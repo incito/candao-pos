@@ -153,6 +153,25 @@ namespace Main
                     lblAmount.Text = "卡余额:" + ret.StoreCardbalance.ToString();
                     edtAmount.Text = "";
                     edtAmount.Focus();
+                    //打印交易凭条
+                    try
+                    {
+                        TMemberStoredInfo memberstoreinfo = new TMemberStoredInfo();
+                        memberstoreinfo.Cardno = _memberInfo.Cardno;
+                        memberstoreinfo.Treport_membertitle = WebServiceReference.WebServiceReference.Report_membertitle;
+                        memberstoreinfo.Pzh = ret.Tracecode;
+                        DateTime date = DateTime.Now;
+                        date = DateTime.Now;
+                        string datestr = string.Format("{0:yyyy-MM-dd}", date);
+                        memberstoreinfo.Date = datestr;
+                        datestr = string.Format("{0:hh:mm}", date);
+                        memberstoreinfo.Time = datestr;
+                        memberstoreinfo.Store = ret.StoreCardbalance.ToString();
+                        memberstoreinfo.Point = "0";// ret.Integral.ToString();//ret.Giftamount.ToString();
+                        memberstoreinfo.Amount = edtAmount.Text;
+                        ReportsFastReport.ReportPrint.PrintMemberStore(memberstoreinfo);
+                    }
+                    catch { }
                     Warning("储值成功,交易流水号:" + ret.Tracecode);
                     return;
                 }

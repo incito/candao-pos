@@ -153,6 +153,7 @@ namespace Main
                     tmrGetIdentCode.Enabled = false;
                     btnGetIdentCode.Text = "发送";
                     btnGetIdentCode.Enabled = true;
+                    Close();
 
                 }
             }
@@ -176,7 +177,7 @@ namespace Main
             if (!edtIdentCode.Text.Equals(valicode))
             {
                 Warning("手机验证码错误！");
-                //return ret;
+                return ret;
             }
             return true;
         }

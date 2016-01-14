@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -87,6 +88,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.lblAmount = new System.Windows.Forms.Label();
             this.dgvjs = new System.Windows.Forms.DataGridView();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.yhname = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.num = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.yhamount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
             this.pbxWm = new System.Windows.Forms.PictureBox();
             this.lblMember = new System.Windows.Forms.Label();
@@ -94,10 +99,10 @@
             this.lblRs = new System.Windows.Forms.Label();
             this.lblDesk = new System.Windows.Forms.Label();
             this.edtRoom = new DevExpress.XtraEditors.TextEdit();
-            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu();
+            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu(this.components);
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
-            this.barManager1 = new DevExpress.XtraBars.BarManager();
+            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -235,16 +240,12 @@
             this.label22 = new System.Windows.Forms.Label();
             this.edtWx = new DevExpress.XtraEditors.TextEdit();
             this.label6 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer();
-            this.tmrOpen = new System.Windows.Forms.Timer();
-            this.imageList1 = new System.Windows.Forms.ImageList();
-            this.tmrClose = new System.Windows.Forms.Timer();
-            this.tmrOpenTable = new System.Windows.Forms.Timer();
-            this.iltDbgBill = new System.Windows.Forms.ImageList();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.yhname = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.num = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.yhamount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpen = new System.Windows.Forms.Timer(this.components);
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.tmrClose = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpenTable = new System.Windows.Forms.Timer(this.components);
+            this.iltDbgBill = new System.Windows.Forms.ImageList(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgWidgh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -1055,6 +1056,40 @@
             this.dgvjs.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvjs_MouseClick);
             this.dgvjs.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvjs_MouseDown);
             this.dgvjs.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dgvjs_MouseUp);
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "序";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.Width = 30;
+            // 
+            // yhname
+            // 
+            this.yhname.DataPropertyName = "yhname";
+            this.yhname.HeaderText = "优惠";
+            this.yhname.Name = "yhname";
+            this.yhname.ReadOnly = true;
+            this.yhname.Width = 130;
+            // 
+            // num
+            // 
+            this.num.DataPropertyName = "num";
+            this.num.HeaderText = "数量";
+            this.num.Name = "num";
+            this.num.ReadOnly = true;
+            this.num.Width = 60;
+            // 
+            // yhamount
+            // 
+            this.yhamount.DataPropertyName = "amount";
+            dataGridViewCellStyle4.Format = "N2";
+            dataGridViewCellStyle4.NullValue = "0.00";
+            this.yhamount.DefaultCellStyle = dataGridViewCellStyle4;
+            this.yhamount.HeaderText = "金额";
+            this.yhamount.Name = "yhamount";
+            this.yhamount.ReadOnly = true;
+            this.yhamount.Width = 80;
             // 
             // panel5
             // 
@@ -3086,40 +3121,6 @@
             this.iltDbgBill.TransparentColor = System.Drawing.Color.Transparent;
             this.iltDbgBill.Images.SetKeyName(0, "weigh_icon.png");
             this.iltDbgBill.Images.SetKeyName(1, "weigh_blue.png");
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "序";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            this.Column2.Width = 30;
-            // 
-            // yhname
-            // 
-            this.yhname.DataPropertyName = "yhname";
-            this.yhname.HeaderText = "优惠";
-            this.yhname.Name = "yhname";
-            this.yhname.ReadOnly = true;
-            this.yhname.Width = 130;
-            // 
-            // num
-            // 
-            this.num.DataPropertyName = "num";
-            this.num.HeaderText = "数量";
-            this.num.Name = "num";
-            this.num.ReadOnly = true;
-            this.num.Width = 60;
-            // 
-            // yhamount
-            // 
-            this.yhamount.DataPropertyName = "amount";
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = "0.00";
-            this.yhamount.DefaultCellStyle = dataGridViewCellStyle4;
-            this.yhamount.HeaderText = "金额";
-            this.yhamount.Name = "yhamount";
-            this.yhamount.ReadOnly = true;
-            this.yhamount.Width = 80;
             // 
             // frmPosMainV3
             // 

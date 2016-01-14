@@ -4805,10 +4805,17 @@ namespace Main
                         //重新查询会员获取卡号
                         //餐道会员
                         string msg = "";
-                        QueryMemberCard2_CanDao(out msg);
+                        bool qret=QueryMemberCard2_CanDao(out msg);
+                        if (!qret)
+                        {
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, "会员结算失败,系统自动反结");
+                            Warning("获取会员卡号失败:" + msg);
+                            return false;
+                        }
                         if (cardno.Trim().Equals(""))
                         {
-                            RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, "会员结算失败,系统自动反结");
+                            //RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, "会员结算失败,系统自动反结");
                             Warning("获取会员卡号失败:"+msg);
                             return false;
                         }
@@ -4842,7 +4849,7 @@ namespace Main
                         ordermemberinfo.Serial = ret.Tracecode;
                         ordermemberinfo.Businessname = WebServiceReference.WebServiceReference.Report_title;
                         ordermemberinfo.Score = (decimal)pszPoint;
-                        ordermemberinfo.Scorebalance = ret.Integraloverall;
+                        ordermemberinfo.Scorebalance= ret.Integraloverall;
                         ordermemberinfo.Couponsbalance = "0";
                         ordermemberinfo.Storedbalance = ret.Storecardbalance;
                         ordermemberinfo.Psexpansivity = 0;
@@ -4876,7 +4883,12 @@ namespace Main
             TCandaoMemberInfo ret=null;
             try
             {
-                ret = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", edtMemberCard.Text, edtPwd.Text);
+                ret = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", edtMemberCard.Text, "");//edtPwd.Text
+                if (!ret.Ret)
+                {
+                    msg = ret.Retinfo;
+                    return false;
+                }
             }
             catch (Exception ex) { msg = "餐道会员查询失败，请检查外网是否稳定，并重试!"; return false; }
             string data = ret.Retcode;
@@ -4923,6 +4935,17 @@ namespace Main
                 //}
                 label15.Text = string.Format("储值余额：{0}", psStoredCardsBalance);
                 label9.Text = string.Format("积分余额：{0}", psIntegralOverall);
+                try
+                {
+                    if (!ret.Cardlevel.Equals("0"))
+                    {
+                        if (!ret.Cardlevel.Equals(""))
+                        {
+                            label15.Text = string.Format("储值余额：{0}({1})", psStoredCardsBalance, ret.Cardlevel);
+                        }
+                    }
+                }
+                catch { }
                 membercard = edtMemberCard.Text.Trim().ToString();
                 Globals.CurrOrderInfo.memberno = membercard;
                 try

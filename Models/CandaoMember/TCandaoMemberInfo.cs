@@ -23,6 +23,7 @@ namespace Models.CandaoMember
         string _regdate;
         string _cardlist;
         string _member_avatar;
+
         public string Regdate
         {
             get { return _regdate; }

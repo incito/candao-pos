@@ -141,7 +141,7 @@ namespace Main
             if (e.KeyChar == 13)
             {
                 //µ÷ÓÃ²éÑ¯
-                memberInfo = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", edtMobile.Text, "");
+                memberInfo = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", edtMobile.Text, edtPwd.Text);
                 if (!memberInfo.Retcode.Equals("0"))
                 {
                     Warning(memberInfo.Retinfo);
@@ -150,7 +150,11 @@ namespace Main
                 edtName.Text = memberInfo.Name;
                 edtAmount.Text = memberInfo.Storecardbalance.ToString();
                 edtPoint.Text = memberInfo.Integraloverall.ToString();
-                dtpBirthday.Value = DateTime.Parse(memberInfo.Birthday.ToString());
+                try
+                {
+                    dtpBirthday.Value = DateTime.Parse(memberInfo.Birthday.ToString());
+                }
+                catch { }
                 if (memberInfo.Gender.ToString().Equals("0"))
                     rgpGender.SelectedIndex = 0;
                 else
@@ -189,6 +193,7 @@ namespace Main
             edtName.Text = "";
             edtAmount.Text = "";
             edtPoint.Text = "";
+            edtPwd.Text = "";
         }
 
         private void button3_Click(object sender, EventArgs e)
