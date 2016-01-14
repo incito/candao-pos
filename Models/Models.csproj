@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2CF256B2-F5E0-4670-8644-08DDF65B0009}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Models</RootNamespace>
+    <AssemblyName>Models</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bill_Order.cs" />
+    <Compile Include="CandaoMember\TCandaoMemberCardInfo.cs" />
+    <Compile Include="CandaoMember\TCandaoMemberInfo.cs" />
+    <Compile Include="CandaoMember\TCandaoRegMemberInfo.cs" />
+    <Compile Include="CandaoMember\TCandaoMemberSale.cs" />
+    <Compile Include="CandaoMember\TCandaoMemberVoidSale.cs" />
+    <Compile Include="CandaoMember\TCandaoOrderMemberInfo.cs" />
+    <Compile Include="CandaoMember\TCandaoRetBase.cs" />
+    <Compile Include="CandaoMember\TCandaoRet_CardLose.cs" />
+    <Compile Include="CandaoMember\TCandaoRet_StoreCardDeposit.cs" />
+    <Compile Include="CandaoMember\TCandaoRet_VoidSale.cs" />
+    <Compile Include="SystemModels\BusinessCommonFields.cs" />
+    <Compile Include="SystemModels\TEmailBody.cs" />
+    <Compile Include="SystemModels\TAttachFile.cs" />
+    <Compile Include="SystemModels\TCompanyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemModels\TUser.cs" />
+    <Compile Include="SystemModels\TUserGroup.cs" />
+    <Compile Include="CandaoMember\TCandaoRet_Sale.cs" />
+    <Compile Include="TComboDish.cs" />
+    <Compile Include="TGzInfo.cs" />
+    <Compile Include="TMemberStoredInfo.cs" />
+    <Compile Include="TPotDishInfo.cs" />
+    <Compile Include="TRoundInfo.cs" />
+    <Compile Include="TSetting.cs" />
+    <Compile Include="TShopping.cs" />
+    <Compile Include="TOrder.cs" />
+    <Compile Include="TTable.cs" />
+    <Compile Include="v_coupon_rule.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NewtonsoftJson\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj">
+      <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
+      <Name>Newtonsoft.Json.Net40</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

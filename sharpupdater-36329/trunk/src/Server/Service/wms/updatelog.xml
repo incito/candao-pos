@@ -1,0 +1,7 @@
+﻿<ArrayOfUpdateLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <UpdateLog>
+      <Version>2.18</Version>
+      <ReleaseDate>2012/10/25 15:04:09</ReleaseDate>
+      <Description><![CDATA[publish test]]></Description>
+   </UpdateLog>
+</ArrayOfUpdateLog>

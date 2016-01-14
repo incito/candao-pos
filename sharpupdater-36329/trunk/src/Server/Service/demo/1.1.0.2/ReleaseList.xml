@@ -1,0 +1,56 @@
+<ReleaseList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ApplicationStart>demo.exe</ApplicationStart>
+  <AppName>Demo</AppName>
+  <MinVersion>1.1.0.2</MinVersion>
+  <ReleaseDate>2012/10/13 11:50:29</ReleaseDate>
+  <ReleaseUrl>http://localhost:801/demo</ReleaseUrl>
+  <FileSize>137</FileSize>
+  <ReleaseVersion>1.1.0.2</ReleaseVersion>
+  <ShortcutIcon>demo.ico</ShortcutIcon>
+  <AllFilesVersionControlled>true</AllFilesVersionControlled>
+  <UpdateDescription><![CDATA[something new]]></UpdateDescription>
+  <Files>
+    <ReleaseFile>
+      <FileName>ClassLibrary1.1.dll</FileName>
+      <ReleaseDate>2012/10/12 13:59:17</ReleaseDate>
+      <FileSize>4</FileSize>
+      <Version>1.0.0.0</Version>
+    </ReleaseFile>
+    <ReleaseFile>
+      <FileName>CnSharp.Common.dll</FileName>
+      <ReleaseDate>2011/8/14 13:52:37</ReleaseDate>
+      <FileSize>53</FileSize>
+      <Version>2.1.0.0</Version>
+    </ReleaseFile>
+    <ReleaseFile>
+      <FileName>CnSharp.IO.Zip.dll</FileName>
+      <ReleaseDate>2011/8/14 13:52:37</ReleaseDate>
+      <FileSize>6</FileSize>
+      <Version>1.0.0.0</Version>
+    </ReleaseFile>
+    <ReleaseFile>
+      <FileName>Demo.exe</FileName>
+      <ReleaseDate>2012/10/13 11:50:28</ReleaseDate>
+      <FileSize>8</FileSize>
+      <Version>1.1.0.2</Version>
+    </ReleaseFile>
+    <ReleaseFile>
+      <FileName>ICSharpCode.SharpZipLib.dll</FileName>
+      <ReleaseDate>2010/5/25 12:55:22</ReleaseDate>
+      <FileSize>196</FileSize>
+      <Version>0.86.0.518</Version>
+    </ReleaseFile>
+    <ReleaseFile>
+      <FileName>ZipUpdater.exe</FileName>
+      <ReleaseDate>2012/3/22 10:35:32</ReleaseDate>
+      <FileSize>28</FileSize>
+      <Version>1.0.0.0</Version>
+    </ReleaseFile>
+    <ReleaseFile>
+      <FileName>ZipUpdater.Monitor.dll</FileName>
+      <ReleaseDate>2012/3/22 10:48:44</ReleaseDate>
+      <FileSize>18</FileSize>
+      <Version>1.0.0.0</Version>
+    </ReleaseFile>
+  </Files>
+</ReleaseList>

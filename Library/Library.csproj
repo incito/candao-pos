@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CC733F2A-65DE-411F-9093-71CD3A5D9B27}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Library</RootNamespace>
+    <AssemblyName>Library</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>http://localhost/vjsdn.CS3Layers_Framework.Library/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Printing.v13.1.Core, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Data.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraBars.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPrinting.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGrid.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraNavBar.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraTreeList.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="fInputPwd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fInputPwd.Designer.cs">
+      <DependentUpon>fInputPwd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="fPrintProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fPrintProgress.Designer.cs">
+      <DependentUpon>fPrintProgress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAuthorize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAuthorize.Designer.cs">
+      <DependentUpon>frmAuthorize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmInputReOrderReason.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInputReOrderReason.Designer.cs">
+      <DependentUpon>frmInputReOrderReason.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmInputMemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInputMemo.Designer.cs">
+      <DependentUpon>frmInputMemo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmInputNum.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInputNum.Designer.cs">
+      <DependentUpon>frmInputNum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmWarning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWarning.Designer.cs">
+      <DependentUpon>frmWarning.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAskQuestion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAskQuestion.Designer.cs">
+      <DependentUpon>frmAskQuestion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBase.Designer.cs">
+      <DependentUpon>frmBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResImage.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResImage.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucCheckEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucCheckEdit.Designer.cs">
+      <DependentUpon>ucCheckEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucCheckedListBoxBinding.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucCheckedListBoxBinding.Designer.cs">
+      <DependentUpon>ucCheckedListBoxBinding.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucCheckedListBoxEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucCheckedListBoxEditor.Designer.cs">
+      <DependentUpon>ucCheckedListBoxEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucPanel.Designer.cs">
+      <DependentUpon>ucPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucTable.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucTable.Designer.cs">
+      <DependentUpon>ucTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucValueEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucValueEdit.Designer.cs">
+      <DependentUpon>ucValueEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucWindowTitle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucWindowTitle.Designer.cs">
+      <DependentUpon>ucWindowTitle.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="fInputPwd.resx">
+      <DependentUpon>fInputPwd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="fPrintProgress.resx">
+      <DependentUpon>fPrintProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAuthorize.resx">
+      <DependentUpon>frmAuthorize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInputReOrderReason.resx">
+      <DependentUpon>frmInputReOrderReason.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInputMemo.resx">
+      <DependentUpon>frmInputMemo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInputNum.resx">
+      <DependentUpon>frmInputNum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWarning.resx">
+      <DependentUpon>frmWarning.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAskQuestion.resx">
+      <DependentUpon>frmAskQuestion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmBase.resx">
+      <DependentUpon>frmBase.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResImage.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>ResImage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucCheckEdit.resx">
+      <DependentUpon>ucCheckEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucCheckedListBoxBinding.resx">
+      <DependentUpon>ucCheckedListBoxBinding.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucCheckedListBoxEditor.resx">
+      <DependentUpon>ucCheckedListBoxEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucTable.resx">
+      <DependentUpon>ucTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucValueEdit.resx">
+      <DependentUpon>ucValueEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ucWindowTitle.resx">
+      <DependentUpon>ucWindowTitle.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Add.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Cancel.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Clone.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_CreateDoc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_DesignReport.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Edit.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Exit1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Exit.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Export.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Help1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Help.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Info.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Lock1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Lock.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Print.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_PrintPreview.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Save.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_UndoBill.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_ViewContent.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Void.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4546.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2009011340768021.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Module.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\noimg.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\vjsdn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btndelete.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_Approval.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_attach.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24_History.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\find50x50.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{269ECEFF-B6C2-4708-86BA-AFBB1A2B045C}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Business\Business.csproj">
+      <Project>{A674DB78-C6CB-409B-893D-728ABF88EC84}</Project>
+      <Name>Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{2CF256B2-F5E0-4670-8644-08DDF65B0009}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebServiceReference\WebServiceReference.csproj">
+      <Project>{830d9756-d0f4-4140-8afc-500e8eca03c4}</Project>
+      <Name>WebServiceReference</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ButtonCascade.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\下载.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logintop.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\print.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\0111-_31_cd.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

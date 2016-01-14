@@ -1,0 +1,126 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VsAddin", "VsAddin", "{ED9CFDDA-3C4E-43A7-A487-11DF4709E8DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{C2191A9B-8E21-40C3-B80D-177E4B283E2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{91192C53-C068-4269-A397-9D468B983139}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{73BC238B-7F69-4E7A-B8FC-2B6D749AE9F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CnSharp.ZipUtil", "src\Util\CnSharp.ZipUtil\CnSharp.ZipUtil.csproj", "{A92D9687-E694-4198-8FE1-B138888C472B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpUpdater.Util", "src\Util\SharpUpdater.Util\SharpUpdater.Util.csproj", "{8615928D-B8E2-408F-A21A-6BCF65897A43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "src\Server\API\API.csproj", "{4843E978-1649-4F61-980B-687D27E2B93E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateService", "src\Server\Service\UpdateService.csproj", "{3BD73549-9299-42FC-8DE4-93A4C6219839}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpUpdater", "src\Client\SharpUpdater\SharpUpdater.csproj", "{E1355A0F-2BB9-4A4A-AEE5-4E2F0B56C62B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpPack", "src\VS.Addin\SharpPack\SharpPack.csproj", "{876C2912-6CE9-4E77-9F3D-C9E778BD107C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4B246BA9-DDCD-4454-A219-D55C5027B23D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E0D2276A-4A81-4490-A934-C7860FF89677}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseTest", "tests\ConfigTest\ReleaseTest.csproj", "{3D32D342-2BA9-400F-85C0-03B0245352FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceControl", "src\VS.Addin\SourceControl\SourceControl.csproj", "{4539150B-4B74-44B8-B8F5-63227FEA6ED2}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 9
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs13
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = src\\Util\\CnSharp.ZipUtil\\CnSharp.ZipUtil.csproj
+		SccProjectTopLevelParentUniqueName1 = SharpUpdater2.1.sln
+		SccProjectName1 = src/Util/CnSharp.ZipUtil
+		SccLocalPath1 = src\\Util\\CnSharp.ZipUtil
+		SccProjectUniqueName2 = src\\Util\\SharpUpdater.Util\\SharpUpdater.Util.csproj
+		SccProjectTopLevelParentUniqueName2 = SharpUpdater2.1.sln
+		SccProjectName2 = src/Util/SharpUpdater.Util
+		SccLocalPath2 = src\\Util\\SharpUpdater.Util
+		SccProjectUniqueName3 = src\\Server\\API\\API.csproj
+		SccProjectTopLevelParentUniqueName3 = SharpUpdater2.1.sln
+		SccProjectName3 = src/Server/API
+		SccLocalPath3 = src\\Server\\API
+		SccProjectUniqueName4 = src\\Server\\Service\\UpdateService.csproj
+		SccProjectTopLevelParentUniqueName4 = SharpUpdater2.1.sln
+		SccProjectName4 = src/Server/Service
+		SccLocalPath4 = src\\Server\\Service
+		SccProjectUniqueName5 = src\\Client\\SharpUpdater\\SharpUpdater.csproj
+		SccProjectTopLevelParentUniqueName5 = SharpUpdater2.1.sln
+		SccProjectName5 = src/Client/SharpUpdater
+		SccLocalPath5 = src\\Client\\SharpUpdater
+		SccProjectUniqueName6 = src\\VS.Addin\\SharpPack\\SharpPack.csproj
+		SccProjectTopLevelParentUniqueName6 = SharpUpdater2.1.sln
+		SccProjectName6 = src/VS.Addin/SharpPack
+		SccLocalPath6 = src\\VS.Addin\\SharpPack
+		SccProjectUniqueName7 = tests\\ConfigTest\\ReleaseTest.csproj
+		SccProjectTopLevelParentUniqueName7 = SharpUpdater2.1.sln
+		SccProjectName7 = tests/ConfigTest
+		SccLocalPath7 = tests\\ConfigTest
+		SccProjectUniqueName8 = src\\VS.Addin\\SourceControl\\SourceControl.csproj
+		SccProjectTopLevelParentUniqueName8 = SharpUpdater2.1.sln
+		SccProjectName8 = src/VS.Addin/SourceControl
+		SccLocalPath8 = src\\VS.Addin\\SourceControl
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A92D9687-E694-4198-8FE1-B138888C472B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A92D9687-E694-4198-8FE1-B138888C472B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A92D9687-E694-4198-8FE1-B138888C472B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A92D9687-E694-4198-8FE1-B138888C472B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8615928D-B8E2-408F-A21A-6BCF65897A43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8615928D-B8E2-408F-A21A-6BCF65897A43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8615928D-B8E2-408F-A21A-6BCF65897A43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8615928D-B8E2-408F-A21A-6BCF65897A43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4843E978-1649-4F61-980B-687D27E2B93E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4843E978-1649-4F61-980B-687D27E2B93E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4843E978-1649-4F61-980B-687D27E2B93E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4843E978-1649-4F61-980B-687D27E2B93E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BD73549-9299-42FC-8DE4-93A4C6219839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BD73549-9299-42FC-8DE4-93A4C6219839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BD73549-9299-42FC-8DE4-93A4C6219839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BD73549-9299-42FC-8DE4-93A4C6219839}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1355A0F-2BB9-4A4A-AEE5-4E2F0B56C62B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1355A0F-2BB9-4A4A-AEE5-4E2F0B56C62B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1355A0F-2BB9-4A4A-AEE5-4E2F0B56C62B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1355A0F-2BB9-4A4A-AEE5-4E2F0B56C62B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{876C2912-6CE9-4E77-9F3D-C9E778BD107C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{876C2912-6CE9-4E77-9F3D-C9E778BD107C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{876C2912-6CE9-4E77-9F3D-C9E778BD107C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{876C2912-6CE9-4E77-9F3D-C9E778BD107C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D32D342-2BA9-400F-85C0-03B0245352FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D32D342-2BA9-400F-85C0-03B0245352FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D32D342-2BA9-400F-85C0-03B0245352FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D32D342-2BA9-400F-85C0-03B0245352FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4539150B-4B74-44B8-B8F5-63227FEA6ED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4539150B-4B74-44B8-B8F5-63227FEA6ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4539150B-4B74-44B8-B8F5-63227FEA6ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4539150B-4B74-44B8-B8F5-63227FEA6ED2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C2191A9B-8E21-40C3-B80D-177E4B283E2D} = {E0D2276A-4A81-4490-A934-C7860FF89677}
+		{91192C53-C068-4269-A397-9D468B983139} = {E0D2276A-4A81-4490-A934-C7860FF89677}
+		{73BC238B-7F69-4E7A-B8FC-2B6D749AE9F3} = {E0D2276A-4A81-4490-A934-C7860FF89677}
+		{ED9CFDDA-3C4E-43A7-A487-11DF4709E8DD} = {E0D2276A-4A81-4490-A934-C7860FF89677}
+		{A92D9687-E694-4198-8FE1-B138888C472B} = {C2191A9B-8E21-40C3-B80D-177E4B283E2D}
+		{8615928D-B8E2-408F-A21A-6BCF65897A43} = {C2191A9B-8E21-40C3-B80D-177E4B283E2D}
+		{4843E978-1649-4F61-980B-687D27E2B93E} = {91192C53-C068-4269-A397-9D468B983139}
+		{3BD73549-9299-42FC-8DE4-93A4C6219839} = {91192C53-C068-4269-A397-9D468B983139}
+		{E1355A0F-2BB9-4A4A-AEE5-4E2F0B56C62B} = {73BC238B-7F69-4E7A-B8FC-2B6D749AE9F3}
+		{876C2912-6CE9-4E77-9F3D-C9E778BD107C} = {ED9CFDDA-3C4E-43A7-A487-11DF4709E8DD}
+		{4539150B-4B74-44B8-B8F5-63227FEA6ED2} = {ED9CFDDA-3C4E-43A7-A487-11DF4709E8DD}
+		{3D32D342-2BA9-400F-85C0-03B0245352FB} = {4B246BA9-DDCD-4454-A219-D55C5027B23D}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,19 @@
+<ReleaseList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ApplicationStart>demo.exe</ApplicationStart>
+  <AppName>Demo</AppName>
+  <MinVersion>1.1.0.4</MinVersion>
+  <ReleaseDate>2012/10/14 19:37:57</ReleaseDate>
+  <ReleaseUrl>http://localhost:801/demo</ReleaseUrl>
+  <ReleaseVersion>1.1.0.4</ReleaseVersion>
+  <ShortcutIcon>demo.ico</ShortcutIcon>
+  <AllFilesVersionControlled>true</AllFilesVersionControlled>
+  <Packaged>true</Packaged>
+  <UpdateDescription><![CDATA[pack 4]]></UpdateDescription>
+  <Files>
+    <ReleaseFile>
+      <FileName>Demo.zip</FileName>
+      <FileSize>15351</FileSize>
+      <Version>1.1.0.4</Version>
+    </ReleaseFile>
+  </Files>
+</ReleaseList>

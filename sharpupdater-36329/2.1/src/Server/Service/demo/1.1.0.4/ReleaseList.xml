@@ -1,0 +1,26 @@
+<ReleaseList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ApplicationStart>demo.exe</ApplicationStart>
+  <AppName>Demo</AppName>
+  <MinVersion>1.1.0.4</MinVersion>
+  <ReleaseDate>2012/10/14 18:28:52</ReleaseDate>
+  <ReleaseUrl>http://localhost:801/demo</ReleaseUrl>
+  <ReleaseVersion>1.1.0.4</ReleaseVersion>
+  <ShortcutIcon>demo.ico</ShortcutIcon>
+  <AllFilesVersionControlled>true</AllFilesVersionControlled>
+  <Packaged>false</Packaged>
+  <UpdateDescription><![CDATA[pack 4]]></UpdateDescription>
+  <Files>
+    <ReleaseFile>
+      <FileName>ClassLibrary1.1.dll</FileName>
+      <ReleaseDate>2012/10/14 18:25:33</ReleaseDate>
+      <FileSize>4096</FileSize>
+      <Version>1.1.0.4</Version>
+    </ReleaseFile>
+    <ReleaseFile>
+      <FileName>Demo.exe</FileName>
+      <ReleaseDate>2012/10/14 18:25:33</ReleaseDate>
+      <FileSize>8192</FileSize>
+      <Version>1.1.0.4</Version>
+    </ReleaseFile>
+  </Files>
+</ReleaseList>

@@ -1,0 +1,26 @@
+﻿<ArrayOfUpdateLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <UpdateLog>
+      <Version>1.1.0.6</Version>
+      <ReleaseDate>2012/10/30 13:17:57</ReleaseDate>
+      <Description><![CDATA[v 1.1.0.6]]></Description>
+   </UpdateLog>
+   <UpdateLog>
+      <Version>1.1.0.2</Version>
+      <Description><![CDATA[something new]]></Description>
+   </UpdateLog>
+   <UpdateLog>
+      <Version>1.1.0.1</Version>
+      <Description><![CDATA[1.new feature
+2.improve
+3.bug fix]]></Description>
+   </UpdateLog>
+   <UpdateLog>
+      <Version>1.1.0.0</Version>
+      <Description><![CDATA[1.new feature
+2.improve
+3.bug fix]]></Description>
+   </UpdateLog>
+   <UpdateLog>
+      <Description><![CDATA[]]></Description>
+   </UpdateLog>
+</ArrayOfUpdateLog>

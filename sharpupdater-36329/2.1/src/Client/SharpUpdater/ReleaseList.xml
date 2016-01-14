@@ -1,0 +1,28 @@
+﻿<ReleaseList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ApplicationStart>Updater.exe</ApplicationStart>
+   <AppName>SharpUpdater</AppName>
+   <MinVersion>2.0.0.0</MinVersion>
+   <ReleaseDate>2012/4/7 22:29:49</ReleaseDate>
+   <ReleaseUrl>http://localhost/SharpUpdater/</ReleaseUrl>
+   <FileSize>0</FileSize>
+   <ReleaseVersion>2.0.0.0</ReleaseVersion>
+   <ShortcutIcon>Updater.ico</ShortcutIcon>
+   <UpdateDescription><![CDATA[V2.0]]></UpdateDescription>
+   <Files>
+      <ReleaseFile>
+         <FileName>SharpUpdater.Util.dll</FileName>
+         <ReleaseDate>2012/4/7 22:26:35</ReleaseDate>
+         <FileSize>16</FileSize>
+      </ReleaseFile>
+      <ReleaseFile>
+         <FileName>Updater.exe.config</FileName>
+         <ReleaseDate>2012/4/1 15:47:02</ReleaseDate>
+         <FileSize>1</FileSize>
+      </ReleaseFile>
+      <ReleaseFile>
+         <FileName>UpdaterVersion.txt</FileName>
+         <ReleaseDate>2010/9/9 14:09:45</ReleaseDate>
+         <FileSize>1</FileSize>
+      </ReleaseFile>
+   </Files>
+</ReleaseList>
