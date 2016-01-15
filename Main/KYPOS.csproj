@@ -404,7 +404,6 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="KYPOS_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
