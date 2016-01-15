@@ -3194,7 +3194,34 @@ namespace WebServiceReference
                 catch { }
             }
         }
-        
+
+        /// <summary>
+        /// 获取所有银行数据。
+        /// </summary>
+        /// <returns></returns>
+        public static List<BankInfo> GetAllBankInfos()
+        {
+            var addr = string.Format("http://{0}/" + apiPath + "/bankinterface/getallbank.json", server2);
+            List<BankInfo> info = new List<BankInfo>();
+            try
+            {
+                string jsonResult = Request_Rest(addr);
+                JArray dataArray = (JArray)JsonConvert.DeserializeObject(jsonResult);
+                foreach (var da in dataArray)
+                {
+                    BankInfo item = new BankInfo();
+                    item.Id = Convert.ToInt32(da["itemid"].ToString());
+                    item.Name = da["itemDesc"].ToString();
+                    item.SortIndex = Convert.ToInt32(da["itemSort"].ToString());
+                    info.Add(item);
+                }
+                return info.OrderBy(t => t.SortIndex).ToList();
+            }
+            catch (Exception exp)
+            {
+                return info;
+            }
+        }
     }
 
     

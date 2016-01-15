@@ -1,0 +1,72 @@
+﻿<Window x:Class="Library.SelectBankWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="750" Height="690"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Background="#FFFFC080" Height="65">
+            <Grid>
+                <Image HorizontalAlignment="Left" Source="Resources/0111-_31_cd.png" />
+                <Button HorizontalAlignment="Right" Click="ButtonCancel_OnClick">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Image Source="Resources/下载.png" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+        <TextBlock Grid.Row="1" Text="请选择银行：" FontSize="28" Margin="10,10,10,10"/>
+        <ListBox Grid.Row="2" ItemsSource="{Binding BankInfos}" SelectedItem="{Binding SelectedBank}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" Width="730"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Background" Value="Gray"></Setter>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="Bg" BorderBrush="{TemplateBinding Background}" BorderThickness="3" Width="200" Height="80" Margin="10">
+                                    <Grid>
+                                        <TextBlock FontSize="20" Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Image Source="{Binding ImageSource}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FFFB7101"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button  Click="ButtonConfirm_OnClick">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Image Source="Resources/ok.png" Width="70"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Margin="20,0,0,0" Click="ButtonCancel_OnClick">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Image Source="Resources/close.png" Width="70"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
