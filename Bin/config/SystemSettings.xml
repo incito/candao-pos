@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<SystemConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <UpgraderServerIP>127.0.0.1</UpgraderServerIP>
+  <UpgraderServerPort>2345</UpgraderServerPort>
+  <UpgradeType>1</UpgradeType>
+  <AutoCheckVersion>true</AutoCheckVersion>
+  <ExitAppIfOldVersion>true</ExitAppIfOldVersion>
+  <MailHostIP>127.0.0.1</MailHostIP>
+  <MailHostPort>2345</MailHostPort>
+  <MailSystemSupportable>false</MailSystemSupportable>
+  <AllowRunMultiInstance>false</AllowRunMultiInstance>
+  <DoubleClickIntoEditMode>false</DoubleClickIntoEditMode>
+  <WriteLocalLog>false</WriteLocalLog>
+  <SkinName>Office 2013</SkinName>
+  <LoginAuthType>1</LoginAuthType>
+  <AttachmentStorageType>SQL</AttachmentStorageType>
+  <AttachmentFolder>S:\_Attachment Shared\</AttachmentFolder>
+</SystemConfig>
