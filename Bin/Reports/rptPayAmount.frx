@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="06/16/2011 14:52:11" ReportInfo.Modified="11/18/2015 13:10:22" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {   
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="tb_Order" ReferenceName="tb_Order" DataType="System.Int32" Enabled="true">
+      <Column Name="orderid" Alias="单号" DataType="System.String"/>
+      <Column Name="userid" Alias="服务员" DataType="System.String"/>
+      <Column Name="begintime" Alias="开台时间" DataType="System.DateTime"/>
+      <Column Name="endtime" Alias="结帐时间" DataType="System.DateTime"/>
+      <Column Name="orderstatus" Alias="状态" DataType="System.String"/>
+      <Column Name="custnum" Alias="人数" DataType="System.Int32"/>
+      <Column Name="womanNum" Alias="女士" DataType="System.Int32"/>
+      <Column Name="mannum" Alias="男士" DataType="System.Int32"/>
+      <Column Name="currenttableid" Alias="桌号" DataType="System.String"/>
+      <Column Name="fulldiscountrate" Alias="全单折扣" DataType="System.Double"/>
+      <Column Name="dueamount" Alias="应收金额" DataType="System.Double"/>
+      <Column Name="discountamount" Alias="折扣金额" DataType="System.Double"/>
+      <Column Name="freeamount" Alias="免单金额" DataType="System.Double"/>
+      <Column Name="wipeamount" Alias="抹零金额" DataType="System.Double"/>
+      <Column Name="payway" Alias="结算" DataType="System.String"/>
+      <Column Name="partnername" Alias="合作单位" DataType="System.String"/>
+      <Column Name="couponname" Alias="优惠名称" DataType="System.String"/>
+      <Column Name="disuserid" Alias="折扣人" DataType="System.String"/>
+      <Column Name="befprintcount" Alias="打印次数" DataType="System.Int32" PropName="printcount"/>
+      <Column Name="tableName" Alias="桌名称" DataType="System.String"/>
+      <Column Name="areaNo" Alias="区域" DataType="System.String"/>
+      <Column Name="areaname" Alias="区域" DataType="System.String"/>
+      <Column Name="payamount" Alias="结帐时抹零金额" DataType="System.Double"/>
+      <Column Name="printcount" Alias="打印" DataType="System.Int32" PropName="befprintcount"/>
+      <Column Name="couponname3" Alias="优惠信息" DataType="System.String"/>
+      <Column Name="fullName" Alias="服务员姓名" DataType="System.String" PropName="Column"/>
+      <Column Name="memberno" Alias="PAD会员登录" DataType="System.String"/>
+      <Column Name="ssamount" Alias="结帐实收" DataType="System.Double"/>
+      <Column Name="gzamount" Alias="结帐挂帐" DataType="System.Double"/>
+      <Column Name="ymamount" Alias="结帐优免" DataType="System.Double"/>
+      <Column Name="ordertype" DataType="System.Int32"/>
+      <Column Name="gzcode" DataType="System.String"/>
+      <Column Name="gzname" DataType="System.String"/>
+      <Column Name="gztele" DataType="System.String"/>
+      <Column Name="gzuser" DataType="System.String"/>
+      <Column Name="payamount2" Alias="四舍五入" DataType="System.Double"/>
+      <Column Name="zdAmount" Alias="赠送金额" DataType="System.Double"/>
+    </TableDataSource>
+    <TableDataSource Name="tb_data" ReferenceName="tb_data" DataType="System.Int32" Enabled="true">
+      <Column Name="amount" Alias="金额" DataType="System.Double"/>
+      <Column Name="dishnum" Alias="数量" DataType="System.Double"/>
+      <Column Name="dishid" Alias="菜品ID" DataType="System.String"/>
+      <Column Name="begintime" Alias="下单时间" DataType="System.DateTime"/>
+      <Column Name="userName" Alias="下单员工" DataType="System.String"/>
+      <Column Name="orderprice" Alias="单价" DataType="System.Double"/>
+      <Column Name="discountrate" Alias="折扣率" DataType="System.Double"/>
+      <Column Name="discountamount" Alias="折扣金额" DataType="System.Double"/>
+      <Column Name="dishtype" Alias="下单类型" DataType="System.Int32"/>
+      <Column Name="dishunit" Alias="单位" DataType="System.String"/>
+      <Column Name="predisamount" Alias="折前金额" DataType="System.Double"/>
+      <Column Name="payamount" Alias="应付金额" DataType="System.Double"/>
+      <Column Name="title" Alias="菜品名称" DataType="System.String"/>
+      <Column Name="image" Alias="图片" DataType="System.String"/>
+      <Column Name="itemid" Alias="类别编号" DataType="System.String"/>
+      <Column Name="itemDesc" Alias="类别名称" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="tb_js" ReferenceName="tb_js" DataType="System.Int32" Enabled="true">
+      <Column Name="orderid" Alias="单号" DataType="System.String"/>
+      <Column Name="couponNum" Alias="数量" DataType="System.Int32"/>
+      <Column Name="incometype" Alias="类型" DataType="System.Int32"/>
+      <Column Name="membercardno" Alias="会员号" DataType="System.String"/>
+      <Column Name="bankcardno" Alias="银行卡号/优惠名称" DataType="System.String"/>
+      <Column Name="payway" Alias="结算类别" DataType="System.Int32"/>
+      <Column Name="payamount" Alias="金额" DataType="System.Double"/>
+      <Column Name="itemDesc" Alias="结算类别" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="yh" ReferenceName="yh" DataType="System.Int32" Enabled="true">
+      <Column Name="yhname" Alias="优惠" DataType="System.String"/>
+      <Column Name="partnername" Alias="挂帐单位" DataType="System.String"/>
+      <Column Name="couponrate" Alias="折扣" DataType="System.Double"/>
+      <Column Name="freeamount" Alias="优免" DataType="System.Double"/>
+      <Column Name="debitamount" Alias="挂帐" DataType="System.Double"/>
+      <Column Name="memo" Alias="备注" DataType="System.String"/>
+      <Column Name="couponsno" Alias="券号" DataType="System.String"/>
+      <Column Name="num" Alias="数量" DataType="System.Int32"/>
+      <Column Name="amount" Alias="金额" DataType="System.Double"/>
+      <Column Name="type" DataType="System.Int32"/>
+      <Column Name="banktype" DataType="System.String"/>
+      <Column Name="ruleid" DataType="System.String"/>
+      <Column Name="couponid" DataType="System.String"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="80" PaperHeight="188" LeftMargin="2.5" TopMargin="0" RightMargin="1" BottomMargin="0" FirstPageSource="15" OtherPagesSource="15">
+    <ReportTitleBand Name="ReportTitle1" Width="289.17" Height="216.25">
+      <RichObject Name="Rich1" Left="0.78" Top="27.8" Width="278.95" Height="37.8" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'ba\'da\'cc\'e5;}{\f1\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10240}\viewkind4\uc1 &#13;&#10;\pard\qc\f0\fs28\lang2052\'d4\'a4\'bd\'e1\'b5\'a5\f1\fs18\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Text16" Left="5.67" Top="148.65" Width="138.75" Height="24.35" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'d3\'c5\'bb\'dd\lang1033 (\'d4\'aa)\'a3\'ba\b0 [tb_Order.\'d5\'db\'bf\'db\'bd\'f0\'b6\'ee]\f1\fs17\lang2052\par&#13;&#10;}&#13;&#10;" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1"/>
+      <RichObject Name="edtPrint" Left="151.2" Top="148.65" Width="113.4" Height="18.9" Text="打印人：收银员1"/>
+      <RichObject Name="Text17" Left="5.67" Top="166.55" Width="138.75" Height="24.35" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}{\f2\froman\fcharset134 \'ce\'a2\'c8\'ed\'d1\'c5\'ba\'da;}{\f3\fnil\fcharset0 Tahoma;}{\f4\fswiss\fcharset0 Calibri;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'c6\'b7\'cf\'ee\'b7\'d1\'a3\'ba\b0\f1\fs17 [[tb_Order.\f2\'d3\'a6\'ca\'d5\'bd\'f0\'b6\'ee\f3\lang1033 ]\f4 +\f1\lang2052 [\f4\lang1033 tb_Order.\f2\'d5\'db\'bf\'db\'bd\'f0\'b6\'ee\f3 ]]\f1\lang2052\par&#13;&#10;\par&#13;&#10;}&#13;&#10;" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1"/>
+      <LineObject Name="Line5" Top="148.65" Width="264.6" Border.Style="Dash" Diagonal="true"/>
+      <RichObject Name="Rich15" Left="5.67" Top="192.45" Width="30.24" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'c6\'b7\'cf\'ee\b0\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich16" Left="132.3" Top="192.45" Width="41.58" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'ca\'fd\'c1\'bf\b0\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich17" Left="170.77" Top="192.45" Width="49.14" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\qc\b\f0\fs18\lang2052\'b5\'a5\'bc\'db\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich18" Left="219.35" Top="192.45" Width="58.59" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\qc\b\f0\fs18\lang2052\'d0\'a1\'bc\'c6\b0\par&#13;&#10;}&#13;&#10;"/>
+      <LineObject Name="Line8" Top="190" Width="264.6" Border.Style="Dash" Diagonal="true"/>
+      <LineObject Name="Line9" Top="212.9" Width="264.6" Border.Style="Dash" Diagonal="true"/>
+      <TextObject Name="edtreport_title" Left="3" Top="9.45" Width="274.05" Height="18.9" Text="新辣道惠新店" HorzAlign="Center" Font="黑体, 14pt"/>
+      <TextObject Name="Text6" Left="8.45" Top="56.7" Width="255.15" Height="18.9" Text="帐单编号：" Font="宋体, 9pt"/>
+      <TextObject Name="Text18" Left="8.45" Top="75.6" Width="255.15" Height="18.9" Text="客位：" Font="宋体, 9pt"/>
+      <TextObject Name="Text19" Left="8.45" Top="94.5" Width="122.85" Height="18.9" Text="人数：" Font="宋体, 9pt"/>
+      <TextObject Name="Text20" Left="132.3" Top="94.5" Width="132.3" Height="18.9" Text="服务员：" Font="宋体, 9pt"/>
+      <TextObject Name="Text21" Left="9.45" Top="113.4" Width="255.15" Height="18.9" Text="开台时间：" Font="宋体, 9pt"/>
+      <TextObject Name="Text22" Left="9.45" Top="132.3" Width="255.15" Height="18.9" Text="结束时间：" Font="宋体, 9pt"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="220.25" Width="289.17" Height="19.57" DataSource="tb_data">
+      <TextObject Name="Text7" Left="5.67" Top="0.67" Width="122.85" Height="18.9" Text="[tb_data.菜品名称]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text12" Left="170.77" Width="49.14" Height="18.9" Text="[tb_data.单价]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text13" Left="217.35" Width="59.7" Height="18.9" Text="[tb_data.金额]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text11" Left="132.3" Width="41.58" Height="18.9" Text="[tb_data.数量]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+    </DataBand>
+    <DataBand Name="Data2" Top="277.17" Width="289.17" Height="18.9" DataSource="yh">
+      <TextObject Name="Text3" Left="6" Width="122.85" Height="18.9" Text="[yh.优惠]" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text4" Left="138.3" Width="47.25" Height="18.9" Text="[yh.数量]" Font="宋体, 9pt"/>
+      <TextObject Name="Text5" Left="185.55" Width="75.6" Height="18.9" Text="[yh.金额]" Format="Number" Format.UseLocale="true" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
+      <DataHeaderBand Name="DataHeader1" Top="243.82" Width="289.17" Height="29.35">
+        <RichObject Name="Rich36" Left="4" Top="5" Width="257.04" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'d3\'c5\'bb\'dd\'d0\'c5\'cf\'a2\'a3\'ba\b0\lang1033 [tb_Order.\cf1\highlight2\lang2052\'d3\'c5\'bb\'dd\'d0\'c5\'cf\'a2\cf0\highlight0\lang1033 ]\f1\fs17\lang2052\par&#13;&#10;\cf1\f0\fs18\par&#13;&#10;}&#13;&#10;"/>
+        <LineObject Name="Line10" Top="3.45" Width="264.6" Border.Style="Dash" Diagonal="true"/>
+      </DataHeaderBand>
+    </DataBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="300.07" Width="289.17" Height="218.8">
+      <RichObject Name="edtAmount" Left="5.67" Top="9.25" Width="113.4" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\f0\fs18\lang2052\'ba\'cf\'bc\'c6\'a3\'ba\par&#13;&#10;}&#13;&#10;"/>
+      <LineObject Name="Line7" Top="2.35" Width="264.6" Border.Style="Dash" Diagonal="true"/>
+      <RichObject Name="Rich22" Left="5.67" Top="47.05" Width="113.4" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\f0\fs18\lang2052\'d4\'f9\'cb\'cd\'bd\'f0\'b6\'ee\'a3\'ba\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich23" Left="5.45" Top="65.95" Width="113.4" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\f0\fs18\lang2052\'b6\'a8\'b6\'ee\'d3\'c5\'bb\'dd\'a3\'ba\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich24" Left="5.67" Top="84.85" Width="113.4" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\f0\fs18\lang2052\'d3\'a6\'ca\'d5\'a3\'ba\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich25" Left="5.67" Top="103.75" Width="113.4" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\f0\fs18\lang2052\'ca\'b5\'ca\'d5\'a3\'ba\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich35" Left="5.67" Top="121.65" Width="255.15" Height="12.45" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Arial;}{\f1\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\fs16\lang1033 ******************************************************************************************************\f1\fs18\lang2052\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich28" Left="123.42" Top="47.7" Width="66.15" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\qr\f0\fs18 [tb_Order.\'d4\'f9\'cb\'cd\'bd\'f0\'b6\'ee]\f1\fs17\lang2052\par&#13;&#10;}&#13;&#10;" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1"/>
+      <RichObject Name="Rich31" Left="123.42" Top="104.4" Width="66.15" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fswiss\fcharset0 Calibri;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\qr\f0\fs18 0.00\f1\fs17\lang2052\par&#13;&#10;}&#13;&#10;" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1"/>
+      <TextObject Name="edtAmountv" Left="123.85" Top="9.45" Width="66.15" Height="18.9" Text="6915.00" HorzAlign="Right" Font="宋体, 9pt"/>
+      <TextObject Name="edtmlAmount" Left="123.85" Top="28.35" Width="66.15" Height="18.9" Text="0.00" HorzAlign="Right" Font="宋体, 9pt"/>
+      <TextObject Name="edtamountf2" Left="122.85" Top="66.15" Width="66.15" Height="18.9" Text="0.00" HorzAlign="Right" Font="宋体, 9pt"/>
+      <TextObject Name="edtysAmount" Left="123.85" Top="85.05" Width="66.15" Height="18.9" Text="6915.00" HorzAlign="Right" Font="宋体, 9pt"/>
+      <TextObject Name="edtRound2" Left="6.45" Top="28.35" Width="113.4" Height="18.9" Text="四舍五入：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="edtreport_tele" Left="6" Top="132.3" Width="245.7" Height="15.12" Text="电话：010-64967966" Font="宋体, 9pt"/>
+      <TextObject Name="edtreport_address" Left="6.45" Top="150.2" Width="283.5" Height="15.12" Text="地址：北京惠新东街9号对外经贸大学对面" Font="宋体, 9pt"/>
+      <TextObject Name="edtreport_web" Left="6.45" Top="168.1" Width="245.7" Height="15.12" Text="新辣道网址 WWW.XINLADAO.NET" Font="宋体, 9pt"/>
+    </ReportSummaryBand>
+  </ReportPage>
+</Report>
