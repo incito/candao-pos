@@ -16,12 +16,12 @@ namespace Models
     {
         public Bill_Order()
         { }
-                public static int  strtoint(string str)
+        public static int strtoint(string str)
         {
-            int re=0;
+            int re = 0;
             try
             {
-                re = int.Parse(str); 
+                re = int.Parse(str);
             }
             catch { re = 0; }
             return re;
@@ -31,7 +31,7 @@ namespace Models
             float re = 0;
             try
             {
-                re = (float)Math.Round(float.Parse(str),2);
+                re = (float)Math.Round(float.Parse(str), 2);
             }
             catch { re = 0; }
             return re;
@@ -53,7 +53,7 @@ namespace Models
             try
             {
                 re = DateTime.ParseExact(str, "yyyyMMdd HH:mm:ss", null);
-                if(re<DateTime.Parse("1980-1-1"))
+                if (re < DateTime.Parse("1980-1-1"))
                 {
                     re = DateTime.Now;
                 }
@@ -115,7 +115,7 @@ namespace Models
             column.DefaultValue = DefaultValue;
             return column;
         }
-        public static void jarray2DataTable(JArray jr,ref DataTable dt)
+        public static void jarray2DataTable(JArray jr, ref DataTable dt)
         {
             string fieldname = "";
             DataRow dr = null;
@@ -130,8 +130,13 @@ namespace Models
                         String datatype = dr[fieldname].GetType().ToString();
                         string value = "";
                         try
-                        { value = ja[fieldname].ToString(); }
-                        catch { value = ""; }
+                        {
+                            value = ja[fieldname].ToString();
+                        }
+                        catch
+                        {
+                            value = "";
+                        }
 
                         if (datatype == "System.Int32")
                         {
@@ -145,10 +150,7 @@ namespace Models
                             else
                                 if (datatype == "System.DateTime")
                                 {
-                                    string datestr = value;
-                                    if (value == "")
-                                    { datestr = "19700101 00:00:00"; }
-                                    dr[fieldname] = strtodatetime(datestr);
+                                    dr[fieldname] = strtodatetime(!string.IsNullOrEmpty(value) ? value : "19700101 00:00:00");
                                 }
                                 else
                                 {
@@ -198,7 +200,7 @@ namespace Models
             dt.Columns.Add(column);
             column = newDataColumn("System.Double", "抹零金额", "wipeamount", (Double)0.00);
             dt.Columns.Add(column);
-            column = newDataColumn("System.String", "结算", "payway","");
+            column = newDataColumn("System.String", "结算", "payway", "");
             dt.Columns.Add(column);
             column = newDataColumn("System.String", "合作单位", "partnername", "");
             dt.Columns.Add(column);
@@ -256,7 +258,7 @@ namespace Models
             dt.Columns.Add(column);
             column = newDataColumn("System.String", "yhname", "yhname", "");
             dt.Columns.Add(column);
-            column = newDataColumn("System.String", "partnername", "partnername","");
+            column = newDataColumn("System.String", "partnername", "partnername", "");
             dt.Columns.Add(column);
             column = newDataColumn("System.Double", "couponrate", "couponrate", (Double)0.00);
             dt.Columns.Add(column);
@@ -293,9 +295,9 @@ namespace Models
             DataTable dt = new DataTable();
             dt.TableName = "tb_data";
             //增加单头表字段
-            DataColumn column = newDataColumn("System.Double", "金额", "amount", (Double)0.00);
+            DataColumn column = newDataColumn("System.Double", "金额", "amount", 0d);
             dt.Columns.Add(column);
-            column = newDataColumn("System.Double", "数量", "dishnum", (Double)0.00);
+            column = newDataColumn("System.Double", "数量", "dishnum", 0d);
             dt.Columns.Add(column);
             column = newDataColumn("System.String", "菜品ID", "dishid", "");
             dt.Columns.Add(column);
@@ -329,7 +331,7 @@ namespace Models
             dt.Columns.Add(column);
             column = newDataColumn("System.String", "pricetype", "pricetype", "");
             dt.Columns.Add(column);
-            
+
             jarray2DataTable(jr, ref dt);
             return dt;
         }
@@ -351,7 +353,7 @@ namespace Models
             dt.Columns.Add(column);
             column = newDataColumn("System.Int32", "类型", "incometype", 0);
             dt.Columns.Add(column);
-            column = newDataColumn("System.String", "会员号", "membercardno","");
+            column = newDataColumn("System.String", "会员号", "membercardno", "");
             dt.Columns.Add(column);
             column = newDataColumn("System.String", "银行卡号/优惠名称", "bankcardno", "");
             dt.Columns.Add(column);
@@ -364,6 +366,27 @@ namespace Models
             column = newDataColumn("System.String", "结算类别", "itemDesc", "");
             dt.Columns.Add(column);
             jarray2DataTable(jr, ref dt);
+            return dt;
+        }
+
+        /// <summary>
+        /// 获取结算各项明细的Table表。
+        /// </summary>
+        /// <param name="jr"></param>
+        /// <returns></returns>
+        public static DataTable GetSettlementDetailTable(Dictionary<string, string> dic)
+        {
+            DataTable dt = new DataTable { TableName = "tb_JSMX" };
+            dt.Columns.Add(newDataColumn("System.String", "明细名称", "name", ""));
+            dt.Columns.Add(newDataColumn("System.Double", "明细金额", "value", 0.00d));
+
+            foreach (var item in dic)
+            {
+                var dr = dt.NewRow();
+                dr["name"] = item.Key;
+                dr["value"] = item.Value;
+                dt.Rows.Add(dr);
+            }
             return dt;
         }
 
