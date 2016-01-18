@@ -23,7 +23,6 @@ namespace Main
         [STAThread]
         static void Main()
         {
-
             RestClient.getTicketList("102073024|4900|2015-07-14|会员生日49元购鱼券|1||0.000000,0.000000,false,,");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -117,11 +117,7 @@ namespace Common
         public static void WriteSettings(SystemConfig config)
         {
             XmlSerializer xs = new XmlSerializer(typeof(SystemConfig));
-            string cfgFile = GetConfigPath();
-            var cfgPath = Path.GetDirectoryName(cfgFile);
-            if (!Directory.Exists(cfgPath))
-                Directory.CreateDirectory(cfgPath);
-            Stream stream = new FileStream(cfgFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+            Stream stream = new FileStream(GetConfigPath(), FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
             xs.Serialize(stream, config);
             stream.Close();
         }
