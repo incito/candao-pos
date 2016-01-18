@@ -197,12 +197,13 @@
             this.edtReturn = new DevExpress.XtraEditors.TextEdit();
             this.edtAmount = new DevExpress.XtraEditors.TextEdit();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
-            this.rgpType = new DevExpress.XtraEditors.RadioGroup();
+            this.BtnSelectBank = new System.Windows.Forms.Button();
+            this.TbBankName = new DevExpress.XtraEditors.TextEdit();
             this.label1 = new System.Windows.Forms.Label();
             this.edtCard = new DevExpress.XtraEditors.TextEdit();
-            this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.edtYHCard = new DevExpress.XtraEditors.TextEdit();
+            this.label17 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
             this.xtraTabPage3 = new DevExpress.XtraTab.XtraTabPage();
@@ -279,7 +280,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.edtReturn.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtAmount.Properties)).BeginInit();
             this.xtraTabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.rgpType.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TbBankName.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtCard.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtYHCard.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
@@ -2529,12 +2530,13 @@
             this.xtraTabPage2.Appearance.HeaderDisabled.Options.UseBorderColor = true;
             this.xtraTabPage2.Appearance.PageClient.BackColor = System.Drawing.Color.White;
             this.xtraTabPage2.Appearance.PageClient.Options.UseBackColor = true;
-            this.xtraTabPage2.Controls.Add(this.rgpType);
+            this.xtraTabPage2.Controls.Add(this.BtnSelectBank);
+            this.xtraTabPage2.Controls.Add(this.TbBankName);
             this.xtraTabPage2.Controls.Add(this.label1);
             this.xtraTabPage2.Controls.Add(this.edtCard);
-            this.xtraTabPage2.Controls.Add(this.label17);
             this.xtraTabPage2.Controls.Add(this.label16);
             this.xtraTabPage2.Controls.Add(this.edtYHCard);
+            this.xtraTabPage2.Controls.Add(this.label17);
             this.xtraTabPage2.Controls.Add(this.label8);
             this.xtraTabPage2.Controls.Add(this.textEdit1);
             this.xtraTabPage2.Name = "xtraTabPage2";
@@ -2542,45 +2544,78 @@
             this.xtraTabPage2.Text = "银行卡";
             this.xtraTabPage2.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
             // 
-            // rgpType
+            // BtnSelectBank
             // 
-            this.rgpType.EditValue = 0;
-            this.rgpType.Location = new System.Drawing.Point(60, 211);
-            this.rgpType.Name = "rgpType";
-            this.rgpType.Properties.Appearance.Font = new System.Drawing.Font("宋体", 22F, System.Drawing.FontStyle.Bold);
-            this.rgpType.Properties.Appearance.Options.UseFont = true;
-            this.rgpType.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Office2003;
-            this.rgpType.Properties.Columns = 2;
-            this.rgpType.Properties.Items.AddRange(new DevExpress.XtraEditors.Controls.RadioGroupItem[] {
-            new DevExpress.XtraEditors.Controls.RadioGroupItem(0, "它行"),
-            new DevExpress.XtraEditors.Controls.RadioGroupItem(1, "工行")});
-            this.rgpType.Size = new System.Drawing.Size(230, 54);
-            this.rgpType.TabIndex = 302;
+            this.BtnSelectBank.Font = new System.Drawing.Font("宋体", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.BtnSelectBank.Location = new System.Drawing.Point(56, 9);
+            this.BtnSelectBank.Name = "BtnSelectBank";
+            this.BtnSelectBank.Size = new System.Drawing.Size(229, 42);
+            this.BtnSelectBank.TabIndex = 309;
+            this.BtnSelectBank.Text = "选择银行";
+            this.BtnSelectBank.UseVisualStyleBackColor = true;
+            this.BtnSelectBank.Click += new System.EventHandler(this.BtnSelectBank_Click_1);
+            // 
+            // TbBankName
+            // 
+            this.TbBankName.EditValue = "";
+            this.TbBankName.Enabled = false;
+            this.TbBankName.Location = new System.Drawing.Point(57, 59);
+            this.TbBankName.MenuManager = this.barManager1;
+            this.TbBankName.Name = "TbBankName";
+            this.TbBankName.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TbBankName.Properties.Appearance.Options.UseFont = true;
+            this.TbBankName.Size = new System.Drawing.Size(228, 40);
+            this.TbBankName.TabIndex = 308;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.CornflowerBlue;
-            this.label1.Font = new System.Drawing.Font("宋体", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Font = new System.Drawing.Font("宋体", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(62, 119);
+            this.label1.Location = new System.Drawing.Point(57, 187);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(117, 34);
-            this.label1.TabIndex = 301;
+            this.label1.Size = new System.Drawing.Size(93, 27);
+            this.label1.TabIndex = 307;
             this.label1.Text = "金额：";
             // 
             // edtCard
             // 
             this.edtCard.EditValue = "";
-            this.edtCard.Location = new System.Drawing.Point(61, 163);
+            this.edtCard.Location = new System.Drawing.Point(56, 222);
             this.edtCard.Name = "edtCard";
-            this.edtCard.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 25F);
+            this.edtCard.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.edtCard.Properties.Appearance.Options.UseFont = true;
-            this.edtCard.Size = new System.Drawing.Size(229, 46);
-            this.edtCard.TabIndex = 300;
+            this.edtCard.Size = new System.Drawing.Size(229, 40);
+            this.edtCard.TabIndex = 306;
             this.edtCard.EditValueChanged += new System.EventHandler(this.edtCard_EditValueChanged);
             this.edtCard.Enter += new System.EventHandler(this.edtCard_Enter);
             this.edtCard.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edtAmount_KeyPress);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("宋体", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label16.Location = new System.Drawing.Point(49, 110);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(147, 27);
+            this.label16.TabIndex = 305;
+            this.label16.Text = "银行卡号：";
+            // 
+            // edtYHCard
+            // 
+            this.edtYHCard.EditValue = "";
+            this.edtYHCard.Location = new System.Drawing.Point(56, 142);
+            this.edtYHCard.Name = "edtYHCard";
+            this.edtYHCard.Properties.Appearance.BackColor = System.Drawing.Color.Moccasin;
+            this.edtYHCard.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.edtYHCard.Properties.Appearance.Options.UseBackColor = true;
+            this.edtYHCard.Properties.Appearance.Options.UseFont = true;
+            this.edtYHCard.Size = new System.Drawing.Size(229, 40);
+            this.edtYHCard.TabIndex = 304;
+            this.edtYHCard.Tag = "100";
+            this.edtYHCard.Enter += new System.EventHandler(this.edtYHCard_Enter);
+            this.edtYHCard.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edtYHCard_KeyPress);
             // 
             // label17
             // 
@@ -2592,31 +2627,6 @@
             this.label17.TabIndex = 299;
             this.label17.Text = "银行：";
             this.label17.Visible = false;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("宋体", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label16.Location = new System.Drawing.Point(54, 23);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(185, 34);
-            this.label16.TabIndex = 298;
-            this.label16.Text = "银行卡号：";
-            // 
-            // edtYHCard
-            // 
-            this.edtYHCard.EditValue = "";
-            this.edtYHCard.Location = new System.Drawing.Point(61, 66);
-            this.edtYHCard.Name = "edtYHCard";
-            this.edtYHCard.Properties.Appearance.BackColor = System.Drawing.Color.Moccasin;
-            this.edtYHCard.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 25F);
-            this.edtYHCard.Properties.Appearance.Options.UseBackColor = true;
-            this.edtYHCard.Properties.Appearance.Options.UseFont = true;
-            this.edtYHCard.Size = new System.Drawing.Size(229, 46);
-            this.edtYHCard.TabIndex = 297;
-            this.edtYHCard.Tag = "100";
-            this.edtYHCard.Enter += new System.EventHandler(this.edtYHCard_Enter);
-            this.edtYHCard.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edtYHCard_KeyPress);
             // 
             // label8
             // 
@@ -3185,7 +3195,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.edtAmount.Properties)).EndInit();
             this.xtraTabPage2.ResumeLayout(false);
             this.xtraTabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.rgpType.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TbBankName.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtCard.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtYHCard.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
@@ -3257,8 +3267,6 @@
         private System.Windows.Forms.Label label14;
         private DevExpress.XtraEditors.TextEdit edtMemberCard;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label16;
-        private DevExpress.XtraEditors.TextEdit edtYHCard;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label lblUser;
         private System.Windows.Forms.Timer timer1;
@@ -3282,8 +3290,6 @@
         private System.Windows.Forms.Button button26;
         private System.Windows.Forms.Panel pnlSum;
         private System.Windows.Forms.Label lblSum;
-        private System.Windows.Forms.Label label1;
-        private DevExpress.XtraEditors.TextEdit edtCard;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Timer tmrOpen;
         private System.Windows.Forms.Button btnOpen;
@@ -3338,7 +3344,6 @@
         private System.Windows.Forms.Button btnPay2;
         private System.Windows.Forms.Button button37;
         private System.Windows.Forms.ImageList imageList1;
-        private DevExpress.XtraEditors.RadioGroup rgpType;
         private System.Windows.Forms.Button button52;
         private System.Windows.Forms.CheckBox cbxOnLine;
         private System.Windows.Forms.Label lblMember;
@@ -3428,5 +3433,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn yhname;
         private System.Windows.Forms.DataGridViewTextBoxColumn num;
         private System.Windows.Forms.DataGridViewTextBoxColumn yhamount;
+        private System.Windows.Forms.Button BtnSelectBank;
+        private DevExpress.XtraEditors.TextEdit TbBankName;
+        private System.Windows.Forms.Label label1;
+        private DevExpress.XtraEditors.TextEdit edtCard;
+        private System.Windows.Forms.Label label16;
+        private DevExpress.XtraEditors.TextEdit edtYHCard;
     }
 }

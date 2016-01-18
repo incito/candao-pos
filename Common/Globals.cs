@@ -136,6 +136,11 @@ namespace Common
         public static JArray cjFood;//餐具
         public static String branch_id = "";//分店ID号
 
+        /// <summary>
+        /// 所有银行集合。
+        /// </summary>
+        public static List<BankInfo> BankInfos { get; set; }
+
         //客用单
         public static DataTable CustPrintTable = new DataTable();
         /// <summary>

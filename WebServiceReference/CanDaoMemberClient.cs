@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.IO;
-using System.Data;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Xml;
-using System.Windows.Forms;
-using System.Runtime.Serialization.Json;
-using System.Runtime.Serialization;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Common;
 using Models;
 using Models.CandaoMember;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace WebServiceReference
 {
