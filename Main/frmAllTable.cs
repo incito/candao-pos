@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Library;
@@ -13,6 +14,7 @@ using Models;
 using WebServiceReference;
 using ReportsFastReport;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Main
 {
@@ -77,6 +79,20 @@ namespace Main
 
         private void frmAllTable_Load(object sender, EventArgs e)
         {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                if (Globals.BankInfos == null)
+                    Globals.BankInfos = RestClient.GetAllBankInfos();
+
+                if (Globals.BankInfos != null)
+                {
+                    foreach (var bankInfo in Globals.BankInfos)
+                    {
+                        var imgTempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", bankInfo.Id.ToString() + ".png");
+                        bankInfo.ImageSource = imgTempPath;
+                    }
+                }
+            });
             lblUser.Text = String.Format("µÇÂ¼Ô±¹¤:{0}", Globals.UserInfo.UserName);
             lblbranchid.Text = String.Format("µêÆÌ±àºÅ£º{0}", RestClient.getbranch_id());
             timer2.Enabled = true;

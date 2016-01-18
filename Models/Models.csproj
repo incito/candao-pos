@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BankInfo.cs" />
     <Compile Include="Bill_Order.cs" />
     <Compile Include="CandaoMember\TCandaoMemberCardInfo.cs" />
     <Compile Include="CandaoMember\TCandaoMemberInfo.cs" />

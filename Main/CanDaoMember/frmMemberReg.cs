@@ -170,7 +170,11 @@ namespace Main
                 Warning("请输入手机号！");
                 return ret;
             }
-
+            if (!IsTelephone(edtMobile.Text))
+            {
+                Warning("请输入正确的手机号！");
+                return ret;
+            }
             if (edtUserName.Text.Trim().ToString().Length <= 0)
             {
                 Warning("请输入姓名！");
@@ -182,7 +186,11 @@ namespace Main
                 Warning("请输入姓名！");
                 return ret;
             }
-
+            if (edtPwd.Text.Trim().ToString().Length <= 0)
+            {
+                Warning("请输入密码！");
+                return ret;
+            }
             if (!edtPwd.Text.Equals(edtPwd2.Text))
             {
                 Warning("两次输入的密码不符！");
@@ -300,5 +308,11 @@ namespace Main
             Application.DoEvents();
 
         }
+        public bool IsTelephone(string str_telephone)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(str_telephone, @"1[0-9]{10}$");
+
+        }
+
     }
 }

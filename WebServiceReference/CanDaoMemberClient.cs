@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.IO;
-using System.Data;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Xml;
-using System.Windows.Forms;
-using System.Runtime.Serialization.Json;
-using System.Runtime.Serialization;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Common;
 using Models;
 using Models.CandaoMember;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace WebServiceReference
 {
@@ -187,9 +174,18 @@ namespace WebServiceReference
             ret.Retcode = ja["Retcode"].ToString();
             ret.Ret = ret.Retcode.Equals("0");
             ret.Retinfo = ja["RetInfo"].ToString();
+            try
+            {
+                if (ret.Retcode.Equals("1"))
+                {
+                    ret.Ret = false;  return ret;
+                }
+            }
+            catch { }
+
             ret.Tracecode = ja["TraceCode"].ToString();
             ret.Storecardbalance = decimal.Parse(ja["StoreCardBalance"].ToString());
-            ret.Inflatedrate = decimal.Parse(ja["IntegralOverall"].ToString());
+            ret.Integraloverall = decimal.Parse(ja["IntegralOverall"].ToString());
             ret.Addintegral = decimal.Parse(ja["AddIntegral"].ToString());
             ret.Decintegral = decimal.Parse(ja["DecIntegral"].ToString());
             ret.Decintegral = decimal.Parse(ja["InflatedRate"].ToString());
@@ -282,6 +278,17 @@ namespace WebServiceReference
             catch { ret.Ret = false; return ret; }
             try
             {
+                String Retcode = ja["Retcode"].ToString();
+                String RetInfo = ja["RetInfo"].ToString();
+                if(Retcode.Equals("1"))
+                {
+                    ret.Ret = false; ret.Retcode = "1"; ret.Retinfo = RetInfo; return ret;
+                }
+            }
+            catch { }
+
+            try
+            {
                 ret.Mcard = ja["CardList"].ToString();//mobile MCard
             }
             catch { ret.Ret = false; ret.Retcode = "1"; ret.Retinfo = "查询失败，服务器未返回数据！"; return ret; }
@@ -310,12 +317,21 @@ namespace WebServiceReference
             ret.Cardlist = ja["CardList"].ToString();
             ret.Member_avatar = ja["member_avatar"].ToString();
             ret.Cardlevel = "0";// ja["CardLevel"].ToString();
+            try
+            {
+                ret.Cardlevel = ja["CardLevel"].ToString();
+            }
+            catch { }
             JArray jr = (JArray)JsonConvert.DeserializeObject(ret.Cardlist);
             JObject jaCard = (JObject)jr[0];
             ret.Mcard = jaCard["cardno"].ToString();
             ret.Mobile = ja["mobile"].ToString();
             ret.Name=ja["name"].ToString();
-            ret.Gender = int.Parse(ja["gender"].ToString());
+            try
+            {
+                ret.Gender = int.Parse(ja["gender"].ToString());
+            }
+            catch { ret.Gender = 0; }
             ret.Birthday = ja["birthday"].ToString();
             ret.Memberaddress = ja["MemberAddress"].ToString();
             ret.Cardno = jaCard["cardno"].ToString();
@@ -368,6 +384,10 @@ namespace WebServiceReference
             ret.Retcode = ja["Retcode"].ToString();
             ret.Ret = ret.Retcode.Equals("0");
             ret.Retinfo = ja["RetInfo"].ToString();
+            if (!ret.Retcode.Equals("0"))
+            {
+                return ret;
+            }
             ret.Tracecode = ja["TraceCode"].ToString();
             ret.StoreCardbalance = decimal.Parse(ja["StoreCardBalance"].ToString());
             ret.Giftamount = decimal.Parse(ja["GiftAmount"].ToString());
@@ -632,9 +652,14 @@ namespace WebServiceReference
             ret.Retcode = ja["Retcode"].ToString();
             ret.Ret = ret.Retcode.Equals("0");
             ret.Retinfo = ja["RetInfo"].ToString();
-            ret.StoreCardbalance = decimal.Parse(ja["StoreCardBalance"].ToString());
-            ret.Integraloverall = decimal.Parse(ja["IntegralOverall"].ToString());
-            ret.Couponsoverall = 0;// decimal.Parse(ja["CouponsOverall"].ToString());
+            if (!ret.Retcode.Equals("0")) { return ret; }
+            try
+            {
+                ret.StoreCardbalance = decimal.Parse(ja["StoreCardBalance"].ToString());
+                ret.Integraloverall = decimal.Parse(ja["IntegralOverall"].ToString());
+                ret.Couponsoverall = 0;// decimal.Parse(ja["CouponsOverall"].ToString());
+            }
+            catch { }
             return ret;
         }
 
@@ -817,7 +842,7 @@ namespace WebServiceReference
             writer.WritePropertyName("stored");
             writer.WriteValue(ordermemberinfo.Stored);
             writer.WritePropertyName("scorebalance");
-            writer.WriteValue(ordermemberinfo.Storedbalance);
+            writer.WriteValue(ordermemberinfo.Scorebalance);
             writer.WritePropertyName("couponsbalance");
             writer.WriteValue(ordermemberinfo.Couponsbalance);
             writer.WritePropertyName("storedbalance");

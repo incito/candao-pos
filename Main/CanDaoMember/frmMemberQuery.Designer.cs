@@ -67,6 +67,8 @@ namespace Main
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.edtPwd = new DevExpress.XtraEditors.TextEdit();
+            this.label20 = new System.Windows.Forms.Label();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.pnlNum.SuspendLayout();
@@ -81,13 +83,14 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edtPwd.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl2
             // 
             this.tabControl2.Controls.Add(this.tabPage2);
             this.tabControl2.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.tabControl2.Location = new System.Drawing.Point(0, 237);
+            this.tabControl2.Location = new System.Drawing.Point(5, 298);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(754, 277);
@@ -349,11 +352,13 @@ namespace Main
             this.tabControl1.Location = new System.Drawing.Point(0, 67);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(755, 173);
+            this.tabControl1.Size = new System.Drawing.Size(755, 225);
             this.tabControl1.TabIndex = 319;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.edtPwd);
+            this.tabPage1.Controls.Add(this.label20);
             this.tabPage1.Controls.Add(this.edtPoint);
             this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.edtAmount);
@@ -370,7 +375,7 @@ namespace Main
             this.tabPage1.Location = new System.Drawing.Point(4, 28);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(747, 141);
+            this.tabPage1.Size = new System.Drawing.Size(747, 193);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "会员信息";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -559,13 +564,34 @@ namespace Main
             this.pictureBox1.TabIndex = 26;
             this.pictureBox1.TabStop = false;
             // 
+            // edtPwd
+            // 
+            this.edtPwd.EditValue = "";
+            this.edtPwd.Location = new System.Drawing.Point(163, 145);
+            this.edtPwd.Name = "edtPwd";
+            this.edtPwd.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 20F);
+            this.edtPwd.Properties.Appearance.Options.UseFont = true;
+            this.edtPwd.Properties.PasswordChar = '*';
+            this.edtPwd.Size = new System.Drawing.Size(227, 40);
+            this.edtPwd.TabIndex = 327;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("宋体", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label20.Location = new System.Drawing.Point(-5, 147);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(185, 34);
+            this.label20.TabIndex = 328;
+            this.label20.Text = "会员密码：";
+            // 
             // frmMemberQuery
             // 
             this.Appearance.BackColor = System.Drawing.SystemColors.Window;
             this.Appearance.Options.UseBackColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(760, 512);
+            this.ClientSize = new System.Drawing.Size(760, 577);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel1);
@@ -592,6 +618,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.edtPwd.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -637,6 +664,8 @@ namespace Main
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage2;
+        private DevExpress.XtraEditors.TextEdit edtPwd;
+        private System.Windows.Forms.Label label20;
 
     }
 }
