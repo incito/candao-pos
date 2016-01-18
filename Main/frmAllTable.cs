@@ -459,11 +459,25 @@ namespace Main
                 string data = ja["Data"].ToString();
                 if (data.Equals("1"))
                 {
-                    try
+                    do
                     {
-                        RestClient.jdesyndata();///调用上传回调///http://localhost:8080/newspicyway/padinterface/jdesyndata.json
-                    }
-                    catch { }              
+                        bool result = false;
+                        try
+                        {
+                            result = RestClient.jdesyndata();//调用上传回调//http://localhost:8080/newspicyway/padinterface/jdesyndata.json
+                        }
+                        catch (Exception)
+                        {
+                            result = false;
+                            //Warning("上传数据失败！");
+                        }
+
+                        if (result)
+                            break;
+
+                        if (!AskQuestion("上传数据失败，重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃。"))
+                            break;
+                    } while (true);
                     //打印清机报表
                     Warning("结业成功!");
                     //返回主界面
@@ -473,11 +487,17 @@ namespace Main
                 }
                 else
                 {
-                    Warning(ja["Info"].ToString());
+                    var msg = ja["Info"].ToString();
+                    if (string.IsNullOrEmpty(msg))
+                        msg = "结业失败！";
+                    Warning(msg);
                 }
 
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Warning("结业失败。" + ex.Message);
+            }
 
         }
 

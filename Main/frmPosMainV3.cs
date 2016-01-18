@@ -4400,6 +4400,7 @@ namespace Main
                     Warning("下单失败，请检查网络!");
                     ////如果会员已经成功，那么只能把雅座中的交易撤销，再重新下单
                 }
+                RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。
                 if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray()).Equals("0"))
                 {
                     isok = false;

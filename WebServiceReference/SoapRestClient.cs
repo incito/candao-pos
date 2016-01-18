@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Data;
+using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -72,6 +73,57 @@ namespace WebServiceReference
             { ipaddress = ip.ToString(); }
             catch { ipaddress = ""; }
             return ipaddress;
+        }
+        /// <summary>
+        /// 获取MAC地址。
+        /// </summary>
+        /// <returns></returns>
+        private static string GetMacAddr()
+        {
+            string mac = GetMacByWMI();
+            if (string.IsNullOrEmpty(mac))
+                mac = GetMacByNetworkInterface();
+            return mac;
+        }
+
+        /// <summary>
+        /// 获取MAC地址方法1。依赖WMI的系统服务，该服务一般不会被关闭；但如果系统服务缺失或者出现问题，该方法无法取得MAC地址。
+        /// </summary>
+        /// <returns></returns>
+        private static string GetMacByWMI()
+        {
+            try
+            {
+                string macAddress = "";
+                ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+                ManagementObjectCollection moc = mc.GetInstances();
+                foreach (var o in moc)
+                {
+                    var mo = (ManagementObject)o;
+                    if ((bool)mo["IPEnabled"])
+                        macAddress = mo["MacAddress"].ToString();
+                    mo.Dispose();
+                }
+                return macAddress;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// 获取MAC地址方法2。
+        /// </summary>
+        /// <returns></returns>
+        private static string GetMacByNetworkInterface()
+        {
+            NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+            if (interfaces.Length > 0)
+            {
+                return interfaces[0].GetPhysicalAddress().ToString();
+            }
+            return "00-00-00-00-00-00";
         }
         public static string ToUnicodeString(string str)
         {
@@ -1549,9 +1601,9 @@ namespace WebServiceReference
         /// <returns></returns>
         public static JObject clearMachine(string userid, string username, string authorizer)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string mac = GetMacAddr();
             string posid = getPosID();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/clearMachine/{0}/{1}/{2}/{3}/{4}/", userid, username, ipaddress, posid, authorizer);
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/clearMachine/{0}/{1}/{2}/{3}/{4}/", userid, username, mac, posid, authorizer);
             String jsonResult = RestClient.Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
@@ -1592,8 +1644,8 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool InputTellerCash(string aUserID, double cachamount, int CallType, out string reinfo)
         {
-            string ipaddress = RestClient.GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/InputTellerCash/{0}/{1}/{2}/{3}/", aUserID,ipaddress, cachamount, CallType);
+            string mac = GetMacAddr();
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/InputTellerCash/{0}/{1}/{2}/{3}/", aUserID, mac, cachamount, CallType);
             String jsonResult = RestClient.Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
@@ -1629,7 +1681,7 @@ namespace WebServiceReference
         /// <summary>
         /// jde同步资料回调
         /// </summary>
-        public static void jdesyndata()
+        public static bool jdesyndata()
         {
             string address = "http://" + server + "/" + apiPath + "/padinterface/jdesyndata.json";
             //{"synkey":"candaosynkey"}
@@ -1640,8 +1692,12 @@ namespace WebServiceReference
             writer.WriteValue("candaosynkey");
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
-            return;
+            string jsonResult = RestClient.Post_Rest(address, sw);
+            if (jsonResult == "0")
+                return false;
+            
+            var jr = (JArray)JsonConvert.DeserializeObject(jsonResult);
+            return jr["result"].ToString().Equals("0");
         }
         /// <summary>
         /// 按类别获取优惠列表
