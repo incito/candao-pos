@@ -1387,12 +1387,12 @@ namespace Main
             {
                 ReportAmount ra;
                 ra.orderid = Globals.CurrOrderInfo.orderid;
-                ra.amount = Math.Round(Convert.ToDouble(Globals.CurrTableInfo.amount), 2); 
-                ra.ysAmount = Math.Round(Convert.ToDouble(ysamount), 2);
-                ra.mlAmount = Math.Round(Convert.ToDouble(amountml), 2); //amountml;
-                ra.amountgz = Math.Round(Convert.ToDouble(amountgz2), 2); //amountgz2;
-                ra.amountym = Math.Round(Convert.ToDouble(amountym), 2); //amountym;
-                ra.amountround = Math.Round(Convert.ToDouble(amountroundtz), 2);
+                ra.amount = Math.Round(Convert.ToDecimal(Globals.CurrTableInfo.amount), 2);
+                ra.ysAmount = Math.Round(Convert.ToDecimal(ysamount), 2);
+                ra.mlAmount = Math.Round(Convert.ToDecimal(amountml), 2); //amountml;
+                ra.amountgz = Math.Round(Convert.ToDecimal(amountgz2), 2); //amountgz2;
+                ra.amountym = Math.Round(Convert.ToDecimal(amountym), 2); //amountym;
+                ra.amountround = Math.Round(Convert.ToDecimal(amountroundtz), 2);
                 this.Cursor = Cursors.WaitCursor;
                 if (Globals.OrderTable.Rows.Count <= 0)
                     return;

@@ -21,44 +21,45 @@ namespace ReportsFastReport
     public struct ReportAmount
     {
         public string orderid;//帐单号
-        public double amount;//合计金额
-        public double ysAmount;//应收金额
-        public double mlAmount;//抹零金额
-        public double amountgz;//挂帐金额
-        public double amountym;//优免金额
-        public double amountround;//
+        public decimal amount;//合计金额
+        public decimal ysAmount;//应收金额
+        public decimal mlAmount;//抹零金额
+        public decimal amountgz;//挂帐金额
+        public decimal amountym;//优免金额
+        public decimal amountround;//
     }
     public class ReportPrint
     {
         private static ReportAmount ramount;
-        private static Report rptReport=new Report();
-        private static frmPrintProgress frmProgress =new frmPrintProgress();
+        private static Report rptReport = new Report();
+        private static frmPrintProgress frmProgress = new frmPrintProgress();
         /// <summary>
         /// 打印预结单2
         /// </summary>
-        public static void PrintPayBill(String billno, String printuser, DataTable yhList,ReportAmount ra)
+        public static void PrintPayBill(String billno, String printuser, DataTable yhList, ReportAmount ra)
         {
             //
-            ramount =ra;
+            ramount = ra;
             JArray jrOrder = null;
             JArray jrList = null;
             JArray jrJS = null;
             try
             {
-                if(!RestClient.getOrderInfo(Globals.UserInfo.UserName, Globals.CurrOrderInfo.orderid,1, out jrOrder, out jrList, out jrJS))
+                if (!RestClient.getOrderInfo(Globals.UserInfo.UserName, Globals.CurrOrderInfo.orderid, 1, out jrOrder, out jrList, out jrJS))
                 {
                     return;
                 }
             }
             catch { }
-            DataTable dtOrder=null;
+            DataTable dtOrder = null;
             DataTable dtList = null;
             DataTable dtJs = null;
             DataTable yh = new DataTable();
             yh = yhList.Copy();
-            dtOrder = Models.Bill_Order.getOrder(jrOrder);
-            dtList = Models.Bill_Order.getOrder_List(jrList);
-            dtJs = Models.Bill_Order.getOrder_Js(jrJS); 
+            dtOrder = Bill_Order.getOrder(jrOrder);
+            dtList = Bill_Order.getOrder_List(jrList);
+            dtJs = Bill_Order.getOrder_Js(jrJS);
+            DataTable dtSettlementDetail = Bill_Order.GetSettlementDetailTable(GetPresettlementDetailList((JObject)jrOrder[0], ra));
             rptReport.Clear();
             string file = Application.StartupPath + @"\Reports\rptBill.frx";
             rptReport.Load(file);//加载报表模板文件
@@ -67,9 +68,45 @@ namespace ReportsFastReport
             ds.Tables.Add(dtList);
             ds.Tables.Add(dtJs);
             ds.Tables.Add(yh);
+            ds.Tables.Add(dtSettlementDetail);
             InitializeReport(ds, ref rptReport, dtList.TableName);
-            PrintRpt(rptReport,1);
+            PrintRpt(rptReport, 1);
         }
+
+        private static Dictionary<string, string> GetPresettlementDetailList(JObject jObj, ReportAmount ra)
+        {
+            var dic = new Dictionary<string, string>();
+            dic.Add("合计：", ra.amount.ToString("f2"));
+
+            if (Globals.roundinfo.Itemid.Equals("1")) //四舍五入
+            {
+                if (ra.amountround > 0)
+                    dic.Add("四舍五入：", ra.amountround.ToString("f2"));
+            }
+            else if (Globals.roundinfo.Itemid.Equals("2")) // 抹零
+            {
+                if (ra.mlAmount > 0)
+                    dic.Add("抹零：", ra.mlAmount.ToString("f2"));
+            }
+
+            var valueStr = jObj["zdAmount"].ToString();
+            if (!string.IsNullOrEmpty(valueStr))
+            {
+                var amount = Convert.ToDecimal(valueStr);
+                if (amount > 0)
+                {
+                    dic.Add("赠送金额：", amount.ToString("f2"));
+                }
+            }
+
+            if (ra.amount - ra.ysAmount > 0)
+                dic.Add("总优惠：", Math.Round(ra.amount - ra.ysAmount, 2).ToString("f2"));
+
+            dic.Add("应收：", ra.ysAmount.ToString("f2"));
+
+            return dic;
+        }
+
         /// <summary>
         /// 打印结帐单
         /// </summary>
@@ -91,9 +128,10 @@ namespace ReportsFastReport
             DataTable dtList = null;
             DataTable dtJs = null;
 
-            dtOrder = Models.Bill_Order.getOrder(jrOrder);
-            dtList = Models.Bill_Order.getOrder_List(jrList);
-            dtJs = Models.Bill_Order.getOrder_Js(jrJS);
+            dtOrder = Bill_Order.getOrder(jrOrder);
+            dtList = Bill_Order.getOrder_List(jrList);
+            dtJs = Bill_Order.getOrder_Js(jrJS);
+            DataTable dtSettlementDetail = Bill_Order.GetSettlementDetailTable(GetSettlementDetailList((JObject)jrOrder[0]));
             rptReport.Clear();
             string file = Application.StartupPath + @"\Reports\rptBill2.frx";
             rptReport.Load(file);//加载报表模板文件
@@ -101,15 +139,68 @@ namespace ReportsFastReport
             ds.Tables.Add(dtOrder);
             ds.Tables.Add(dtList);
             ds.Tables.Add(dtJs);
-            //如果是四舍五入，如果是抹零
-            setRtpISRound(ref rptReport, ref dtOrder);
+            ds.Tables.Add(dtSettlementDetail);
             InitializeReport(ds, ref rptReport, dtList.TableName);
             PrintRpt(rptReport, 1);
         }
+
+        /// <summary>
+        /// 获取结算明细的键值对集合。
+        /// </summary>
+        /// <param name="jObj"></param>
+        /// <returns></returns>
+        private static Dictionary<string, string> GetSettlementDetailList(JObject jObj)
+        {
+            var dic = new Dictionary<string, string>();
+            var valueStr = jObj["dueamount"].ToString();
+            var sumAmount = Convert.ToDecimal(valueStr);//合计金额。
+            dic.Add("合计：", sumAmount.ToString("f2"));
+
+            if (Globals.roundinfo.Itemid.Equals("1")) //四舍五入
+            {
+                valueStr = jObj["payamount2"].ToString();
+                if (!string.IsNullOrEmpty(valueStr))
+                {
+                    var value = Convert.ToDecimal(valueStr);
+                    if (value > 0)
+                        dic.Add("四舍五入：", value.ToString("f2"));
+                }
+            }
+            else if (Globals.roundinfo.Itemid.Equals("2"))// 抹零
+            {
+                valueStr = jObj["payamount"].ToString();
+                if (!string.IsNullOrEmpty(valueStr))
+                {
+                    var value = Convert.ToDecimal(valueStr);
+                    if (value > 0)
+                        dic.Add("抹零：", value.ToString("f2"));
+                }
+            }
+
+            valueStr = jObj["zdAmount"].ToString();
+            if (!string.IsNullOrEmpty(valueStr))
+            {
+                var amount = Convert.ToDecimal(valueStr);
+                if (amount > 0)
+                {
+                    dic.Add("赠送金额：", amount.ToString("f2"));
+                }
+            }
+
+            valueStr = jObj["ssamount"].ToString();
+            var actualAmount = Convert.ToDecimal(valueStr);//实收金额。
+            var favorableAmount = sumAmount - actualAmount;
+            if (favorableAmount > 0)
+                dic.Add("总优惠：", Math.Round(favorableAmount, 2).ToString("f2"));
+            dic.Add("实收：", actualAmount.ToString("f2"));
+
+            return dic;
+        }
+
         /// <summary>
         /// 按是四舍五入还是抹零还决定报表上显示的字段内容
         /// </summary>
-        private static void setRtpISRound(ref Report rtp,ref DataTable dt)
+        private static void setRtpISRound(ref Report rtp, ref DataTable dt)
         {
             try
             {
@@ -195,27 +286,27 @@ namespace ReportsFastReport
                 }
                 dtOrder = Models.Bill_Order.getMemberSaleInfo_List(jrOrder);
 
-            rptReport.Clear();
-            if(dtOrder.Rows.Count<=0)
-            {
-                Library.frmWarning.ShowWarning("该单没有会员消费记录!");
-                return;
-            }
-            string file = Application.StartupPath + @"\Reports\rptyz1.frx";
-            rptReport.Load(file);//加载报表模板文件
-            DataSet ds = new DataSet();
-            ds.Tables.Add(dtOrder);
-            InitializeReport(ds, ref rptReport, dtOrder.TableName);
-            AddedtValue(ref rptReport, "edtreport_membertitle", WebServiceReference.WebServiceReference.Report_membertitle);
-            AddedtValue(ref rptReport, "Text2", "------商户联------");
-            visiableObj(ref rptReport, "Rich18", true);
-            visiableObj(ref rptReport, "Line1", true);   
-            PrintRpt(rptReport,1);
-            Application.DoEvents();
-            AddedtValue(ref rptReport, "Text2", "------客户联------");
-            visiableObj(ref rptReport, "Rich18", false);
-            visiableObj(ref rptReport, "Line1", false);   
-            PrintRpt(rptReport, 1);
+                rptReport.Clear();
+                if (dtOrder.Rows.Count <= 0)
+                {
+                    Library.frmWarning.ShowWarning("该单没有会员消费记录!");
+                    return;
+                }
+                string file = Application.StartupPath + @"\Reports\rptyz1.frx";
+                rptReport.Load(file);//加载报表模板文件
+                DataSet ds = new DataSet();
+                ds.Tables.Add(dtOrder);
+                InitializeReport(ds, ref rptReport, dtOrder.TableName);
+                AddedtValue(ref rptReport, "edtreport_membertitle", WebServiceReference.WebServiceReference.Report_membertitle);
+                AddedtValue(ref rptReport, "Text2", "------商户联------");
+                visiableObj(ref rptReport, "Rich18", true);
+                visiableObj(ref rptReport, "Line1", true);
+                PrintRpt(rptReport, 1);
+                Application.DoEvents();
+                AddedtValue(ref rptReport, "Text2", "------客户联------");
+                visiableObj(ref rptReport, "Rich18", false);
+                visiableObj(ref rptReport, "Line1", false);
+                PrintRpt(rptReport, 1);
             }
             catch { }
         }
@@ -225,24 +316,24 @@ namespace ReportsFastReport
         /// <param name="billno"></param>
         /// <param name="invoice_title"></param>
         /// <param name="tableno"></param>
-        public static void PrintInvoice(String billno, String invoice_title,String tableno,decimal amount)
+        public static void PrintInvoice(String billno, String invoice_title, String tableno, decimal amount)
         {
             try
             {
 
-            rptReport.Clear();
+                rptReport.Clear();
 
-            string file = Application.StartupPath + @"\Reports\rptInvoice.frx";
-            rptReport.Load(file);//加载报表模板文件
-            AddedtValue(ref rptReport, "lbltableno", String.Format("桌  号：{0}", tableno));
-            AddedtValue(ref rptReport, "lblorderno", String.Format("帐单号：{0}", billno));
-            AddedtValue(ref rptReport, "lblamount", String.Format("发票金额：{0}", amount.ToString()));
-            AddedtValue(ref rptReport, "lblinvoicetitle", String.Format("发票抬头：{0}", invoice_title));
-            PrintRpt(rptReport,1);
+                string file = Application.StartupPath + @"\Reports\rptInvoice.frx";
+                rptReport.Load(file);//加载报表模板文件
+                AddedtValue(ref rptReport, "lbltableno", String.Format("桌  号：{0}", tableno));
+                AddedtValue(ref rptReport, "lblorderno", String.Format("帐单号：{0}", billno));
+                AddedtValue(ref rptReport, "lblamount", String.Format("发票金额：{0}", amount.ToString()));
+                AddedtValue(ref rptReport, "lblinvoicetitle", String.Format("发票抬头：{0}", invoice_title));
+                PrintRpt(rptReport, 1);
             }
             catch { }
         }
-        
+
         /// <summary>
         /// //打印清机报表
         /// </summary>
@@ -253,7 +344,7 @@ namespace ReportsFastReport
             JArray jrJS = null;
             string printuser = Globals.UserInfo.UserID;
             string jsorder = Globals.jsOrder;
-            if (jsorder.Trim().ToString().Length<=0)
+            if (jsorder.Trim().ToString().Length <= 0)
             {
                 jsorder = " ";
             }
@@ -290,14 +381,14 @@ namespace ReportsFastReport
         {
 
         }
-        public static void AddedtValue(ref Report rtp,String edtName,String value)
+        public static void AddedtValue(ref Report rtp, String edtName, String value)
         {
-                 try
-                {
-                    if (rtp.FindObject(edtName)!=null)
-                    (rtp.FindObject(edtName) as TextObject).Text =value;
-                }
-                catch { }
+            try
+            {
+                if (rtp.FindObject(edtName) != null)
+                    (rtp.FindObject(edtName) as TextObject).Text = value;
+            }
+            catch { }
         }
         public static void visiableObj(ref Report rtp, String edtName, Boolean value)
         {
@@ -324,7 +415,7 @@ namespace ReportsFastReport
             AddedtValue(ref rtp, "edtreport_address", WebServiceReference.WebServiceReference.Report_address);
             AddedtValue(ref rtp, "edtreport_web", WebServiceReference.WebServiceReference.Report_web);
         }
-        public static void PrintRpt(Report rtp,int printcount)
+        public static void PrintRpt(Report rtp, int printcount)
         {
             try
             {
@@ -342,7 +433,7 @@ namespace ReportsFastReport
                     (rtp.FindObject("edtPrint") as RichObject).Text = "打印人：" + Globals.UserInfo.UserName;
                 }
                 catch { }
-                AddedtValue(ref rtp,"edtorderid",ramount.orderid);
+                AddedtValue(ref rtp, "edtorderid", ramount.orderid);
                 AddedtValue(ref rtp, "edtAmountv", ramount.amount.ToString("f2"));
                 AddedtValue(ref rtp, "edtysAmount", ramount.ysAmount.ToString("f2"));
                 AddedtValue(ref rtp, "edtmlAmount", ramount.mlAmount.ToString("f2"));
@@ -398,20 +489,21 @@ namespace ReportsFastReport
                         }
                         catch (Exception e) { MessageBox.Show(e.Message); }
                     }
-            }finally
+            }
+            finally
             {
                 //关闭打印对话框
                 frmProgress.hideFrm();
             }
         }
-        private static void InitializeReport(DataSet ds,ref Report  rpt,String tableName)
+        private static void InitializeReport(DataSet ds, ref Report rpt, String tableName)
         {
             rpt.PrintSettings.ShowDialog = false;
             //打印单表数据
             //给DataBand(明细数据)绑定数据源
-            foreach(DataTable dt in ds.Tables)
+            foreach (DataTable dt in ds.Tables)
             {
-                rpt.RegisterData(dt,dt.TableName); //注册数据源,单表
+                rpt.RegisterData(dt, dt.TableName); //注册数据源,单表
                 rpt.GetDataSource(dt.TableName).Enabled = true;
                 rpt.GetDataSource(dt.TableName).Init();
             }
