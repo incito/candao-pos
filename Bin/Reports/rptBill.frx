@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="06/16/2011 14:52:11" ReportInfo.Modified="01/19/2016 13:02:59" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="06/16/2011 14:52:11" ReportInfo.Modified="01/21/2016 09:25:58" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -144,8 +144,8 @@ namespace FastReport
     </DataBand>
     <DataBand Name="Data2" Top="280.72" Width="289.17" Height="18.9" DataSource="yh">
       <TextObject Name="Text3" Left="6" Width="94.5" Height="18.9" Text="[yh.优惠]" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text4" Left="103.95" Width="32.13" Height="18.9" Text="[yh.数量]" Font="宋体, 9pt"/>
-      <TextObject Name="Text5" Left="167.08" Width="49.14" Height="18.9" Text="[yh.金额]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="," Format.NegativePattern="2" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text4" Left="103.95" Width="60.48" Height="18.9" Text="[yh.数量]" Font="宋体, 9pt"/>
+      <TextObject Name="Text5" Left="167.08" Width="96.39" Height="18.9" Text="[yh.金额]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="," Format.NegativePattern="2" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
       <DataHeaderBand Name="DataHeader1" Top="247.37" Width="289.17" Height="29.35">
         <RichObject Name="Rich36" Left="4" Top="5" Width="257.04" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\colortbl ;\red0\green0\blue0;\red255\green255\blue255;}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'d3\'c5\'bb\'dd\'d0\'c5\'cf\'a2\'a3\'ba\b0\lang1033 [tb_Order.\cf1\highlight2\lang2052\'d3\'c5\'bb\'dd\'d0\'c5\'cf\'a2\cf0\highlight0\lang1033 ]\f1\fs17\lang2052\par&#13;&#10;\cf1\f0\fs18\par&#13;&#10;}&#13;&#10;"/>
         <LineObject Name="Line10" Top="3.45" Width="264.6" Border.Style="Dash" Diagonal="true"/>
