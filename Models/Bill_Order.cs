@@ -56,6 +56,8 @@ namespace Models
             try
             {
                 retValue = DateTime.ParseExact(str, "yyyyMMdd HH:mm:ss", null);
+                if (retValue < DateTime.Parse("1980-1-1"))
+                    retValue = DateTime.Now;
             }
             catch
             {
