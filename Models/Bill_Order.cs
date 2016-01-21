@@ -46,20 +46,22 @@ namespace Models
             catch { re = 0; }
             return re;
         }
+
         public static DateTime strtodatetime(string str)
         {
+            DateTime retValue = DateTime.Now;
+            if (string.IsNullOrEmpty(str))
+                return retValue;
 
-            DateTime re = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
             try
             {
-                re = DateTime.ParseExact(str, "yyyyMMdd HH:mm:ss", null);
-                if (re < DateTime.Parse("1980-1-1"))
-                {
-                    re = DateTime.Now;
-                }
+                retValue = DateTime.ParseExact(str, "yyyyMMdd HH:mm:ss", null);
             }
-            catch { }
-            return re;
+            catch
+            {
+                // ignored
+            }
+            return retValue;
         }
         public static double ConvertDateTimeInt(System.DateTime time)
         {
@@ -129,50 +131,22 @@ namespace Models
                         fieldname = dc.ColumnName;
                         var type = dr[fieldname].GetType();
                         var valueStr = ja[fieldname] != null ? ja[fieldname].ToString() : "";
-                        if (type == typeof (double) || type == typeof (decimal))
+                        if (type == typeof(double) || type == typeof(decimal))
                         {
                             if (!string.IsNullOrEmpty(valueStr))
-                            {
                                 dr[fieldname] = Math.Round(Convert.ToDecimal(valueStr), 2);
-                            }
                         }
+                        else if (type == typeof(DateTime))
+                            dr[fieldname] = strtodatetime(valueStr);
+                        else if (type == typeof(int))
+                            dr[fieldname] = strtoint(valueStr);
                         else
-                        {
                             dr[fieldname] = valueStr;
-                        }
-                        continue;
-
-                        String datatype = dr[fieldname].GetType().ToString();
-                        string value = "";
-                        try
-                        {
-                            value = ja[fieldname].ToString();
-                        }
-                        catch
-                        {
-                            value = "";
-                        }
-
-                        if (datatype == "System.Int32")
-                        {
-                            dr[fieldname] = strtoint(value);
-                        }
-                        else
-                            if (datatype == "System.Double")
-                            {
-                                dr[fieldname] = strtofloat(value);
-                            }
-                            else
-                                if (datatype == "System.DateTime")
-                                {
-                                    dr[fieldname] = strtodatetime(!string.IsNullOrEmpty(value) ? value : "19700101 00:00:00");
-                                }
-                                else
-                                {
-                                    dr[fieldname] = value;
-                                }
                     }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
                 dt.Rows.Add(dr);
             }
