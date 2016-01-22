@@ -56,9 +56,11 @@ namespace Models
             try
             {
                 retValue = DateTime.ParseExact(str, "yyyyMMdd HH:mm:ss", null);
+                if (retValue < DateTime.Parse("1980-1-1"))
+                    retValue = DateTime.Now;
             }
             catch
-            {
+                {
                 // ignored
             }
             return retValue;
@@ -135,16 +137,16 @@ namespace Models
                         {
                             if (!string.IsNullOrEmpty(valueStr))
                                 dr[fieldname] = Math.Round(Convert.ToDecimal(valueStr), 2);
-                        }
+                            }
                         else if (type == typeof(DateTime))
                             dr[fieldname] = strtodatetime(valueStr);
                         else if (type == typeof(int))
                             dr[fieldname] = strtoint(valueStr);
                         else
                             dr[fieldname] = valueStr;
-                    }
-                    catch
-                    {
+                        }
+                        catch
+                        {
                         // ignored
                     }
                 }
