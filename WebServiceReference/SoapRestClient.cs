@@ -151,7 +151,7 @@ namespace WebServiceReference
         public static string GetSoapRemoteAddress()
         {
             XmlDocument xml = new XmlDocument();
-            xml.Load(RestClient.ConfigFile);
+            xml.Load(ConfigFile);
             string xpath = "configuration/client/Server";
             XmlNode node = xml.SelectSingleNode(xpath);
             server = node.Attributes["address"].Value;
@@ -182,7 +182,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/PrintDesign";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 PrintDesign = node.Attributes["value"].Value;
@@ -196,7 +196,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/MemberSystem";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 MemberSystem = int.Parse(node.Attributes["value"].Value.ToString());
@@ -210,7 +210,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/PortName";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 _portname = node.Attributes["value"].Value;
@@ -224,7 +224,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/branch_id";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 _branch_id = node.Attributes["value"].Value;
@@ -242,7 +242,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/yhid";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 ret = node.Attributes["value"].Value;
@@ -256,7 +256,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/doubledishticket";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 ret = node.Attributes["value"].Value;
@@ -271,7 +271,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/Round";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 ret = node.Attributes["value"].Value.Equals("1");
@@ -286,7 +286,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/TakeOutTable";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 TakeOutTable = node.Attributes["value"].Value;
@@ -300,7 +300,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/ClearCoupon";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 ret = node.Attributes["value"].Value.Equals("1");
@@ -314,7 +314,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/TakeOutTableID";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 TakeOutTableID = node.Attributes["value"].Value;
@@ -349,7 +349,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/AutoClose";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 AutoClose = int.Parse(node.Attributes["value"].Value);
@@ -363,7 +363,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/OpenCash";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 ip = node.Attributes["value"].Value;
@@ -379,7 +379,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/POSID";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 posid = node.Attributes["value"].Value;
@@ -394,7 +394,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/MANAGERPWD";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 posid = node.Attributes["value"].Value;
@@ -410,7 +410,7 @@ namespace WebServiceReference
             try
             {
                 XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
+                xml.Load(ConfigFile);
                 string xpath = "configuration/client/PrintDesign";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 PrintDesign = node.Attributes["value"].Value;
@@ -461,7 +461,7 @@ namespace WebServiceReference
                 {
                     reader = new StreamReader(response.GetResponseStream());  
                     sbSource = new StringBuilder(reader.ReadToEnd());
-                    string returnStr=RestClient.FromUnicodeString(sbSource.ToString());
+                    string returnStr=FromUnicodeString(sbSource.ToString());
                     returnStr=returnStr.Replace("{\"result\":[\"", "");
                     returnStr = returnStr.Replace("\"]}", "");
                     return returnStr;
@@ -504,7 +504,7 @@ namespace WebServiceReference
                 {
                     reader = new StreamReader(response.GetResponseStream());
                     sbSource = new StringBuilder(reader.ReadToEnd());
-                    string returnStr = RestClient.FromUnicodeString(sbSource.ToString());
+                    string returnStr = FromUnicodeString(sbSource.ToString());
                     returnStr = returnStr.Replace("{\"result\":[\"", "");
                     returnStr = returnStr.Replace("\"]}", "");
                     return returnStr;
@@ -561,7 +561,7 @@ namespace WebServiceReference
                 {
                     reader = new StreamReader(response.GetResponseStream());
                     sbSource = new StringBuilder(reader.ReadToEnd());
-                    string returnStr = RestClient.FromUnicodeString(sbSource.ToString());
+                    string returnStr = FromUnicodeString(sbSource.ToString());
                     if (returnStr.Trim().ToString().Length<=0)
                     {
                         returnStr = sbSource.ToString();
@@ -610,10 +610,10 @@ namespace WebServiceReference
                 {
                     reader = new StreamReader(response.GetResponseStream());
                     sbSource = new StringBuilder(reader.ReadToEnd());
-                    string returnStr = RestClient.FromUnicodeString(sbSource.ToString());
+                    string returnStr = FromUnicodeString(sbSource.ToString());
                     returnStr = returnStr.Replace("{\"result\":[\"", "");
                     returnStr = returnStr.Replace("\"]}", "");
-                    return System.Text.Encoding.Default.GetBytes(returnStr);
+                    return Encoding.Default.GetBytes(returnStr);
                     //return sbSource.ToString();
                 }
             }
@@ -660,7 +660,7 @@ namespace WebServiceReference
             //Msg.ShowError(jsonText);
             Console.WriteLine(jsonText);
             //return wmsRestClient.Request_Rest(address);
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             //Msg.ShowError(address);
             //Msg.ShowError(jsonResult);
             if(jsonResult=="0")
@@ -722,7 +722,7 @@ namespace WebServiceReference
             Console.WriteLine(jsonText);
 
             //return wmsRestClient.Request_Rest(address);
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             if (jsonResult == "0")
             {
                 return "";
@@ -738,7 +738,7 @@ namespace WebServiceReference
                                           , TableName
                                           , UserID
                                           );
-            String jsonResult= RestClient.Request_Rest(address);
+            String jsonResult= Request_Rest(address);
             if (jsonResult == "0")
             {
                 return "";
@@ -831,7 +831,7 @@ namespace WebServiceReference
                                           , TableName
                                           , UserID
                                           );
-            String jsonResult= RestClient.Request_Rest(address);
+            String jsonResult= Request_Rest(address);
             if (jsonResult == "0")
             {
                 return "";
@@ -976,7 +976,7 @@ namespace WebServiceReference
                                           , couponid  //优惠编号
                                           , partnername  //优惠合作单位
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return "";
@@ -1004,7 +1004,7 @@ namespace WebServiceReference
                                           , cardno
                                           , orderprice
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return "";
@@ -1018,14 +1018,14 @@ namespace WebServiceReference
         }
         public static bool setMemberPrice(string UserID,string OrderID,string memberno)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice/{0}/{1}/{2}/{3}/"
                                           , UserID
                                           , OrderID
                                           , ipaddress
                                           , memberno
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return false;
@@ -1039,13 +1039,13 @@ namespace WebServiceReference
         }
         public static bool setMemberPrice2(string UserID, string OrderID)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice2/{0}/{1}/{2}/"
                                           , UserID
                                           , OrderID
                                           , ipaddress
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return false;
@@ -1059,13 +1059,13 @@ namespace WebServiceReference
         }
         public static bool cancelOrder(string UserID, string OrderID,string tableno)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/cancelOrder/{0}/{1}/{2}/"
                                           , UserID
                                           , OrderID
                                           , tableno
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return false;
@@ -1080,13 +1080,13 @@ namespace WebServiceReference
         
         public static bool setMemberPrice3(string UserID, string OrderID)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice3/{0}/{1}/{2}/"
                                           , UserID
                                           , OrderID
                                           , ipaddress
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return false;
@@ -1100,12 +1100,12 @@ namespace WebServiceReference
         }
         public static bool rebackorder(string UserID, string OrderID,ref String errStr)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/rebackorder/{0}/{1}/"
                                           , UserID
                                           , OrderID
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return false;
@@ -1120,12 +1120,12 @@ namespace WebServiceReference
         }
         public static bool accountsorder(string UserID, string OrderID, ref String errStr)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/accountsorder/{0}/{1}/"
                                           , UserID
                                           , OrderID
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return false;
@@ -1151,7 +1151,7 @@ namespace WebServiceReference
                                           , OrderID
                                           , UserID
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return "";
@@ -1204,13 +1204,13 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool posrebacksettleorder(string UserID, string OrderID)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/posrebacksettleorder/{0}/{1}/{2}/"
                                           , OrderID
                                           , UserID
                                           , ipaddress
                                           );
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return false;
@@ -1242,7 +1242,7 @@ namespace WebServiceReference
             writer.WriteValue(reason);
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             if (jsonResult == "0")
             {
                 return "";
@@ -1267,7 +1267,7 @@ namespace WebServiceReference
             writer.WriteValue(OrderID);
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             if (jsonResult == "0")
             {
                 return "";
@@ -1304,7 +1304,7 @@ namespace WebServiceReference
             writer.WriteValue(dishnum);
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             if (jsonResult == "0")
             {
                 return "";
@@ -1355,7 +1355,7 @@ namespace WebServiceReference
 
             Console.WriteLine(jsonText);
             //return wmsRestClient.Request_Rest(address);
-            String jsonResult = RestClient.Post_Rest(address, sw2);
+            String jsonResult = Post_Rest(address, sw2);
             string result = "";
             if (jsonResult == "0")
             {
@@ -1388,7 +1388,7 @@ namespace WebServiceReference
             Console.WriteLine(jsonText);
 
             //return wmsRestClient.Request_Rest(address);
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             if (jsonResult == "0")
             {
                 return "";
@@ -1429,13 +1429,13 @@ namespace WebServiceReference
             try
             {
 
-                System.Net.HttpWebRequest Myrq = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(URL);
+                HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create(URL);
 
-                System.Net.HttpWebResponse myrp = (System.Net.HttpWebResponse)Myrq.GetResponse();
+                HttpWebResponse myrp = (HttpWebResponse)Myrq.GetResponse();
 
-                System.IO.Stream st = myrp.GetResponseStream();
+                Stream st = myrp.GetResponseStream();
 
-                System.IO.Stream so = new System.IO.FileStream(filename, System.IO.FileMode.Create);
+                Stream so = new FileStream(filename, FileMode.Create);
 
                 byte[] by = new byte[1024];
 
@@ -1462,7 +1462,7 @@ namespace WebServiceReference
 
             }
 
-            catch (System.Exception e)
+            catch (Exception e)
             {
 
                 return false;
@@ -1475,7 +1475,7 @@ namespace WebServiceReference
         public static JObject QueryBalance(string memberinfo)
         {
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/QueryBalance/{0}/", memberinfo);
-            String jsonResult = RestClient.Request_Rest60(address);
+            String jsonResult = Request_Rest60(address);
             if(jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败,请检查内网是否正常...");
@@ -1489,7 +1489,7 @@ namespace WebServiceReference
         {
             //orderid,pszPwd,pszGPwd
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/VoidSale/{0}/{1}/{2}/", orderid, pszPwd, pszGPwd);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if(jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
@@ -1508,7 +1508,7 @@ namespace WebServiceReference
         {
             int psTransType = 0;
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/StoreCardDeposit/{0}/{1}/{2}/{3}/{4}/{5}/", Globals.UserInfo.UserID, memberinfo, pszAmount, pszSerial, psTransType, paytype);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             //String jsonResult = "{\"Data\":\"1\",\"pszRestInfo\":\"\",\"pszRetcode\":\"\",\"pszRefnum\":\"\",\"pszTrace\":\"685646\",\"pszPan\":\"6201200131911018\",\"psStoreCardBalance\":\"120000\",\"psStoreCard2\":\"120000\"}";
             if (jsonResult.Equals("0"))
             {
@@ -1525,7 +1525,7 @@ namespace WebServiceReference
             if (pszPwd.Trim().ToArray().Length <= 0)
                 pszPwd = " ";
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/CardActive/{0}/{1}/{2}/", pszTrack2, pszPwd, pszMobile);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
@@ -1542,7 +1542,7 @@ namespace WebServiceReference
                 pszTicketList = "  ";
 
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/Sale/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}/{9}/{10}/{11}/", aUserid, orderid, pszInput, pszSerial, pszCash, pszPoint, psTransType, pszStore, pszTicketList, pszPwd, memberyhqamount, server);
-            String jsonResult = RestClient.Request_Rest60(address);//会员结算的超时时间要多给点
+            String jsonResult = Request_Rest60(address);//会员结算的超时时间要多给点
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败，请检查内网网络...");
@@ -1557,9 +1557,9 @@ namespace WebServiceReference
 
         public static bool OpenUp(string aUserID,string aUserPassword,int CallType,out string reinfo)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/OpenUp/{0}/{1}/{2}/{3}/", aUserID, aUserPassword, ipaddress, CallType);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败,请检查服务器是否开机,内网是否正常...");
@@ -1582,9 +1582,9 @@ namespace WebServiceReference
         public static bool saveOrderPreferential(string aUserid,string OrderID,string Preferential)
         {
             Preferential = Preferential.Replace(@"\", "");
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/saveOrderPreferential/{0}/{1}/{2}/{3}/", aUserid, ipaddress, OrderID, Preferential);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
@@ -1604,7 +1604,7 @@ namespace WebServiceReference
             string mac = GetMacAddr();
             string posid = getPosID();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/clearMachine/{0}/{1}/{2}/{3}/{4}/", userid, username, mac, posid, authorizer);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
@@ -1621,9 +1621,9 @@ namespace WebServiceReference
         /// <returns></returns>
         public static JObject endWork(string userid)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/endWork/{0}/{1}/", userid, ipaddress);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
@@ -1646,7 +1646,7 @@ namespace WebServiceReference
         {
             string mac = GetMacAddr();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/InputTellerCash/{0}/{1}/{2}/{3}/", aUserID, mac, cachamount, CallType);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
@@ -1668,7 +1668,7 @@ namespace WebServiceReference
             JArray jr = null;
 
             string address = "http://" + server + "/" + apiPath + "/padinterface/querytables.json";
-            String jsonResult = RestClient.Post_Rest(address,null);
+            String jsonResult = Post_Rest(address,null);
             if (jsonResult == "0")
             {
                 return jr;
@@ -1692,11 +1692,11 @@ namespace WebServiceReference
             writer.WriteValue("candaosynkey");
             writer.WriteEndObject();
             writer.Flush();
-            string jsonResult = RestClient.Post_Rest(address, sw);
+            string jsonResult = Post_Rest(address, sw);
             if (jsonResult == "0")
                 return false;
             
-            var jr = (JArray)JsonConvert.DeserializeObject(jsonResult);
+            var jr = (JObject)JsonConvert.DeserializeObject(jsonResult);
             return jr["result"].ToString().Equals("0");
         }
         /// <summary>
@@ -1709,9 +1709,9 @@ namespace WebServiceReference
             if (typeid < 90)
                 typeid = 90;
             JArray jr = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getcoupon_rule/{0}/", typeid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
@@ -1732,9 +1732,9 @@ namespace WebServiceReference
         /// <returns></returns>
         public static void broadcastmsg(int msgid,string msg)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/broadcastmsg/{0}/{1}/{2}",Globals.UserInfo.UserID, msgid, msg);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
@@ -1745,9 +1745,9 @@ namespace WebServiceReference
         {
             if (gzinfo.Gzcode==null)
                 gzinfo.Gzcode = "0";
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/putOrder/{0}/{1}/{2}/{3}/{4}/{5}/", tableno, orderid, gzinfo.Gzcode, gzinfo.Gzname, gzinfo.Telephone, gzinfo.Relaperson);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
@@ -1758,9 +1758,9 @@ namespace WebServiceReference
         {
             bool ret = false;
             sequence = "";
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getOrderSequence/{0}/", tableno);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             try
             {
                 if (jsonResult.Equals("0"))
@@ -1781,9 +1781,9 @@ namespace WebServiceReference
         
         public static void wmOrder(string orderid)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/wmOrder/{0}/", orderid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
             }
@@ -1806,7 +1806,7 @@ namespace WebServiceReference
             {
                 orderid = "000000";
             }
-            string ipaddress = RestClient.GetLocalIp(); //newspicyway/padinterface/getPreferentialList.json
+            string ipaddress = GetLocalIp(); //newspicyway/padinterface/getPreferentialList.json
             //string address = String.Format("http://" + server + "/newspicyway/padinterface/getPreferentialList.json?typeid={0}",typeid);
             string address = "http://" + server + "/" + apiPath + "/padinterface/getPreferentialList.json";
             
@@ -1825,7 +1825,7 @@ namespace WebServiceReference
             writer.Flush();
             string jsonText = sw.GetStringBuilder().ToString();
             //Console.WriteLine(jsonText);
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             //String jsonResult = RestClient.Post_Rest(address, null);
             //String jsonResult = RestClient.Request_Rest(address);
             if (jsonResult.Equals("0"))
@@ -1855,7 +1855,7 @@ namespace WebServiceReference
         public static bool usePreferentialItem(string preferentialid, float disrate, string orderid, string type, string sub_type, ref string msg, ref float amount, float preferentialAmt)
         {
             JArray jr = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = "http://" + server + "/" + apiPath + "/padinterface/usePreferentialItem.json";
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1881,7 +1881,7 @@ namespace WebServiceReference
             writer.Flush();
             string jsonText = sw.GetStringBuilder().ToString();
             //Console.WriteLine(jsonText);
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             //String jsonResult = RestClient.Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
@@ -1910,7 +1910,7 @@ namespace WebServiceReference
         public static bool cancelPreferentialItem(string preferentialid, string orderid, ref string msg)
         {
             JArray jr = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = "http://" + server + "/" + apiPath + "/padinterface/cancelPreferentialItem.json";
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1927,7 +1927,7 @@ namespace WebServiceReference
             writer.Flush();
             string jsonText = sw.GetStringBuilder().ToString();
             //Console.WriteLine(jsonText);
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             //String jsonResult = RestClient.Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
@@ -1953,9 +1953,9 @@ namespace WebServiceReference
             JArray jrOrder = null;
             JArray jrList = null;
             JArray jrJS = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getOrderInfo/{0}/{1}/{2}/", aUserid, orderid, printtype);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
@@ -2025,9 +2025,9 @@ namespace WebServiceReference
             JArray jrOrder = null;
             JArray jrJS = null;
             String posid = getPosID();
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getClearMachineData/{0}/{1}/{2}/", aUserid, jsorder, posid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
@@ -2073,9 +2073,9 @@ namespace WebServiceReference
             JArray jrOrder = null;
             JArray jrJS = null;
             String posid = getPosID();
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/caleTableAmount/{0}/{1}/",orderid, aUserid);
-            String jsonResult = RestClient.Request_Rest60(address);
+            String jsonResult = Request_Rest60(address);
             //将反序列化的JSON字符串转换成对象  
             string result = jsonResult;
             bool ret = result.Equals("1");
@@ -2108,7 +2108,7 @@ namespace WebServiceReference
                 {
                     string ip = getOpenCashIP();
                     string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/OpenCash/{0}/", ip);
-                    jsonResult = RestClient.Request_Rest(address);
+                    jsonResult = Request_Rest(address);
                     //将反序列化的JSON字符串转换成对象  
                     string result = jsonResult;
                     ret = result.Equals("1");
@@ -2159,9 +2159,9 @@ namespace WebServiceReference
         {
             String OrderJson="";
             JArray jrOrder = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllOrderInfo2/{0}/", aUserid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
@@ -2188,12 +2188,12 @@ namespace WebServiceReference
         }
         public static int getFoodStatus(string dishid, string dishunit)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             int result = 0;
             try
             {
                 string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getFoodStatus/{0}/{1}/", dishid, dishunit);
-                String jsonResult = RestClient.Request_Rest(address);
+                String jsonResult = Request_Rest(address);
                 if (jsonResult.Equals("0"))
                 {
                     return 0;
@@ -2216,9 +2216,9 @@ namespace WebServiceReference
         {
             String OrderJson="";
             JArray jrOrder = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllGZDW/{0}/", aUserid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 gzData = jrOrder;
@@ -2254,9 +2254,9 @@ namespace WebServiceReference
         {
             String OrderJson = "";
             JArray jrOrder = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllWmFood/{0}/", aUserid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 wmData = jrOrder;
@@ -2291,9 +2291,9 @@ namespace WebServiceReference
         {
             String OrderJson = "";
             JArray jrOrder = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getCJFood/{0}/", aUserid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 cjData = jrOrder;
@@ -2323,9 +2323,9 @@ namespace WebServiceReference
         {
             String OrderJson = "";
             JArray jrOrder = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getGroupDetail/{0}/", dishid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 groupData = jrOrder;
@@ -2360,9 +2360,9 @@ namespace WebServiceReference
         {
             String OrderJson="";
             JArray jrOrder = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getMemberSaleInfo/{0}/{1}/", aUserid, orderid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 gzData = jrOrder;
@@ -2399,9 +2399,9 @@ namespace WebServiceReference
         {
             String OrderJson="";
             JArray jrOrder = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getUserRights/{0}/", aUserid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 rightData = jrOrder;
@@ -2440,7 +2440,7 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String rightjson = "";
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
             if (!jsonResult.Equals("0"))
             {
@@ -2472,7 +2472,7 @@ namespace WebServiceReference
             writer.WriteValue(menuid);
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             JObject ja =null;
             bool ret = true;// result.Equals("0");
             JArray jr = null;
@@ -2504,9 +2504,9 @@ namespace WebServiceReference
             JArray jrList = null;
             JArray jrDouble = null;
             String posid = getPosID();
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getFavorale/{0}/{1}/", aUserid, jsorder);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
@@ -2580,7 +2580,7 @@ namespace WebServiceReference
             writer.WriteValue(1);
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             ///如果返回1，已经开台，先关掉
             ///{"result":"0","delaytime":"10","vipaddress":"192.168.40.25:8081","locktime":"120","backpsd":"1","orderid":"H20150416003934"}
             bool result=false;
@@ -2624,7 +2624,7 @@ namespace WebServiceReference
             writer.WriteValue(ageperiod);
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             ///如果返回1，已经开台，先关掉
             ///{"result":"0","delaytime":"10","vipaddress":"192.168.40.25:8081","locktime":"120","backpsd":"1","orderid":"H20150416003934"}
             bool result = false;
@@ -2646,7 +2646,7 @@ namespace WebServiceReference
         public static bool getFoodType(out JArray jr)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/getMenuColumn.json", server2);
-            String jsonResult = RestClient.Post_Rest(address,null);
+            String jsonResult = Post_Rest(address,null);
             bool result = false;
             JArray ja = null;
             try
@@ -2672,7 +2672,7 @@ namespace WebServiceReference
         public static bool discarddish(StringWriter sw)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/discarddish.json", server2);
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             bool result=false;
             try
             {
@@ -2696,7 +2696,7 @@ namespace WebServiceReference
             writer.WriteValue("030101");
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             bool result = false;
             try
             {
@@ -2754,8 +2754,8 @@ namespace WebServiceReference
                             dishtype = 2;
                             writer.WritePropertyName("dishes");
                             writer.WriteStartArray();
-                            RestClient.writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, true, primarykey);
-                            RestClient.writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, false, primarykey);
+                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, true, primarykey);
+                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, false, primarykey);
                             writer.WriteEndArray();
                         }
                         else
@@ -2764,7 +2764,7 @@ namespace WebServiceReference
                             dishtype = 1;
                             writer.WritePropertyName("dishes");
                             writer.WriteStartArray();
-                            RestClient.writeDishes(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, primarykey);
+                            writeDishes(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, primarykey);
                             writer.WriteEndArray();
                         }
 
@@ -2867,7 +2867,7 @@ namespace WebServiceReference
                             dr["Groupid2"] = groupid;
                             writer.WriteStartArray();
                             string primarykey2 = "";
-                            RestClient.writeDishes(orderid, ref writer, dt, groupid2, ordertype, primarykey2);
+                            writeDishes(orderid, ref writer, dt, groupid2, ordertype, primarykey2);
                             writer.WriteEndArray();
                         }
                         else
@@ -2997,7 +2997,7 @@ namespace WebServiceReference
         }
         public static string getGUID()
         {
-            System.Guid guid = new Guid();
+            Guid guid = new Guid();
             guid = Guid.NewGuid();
             string str = guid.ToString();
             return str;
@@ -3023,7 +3023,7 @@ namespace WebServiceReference
             getAllFoodArray(ref writer, dt, orderid, ordertype);
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             ///如果返回1，已经开台，先关掉
             ///{"result":"0","delaytime":"10","vipaddress":"192.168.40.25:8081","locktime":"120","backpsd":"1","orderid":"H20150416003934"}
             bool result=false;
@@ -3052,7 +3052,7 @@ namespace WebServiceReference
             writer.WriteValue(settingname);
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             bool result = false;
             setting = new TSetting();
             setting.Itemid = "0";
@@ -3086,7 +3086,7 @@ namespace WebServiceReference
             writer.WriteValue("ROUNDING");
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             bool result = false;
             roundJson=new TRoundInfo();
             roundJson.Itemid = "0";
@@ -3129,7 +3129,7 @@ namespace WebServiceReference
             writer.WriteValue(tableno);
             writer.WriteEndObject();
             writer.Flush();
-            String jsonResult = RestClient.Post_Rest(address, sw);
+            String jsonResult = Post_Rest(address, sw);
             bool result = false;
             try
             {
@@ -3144,9 +3144,9 @@ namespace WebServiceReference
         {
             String OrderJson = "";
             JArray jrOrder = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetOrderCouponList/{0}/{1}/", orderid, aUserid);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
@@ -3176,9 +3176,9 @@ namespace WebServiceReference
         {
             String OrderJson = "";
             JArray jrOrder = null;
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getBackDishInfo/{0}/{1}/{2}/{3}/", orderid, dishid, dishunit,tableno);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
@@ -3202,9 +3202,9 @@ namespace WebServiceReference
         }
         public static bool deletePosOperation(string tableno)
         {
-            string ipaddress = RestClient.GetLocalIp();
+            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/deletePosOperation/{0}", tableno);
-            String jsonResult = RestClient.Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             return true;
         }
 
