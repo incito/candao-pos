@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.IO;
 using System.Data;
+using System.IO;
+using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Xml;
-using System.Windows.Forms;
-using System.Runtime.Serialization.Json;
-using System.Runtime.Serialization;
 using System.Runtime.InteropServices;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Xml;
 using Common;
 using Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 namespace WebServiceReference
 {
@@ -26,7 +25,7 @@ namespace WebServiceReference
         public static string server = "";
         public static string server2 = "";
         public static string Server3 = "";
-        public static string apiPath="";
+        public static string apiPath = "";
         public static SerialClass sc;
         public static string portname = "";
         public enum ShowWindowCommands : int
@@ -59,7 +58,7 @@ namespace WebServiceReference
         public static string GetLocalIp()
         {
             IPAddress[] ips = Dns.GetHostAddresses(Dns.GetHostName());
-            IPAddress ip=null;
+            IPAddress ip = null;
             foreach (IPAddress ipa in ips)
             {
                 if (ipa.AddressFamily == AddressFamily.InterNetwork)
@@ -167,9 +166,9 @@ namespace WebServiceReference
             apiPath = "newspicyway";
             try
             {
-              xpath = "configuration/client/ApiPath";
-              node = xml.SelectSingleNode(xpath);
-              apiPath = node.Attributes["value"].Value;
+                xpath = "configuration/client/ApiPath";
+                node = xml.SelectSingleNode(xpath);
+                apiPath = node.Attributes["value"].Value;
             }
             catch { apiPath = "newspicyway"; }
 
@@ -264,7 +263,7 @@ namespace WebServiceReference
             catch { }
             return ret;
         }
-        
+
         public static bool isRound()
         {
             bool ret = true; ;
@@ -279,7 +278,7 @@ namespace WebServiceReference
             catch { }
             return ret;
         }
-        
+
         public static string getTakeOutTable()
         {
             string TakeOutTable = "60";
@@ -321,15 +320,15 @@ namespace WebServiceReference
             }
             catch { TakeOutTableID = "220"; }
             return TakeOutTableID;
-            
+
         }
         public static string getRightCode(string rightid)
         {
-          string PrintDesign = rightid;
-            String rightdir= rightid.ToString();
-          if(rightid.Length<=1)
-             rightdir = "03020" + rightid.ToString();//R
-          return rightdir;
+            string PrintDesign = rightid;
+            String rightdir = rightid.ToString();
+            if (rightid.Length <= 1)
+                rightdir = "03020" + rightid.ToString();//R
+            return rightdir;
             /*try
             {
                 String rightdir="R03020"+rightid.ToString();
@@ -367,7 +366,7 @@ namespace WebServiceReference
                 string xpath = "configuration/client/OpenCash";
                 XmlNode node = xml.SelectSingleNode(xpath);
                 ip = node.Attributes["value"].Value;
-                if(ip.Trim().ToString().Length<=0)
+                if (ip.Trim().ToString().Length <= 0)
                     ip = "192.168.2.113";
             }
             catch { }
@@ -386,7 +385,7 @@ namespace WebServiceReference
             }
             catch { }
             return posid;
-            
+
         }
         public static string getManagerPwd()
         {
@@ -403,7 +402,7 @@ namespace WebServiceReference
             return posid;
 
         }
-        
+
         public static bool getPrintDesign()
         {
             string PrintDesign = "0";
@@ -459,17 +458,17 @@ namespace WebServiceReference
                 response = request.GetResponse() as HttpWebResponse;
                 if (request.HaveResponse == true && response != null)
                 {
-                    reader = new StreamReader(response.GetResponseStream());  
+                    reader = new StreamReader(response.GetResponseStream());
                     sbSource = new StringBuilder(reader.ReadToEnd());
-                    string returnStr=FromUnicodeString(sbSource.ToString());
-                    returnStr=returnStr.Replace("{\"result\":[\"", "");
+                    string returnStr = FromUnicodeString(sbSource.ToString());
+                    returnStr = returnStr.Replace("{\"result\":[\"", "");
                     returnStr = returnStr.Replace("\"]}", "");
                     return returnStr;
                     //return sbSource.ToString();
                 }
             }
             catch (WebException wex)
-            {  
+            {
                 if (wex.Response != null)
                 {
                     using (HttpWebResponse errorResponse = (HttpWebResponse)wex.Response)
@@ -562,7 +561,7 @@ namespace WebServiceReference
                     reader = new StreamReader(response.GetResponseStream());
                     sbSource = new StringBuilder(reader.ReadToEnd());
                     string returnStr = FromUnicodeString(sbSource.ToString());
-                    if (returnStr.Trim().ToString().Length<=0)
+                    if (returnStr.Trim().ToString().Length <= 0)
                     {
                         returnStr = sbSource.ToString();
                     }
@@ -584,12 +583,12 @@ namespace WebServiceReference
             }
             finally
             {
-                if (response != null) { response.Close();  }
+                if (response != null) { response.Close(); }
             }
             return "0";
         }
 
- 
+
         private static byte[] Request_RestByte(string url)
         {
             HttpWebRequest request;
@@ -663,7 +662,7 @@ namespace WebServiceReference
             String jsonResult = Post_Rest(address, sw);
             //Msg.ShowError(address);
             //Msg.ShowError(jsonResult);
-            if(jsonResult=="0")
+            if (jsonResult == "0")
             {
                 return "";
             }
@@ -693,7 +692,8 @@ namespace WebServiceReference
             try
             {
                 Globals.UserInfo.msg = ja["msg"].ToString();
-            }catch{}
+            }
+            catch { }
             return result;
         }
         /// <summary>
@@ -738,7 +738,7 @@ namespace WebServiceReference
                                           , TableName
                                           , UserID
                                           );
-            String jsonResult= Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return "";
@@ -756,7 +756,7 @@ namespace WebServiceReference
                 Globals.CurrTableInfo.tableNo = ja["tableNo"].ToString();
                 Globals.CurrTableInfo.tabletype = ja["tabletype"].ToString();
                 Globals.CurrTableInfo.personNum = int.Parse(ja["personNum"].ToString());
-                
+
                 Globals.CurrOrderInfo.orderstatus = int.Parse(ja["orderstatus"].ToString());
                 try
                 {
@@ -779,19 +779,19 @@ namespace WebServiceReference
                 { }
                 try
                 {
-                Globals.CurrOrderInfo.womanNum = Int32.Parse(ja["womanNum"].ToString());
-                }
-                catch
-                { }
-                try
-                { 
-                Globals.CurrOrderInfo.mannum = Int32.Parse(ja["mannum"].ToString());
+                    Globals.CurrOrderInfo.womanNum = Int32.Parse(ja["womanNum"].ToString());
                 }
                 catch
                 { }
                 try
                 {
-                Globals.CurrOrderInfo.custnum = Int32.Parse(ja["custnum"].ToString());
+                    Globals.CurrOrderInfo.mannum = Int32.Parse(ja["mannum"].ToString());
+                }
+                catch
+                { }
+                try
+                {
+                    Globals.CurrOrderInfo.custnum = Int32.Parse(ja["custnum"].ToString());
                 }
                 catch
                 { }
@@ -815,15 +815,15 @@ namespace WebServiceReference
                 { }
                 try
                 {
-                    Globals.CurrOrderInfo.userid =  ja["userid"].ToString();
+                    Globals.CurrOrderInfo.userid = ja["userid"].ToString();
                 }
                 catch
                 { }
 
             }
             return result;
-        
-        
+
+
         }
         public static string GetOrder(string TableName, string UserID)
         {
@@ -831,7 +831,7 @@ namespace WebServiceReference
                                           , TableName
                                           , UserID
                                           );
-            String jsonResult= Request_Rest(address);
+            String jsonResult = Request_Rest(address);
             if (jsonResult == "0")
             {
                 return "";
@@ -852,7 +852,7 @@ namespace WebServiceReference
                 Globals.CurrTableInfo.tableNo = ja["tableNo"].ToString();
                 Globals.CurrTableInfo.tabletype = ja["tabletype"].ToString();
                 Globals.CurrTableInfo.personNum = int.Parse(ja["personNum"].ToString());
-                
+
                 Globals.CurrOrderInfo.orderstatus = int.Parse(ja["orderstatus"].ToString());
                 try
                 {
@@ -875,19 +875,19 @@ namespace WebServiceReference
                 { }
                 try
                 {
-                Globals.CurrOrderInfo.womanNum = Int32.Parse(ja["womanNum"].ToString());
-                }
-                catch
-                { }
-                try
-                { 
-                Globals.CurrOrderInfo.mannum = Int32.Parse(ja["mannum"].ToString());
+                    Globals.CurrOrderInfo.womanNum = Int32.Parse(ja["womanNum"].ToString());
                 }
                 catch
                 { }
                 try
                 {
-                Globals.CurrOrderInfo.custnum = Int32.Parse(ja["custnum"].ToString());
+                    Globals.CurrOrderInfo.mannum = Int32.Parse(ja["mannum"].ToString());
+                }
+                catch
+                { }
+                try
+                {
+                    Globals.CurrOrderInfo.custnum = Int32.Parse(ja["custnum"].ToString());
                 }
                 catch
                 { }
@@ -911,7 +911,7 @@ namespace WebServiceReference
                 { }
                 try
                 {
-                    Globals.CurrOrderInfo.userid =  ja["userid"].ToString();
+                    Globals.CurrOrderInfo.userid = ja["userid"].ToString();
                 }
                 catch
                 { }
@@ -920,7 +920,7 @@ namespace WebServiceReference
                 //JObject jaList = (JObject)JsonConvert.DeserializeObject(tablelistjson);
                 if (tablelistjson.Length > 30)
                 {
-                    Newtonsoft.Json.Converters.DataTableConverter dtc = new Newtonsoft.Json.Converters.DataTableConverter();
+                    DataTableConverter dtc = new DataTableConverter();
                     JsonReader jread = new JsonTextReader(new StringReader(tablelistjson));
                     DataTable dt = new DataTable();
                     dt.TableName = "tb_data";
@@ -956,10 +956,10 @@ namespace WebServiceReference
                 }
             }
             return result;
-        
-        
+
+
         }
-        
+
         /// <summary>
         /// 全单折扣
         /// </summary>
@@ -996,7 +996,7 @@ namespace WebServiceReference
         /// <param name="cardno"></param>
         /// <param name="orderprice"></param>
         /// <returns></returns>
-        public static string usefishcard(string OrderID, string UserID,string cardno, double orderprice)
+        public static string usefishcard(string OrderID, string UserID, string cardno, double orderprice)
         {
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/usefishcard/{0}/{1}/{2}/{3} "
                                           , OrderID
@@ -1016,7 +1016,7 @@ namespace WebServiceReference
 
 
         }
-        public static bool setMemberPrice(string UserID,string OrderID,string memberno)
+        public static bool setMemberPrice(string UserID, string OrderID, string memberno)
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice/{0}/{1}/{2}/{3}/"
@@ -1033,7 +1033,7 @@ namespace WebServiceReference
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
             //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
-            return result=="1";
+            return result == "1";
 
 
         }
@@ -1057,7 +1057,7 @@ namespace WebServiceReference
 
 
         }
-        public static bool cancelOrder(string UserID, string OrderID,string tableno)
+        public static bool cancelOrder(string UserID, string OrderID, string tableno)
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/cancelOrder/{0}/{1}/{2}/"
@@ -1077,7 +1077,7 @@ namespace WebServiceReference
 
 
         }
-        
+
         public static bool setMemberPrice3(string UserID, string OrderID)
         {
             string ipaddress = GetLocalIp();
@@ -1098,7 +1098,7 @@ namespace WebServiceReference
 
 
         }
-        public static bool rebackorder(string UserID, string OrderID,ref String errStr)
+        public static bool rebackorder(string UserID, string OrderID, ref String errStr)
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/rebackorder/{0}/{1}/"
@@ -1138,7 +1138,7 @@ namespace WebServiceReference
 
 
         }
-        
+
         /// <summary>
         /// 获取帐单列表
         /// </summary>
@@ -1166,15 +1166,15 @@ namespace WebServiceReference
             {
                 ///JArray jr = (JArray)JsonConvert.DeserializeObject(result);
                 //把JSON转为DataSet
-                Newtonsoft.Json.Converters.DataTableConverter dtc = new Newtonsoft.Json.Converters.DataTableConverter();
+                DataTableConverter dtc = new DataTableConverter();
                 JsonReader jread = new JsonTextReader(new StringReader(result));
-                DataTable dt=new DataTable();
+                DataTable dt = new DataTable();
                 dt.TableName = "tb_data";
                 dt.Clear();
                 dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
                 Globals.OrderTable.Clear();
                 Globals.OrderTable = null;
-                if (dt.Rows.Count>0)
+                if (dt.Rows.Count > 0)
                 {
                     DataRow dr = dt.Rows[0];
                     if (dr[0].ToString().Equals(""))
@@ -1184,10 +1184,10 @@ namespace WebServiceReference
                 }
                 if (dt.Rows.Count > 0)
                 {
-                    DataRow dr = dt.Rows[dt.Rows.Count-1];
+                    DataRow dr = dt.Rows[dt.Rows.Count - 1];
                     if (dr[0].ToString().Equals(""))
                     {
-                        dt.Rows.RemoveAt(dt.Rows.Count-1);
+                        dt.Rows.RemoveAt(dt.Rows.Count - 1);
                     }
                 }
                 Globals.OrderTable = dt;
@@ -1288,7 +1288,7 @@ namespace WebServiceReference
         /// <param name="OrderID"></param>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public static string updateDishWeight(string tableNo, string dishid,string primarykey,string dishnum)
+        public static string updateDishWeight(string tableNo, string dishid, string primarykey, string dishnum)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/updateDishWeight.json", server2);
             StringWriter sw = new StringWriter();
@@ -1319,7 +1319,7 @@ namespace WebServiceReference
             //将反序列化的JSON字符串转换成对象  
             return result;
         }
-        
+
         /// <summary>
         /// 结算
         /// </summary>
@@ -1338,7 +1338,7 @@ namespace WebServiceReference
             writer.WritePropertyName("orderNo");
             writer.WriteValue(OrderID);
             writer.WritePropertyName("payDetail");
-            string paystr =   payDetail.ToString();
+            string paystr = payDetail.ToString();
             paystr = paystr.Replace("\r\n", "");
             paystr = paystr.Replace(@"\", "");
             writer.WriteValue(paystr);
@@ -1349,7 +1349,7 @@ namespace WebServiceReference
             jsonText = jsonText.Replace(@"\", "");
             jsonText = jsonText.Replace("\"[", "[");
             jsonText = jsonText.Replace("]\"", "]");
-            
+
             StringWriter sw2 = new StringWriter();
             sw2.Write(jsonText);
 
@@ -1406,22 +1406,22 @@ namespace WebServiceReference
         public static DateTime PDA_GetServerTime()
         {
             //内向交货单 OrderType=1,收货单 OrderType=2 ...
-           /* string address = String.Format("http://{0}:8080/datasnap/rest/TServerMethods1/PDA_GetServerTime/{1} "
-                                          , myConst.ServerName
-                                          , System.Net.Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString()
-                                          );
-            try
-            {
-                string datestr = wmsRestClient.Request_Rest(address);
-                return DateTime.Parse(datestr);
-            }
-            catch
-            {
-                return DateTime.Now;
-            }*/
+            /* string address = String.Format("http://{0}:8080/datasnap/rest/TServerMethods1/PDA_GetServerTime/{1} "
+                                           , myConst.ServerName
+                                           , System.Net.Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString()
+                                           );
+             try
+             {
+                 string datestr = wmsRestClient.Request_Rest(address);
+                 return DateTime.Parse(datestr);
+             }
+             catch
+             {
+                 return DateTime.Now;
+             }*/
             return DateTime.Now;
 
-        }   
+        }
 
         public static bool DownloadFile(string URL, string filename)
         {
@@ -1476,7 +1476,7 @@ namespace WebServiceReference
         {
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/QueryBalance/{0}/", memberinfo);
             String jsonResult = Request_Rest60(address);
-            if(jsonResult.Equals("0"))
+            if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败,请检查内网是否正常...");
 
@@ -1485,24 +1485,24 @@ namespace WebServiceReference
             //将反序列化的JSON字符串转换成对象  
             return ja;
         }
-        public static bool VoidSale(string orderid, string pszPwd, string pszGPwd,out string info)
+        public static bool VoidSale(string orderid, string pszPwd, string pszGPwd, out string info)
         {
             //orderid,pszPwd,pszGPwd
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/VoidSale/{0}/{1}/{2}/", orderid, pszPwd, pszGPwd);
             String jsonResult = Request_Rest(address);
-            if(jsonResult.Equals("0"))
+            if (jsonResult.Equals("0"))
             {
                 throw new Exception("连接服务器失败...");
 
             }
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
             //将反序列化的JSON字符串转换成对象  
-             string result = ja["Data"].ToString();
+            string result = ja["Data"].ToString();
             //将反序列化的JSON字符串转换成对象  
-             info = ja["Info"].ToString();
+            info = ja["Info"].ToString();
             return result.Equals("1");
         }
-        
+
         //memberinfo 会员卡号工k手机号
         public static JObject StoreCardDeposit(string memberinfo, double pszAmount, string pszSerial, int paytype)
         {
@@ -1552,10 +1552,10 @@ namespace WebServiceReference
             //将反序列化的JSON字符串转换成对象  
             return ja;
         }
-        
 
 
-        public static bool OpenUp(string aUserID,string aUserPassword,int CallType,out string reinfo)
+
+        public static bool OpenUp(string aUserID, string aUserPassword, int CallType, out string reinfo)
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/OpenUp/{0}/{1}/{2}/{3}/", aUserID, aUserPassword, ipaddress, CallType);
@@ -1579,7 +1579,7 @@ namespace WebServiceReference
 
         //
         //保存优惠内容
-        public static bool saveOrderPreferential(string aUserid,string OrderID,string Preferential)
+        public static bool saveOrderPreferential(string aUserid, string OrderID, string Preferential)
         {
             Preferential = Preferential.Replace(@"\", "");
             string ipaddress = GetLocalIp();
@@ -1668,7 +1668,7 @@ namespace WebServiceReference
             JArray jr = null;
 
             string address = "http://" + server + "/" + apiPath + "/padinterface/querytables.json";
-            String jsonResult = Post_Rest(address,null);
+            String jsonResult = Post_Rest(address, null);
             if (jsonResult == "0")
             {
                 return jr;
@@ -1695,7 +1695,7 @@ namespace WebServiceReference
             string jsonResult = Post_Rest(address, sw);
             if (jsonResult == "0")
                 return false;
-            
+
             var jr = (JObject)JsonConvert.DeserializeObject(jsonResult);
             return jr["result"].ToString().Equals("0");
         }
@@ -1730,10 +1730,10 @@ namespace WebServiceReference
         /// </summary>
         /// <param name="typeid"></param>
         /// <returns></returns>
-        public static void broadcastmsg(int msgid,string msg)
+        public static void broadcastmsg(int msgid, string msg)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/broadcastmsg/{0}/{1}/{2}",Globals.UserInfo.UserID, msgid, msg);
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/broadcastmsg/{0}/{1}/{2}", Globals.UserInfo.UserID, msgid, msg);
             String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
@@ -1741,9 +1741,9 @@ namespace WebServiceReference
 
             }
         }
-        public static void putOrder(string tableno, string orderid,TGzInfo gzinfo)
+        public static void putOrder(string tableno, string orderid, TGzInfo gzinfo)
         {
-            if (gzinfo.Gzcode==null)
+            if (gzinfo.Gzcode == null)
                 gzinfo.Gzcode = "0";
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/putOrder/{0}/{1}/{2}/{3}/{4}/{5}/", tableno, orderid, gzinfo.Gzcode, gzinfo.Gzname, gzinfo.Telephone, gzinfo.Relaperson);
@@ -1754,7 +1754,7 @@ namespace WebServiceReference
 
             }
         }
-        public static bool getOrderSequence(string tableno,out string sequence)
+        public static bool getOrderSequence(string tableno, out string sequence)
         {
             bool ret = false;
             sequence = "";
@@ -1778,7 +1778,7 @@ namespace WebServiceReference
             catch { }
             return ret;
         }
-        
+
         public static void wmOrder(string orderid)
         {
             string ipaddress = GetLocalIp();
@@ -1788,8 +1788,8 @@ namespace WebServiceReference
             {
             }
         }
-        
-        
+
+
         /// <summary>
         /// 按类别获取优惠列表 第二版 POST接口
         /// </summary>
@@ -1798,18 +1798,13 @@ namespace WebServiceReference
         public static JArray getcoupon_rulev2(string typeid, string orderid)
         {
             JArray jr = null;
-            if (orderid==null)
-            {
+            if (string.IsNullOrEmpty(orderid))
                 orderid = "000000";
-            }
-            if(orderid.Equals(""))
-            {
-                orderid = "000000";
-            }
+
             string ipaddress = GetLocalIp(); //newspicyway/padinterface/getPreferentialList.json
             //string address = String.Format("http://" + server + "/newspicyway/padinterface/getPreferentialList.json?typeid={0}",typeid);
             string address = "http://" + server + "/" + apiPath + "/padinterface/getPreferentialList.json";
-            
+
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -1845,6 +1840,7 @@ namespace WebServiceReference
             //string result = jr["result"].ToString();
             return jr;
         }
+
         /// <summary>
         /// 使用优惠返回一个金额
         /// </summary>
@@ -1947,8 +1943,8 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool getOrderInfo(string aUserid, string orderid, int printtype, out JArray jrorder, out JArray jrlist, out JArray jrjs)
         {
-            String OrderJson="";
-            String ListJson="";
+            String OrderJson = "";
+            String ListJson = "";
             String JSJson = "";
             JArray jrOrder = null;
             JArray jrList = null;
@@ -1972,7 +1968,7 @@ namespace WebServiceReference
             if (result == "1")
             {
                 OrderJson = ja["OrderJson"].ToString();
-                OrderJson=OrderJson.Replace("|","\"");
+                OrderJson = OrderJson.Replace("|", "\"");
                 ListJson = ja["ListJson"].ToString();
                 ListJson = ListJson.Replace("|", "\"");
                 ListJson = ListJson.Replace(@"\", @"\\");
@@ -1992,7 +1988,8 @@ namespace WebServiceReference
                     result = ja["Data"].ToString();
                     jrList = (JArray)JsonConvert.DeserializeObject(result);
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     MessageBox.Show(e.Message);
                 }
                 try
@@ -2074,7 +2071,7 @@ namespace WebServiceReference
             JArray jrJS = null;
             String posid = getPosID();
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/caleTableAmount/{0}/{1}/",orderid, aUserid);
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/caleTableAmount/{0}/{1}/", orderid, aUserid);
             String jsonResult = Request_Rest60(address);
             //将反序列化的JSON字符串转换成对象  
             string result = jsonResult;
@@ -2118,7 +2115,7 @@ namespace WebServiceReference
             try
             {
                 //开启IBM钱箱
-                string filename = Application.StartupPath+ "\\Cash.exe";
+                string filename = Application.StartupPath + "\\Cash.exe";
                 if (File.Exists(filename))
                 {
                     ShellExecute(IntPtr.Zero, "open", filename, null, null, ShowWindowCommands.SW_SHOWNORMAL);
@@ -2148,7 +2145,7 @@ namespace WebServiceReference
             catch { }
             return ret;
         }
-        
+
         /// <summary>
         /// 返回当天全部帐单
         /// </summary>
@@ -2157,7 +2154,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool getAllOrderInfo2(string aUserid, out JArray jrorder)
         {
-            String OrderJson="";
+            String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllOrderInfo2/{0}/", aUserid);
@@ -2174,7 +2171,7 @@ namespace WebServiceReference
             if (result == "1")
             {
                 OrderJson = ja["OrderJson"].ToString();
-                OrderJson=OrderJson.Replace("|","\"");
+                OrderJson = OrderJson.Replace("|", "\"");
                 try
                 {
                     ja = (JObject)JsonConvert.DeserializeObject(OrderJson);
@@ -2205,7 +2202,7 @@ namespace WebServiceReference
             catch { }
             return result;
         }
-        
+
         /// <summary>
         /// 获取全部的挂帐单位
         /// </summary>
@@ -2214,7 +2211,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool getAllGZDW(string aUserid, out JArray gzData)
         {
-            String OrderJson="";
+            String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllGZDW/{0}/", aUserid);
@@ -2231,7 +2228,7 @@ namespace WebServiceReference
             if (result == "1")
             {
                 OrderJson = ja["OrderJson"].ToString();
-                OrderJson=OrderJson.Replace("|","\"");
+                OrderJson = OrderJson.Replace("|", "\"");
                 try
                 {
                     ja = (JObject)JsonConvert.DeserializeObject(OrderJson);
@@ -2318,7 +2315,7 @@ namespace WebServiceReference
             cjData = jrOrder;
             return ret;
         }
-        
+
         public static bool getGroupDetail(string dishid, out JArray groupData)
         {
             String OrderJson = "";
@@ -2356,9 +2353,9 @@ namespace WebServiceReference
         /// <param name="aUserid"></param>
         /// <param name="gzData"></param>
         /// <returns></returns>
-        public static bool getMemberSaleInfo(string aUserid,string orderid, out JArray gzData)
+        public static bool getMemberSaleInfo(string aUserid, string orderid, out JArray gzData)
         {
-            String OrderJson="";
+            String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getMemberSaleInfo/{0}/{1}/", aUserid, orderid);
@@ -2375,7 +2372,7 @@ namespace WebServiceReference
             if (result == "1")
             {
                 OrderJson = ja["OrderJson"].ToString();
-                OrderJson=OrderJson.Replace("|","\"");
+                OrderJson = OrderJson.Replace("|", "\"");
                 try
                 {
                     ja = (JObject)JsonConvert.DeserializeObject(OrderJson);
@@ -2388,7 +2385,7 @@ namespace WebServiceReference
             return ret;
         }
 
-        
+
         /// <summary>
         /// 获取员工前台权限
         /// </summary>
@@ -2397,7 +2394,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool getUserRights(string aUserid, out JArray rightData)
         {
-            String OrderJson="";
+            String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getUserRights/{0}/", aUserid);
@@ -2414,7 +2411,7 @@ namespace WebServiceReference
             if (result == "1")
             {
                 OrderJson = ja["OrderJson"].ToString();
-                OrderJson=OrderJson.Replace("|","\"");
+                OrderJson = OrderJson.Replace("|", "\"");
                 try
                 {
                     ja = (JObject)JsonConvert.DeserializeObject(OrderJson);
@@ -2454,7 +2451,7 @@ namespace WebServiceReference
             }
             //将反序列化的JSON字符串转换成对象  
             string result = ja["result"].ToString();
-            
+
             bool ret = result.Equals("0");
             rightData = jrOrder;
             return ret;
@@ -2473,7 +2470,7 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
-            JObject ja =null;
+            JObject ja = null;
             bool ret = true;// result.Equals("0");
             JArray jr = null;
             try
@@ -2527,7 +2524,7 @@ namespace WebServiceReference
                 JSJson = JSJson.Replace("|", "\"");
                 DoubleJson = ja["DoubleJson"].ToString();
                 DoubleJson = DoubleJson.Replace("|", "\"");
-                
+
                 try
                 {
                     ja = (JObject)JsonConvert.DeserializeObject(OrderJson);
@@ -2562,7 +2559,7 @@ namespace WebServiceReference
         ///3、
         ///
         //public static String founding = HTTP + URL_HOST + "/newspicyway/padinterface/setorder.json";
-        public static bool setorder(string tableNo, string UserID,ref string orderid)
+        public static bool setorder(string tableNo, string UserID, ref string orderid)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/setorder.json", server2);
             StringWriter sw = new StringWriter();
@@ -2583,12 +2580,12 @@ namespace WebServiceReference
             String jsonResult = Post_Rest(address, sw);
             ///如果返回1，已经开台，先关掉
             ///{"result":"0","delaytime":"10","vipaddress":"192.168.40.25:8081","locktime":"120","backpsd":"1","orderid":"H20150416003934"}
-            bool result=false;
+            bool result = false;
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 string javaresult = ja["result"].ToString();
-                result= ja["result"].ToString().Equals("0");
+                result = ja["result"].ToString().Equals("0");
                 orderid = ja["orderid"].ToString();
             }
             catch { return false; }
@@ -2646,7 +2643,7 @@ namespace WebServiceReference
         public static bool getFoodType(out JArray jr)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/getMenuColumn.json", server2);
-            String jsonResult = Post_Rest(address,null);
+            String jsonResult = Post_Rest(address, null);
             bool result = false;
             JArray ja = null;
             try
@@ -2656,7 +2653,7 @@ namespace WebServiceReference
                 ja = (JArray)JsonConvert.DeserializeObject(javaresult);
                 result = true;// ja["result"].ToString().Equals("0");
             }
-            catch { result= false; }
+            catch { result = false; }
             //将反序列化的JSON字符串转换成对象  
             jr = ja;
             return result;
@@ -2673,12 +2670,12 @@ namespace WebServiceReference
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/discarddish.json", server2);
             String jsonResult = Post_Rest(address, sw);
-            bool result=false;
+            bool result = false;
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 string javaresult = ja["result"].ToString();
-                result= ja["result"].ToString().Equals("0");
+                result = ja["result"].ToString().Equals("0");
             }
             catch { return false; }
             //将反序列化的JSON字符串转换成对象  
@@ -2724,8 +2721,8 @@ namespace WebServiceReference
                     writer.WritePropertyName("printtype");
                     writer.WriteValue(str0);
                     string orderprice = dr["price"].ToString();
-                    if (ordertype==1)
-                        orderprice="0";//赠送
+                    if (ordertype == 1)
+                        orderprice = "0";//赠送
                     string dishid = dr["dishid"].ToString();
                     string pricetype = ordertype.ToString();
                     if (dishid.Equals(Globals.cjSetting.Id))
@@ -2748,7 +2745,7 @@ namespace WebServiceReference
                     {
                         string otype = dr["ordertype"].ToString();
                         //鱼锅 dishes ,以后加套餐再分开 Weigh
-                        if (otype.Equals("2")||(otype.Equals("3")))
+                        if (otype.Equals("2") || (otype.Equals("3")))
                         {
                             //套餐
                             dishtype = 2;
@@ -2795,7 +2792,7 @@ namespace WebServiceReference
                     writer.WriteValue("");
                     writer.WritePropertyName("primarykey"); ////
                     writer.WriteValue(primarykey);
-                    string dishstatus="0";
+                    string dishstatus = "0";
                     if (dr["weigh"].ToString().Equals("1"))
                     {
                         dishstatus = "1";
@@ -2815,7 +2812,7 @@ namespace WebServiceReference
         {
             string str0 = "0";
             string str1 = "1";
-            int i=0;
+            int i = 0;
             foreach (DataRow dr in dt.Rows)
             {
                 if (dr["Groupid"].ToString().Equals(groupid))
@@ -2871,7 +2868,7 @@ namespace WebServiceReference
                             writer.WriteEndArray();
                         }
                         else
-                          writer.WriteValue(dishes);
+                            writer.WriteValue(dishes);
                         string userid = dr["userid"].ToString();
                         writer.WritePropertyName("userName");
                         writer.WriteValue(userid);
@@ -2886,7 +2883,7 @@ namespace WebServiceReference
                         if (dr["Orderstatus"].ToString().Equals("6"))
                             writer.WriteValue(1);//int.Parse(str0)
                         else
-                          writer.WriteValue(dishtype);//int.Parse(str0)
+                            writer.WriteValue(dishtype);//int.Parse(str0)
                         writer.WritePropertyName("orderseq");
                         writer.WriteValue(str1);
                         string dishnum = dr["dishnum"].ToString();
@@ -2929,7 +2926,7 @@ namespace WebServiceReference
                         if (primarykey.Equals(""))
                             primarykeydish = getGUID();
                         else
-                          primarykeydish = primarykey +"-"+ i.ToString();
+                            primarykeydish = primarykey + "-" + i.ToString();
                         writer.WriteStartObject();
                         writer.WritePropertyName("printtype");
                         writer.WriteValue(str0);
@@ -2985,10 +2982,10 @@ namespace WebServiceReference
                         writer.WritePropertyName("dishstatus");
                         writer.WriteValue(dishstatus);
                         writer.WritePropertyName("ispot");
-                        if(dr["Orderstatus"].ToString().Equals("2"))
+                        if (dr["Orderstatus"].ToString().Equals("2"))
                             writer.WriteValue("1");
                         else
-                          writer.WriteValue("0");
+                            writer.WriteValue("0");
                         writer.WriteEndObject();
                         i++;
                     }
@@ -3002,10 +2999,10 @@ namespace WebServiceReference
             string str = guid.ToString();
             return str;
         }
-        public static bool bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence,int ordertype)
+        public static bool bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype)
         {
             //string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorder.json", server2);
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);   
+            string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -3026,23 +3023,23 @@ namespace WebServiceReference
             String jsonResult = Post_Rest(address, sw);
             ///如果返回1，已经开台，先关掉
             ///{"result":"0","delaytime":"10","vipaddress":"192.168.40.25:8081","locktime":"120","backpsd":"1","orderid":"H20150416003934"}
-            bool result=false;
+            bool result = false;
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 string javaresult = ja["result"].ToString();
-                if(javaresult.Equals("1"))
+                if (javaresult.Equals("1"))
                 {
                     //返回现有的帐单号，用现有的帐单号结算
                     //RestClient.GetTableInfo()
                 }
-                result= ja["result"].ToString().Equals("0");
+                result = ja["result"].ToString().Equals("0");
             }
             catch { return false; }
             //将反序列化的JSON字符串转换成对象  
             return result;
         }
-        public static bool getSystemSetData(string settingname,out TSetting setting)
+        public static bool getSystemSetData(string settingname, out TSetting setting)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/getSystemSetData.Json", server2);
             StringWriter sw = new StringWriter();
@@ -3088,7 +3085,7 @@ namespace WebServiceReference
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
             bool result = false;
-            roundJson=new TRoundInfo();
+            roundJson = new TRoundInfo();
             roundJson.Itemid = "0";
             roundJson.Type = "";
             try
@@ -3134,7 +3131,7 @@ namespace WebServiceReference
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-                result =  ja["result"].ToString().Equals("0");
+                result = ja["result"].ToString().Equals("0");
             }
             catch { return false; }
             //将反序列化的JSON字符串转换成对象  
@@ -3172,12 +3169,12 @@ namespace WebServiceReference
             return jrorder != null;
         }
 
-        public static bool getBackDishInfo(string orderid, string dishid,string dishunit,string tableno, out JArray jrorder)
+        public static bool getBackDishInfo(string orderid, string dishid, string dishunit, string tableno, out JArray jrorder)
         {
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getBackDishInfo/{0}/{1}/{2}/{3}/", orderid, dishid, dishunit,tableno);
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getBackDishInfo/{0}/{1}/{2}/{3}/", orderid, dishid, dishunit, tableno);
             String jsonResult = Request_Rest(address);
             if (jsonResult.Equals("0"))
             {
@@ -3210,7 +3207,7 @@ namespace WebServiceReference
 
         public static void getTicketList(String psTicketInfo)
         {
-            pszTicket[] pszTicketList=null;
+            pszTicket[] pszTicketList = null;
             string tickstr = psTicketInfo;
             string[] Ticks = null;
             Ticks = tickstr.Split(new char[] { ';' });
@@ -3280,7 +3277,7 @@ namespace WebServiceReference
         }
     }
 
-    
+
 }
 
 
