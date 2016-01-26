@@ -121,6 +121,9 @@ namespace Models
         }
         public static void jarray2DataTable(JArray jr, ref DataTable dt)
         {
+            if(jr == null)
+                return;
+
             string fieldname = "";
             DataRow dr = null;
             foreach (JObject ja in jr)

@@ -1921,8 +1921,7 @@ namespace WebServiceReference
                 ListJson = ListJson.Replace("|", "\"");
                 ListJson = ListJson.Replace(@"\", @"\\");
                 JSJson = ja["JSJson"].ToString();
-                JSJson = JSJson.Replace("|", "\"");
-                JSJson = JSJson.Replace(@"\", @"\\");
+                JSJson = JSJson.Replace("&quot", "\"");
                 try
                 {
                     ja = (JObject)JsonConvert.DeserializeObject(OrderJson);
