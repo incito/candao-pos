@@ -1176,7 +1176,7 @@ namespace Main
                                         string pwd = "0";
                                         if (edtPwd.Text.Trim().ToString().Length > 0)
                                         {
-                                            pwd = edtPwd.Text.Substring(0, 6);
+                                            pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
                                         }
                                         bool data= MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
                                         //string data = json["Data"].ToString();
