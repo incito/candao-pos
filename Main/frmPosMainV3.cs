@@ -1719,8 +1719,8 @@ namespace Main
                         Warning("会员消费撤消失败...,请重试");
                         return;
                     }
-                } 
-                if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName,inputMemo).Equals("0"))
+                }
+                if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, inputMemo).Equals("0"))
                 {
                     Warning("帐单反结算失败...");
                 }
@@ -4809,15 +4809,15 @@ namespace Main
                         bool qret=QueryMemberCard2_CanDao(out msg);
                         if (!qret)
                         {
-                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, "会员结算失败,系统自动反结");
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结");
                             Warning("获取会员卡号失败:" + msg);
                             return false;
                         }
                         if (cardno.Trim().Equals(""))
                         {
                             //RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
-                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, "会员结算失败,系统自动反结");
-                            Warning("获取会员卡号失败:"+msg);
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结");
+                            Warning("获取会员卡号失败:" + msg);
                             return false;
                         }
                     }
@@ -4834,7 +4834,7 @@ namespace Main
                     TCandaoRet_Sale ret = CanDaoMemberClient.MemberSale(membersale);
                     if (!ret.Ret)
                     {
-                        RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID,"会员结算失败,系统自动反结");
+                        RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结");
                         Warning(ret.Retinfo);
                         return false;
                     }
