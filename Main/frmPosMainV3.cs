@@ -5102,39 +5102,36 @@ namespace Main
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            /*try
-            {
-                tbyh.Clear();
-                JArray ja = Globals.GetTableJson(tbyh);
-                string str = ja.ToString();
-            }
-            catch { }*/
             try
             {
                 for (int i = tbyh.Rows.Count - 1; i >= 0; i--)
                 {
-                    //foreach (DataRow dr in tbyh.Rows)
-                    //{
                     DataRow dr = tbyh.Rows[i];
                     if (!dr["banktype"].ToString().Equals("101"))
                     {
-                        //tbyh.Rows.Remove(dr);
                         amountym = amountym - float.Parse(dr["freeamount"].ToString());
                         amountgz2 = amountgz2 - float.Parse(dr["debitamount"].ToString());
                         dr.Delete();
                     }
-                    // }
                 }
+                tbyh.AcceptChanges();
             }
-            catch { } getAmount();
+            catch
+            {
+                // ignored
+            }
+            getAmount();
+
             try
             {
-
                 JArray ja = Globals.GetTableJson(tbyh);
                 string str = ja.ToString();
                 RestClient.saveOrderPreferential(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, str);
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
 
         private void btnPrintAmount_Click(object sender, EventArgs e)
