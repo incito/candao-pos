@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Library;
@@ -18,7 +19,7 @@ using System.Threading;
 
 namespace Main
 {
-    
+
     public partial class frmAllTable : frmBase
     {
         [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -97,7 +98,7 @@ namespace Main
             lblbranchid.Text = String.Format("店铺编号：{0}", RestClient.getbranch_id());
             timer2.Enabled = true;
             timer2.Interval = 1000;
-            lblVer.Text = String.Format("版本:{0}",Globals.ProductVersion);
+            lblVer.Text = String.Format("版本:{0}", Globals.ProductVersion);
             try
             {
                 RestClient.getSystemSetData(out Globals.roundinfo);
@@ -125,7 +126,7 @@ namespace Main
             }
             catch { }
             Globals.branch_id = RestClient.getbranch_id();
-            
+
         }
 
         private void ucTable1_Click(object sender, EventArgs e)
@@ -151,7 +152,7 @@ namespace Main
                 }
                 catch { }
             }
-            if (Globals.cjFood==null)
+            if (Globals.cjFood == null)
             {
                 try
                 {
@@ -159,9 +160,9 @@ namespace Main
                 }
                 catch { }
             }
-            object obj=((Label)sender).Tag;
-            Library.UserControls.ucTable uctable= ((Library.UserControls.ucTable)obj);
-            string tableno=uctable.lblNo.Text;
+            object obj = ((Label)sender).Tag;
+            Library.UserControls.ucTable uctable = ((Library.UserControls.ucTable)obj);
+            string tableno = uctable.lblNo.Text;
             //if (uctable.status == 0)
             //    return;
             if (uctable.status == 2)
@@ -174,7 +175,8 @@ namespace Main
                 timer2.Enabled = false;
                 //frmPosMain.ShowPosMain(tableno, uctable.status);
                 frmpos.showFrm(tableno, uctable.status);
-            }finally
+            }
+            finally
             {
                 btnRefresh.Tag = 0;
                 this.Cursor = Cursors.Default;
@@ -205,7 +207,7 @@ namespace Main
         private void CreateBtnArr()
         {
             btntables = new Library.UserControls.ucTable[jarrTables.Count];
-            JObject ja=null;
+            JObject ja = null;
             string tableid = "";
             string tableName = "";
             string tableNo = "";
@@ -216,8 +218,8 @@ namespace Main
             int rowindex = 0;
             int colindex = 0;
             int personnum = 0;
-            frmProgress.frm.SetProgress("正在加载桌台资料...",btntables.Length,0);
-            for(int i=0;i<=btntables.Length-1;i++)
+            frmProgress.frm.SetProgress("正在加载桌台资料...", btntables.Length, 0);
+            for (int i = 0; i <= btntables.Length - 1; i++)
             {
                 btntables[i] = new Library.UserControls.ucTable();
                 btntables[i].lblNo.Click += new EventHandler(ucTable1_Click);
@@ -235,12 +237,12 @@ namespace Main
                 orderstatus = int.Parse(ja["status"].ToString());
                 btntables[i].lblNo.Text = tableNo;
                 btntables[i].lbl2.Text = string.Format("{0}人桌", personnum);
-                if (tableName.IndexOf("外")>=0)
+                if (tableName.IndexOf("外") >= 0)
                 {
                     btntables[i].lbl2.Text = tableName;
                 }
                 btntables[i].status = orderstatus;
-                
+
 
                 btntables[i].lblNo.Tag = btntables[i];
                 btntables[i].lbl2.Tag = btntables[i];
@@ -251,7 +253,7 @@ namespace Main
                 btntables[i].Width = btnWidth;
                 btntables[i].Height = btnHeight;
                 colindex = (i % rowcount);
-                btnleft = colindex * btnWidth + ucTable1.Left + (colindex*btnSpace);
+                btnleft = colindex * btnWidth + ucTable1.Left + (colindex * btnSpace);
                 btntables[i].Left = btnleft;
                 rowindex = i / rowcount;
                 btntop = btnHeight * rowindex + ucTable1.Top + (rowindex * btnSpace);
@@ -266,22 +268,22 @@ namespace Main
             {
                 case 0: //空闲
                     btn.BackColor = lblState0.BackColor;
-                    statusnum0 = statusnum0+1;
+                    statusnum0 = statusnum0 + 1;
                     break;
                 case 1: //就餐
                     btn.BackColor = lblState1.BackColor;
-                    statusnum1 = statusnum1+1;
+                    statusnum1 = statusnum1 + 1;
                     break;
                 case 3: //已结账
-                    statusnum3 = statusnum3+1;
+                    statusnum3 = statusnum3 + 1;
                     btn.BackColor = lblState3.BackColor;
                     break;
                 case 4: //预定
-                    statusnum4 = statusnum4+1;
+                    statusnum4 = statusnum4 + 1;
                     btn.BackColor = lblState4.BackColor;
                     break;
                 case 5: //已撤销
-                    statusnum5 = statusnum5+1;
+                    statusnum5 = statusnum5 + 1;
                     btn.BackColor = lblState5.BackColor;
                     break;
             }
@@ -292,7 +294,7 @@ namespace Main
             for (int i = 0; i <= jarrTables.Count - 1; i++)
             {
                 ja = (JObject)jarrTables[i];
-                if(tableno.Equals(ja["tableNo"].ToString()))
+                if (tableno.Equals(ja["tableNo"].ToString()))
                 {
                     //return ja;
                     break;
@@ -333,14 +335,14 @@ namespace Main
                 for (int i = 0; i <= btntables.Length - 1; i++)
                 {
                     ja = getTableJson(btntables[i].lblNo.Text);
-                    if(ja==null)
+                    if (ja == null)
                     {
                         btntables[i].Enabled = false;
                     }
                     else
                     {
                         btntables[i].Enabled = true;
-                        int orderstatus= int.Parse(ja["status"].ToString());
+                        int orderstatus = int.Parse(ja["status"].ToString());
                         setbtnColor(btntables[i], orderstatus);
                         btntables[i].status = orderstatus;
                     }
@@ -349,8 +351,9 @@ namespace Main
                 lblState1.Text = string.Format("就餐({0})", statusnum1);
                 lblState4.Text = string.Format("预定({0})", statusnum4);
                 lblState3.Text = string.Format("(结帐{0})", statusnum3);
-                lblState5.Text = string.Format("撤销({0})", statusnum5);                                  
-            }finally
+                lblState5.Text = string.Format("撤销({0})", statusnum5);
+            }
+            finally
             {
             }
 
@@ -389,51 +392,68 @@ namespace Main
                 Warning("您没有清机权限！");
                 return;
             }
-            if (!AskQuestion("确定要现在清机吗？"))
+
+            var wnd = new SelectClearMachineStepWindow(true);
+            if (wnd.ShowDialog() == true)
             {
-                return;
-            }
-            if (!frmPermission2.ShowPermission2("收银员清机", eRightType.right4))
-            {
-                return;
-            }
-            try
-            {
-                string authorizer = Globals.authorizer;
-                JObject ja = RestClient.clearMachine(Globals.UserInfo.UserID, Globals.UserInfo.UserName, authorizer);
-                string data=  ja["Data"].ToString();
-                if(data.Equals("1"))
+                if (wnd.DoEndWork)
                 {
-                    //打印清机报表
-                    ReportPrint.PrintClearMachine();
-                    RestClient.OpenCash();
-                    Warning("清机成功!");
-                    //返回主界面
-                    if (frmLogin.Login())
+                    var noClearnMachineList = RestClient.GetNoClearMachineInfos();
+                    if (noClearnMachineList.Any())
                     {
-                        if (Globals.userRight.getSyRigth())
+                        var thisMachineNoClearList = noClearnMachineList.Where(t=>t.MachineFlag.Equals(RestClient.GetMacAddr())).ToList();
+                        if (thisMachineNoClearList.Any())
                         {
-                            if (!frmPosMainV3.checkInputTellerCash())
+                            foreach (var noClearMachineInfo in thisMachineNoClearList)
                             {
-                                Application.Exit();
-                                return;
+                                
                             }
                         }
-                        lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
                     }
-                    else//登录失败,退出程序
-                        Application.Exit();
-                    
-                    return;
                 }
-                else
+                else //选择倒班。
                 {
-                    Warning(ja["Info"].ToString());
-                }
+                    if (!frmPermission2.ShowPermission2("收银员清机", eRightType.right4))
+                        return;
 
+                    try
+                    {
+                        JObject ja = RestClient.clearMachine(Globals.UserInfo.UserID, Globals.UserInfo.UserName,
+                            Globals.authorizer);
+                        string data = ja["Data"].ToString();
+                        if (data.Equals("1"))
+                        {
+                            //打印清机报表
+                            ReportPrint.PrintClearMachine();
+                            RestClient.OpenCash();
+                            Warning("清机成功!");
+                            //返回主界面
+                            if (frmLogin.Login())
+                            {
+                                if (Globals.userRight.getSyRigth())
+                                {
+                                    if (!frmPosMainV3.checkInputTellerCash())
+                                    {
+                                        Application.Exit();
+                                        return;
+                                    }
+                                }
+                                lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
+                            }
+                            else //登录失败,退出程序
+                                Application.Exit();
+                        }
+                        else
+                        {
+                            Warning(!string.IsNullOrEmpty(ja["Info"].ToString()) ? ja["Info"].ToString() : "清机失败。");
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        Warning("清机时错误：" + ex.Message);
+                    }
+                }
             }
-            catch { }
-            
         }
 
         private void btnend_Click(object sender, EventArgs e)

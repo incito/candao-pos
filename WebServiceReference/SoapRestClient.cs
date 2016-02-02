@@ -77,7 +77,7 @@ namespace WebServiceReference
         /// 获取MAC地址。
         /// </summary>
         /// <returns></returns>
-        private static string GetMacAddr()
+        public static string GetMacAddr()
         {
             string mac = GetMacByWMI();
             if (string.IsNullOrEmpty(mac))
@@ -3273,6 +3273,15 @@ namespace WebServiceReference
             {
                 return info;
             }
+        }
+
+        /// <summary>
+        /// 获取未清机集合。
+        /// </summary>
+        /// <returns></returns>
+        public static List<NoClearMachineInfo> GetNoClearMachineInfos()
+        {
+            return new List<NoClearMachineInfo>();
         }
     }
 
