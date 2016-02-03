@@ -76,11 +76,6 @@
       <HintPath>C:\Program Files (x86)\FastReports\FastReport.Net Demo\FastReport.VSDesign.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Bin\Lib\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -168,6 +163,10 @@
       <Project>{2CF256B2-F5E0-4670-8644-08DDF65B0009}</Project>
       <Name>Models</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\NewtonsoftJson\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj">
+      <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
+      <Name>Newtonsoft.Json.Net40</Name>
     </ProjectReference>
     <ProjectReference Include="..\WebServiceReference\WebServiceReference.csproj">
       <Project>{830d9756-d0f4-4140-8afc-500e8eca03c4}</Project>

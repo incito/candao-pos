@@ -8,7 +8,9 @@ namespace Common
         public static string GetDataServerReturnData(string jsonStrng)
         {
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonStrng);
-            return ja["result"] != null ? ja["result"].ToString() : "";
+            var resultStr = ja["result"] != null ? ja["result"].ToString() : "";
+            JArray jr = (JArray) JsonConvert.DeserializeObject(resultStr);
+            return jr[0].ToString();
         } 
     }
 }

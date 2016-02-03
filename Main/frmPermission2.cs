@@ -99,8 +99,7 @@ namespace Main
                 IAccountService service = new AccountServiceImpl();
                 var response = service.Login(txtUser.Text, txtPwd.Text, _loginType);
                 if (!string.IsNullOrEmpty(response.Item1))
-                {
-                    AfterLoginError(response.Item1);
+                {AfterLoginError(response.Item1);
                     return;
                 }
 
