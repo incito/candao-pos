@@ -475,7 +475,7 @@ namespace Main
                         if (result)
                             break;
 
-                        if (!AskQuestion("上传数据失败，重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃。"))
+                        if (!AskQuestion("发生异常，上传失败，是否重新上传？"))
                             break;
                     } while (true);
                     //打印清机报表
