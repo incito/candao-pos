@@ -9,6 +9,7 @@ using WebServiceReference;
 using System.Diagnostics;
 using DevExpress.UserSkins;
 using DevExpress.Skins;
+using Models.Enum;
 
 /************************************************************************* 
  * 程序说明: 程序入口
@@ -80,7 +81,7 @@ namespace Main
                     else
                     {
                         //经理权限开业
-                        if (!frmPermission2.ShowPermission2("开业经理授权", eRightType.right2))
+                        if (!frmPermission2.ShowPermission2("开业经理授权", EnumRightType.OpenUp))
                         {
                             Application.Exit();
                             return;

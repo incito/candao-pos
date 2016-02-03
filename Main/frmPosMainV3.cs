@@ -16,6 +16,7 @@ using ReportsFastReport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Models.CandaoMember;
+using Models.Enum;
 
 namespace Main
 {
@@ -1681,7 +1682,7 @@ namespace Main
                 {
                     return;
                 }
-                if (!frmPermission2.ShowPermission2("反结算经理授权", eRightType.right3))
+                if (!frmPermission2.ShowPermission2("反结算经理授权", EnumRightType.AntiSettlement))
                 {
                     return;
                 }

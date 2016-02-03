@@ -16,6 +16,7 @@ using WebServiceReference;
 using ReportsFastReport;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Models.Enum;
 
 namespace Main
 {
@@ -401,58 +402,49 @@ namespace Main
                     var noClearnMachineList = RestClient.GetNoClearMachineInfos();
                     if (noClearnMachineList.Any())
                     {
-                        var thisMachineNoClearList = noClearnMachineList.Where(t=>t.MachineFlag.Equals(RestClient.GetMacAddr())).ToList();
+                        var localMac = RestClient.GetMacAddr();
+                        var thisMachineNoClearList = noClearnMachineList.Where(t => t.MachineFlag.Equals(localMac)).ToList();
                         if (thisMachineNoClearList.Any())
                         {
-                            foreach (var noClearMachineInfo in thisMachineNoClearList)
+                            if (thisMachineNoClearList.Any(noClearMachineInfo => !frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine, noClearMachineInfo.UserName))) //任何一个本机收银全清机失败就返回。
+                                return;
+
+                            if (noClearnMachineList.Any(t => !t.MachineFlag.Equals(localMac)))//有其他POS的收银机。
                             {
-                                
+                                OtherMachineNoClearnWarningWindow warningWnd = new OtherMachineNoClearnWarningWindow();
+                                if (warningWnd.ShowDialog() != true)
+                                    return;
                             }
+
+                            EndWork();
+
                         }
                     }
                 }
                 else //选择倒班。
                 {
-                    if (!frmPermission2.ShowPermission2("收银员清机", eRightType.right4))
+                    if (!frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine))
                         return;
 
-                    try
+                    //打印清机报表
+                    ReportPrint.PrintClearMachine();
+                    RestClient.OpenCash();
+                    Warning("清机成功!");
+                    //返回主界面
+                    if (frmLogin.Login())
                     {
-                        JObject ja = RestClient.clearMachine(Globals.UserInfo.UserID, Globals.UserInfo.UserName,
-                            Globals.authorizer);
-                        string data = ja["Data"].ToString();
-                        if (data.Equals("1"))
+                        if (Globals.userRight.getSyRigth())
                         {
-                            //打印清机报表
-                            ReportPrint.PrintClearMachine();
-                            RestClient.OpenCash();
-                            Warning("清机成功!");
-                            //返回主界面
-                            if (frmLogin.Login())
+                            if (!frmPosMainV3.checkInputTellerCash())
                             {
-                                if (Globals.userRight.getSyRigth())
-                                {
-                                    if (!frmPosMainV3.checkInputTellerCash())
-                                    {
-                                        Application.Exit();
-                                        return;
-                                    }
-                                }
-                                lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
-                            }
-                            else //登录失败,退出程序
                                 Application.Exit();
+                                return;
+                            }
                         }
-                        else
-                        {
-                            Warning(!string.IsNullOrEmpty(ja["Info"].ToString()) ? ja["Info"].ToString() : "清机失败。");
-                        }
+                        lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
                     }
-                    catch(Exception ex)
-                    {
-                        Warning("清机时错误：" + ex.Message);
-                    }
-                }
+                    else //登录失败,退出程序
+                        Application.Exit();}
             }
         }
 
@@ -469,10 +461,17 @@ namespace Main
             }
             //清机 打印清机报表，标记收银机为已清机状态，可以下一个收银员 录入零找金
             //经理权限
-            if (!frmPermission2.ShowPermission2("结业经理授权", eRightType.right5))
-            {
+            EndWork();
+        }
+
+        /// <summary>
+        /// 结业处理。
+        /// </summary>
+        private void EndWork()
+        {
+            if (!frmPermission2.ShowPermission2("结业经理授权", EnumRightType.EndWork))
                 return;
-            }
+
             try
             {
                 JObject ja = RestClient.endWork(Globals.UserInfo.UserID);
@@ -481,7 +480,7 @@ namespace Main
                 {
                     do
                     {
-                        bool result = false;
+                        bool result;
                         try
                         {
                             result = RestClient.jdesyndata();//调用上传回调//http://localhost:8080/newspicyway/padinterface/jdesyndata.json
@@ -489,7 +488,6 @@ namespace Main
                         catch (Exception)
                         {
                             result = false;
-                            //Warning("上传数据失败！");
                         }
 
                         if (result)
@@ -498,9 +496,7 @@ namespace Main
                         if (!AskQuestion("上传数据失败，重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃。"))
                             break;
                     } while (true);
-                    //打印清机报表
                     Warning("结业成功!");
-                    //返回主界面
                     Application.Exit();
                     Close();
                     return;
@@ -512,13 +508,11 @@ namespace Main
                         msg = "结业失败！";
                     Warning(msg);
                 }
-
             }
             catch (Exception ex)
             {
                 Warning("结业失败。" + ex.Message);
             }
-
         }
 
         private void button3_Click_1(object sender, EventArgs e)

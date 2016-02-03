@@ -632,9 +632,9 @@ namespace WebServiceReference
             }
             return null;
         }
+
         /// <summary>
         ///登录
-        /// </summary>
         /// </summary>
         /// <param name="userid"></param>
         /// <param name="password"></param>
@@ -642,7 +642,7 @@ namespace WebServiceReference
         /// http://192.168.102.7/ladaotu/padinterface/login.json
         public static string Login(string userid, string password, string loginType)
         {
-            string newloginType = getRightCode(loginType.ToString());
+            string newloginType = getRightCode(loginType);
             string address = "http://" + server + "/" + apiPath + "/padinterface/login.json";
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
@@ -656,16 +656,11 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             string jsonText = sw.GetStringBuilder().ToString();
-            //Msg.ShowError(jsonText);
             Console.WriteLine(jsonText);
-            //return wmsRestClient.Request_Rest(address);
             String jsonResult = Post_Rest(address, sw);
-            //Msg.ShowError(address);
-            //Msg.ShowError(jsonResult);
             if (jsonResult == "0")
-            {
                 return "";
-            }
+
             Globals.UserInfo.msg = jsonResult;
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
             Globals.UserInfo.msg = "";

@@ -1,38 +1,43 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using Library;
-using Common;
 using System.IO;
-using Models;
+using System.Threading;
+using System.Windows.Forms;
+using Common;
+using DevExpress.XtraEditors;
+using Library;
+using Models.Enum;
+using Models.Request;
+using Models.Response;
 using WebServiceReference;
+using WebServiceReference.IService;
+using WebServiceReference.ServiceImpl;
 
 namespace Main
 {
     public partial class frmPermission2 : frmBase
     {
-        private DevExpress.XtraEditors.TextEdit focusedt = null;
-        private eRightType loginType = eRightType.right2;
-        public static bool ShowPermission2(string msg, eRightType loginType)
-        {
-            frmPermission2 frm = new frmPermission2();
-            frm.label10.Text = msg;
-            frm.loginType = loginType;
-            frm.ShowDialog();
-            return frm.DialogResult == DialogResult.OK;
-        }
-        public frmPermission2()
+        private TextEdit focusedt = null;
+        private EnumRightType _loginType = EnumRightType.OpenUp;
+
+        public string UserId { get; set; }
+
+        public string S { get; set; }
+
+        public frmPermission2(string userName)
         {
             InitializeComponent();
+            if (string.IsNullOrEmpty(userName))
+                txtUser.Text = userName;
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+
+        public static bool ShowPermission2(string msg, EnumRightType loginType, string userName = null)
         {
-            this.Close();
+            frmPermission2 frm = new frmPermission2(userName);
+            frm.label10.Text = msg;
+            frm._loginType = loginType;
+            frm.ShowDialog();
+            return frm.DialogResult == DialogResult.OK;
         }
 
         private void frmPermission2_Load(object sender, EventArgs e)
@@ -41,22 +46,24 @@ namespace Main
             ReadLoginInfo();
             setBtnFocus();
         }
+
         private void setBtnFocus()
         {
-            Common.Globals.SetButton(button18);
-            Common.Globals.SetButton(button19);
-            Common.Globals.SetButton(button20);
-            Common.Globals.SetButton(button21);
-            Common.Globals.SetButton(button22);
-            Common.Globals.SetButton(button23);
-            Common.Globals.SetButton(button24);
-            Common.Globals.SetButton(button25);
-            Common.Globals.SetButton(button26);
-            Common.Globals.SetButton(button27);
-            Common.Globals.SetButton(button28);
-            Common.Globals.SetButton(button2);
-            Common.Globals.SetButton(button11);
+            Globals.SetButton(button18);
+            Globals.SetButton(button19);
+            Globals.SetButton(button20);
+            Globals.SetButton(button21);
+            Globals.SetButton(button22);
+            Globals.SetButton(button23);
+            Globals.SetButton(button24);
+            Globals.SetButton(button25);
+            Globals.SetButton(button26);
+            Globals.SetButton(button27);
+            Globals.SetButton(button28);
+            Globals.SetButton(button2);
+            Globals.SetButton(button11);
         }
+
         private void txtUser_Enter(object sender, EventArgs e)
         {
             focusedt = txtUser;
@@ -65,90 +72,95 @@ namespace Main
         private void txtPwd_Enter(object sender, EventArgs e)
         {
             focusedt = txtPwd;
+            txtPwd.SelectAll();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (focusedt == txtUser)
+            if (focusedt == txtUser && !string.IsNullOrEmpty(focusedt.Text.Trim()))
             {
-                if (focusedt.Text.Trim().ToString().Equals(""))
-                {
-                    focusedt.Focus();
-                }
-                else
-                {
-                    txtPwd.Focus();
-                    txtPwd.SelectAll();
-                }
+                txtPwd.Focus();
+                return;
             }
-            else
-            {
-                checkuserright();
-            }
+
+            CheckUserRight();
         }
-        private void checkuserright()
+
+        private void CheckUserRight()
         {
             try
             {
-                this.Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
                 button2.Enabled = false;
-                this.Update();//必须
+                Update();//必须
                 string userID = txtUser.Text;
-                string password = CEncoder.GenerateMD5Hash(txtPwd.Text);/*常规加密*/
                 int tmploginType = -1;
-                string loginReturn = RestClient.Login(userID, password, ((int)loginType).ToString());
-                if (loginReturn == "0") //调用登录策略
+
+                IAccountService service = new AccountServiceImpl();
+                var response = service.Login(txtUser.Text, txtPwd.Text, _loginType);
+                if (!string.IsNullOrEmpty(response.Item1))
                 {
-                    //Msg.ShowError(loginReturn);
-                    this.SaveLoginInfo();//跟据选项保存登录信息   
-                    string reinfo = "";
-                    if (loginType.Equals(eRightType.right2))
-                    {
+                    AfterLoginError(response.Item1);
+                    return;
+                }
+
+                SaveLoginInfo();//跟据选项保存登录信息   
+                switch (_loginType)
+                {
+                    case EnumRightType.Login:
+                        Globals.UserInfo.UserName = response.Item2;
+                        Globals.UserInfo.PassWord = txtPwd.Text;
+                        Globals.UserInfo.UserID = txtUser.Text;
+                        break;
+                    case EnumRightType.OpenUp:
+                        Globals.authorizer = response.Item2;
+                        string reinfo;
                         if (!RestClient.OpenUp(txtUser.Text, txtPwd.Text, 1, out reinfo))
                         {
-                            Msg.Warning(reinfo);
-                            button2.Enabled = true;
-                            txtPwd.Focus();
-                            txtPwd.SelectAll();
+                            AfterLoginError(reinfo);
                             return;
                         }
-                    }
-                    this.DialogResult = DialogResult.OK; //成功
-                    this.Close(); //关闭登陆窗体
+                        break;
+                    case EnumRightType.ClearMachine:
+                        IRestaurantService rService = new RestaurantServiceImpl();
+                        var errMsg = rService.Clearner(txtUser.Text, response.Item2);
+                        if (!string.IsNullOrEmpty(errMsg))
+                        {
+                            AfterLoginError(errMsg);
+                            return;
+                        }
+                        break;
+                    default:
+                        Globals.authorizer = response.Item2;
+                        break;
                 }
-                else
-                    if (loginReturn == "")
-                    {
 
-                        Warning("验证失败，请检查网络和后台服务!");
-                        button2.Enabled = true;
-                        txtPwd.Focus();
-                        txtPwd.SelectAll();
-                    }
-                    else
-                    {
-                        Warning("验证失败，请检查用户名和密码!");
-                        button2.Enabled = true;
-                        txtPwd.Focus();
-                        txtPwd.SelectAll();
-                    }
+                DialogResult = DialogResult.OK; //成功
+                Close(); //关闭登陆窗体
             }
             catch (CustomException ex)
             {
-                button2.Enabled = true;
-                Warning(ex.Message);
-                txtPwd.Focus();
-                txtPwd.SelectAll();
+                AfterLoginError(ex.Message);
             }
             catch (Exception ex)
             {
-                button2.Enabled = true;
-                Warning("后台返回数据错误：" + Globals.UserInfo.msg);
-                txtPwd.Focus();
-                txtPwd.SelectAll();
+                AfterLoginError("后台返回数据错误：" + Globals.UserInfo.msg);
             }
-            this.Cursor = Cursors.Default;
+            Cursor = Cursors.Default;
         }
+
+        /// <summary>
+        /// 登录失败以后的处理。
+        /// </summary>
+        /// <param name="errMsg">错误信息。</param>
+        protected void AfterLoginError(string errMsg)
+        {
+            Warning(errMsg);
+            button2.Enabled = true;
+            txtPwd.Focus();
+            txtPwd.SelectAll();
+        }
+
         private void SaveLoginInfo()
         {
             //存在用户配置文件，自动加载登录信息
@@ -171,7 +183,7 @@ namespace Main
         private void button26_Click(object sender, EventArgs e)
         {
             focusedt.Focus();
-            System.Threading.Thread.Sleep(10);
+            Thread.Sleep(10);
             SendKeys.Send(((Button)sender).Text);
             //System.Threading.Thread.Sleep(100); 
             SendKeys.Flush();
@@ -180,7 +192,7 @@ namespace Main
         private void button19_Click(object sender, EventArgs e)
         {
             focusedt.Focus();
-            System.Threading.Thread.Sleep(10);
+            Thread.Sleep(10);
             SendKeys.Send(((Button)sender).Text);
             //System.Threading.Thread.Sleep(100); 
             SendKeys.Flush();
@@ -218,7 +230,7 @@ namespace Main
 
         private void txtUser_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if(e.KeyChar==13)
+            if (e.KeyChar == 13)
             {
                 button2_Click(button2, e);
             }

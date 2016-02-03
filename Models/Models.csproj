@@ -36,6 +36,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Lib\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -56,7 +61,11 @@
     <Compile Include="CandaoMember\TCandaoRet_CardLose.cs" />
     <Compile Include="CandaoMember\TCandaoRet_StoreCardDeposit.cs" />
     <Compile Include="CandaoMember\TCandaoRet_VoidSale.cs" />
+    <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="NoClearMachineInfo.cs" />
+    <Compile Include="Request\AuthorizeLoginRequest.cs" />
+    <Compile Include="Response\AuthorizeLoginResponse.cs" />
+    <Compile Include="Response\JavaResponse.cs" />
     <Compile Include="SystemModels\BusinessCommonFields.cs" />
     <Compile Include="SystemModels\TEmailBody.cs" />
     <Compile Include="SystemModels\TAttachFile.cs" />
@@ -75,12 +84,6 @@
     <Compile Include="TOrder.cs" />
     <Compile Include="TTable.cs" />
     <Compile Include="v_coupon_rule.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NewtonsoftJson\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj">
-      <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
-      <Name>Newtonsoft.Json.Net40</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
