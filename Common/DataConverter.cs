@@ -19,6 +19,8 @@ using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using System.ComponentModel;
 using System.Xml;
+using Models;
+using Models.Response;
 
 namespace Common
 {
@@ -665,5 +667,13 @@ namespace Common
             return dt;
         }
 
+        public static NoClearMachineInfo ToNoClearMachineInfo(UnclearPosResponse response)
+        {
+            return new NoClearMachineInfo
+            {
+                UserName = response.username,
+                MachineFlag = response.ipaddress,
+            };
+        }
     }
 }

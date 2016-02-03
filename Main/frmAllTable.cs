@@ -17,6 +17,8 @@ using ReportsFastReport;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Models.Enum;
+using WebServiceReference.IService;
+using WebServiceReference.ServiceImpl;
 
 namespace Main
 {
@@ -399,7 +401,15 @@ namespace Main
             {
                 if (wnd.DoEndWork)
                 {
-                    var noClearnMachineList = RestClient.GetNoClearMachineInfos();
+                    IRestaurantService service =new RestaurantServiceImpl();
+                    var result = service.GetUnclearnPosInfo();
+                    if (!string.IsNullOrEmpty(result.Item1))
+                    {
+                        Warning(result.Item1);
+                        return;
+                    }
+
+                    var noClearnMachineList = result.Item2;
                     if (noClearnMachineList.Any())
                     {
                         var localMac = RestClient.GetMacAddr();
@@ -408,18 +418,17 @@ namespace Main
                         {
                             if (thisMachineNoClearList.Any(noClearMachineInfo => !frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine, noClearMachineInfo.UserName))) //任何一个本机收银全清机失败就返回。
                                 return;
+                        }
 
-                            if (noClearnMachineList.Any(t => !t.MachineFlag.Equals(localMac)))//有其他POS的收银机。
-                            {
-                                OtherMachineNoClearnWarningWindow warningWnd = new OtherMachineNoClearnWarningWindow();
-                                if (warningWnd.ShowDialog() != true)
-                                    return;
-                            }
-
-                            EndWork();
-
+                        if (noClearnMachineList.Any(t => !t.MachineFlag.Equals(localMac)))//有其他POS的收银机。
+                        {
+                            OtherMachineNoClearnWarningWindow warningWnd = new OtherMachineNoClearnWarningWindow();
+                            if (warningWnd.ShowDialog() != true)
+                                return;
                         }
                     }
+
+                    EndWork();
                 }
                 else //选择倒班。
                 {

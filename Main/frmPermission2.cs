@@ -26,8 +26,11 @@ namespace Main
         public frmPermission2(string userName)
         {
             InitializeComponent();
-            if (string.IsNullOrEmpty(userName))
+            if (!string.IsNullOrEmpty(userName))
+            {
                 txtUser.Text = userName;
+                txtUser.Update();
+            }
         }
 
 
@@ -42,9 +45,17 @@ namespace Main
 
         private void frmPermission2_Load(object sender, EventArgs e)
         {
-            focusedt = txtUser;
-            ReadLoginInfo();
+            if (string.IsNullOrEmpty(txtUser.Text))
+            {
+                ReadLoginInfo();
+                focusedt = txtUser;
+            }
+            else
+            {
+                focusedt = txtPwd;
+            }
             setBtnFocus();
+            focusedt.Focus();
         }
 
         private void setBtnFocus()
@@ -99,7 +110,8 @@ namespace Main
                 IAccountService service = new AccountServiceImpl();
                 var response = service.Login(txtUser.Text, txtPwd.Text, _loginType);
                 if (!string.IsNullOrEmpty(response.Item1))
-                {AfterLoginError(response.Item1);
+                {
+                    AfterLoginError(response.Item1);
                     return;
                 }
 

@@ -60,7 +60,9 @@
     <Compile Include="NoClearMachineInfo.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
     <Compile Include="Response\AuthorizeLoginResponse.cs" />
+    <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\JavaResponse.cs" />
+    <Compile Include="Response\UnclearPosResponse.cs" />
     <Compile Include="SystemModels\BusinessCommonFields.cs" />
     <Compile Include="SystemModels\TEmailBody.cs" />
     <Compile Include="SystemModels\TAttachFile.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="TShopping.cs" />
     <Compile Include="TOrder.cs" />
     <Compile Include="TTable.cs" />
+    <Compile Include="UnclearPosInfo.cs" />
     <Compile Include="v_coupon_rule.cs" />
   </ItemGroup>
   <ItemGroup>

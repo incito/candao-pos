@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms.VisualStyles;
 using Common;
+using Models;
 using Models.Request;
+using Models.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebServiceReference.IService;
@@ -36,6 +40,24 @@ namespace WebServiceReference.ServiceImpl
             {
                 //AllLog.Instance.E(ex);
                 return ex.Message;
+            }
+        }
+
+        public Tuple<string, List<NoClearMachineInfo>> GetUnclearnPosInfo()
+        {
+            var addr = string.Format("http://{0}/{1}/padinterface/findUncleanPosList.json", RestClient.server, RestClient.apiPath);
+            try
+            {
+                var result = HttpHelper.HttpGet<GetUnclearnPosInfoResponse>(addr);
+                if (!result.result.Equals("0"))
+                    return new Tuple<string, List<NoClearMachineInfo>>("服务器内部错误，获取未清机列表失败。", null);
+
+                var list = result.detail.Select(DataConverter.ToNoClearMachineInfo).ToList();
+                return new Tuple<string, List<NoClearMachineInfo>>(null, list);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, List<NoClearMachineInfo>>(ex.Message, null);
             }
         }
     }

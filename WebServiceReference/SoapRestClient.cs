@@ -3270,14 +3270,6 @@ namespace WebServiceReference
             }
         }
 
-        /// <summary>
-        /// 获取未清机集合。
-        /// </summary>
-        /// <returns></returns>
-        public static List<NoClearMachineInfo> GetNoClearMachineInfos()
-        {
-            return new List<NoClearMachineInfo>();
-        }
     }
 
 

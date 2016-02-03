@@ -22,13 +22,13 @@ namespace Library
 
         private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
         {
-            var noClearnMachineList = RestClient.GetNoClearMachineInfos();
-            var localMac = RestClient.GetMacAddr();
-            if (!noClearnMachineList.All(t => t.MachineFlag.Equals(localMac)))
-            {
-                DialogResult = true;
-                Close();
-            }
+            //var noClearnMachineList = RestClient.GetNoClearMachineInfos();
+            //var localMac = RestClient.GetMacAddr();
+            //if (!noClearnMachineList.All(t => t.MachineFlag.Equals(localMac)))
+            //{
+            //    DialogResult = true;
+            //    Close();
+            //}
         }
     }
 }

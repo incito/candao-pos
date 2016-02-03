@@ -418,8 +418,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\EndWork_Dis.png" />
-    <Content Include="Resources\Retry_Down.png" />
-    <Content Include="Resources\Retry_Press.png" />
+    <Resource Include="Resources\Retry_Down.png" />
+    <Resource Include="Resources\Retry_Press.png" />
     <Content Include="Resources\Warning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
