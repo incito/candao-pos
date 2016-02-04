@@ -468,8 +468,6 @@ namespace Main
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //清机 打印清机报表，标记收银机为已清机状态，可以下一个收银员 录入零找金
-            //经理权限
             if (!Globals.userRight.getSyRigth())
             {
                 Warning("您没有清机权限！");
@@ -498,7 +496,7 @@ namespace Main
                         var thisMachineNoClearList = noClearnMachineList.Where(t => t.MachineFlag.Equals(localMac)).ToList();
                         if (thisMachineNoClearList.Any())
                         {
-                            if (thisMachineNoClearList.Any(noClearMachineInfo => !frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine, noClearMachineInfo.UserName))) //任何一个本机收银全清机失败就返回。
+                            if (thisMachineNoClearList.Any(t => ClearMachine(t.UserName)))
                                 return;
                         }
 
@@ -510,34 +508,53 @@ namespace Main
                         }
                     }
 
-                    EndWork();
+                    if (!EndWork())
+                        ForcedLogin();
                 }
                 else //选择倒班。
                 {
-                    if (!frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine))
-                        return;
-
-                    //打印清机报表
-                    ReportPrint.PrintClearMachine();
-                    RestClient.OpenCash();
-                    Warning("清机成功!");
-                    //返回主界面
-                    if (frmLogin.Login())
-                    {
-                        if (Globals.userRight.getSyRigth())
-                        {
-                            if (!frmPosMainV3.checkInputTellerCash())
-                            {
-                                Application.Exit();
-                                return;
-                            }
-                        }
-                        lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
-                    }
-                    else //登录失败,退出程序
-                        Application.Exit();
+                    ClearMachine();
+                    ForcedLogin();
                 }
             }
+        }
+
+        /// <summary>
+        /// 清机业务组合。
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        private static bool ClearMachine(string userName = null)
+        {
+            if (!frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine, userName))
+                //任何一个本机收银全清机失败就返回。
+                return true;
+
+            ReportPrint.PrintClearMachine(); //打印清机报表
+            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
+            Warning("清机成功!");
+            return false;
+        }
+
+        /// <summary>
+        /// 强制登录。
+        /// </summary>
+        private void ForcedLogin()
+        {
+            if (frmLogin.Login()) //返回主界面
+            {
+                if (Globals.userRight.getSyRigth())
+                {
+                    if (!frmPosMainV3.checkInputTellerCash())
+                    {
+                        Application.Exit();
+                        return;
+                    }
+                }
+                lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
+            }
+            else //登录失败,退出程序
+                Application.Exit();
         }
 
         private void btnend_Click(object sender, EventArgs e)
@@ -547,22 +564,22 @@ namespace Main
                 Warning("您没有结业权限！");
                 return;
             }
-            if (!AskQuestion("确定要现在结业吗？"))
+            if (TableInfos.Any(t => t.TableStatus == EnumTableStatus.Dinner))
             {
+                Warning("还有未结账的餐台，不能结业。");
                 return;
             }
-            //清机 打印清机报表，标记收银机为已清机状态，可以下一个收银员 录入零找金
-            //经理权限
-            EndWork();
+            if (AskQuestion("确定要现在结业吗？"))
+                EndWork();
         }
 
         /// <summary>
         /// 结业处理。
         /// </summary>
-        private void EndWork()
+        private bool EndWork()
         {
             if (!frmPermission2.ShowPermission2("结业经理授权", EnumRightType.EndWork))
-                return;
+                return false;
 
             try
             {
@@ -588,22 +605,23 @@ namespace Main
                         if (!AskQuestion("上传数据失败，重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃。"))
                             break;
                     } while (true);
+
                     Warning("结业成功!");
                     Application.Exit();
                     Close();
-                    return;
+                    return true;
                 }
-                else
-                {
-                    var msg = ja["Info"].ToString();
-                    if (string.IsNullOrEmpty(msg))
-                        msg = "结业失败！";
-                    Warning(msg);
-                }
+
+                var msg = ja["Info"].ToString();
+                if (string.IsNullOrEmpty(msg))
+                    msg = "结业失败！";
+                Warning(msg);
+                return false;
             }
             catch (Exception ex)
             {
                 Warning("结业失败。" + ex.Message);
+                return false;
             }
         }
 

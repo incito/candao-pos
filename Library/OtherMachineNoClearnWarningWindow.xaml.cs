@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Windows;
 using WebServiceReference;
+using WebServiceReference.IService;
+using WebServiceReference.ServiceImpl;
 
 namespace Library
 {
@@ -22,13 +24,20 @@ namespace Library
 
         private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
         {
-            //var noClearnMachineList = RestClient.GetNoClearMachineInfos();
-            //var localMac = RestClient.GetMacAddr();
-            //if (!noClearnMachineList.All(t => t.MachineFlag.Equals(localMac)))
-            //{
-            //    DialogResult = true;
-            //    Close();
-            //}
+            IRestaurantService service = new RestaurantServiceImpl();
+            var result = service.GetUnclearnPosInfo();
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                frmWarning.ShowWarning(result.Item1);
+                return;
+            }
+
+            var noClearnMachineList = result.Item2;
+            if (noClearnMachineList.Any()) //这里只需要判断有未清机的就不关闭窗口。
+                return;
+
+            DialogResult = true;
+            Close();
         }
     }
 }
