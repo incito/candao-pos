@@ -326,7 +326,7 @@ namespace Main
             // ucTable1
             // 
             this.ucTable1.BackColor = System.Drawing.Color.LightSalmon;
-            this.ucTable1.Location = new System.Drawing.Point(9, 80);
+            this.ucTable1.Location = new System.Drawing.Point(10, 81);
             this.ucTable1.Name = "ucTable1";
             this.ucTable1.Size = new System.Drawing.Size(87, 57);
             this.ucTable1.TabIndex = 0;

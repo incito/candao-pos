@@ -16,6 +16,7 @@ using WebServiceReference;
 using ReportsFastReport;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Library.UserControls;
 using Models.Enum;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
@@ -29,6 +30,7 @@ namespace Main
         public static extern bool LockWindowUpdate(IntPtr hwnd);
         private JArray jarrTables = null;
         private Library.UserControls.ucTable[] btntables;
+        private List<ucTable> _tableControls;
         private const int rowcount = 10;
         private int btnWidth = 88;
         private int btnHeight = 58;
@@ -44,6 +46,12 @@ namespace Main
         //public frmPosMain frmpos = new frmPosMain();
         public frmPosMainV3 frmpos = new frmPosMainV3();
         public frmPosMainV3 frmposwm = new frmPosMainV3();
+
+        /// <summary>
+        /// 餐桌集合。
+        /// </summary>
+        public List<TableInfo> TableInfos { get; set; }
+
         public frmAllTable()
         {
             InitializeComponent();
@@ -192,21 +200,94 @@ namespace Main
             //
             try
             {
+                UpdateRefreshBtnStatus(5);
                 this.Cursor = Cursors.WaitCursor;
                 btnRefresh.Enabled = false;
+                timer2.Stop();
                 this.Update();//必须
-                jarrTables = RestClient.querytables();
-                if (jarrTables == null)
+
+                IRestaurantService service = new RestaurantServiceImpl();
+                var result = service.GetAllTableInfoes();
+                if (!string.IsNullOrEmpty(result.Item1))
+                {
+                    Warning(result.Item1);
                     return;
-                CreateTableArr();
-                UpdateTableStatus();
+                }
+
+                TableInfos = result.Item2;
+                CreateTableControls();
+
+                lblState0.Text = string.Format("空闲({0})", TableInfos.Count(t => t.TableStatus == EnumTableStatus.Idle));
+                lblState1.Text = string.Format("就餐({0})", TableInfos.Count(t => t.TableStatus == EnumTableStatus.Dinner));
             }
             finally
             {
                 this.Cursor = Cursors.Default;
                 btnRefresh.Enabled = true;
+                timer2.Start();
             }
         }
+
+        /// <summary>
+        /// 创建餐台控件。
+        /// </summary>
+        private void CreateTableControls()
+        {
+            try
+            {
+                //frmProgress.ShowProgress("正在加载桌台资料...");
+                LockWindowUpdate(Handle);
+                //frmProgress.frm.SetProgress("正在加载桌台资料...", TableInfos.Count, 0);
+
+                int idx = 0;
+                if (_tableControls != null)
+                {
+                    foreach (var tableControl in _tableControls)
+                    {
+                        tableControl.lblNo.Click -= ucTable1_Click;
+                        tableControl.lbl2.Click -= ucTable1_Click;
+                        tableControl.Parent = null;
+                    }
+                }
+                _tableControls = new List<ucTable>();
+
+                foreach (var tableInfo in TableInfos)
+                {
+                    var colindex = (idx % rowcount);
+                    var rowindex = idx / rowcount;
+                    ucTable table = new ucTable(tableInfo)
+                    {
+                        Parent = pnlMain,
+                        Width = btnWidth,
+                        Height = btnHeight,
+                        Left = colindex * btnWidth + ucTable1.Left + (colindex * btnSpace),
+                        Top = btnHeight * rowindex + ucTable1.Top + (rowindex * btnSpace),
+                    };
+                    table.lblNo.Click += ucTable1_Click;
+                    table.lbl2.Click += ucTable1_Click;
+                    _tableControls.Add(table);
+                    //frmProgress.frm.SetProgress("正在加载桌台资料..." + tableInfo.TableNo, TableInfos.Count, idx);
+                    idx++;
+                }
+            }
+            finally
+            {
+                LockWindowUpdate(IntPtr.Zero);
+                //frmProgress.frm.Close();
+            }
+        }
+
+        /// <summary>
+        /// 进入强制结业模式，只能结账和清机。
+        /// </summary>
+        public void SetInForcedEndWorkModel()
+        {
+            var idleTableControls = _tableControls.Where(t => ((TableInfo)t.Tag).TableStatus == EnumTableStatus.Idle).ToList();
+            idleTableControls.ForEach(t => t.Enabled = false);
+            btnShapping.Enabled = false;
+            button3.Enabled = false;
+        }
+
         private void CreateBtnArr()
         {
             btntables = new Library.UserControls.ucTable[jarrTables.Count];
@@ -325,7 +406,6 @@ namespace Main
         }
         private void UpdateTableStatus()
         {
-            //如果没有创建台那么创建
             try
             {
                 //刷新最新状态
@@ -369,21 +449,21 @@ namespace Main
                 timer2.Enabled = false;
                 int inttime = int.Parse(btnRefresh.Tag.ToString());
                 if (inttime > 0)
-                {
-                    inttime = inttime - 1;
-                    btnRefresh.Tag = inttime;
-                    btnRefresh.Text = String.Format("刷新[{0}]", inttime);
-                    btnRefresh.Update();
-                    return;
-                }
-                inttime = 5;
-                btnRefresh.Tag = inttime;
-                btnRefresh.Text = String.Format("刷新[{0}]", inttime);
-                btnRefresh.Update();
-                button3_Click(btnRefresh, e);
+                    UpdateRefreshBtnStatus(--inttime);
+                else
+                    button3_Click(null, null);
             }
             finally
-            { timer2.Enabled = true; }
+            {
+                timer2.Enabled = true;
+            }
+        }
+
+        private void UpdateRefreshBtnStatus(int inttime)
+        {
+            btnRefresh.Tag = inttime;
+            btnRefresh.Text = String.Format("刷新[{0}]", inttime);
+            btnRefresh.Update();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -396,12 +476,14 @@ namespace Main
                 return;
             }
 
-            var wnd = new SelectClearMachineStepWindow(true);
+            var hadDinnerTable = TableInfos.Any(t => t.TableStatus == EnumTableStatus.Dinner);
+            var wnd = new SelectClearMachineStepWindow(!hadDinnerTable);
             if (wnd.ShowDialog() == true)
             {
                 if (wnd.DoEndWork)
                 {
-                    IRestaurantService service =new RestaurantServiceImpl();
+
+                    IRestaurantService service = new RestaurantServiceImpl();
                     var result = service.GetUnclearnPosInfo();
                     if (!string.IsNullOrEmpty(result.Item1))
                     {
@@ -453,7 +535,8 @@ namespace Main
                         lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
                     }
                     else //登录失败,退出程序
-                        Application.Exit();}
+                        Application.Exit();
+                }
             }
         }
 

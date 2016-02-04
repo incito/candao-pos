@@ -19,7 +19,9 @@ using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using System.ComponentModel;
 using System.Xml;
+using CanDao.Pos.Model.Response;
 using Models;
+using Models.Enum;
 using Models.Response;
 
 namespace Common
@@ -675,5 +677,24 @@ namespace Common
                 MachineFlag = response.ipaddress,
             };
         }
+
+        public static TableInfo ToTableInfo(TableInfoResponse response)
+        {
+            return new TableInfo
+            {
+                AreaName = response.areaname,
+                AreaNo = response.areaid,
+                OrderId = response.orderid,
+                PeopleNumber = response.personNum,
+                TableStatus = (EnumTableStatus)response.status,
+                TableId = response.tableid,
+                TableName = response.tableName,
+                TableNo = response.tableNo,
+                TableType = (EnumTableType)response.tabletype,
+                MinPrice = Math.Round(response.minprice, 2),
+                FixPrice = Math.Round(response.fixprice, 2),
+            };
+        }
+
     }
 }

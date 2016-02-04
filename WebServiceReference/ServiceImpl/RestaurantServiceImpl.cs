@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms.VisualStyles;
+using CanDao.Pos.Model.Response;
 using Common;
 using Models;
 using Models.Request;
@@ -60,5 +61,24 @@ namespace WebServiceReference.ServiceImpl
                 return new Tuple<string, List<NoClearMachineInfo>>(ex.Message, null);
             }
         }
+
+        public Tuple<string, List<TableInfo>> GetAllTableInfoes()
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/querytables.json", RestClient.server, RestClient.apiPath);
+                var result = HttpHelper.HttpPost<List<TableInfoResponse>>(addr, null);
+                var dataList = new List<TableInfo>();
+                if (result != null && result.Any())
+                    dataList = result.Select(DataConverter.ToTableInfo).ToList();
+                return new Tuple<string, List<TableInfo>>(null, dataList);
+            }
+            catch (Exception ex)
+            {
+                //AllLog.Instance.E(ex);
+                return new Tuple<string, List<TableInfo>>(ex.Message, null);
+            }
+        }
+
     }
 }

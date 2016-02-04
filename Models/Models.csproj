@@ -57,11 +57,14 @@
     <Compile Include="CandaoMember\TCandaoRet_StoreCardDeposit.cs" />
     <Compile Include="CandaoMember\TCandaoRet_VoidSale.cs" />
     <Compile Include="Enum\EnumRightType.cs" />
+    <Compile Include="Enum\EnumTableStatus.cs" />
+    <Compile Include="Enum\EnumTableType.cs" />
     <Compile Include="NoClearMachineInfo.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
     <Compile Include="Response\AuthorizeLoginResponse.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\JavaResponse.cs" />
+    <Compile Include="Response\TableInfoResponse.cs" />
     <Compile Include="Response\UnclearPosResponse.cs" />
     <Compile Include="SystemModels\BusinessCommonFields.cs" />
     <Compile Include="SystemModels\TEmailBody.cs" />
@@ -71,6 +74,7 @@
     <Compile Include="SystemModels\TUser.cs" />
     <Compile Include="SystemModels\TUserGroup.cs" />
     <Compile Include="CandaoMember\TCandaoRet_Sale.cs" />
+    <Compile Include="TableInfo.cs" />
     <Compile Include="TComboDish.cs" />
     <Compile Include="TGzInfo.cs" />
     <Compile Include="TMemberStoredInfo.cs" />
