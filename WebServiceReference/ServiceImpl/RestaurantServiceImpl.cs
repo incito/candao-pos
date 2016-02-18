@@ -80,5 +80,21 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
+        public Tuple<string, bool> CheckWhetherTheLastEndWork()
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/isEndWork.json", RestClient.server, RestClient.apiPath);
+                var result = HttpHelper.HttpGet<CheckWhetherEndWorkResponse>(addr);
+                if (!result.IsSuccess)
+                    return new Tuple<string, bool>(result.msg ?? "检测是否结业失败。", false);
+
+                return new Tuple<string, bool>(null, result.detail);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, bool>(ex.Message, false);
+            }
+        }
     }
 }

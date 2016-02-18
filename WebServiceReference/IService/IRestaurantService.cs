@@ -27,5 +27,11 @@ namespace WebServiceReference.IService
         /// </summary>
         /// <returns>Item1全部正常则为null，否则为错误信息，Item2为餐桌信息集合。</returns>
         Tuple<string, List<TableInfo>> GetAllTableInfoes();
+
+        /// <summary>
+        /// 检测上一次是否结业。
+        /// </summary>
+        /// <returns>Item1全部正常则为null，否则为错误信息，Item2为是否结业。</returns>
+        Tuple<string, bool> CheckWhetherTheLastEndWork();
     }
 }

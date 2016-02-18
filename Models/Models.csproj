@@ -62,6 +62,7 @@
     <Compile Include="NoClearMachineInfo.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
     <Compile Include="Response\AuthorizeLoginResponse.cs" />
+    <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\JavaResponse.cs" />
     <Compile Include="Response\TableInfoResponse.cs" />

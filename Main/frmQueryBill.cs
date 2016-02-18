@@ -300,7 +300,7 @@ namespace Main
                     if (RestClient.rebackorder(Globals.UserInfo.UserID, orderid, ref errStr))
                     {
                         //frmPosMain.ShowPosMain(errStr, 9);
-                        frmtable.frmpos.showFrm(errStr, 9);
+                        frmtable.frmpos.ShowFrm(errStr, 9);
                     }
                     else
                     {
@@ -351,7 +351,7 @@ namespace Main
                     if (RestClient.accountsorder(Globals.UserInfo.UserID, orderid, ref errStr))
                     {
                         //frmPosMain.ShowPosMain(errStr, 9);
-                        frmtable.frmpos.showFrm(errStr, 8);
+                        frmtable.frmpos.ShowFrm(errStr, 8);
                     }
                     else
                     {

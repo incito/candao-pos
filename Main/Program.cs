@@ -37,31 +37,21 @@ namespace Main
             Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
             frmStart.frm.setMsg("检测实例...");
             Process instance = RunningInstance();
-            if (instance == null)
+            if (instance != null)//已经有一个实例在运行
             {
-                //1.1 没有实例在运行
-
-            }
-            else
-            {
-                //1.2 已经有一个实例在运行
                 HandleRunningInstance(instance);
                 return;
             }
-            //Program.CheckInstance();//检查程序是否运行多实例
             frmStart.frm.setMsg("读取设置...");
             SystemConfig.ReadSettings(); //读取用户自定义设置
-
-            /*if (false == BridgeFactory.InitializeBridge())//初始化桥接功能
-            {
-                Application.Exit();
-                return;
-            }*/
 
             BonusSkins.Register();//注册Dev酷皮肤
             //OfficeSkins.Register();////注册Office样式的皮肤
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
             RestClient.GetSoapRemoteAddress();
+
+            //frmStart.frm.setMsg("检查之前是否结业...");
+
             //如果还没有开业，提示开业授权
             string reinfo="";
             frmStart.frm.setMsg("检查是否开业...");

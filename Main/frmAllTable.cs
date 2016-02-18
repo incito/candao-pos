@@ -1,23 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Library;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Common;
-using Models;
-using WebServiceReference;
-using ReportsFastReport;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
+using Common;
+using Library;
 using Library.UserControls;
+using Models;
 using Models.Enum;
+using Newtonsoft.Json.Linq;
+using ReportsFastReport;
+using WebServiceReference;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
 
@@ -28,22 +23,17 @@ namespace Main
     {
         [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool LockWindowUpdate(IntPtr hwnd);
-        private JArray jarrTables = null;
-        private Library.UserControls.ucTable[] btntables;
+
         private List<ucTable> _tableControls;
-        private const int rowcount = 10;
+        private const int Rowcount = 10;
         private int btnWidth = 88;
         private int btnHeight = 58;
         private int btnSpace = 10;
 
-        private int statusnum0 = 0;
-        private int statusnum1 = 0;
-        private int statusnum3 = 0;
-        private int statusnum4 = 0;
-        private int statusnum5 = 0;
-        //public frmPosMain frmpos = new frmPosMain();
-        //public frmPosMain frmposwm = new frmPosMain();
-        //public frmPosMain frmpos = new frmPosMain();
+        private DateTime _endWorkTime;
+        private DateTime _openTime;
+        private bool _isForcedEndWorkModel;//是否是强制结业模式。
+
         public frmPosMainV3 frmpos = new frmPosMainV3();
         public frmPosMainV3 frmposwm = new frmPosMainV3();
 
@@ -55,11 +45,7 @@ namespace Main
         public frmAllTable()
         {
             InitializeComponent();
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            GetTradeTime();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -73,11 +59,6 @@ namespace Main
 
         }
 
-        private void panel3_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             if (AskQuestion("确定要退出系统吗？")) Application.Exit();
@@ -85,8 +66,8 @@ namespace Main
 
         private void ucTable1_Load(object sender, EventArgs e)
         {
-            ((Library.UserControls.ucTable)sender).lblNo.Click += new EventHandler(ucTable1_Click);
-            ((Library.UserControls.ucTable)sender).lbl2.Click += new EventHandler(ucTable1_Click);
+            ((ucTable)sender).lblNo.Click += new EventHandler(ucTable1_Click);
+            ((ucTable)sender).lbl2.Click += new EventHandler(ucTable1_Click);
         }
 
         private void frmAllTable_Load(object sender, EventArgs e)
@@ -169,23 +150,22 @@ namespace Main
                 {
                     getCJFood();
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
             }
-            object obj = ((Label)sender).Tag;
-            Library.UserControls.ucTable uctable = ((Library.UserControls.ucTable)obj);
+            ucTable uctable = ((ucTable)((Label)sender).Tag);
             string tableno = uctable.lblNo.Text;
-            //if (uctable.status == 0)
-            //    return;
-            if (uctable.status == 2)
-                return;
-            if (uctable.status == 4)
-                return;
             try
             {
                 this.Cursor = Cursors.WaitCursor;
                 timer2.Enabled = false;
                 //frmPosMain.ShowPosMain(tableno, uctable.status);
-                frmpos.showFrm(tableno, uctable.status);
+                frmpos.ShowFrm(tableno, uctable.status);
+
+                if (_isForcedEndWorkModel)//如果已经是强制结业模式，就继续设定成强制结业（结算是在另外的弹出窗口）
+                    SetInForcedEndWorkModel();
             }
             finally
             {
@@ -253,8 +233,8 @@ namespace Main
 
                 foreach (var tableInfo in TableInfos)
                 {
-                    var colindex = (idx % rowcount);
-                    var rowindex = idx / rowcount;
+                    var colindex = (idx % Rowcount);
+                    var rowindex = idx / Rowcount;
                     ucTable table = new ucTable(tableInfo)
                     {
                         Parent = pnlMain,
@@ -266,6 +246,8 @@ namespace Main
                     table.lblNo.Click += ucTable1_Click;
                     table.lbl2.Click += ucTable1_Click;
                     _tableControls.Add(table);
+                    if (_isForcedEndWorkModel)//如果是强制结业模式，则只允许操作就餐餐台。
+                        table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
                     //frmProgress.frm.SetProgress("正在加载桌台资料..." + tableInfo.TableNo, TableInfos.Count, idx);
                     idx++;
                 }
@@ -278,7 +260,7 @@ namespace Main
         }
 
         /// <summary>
-        /// 进入强制结业模式，只能结账和清机。
+        /// 进入强制结业模式，只能结账、清机和结业。
         /// </summary>
         public void SetInForcedEndWorkModel()
         {
@@ -286,160 +268,7 @@ namespace Main
             idleTableControls.ForEach(t => t.Enabled = false);
             btnShapping.Enabled = false;
             button3.Enabled = false;
-        }
-
-        private void CreateBtnArr()
-        {
-            btntables = new Library.UserControls.ucTable[jarrTables.Count];
-            JObject ja = null;
-            string tableid = "";
-            string tableName = "";
-            string tableNo = "";
-            string tabletype = "";
-            int orderstatus = 0;
-            int btnleft = 0;
-            int btntop = 0;
-            int rowindex = 0;
-            int colindex = 0;
-            int personnum = 0;
-            frmProgress.frm.SetProgress("正在加载桌台资料...", btntables.Length, 0);
-            for (int i = 0; i <= btntables.Length - 1; i++)
-            {
-                btntables[i] = new Library.UserControls.ucTable();
-                btntables[i].lblNo.Click += new EventHandler(ucTable1_Click);
-                btntables[i].lbl2.Click += new EventHandler(ucTable1_Click);
-                ja = (JObject)jarrTables[i];
-                tableid = ja["tableid"].ToString();
-                tableName = ja["tableName"].ToString();
-                tableNo = ja["tableNo"].ToString();
-                tabletype = ja["tabletype"].ToString();
-                try
-                {
-                    personnum = int.Parse(ja["personNum"].ToString());
-                }
-                catch { personnum = 0; }
-                orderstatus = int.Parse(ja["status"].ToString());
-                btntables[i].lblNo.Text = tableNo;
-                btntables[i].lbl2.Text = string.Format("{0}人桌", personnum);
-                if (tableName.IndexOf("外") >= 0)
-                {
-                    btntables[i].lbl2.Text = tableName;
-                }
-                btntables[i].status = orderstatus;
-
-
-                btntables[i].lblNo.Tag = btntables[i];
-                btntables[i].lbl2.Tag = btntables[i];
-
-                setbtnColor(btntables[i], orderstatus);
-                //位置
-                btntables[i].Parent = pnlMain;
-                btntables[i].Width = btnWidth;
-                btntables[i].Height = btnHeight;
-                colindex = (i % rowcount);
-                btnleft = colindex * btnWidth + ucTable1.Left + (colindex * btnSpace);
-                btntables[i].Left = btnleft;
-                rowindex = i / rowcount;
-                btntop = btnHeight * rowindex + ucTable1.Top + (rowindex * btnSpace);
-                btntables[i].Top = btntop;
-                frmProgress.frm.SetProgress("正在加载桌台资料..." + tableNo, btntables.Length, i);
-
-            }
-        }
-        private void setbtnColor(Library.UserControls.ucTable btn, int orderstatus)
-        {
-            switch (orderstatus)
-            {
-                case 0: //空闲
-                    btn.BackColor = lblState0.BackColor;
-                    statusnum0 = statusnum0 + 1;
-                    break;
-                case 1: //就餐
-                    btn.BackColor = lblState1.BackColor;
-                    statusnum1 = statusnum1 + 1;
-                    break;
-                case 3: //已结账
-                    statusnum3 = statusnum3 + 1;
-                    btn.BackColor = lblState3.BackColor;
-                    break;
-                case 4: //预定
-                    statusnum4 = statusnum4 + 1;
-                    btn.BackColor = lblState4.BackColor;
-                    break;
-                case 5: //已撤销
-                    statusnum5 = statusnum5 + 1;
-                    btn.BackColor = lblState5.BackColor;
-                    break;
-            }
-        }
-        private JObject getTableJson(string tableno)
-        {
-            JObject ja = null;
-            for (int i = 0; i <= jarrTables.Count - 1; i++)
-            {
-                ja = (JObject)jarrTables[i];
-                if (tableno.Equals(ja["tableNo"].ToString()))
-                {
-                    //return ja;
-                    break;
-                }
-            }
-            return ja;
-        }
-        private void CreateTableArr()
-        {
-            //如果没有创建台那么创建
-            if (btntables != null)
-                return;
-            try
-            {
-                frmProgress.ShowProgress("正在加载桌台资料...");
-                frmAllTable.LockWindowUpdate(this.Handle);
-                CreateBtnArr();
-            }
-            finally
-            {
-                frmAllTable.LockWindowUpdate(IntPtr.Zero);
-                frmProgress.frm.Close();
-            }
-
-        }
-        private void UpdateTableStatus()
-        {
-            try
-            {
-                //刷新最新状态
-                statusnum0 = 0;
-                statusnum1 = 0;
-                statusnum3 = 0;
-                statusnum4 = 0;
-                statusnum5 = 0;
-                JObject ja;
-                for (int i = 0; i <= btntables.Length - 1; i++)
-                {
-                    ja = getTableJson(btntables[i].lblNo.Text);
-                    if (ja == null)
-                    {
-                        btntables[i].Enabled = false;
-                    }
-                    else
-                    {
-                        btntables[i].Enabled = true;
-                        int orderstatus = int.Parse(ja["status"].ToString());
-                        setbtnColor(btntables[i], orderstatus);
-                        btntables[i].status = orderstatus;
-                    }
-                }
-                lblState0.Text = string.Format("空闲({0})", statusnum0);
-                lblState1.Text = string.Format("就餐({0})", statusnum1);
-                lblState4.Text = string.Format("预定({0})", statusnum4);
-                lblState3.Text = string.Format("(结帐{0})", statusnum3);
-                lblState5.Text = string.Format("撤销({0})", statusnum5);
-            }
-            finally
-            {
-            }
-
+            _isForcedEndWorkModel = true;
         }
 
         private void timer2_Tick(object sender, EventArgs e)
@@ -447,6 +276,17 @@ namespace Main
             try
             {
                 timer2.Enabled = false;
+
+                //if (DateTime.Now > _openTime) //当前时间大于开业时间，强制结业
+                //{
+                //    SetInForcedEndWorkModel();
+                //}
+                //else if (DateTime.Now > _endWorkTime)//当前时间大于结业时间，提示结业
+                //{
+                //    _endWorkTime = _endWorkTime.AddHours(24);//提示一次以后就要把结业时间计算成下一次结业，不然每一秒都会提示该信息。
+                //    Warning("结业时间到了，请及时结业。");
+                //}
+
                 int inttime = int.Parse(btnRefresh.Tag.ToString());
                 if (inttime > 0)
                     UpdateRefreshBtnStatus(--inttime);
@@ -496,7 +336,7 @@ namespace Main
                         var thisMachineNoClearList = noClearnMachineList.Where(t => t.MachineFlag.Equals(localMac)).ToList();
                         if (thisMachineNoClearList.Any())
                         {
-                            if (thisMachineNoClearList.Any(t => ClearMachine(t.UserName)))
+                            if (thisMachineNoClearList.Any(t => !ClearMachine(t.UserName)))//任何一个本机收银全清机失败就返回。
                                 return;
                         }
 
@@ -513,8 +353,8 @@ namespace Main
                 }
                 else //选择倒班。
                 {
-                    ClearMachine();
-                    ForcedLogin();
+                    if (ClearMachine())
+                        ForcedLogin();
                 }
             }
         }
@@ -522,18 +362,17 @@ namespace Main
         /// <summary>
         /// 清机业务组合。
         /// </summary>
-        /// <param name="userName"></param>
-        /// <returns></returns>
+        /// <param name="userName">收银员账号。</param>
+        /// <returns>清机成功返回true，否则返回false。</returns>
         private static bool ClearMachine(string userName = null)
         {
             if (!frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine, userName))
-                //任何一个本机收银全清机失败就返回。
-                return true;
+                return false;
 
             ReportPrint.PrintClearMachine(); //打印清机报表
             ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
             Warning("清机成功!");
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -589,20 +428,17 @@ namespace Main
                 {
                     do
                     {
-                        bool result;
                         try
                         {
-                            result = RestClient.jdesyndata();//调用上传回调//http://localhost:8080/newspicyway/padinterface/jdesyndata.json
+                            if (RestClient.jdesyndata())//调用上传回调
+                                break;
                         }
                         catch (Exception)
                         {
-                            result = false;
+                            // ignored
                         }
 
-                        if (result)
-                            break;
-
-                        if (!AskQuestion("上传数据失败，重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃。"))
+                        if (!AskQuestion("发生异常，上传失败，是否重新上传？"))
                             break;
                     } while (true);
 
@@ -627,13 +463,7 @@ namespace Main
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            //
             frmQueryBill.ShowQueryBill(this);
-        }
-
-        private void pnlState3_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
         private void btnShapping_Click(object sender, EventArgs e)
@@ -658,23 +488,24 @@ namespace Main
             }
         }
 
-        private void panel1_DoubleClick(object sender, EventArgs e)
-        {
-
-        }
         private void getCJFood()
         {
-
-            JArray jrOrder = null;
             try
             {
-                if (!RestClient.getCJFood(Globals.UserInfo.UserName, out jrOrder))
-                {
-                    return;
-                }
+                JArray jrOrder;
+                if (RestClient.getCJFood(Globals.UserInfo.UserName, out jrOrder))
+                    Globals.cjFood = jrOrder;
             }
-            catch { }
-            Globals.cjFood = jrOrder;
+            catch
+            {
+                // ignored
+            }
+        }
+
+        private void GetTradeTime()
+        {
+            _endWorkTime = DateTime.Now.AddSeconds(5);//DateTime.Today.AddHours(20);
+            _openTime = DateTime.Now.AddSeconds(10); //DateTime.Today.AddHours(31);//第二天7点
         }
 
         private void frmAllTable_FormClosed(object sender, FormClosedEventArgs e)
