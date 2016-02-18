@@ -496,7 +496,7 @@ namespace Main
                         var thisMachineNoClearList = noClearnMachineList.Where(t => t.MachineFlag.Equals(localMac)).ToList();
                         if (thisMachineNoClearList.Any())
                         {
-                            if (thisMachineNoClearList.Any(t => ClearMachine(t.UserName)))
+                            if (thisMachineNoClearList.Any(t => !ClearMachine(t.UserName)))//任何一个本机收银全清机失败就返回。
                                 return;
                         }
 
@@ -513,8 +513,8 @@ namespace Main
                 }
                 else //选择倒班。
                 {
-                    ClearMachine();
-                    ForcedLogin();
+                    if (ClearMachine())
+                        ForcedLogin();
                 }
             }
         }
@@ -522,18 +522,17 @@ namespace Main
         /// <summary>
         /// 清机业务组合。
         /// </summary>
-        /// <param name="userName"></param>
-        /// <returns></returns>
+        /// <param name="userName">收银员账号。</param>
+        /// <returns>清机成功返回true，否则返回false。</returns>
         private static bool ClearMachine(string userName = null)
         {
             if (!frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine, userName))
-                //任何一个本机收银全清机失败就返回。
-                return true;
+                return false;
 
             ReportPrint.PrintClearMachine(); //打印清机报表
             ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
             Warning("清机成功!");
-            return false;
+            return true;
         }
 
         /// <summary>
