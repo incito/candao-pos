@@ -1069,7 +1069,7 @@ namespace Main
                         isok = wmAccount(0);
                         if (isok)
                         {
-                            RestClient.OpenCash();
+                            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                         }
                     }
                     else
@@ -1115,7 +1115,7 @@ namespace Main
                                         {
                                             try
                                             {
-                                                RestClient.OpenCash();
+                                                ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                             }
                                             catch { }
                                             isok = true;
@@ -1134,7 +1134,7 @@ namespace Main
                                 {
                                     try
                                     {
-                                        RestClient.OpenCash();
+                                        ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                     }
                                     catch { }
                                     //threadOpenCash 打开钱箱用线程
@@ -1145,7 +1145,7 @@ namespace Main
                             {
                                 try
                                 {
-                                    RestClient.OpenCash();
+                                    ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                 }
                                 catch { }
                                 //threadOpenCash 打开钱箱用线程
@@ -1159,20 +1159,11 @@ namespace Main
                                 }
                                 catch { }
                             }
-                            //保存优惠内容,以便还原Thread thread = new Thread(DoTask);
-                            JArray ja = Globals.GetTableJson(tbyh);
-                            string str = ja.ToString();
-                            try
-                            {
-                                RestClient.saveOrderPreferential(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, str);
-                            }
-                            catch { }
                         }
                     }
                     opentable2();
                     if (isok)
                     {
-
                         /*try
                         {
                             RestClient.caleTableAmount(Globals.UserInfo.UserID, settleorderorderid);
@@ -1230,15 +1221,7 @@ namespace Main
             }
 
         }
-        private void threadOpenCash()
-        {
-            RestClient.OpenCash();
-        }
-        private void openCash()
-        {
-            Thread thread = new Thread(threadOpenCash);
-            thread.Start();// 
-        }
+
         private void broadMsg()
         {
             try
@@ -3321,7 +3304,6 @@ namespace Main
                 button52.Enabled = true;
             }
             //如果是IBM本地钱箱，如果本地目录有文件Cash.exe那么就调用 Cash.exe开启钱箱
-
         }
 
         private void lblAmount_Click(object sender, EventArgs e)
@@ -5231,7 +5213,7 @@ namespace Main
                                 {
                                     try
                                     {
-                                        RestClient.OpenCash();
+                                        ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                     }
                                     catch { }
                                     isok = true;
@@ -5246,7 +5228,7 @@ namespace Main
                         {
                             try
                             {
-                                RestClient.OpenCash();
+                                ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                             }
                             catch { }
                             isok = true;
