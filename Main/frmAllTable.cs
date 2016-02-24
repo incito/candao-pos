@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Common;
+using KYPOS;
 using Library;
 using Library.UserControls;
 using Models;
@@ -30,8 +31,6 @@ namespace Main
         private int btnHeight = 58;
         private int btnSpace = 10;
 
-        private DateTime _endWorkTime;
-        private DateTime _openTime;
         private bool _isForcedEndWorkModel;//是否是强制结业模式。
 
         public frmPosMainV3 frmpos = new frmPosMainV3();
@@ -45,7 +44,6 @@ namespace Main
         public frmAllTable()
         {
             InitializeComponent();
-            GetTradeTime();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -264,8 +262,11 @@ namespace Main
         /// </summary>
         public void SetInForcedEndWorkModel()
         {
-            var idleTableControls = _tableControls.Where(t => ((TableInfo)t.Tag).TableStatus == EnumTableStatus.Idle).ToList();
-            idleTableControls.ForEach(t => t.Enabled = false);
+            if (_tableControls != null)
+            {
+                var idleTableControls = _tableControls.Where(t => ((TableInfo)t.Tag).TableStatus == EnumTableStatus.Idle).ToList();
+                idleTableControls.ForEach(t => t.Enabled = false);
+            }
             btnShapping.Enabled = false;
             button3.Enabled = false;
             _isForcedEndWorkModel = true;
@@ -277,15 +278,17 @@ namespace Main
             {
                 timer2.Enabled = false;
 
-                //if (DateTime.Now > _openTime) //当前时间大于开业时间，强制结业
-                //{
-                //    SetInForcedEndWorkModel();
-                //}
-                //else if (DateTime.Now > _endWorkTime)//当前时间大于结业时间，提示结业
-                //{
-                //    _endWorkTime = _endWorkTime.AddHours(24);//提示一次以后就要把结业时间计算成下一次结业，不然每一秒都会提示该信息。
-                //    Warning("结业时间到了，请及时结业。");
-                //}
+                if (DateTime.Now > Globals.TradeTime.BeginTime) //当前时间大于开业时间，强制结业
+                {
+                    Globals.TradeTime.BeginTime = Globals.TradeTime.BeginTime.AddDays(1);
+                    Warning("昨天还未结业，请先结业。");
+                    SetInForcedEndWorkModel();
+                }
+                else if (DateTime.Now > Globals.TradeTime.EndTime.AddSeconds(10))//当前时间大于结业时间，提示结业，与真实的时间提前10秒。
+                {
+                    Globals.TradeTime.EndTime = Globals.TradeTime.EndTime.AddDays(1);//提示一次以后就要把结业时间计算成下一次结业，不然每一秒都会提示该信息。
+                    Warning("结业时间到了，请及时结业。");
+                }
 
                 int inttime = int.Parse(btnRefresh.Tag.ToString());
                 if (inttime > 0)
@@ -320,59 +323,18 @@ namespace Main
             {
                 if (wnd.DoEndWork)
                 {
-
-                    IRestaurantService service = new RestaurantServiceImpl();
-                    var result = service.GetUnclearnPosInfo();
-                    if (!string.IsNullOrEmpty(result.Item1))
-                    {
-                        Warning(result.Item1);
+                    if (!CommonHelper.ClearAllMachine(false))
                         return;
-                    }
 
-                    var noClearnMachineList = result.Item2;
-                    if (noClearnMachineList.Any())
-                    {
-                        var localMac = RestClient.GetMacAddr();
-                        var thisMachineNoClearList = noClearnMachineList.Where(t => t.MachineFlag.Equals(localMac)).ToList();
-                        if (thisMachineNoClearList.Any())
-                        {
-                            if (thisMachineNoClearList.Any(t => !ClearMachine(t.UserName)))//任何一个本机收银全清机失败就返回。
-                                return;
-                        }
-
-                        if (noClearnMachineList.Any(t => !t.MachineFlag.Equals(localMac)))//有其他POS的收银机。
-                        {
-                            OtherMachineNoClearnWarningWindow warningWnd = new OtherMachineNoClearnWarningWindow();
-                            if (warningWnd.ShowDialog() != true)
-                                return;
-                        }
-                    }
-
-                    if (!EndWork())
+                    if (!CommonHelper.EndWork())
                         ForcedLogin();
                 }
                 else //选择倒班。
                 {
-                    if (ClearMachine())
+                    if (CommonHelper.ClearMachine())
                         ForcedLogin();
                 }
             }
-        }
-
-        /// <summary>
-        /// 清机业务组合。
-        /// </summary>
-        /// <param name="userName">收银员账号。</param>
-        /// <returns>清机成功返回true，否则返回false。</returns>
-        private static bool ClearMachine(string userName = null)
-        {
-            if (!frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine, userName))
-                return false;
-
-            ReportPrint.PrintClearMachine(); //打印清机报表
-            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-            Warning("清机成功!");
-            return true;
         }
 
         /// <summary>
@@ -409,56 +371,7 @@ namespace Main
                 return;
             }
             if (AskQuestion("确定要现在结业吗？"))
-                EndWork();
-        }
-
-        /// <summary>
-        /// 结业处理。
-        /// </summary>
-        private bool EndWork()
-        {
-            if (!frmPermission2.ShowPermission2("结业经理授权", EnumRightType.EndWork))
-                return false;
-
-            try
-            {
-                JObject ja = RestClient.endWork(Globals.UserInfo.UserID);
-                string data = ja["Data"].ToString();
-                if (data.Equals("1"))
-                {
-                    do
-                    {
-                        try
-                        {
-                            if (RestClient.jdesyndata())//调用上传回调
-                                break;
-                        }
-                        catch (Exception)
-                        {
-                            // ignored
-                        }
-
-                        if (!AskQuestion("发生异常，上传失败，是否重新上传？"))
-                            break;
-                    } while (true);
-
-                    Warning("结业成功!");
-                    Application.Exit();
-                    Close();
-                    return true;
-                }
-
-                var msg = ja["Info"].ToString();
-                if (string.IsNullOrEmpty(msg))
-                    msg = "结业失败！";
-                Warning(msg);
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Warning("结业失败。" + ex.Message);
-                return false;
-            }
+                CommonHelper.EndWork();
         }
 
         private void button3_Click_1(object sender, EventArgs e)
@@ -500,12 +413,6 @@ namespace Main
             {
                 // ignored
             }
-        }
-
-        private void GetTradeTime()
-        {
-            _endWorkTime = DateTime.Now.AddSeconds(5);//DateTime.Today.AddHours(20);
-            _openTime = DateTime.Now.AddSeconds(10); //DateTime.Today.AddHours(31);//第二天7点
         }
 
         private void frmAllTable_FormClosed(object sender, FormClosedEventArgs e)

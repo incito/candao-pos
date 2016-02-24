@@ -157,6 +157,7 @@
     <Compile Include="CanDaoMember\frmMemberQuery.Designer.cs">
       <DependentUpon>frmMemberQuery.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommonHelper.cs" />
     <Compile Include="frmCombodish.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -400,7 +401,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmLogin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

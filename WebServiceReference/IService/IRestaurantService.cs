@@ -31,7 +31,13 @@ namespace WebServiceReference.IService
         /// <summary>
         /// 检测上一次是否结业。
         /// </summary>
-        /// <returns>Item1全部正常则为null，否则为错误信息，Item2为是否结业。</returns>
+        /// <returns>Item1全部正常则为null，否则为错误信息，Item2为是否结业，已结业返回true，否则返回false。</returns>
         Tuple<string, bool> CheckWhetherTheLastEndWork();
+
+        /// <summary>
+        /// 获取店铺营业时间。
+        /// </summary>
+        /// <returns></returns>
+        Tuple<string, RestaurantTradeTime> GetRestaurantTradeTime();
     }
 }

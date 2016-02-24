@@ -128,6 +128,11 @@ namespace Common
         public static String branch_id = "";//分店ID号
 
         /// <summary>
+        /// 店铺营业时间。
+        /// </summary>
+        public static RestaurantTradeTime TradeTime { get; set; }
+
+        /// <summary>
         /// 所有银行集合。
         /// </summary>
         public static List<BankInfo> BankInfos { get; set; }

@@ -96,5 +96,23 @@ namespace WebServiceReference.ServiceImpl
                 return new Tuple<string, bool>(ex.Message, false);
             }
         }
+
+        public Tuple<string, RestaurantTradeTime> GetRestaurantTradeTime()
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/getOpenEndTime.json", RestClient.server, RestClient.apiPath);
+                var response = HttpHelper.HttpGet<GetRestaurantTradeTimeResponse>(addr);
+                if (!response.IsSuccess)
+                    return new Tuple<string, RestaurantTradeTime>(response.info ?? "获取店铺营业时间失败。", null);
+
+                var result = new RestaurantTradeTime(response.detail.begintime, response.detail.endtime);
+                return new Tuple<string, RestaurantTradeTime>(null, result);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, RestaurantTradeTime>(ex.Message, null);
+            }
+        }
     }
 }
