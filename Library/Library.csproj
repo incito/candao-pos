@@ -142,6 +142,7 @@
     <Compile Include="SelectBankWindow.xaml.cs">
       <DependentUpon>SelectBankWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TaskService.cs" />
     <Compile Include="UserControls\ucCheckEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>

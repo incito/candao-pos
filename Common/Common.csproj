@@ -70,6 +70,7 @@
     <Compile Include="SerialClass.cs" />
     <Compile Include="ShellPathNameConvert.cs" />
     <Compile Include="SystemConfig.cs" />
+    <Compile Include="TaskBase.cs" />
     <Compile Include="UpdateType.cs" />
     <Compile Include="VersionCheck.cs" />
     <Compile Include="ZipTools.cs" />

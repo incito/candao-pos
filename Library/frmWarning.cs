@@ -13,7 +13,7 @@ namespace Library
 {
     public partial class frmWarning : frmBase
     {
-        public string inputNo="";
+        public string inputNo = "";
         public static bool ShowWarning(string msg)
         {
             frmWarning frm = new frmWarning();
@@ -27,14 +27,29 @@ namespace Library
                 frm.lblMsg.Text = msg;
                 frm.lblmsg2.Text = "";
             }
-            
+
             frm.ShowDialog();
 
-            return frm.DialogResult == DialogResult.OK ;
+            return frm.DialogResult == DialogResult.OK;
         }
         public frmWarning()
         {
             InitializeComponent();
+        }
+
+        public frmWarning(string msg)
+            : this()
+        {
+            if (msg.Length > 26)
+            {
+                lblMsg.Text = msg.Substring(0, 21);
+                lblmsg2.Text = msg.Substring(21, msg.Length - 21);
+            }
+            else
+            {
+                lblMsg.Text = msg;
+                lblmsg2.Text = "";
+            }
         }
 
         private void frmInputText_Load(object sender, EventArgs e)
@@ -59,7 +74,7 @@ namespace Library
 
         private void button28_Click(object sender, EventArgs e)
         {
- 
+
         }
 
         private void button27_Click(object sender, EventArgs e)

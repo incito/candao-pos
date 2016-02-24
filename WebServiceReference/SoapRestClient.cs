@@ -544,7 +544,7 @@ namespace WebServiceReference
                 request.KeepAlive = false;
                 //webReq.ContentType = "application/x-www-form-urlencoded";
                 request.ContentType = "application/json; charset=utf-8";
-                request.Timeout = 15 * 1000;
+                //request.Timeout = 15 * 1000;
                 if (sw != null)
                 {
                     string jsonText = sw.GetStringBuilder().ToString();
