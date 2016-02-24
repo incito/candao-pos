@@ -3,6 +3,7 @@ using System.Windows;
 using WebServiceReference;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
+using Application = System.Windows.Forms.Application;
 
 namespace Library
 {
@@ -14,6 +15,13 @@ namespace Library
         public OtherMachineNoClearnWarningWindow()
         {
             InitializeComponent();
+            Closing += OtherMachineNoClearnWarningWindow_Closing;
+        }
+
+        void OtherMachineNoClearnWarningWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (DialogResult != true)
+                Application.Exit();
         }
 
         private void ButtonCancel_OnClick(object sender, System.Windows.RoutedEventArgs e)
@@ -35,6 +43,7 @@ namespace Library
             var noClearnMachineList = result.Item2;
             if (noClearnMachineList.Any()) //这里只需要判断有未清机的就不关闭窗口。
                 return;
+
 
             DialogResult = true;
             Close();

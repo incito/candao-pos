@@ -40,6 +40,8 @@ namespace Models
         private string _wholesingle;
         private string _sub_type;
 
+        public string Color { get; set; }
+
         public string sub_type
         {
             set { _sub_type = value; }
@@ -368,7 +370,8 @@ namespace Models
                 vcr.description = ja["activity_introduction"].ToString();//description
             }
             catch { vcr.description = ""; }
-         
+
+            vcr.Color = ja["color"] != null ? ja["color"].ToString() : null;
             vcr.ruleid = ja["id"].ToString();//ruleid
             vcr.couponid = ja["preferential"].ToString();//couponid
             try

@@ -1548,8 +1548,6 @@ namespace WebServiceReference
             return ja;
         }
 
-
-
         public static bool OpenUp(string aUserID, string aUserPassword, int CallType, out string reinfo)
         {
             string ipaddress = GetLocalIp();

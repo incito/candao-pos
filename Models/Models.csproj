@@ -62,10 +62,13 @@
     <Compile Include="NoClearMachineInfo.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
     <Compile Include="Response\AuthorizeLoginResponse.cs" />
+    <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />
+    <Compile Include="Response\GetRestaurantTradeTimeResponse.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\JavaResponse.cs" />
     <Compile Include="Response\TableInfoResponse.cs" />
     <Compile Include="Response\UnclearPosResponse.cs" />
+    <Compile Include="RestaurantTradeTime.cs" />
     <Compile Include="SystemModels\BusinessCommonFields.cs" />
     <Compile Include="SystemModels\TEmailBody.cs" />
     <Compile Include="SystemModels\TAttachFile.cs" />
