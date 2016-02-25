@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
+using System.Windows.Forms;
 using WebServiceReference;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
@@ -44,6 +45,9 @@ namespace Library
             if (noClearnMachineList.Any()) //这里只需要判断有未清机的就不关闭窗口。
                 return;
 
+            string reinfo;
+            if (!RestClient.OpenUp("", "", 0, out reinfo))//如果判断未开业则说明结业成功了。
+                Application.Exit();
 
             DialogResult = true;
             Close();

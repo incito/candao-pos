@@ -360,11 +360,6 @@ namespace Main
 
         private void btnend_Click(object sender, EventArgs e)
         {
-            if (!Globals.userRight.getJyRight())
-            {
-                Warning("您没有结业权限！");
-                return;
-            }
             if (TableInfos.Any(t => t.TableStatus == EnumTableStatus.Dinner))
             {
                 Warning("还有未结账的餐台，不能结业。");
