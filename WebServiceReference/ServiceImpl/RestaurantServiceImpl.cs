@@ -84,7 +84,7 @@ namespace WebServiceReference.ServiceImpl
         {
             try
             {
-                var addr = string.Format("http://{0}/{1}/padinterface/isEndWork.json", RestClient.server, RestClient.apiPath);
+                var addr = string.Format("http://{0}/{1}/padinterface/isYesterdayEndWork.json", RestClient.server, RestClient.apiPath);
                 var result = HttpHelper.HttpGet<CheckWhetherEndWorkResponse>(addr);
                 if (!result.IsSuccess)
                     return new Tuple<string, bool>(result.msg ?? "检测是否结业失败。", false);
