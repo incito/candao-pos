@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Library
 {
@@ -23,11 +11,13 @@ namespace Library
         /// 
         /// </summary>
         /// <param name="canEndWork">允许结业。</param>
-        public SelectClearMachineStepWindow(bool canEndWork)
+        /// <paramref name="isForcedEndWorkModel">是否是强制结业模式。</paramref>
+        public SelectClearMachineStepWindow(bool canEndWork, bool isForcedEndWorkModel)
         {
             InitializeComponent();
             CanEndWork = canEndWork;
             CanNotEndWork = !canEndWork;
+            BtnChangeShift.IsEnabled = !isForcedEndWorkModel;//强制结业模式下不允许倒班。
             DataContext = this;
         }
 

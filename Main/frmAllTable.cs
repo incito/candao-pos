@@ -318,7 +318,7 @@ namespace Main
             }
 
             var hadDinnerTable = TableInfos.Any(t => t.TableStatus == EnumTableStatus.Dinner);
-            var wnd = new SelectClearMachineStepWindow(!hadDinnerTable);
+            var wnd = new SelectClearMachineStepWindow(!hadDinnerTable, _isForcedEndWorkModel);
             if (wnd.ShowDialog() == true)
             {
                 if (wnd.DoEndWork)
