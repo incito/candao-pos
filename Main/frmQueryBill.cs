@@ -28,14 +28,20 @@ namespace Main
         private DataTable dtOrder = null;
         private DataView dv=null;
         private frmAllTable frmtable=null;
-        public static void ShowQueryBill(frmAllTable frmtable)
+
+        public static void ShowQueryBill(frmAllTable frmtable, bool isForcedEndWorkModel)
         {
             frmQueryBill frm = new frmQueryBill();
             frm.frmtable = frmtable;
+            if (isForcedEndWorkModel)
+            {
+                frm.button2.Enabled = false;
+                frm.button3.Enabled = false;
+                frm.btnRePrintClear.Enabled = false;
+            }
             frm.ShowDialog();
-
-            return;
         }
+
         public frmQueryBill()
         {
             InitializeComponent();

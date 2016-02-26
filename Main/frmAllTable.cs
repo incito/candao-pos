@@ -268,7 +268,6 @@ namespace Main
                 idleTableControls.ForEach(t => t.Enabled = false);
             }
             btnShapping.Enabled = false;
-            button3.Enabled = false;
             _isForcedEndWorkModel = true;
         }
 
@@ -371,7 +370,7 @@ namespace Main
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            frmQueryBill.ShowQueryBill(this);
+            frmQueryBill.ShowQueryBill(this, _isForcedEndWorkModel);
         }
 
         private void btnShapping_Click(object sender, EventArgs e)

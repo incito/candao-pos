@@ -43,7 +43,7 @@ namespace KYPOS
 
                 if (isInForcedEndWorkModel && (thisMachineNoClearList.Any() || otherMachineNoClear))
                 {
-                    frmBase.Warning("昨天未就业且还有未清机，请先清机后再结业。");
+                    frmBase.Warning("昨天未结业且还有未清机，请先清机后再结业。");
                 }
 
                 if (thisMachineNoClearList.Any())
