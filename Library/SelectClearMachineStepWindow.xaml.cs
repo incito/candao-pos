@@ -11,7 +11,7 @@ namespace Library
         /// 
         /// </summary>
         /// <param name="canEndWork">允许结业。</param>
-        /// <paramref name="isForcedEndWorkModel">是否是强制结业模式。</paramref>
+        /// <param name="isForcedEndWorkModel">是否是强制结业模式。</param>
         public SelectClearMachineStepWindow(bool canEndWork, bool isForcedEndWorkModel)
         {
             InitializeComponent();

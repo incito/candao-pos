@@ -12,11 +12,16 @@
                         <Grid>
                             <Image x:Name="ImgN"  Visibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Resources/ChangeShift_Normal.png"/>
                             <Image x:Name="ImgP" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Resources/ChangeShift_Press.png" />
+                            <Image x:Name="ImgD" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Resources/ChangeShift_Dis.png" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
                                 <Setter TargetName="ImgP" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="ImgD" Property="Visibility" Value="Visible"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
