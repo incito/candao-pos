@@ -1228,8 +1228,9 @@ namespace WebServiceReference
         /// <param name="OrderID"></param>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public static string rebacksettleorder(string OrderID, string UserID, string reason)
+        public static bool rebacksettleorder(string OrderID, string UserID, string reason, out string msg)
         {
+            msg = null;
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/rebacksettleorder.json", server2);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1245,17 +1246,18 @@ namespace WebServiceReference
             String jsonResult = Post_Rest(address, sw);
             if (jsonResult == "0")
             {
-                return "";
+                return false;
             }
             string result = "1";
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 result = ja["result"].ToString();
+                msg = ja["msg"].ToString();
             }
             catch { }
             //将反序列化的JSON字符串转换成对象  
-            return result;
+            return result.Equals("0");
         }
         public static string debitamout(string OrderID)
         {
