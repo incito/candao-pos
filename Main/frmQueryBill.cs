@@ -28,14 +28,20 @@ namespace Main
         private DataTable dtOrder = null;
         private DataView dv=null;
         private frmAllTable frmtable=null;
-        public static void ShowQueryBill(frmAllTable frmtable)
+
+        public static void ShowQueryBill(frmAllTable frmtable, bool isForcedEndWorkModel)
         {
             frmQueryBill frm = new frmQueryBill();
             frm.frmtable = frmtable;
+            if (isForcedEndWorkModel)
+            {
+                frm.button2.Enabled = false;
+                frm.button3.Enabled = false;
+                frm.btnRePrintClear.Enabled = false;
+            }
             frm.ShowDialog();
-
-            return;
         }
+
         public frmQueryBill()
         {
             InitializeComponent();
@@ -300,7 +306,7 @@ namespace Main
                     if (RestClient.rebackorder(Globals.UserInfo.UserID, orderid, ref errStr))
                     {
                         //frmPosMain.ShowPosMain(errStr, 9);
-                        frmtable.frmpos.showFrm(errStr, 9);
+                        frmtable.frmpos.ShowFrm(errStr, 9);
                     }
                     else
                     {
@@ -351,7 +357,7 @@ namespace Main
                     if (RestClient.accountsorder(Globals.UserInfo.UserID, orderid, ref errStr))
                     {
                         //frmPosMain.ShowPosMain(errStr, 9);
-                        frmtable.frmpos.showFrm(errStr, 8);
+                        frmtable.frmpos.ShowFrm(errStr, 8);
                     }
                     else
                     {

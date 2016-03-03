@@ -1,0 +1,94 @@
+﻿<Window x:Class="Library.SelectClearMachineStepWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="520" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisibilityCvt"/>
+        <Style x:Key="ChangeShiftBtnStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Image x:Name="ImgN"  Visibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Resources/ChangeShift_Normal.png"/>
+                            <Image x:Name="ImgP" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Resources/ChangeShift_Press.png" />
+                            <Image x:Name="ImgD" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Resources/ChangeShift_Dis.png" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="ImgP" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="ImgD" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="EndWorkBtnStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Image x:Name="ImgN" Visibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Resources/EndWork_Normal.png" />
+                            <Image x:Name="ImgP" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Resources/EndWork_Press.png" />
+                            <Image x:Name="ImgD" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Resources/EndWork_Dis.png" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="ImgP" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="ImgD" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Background="#FFFFC080" Height="65">
+            <Grid>
+                <Image HorizontalAlignment="Left" Source="Resources/0111-_31_cd.png" />
+                <Button HorizontalAlignment="Right" Click="ButtonCancel_OnClick">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Image Source="Resources/下载.png" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1" Margin="40,40,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="45"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="请选择倒班或者结业。" FontSize="24" Foreground="#FF333333" Margin="0,0,0,20"/>
+            <Button x:Name="BtnChangeShift" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Click="BtnChangeShift_OnClick" Style="{StaticResource ChangeShiftBtnStyle}" Width="180" Height="63"/>
+            <Button x:Name="BtnEndWork" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding CanEndWork}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Click="BtnEndWork_OnClick" Style="{StaticResource EndWorkBtnStyle}" Width="180" Height="63"/>
+            <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding CanNotEndWork, Converter={StaticResource Bool2VisibilityCvt}}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Resources/Warning.png" Height="16"/>
+                    <TextBlock Text="还有未结账的餐台，不能结业。" FontSize="18" Foreground="Gray" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

@@ -31,7 +31,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,7 +69,6 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -133,6 +133,9 @@
     <Compile Include="frmBase.Designer.cs">
       <DependentUpon>frmBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="OtherMachineNoClearnWarningWindow.xaml.cs">
+      <DependentUpon>OtherMachineNoClearnWarningWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResImage.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -143,6 +146,9 @@
       <DependentUpon>SelectBankWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TaskService.cs" />
+    <Compile Include="SelectClearMachineStepWindow.xaml.cs">
+      <DependentUpon>SelectClearMachineStepWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ucCheckEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -353,13 +359,13 @@
     <None Include="Resources\find50x50.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{269ECEFF-B6C2-4708-86BA-AFBB1A2B045C}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Business\Business.csproj">
       <Project>{A674DB78-C6CB-409B-893D-728ABF88EC84}</Project>
       <Name>Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{269eceff-b6c2-4708-86ba-afbb1a2b045c}</Project>
+      <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{2CF256B2-F5E0-4670-8644-08DDF65B0009}</Project>
@@ -369,9 +375,6 @@
       <Project>{830d9756-d0f4-4140-8afc-500e8eca03c4}</Project>
       <Name>WebServiceReference</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ButtonCascade.png" />
@@ -395,10 +398,33 @@
     <Resource Include="Resources\0111-_31_cd.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="OtherMachineNoClearnWarningWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SelectBankWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SelectClearMachineStepWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ChangeShift_Normal.png" />
+    <Resource Include="Resources\ChangeShift_Press.png" />
+    <Resource Include="Resources\EndWork_Normal.png" />
+    <Resource Include="Resources\EndWork_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\EndWork_Dis.png" />
+    <Resource Include="Resources\Retry_Down.png" />
+    <Resource Include="Resources\Retry_Press.png" />
+    <Resource Include="Resources\Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ChangeShift_Dis.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
