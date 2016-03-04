@@ -56,6 +56,7 @@
     <Compile Include="CandaoMember\TCandaoRet_CardLose.cs" />
     <Compile Include="CandaoMember\TCandaoRet_StoreCardDeposit.cs" />
     <Compile Include="CandaoMember\TCandaoRet_VoidSale.cs" />
+    <Compile Include="OnAccountCompanyResponse.cs" />
     <Compile Include="SystemModels\BusinessCommonFields.cs" />
     <Compile Include="SystemModels\TEmailBody.cs" />
     <Compile Include="SystemModels\TAttachFile.cs" />

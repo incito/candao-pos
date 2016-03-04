@@ -2876,7 +2876,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static List<BankInfo> GetAllBankInfos()
         {
-            var addr = string.Format("http://{0}/" + apiPath + "/bankinterface/getallbank.json", server2);
+            var addr = string.Format("http://{0}/" + apiPath + "/bankinterface/getallbank.json", server);
             List<BankInfo> info = new List<BankInfo>();
             try
             {
@@ -2897,6 +2897,26 @@ namespace WebServiceReference
             catch (Exception exp)
             {
                 return info;
+            }
+        }
+
+        /// <summary>
+        /// 获取所有挂账单位。
+        /// </summary>
+        /// <returns>Item1返回错误信息，如果正确则返回null；Item2返回数据集合。</returns>
+        public static Tuple<string, JArray> GetAllOnAccountCompany()
+        {
+            var addr = string.Format("http://{0}/" + apiPath + "/padinterface/getCooperationUnit.json", server);
+            try
+            {
+                AllLog.Instance.I("【 getCooperationUnit 】 start。");
+                string jsonResult = Post_Rest(addr, null);
+                AllLog.Instance.I(string.Format("【 getCooperationUnit 】 result：{0}。", jsonResult));
+                return new Tuple<string, JArray>(null, (JArray)JsonConvert.DeserializeObject(jsonResult));
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, JArray>(ex.Message, null);
             }
         }
     }

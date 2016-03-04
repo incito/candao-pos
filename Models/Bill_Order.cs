@@ -413,6 +413,20 @@ namespace Models
             jarray2DataTable(jr, ref dt);
             return dt;
         }
+
+        public static DataTable GetOnAccountDb(JArray jArray)
+        {
+
+            DataTable dt = new DataTable();
+            dt.TableName = "tb_data";
+            dt.Columns.Add(newDataColumn("System.String", "挂帐单位", "name", ""));
+            dt.Columns.Add(newDataColumn("System.String", "parternerid", "preferential", 0));
+            dt.Columns.Add(newDataColumn("System.String", "拼音", "name_first_letter", ""));
+
+            jarray2DataTable(jArray, ref dt);
+            return dt;
+        }
+
         /// <summary>
         /// 所有外卖FOOD接口
         /// </summary>

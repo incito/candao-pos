@@ -124,17 +124,23 @@ namespace Main
         public void getAllData()
         {
             //
-            JArray jrOrder = null;
+            JArray jArray = null;
             try
             {
-                if (!RestClient.getAllGZDW(Globals.UserInfo.UserName, out jrOrder))
+                var result = RestClient.GetAllOnAccountCompany();
+                if (!string.IsNullOrEmpty(result.Item1))
                 {
+                    Warning(result.Item1);
                     return;
                 }
+                jArray = result.Item2;
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
             DataTable dtOrder = null;
-            dtOrder = Models.Bill_Order.getGz_List(jrOrder);
+            dtOrder = Models.Bill_Order.GetOnAccountDb(jArray);
             dv = new DataView(dtOrder);
             dv.AllowNew = false;
             this.dgvBill.AutoGenerateColumns = false;
