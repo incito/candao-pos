@@ -18,7 +18,6 @@ using System.Threading;
 
 namespace Main
 {
-
     public partial class frmAllTable : frmBase
     {
         [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -114,18 +113,7 @@ namespace Main
             }
             catch { }
             RestClient.openCashCom();
-            ///ªÒ»°∑÷µÍID
-            try
-            {
-                String branch_id = "";
-                CanDaoMemberClient.findBranchid(out branch_id, "");
-                if (branch_id.Equals(""))
-                    branch_id = "0013";
-                Globals.branch_id = branch_id;
-            }
-            catch { }
             Globals.branch_id = RestClient.getbranch_id();
-
         }
 
         private void ucTable1_Click(object sender, EventArgs e)
