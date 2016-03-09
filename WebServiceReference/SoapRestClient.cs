@@ -650,7 +650,7 @@ namespace WebServiceReference
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetServerTableInfo/{0}/{1} ", TableName, UserID);
             AllLog.Instance.I(string.Format("【GetServerTableInfo】 TableName：{0}，UserID：{1}。", TableName, UserID));
             String jsonResult = Request_Rest(address);
-            AllLog.Instance.I(string.Format("【GetServerTableInfo】 result：{0}。", jsonResult)啥);
+            AllLog.Instance.I(string.Format("【GetServerTableInfo】 result：{0}。", jsonResult));
             if (jsonResult == "0")
                 return "";
 
