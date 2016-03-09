@@ -1630,12 +1630,16 @@ namespace Main
                         return;
                     }
                 }
-                if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, inputMemo).Equals("0"))
+                string msg;
+                if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, inputMemo, out msg))
                 {
                     Warning("帐单反结算失败...");
                 }
                 else
                 {
+                    if (!string.IsNullOrEmpty(msg))
+                        Warning(msg);
+
                     if (membersystem == 1)
                     {
                         try
@@ -4706,14 +4710,16 @@ namespace Main
                         bool qret = QueryMemberCard2_CanDao(out msg);
                         if (!qret)
                         {
-                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结");
+                            string weChatMsg;
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结", out weChatMsg);
                             Warning("获取会员卡号失败:" + msg);
                             return false;
                         }
                         if (cardno.Trim().Equals(""))
                         {
                             //RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
-                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结");
+                            string weChatMsg;
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结", out weChatMsg);
                             Warning("获取会员卡号失败:" + msg);
                             return false;
                         }
@@ -4731,7 +4737,8 @@ namespace Main
                     TCandaoRet_Sale ret = CanDaoMemberClient.MemberSale(membersale);
                     if (!ret.Ret)
                     {
-                        RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结");
+                        string weChatMsg;
+                        RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结", out weChatMsg);
                         Warning(ret.Retinfo);
                         return false;
                     }
