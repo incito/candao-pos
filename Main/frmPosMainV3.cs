@@ -1717,22 +1717,6 @@ namespace Main
             Common.Globals.SetButton(button9);
             Common.Globals.SetButton(button10);
         }
-        private void button10_Click(object sender, EventArgs e)
-        {
-            //
-            string str = frmInputText.ShowInputText();
-            //使用鱼券
-            if (!str.Trim().ToString().Equals(""))
-            {
-                if (!RestClient.usefishcard(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, str, -49).Equals("0"))
-                {
-                    Warning("使用鱼券失败...");
-                }
-                opentable();
-            }
-
-        }
-
         private void button4_Click(object sender, EventArgs e)
         {
             frmMemberStoredValue.ShowMemberStoredValue();

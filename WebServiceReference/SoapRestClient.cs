@@ -22,6 +22,9 @@ namespace WebServiceReference
 {
     public class RestClient
     {
+        private static bool alreadLogAllTableInfo;//是否已经记录了所有餐台信息。防止每次获取餐台信息时都打印接口返回数据。
+        private static bool alreadLogAllFood;
+
         public static string server = "";
         public static string server2 = "";
         public static string Server3 = "";
@@ -573,6 +576,7 @@ namespace WebServiceReference
             }
             catch (WebException wex)
             {
+                AllLog.Instance.E("Addr：{0}。Exception：{1}", url, wex.Message);
                 if (wex.Response != null)
                 {
                     using (HttpWebResponse errorResponse = (HttpWebResponse)wex.Response)
@@ -589,50 +593,6 @@ namespace WebServiceReference
         }
 
 
-        private static byte[] Request_RestByte(string url)
-        {
-            HttpWebRequest request;
-            HttpWebResponse response = null;
-            StreamReader reader;
-            StringBuilder sbSource;
-            string address = url;
-            if (address == null) { throw new ArgumentNullException("address"); }
-            try
-            {
-                request = WebRequest.Create(address) as HttpWebRequest;
-                request.UserAgent = ".NET Sample";
-                request.Method = "GET";
-                request.KeepAlive = false;
-                request.Timeout = 15 * 1000;
-                response = request.GetResponse() as HttpWebResponse;
-                if (request.HaveResponse == true && response != null)
-                {
-                    reader = new StreamReader(response.GetResponseStream());
-                    sbSource = new StringBuilder(reader.ReadToEnd());
-                    string returnStr = FromUnicodeString(sbSource.ToString());
-                    returnStr = returnStr.Replace("{\"result\":[\"", "");
-                    returnStr = returnStr.Replace("\"]}", "");
-                    return Encoding.Default.GetBytes(returnStr);
-                    //return sbSource.ToString();
-                }
-            }
-            catch (WebException wex)
-            {
-                if (wex.Response != null)
-                {
-                    using (HttpWebResponse errorResponse = (HttpWebResponse)wex.Response)
-                    {
-                        return null;
-                    }
-                }
-            }
-            finally
-            {
-                if (response != null) { response.Close(); }
-            }
-            return null;
-        }
-
         /// <summary>
         ///登录
         /// </summary>
@@ -644,6 +604,7 @@ namespace WebServiceReference
         {
             string newloginType = getRightCode(loginType);
             string address = "http://" + server + "/" + apiPath + "/padinterface/login.json";
+            AllLog.Instance.I(string.Format("【login】 userid：{0}，loginType：{1}。", userid, loginType));
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -658,21 +619,15 @@ namespace WebServiceReference
             string jsonText = sw.GetStringBuilder().ToString();
             Console.WriteLine(jsonText);
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I("【login】 result：{0}。", jsonResult);
             if (jsonResult == "0")
                 return "";
 
             Globals.UserInfo.msg = jsonResult;
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
             Globals.UserInfo.msg = "";
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["result"].ToString();
-            //Msg.ShowError(result);
-            string username = "";
-            try
-            {
-                username = ja["fullname"].ToString();
-            }
-            catch { }
+            string username = ja["fullname"] != null ? ja["fullname"].ToString() : "";
             Globals.UserInfo.msg = "";
             if (loginType.Equals("1"))
             {
@@ -684,68 +639,27 @@ namespace WebServiceReference
             {
                 Globals.authorizer = username;
             }
-            try
-            {
+
+            if (ja["msg"] != null)
                 Globals.UserInfo.msg = ja["msg"].ToString();
-            }
-            catch { }
             return result;
         }
-        /// <summary>
-        /// 查询桌台
-        /// 
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public static string GetTableInfo(string TableName, string UserID)
-        {
-            string address = "http://" + Server3 + "/datasnap/rest/TServerMethods1/GetTableInfo";
-            StringWriter sw = new StringWriter();
-            JsonWriter writer = new JsonTextWriter(sw);
-            writer.WriteStartObject();
-            writer.WritePropertyName("ID");
-            writer.WriteValue(1);
-            writer.WritePropertyName("TableName");
-            writer.WriteValue(TableName);
-            writer.WritePropertyName("UserID");
-            writer.WriteValue(UserID);
-            writer.WriteEndObject();
-            writer.Flush();
 
-            string jsonText = sw.GetStringBuilder().ToString();
-            Console.WriteLine(jsonText);
-
-            //return wmsRestClient.Request_Rest(address);
-            String jsonResult = Post_Rest(address, sw);
-            if (jsonResult == "0")
-            {
-                return "";
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["UserID"].ToString();
-            return result;
-        }
         public static string GetServerTableInfo(string TableName, string UserID)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetServerTableInfo/{0}/{1} "
-                                          , TableName
-                                          , UserID
-                                          );
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetServerTableInfo/{0}/{1} ", TableName, UserID);
+            AllLog.Instance.I(string.Format("【GetServerTableInfo】 TableName：{0}，UserID：{1}。", TableName, UserID));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetServerTableInfo】 result：{0}。", jsonResult)啥);
             if (jsonResult == "0")
-            {
                 return "";
-            }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             if (!result.Equals("0"))
             {
                 JArray jr = (JArray)JsonConvert.DeserializeObject(result);
-                ja = (JObject)jr[0];//(JObject)JsonConvert.DeserializeObject(result);
-                //将反序列化的JSON字符串转换成对象  
+                ja = (JObject)jr[0];
                 Globals.CurrTableInfo.tableid = ja["tableid"].ToString();
                 Globals.CurrTableInfo.tableName = ja["tableName"].ToString();
                 Globals.CurrTableInfo.tableNo = ja["tableNo"].ToString();
@@ -820,19 +734,17 @@ namespace WebServiceReference
 
 
         }
+
         public static string GetOrder(string TableName, string UserID)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetOrder/{0}/{1} "
-                                          , TableName
-                                          , UserID
-                                          );
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetOrder/{0}/{1} ", TableName, UserID);
+            AllLog.Instance.I(string.Format("【GetOrder】 TableName：{0}，UserID：{1}。", TableName, UserID));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetOrder】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return "";
-            }
+
             JObject jaAll = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = jaAll["Data"].ToString();
             if (!result.Equals("0"))
             {
@@ -840,8 +752,7 @@ namespace WebServiceReference
                 JObject ja = (JObject)JsonConvert.DeserializeObject(tableinfojson);
                 result = ja["Data"].ToString();
                 JArray jr = (JArray)JsonConvert.DeserializeObject(result);
-                ja = (JObject)jr[0];//(JObject)JsonConvert.DeserializeObject(result);
-                //将反序列化的JSON字符串转换成对象  
+                ja = (JObject)jr[0];
                 Globals.CurrTableInfo.tableid = ja["tableid"].ToString();
                 Globals.CurrTableInfo.tableName = ja["tableName"].ToString();
                 Globals.CurrTableInfo.tableNo = ja["tableNo"].ToString();
@@ -955,183 +866,79 @@ namespace WebServiceReference
 
         }
 
-        /// <summary>
-        /// 全单折扣
-        /// </summary>
-        /// <param name="OrderID"></param>
-        /// <param name="UserID"></param>
-        /// <param name="discount"></param>
-        /// <returns></returns>
-        public static string fullDiscount(string OrderID, string UserID, double discount, string couponid, string partnername)
-        {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/fullDiscount/{0}/{1}/{2}/{3}/{4}/ "
-                                          , OrderID
-                                          , UserID
-                                          , discount  //折扣率
-                                          , couponid  //优惠编号
-                                          , partnername  //优惠合作单位
-                                          );
-            String jsonResult = Request_Rest(address);
-            if (jsonResult == "0")
-            {
-                return "";
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
-            return result;
-
-
-        }
-        /// <summary>
-        /// 使用鱼券
-        /// </summary>
-        /// <param name="OrderID"></param>
-        /// <param name="UserID"></param>
-        /// <param name="cardno"></param>
-        /// <param name="orderprice"></param>
-        /// <returns></returns>
-        public static string usefishcard(string OrderID, string UserID, string cardno, double orderprice)
-        {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/usefishcard/{0}/{1}/{2}/{3} "
-                                          , OrderID
-                                          , UserID
-                                          , cardno
-                                          , orderprice
-                                          );
-            String jsonResult = Request_Rest(address);
-            if (jsonResult == "0")
-            {
-                return "";
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
-            return result;
-
-
-        }
         public static bool setMemberPrice(string UserID, string OrderID, string memberno)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice/{0}/{1}/{2}/{3}/"
-                                          , UserID
-                                          , OrderID
-                                          , ipaddress
-                                          , memberno
-                                          );
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice/{0}/{1}/{2}/{3}/", UserID, OrderID, ipaddress, memberno);
+            AllLog.Instance.I(string.Format("【setMemberPrice】 OrderID：{0}，memberno：{1}。", OrderID, memberno));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【setMemberPrice】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return false;
-            }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
-            return result == "1";
-
-
+            return ja["Data"].ToString() == "1";
         }
+
+        /// <summary>
+        /// 设回会员价。
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="OrderID"></param>
+        /// <returns></returns>
         public static bool setMemberPrice2(string UserID, string OrderID)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice2/{0}/{1}/{2}/"
-                                          , UserID
-                                          , OrderID
-                                          , ipaddress
-                                          );
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice2/{0}/{1}/{2}/", UserID, OrderID, ipaddress);
+            AllLog.Instance.I(string.Format("【setMemberPrice2】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【setMemberPrice2】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return false;
-            }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
-            return result == "1";
-
-
+            return ja["Data"].ToString() == "1";
         }
+
         public static bool cancelOrder(string UserID, string OrderID, string tableno)
         {
-            string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/cancelOrder/{0}/{1}/{2}/"
-                                          , UserID
-                                          , OrderID
-                                          , tableno
-                                          );
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/cancelOrder/{0}/{1}/{2}/", UserID, OrderID, tableno);
+            AllLog.Instance.I(string.Format("【cancelOrder】 OrderID：{0}，tableno：{1}。", OrderID, tableno));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【cancelOrder】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return false;
-            }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
-            return result == "1";
-
-
+            return ja["Data"].ToString() == "1";
         }
 
-        public static bool setMemberPrice3(string UserID, string OrderID)
-        {
-            string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice3/{0}/{1}/{2}/"
-                                          , UserID
-                                          , OrderID
-                                          , ipaddress
-                                          );
-            String jsonResult = Request_Rest(address);
-            if (jsonResult == "0")
-            {
-                return false;
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
-            return result == "1";
-
-
-        }
         public static bool rebackorder(string UserID, string OrderID, ref String errStr)
         {
-            string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/rebackorder/{0}/{1}/"
-                                          , UserID
-                                          , OrderID
-                                          );
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/rebackorder/{0}/{1}/", UserID, OrderID);
+            AllLog.Instance.I(string.Format("【rebackorder】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【rebackorder】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return false;
-            }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             errStr = ja["Info"].ToString();
-            string result = ja["Data"].ToString();
-            return result == "1";
-
-
+            return ja["Data"].ToString() == "1";
         }
+
         public static bool accountsorder(string UserID, string OrderID, ref String errStr)
         {
-            string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/accountsorder/{0}/{1}/"
-                                          , UserID
-                                          , OrderID
-                                          );
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/accountsorder/{0}/{1}/", UserID, OrderID);
+            AllLog.Instance.I(string.Format("【accountsorder】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【accountsorder】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return false;
-            }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             errStr = ja["Info"].ToString();
-            string result = ja["Data"].ToString();
-            return result == "1";
-
-
+            return ja["Data"].ToString() == "1";
         }
 
         /// <summary>
@@ -1142,24 +949,27 @@ namespace WebServiceReference
         /// <returns></returns>
         public static string GetServerTableList(string OrderID, string UserID)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetServerTableList/{0}/{1} "
-                                          , OrderID
-                                          , UserID
-                                          );
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetServerTableList/{0}/{1} ", OrderID, UserID);
+            AllLog.Instance.I(string.Format("【GetServerTableList】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetServerTableList】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return "";
-            }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
+
             try
-            { Globals.OrderTable.Clear(); }
-            catch { }
+            {
+                Globals.OrderTable.Clear();
+            }
+            catch
+            {
+                // ignored
+            }
+
             if (!result.Equals("0"))
             {
-                ///JArray jr = (JArray)JsonConvert.DeserializeObject(result);
                 //把JSON转为DataSet
                 DataTableConverter dtc = new DataTableConverter();
                 JsonReader jread = new JsonTextReader(new StringReader(result));
@@ -1188,9 +998,8 @@ namespace WebServiceReference
                 Globals.OrderTable = dt;
             }
             return result;
-
-
         }
+
         /// <summary>
         /// 错误后反结算
         /// </summary>
@@ -1200,23 +1009,17 @@ namespace WebServiceReference
         public static bool posrebacksettleorder(string UserID, string OrderID)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/posrebacksettleorder/{0}/{1}/{2}/"
-                                          , OrderID
-                                          , UserID
-                                          , ipaddress
-                                          );
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/posrebacksettleorder/{0}/{1}/{2}/", OrderID, UserID, ipaddress);
+            AllLog.Instance.I(string.Format("【posrebacksettleorder】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【posrebacksettleorder】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return false;
-            }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
-            return result == "1";
-
-
+            return ja["Data"].ToString() == "1";
         }
+
         /// <summary>
         /// 反结算
         /// </summary>
@@ -1227,6 +1030,7 @@ namespace WebServiceReference
         {
             msg = null;
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/rebacksettleorder.json", server2);
+            AllLog.Instance.I(string.Format("【rebacksettleorder】 OrderID：{0}，reason：{1}。", OrderID, reason));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -1239,10 +1043,10 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【rebacksettleorder】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return false;
-            }
+
             string result = "1";
             try
             {
@@ -1251,12 +1055,13 @@ namespace WebServiceReference
                 msg = ja["msg"].ToString();
             }
             catch { }
-            //将反序列化的JSON字符串转换成对象  
             return result.Equals("0");
         }
+
         public static string debitamout(string OrderID)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/debitamout.json", server2);
+            AllLog.Instance.I(string.Format("【debitamout】 OrderID：{0}。", OrderID));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -1265,10 +1070,10 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【debitamout】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return "";
-            }
+
             string result = "1";
             try
             {
@@ -1276,9 +1081,9 @@ namespace WebServiceReference
                 result = ja["result"].ToString();
             }
             catch { }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
+
         /// <summary>
         /// 修改称重数量
         /// </summary>
@@ -1288,6 +1093,7 @@ namespace WebServiceReference
         public static string updateDishWeight(string tableNo, string dishid, string primarykey, string dishnum)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/updateDishWeight.json", server2);
+            AllLog.Instance.I(string.Format("【updateDishWeight】 tableNo：{0}，dishid：{1}，primarykey：{2}，dishnum：{3}。", tableNo, dishid, primarykey, dishnum));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -1302,10 +1108,10 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【updateDishWeight】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return "";
-            }
+
             string result = "1";
             try
             {
@@ -1313,7 +1119,6 @@ namespace WebServiceReference
                 result = ja["result"].ToString();
             }
             catch { }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
 
@@ -1327,6 +1132,7 @@ namespace WebServiceReference
         public static string settleorder(string OrderID, string UserID, JArray payDetail)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/settleorder.json", server2);
+            AllLog.Instance.I(string.Format("【settleorder】 OrderID：{0}。", OrderID));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -1350,152 +1156,48 @@ namespace WebServiceReference
             StringWriter sw2 = new StringWriter();
             sw2.Write(jsonText);
 
-            Console.WriteLine(jsonText);
-            //return wmsRestClient.Request_Rest(address);
+            AllLog.Instance.I(string.Format("【settleorder】 request：{0}。", sw2));
             String jsonResult = Post_Rest(address, sw2);
-            string result = "";
+            AllLog.Instance.I(string.Format("【settleorder】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-            {
                 return "";
-            }
+
+            string result = "-1";
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 result = ja["result"].ToString();
             }
-            catch { result = "-1"; }
-            //将反序列化的JSON字符串转换成对象  
+            catch { }
             return result;
         }
 
-        public static string ChekDesk(string userid, string password)
-        {
-            string address = "http://" + server + "/" + apiPath + "/padinterface/login.json";
-            StringWriter sw = new StringWriter();
-            JsonWriter writer = new JsonTextWriter(sw);
-            writer.WriteStartObject();
-            writer.WritePropertyName("username");
-            writer.WriteValue(userid);
-            writer.WritePropertyName("password");
-            writer.WriteValue(password);
-            writer.WriteEndObject();
-            writer.Flush();
-
-            string jsonText = sw.GetStringBuilder().ToString();
-            Console.WriteLine(jsonText);
-
-            //return wmsRestClient.Request_Rest(address);
-            String jsonResult = Post_Rest(address, sw);
-            if (jsonResult == "0")
-            {
-                return "";
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["result"].ToString();
-            string username = ja["fullname"].ToString();
-            Globals.UserInfo.UserName = username;
-            Globals.UserInfo.PassWord = password;
-            Globals.UserInfo.UserID = userid;
-            return result;
-        }
-        //获取数据库服务器时间
-        public static DateTime PDA_GetServerTime()
-        {
-            //内向交货单 OrderType=1,收货单 OrderType=2 ...
-            /* string address = String.Format("http://{0}:8080/datasnap/rest/TServerMethods1/PDA_GetServerTime/{1} "
-                                           , myConst.ServerName
-                                           , System.Net.Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString()
-                                           );
-             try
-             {
-                 string datestr = wmsRestClient.Request_Rest(address);
-                 return DateTime.Parse(datestr);
-             }
-             catch
-             {
-                 return DateTime.Now;
-             }*/
-            return DateTime.Now;
-
-        }
-
-        public static bool DownloadFile(string URL, string filename)
-        {
-
-            try
-            {
-
-                HttpWebRequest Myrq = (HttpWebRequest)WebRequest.Create(URL);
-
-                HttpWebResponse myrp = (HttpWebResponse)Myrq.GetResponse();
-
-                Stream st = myrp.GetResponseStream();
-
-                Stream so = new FileStream(filename, FileMode.Create);
-
-                byte[] by = new byte[1024];
-
-                int osize = st.Read(by, 0, (int)by.Length);
-
-                while (osize > 0)
-                {
-
-                    so.Write(by, 0, osize);
-
-                    osize = st.Read(by, 0, (int)by.Length);
-
-                }
-
-                so.Close();
-
-                st.Close();
-
-                myrp.Close();
-
-                Myrq.Abort();
-
-                return true;
-
-            }
-
-            catch (Exception e)
-            {
-
-                return false;
-
-            }
-
-        }
-        //会员卡功能
         //memberinfo 会员卡号工k手机号
         public static JObject QueryBalance(string memberinfo)
         {
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/QueryBalance/{0}/", memberinfo);
+            AllLog.Instance.I(string.Format("【QueryBalance】 memberinfo：{0}。", memberinfo));
             String jsonResult = Request_Rest60(address);
+            AllLog.Instance.I(string.Format("【QueryBalance】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败,请检查内网是否正常...");
 
-            }
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             return ja;
         }
+
         public static bool VoidSale(string orderid, string pszPwd, string pszGPwd, out string info)
         {
             //orderid,pszPwd,pszGPwd
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/VoidSale/{0}/{1}/{2}/", orderid, pszPwd, pszGPwd);
+            AllLog.Instance.I(string.Format("【VoidSale】 orderid：{0}。", orderid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【VoidSale】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
 
-            }
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
-            //将反序列化的JSON字符串转换成对象  
             info = ja["Info"].ToString();
             return result.Equals("1");
         }
@@ -1505,33 +1207,30 @@ namespace WebServiceReference
         {
             int psTransType = 0;
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/StoreCardDeposit/{0}/{1}/{2}/{3}/{4}/{5}/", Globals.UserInfo.UserID, memberinfo, pszAmount, pszSerial, psTransType, paytype);
+            AllLog.Instance.I(string.Format("【StoreCardDeposit】 memberinfo：{0}，pszAmount：{1}，pszSerial：{2}。", memberinfo, pszAmount, pszSerial));
             String jsonResult = Request_Rest(address);
-            //String jsonResult = "{\"Data\":\"1\",\"pszRestInfo\":\"\",\"pszRetcode\":\"\",\"pszRefnum\":\"\",\"pszTrace\":\"685646\",\"pszPan\":\"6201200131911018\",\"psStoreCardBalance\":\"120000\",\"psStoreCard2\":\"120000\"}";
+            AllLog.Instance.I(string.Format("【StoreCardDeposit】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
 
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            return ja;
+            return (JObject)JsonConvert.DeserializeObject(jsonResult);
         }
+
         //激活卡
         public static JObject CardActive(string pszTrack2, string pszPwd, string pszMobile)
         {
             if (pszPwd.Trim().ToArray().Length <= 0)
                 pszPwd = " ";
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/CardActive/{0}/{1}/{2}/", pszTrack2, pszPwd, pszMobile);
+            AllLog.Instance.I(string.Format("【CardActive】 pszTrack2：{0}，pszMobile：{1}。", pszTrack2, pszMobile));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【CardActive】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
 
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            return ja;
+            return (JObject)JsonConvert.DeserializeObject(jsonResult);
         }
+
         //会员卡消费
         public static JObject MemberSale(string aUserid, string orderid, string pszInput, string pszSerial, float pszCash, float pszPoint, int psTransType, float pszStore, string pszTicketList, string pszPwd, float memberyhqamount)
         {
@@ -1539,56 +1238,49 @@ namespace WebServiceReference
                 pszTicketList = "  ";
 
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/Sale/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}/{9}/{10}/{11}/", aUserid, orderid, pszInput, pszSerial, pszCash, pszPoint, psTransType, pszStore, pszTicketList, pszPwd, memberyhqamount, server);
+            AllLog.Instance.I(string.Format("【Sale】 orderid：{0}，pszCash：{1}，memberyhqamount：{2}。", orderid, pszCash, memberyhqamount));
             String jsonResult = Request_Rest60(address);//会员结算的超时时间要多给点
+            AllLog.Instance.I(string.Format("【Sale】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败，请检查内网网络...");
 
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            return ja;
+            return (JObject)JsonConvert.DeserializeObject(jsonResult);
         }
 
         public static bool OpenUp(string aUserID, string aUserPassword, int CallType, out string reinfo)
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/OpenUp/{0}/{1}/{2}/{3}/", aUserID, aUserPassword, ipaddress, CallType);
+            AllLog.Instance.I(string.Format("【OpenUp】 aUserID：{0}。", aUserID));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【OpenUp】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败,请检查服务器是否开机,内网是否正常...");
 
-            }
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
             string workdate = ja["workdate"].ToString();
-            string Info = ja["Info"].ToString();
+            reinfo = ja["Info"].ToString();
             Globals.workdate = workdate;
 
-            reinfo = Info;
-            //将反序列化的JSON字符串转换成对象  
-            return result.Equals("1");
+            return ja["Data"].ToString().Equals("1");
         }
 
-        //
         //保存优惠内容
         public static bool saveOrderPreferential(string aUserid, string OrderID, string Preferential)
         {
             Preferential = Preferential.Replace(@"\", "");
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/saveOrderPreferential/{0}/{1}/{2}/{3}/", aUserid, ipaddress, OrderID, Preferential);
+            AllLog.Instance.I(string.Format("【saveOrderPreferential】 OrderID：{0}，Preferential：{1}。", OrderID, Preferential));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【saveOrderPreferential】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
 
-            }
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            return ja.Equals("1");
+            return ja["Data"].ToString().Equals("1");
         }
+
         /// <summary>
         /// 清机
         /// </summary>
@@ -1599,16 +1291,15 @@ namespace WebServiceReference
             string mac = GetMacAddr();
             string posid = getPosID();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/clearMachine/{0}/{1}/{2}/{3}/{4}/", userid, username, mac, posid, authorizer);
+            AllLog.Instance.I(string.Format("【clearMachine】 username：{0}，authorizer：{1}。", username, authorizer));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【clearMachine】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
 
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            return ja;
+            return (JObject)JsonConvert.DeserializeObject(jsonResult);
         }
+
         /// <summary>
         /// 结业
         /// </summary>
@@ -1618,22 +1309,20 @@ namespace WebServiceReference
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/endWork/{0}/{1}/", userid, ipaddress);
+            AllLog.Instance.I(string.Format("【endWork】 userid：{0}。", userid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【endWork】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
 
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            return ja;
+            return (JObject)JsonConvert.DeserializeObject(jsonResult);
         }
 
         /// <summary>
         /// 零找金接口
         /// </summary>
         /// <param name="aUserID"></param>
-        /// <param name="aUserPassword"></param>
+        /// <param name="cachamount"></param>
         /// <param name="CallType"></param>
         /// <param name="reinfo"></param>
         /// <returns></returns>
@@ -1641,45 +1330,43 @@ namespace WebServiceReference
         {
             string mac = GetMacAddr();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/InputTellerCash/{0}/{1}/{2}/{3}/", aUserID, mac, cachamount, CallType);
+            AllLog.Instance.I(string.Format("【InputTellerCash】 aUserID：{0}，cachamount：{1}，CallType：{2}。", aUserID, cachamount, CallType));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【InputTellerCash】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
 
-            }
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
             string workdate = ja["workdate"].ToString();
-            string Info = ja["Info"].ToString();
+            reinfo = ja["Info"].ToString();
             Globals.workdate = workdate;
 
-            reinfo = Info;
-            //将反序列化的JSON字符串转换成对象  
-            return result.Equals("1");
+            return ja["Data"].ToString().Equals("1");
         }
+
         public static JArray querytables()
         {
             JArray jr = null;
-
             string address = "http://" + server + "/" + apiPath + "/padinterface/querytables.json";
+            if (!alreadLogAllTableInfo)
+                AllLog.Instance.I("【querytables】 begin。");
             String jsonResult = Post_Rest(address, null);
+            if (!alreadLogAllTableInfo)
+                AllLog.Instance.I(string.Format("【querytables】 result：{0}。", jsonResult));
+            alreadLogAllTableInfo = true;
             if (jsonResult == "0")
-            {
-                return jr;
-            }
-            jr = (JArray)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            //string result = jr["result"].ToString();
-            return jr;
+                return null;
+
+            return (JArray)JsonConvert.DeserializeObject(jsonResult);
         }
+
         /// <summary>
         /// jde同步资料回调
         /// </summary>
         public static bool jdesyndata()
         {
             string address = "http://" + server + "/" + apiPath + "/padinterface/jdesyndata.json";
-            //{"synkey":"candaosynkey"}
+            AllLog.Instance.I("【jdesyndata】 begin。");
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -1688,38 +1375,14 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             string jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【jdesyndata】 result：{0}。", jsonResult));
             if (jsonResult == "0")
                 return false;
 
             var jr = (JObject)JsonConvert.DeserializeObject(jsonResult);
             return jr["result"].ToString().Equals("0");
         }
-        /// <summary>
-        /// 按类别获取优惠列表
-        /// </summary>
-        /// <param name="typeid"></param>
-        /// <returns></returns>
-        public static JArray getcoupon_rule(int typeid)
-        {
-            if (typeid < 90)
-                typeid = 90;
-            JArray jr = null;
-            string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getcoupon_rule/{0}/", typeid);
-            String jsonResult = Request_Rest(address);
-            if (jsonResult.Equals("0"))
-            {
-                throw new Exception("连接服务器失败...");
 
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["Data"].ToString();
-            jr = (JArray)JsonConvert.DeserializeObject(result);
-            //将反序列化的JSON字符串转换成对象  
-            //string result = jr["result"].ToString();
-            return jr;
-        }
         /// <summary>
         /// 广播UDP消息
         /// </summary>
@@ -1729,46 +1392,40 @@ namespace WebServiceReference
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/broadcastmsg/{0}/{1}/{2}", Globals.UserInfo.UserID, msgid, msg);
+            AllLog.Instance.I(string.Format("【broadcastmsg】 msgid：{0}，msg：{1}。", msgid, msg));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【broadcastmsg】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
-
-            }
         }
+
         public static void putOrder(string tableno, string orderid, TGzInfo gzinfo)
         {
             if (gzinfo.Gzcode == null)
                 gzinfo.Gzcode = "0";
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/putOrder/{0}/{1}/{2}/{3}/{4}/{5}/", tableno, orderid, gzinfo.Gzcode, gzinfo.Gzname, gzinfo.Telephone, gzinfo.Relaperson);
+            AllLog.Instance.I(string.Format("【putOrder】 tableno：{0}，orderid：{1}。", tableno, orderid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【putOrder】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
-
-            }
         }
+
         public static bool getOrderSequence(string tableno, out string sequence)
         {
             bool ret = false;
             sequence = "";
-            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getOrderSequence/{0}/", tableno);
+            AllLog.Instance.I(string.Format("【getOrderSequence】 tableno：{0}。", tableno));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getOrderSequence】 result：{0}。", jsonResult));
             try
             {
-                if (jsonResult.Equals("0"))
-                {
-                }
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-                //将反序列化的JSON字符串转换成对象  
-                string result = ja["Data"].ToString();
-                ret = result.Equals("1");
+                ret = ja["Data"].ToString().Equals("1");
                 if (ret)
-                {
                     sequence = ja["Info"].ToString();
-                }
             }
             catch { }
             return ret;
@@ -1778,12 +1435,10 @@ namespace WebServiceReference
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/wmOrder/{0}/", orderid);
+            AllLog.Instance.I(string.Format("【wmOrder】 orderid：{0}。", orderid));
             String jsonResult = Request_Rest(address);
-            if (jsonResult.Equals("0"))
-            {
-            }
+            AllLog.Instance.I(string.Format("【wmOrder】 result：{0}。", jsonResult));
         }
-
 
         /// <summary>
         /// 按类别获取优惠列表 第二版 POST接口
@@ -1796,10 +1451,9 @@ namespace WebServiceReference
             if (string.IsNullOrEmpty(orderid))
                 orderid = "000000";
 
-            string ipaddress = GetLocalIp(); //newspicyway/padinterface/getPreferentialList.json
-            //string address = String.Format("http://" + server + "/newspicyway/padinterface/getPreferentialList.json?typeid={0}",typeid);
+            string ipaddress = GetLocalIp();
             string address = "http://" + server + "/" + apiPath + "/padinterface/getPreferentialList.json";
-
+            AllLog.Instance.I(string.Format("【getPreferentialList】 typeid：{0}，orderid：{1}。", typeid, orderid));
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -1813,26 +1467,17 @@ namespace WebServiceReference
             writer.WriteValue(typeid);
             writer.WriteEndObject();
             writer.Flush();
-            string jsonText = sw.GetStringBuilder().ToString();
-            //Console.WriteLine(jsonText);
             String jsonResult = Post_Rest(address, sw);
-            //String jsonResult = RestClient.Post_Rest(address, null);
-            //String jsonResult = RestClient.Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getPreferentialList】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-            {
                 throw new Exception("连接服务器失败...");
 
-            }
-            //JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = jsonResult;// ja["Data"].ToString();
             try
             {
                 jr = (JArray)JsonConvert.DeserializeObject(result);
             }
             catch { }
-            //将反序列化的JSON字符串转换成对象  
-            //string result = jr["result"].ToString();
             return jr;
         }
 
@@ -1848,6 +1493,7 @@ namespace WebServiceReference
             JArray jr = null;
             string ipaddress = GetLocalIp();
             string address = "http://" + server + "/" + apiPath + "/padinterface/usePreferentialItem.json";
+            AllLog.Instance.I(string.Format("【usePreferentialItem】 preferentialid：{0}，disrate：{1}，orderid：{2}。", preferentialid, disrate, orderid));
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -1871,66 +1517,31 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             string jsonText = sw.GetStringBuilder().ToString();
-            //Console.WriteLine(jsonText);
             String jsonResult = Post_Rest(address, sw);
-            //String jsonResult = RestClient.Request_Rest(address);
+            AllLog.Instance.I(string.Format("【usePreferentialItem】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 msg = "连接服务器失败...";
                 return false;
-
             }
-            JObject ja = null; //(JObject)JsonConvert.DeserializeObject(jsonResult);
+
+            JObject ja;
             try
-            { ja = (JObject)JsonConvert.DeserializeObject(jsonResult); }
-            catch { amount = 0; msg = jsonResult; return false; }
-            //JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            bool result = ja["result"].ToString().Equals("1");
+            {
+                ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+            }
+            catch
+            {
+                amount = 0;
+                msg = jsonResult;
+                return false;
+            }
+
             msg = ja["msg"].ToString();
             amount = float.Parse(ja["amount"].ToString());
-            return result;
+            return ja["result"].ToString().Equals("1");
         }
-        /// <summary>
-        /// 撤销帐单优惠
-        /// </summary>
-        /// <param name="preferentialid"></param>
-        /// <param name="disrate"></param>
-        /// <param name="orderid"></param>
-        /// <returns></returns>
-        public static bool cancelPreferentialItem(string preferentialid, string orderid, ref string msg)
-        {
-            JArray jr = null;
-            string ipaddress = GetLocalIp();
-            string address = "http://" + server + "/" + apiPath + "/padinterface/cancelPreferentialItem.json";
-            StringWriter sw = new StringWriter();  //right1
-            JsonWriter writer = new JsonTextWriter(sw);
-            writer.WriteStartObject();
-            writer.WritePropertyName("machineno");
-            writer.WriteValue(ipaddress);
-            writer.WritePropertyName("userid");
-            writer.WriteValue(Globals.UserInfo.UserID);
-            writer.WritePropertyName("orderid");//有可能为空
-            writer.WriteValue(orderid);
-            writer.WritePropertyName("preferentialid");
-            writer.WriteValue(preferentialid);
-            writer.WriteEndObject();
-            writer.Flush();
-            string jsonText = sw.GetStringBuilder().ToString();
-            //Console.WriteLine(jsonText);
-            String jsonResult = Post_Rest(address, sw);
-            //String jsonResult = RestClient.Request_Rest(address);
-            if (jsonResult.Equals("0"))
-            {
-                throw new Exception("连接服务器失败...");
 
-            }
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
-            bool result = ja["result"].ToString().Equals("1");
-            msg = ja["msg"].ToString();
-            return result;
-        }
         /// <summary>
         /// 获取帐单内容，用于打印
         /// </summary>
@@ -1944,20 +1555,19 @@ namespace WebServiceReference
             JArray jrOrder = null;
             JArray jrList = null;
             JArray jrJS = null;
-            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getOrderInfo/{0}/{1}/{2}/", aUserid, orderid, printtype);
+            AllLog.Instance.I(string.Format("【getOrderInfo】 orderid：{0}，printtype：{1}。", orderid, printtype));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getOrderInfo】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
                 jrjs = jrJS;
                 jrlist = jrList;
                 return false;
-                //throw new Exception("连接服务器失败...");
-
             }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             bool ret = result.Equals("1");
             if (result == "1")
@@ -2001,6 +1611,7 @@ namespace WebServiceReference
             //string result = jr["result"].ToString();
             return ret;
         }
+
         /// <summary>
         /// 获取清单单内容
         /// </summary>
@@ -2016,19 +1627,18 @@ namespace WebServiceReference
             JArray jrOrder = null;
             JArray jrJS = null;
             String posid = getPosID();
-            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getClearMachineData/{0}/{1}/{2}/", aUserid, jsorder, posid);
+            AllLog.Instance.I(string.Format("【getClearMachineData】 aUserid：{0}，jsorder：{1}。", aUserid, jsorder));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getClearMachineData】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
                 jrjs = jrJS;
                 return false;
-                //throw new Exception("连接服务器失败...");
-
             }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             bool ret = result.Equals("1");
             if (result == "1")
@@ -2063,19 +1673,17 @@ namespace WebServiceReference
             String JSJson = "";
             JArray jrOrder = null;
             JArray jrJS = null;
-            String posid = getPosID();
-            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/caleTableAmount/{0}/{1}/", orderid, aUserid);
+            AllLog.Instance.I(string.Format("【caleTableAmount】 aUserid：{0}，orderid：{1}。", aUserid, orderid));
             String jsonResult = Request_Rest60(address);
-            //将反序列化的JSON字符串转换成对象  
-            string result = jsonResult;
-            bool ret = result.Equals("1");
-            return ret;
+            AllLog.Instance.I(string.Format("【caleTableAmount】 result：{0}。", jsonResult));
+            return jsonResult.Equals("1");
         }
+
         public static void openCashCom()
         {
             portname = "COM" + getPortName();
-            if (portname.Trim().ToString().Length > 0)
+            if (portname.Trim().Length > 0)
             {
                 sc = new SerialClass(portname);
                 try
@@ -2083,26 +1691,24 @@ namespace WebServiceReference
                     sc.openPort();
                 }
                 catch { }
-                finally
-                {
-                }
             }
         }
+
         public static bool OpenCash()
         {
             String jsonResult = "";
             bool ret = false;
             portname = getPortName();
-            if (portname.Trim().ToString().Length <= 0)
+            if (portname.Trim().Length <= 0)
             {
                 try
                 {
                     string ip = getOpenCashIP();
                     string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/OpenCash/{0}/", ip);
+                    AllLog.Instance.I("【OpenCash】 start。");
                     jsonResult = Request_Rest(address);
-                    //将反序列化的JSON字符串转换成对象  
-                    string result = jsonResult;
-                    ret = result.Equals("1");
+                    AllLog.Instance.I(string.Format("【OpenCash】 result：{0}。", jsonResult));
+                    ret = jsonResult.Equals("1");
                 }
                 catch { }
             }
@@ -2150,12 +1756,13 @@ namespace WebServiceReference
         {
             String OrderJson = "";
             JArray jrOrder = null;
-            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllOrderInfo2/{0}/", aUserid);
+            AllLog.Instance.I(string.Format("【getAllOrderInfo2】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getAllOrderInfo2】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
-                jrorder = jrOrder;
+                jrorder = null;
                 return false;
             }
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
@@ -2177,20 +1784,20 @@ namespace WebServiceReference
             jrorder = jrOrder;
             return ret;
         }
+
         public static int getFoodStatus(string dishid, string dishunit)
         {
-            string ipaddress = GetLocalIp();
             int result = 0;
             try
             {
                 string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getFoodStatus/{0}/{1}/", dishid, dishunit);
+                AllLog.Instance.I(string.Format("【getFoodStatus】 dishid：{0}，dishunit：{1}。", dishid, dishunit));
                 String jsonResult = Request_Rest(address);
+                AllLog.Instance.I(string.Format("【getFoodStatus】 result：{0}。", jsonResult));
                 if (jsonResult.Equals("0"))
-                {
                     return 0;
-                }
+
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-                //将反序列化的JSON字符串转换成对象  
                 result = int.Parse(ja["Info"].ToString());
             }
             catch { }
@@ -2209,14 +1816,16 @@ namespace WebServiceReference
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllGZDW/{0}/", aUserid);
+            AllLog.Instance.I(string.Format("【getAllGZDW】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getAllGZDW】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 gzData = jrOrder;
                 return false;
             }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             bool ret = result.Equals("1");
             if (result == "1")
@@ -2247,14 +1856,19 @@ namespace WebServiceReference
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllWmFood/{0}/", aUserid);
+            if (!alreadLogAllFood)
+                AllLog.Instance.I(string.Format("【getAllWmFood】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
+            if (!alreadLogAllFood)
+                AllLog.Instance.I(string.Format("【getAllWmFood】 result：{0}。", jsonResult));
+            alreadLogAllFood = true;
             if (jsonResult.Equals("0"))
             {
                 wmData = jrOrder;
                 return false;
             }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             bool ret = result.Equals("1");
             if (result == "1")
@@ -2272,6 +1886,7 @@ namespace WebServiceReference
             wmData = jrOrder;
             return ret;
         }
+
         /// <summary>
         /// 餐具
         /// </summary>
@@ -2284,14 +1899,15 @@ namespace WebServiceReference
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getCJFood/{0}/", aUserid);
+            AllLog.Instance.I(string.Format("【getCJFood】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getCJFood】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 cjData = jrOrder;
                 return false;
             }
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             bool ret = result.Equals("1");
             if (result == "1")
@@ -2316,14 +1932,16 @@ namespace WebServiceReference
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getGroupDetail/{0}/", dishid);
+            AllLog.Instance.I(string.Format("【getGroupDetail】 dishid：{0}。", dishid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getGroupDetail】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 groupData = jrOrder;
                 return false;
             }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             bool ret = result.Equals("1");
             if (result == "1")
@@ -2341,6 +1959,7 @@ namespace WebServiceReference
             groupData = jrOrder;
             return ret;
         }
+
         /// <summary>
         /// 获取会员交易凭条内容
         /// </summary>
@@ -2351,16 +1970,16 @@ namespace WebServiceReference
         {
             String OrderJson = "";
             JArray jrOrder = null;
-            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getMemberSaleInfo/{0}/{1}/", aUserid, orderid);
+            AllLog.Instance.I(string.Format("【getMemberSaleInfo】 orderid：{0}，aUserid：{1}。", orderid, aUserid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getMemberSaleInfo】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 gzData = jrOrder;
                 return false;
             }
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             bool ret = result.Equals("1");
             if (result == "1")
@@ -2379,7 +1998,6 @@ namespace WebServiceReference
             return ret;
         }
 
-
         /// <summary>
         /// 获取员工前台权限
         /// </summary>
@@ -2392,14 +2010,16 @@ namespace WebServiceReference
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getUserRights/{0}/", aUserid);
+            AllLog.Instance.I(string.Format("【getUserRights】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getUserRights】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 rightData = jrOrder;
                 return false;
             }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             bool ret = result.Equals("1");
             if (result == "1")
@@ -2417,10 +2037,12 @@ namespace WebServiceReference
             rightData = jrOrder;
             return ret;
         }
+
         public static bool getuserrights(string userid, string password, out JObject rightData)
         {
             JObject jrOrder = null;
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/userrights.json", server2);
+            AllLog.Instance.I(string.Format("【userrights】 userid：{0}。", userid));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -2432,6 +2054,7 @@ namespace WebServiceReference
             writer.Flush();
             String rightjson = "";
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【userrights】 result：{0}。", jsonResult));
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
             if (!jsonResult.Equals("0"))
             {
@@ -2441,19 +2064,16 @@ namespace WebServiceReference
                     jrOrder = (JObject)JsonConvert.DeserializeObject(rightjson);
                 }
                 catch { }
-                rightData = jrOrder;
             }
-            //将反序列化的JSON字符串转换成对象  
-            string result = ja["result"].ToString();
 
-            bool ret = result.Equals("0");
             rightData = jrOrder;
-            return ret;
+            return ja["result"].ToString().Equals("0");
         }
 
         public static bool getMenuCombodish(string dishid, string menuid, out JObject jaData)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/getMenuCombodish.json", server2);
+            AllLog.Instance.I(string.Format("【getMenuCombodish】 dishid：{0}，menuid：{1}。", dishid, menuid));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -2464,6 +2084,7 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【getMenuCombodish】 result：{0}。", jsonResult));
             JObject ja = null;
             bool ret = true;// result.Equals("0");
             JArray jr = null;
@@ -2479,6 +2100,7 @@ namespace WebServiceReference
             jaData = ja;
             return ret;
         }
+
         /// <summary>
         /// 获取第二杯半价和第二份起半价数据 由于当时做的是临时方案，固定了，后面有时间优化做成灵活的一个dataser转回来
         /// </summary>
@@ -2494,20 +2116,19 @@ namespace WebServiceReference
             JArray jrOrder = null;
             JArray jrList = null;
             JArray jrDouble = null;
-            String posid = getPosID();
-            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getFavorale/{0}/{1}/", aUserid, jsorder);
+            AllLog.Instance.I(string.Format("【getFavorale】 aUserid：{0}，jsorder：{1}。", aUserid, jsorder));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getFavorale】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
                 jrlist = jrList;
                 jrdouble = jrDouble;
                 return false;
-                //throw new Exception("连接服务器失败...");
             }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             bool ret = result.Equals("1");
             if (result == "1")
@@ -2556,6 +2177,7 @@ namespace WebServiceReference
         public static bool setorder(string tableNo, string UserID, ref string orderid)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/setorder.json", server2);
+            AllLog.Instance.I(string.Format("【setorder】 tableNo：{0}，UserID：{1}。", tableNo, UserID));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -2572,8 +2194,7 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
-            ///如果返回1，已经开台，先关掉
-            ///{"result":"0","delaytime":"10","vipaddress":"192.168.40.25:8081","locktime":"120","backpsd":"1","orderid":"H20150416003934"}
+            AllLog.Instance.I(string.Format("【setorder】 result：{0}。", jsonResult));
             bool result = false;
             try
             {
@@ -2583,9 +2204,9 @@ namespace WebServiceReference
                 orderid = ja["orderid"].ToString();
             }
             catch { return false; }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
+
         /// <summary>
         /// 堂食开台接口
         /// </summary>
@@ -2598,6 +2219,7 @@ namespace WebServiceReference
         public static bool setorder(string tableNo, string UserID, int manNum, int womanNum, string ageperiod, ref string orderid)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/setorder.json", server2);
+            AllLog.Instance.I(string.Format("【setorder】 tableNo：{0}，ageperiod：{1}。", tableNo, ageperiod));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -2616,20 +2238,18 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
-            ///如果返回1，已经开台，先关掉
-            ///{"result":"0","delaytime":"10","vipaddress":"192.168.40.25:8081","locktime":"120","backpsd":"1","orderid":"H20150416003934"}
+            AllLog.Instance.I(string.Format("【setorder】 result：{0}。", jsonResult));
             bool result = false;
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-                string javaresult = ja["result"].ToString();
                 result = ja["result"].ToString().Equals("0");
                 orderid = ja["orderid"].ToString();
             }
             catch { return false; }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
+
         /// <summary>
         /// 获取全部分类
         /// </summary>
@@ -2637,7 +2257,9 @@ namespace WebServiceReference
         public static bool getFoodType(out JArray jr)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/getMenuColumn.json", server2);
+            AllLog.Instance.I("【getMenuColumn】 start。");
             String jsonResult = Post_Rest(address, null);
+            AllLog.Instance.I(string.Format("【getMenuColumn】 result：{0}。", jsonResult));
             bool result = false;
             JArray ja = null;
             try
@@ -2648,11 +2270,11 @@ namespace WebServiceReference
                 result = true;// ja["result"].ToString().Equals("0");
             }
             catch { result = false; }
-            //将反序列化的JSON字符串转换成对象  
             jr = ja;
             return result;
 
         }
+
         /// <summary>
         /// 退菜
         /// </summary>
@@ -2663,21 +2285,23 @@ namespace WebServiceReference
         public static bool discarddish(StringWriter sw)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/discarddish.json", server2);
+            AllLog.Instance.I(string.Format("【discarddish】 sw：{0}。", sw));
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【discarddish】 result：{0}。", jsonResult));
             bool result = false;
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-                string javaresult = ja["result"].ToString();
                 result = ja["result"].ToString().Equals("0");
             }
             catch { return false; }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
+
         public static bool verifyuser(string userid)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/verifyuser.json", server2);
+            AllLog.Instance.I(string.Format("【verifyuser】 userid：{0}。", userid));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -2688,17 +2312,17 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【verifyuser】 result：{0}。", jsonResult));
             bool result = false;
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-                string javaresult = ja["result"].ToString();
                 result = ja["result"].ToString().Equals("0");
             }
             catch { return false; }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
+
         public static string getAllFoodArray(ref JsonWriter writer, DataTable dt, string orderid, int ordertype)
         {
             writer.WriteStartArray();
@@ -2802,6 +2426,7 @@ namespace WebServiceReference
             writer.WriteEndArray();
             return "";
         }
+
         private static void writeCombos(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype, bool isfish, string primarykey)
         {
             string str0 = "0";
@@ -2904,6 +2529,7 @@ namespace WebServiceReference
                 }
             }
         }
+
         private static void writeDishes(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype, string primarykey)
         {
             string str0 = "0";
@@ -2986,6 +2612,7 @@ namespace WebServiceReference
                 }
             }
         }
+
         public static string getGUID()
         {
             Guid guid = new Guid();
@@ -2993,10 +2620,11 @@ namespace WebServiceReference
             string str = guid.ToString();
             return str;
         }
+
         public static bool bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype)
         {
-            //string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorder.json", server2);
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);
+            AllLog.Instance.I(string.Format("【bookorderList】 tableid：{0}，orderid：{1}，sequence：{2}。", tableid, orderid, sequence));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -3015,8 +2643,7 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
-            ///如果返回1，已经开台，先关掉
-            ///{"result":"0","delaytime":"10","vipaddress":"192.168.40.25:8081","locktime":"120","backpsd":"1","orderid":"H20150416003934"}
+            AllLog.Instance.I(string.Format("【bookorderList】 result：{0}。", jsonResult));
             bool result = false;
             try
             {
@@ -3030,12 +2657,13 @@ namespace WebServiceReference
                 result = ja["result"].ToString().Equals("0");
             }
             catch { return false; }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
+
         public static bool getSystemSetData(string settingname, out TSetting setting)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/getSystemSetData.Json", server2);
+            AllLog.Instance.I(string.Format("【getSystemSetData】 settingname：{0}。", settingname));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -3044,6 +2672,7 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【getSystemSetData】 result：{0}。", jsonResult));
             bool result = false;
             setting = new TSetting();
             setting.Itemid = "0";
@@ -3064,12 +2693,13 @@ namespace WebServiceReference
                 result = true;
             }
             catch { return false; }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
+
         public static bool getSystemSetData(out TRoundInfo roundJson)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/getSystemSetData.Json", server2);
+            AllLog.Instance.I(string.Format("【getSystemSetData】 settingname：{0}。", "ROUNDING"));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -3078,6 +2708,7 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【getSystemSetData】 result：{0}。", jsonResult));
             bool result = false;
             roundJson = new TRoundInfo();
             roundJson.Itemid = "0";
@@ -3101,7 +2732,6 @@ namespace WebServiceReference
 
             }
             catch { return false; }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
 
@@ -3113,6 +2743,7 @@ namespace WebServiceReference
         public static bool cleantable(string tableno)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/cleantable.Json", server2);
+            AllLog.Instance.I(string.Format("【cleantable】 tableno：{0}。", tableno));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -3121,6 +2752,7 @@ namespace WebServiceReference
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【cleantable】 result：{0}。", jsonResult));
             bool result = false;
             try
             {
@@ -3128,38 +2760,34 @@ namespace WebServiceReference
                 result = ja["result"].ToString().Equals("0");
             }
             catch { return false; }
-            //将反序列化的JSON字符串转换成对象  
             return result;
         }
+
         public static bool getOrderCouponList(string aUserid, string orderid, out JArray jrorder)
         {
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetOrderCouponList/{0}/{1}/", orderid, aUserid);
+            AllLog.Instance.I(string.Format("【GetOrderCouponList】 orderid：{0}。", orderid));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetOrderCouponList】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
                 return false;
-                //throw new Exception("连接服务器失败...");
-
             }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             OrderJson = result;
             OrderJson = OrderJson.Replace("|", "\"");
             try
             {
-                //ja = (JObject)JsonConvert.DeserializeObject(OrderJson);
-                //result = ja["Data"].ToString();
                 jrOrder = (JArray)JsonConvert.DeserializeObject(result);
             }
             catch { }
             jrorder = jrOrder;
-            //将反序列化的JSON字符串转换成对象  
-            //string result = jr["result"].ToString();
             return jrorder != null;
         }
 
@@ -3169,16 +2797,16 @@ namespace WebServiceReference
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getBackDishInfo/{0}/{1}/{2}/{3}/", orderid, dishid, dishunit, tableno);
+            AllLog.Instance.I(string.Format("【getBackDishInfo】 orderid：{0}，dishid：{1}，tableno：{2}。", orderid, dishid, tableno));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【getBackDishInfo】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
             {
                 jrorder = jrOrder;
                 return false;
-                //throw new Exception("连接服务器失败...");
-
             }
+
             JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            //将反序列化的JSON字符串转换成对象  
             string result = ja["Data"].ToString();
             OrderJson = result;
             OrderJson = OrderJson.Replace("|", "\"");
@@ -3188,14 +2816,16 @@ namespace WebServiceReference
             }
             catch { }
             jrorder = jrOrder;
-            //将反序列化的JSON字符串转换成对象  
             return jrorder != null;
         }
+
         public static bool deletePosOperation(string tableno)
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/deletePosOperation/{0}", tableno);
+            AllLog.Instance.I(string.Format("【deletePosOperation】 tableno：{0}。", tableno));
             String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【deletePosOperation】 result：{0}。", jsonResult));
             return true;
         }
 
@@ -3252,7 +2882,9 @@ namespace WebServiceReference
             List<BankInfo> info = new List<BankInfo>();
             try
             {
+                AllLog.Instance.I("【getallbank】 start。");
                 string jsonResult = Request_Rest(addr);
+                AllLog.Instance.I(string.Format("【getallbank】 result：{0}。", jsonResult));
                 JArray dataArray = (JArray)JsonConvert.DeserializeObject(jsonResult);
                 foreach (var da in dataArray)
                 {
@@ -3271,10 +2903,7 @@ namespace WebServiceReference
         }
 
     }
-
-
 }
-
 
 /*
 

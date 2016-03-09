@@ -60,8 +60,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllLog.cs" />
+    <Compile Include="BaseLog.cs" />
     <Compile Include="ButtonAuthority.cs" />
     <Compile Include="CCursor.cs" />
+    <Compile Include="ClientLog.cs" />
     <Compile Include="ConvertEx.cs" />
     <Compile Include="CustomException.cs" />
     <Compile Include="DataConverter.cs" />
