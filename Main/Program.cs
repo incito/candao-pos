@@ -12,6 +12,7 @@ using DevExpress.UserSkins;
 using DevExpress.Skins;
 using KYPOS;
 using Library;
+using Models;
 using Models.Enum;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
@@ -53,7 +54,10 @@ namespace Main
             BonusSkins.Register();//注册Dev酷皮肤
             //OfficeSkins.Register();////注册Office样式的皮肤
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
-            RestClient.GetSoapRemoteAddress();
+            RestClient.GetSystemConfigSetting();
+
+            BigDataHelper.RegisterPos();
+            BigDataHelper.DeviceAction(EnumDeviceAction.ApplicationStart);
 
             frmStart.frm.setMsg("获取系统设置...");
             try

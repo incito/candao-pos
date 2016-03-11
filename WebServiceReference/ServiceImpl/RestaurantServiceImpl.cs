@@ -22,10 +22,10 @@ namespace WebServiceReference.ServiceImpl
                 userId,
                 userName,
                 RestClient.GetMacAddr(),
-                RestClient.getPosID(),
+                RestClient.PosId,
                 Globals.authorizer
             };
-            var addr = string.Format("http://{0}/datasnap/rest/TServerMethods1/clearMachine/{1}", RestClient.Server3, string.Join("//", paramList));
+            var addr = string.Format("http://{0}/datasnap/rest/TServerMethods1/clearMachine/{1}", RestClient.MemberServer, string.Join("//", paramList));
 
             try
             {
@@ -46,7 +46,7 @@ namespace WebServiceReference.ServiceImpl
 
         public Tuple<string, List<NoClearMachineInfo>> GetUnclearnPosInfo()
         {
-            var addr = string.Format("http://{0}/{1}/padinterface/findUncleanPosList.json", RestClient.server, RestClient.apiPath);
+            var addr = string.Format("http://{0}/{1}/padinterface/findUncleanPosList.json", RestClient.JavaServer, RestClient.ApiPath);
             try
             {
                 var result = HttpHelper.HttpGet<GetUnclearnPosInfoResponse>(addr);
@@ -66,7 +66,7 @@ namespace WebServiceReference.ServiceImpl
         {
             try
             {
-                var addr = string.Format("http://{0}/{1}/padinterface/querytables.json", RestClient.server, RestClient.apiPath);
+                var addr = string.Format("http://{0}/{1}/padinterface/querytables.json", RestClient.JavaServer, RestClient.ApiPath);
                 var result = HttpHelper.HttpPost<List<TableInfoResponse>>(addr, null);
                 var dataList = new List<TableInfo>();
                 if (result != null && result.Any())
@@ -84,7 +84,7 @@ namespace WebServiceReference.ServiceImpl
         {
             try
             {
-                var addr = string.Format("http://{0}/{1}/padinterface/isYesterdayEndWork.json", RestClient.server, RestClient.apiPath);
+                var addr = string.Format("http://{0}/{1}/padinterface/isYesterdayEndWork.json", RestClient.JavaServer, RestClient.ApiPath);
                 var result = HttpHelper.HttpGet<CheckWhetherEndWorkResponse>(addr);
                 if (!result.IsSuccess)
                     return new Tuple<string, bool>(result.msg ?? "检测是否结业失败。", false);
@@ -101,7 +101,7 @@ namespace WebServiceReference.ServiceImpl
         {
             try
             {
-                var addr = string.Format("http://{0}/{1}/padinterface/getOpenEndTime.json", RestClient.server, RestClient.apiPath);
+                var addr = string.Format("http://{0}/{1}/padinterface/getOpenEndTime.json", RestClient.JavaServer, RestClient.ApiPath);
                 var response = HttpHelper.HttpGet<GetRestaurantTradeTimeResponse>(addr);
                 if (!response.IsSuccess)
                     return new Tuple<string, RestaurantTradeTime>(response.info ?? "获取店铺营业时间失败。", null);

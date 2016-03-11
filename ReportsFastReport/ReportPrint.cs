@@ -453,7 +453,7 @@ namespace ReportsFastReport
                         AddedtValue(ref rtp, "edtmlAmount", ramount.mlAmount.ToString("f2"));
                     }
 
-                if (RestClient.getShowReport())
+                if (RestClient.ShowReport)
                 {
                     frmProgress.hideFrm();
                     try
@@ -463,7 +463,7 @@ namespace ReportsFastReport
                     catch (Exception e) { MessageBox.Show(e.Message); }
                 }
                 else
-                    if (RestClient.getPrintDesign())
+                    if (RestClient.ShowAndDesign)
                     {
                         frmProgress.hideFrm();
                         try

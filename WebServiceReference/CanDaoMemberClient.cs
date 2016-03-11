@@ -451,7 +451,7 @@ namespace WebServiceReference
         public static TCandaoRetBase ChangePwd(string branch_id, string securitycode, string cardno,string password )
         {
             TCandaoRetBase ret = new TCandaoRetBase();
-            string address = String.Format("http://{0}/" + RestClient.apiPath + "/padinterface/ChangePwd.json", WebServiceReference.Candaomemberserver);
+            string address = String.Format("http://{0}/" + RestClient.ApiPath + "/padinterface/ChangePwd.json", WebServiceReference.Candaomemberserver);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -492,7 +492,7 @@ namespace WebServiceReference
         public static TCandaoRetBase UnCardLose(string branch_id, string securitycode, string cardno, string password,string fmemo)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
-            string address = String.Format("http://{0}/" + RestClient.apiPath + "/padinterface/UnCardLose.json", WebServiceReference.Candaomemberserver);
+            string address = String.Format("http://{0}/" + RestClient.ApiPath + "/padinterface/UnCardLose.json", WebServiceReference.Candaomemberserver);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -533,7 +533,7 @@ namespace WebServiceReference
         public static TCandaoRetBase Logout(string branch_id, string securitycode,string userid)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
-            string address = String.Format("http://{0}/" + RestClient.apiPath + "/padinterface/Logout.json", WebServiceReference.Candaomemberserver);
+            string address = String.Format("http://{0}/" + RestClient.ApiPath + "/padinterface/Logout.json", WebServiceReference.Candaomemberserver);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -711,7 +711,7 @@ namespace WebServiceReference
         {
             branch_id = "";
             TCandaoRetBase ret = new TCandaoRetBase();
-            string address = String.Format("http://{0}/member/memberManager/findBranchid", RestClient.server2);
+            string address = String.Format("http://{0}/member/memberManager/findBranchid", RestClient.JavaServer);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -737,7 +737,7 @@ namespace WebServiceReference
         public static TCandaoRetBase MemberLogin(string orderid, string mobile)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
-            string address = String.Format("http://{0}/newspicyway/member/MemberLogin.json", RestClient.server2);
+            string address = String.Format("http://{0}/newspicyway/member/MemberLogin.json", RestClient.JavaServer);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -764,7 +764,7 @@ namespace WebServiceReference
         public static TCandaoRetBase MemberLogout(string orderid, string mobile)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
-            string address = String.Format("http://{0}/newspicyway/member/MemberLogout.json", RestClient.server2);
+            string address = String.Format("http://{0}/newspicyway/member/MemberLogout.json", RestClient.JavaServer);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -791,7 +791,7 @@ namespace WebServiceReference
         public static TCandaoRetBase DeleteOrderMember(string orderid, string mobile)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
-            string address = String.Format("http://{0}/newspicyway/member/DeleteOrderMember.json", RestClient.server2);
+            string address = String.Format("http://{0}/newspicyway/member/DeleteOrderMember.json", RestClient.JavaServer);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -817,7 +817,7 @@ namespace WebServiceReference
         public static TCandaoRetBase AddOrderMember(TCandaoOrderMemberInfo ordermemberinfo)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
-            string address = String.Format("http://{0}/newspicyway/member/AddOrderMember.json", RestClient.server2);
+            string address = String.Format("http://{0}/newspicyway/member/AddOrderMember.json", RestClient.JavaServer);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -872,7 +872,7 @@ namespace WebServiceReference
         public static TCandaoRetBase getOrderMember(string orderid)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
-            string address = String.Format("http://{0}/newspicyway/member/GetOrderMember.json", RestClient.server2);
+            string address = String.Format("http://{0}/newspicyway/member/GetOrderMember.json", RestClient.JavaServer);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();

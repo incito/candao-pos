@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using Common;
 using Models;
 using Newtonsoft.Json;
@@ -25,10 +26,73 @@ namespace WebServiceReference
         private static bool alreadLogAllTableInfo;//是否已经记录了所有餐台信息。防止每次获取餐台信息时都打印接口返回数据。
         private static bool alreadLogAllFood;
 
-        public static string server = "";
-        public static string server2 = "";
-        public static string Server3 = "";
-        public static string apiPath = "";
+        /// <summary>
+        /// 门店后台地址。
+        /// </summary>
+        public static string JavaServer { get; set; }
+
+        /// <summary>
+        /// 会员地址。
+        /// </summary>
+        public static string MemberServer { get; set; }
+
+        /// <summary>
+        /// 大数据地址。
+        /// </summary>
+        public static string BigDataServer { get; set; }
+
+        public static string ApiPath = "";
+
+        public static string PrintDesign { get; set; }
+
+        public static bool ShowReport
+        {
+            get { return PrintDesign == "1"; }
+        }
+
+        public static bool ShowAndDesign
+        {
+            get { return PrintDesign == "2"; }
+        }
+
+        public static string PosId { get; set; }
+
+        public static string ManagerPwd { get; set; }
+
+        public static string OpenCashAddr { get; set; }
+
+        public static string PortName { get; set; }
+
+        public static int AutoClose { get; set; }
+
+        public static string TakeOutTable { get; set; }
+
+        public static string TakeOutTableID { get; set; }
+
+        public static bool IsClearCoupon { get; set; }
+
+        /// <summary>
+        /// 惠新第二扎半价优惠ID。
+        /// </summary>
+        public static string YhId { get; set; }
+
+        public static string DoubleDishTicket { get; set; }
+
+        public static int MemberSystem { get; set; }
+
+        public static string BranchId { get; set; }
+
+        private static string _mac;
+
+        /// <summary>
+        /// 本机MAC。
+        /// </summary>
+        public static string Mac
+        {
+            get { return _mac ?? (_mac = GetMacAddr()); }
+        }
+
+
         public static SerialClass sc;
         public static string portname = "";
         public enum ShowWindowCommands : int
@@ -58,6 +122,7 @@ namespace WebServiceReference
             string lpszDir,
             ShowWindowCommands FsShowCmd
             );
+
         public static string GetLocalIp()
         {
             IPAddress[] ips = Dns.GetHostAddresses(Dns.GetHostName());
@@ -76,6 +141,7 @@ namespace WebServiceReference
             catch { ipaddress = ""; }
             return ipaddress;
         }
+
         /// <summary>
         /// 获取MAC地址。
         /// </summary>
@@ -127,298 +193,63 @@ namespace WebServiceReference
             }
             return "00-00-00-00-00-00";
         }
-        public static string ToUnicodeString(string str)
-        {
-            StringBuilder strResult = new StringBuilder();
-            if (!string.IsNullOrEmpty(str))
-            {
-                for (int i = 0; i < str.Length; i++)
-                {
-                    strResult.Append("\\u");
-                    strResult.Append(((int)str[i]).ToString("x"));
-                }
-            }
-            return strResult.ToString();
-        }
+
         public static string ConfigFile
         {
             get { return Application.StartupPath + @"\WebServiceReference.dll.config"; }
         }
 
         /// <summary>
-        /// 从config文件获取WebService的连接地址
-        /// </summary>
-        /// <param name="endPointName">SOAP endPointName</param>
-        /// <returns></returns>
-        public static string GetSoapRemoteAddress()
-        {
-            XmlDocument xml = new XmlDocument();
-            xml.Load(ConfigFile);
-            string xpath = "configuration/client/Server";
-            XmlNode node = xml.SelectSingleNode(xpath);
-            server = node.Attributes["address"].Value;
-
-            xpath = "configuration/client/Server2";
-            node = xml.SelectSingleNode(xpath);
-            server2 = node.Attributes["address"].Value;
-
-            xpath = "configuration/client/Server3";
-            node = xml.SelectSingleNode(xpath);
-            Server3 = node.Attributes["address"].Value;
-
-            apiPath = "newspicyway";
-            try
-            {
-                xpath = "configuration/client/ApiPath";
-                node = xml.SelectSingleNode(xpath);
-                apiPath = node.Attributes["value"].Value;
-            }
-            catch { apiPath = "newspicyway"; }
-
-            return server;
-
-        }
-        public static bool getShowReport()
-        {
-            string PrintDesign = "0";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/PrintDesign";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                PrintDesign = node.Attributes["value"].Value;
-            }
-            catch { }
-            return PrintDesign == "1";
-        }
-        public static int getMemberSystem()
-        {
-            int MemberSystem = 0;
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/MemberSystem";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                MemberSystem = int.Parse(node.Attributes["value"].Value.ToString());
-            }
-            catch { }
-            return MemberSystem;
-        }
-        public static string getPortName()
-        {
-            string _portname = "";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/PortName";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                _portname = node.Attributes["value"].Value;
-            }
-            catch { _portname = ""; }
-            return _portname;
-        }
-        public static string getbranch_id()
-        {
-            string _branch_id = "586313";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/branch_id";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                _branch_id = node.Attributes["value"].Value;
-            }
-            catch { _branch_id = ""; }
-            return _branch_id;
-        }
-        /// <summary>
-        /// 返回第二扎半价ID号
+        /// 获取配置文件数据。
         /// </summary>
         /// <returns></returns>
-        public static string getYhID()
+        public static void GetSystemConfigSetting()
         {
-            string ret = "f4d14744f95b4febb18385f7659199ee";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/yhid";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                ret = node.Attributes["value"].Value;
-            }
-            catch { }
-            return ret;
-        }
-        public static string getDoubleDishTicket()
-        {
-            string ret = "14027c4ed33a4bd19e9fd42f3cd09d7e";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/doubledishticket";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                ret = node.Attributes["value"].Value;
-            }
-            catch { }
-            return ret;
-        }
+            var xDoc = XDocument.Load(ConfigFile);
+            var client = xDoc.Root.Element("client");
+            JavaServer = GetXmlAttrValueString(client, "Server", "address");
+            MemberServer = GetXmlAttrValueString(client, "Server3", "address");
+            BigDataServer = GetXmlAttrValueString(client, "BigData", "address");
 
-        public static bool isRound()
-        {
-            bool ret = true; ;
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/Round";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                ret = node.Attributes["value"].Value.Equals("1");
-            }
-            catch { }
-            return ret;
-        }
-
-        public static string getTakeOutTable()
-        {
-            string TakeOutTable = "60";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/TakeOutTable";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                TakeOutTable = node.Attributes["value"].Value;
-            }
-            catch { }
-            return TakeOutTable;
-        }
-        public static bool isClearCoupon()
-        {
-            bool ret = true;
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/ClearCoupon";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                ret = node.Attributes["value"].Value.Equals("1");
-            }
-            catch { }
-            return ret;
-        }
-        public static string getTakeOutTableID()
-        {
-            string TakeOutTableID = "220";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/TakeOutTableID";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                TakeOutTableID = node.Attributes["value"].Value;
-            }
-            catch { TakeOutTableID = "220"; }
-            return TakeOutTableID;
+            ApiPath = GetXmlAttrValueString(client, "ApiPath") ?? "newspicyway";
+            PrintDesign = GetXmlAttrValueString(client, "PrintDesign");
+            PosId = GetXmlAttrValueString(client, "POSID") ?? "001";
+            ManagerPwd = GetXmlAttrValueString(client, "MANAGERPWD");
+            OpenCashAddr = GetXmlAttrValueString(client, "OpenCash");
+            PortName = GetXmlAttrValueString(client, "PortName");
+            AutoClose = Convert.ToInt32(GetXmlAttrValueString(client, "AutoClose"));
+            TakeOutTable = GetXmlAttrValueString(client, "TakeOutTable");
+            TakeOutTableID = GetXmlAttrValueString(client, "TakeOutTableID");
+            IsClearCoupon = GetXmlAttrValueString(client, "ClearCoupon") == "1";
+            YhId = GetXmlAttrValueString(client, "yhid");
+            if (string.IsNullOrEmpty(YhId))
+                YhId = "f4d14744f95b4febb18385f7659199ee";
+            DoubleDishTicket = GetXmlAttrValueString(client, "doubledishticket");
+            if (string.IsNullOrEmpty(DoubleDishTicket))
+                DoubleDishTicket = "14027c4ed33a4bd19e9fd42f3cd09d7e";
+            MemberSystem = Convert.ToInt32(GetXmlAttrValueString(client, "MemberSystem"));
+            BranchId = GetXmlAttrValueString(client, "branch_id");
 
         }
+
+        private static string GetXmlAttrValueString(XElement element, string nodeName, string attrName = "value")
+        {
+            if (element == null || string.IsNullOrEmpty(nodeName) || string.IsNullOrEmpty(attrName))
+                return null;
+
+            var node = element.Element(nodeName);
+            if (node == null)
+                return null;
+
+            var attr = node.Attribute(attrName);
+            return attr != null ? attr.Value : null;
+        }
+
         public static string getRightCode(string rightid)
         {
-            string PrintDesign = rightid;
-            String rightdir = rightid.ToString();
             if (rightid.Length <= 1)
-                rightdir = "03020" + rightid.ToString();//R
-            return rightdir;
-            /*try
-            {
-                String rightdir="R03020"+rightid.ToString();
-                return rightdir;
-                XmlDocument xml = new XmlDocument();
-                xml.Load(RestClient.ConfigFile);
-                string xpath = "configuration/client/"+rightdir;
-                XmlNode node = xml.SelectSingleNode(xpath);
-                PrintDesign = node.Attributes["value"].Value;
-            }
-            catch { }
-            return PrintDesign;*/
-        }
-        public static int getAutoClose()
-        {
-            int AutoClose = 0;
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/AutoClose";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                AutoClose = int.Parse(node.Attributes["value"].Value);
-            }
-            catch { }
-            return AutoClose;
-        }
-        public static string getOpenCashIP()
-        {
-            string ip = "192.168.2.113";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/OpenCash";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                ip = node.Attributes["value"].Value;
-                if (ip.Trim().ToString().Length <= 0)
-                    ip = "192.168.2.113";
-            }
-            catch { }
-            return ip;
-        }
-        public static string getPosID()
-        {
-            string posid = "001";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/POSID";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                posid = node.Attributes["value"].Value;
-            }
-            catch { }
-            return posid;
-
-        }
-        public static string getManagerPwd()
-        {
-            string posid = "001";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/MANAGERPWD";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                posid = node.Attributes["value"].Value;
-            }
-            catch { }
-            return posid;
-
-        }
-
-        public static bool getPrintDesign()
-        {
-            string PrintDesign = "0";
-            try
-            {
-                XmlDocument xml = new XmlDocument();
-                xml.Load(ConfigFile);
-                string xpath = "configuration/client/PrintDesign";
-                XmlNode node = xml.SelectSingleNode(xpath);
-                PrintDesign = node.Attributes["value"].Value;
-            }
-            catch { }
-            return PrintDesign == "2";
+                return "03020" + rightid;
+            return rightid;
         }
 
         public static string FromUnicodeString(string str)
@@ -443,6 +274,7 @@ namespace WebServiceReference
             }
             return strResult.ToString();
         }
+
         private static string Request_Rest(string url)
         {
             HttpWebRequest request;
@@ -486,6 +318,7 @@ namespace WebServiceReference
             }
             return "0";
         }
+
         private static string Request_Rest60(string url)
         {
             HttpWebRequest request;
@@ -592,7 +425,6 @@ namespace WebServiceReference
             return "0";
         }
 
-
         /// <summary>
         ///登录
         /// </summary>
@@ -603,7 +435,7 @@ namespace WebServiceReference
         public static string Login(string userid, string password, string loginType)
         {
             string newloginType = getRightCode(loginType);
-            string address = "http://" + server + "/" + apiPath + "/padinterface/login.json";
+            string address = "http://" + JavaServer + "/" + ApiPath + "/padinterface/login.json";
             AllLog.Instance.I(string.Format("【login】 userid：{0}，loginType：{1}。", userid, loginType));
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
@@ -647,7 +479,7 @@ namespace WebServiceReference
 
         public static string GetServerTableInfo(string TableName, string UserID)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetServerTableInfo/{0}/{1} ", TableName, UserID);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/GetServerTableInfo/{0}/{1} ", TableName, UserID);
             AllLog.Instance.I(string.Format("【GetServerTableInfo】 TableName：{0}，UserID：{1}。", TableName, UserID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【GetServerTableInfo】 result：{0}。", jsonResult));
@@ -737,7 +569,7 @@ namespace WebServiceReference
 
         public static string GetOrder(string TableName, string UserID)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetOrder/{0}/{1} ", TableName, UserID);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/GetOrder/{0}/{1} ", TableName, UserID);
             AllLog.Instance.I(string.Format("【GetOrder】 TableName：{0}，UserID：{1}。", TableName, UserID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【GetOrder】 result：{0}。", jsonResult));
@@ -869,7 +701,7 @@ namespace WebServiceReference
         public static bool setMemberPrice(string UserID, string OrderID, string memberno)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice/{0}/{1}/{2}/{3}/", UserID, OrderID, ipaddress, memberno);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/setMemberPrice/{0}/{1}/{2}/{3}/", UserID, OrderID, ipaddress, memberno);
             AllLog.Instance.I(string.Format("【setMemberPrice】 OrderID：{0}，memberno：{1}。", OrderID, memberno));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【setMemberPrice】 result：{0}。", jsonResult));
@@ -889,7 +721,7 @@ namespace WebServiceReference
         public static bool setMemberPrice2(string UserID, string OrderID)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/setMemberPrice2/{0}/{1}/{2}/", UserID, OrderID, ipaddress);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/setMemberPrice2/{0}/{1}/{2}/", UserID, OrderID, ipaddress);
             AllLog.Instance.I(string.Format("【setMemberPrice2】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【setMemberPrice2】 result：{0}。", jsonResult));
@@ -902,7 +734,7 @@ namespace WebServiceReference
 
         public static bool cancelOrder(string UserID, string OrderID, string tableno)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/cancelOrder/{0}/{1}/{2}/", UserID, OrderID, tableno);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/cancelOrder/{0}/{1}/{2}/", UserID, OrderID, tableno);
             AllLog.Instance.I(string.Format("【cancelOrder】 OrderID：{0}，tableno：{1}。", OrderID, tableno));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【cancelOrder】 result：{0}。", jsonResult));
@@ -915,7 +747,7 @@ namespace WebServiceReference
 
         public static bool rebackorder(string UserID, string OrderID, ref String errStr)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/rebackorder/{0}/{1}/", UserID, OrderID);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/rebackorder/{0}/{1}/", UserID, OrderID);
             AllLog.Instance.I(string.Format("【rebackorder】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【rebackorder】 result：{0}。", jsonResult));
@@ -929,7 +761,7 @@ namespace WebServiceReference
 
         public static bool accountsorder(string UserID, string OrderID, ref String errStr)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/accountsorder/{0}/{1}/", UserID, OrderID);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/accountsorder/{0}/{1}/", UserID, OrderID);
             AllLog.Instance.I(string.Format("【accountsorder】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【accountsorder】 result：{0}。", jsonResult));
@@ -949,7 +781,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static string GetServerTableList(string OrderID, string UserID)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetServerTableList/{0}/{1} ", OrderID, UserID);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/GetServerTableList/{0}/{1} ", OrderID, UserID);
             AllLog.Instance.I(string.Format("【GetServerTableList】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【GetServerTableList】 result：{0}。", jsonResult));
@@ -1009,7 +841,7 @@ namespace WebServiceReference
         public static bool posrebacksettleorder(string UserID, string OrderID)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/posrebacksettleorder/{0}/{1}/{2}/", OrderID, UserID, ipaddress);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/posrebacksettleorder/{0}/{1}/{2}/", OrderID, UserID, ipaddress);
             AllLog.Instance.I(string.Format("【posrebacksettleorder】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【posrebacksettleorder】 result：{0}。", jsonResult));
@@ -1029,7 +861,7 @@ namespace WebServiceReference
         public static bool rebacksettleorder(string OrderID, string UserID, string reason, out string msg)
         {
             msg = null;
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/rebacksettleorder.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/rebacksettleorder.json", JavaServer);
             AllLog.Instance.I(string.Format("【rebacksettleorder】 OrderID：{0}，reason：{1}。", OrderID, reason));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1060,7 +892,7 @@ namespace WebServiceReference
 
         public static string debitamout(string OrderID)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/debitamout.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/debitamout.json", JavaServer);
             AllLog.Instance.I(string.Format("【debitamout】 OrderID：{0}。", OrderID));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1092,7 +924,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static string updateDishWeight(string tableNo, string dishid, string primarykey, string dishnum)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/updateDishWeight.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/updateDishWeight.json", JavaServer);
             AllLog.Instance.I(string.Format("【updateDishWeight】 tableNo：{0}，dishid：{1}，primarykey：{2}，dishnum：{3}。", tableNo, dishid, primarykey, dishnum));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1131,7 +963,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static string settleorder(string OrderID, string UserID, JArray payDetail)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/settleorder.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/settleorder.json", JavaServer);
             AllLog.Instance.I(string.Format("【settleorder】 OrderID：{0}。", OrderID));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1175,7 +1007,7 @@ namespace WebServiceReference
         //memberinfo 会员卡号工k手机号
         public static JObject QueryBalance(string memberinfo)
         {
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/QueryBalance/{0}/", memberinfo);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/QueryBalance/{0}/", memberinfo);
             AllLog.Instance.I(string.Format("【QueryBalance】 memberinfo：{0}。", memberinfo));
             String jsonResult = Request_Rest60(address);
             AllLog.Instance.I(string.Format("【QueryBalance】 result：{0}。", jsonResult));
@@ -1189,7 +1021,7 @@ namespace WebServiceReference
         public static bool VoidSale(string orderid, string pszPwd, string pszGPwd, out string info)
         {
             //orderid,pszPwd,pszGPwd
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/VoidSale/{0}/{1}/{2}/", orderid, pszPwd, pszGPwd);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/VoidSale/{0}/{1}/{2}/", orderid, pszPwd, pszGPwd);
             AllLog.Instance.I(string.Format("【VoidSale】 orderid：{0}。", orderid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【VoidSale】 result：{0}。", jsonResult));
@@ -1202,11 +1034,10 @@ namespace WebServiceReference
             return result.Equals("1");
         }
 
-        //memberinfo 会员卡号工k手机号
         public static JObject StoreCardDeposit(string memberinfo, double pszAmount, string pszSerial, int paytype)
         {
             int psTransType = 0;
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/StoreCardDeposit/{0}/{1}/{2}/{3}/{4}/{5}/", Globals.UserInfo.UserID, memberinfo, pszAmount, pszSerial, psTransType, paytype);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/StoreCardDeposit/{0}/{1}/{2}/{3}/{4}/{5}/", Globals.UserInfo.UserID, memberinfo, pszAmount, pszSerial, psTransType, paytype);
             AllLog.Instance.I(string.Format("【StoreCardDeposit】 memberinfo：{0}，pszAmount：{1}，pszSerial：{2}。", memberinfo, pszAmount, pszSerial));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【StoreCardDeposit】 result：{0}。", jsonResult));
@@ -1221,7 +1052,7 @@ namespace WebServiceReference
         {
             if (pszPwd.Trim().ToArray().Length <= 0)
                 pszPwd = " ";
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/CardActive/{0}/{1}/{2}/", pszTrack2, pszPwd, pszMobile);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/CardActive/{0}/{1}/{2}/", pszTrack2, pszPwd, pszMobile);
             AllLog.Instance.I(string.Format("【CardActive】 pszTrack2：{0}，pszMobile：{1}。", pszTrack2, pszMobile));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【CardActive】 result：{0}。", jsonResult));
@@ -1237,7 +1068,7 @@ namespace WebServiceReference
             if (pszTicketList.Length <= 0)
                 pszTicketList = "  ";
 
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/Sale/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}/{9}/{10}/{11}/", aUserid, orderid, pszInput, pszSerial, pszCash, pszPoint, psTransType, pszStore, pszTicketList, pszPwd, memberyhqamount, server);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/Sale/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}/{9}/{10}/{11}/", aUserid, orderid, pszInput, pszSerial, pszCash, pszPoint, psTransType, pszStore, pszTicketList, pszPwd, memberyhqamount, JavaServer);
             AllLog.Instance.I(string.Format("【Sale】 orderid：{0}，pszCash：{1}，memberyhqamount：{2}。", orderid, pszCash, memberyhqamount));
             String jsonResult = Request_Rest60(address);//会员结算的超时时间要多给点
             AllLog.Instance.I(string.Format("【Sale】 result：{0}。", jsonResult));
@@ -1250,7 +1081,7 @@ namespace WebServiceReference
         public static bool OpenUp(string aUserID, string aUserPassword, int CallType, out string reinfo)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/OpenUp/{0}/{1}/{2}/{3}/", aUserID, aUserPassword, ipaddress, CallType);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/OpenUp/{0}/{1}/{2}/{3}/", aUserID, aUserPassword, ipaddress, CallType);
             AllLog.Instance.I(string.Format("【OpenUp】 aUserID：{0}。", aUserID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【OpenUp】 result：{0}。", jsonResult));
@@ -1270,7 +1101,7 @@ namespace WebServiceReference
         {
             Preferential = Preferential.Replace(@"\", "");
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/saveOrderPreferential/{0}/{1}/{2}/{3}/", aUserid, ipaddress, OrderID, Preferential);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/saveOrderPreferential/{0}/{1}/{2}/{3}/", aUserid, ipaddress, OrderID, Preferential);
             AllLog.Instance.I(string.Format("【saveOrderPreferential】 OrderID：{0}，Preferential：{1}。", OrderID, Preferential));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【saveOrderPreferential】 result：{0}。", jsonResult));
@@ -1289,8 +1120,7 @@ namespace WebServiceReference
         public static JObject clearMachine(string userid, string username, string authorizer)
         {
             string mac = GetMacAddr();
-            string posid = getPosID();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/clearMachine/{0}/{1}/{2}/{3}/{4}/", userid, username, mac, posid, authorizer);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/clearMachine/{0}/{1}/{2}/{3}/{4}/", userid, username, mac, PosId, authorizer);
             AllLog.Instance.I(string.Format("【clearMachine】 username：{0}，authorizer：{1}。", username, authorizer));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【clearMachine】 result：{0}。", jsonResult));
@@ -1308,7 +1138,7 @@ namespace WebServiceReference
         public static JObject endWork(string userid)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/endWork/{0}/{1}/", userid, ipaddress);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/endWork/{0}/{1}/", userid, ipaddress);
             AllLog.Instance.I(string.Format("【endWork】 userid：{0}。", userid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【endWork】 result：{0}。", jsonResult));
@@ -1329,7 +1159,7 @@ namespace WebServiceReference
         public static bool InputTellerCash(string aUserID, double cachamount, int CallType, out string reinfo)
         {
             string mac = GetMacAddr();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/InputTellerCash/{0}/{1}/{2}/{3}/", aUserID, mac, cachamount, CallType);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/InputTellerCash/{0}/{1}/{2}/{3}/", aUserID, mac, cachamount, CallType);
             AllLog.Instance.I(string.Format("【InputTellerCash】 aUserID：{0}，cachamount：{1}，CallType：{2}。", aUserID, cachamount, CallType));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【InputTellerCash】 result：{0}。", jsonResult));
@@ -1347,7 +1177,7 @@ namespace WebServiceReference
         public static JArray querytables()
         {
             JArray jr = null;
-            string address = "http://" + server + "/" + apiPath + "/padinterface/querytables.json";
+            string address = "http://" + JavaServer + "/" + ApiPath + "/padinterface/querytables.json";
             if (!alreadLogAllTableInfo)
                 AllLog.Instance.I("【querytables】 begin。");
             String jsonResult = Post_Rest(address, null);
@@ -1365,7 +1195,7 @@ namespace WebServiceReference
         /// </summary>
         public static bool jdesyndata()
         {
-            string address = "http://" + server + "/" + apiPath + "/padinterface/jdesyndata.json";
+            string address = "http://" + JavaServer + "/" + ApiPath + "/padinterface/jdesyndata.json";
             AllLog.Instance.I("【jdesyndata】 begin。");
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1391,7 +1221,7 @@ namespace WebServiceReference
         public static void broadcastmsg(int msgid, string msg)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/broadcastmsg/{0}/{1}/{2}", Globals.UserInfo.UserID, msgid, msg);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/broadcastmsg/{0}/{1}/{2}", Globals.UserInfo.UserID, msgid, msg);
             AllLog.Instance.I(string.Format("【broadcastmsg】 msgid：{0}，msg：{1}。", msgid, msg));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【broadcastmsg】 result：{0}。", jsonResult));
@@ -1404,7 +1234,7 @@ namespace WebServiceReference
             if (gzinfo.Gzcode == null)
                 gzinfo.Gzcode = "0";
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/putOrder/{0}/{1}/{2}/{3}/{4}/{5}/", tableno, orderid, gzinfo.Gzcode, gzinfo.Gzname, gzinfo.Telephone, gzinfo.Relaperson);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/putOrder/{0}/{1}/{2}/{3}/{4}/{5}/", tableno, orderid, gzinfo.Gzcode, gzinfo.Gzname, gzinfo.Telephone, gzinfo.Relaperson);
             AllLog.Instance.I(string.Format("【putOrder】 tableno：{0}，orderid：{1}。", tableno, orderid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【putOrder】 result：{0}。", jsonResult));
@@ -1416,7 +1246,7 @@ namespace WebServiceReference
         {
             bool ret = false;
             sequence = "";
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getOrderSequence/{0}/", tableno);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getOrderSequence/{0}/", tableno);
             AllLog.Instance.I(string.Format("【getOrderSequence】 tableno：{0}。", tableno));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getOrderSequence】 result：{0}。", jsonResult));
@@ -1434,7 +1264,7 @@ namespace WebServiceReference
         public static void wmOrder(string orderid)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/wmOrder/{0}/", orderid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/wmOrder/{0}/", orderid);
             AllLog.Instance.I(string.Format("【wmOrder】 orderid：{0}。", orderid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【wmOrder】 result：{0}。", jsonResult));
@@ -1452,7 +1282,7 @@ namespace WebServiceReference
                 orderid = "000000";
 
             string ipaddress = GetLocalIp();
-            string address = "http://" + server + "/" + apiPath + "/padinterface/getPreferentialList.json";
+            string address = "http://" + JavaServer + "/" + ApiPath + "/padinterface/getPreferentialList.json";
             AllLog.Instance.I(string.Format("【getPreferentialList】 typeid：{0}，orderid：{1}。", typeid, orderid));
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1492,7 +1322,7 @@ namespace WebServiceReference
         {
             JArray jr = null;
             string ipaddress = GetLocalIp();
-            string address = "http://" + server + "/" + apiPath + "/padinterface/usePreferentialItem.json";
+            string address = "http://" + JavaServer + "/" + ApiPath + "/padinterface/usePreferentialItem.json";
             AllLog.Instance.I(string.Format("【usePreferentialItem】 preferentialid：{0}，disrate：{1}，orderid：{2}。", preferentialid, disrate, orderid));
             StringWriter sw = new StringWriter();  //right1
             JsonWriter writer = new JsonTextWriter(sw);
@@ -1555,7 +1385,7 @@ namespace WebServiceReference
             JArray jrOrder = null;
             JArray jrList = null;
             JArray jrJS = null;
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getOrderInfo/{0}/{1}/{2}/", aUserid, orderid, printtype);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getOrderInfo/{0}/{1}/{2}/", aUserid, orderid, printtype);
             AllLog.Instance.I(string.Format("【getOrderInfo】 orderid：{0}，printtype：{1}。", orderid, printtype));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getOrderInfo】 result：{0}。", jsonResult));
@@ -1626,8 +1456,7 @@ namespace WebServiceReference
             String JSJson = "";
             JArray jrOrder = null;
             JArray jrJS = null;
-            String posid = getPosID();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getClearMachineData/{0}/{1}/{2}/", aUserid, jsorder, posid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getClearMachineData/{0}/{1}/{2}/", aUserid, jsorder, PosId);
             AllLog.Instance.I(string.Format("【getClearMachineData】 aUserid：{0}，jsorder：{1}。", aUserid, jsorder));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getClearMachineData】 result：{0}。", jsonResult));
@@ -1673,24 +1502,26 @@ namespace WebServiceReference
             String JSJson = "";
             JArray jrOrder = null;
             JArray jrJS = null;
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/caleTableAmount/{0}/{1}/", orderid, aUserid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/caleTableAmount/{0}/{1}/", orderid, aUserid);
             AllLog.Instance.I(string.Format("【caleTableAmount】 aUserid：{0}，orderid：{1}。", aUserid, orderid));
             String jsonResult = Request_Rest60(address);
             AllLog.Instance.I(string.Format("【caleTableAmount】 result：{0}。", jsonResult));
             return jsonResult.Equals("1");
         }
 
-        public static void openCashCom()
+        public static void OpenCashCom()
         {
-            portname = "COM" + getPortName();
-            if (portname.Trim().Length > 0)
+            if (string.IsNullOrEmpty(PortName))
+                return;
+
+            sc = new SerialClass("COM" + PortName);
+            try
             {
-                sc = new SerialClass(portname);
-                try
-                {
-                    sc.openPort();
-                }
-                catch { }
+                sc.openPort();
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("端口打开钱箱方式异常。" + ex.Message);
             }
         }
 
@@ -1698,13 +1529,11 @@ namespace WebServiceReference
         {
             String jsonResult = "";
             bool ret = false;
-            portname = getPortName();
-            if (portname.Trim().Length <= 0)
+            if (string.IsNullOrEmpty(PortName))
             {
                 try
                 {
-                    string ip = getOpenCashIP();
-                    string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/OpenCash/{0}/", ip);
+                    string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/OpenCash/{0}/", OpenCashAddr);
                     AllLog.Instance.I("【OpenCash】 start。");
                     jsonResult = Request_Rest(address);
                     AllLog.Instance.I(string.Format("【OpenCash】 result：{0}。", jsonResult));
@@ -1756,7 +1585,7 @@ namespace WebServiceReference
         {
             String OrderJson = "";
             JArray jrOrder = null;
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllOrderInfo2/{0}/", aUserid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getAllOrderInfo2/{0}/", aUserid);
             AllLog.Instance.I(string.Format("【getAllOrderInfo2】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getAllOrderInfo2】 result：{0}。", jsonResult));
@@ -1790,7 +1619,7 @@ namespace WebServiceReference
             int result = 0;
             try
             {
-                string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getFoodStatus/{0}/{1}/", dishid, dishunit);
+                string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getFoodStatus/{0}/{1}/", dishid, dishunit);
                 AllLog.Instance.I(string.Format("【getFoodStatus】 dishid：{0}，dishunit：{1}。", dishid, dishunit));
                 String jsonResult = Request_Rest(address);
                 AllLog.Instance.I(string.Format("【getFoodStatus】 result：{0}。", jsonResult));
@@ -1815,7 +1644,7 @@ namespace WebServiceReference
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllGZDW/{0}/", aUserid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getAllGZDW/{0}/", aUserid);
             AllLog.Instance.I(string.Format("【getAllGZDW】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getAllGZDW】 result：{0}。", jsonResult));
@@ -1855,7 +1684,7 @@ namespace WebServiceReference
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getAllWmFood/{0}/", aUserid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getAllWmFood/{0}/", aUserid);
             if (!alreadLogAllFood)
                 AllLog.Instance.I(string.Format("【getAllWmFood】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
@@ -1898,7 +1727,7 @@ namespace WebServiceReference
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getCJFood/{0}/", aUserid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getCJFood/{0}/", aUserid);
             AllLog.Instance.I(string.Format("【getCJFood】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getCJFood】 result：{0}。", jsonResult));
@@ -1931,7 +1760,7 @@ namespace WebServiceReference
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getGroupDetail/{0}/", dishid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getGroupDetail/{0}/", dishid);
             AllLog.Instance.I(string.Format("【getGroupDetail】 dishid：{0}。", dishid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getGroupDetail】 result：{0}。", jsonResult));
@@ -1970,7 +1799,7 @@ namespace WebServiceReference
         {
             String OrderJson = "";
             JArray jrOrder = null;
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getMemberSaleInfo/{0}/{1}/", aUserid, orderid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getMemberSaleInfo/{0}/{1}/", aUserid, orderid);
             AllLog.Instance.I(string.Format("【getMemberSaleInfo】 orderid：{0}，aUserid：{1}。", orderid, aUserid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getMemberSaleInfo】 result：{0}。", jsonResult));
@@ -2009,7 +1838,7 @@ namespace WebServiceReference
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getUserRights/{0}/", aUserid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getUserRights/{0}/", aUserid);
             AllLog.Instance.I(string.Format("【getUserRights】 aUserid：{0}。", aUserid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getUserRights】 result：{0}。", jsonResult));
@@ -2041,7 +1870,7 @@ namespace WebServiceReference
         public static bool getuserrights(string userid, string password, out JObject rightData)
         {
             JObject jrOrder = null;
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/userrights.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/userrights.json", JavaServer);
             AllLog.Instance.I(string.Format("【userrights】 userid：{0}。", userid));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2072,7 +1901,7 @@ namespace WebServiceReference
 
         public static bool getMenuCombodish(string dishid, string menuid, out JObject jaData)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/getMenuCombodish.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/getMenuCombodish.json", JavaServer);
             AllLog.Instance.I(string.Format("【getMenuCombodish】 dishid：{0}，menuid：{1}。", dishid, menuid));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2116,7 +1945,7 @@ namespace WebServiceReference
             JArray jrOrder = null;
             JArray jrList = null;
             JArray jrDouble = null;
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getFavorale/{0}/{1}/", aUserid, jsorder);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getFavorale/{0}/{1}/", aUserid, jsorder);
             AllLog.Instance.I(string.Format("【getFavorale】 aUserid：{0}，jsorder：{1}。", aUserid, jsorder));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getFavorale】 result：{0}。", jsonResult));
@@ -2176,7 +2005,7 @@ namespace WebServiceReference
         //public static String founding = HTTP + URL_HOST + "/newspicyway/padinterface/setorder.json";
         public static bool setorder(string tableNo, string UserID, ref string orderid)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/setorder.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/setorder.json", JavaServer);
             AllLog.Instance.I(string.Format("【setorder】 tableNo：{0}，UserID：{1}。", tableNo, UserID));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2218,7 +2047,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool setorder(string tableNo, string UserID, int manNum, int womanNum, string ageperiod, ref string orderid)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/setorder.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/setorder.json", JavaServer);
             AllLog.Instance.I(string.Format("【setorder】 tableNo：{0}，ageperiod：{1}。", tableNo, ageperiod));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2256,7 +2085,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool getFoodType(out JArray jr)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/getMenuColumn.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/getMenuColumn.json", JavaServer);
             AllLog.Instance.I("【getMenuColumn】 start。");
             String jsonResult = Post_Rest(address, null);
             AllLog.Instance.I(string.Format("【getMenuColumn】 result：{0}。", jsonResult));
@@ -2284,7 +2113,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool discarddish(StringWriter sw)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/discarddish.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/discarddish.json", JavaServer);
             AllLog.Instance.I(string.Format("【discarddish】 sw：{0}。", sw));
             String jsonResult = Post_Rest(address, sw);
             AllLog.Instance.I(string.Format("【discarddish】 result：{0}。", jsonResult));
@@ -2300,7 +2129,7 @@ namespace WebServiceReference
 
         public static bool verifyuser(string userid)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/verifyuser.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/verifyuser.json", JavaServer);
             AllLog.Instance.I(string.Format("【verifyuser】 userid：{0}。", userid));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2623,7 +2452,7 @@ namespace WebServiceReference
 
         public static bool bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/bookorderList.json", JavaServer);
             AllLog.Instance.I(string.Format("【bookorderList】 tableid：{0}，orderid：{1}，sequence：{2}。", tableid, orderid, sequence));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2662,7 +2491,7 @@ namespace WebServiceReference
 
         public static bool getSystemSetData(string settingname, out TSetting setting)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/getSystemSetData.Json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/getSystemSetData.Json", JavaServer);
             AllLog.Instance.I(string.Format("【getSystemSetData】 settingname：{0}。", settingname));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2698,7 +2527,7 @@ namespace WebServiceReference
 
         public static bool getSystemSetData(out TRoundInfo roundJson)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/getSystemSetData.Json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/getSystemSetData.Json", JavaServer);
             AllLog.Instance.I(string.Format("【getSystemSetData】 settingname：{0}。", "ROUNDING"));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2742,7 +2571,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool cleantable(string tableno)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/cleantable.Json", server2);
+            string address = String.Format("http://{0}/" + ApiPath + "/padinterface/cleantable.Json", JavaServer);
             AllLog.Instance.I(string.Format("【cleantable】 tableno：{0}。", tableno));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2768,7 +2597,7 @@ namespace WebServiceReference
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetOrderCouponList/{0}/{1}/", orderid, aUserid);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/GetOrderCouponList/{0}/{1}/", orderid, aUserid);
             AllLog.Instance.I(string.Format("【GetOrderCouponList】 orderid：{0}。", orderid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【GetOrderCouponList】 result：{0}。", jsonResult));
@@ -2796,7 +2625,7 @@ namespace WebServiceReference
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getBackDishInfo/{0}/{1}/{2}/{3}/", orderid, dishid, dishunit, tableno);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/getBackDishInfo/{0}/{1}/{2}/{3}/", orderid, dishid, dishunit, tableno);
             AllLog.Instance.I(string.Format("【getBackDishInfo】 orderid：{0}，dishid：{1}，tableno：{2}。", orderid, dishid, tableno));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【getBackDishInfo】 result：{0}。", jsonResult));
@@ -2822,7 +2651,7 @@ namespace WebServiceReference
         public static bool deletePosOperation(string tableno)
         {
             string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/deletePosOperation/{0}", tableno);
+            string address = String.Format("http://" + MemberServer + "/datasnap/rest/TServerMethods1/deletePosOperation/{0}", tableno);
             AllLog.Instance.I(string.Format("【deletePosOperation】 tableno：{0}。", tableno));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【deletePosOperation】 result：{0}。", jsonResult));
@@ -2878,7 +2707,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static List<BankInfo> GetAllBankInfos()
         {
-            var addr = string.Format("http://{0}/" + apiPath + "/bankinterface/getallbank.json", server2);
+            var addr = string.Format("http://{0}/" + ApiPath + "/bankinterface/getallbank.json", JavaServer);
             List<BankInfo> info = new List<BankInfo>();
             try
             {

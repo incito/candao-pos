@@ -927,6 +927,7 @@ namespace Main
             //保存挂帐人信息到数据库
             string settleorderorderid = Globals.CurrOrderInfo.orderid;
         }
+
         private void setOrder(TGzInfo gzinfo)
         {
             //getTakeOutTable
@@ -941,7 +942,7 @@ namespace Main
                 Thread.Sleep(1000);
             }catch{}
             Globals.CurrOrderInfo.orderid = orderid;
-            Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
+            Globals.CurrTableInfo.tableid = RestClient.TakeOutTableID;
             if (!bookOrder())
             {
                 return;
@@ -963,48 +964,26 @@ namespace Main
             bool re = false;
             try
             {
-                re = bookorder("1");
-                if (!re)
+                int index = 0;
+                while (index < 9 && !re)
                 {
-                    re = bookorder("2");
-                }
-                if (!re)
-                {
-                    re = bookorder("3");
-                }
-                if (!re)
-                {
-                    re = bookorder("4");
-                }
-                if (!re)
-                {
-                    re = bookorder("5");
-                }
-                if (!re)
-                {
-                    re = bookorder("6");
-                }
-                if (!re)
-                {
-                    re = bookorder("7");
-                }
-                if (!re)
-                {
-                    re = bookorder("8");
+                    re = bookorder((index++).ToString());
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("下单时异常" + ex.Message);
+            }
             if (!re)
             {
-                ///把台关掉，帐单删掉,让用户重点
-                ///userid:string;orderid:string;tableno:string
+                //把台关掉，帐单删掉,让用户重点
                 RestClient.cancelOrder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo);
                 Warning("下单失败，请检查网络!");
-                ////如果会员已经成功，那么只能把雅座中的交易撤销，再重新下单
+                //如果会员已经成功，那么只能把雅座中的交易撤销，再重新下单
             }
             return re;
-
         }
+
         private bool bookorder(string sequence)
         {
             //下单

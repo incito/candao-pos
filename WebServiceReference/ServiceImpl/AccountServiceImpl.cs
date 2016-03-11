@@ -11,7 +11,7 @@ namespace WebServiceReference.ServiceImpl
     {
         public Tuple<string, string> Login(string userName, string password, EnumRightType rightType)
         {
-            string addr = "http://" + RestClient.server + "/" + RestClient.apiPath + "/padinterface/login.json";
+            string addr = "http://" + RestClient.JavaServer + "/" + RestClient.ApiPath + "/padinterface/login.json";
             var encodePwd = CEncoder.GenerateMD5Hash(password);
             var request = new AuthorizeLoginRequest(userName, encodePwd, GetRightCode(rightType));
             try
