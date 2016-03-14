@@ -17,19 +17,8 @@ namespace Library
         public static bool ShowWarning(string msg)
         {
             frmWarning frm = new frmWarning();
-            if (msg.Length > 26)
-            {
-                frm.lblMsg.Text = msg.Substring(0, 21);
-                frm.lblmsg2.Text = msg.Substring(21, msg.Length - 21);
-            }
-            else
-            {
-                frm.lblMsg.Text = msg;
-                frm.lblmsg2.Text = "";
-            }
-
+            frm.RtbMsg.Text = msg;
             frm.ShowDialog();
-
             return frm.DialogResult == DialogResult.OK;
         }
         public frmWarning()
@@ -40,16 +29,7 @@ namespace Library
         public frmWarning(string msg)
             : this()
         {
-            if (msg.Length > 26)
-            {
-                lblMsg.Text = msg.Substring(0, 21);
-                lblmsg2.Text = msg.Substring(21, msg.Length - 21);
-            }
-            else
-            {
-                lblMsg.Text = msg;
-                lblmsg2.Text = "";
-            }
+            RtbMsg.Text = msg;
         }
 
         private void frmInputText_Load(object sender, EventArgs e)
