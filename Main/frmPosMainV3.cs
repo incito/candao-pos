@@ -985,6 +985,9 @@ namespace Main
                         Globals.CurrOrderInfo.userid = Globals.UserInfo.UserID;
                         openTableAndOrder();
                         settleorderorderid = Globals.CurrOrderInfo.orderid;
+                        if (string.IsNullOrEmpty(settleorderorderid))
+                            return;
+
                         ///如果是外卖先结算会员，如果会员结算失败就不再结算帐单
                         isok = wmAccount(0);
                         if (isok)
@@ -4132,11 +4135,8 @@ namespace Main
                 float psccash = amountrmb + amountyhk + amountgz;//现金 用于会员积分
                 float pscpoint = amountjf; //使用积分付款
                 float pszStore = amounthyk;//使用储值余额付款
-                float tmppsccash = psccash - returnamount;
-                if (tmppsccash < 0)
-                {
-                    tmppsccash = 0;
-                }
+                float tmppsccash = Math.Max(0, psccash - returnamount);
+
                 //使用优惠券
                 String tickstrs = getTicklistStr();
                 if (tmppsccash > 0 || pscpoint > 0 || tickstrs.Length > 0 || amounthyk > 0)
@@ -4144,20 +4144,16 @@ namespace Main
                     try
                     {
                         string pwd = "0";
-                        if (edtPwd.Text.Trim().ToString().Length > 0)
-                        {
-                            pwd = edtPwd.Text.Substring(0, 6);
-                        }
-                        JObject json = (JObject)RestClient.MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
+                        if (edtPwd.Text.Trim().Length > 0)
+                            pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
+
+                        JObject json = RestClient.MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
                         string data = json["Data"].ToString();
                         if (data == "0")
                         {
-                            Thread.Sleep(1000);
-                            //检查调用接口有没有成功
                             try
                             {
                                 string err = json["Info"].ToString();
-
                                 if (err.IndexOf("密码不正确") > 0)
                                 {
                                     Warning("卡号:" + cardno + err);
@@ -4169,15 +4165,19 @@ namespace Main
                                     Warning(err);
                                 }
                             }
-                            catch { }
+                            catch (Exception ex)
+                            {
+                                AllLog.Instance.E(ex);
+                            }
                         }
                         else
                         {
                             isok = true;
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        AllLog.Instance.E(ex);
                         Warning("会员积分，结算失败!");
                     }
                 }
@@ -4186,62 +4186,40 @@ namespace Main
                     isok = true;
                 }
             }
-            else
-            {
-                isok = true;
-            }
+
             if (isok)
             {
                 //下单
                 bool re = false;
                 try
                 {
-                    re = bookorder("1", ordertype);
-                    if (!re)
+                    int index = 1;
+                    do
                     {
-                        re = bookorder("2", ordertype);
-                    }
-                    if (!re)
-                    {
-                        re = bookorder("3", ordertype);
-                    }
-                    if (!re)
-                    {
-                        re = bookorder("4", ordertype);
-                    }
-                    if (!re)
-                    {
-                        re = bookorder("5", ordertype);
-                    }
-                    if (!re)
-                    {
-                        re = bookorder("6", ordertype);
-                    }
-                    if (!re)
-                    {
-                        re = bookorder("7", ordertype);
-                    }
-                    if (!re)
-                    {
-                        re = bookorder("8", ordertype);
-                    }
+                        re = bookorder(index.ToString(), ordertype);
+                    } while (index++ < 9 && !re);//下单失败多尝试几次。
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    AllLog.Instance.E(ex);
+                }
+
                 if (!re)
                 {
-                    ///把台关掉，帐单删掉,让用户重点
-                    ///userid:string;orderid:string;tableno:string
+                    //把台关掉，帐单删掉,让用户重点
                     isok = false;
                     RestClient.cancelOrder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, currtableno);
                     Warning("下单失败，请检查网络!");
                     ////如果会员已经成功，那么只能把雅座中的交易撤销，再重新下单
                 }
-                RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。
+
                 if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray()).Equals("0"))
                 {
                     isok = false;
                     Warning("结算失败...");
                 }
+
+                RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。
             }
             else
             {
@@ -4362,7 +4340,7 @@ namespace Main
                     try
                     {
                         int localSequence = int.Parse(IniPos.getPosIniValue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, "0"));
-                        if (localSequence != int.Parse(serverSequence))
+                        if (localSequence < int.Parse(serverSequence))
                         {
                             IniPos.setPosIniVlaue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, serverSequence);
                         }
