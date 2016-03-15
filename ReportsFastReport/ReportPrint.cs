@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using WebServiceReference;
 using Library;
 using Models;
+using System.Threading;
 
 namespace ReportsFastReport
 {
@@ -32,7 +33,13 @@ namespace ReportsFastReport
     {
         private static ReportAmount ramount;
         private static Report rptReport = new Report();
-        private static frmPrintProgress frmProgress = new frmPrintProgress();
+        private static frmPrintProgress frmProgress;// = new frmPrintProgress();
+
+        public static void Init()
+        {
+            frmProgress = new frmPrintProgress();
+        }
+
         /// <summary>
         /// 打印预结单2
         /// </summary>
@@ -420,8 +427,8 @@ namespace ReportsFastReport
             try
             {
                 //显示打印对话框
-                frmProgress.showFrm();
-                Application.DoEvents();
+                ShowReportFrm();
+                //Application.DoEvents();
                 //Globals.Delay(10000);
                 rtp.PrintSettings.ShowDialog = false;
                 FastReport.EnvironmentSettings es = new EnvironmentSettings();
@@ -432,7 +439,9 @@ namespace ReportsFastReport
                 {
                     (rtp.FindObject("edtPrint") as RichObject).Text = "打印人：" + Globals.UserInfo.UserName;
                 }
-                catch { }
+                catch
+                {
+                }
                 AddedtValue(ref rtp, "edtorderid", ramount.orderid);
                 AddedtValue(ref rtp, "edtAmountv", ramount.amount.ToString("f2"));
                 AddedtValue(ref rtp, "edtysAmount", ramount.ysAmount.ToString("f2"));
@@ -441,61 +450,101 @@ namespace ReportsFastReport
                 AddedtValue(ref rtp, "edtamountym", ramount.amountym.ToString("f2"));
                 AddedtValue(ref rtp, "edtamountf", (0 - (ramount.amountym + ramount.amountgz)).ToString("f2"));
                 setReportSetText(ref rtp);
-                if (Globals.roundinfo.Itemid.Equals("1"))//四舍五入
+                if (Globals.roundinfo.Itemid.Equals("1")) //四舍五入
                 {
                     AddedtValue(ref rtp, "edtRound2", "四舍五入：");
                     AddedtValue(ref rtp, "edtmlAmount", ramount.amountround.ToString("f2"));
                 }
-                else
-                    if (Globals.roundinfo.Itemid.Equals("2"))
-                    {
-                        AddedtValue(ref rtp, "edtRound2", "抹零：");
-                        AddedtValue(ref rtp, "edtmlAmount", ramount.mlAmount.ToString("f2"));
-                    }
+                else if (Globals.roundinfo.Itemid.Equals("2"))
+                {
+                    AddedtValue(ref rtp, "edtRound2", "抹零：");
+                    AddedtValue(ref rtp, "edtmlAmount", ramount.mlAmount.ToString("f2"));
+                }
 
                 if (RestClient.getShowReport())
                 {
-                    frmProgress.hideFrm();
+                    HideReportFrm();
                     try
                     {
                         rtp.Show();
                     }
-                    catch (Exception e) { MessageBox.Show(e.Message); }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
+                }
+                else if (RestClient.getPrintDesign())
+                {
+                    HideReportFrm();
+                    try
+                    {
+                        rtp.Prepare(); //准备工作
+                        rtp.Design();
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
+
                 }
                 else
-                    if (RestClient.getPrintDesign())
+                {
+                    try
                     {
-                        frmProgress.hideFrm();
-                        try
+                        rtp.PrintSettings.Copies = printcount;
+                        rtp.Prepare(); //准备工作
+
+                        for (int i = 0; i <= printcount - 1; i++)
                         {
-                            rtp.Prepare();//准备工作
-                            rtp.Design();
+                            rtp.PrintPrepared();
                         }
-                        catch (Exception e) { MessageBox.Show(e.Message); }
 
                     }
-                    else
+                    catch (Exception e)
                     {
-                        try
-                        {
-                            rtp.PrintSettings.Copies = printcount;
-                            rtp.Prepare();//准备工作
-
-                            for (int i = 0; i <= printcount - 1; i++)
-                            {
-                                rtp.PrintPrepared();
-                            }
-
-                        }
-                        catch (Exception e) { MessageBox.Show(e.Message); }
+                        MessageBox.Show(e.Message);
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E(ex);
             }
             finally
             {
-                //关闭打印对话框
-                frmProgress.hideFrm();
+                HideReportFrm();
             }
         }
+
+        private static void ShowReportFrm()
+        {
+            if (frmProgress.IsHandleCreated && frmProgress.InvokeRequired)
+            {
+                frmProgress.BeginInvoke((Action)delegate
+                {
+                    frmProgress.showFrm();
+                    frmProgress.Update();
+                });
+                return;
+            }
+
+            frmProgress.showFrm();
+        }
+
+        private static void HideReportFrm()
+        {
+            if (frmProgress.IsHandleCreated)
+            {
+                if (frmProgress.InvokeRequired)
+                {
+                    frmProgress.BeginInvoke((Action)delegate { frmProgress.hideFrm(); });
+                    return;
+                }
+            }
+
+            frmProgress.hideFrm();
+        }
+
         private static void InitializeReport(DataSet ds, ref Report rpt, String tableName)
         {
             rpt.PrintSettings.ShowDialog = false;
