@@ -244,7 +244,7 @@ namespace Main
                 {
                     btnGetIdentCode.Enabled = false;
                     valicode = "";
-                    CanDaoMemberClient.sendAccountByMobile(Globals.branch_id, "", edtMobile.Text, out valicode);
+                    CanDaoMemberClient.SendAccountByMobile(Globals.branch_id, "", edtMobile.Text, out valicode);
                     if (valicode.Equals(""))
                     {
                         Warning("∑¢ÀÕ ß∞‹£¨«Î÷ÿ ‘£°");

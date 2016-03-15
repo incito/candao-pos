@@ -39,29 +39,31 @@ namespace WebServiceReference
         /// <summary>
         /// 操作员登录
         /// </summary>
-        /// <param name="branch_id"></param>
-        /// <param name="UserID"></param>
+        /// <param name="branchId"></param>
+        /// <param name="userId"></param>
         /// <param name="password"></param>
-        /// <param name="LoginType"></param>
+        /// <param name="loginType"></param>
         /// <returns></returns>
-        public static TCandaoRetBase OpLogin(string branch_id,string UserID,string password,int LoginType)
+        public static TCandaoRetBase OpLogin(string branchId, string userId, string password, int loginType)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
+            AllLog.Instance.I(string.Format("【OpLogin】 branchId：{0}，userId：{1}，loginType：{2}。", branchId, userId, loginType));
             string address = String.Format("http://{0}/padinterface/getMenuCombodish.json", WebServiceReference.Candaomemberserver);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
             writer.WritePropertyName("branch_id");
-            writer.WriteValue(branch_id);
+            writer.WriteValue(branchId);
             writer.WritePropertyName("userid");
-            writer.WriteValue(UserID);
+            writer.WriteValue(userId);
             writer.WritePropertyName("password");
             writer.WriteValue(password);
             writer.WritePropertyName("LoginType");
-            writer.WriteValue(LoginType);
+            writer.WriteValue(loginType);
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【OpLogin】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -84,6 +86,7 @@ namespace WebServiceReference
         public static TCandaoRetBase MemberReg(TCandaoRegMemberInfo memberinfo)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
+            AllLog.Instance.I(string.Format("【MemberReg】 branchId：{0}，mobile：{1}，cardno：{2}。", memberinfo.Branch_id, memberinfo.Mobile, memberinfo.Cardno));
             string address = String.Format("http://{0}/member/memberManager/save.json", WebServiceReference.Candaomemberserver);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -108,13 +111,14 @@ namespace WebServiceReference
             //writer.WriteValue(memberinfo.Regtype);
             writer.WritePropertyName("member_avatar");
             writer.WriteValue(memberinfo.Member_avatar);
-            writeObject(ref writer, "channel", "0");
-            writeObject(ref writer, "tenant_id", "");
-            writeObject(ref writer, "createuser", Globals.UserInfo.UserName);
-            writeObject(ref writer, "updateuser", "");
+            WriteObject(ref writer, "channel", "0");
+            WriteObject(ref writer, "tenant_id", "");
+            WriteObject(ref writer, "createuser", Globals.UserInfo.UserName);
+            WriteObject(ref writer, "updateuser", "");
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【MemberReg】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -162,7 +166,9 @@ namespace WebServiceReference
             writer.WriteValue(membersale.Fticketlist);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【MemberSale】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【MemberSale】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -178,7 +184,7 @@ namespace WebServiceReference
             {
                 if (ret.Retcode.Equals("1"))
                 {
-                    ret.Ret = false;  return ret;
+                    ret.Ret = false; return ret;
                 }
             }
             catch { }
@@ -192,7 +198,7 @@ namespace WebServiceReference
             ret.Decintegral = decimal.Parse(ja["NetAmount"].ToString());
             return ret;
         }
-        
+
         /// <summary>
         /// 取消交易
         /// </summary>
@@ -221,7 +227,9 @@ namespace WebServiceReference
             writer.WriteValue(voidsale.Superpwd);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【VoidSale】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【VoidSale】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -250,7 +258,7 @@ namespace WebServiceReference
         /// <param name="cardno"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static TCandaoMemberInfo QueryBalance(string branch_id,string securitycode,string cardno,string password)
+        public static TCandaoMemberInfo QueryBalance(string branch_id, string securitycode, string cardno, string password)
         {
             TCandaoMemberInfo ret = new TCandaoMemberInfo();
             string address = String.Format("http://{0}/member/memberManager/findByParams", WebServiceReference.Candaomemberserver);
@@ -267,7 +275,9 @@ namespace WebServiceReference
             writer.WriteValue(password);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【QueryBalance】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【QueryBalance】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -280,7 +290,7 @@ namespace WebServiceReference
             {
                 String Retcode = ja["Retcode"].ToString();
                 String RetInfo = ja["RetInfo"].ToString();
-                if(Retcode.Equals("1"))
+                if (Retcode.Equals("1"))
                 {
                     ret.Ret = false; ret.Retcode = "1"; ret.Retinfo = RetInfo; return ret;
                 }
@@ -299,8 +309,8 @@ namespace WebServiceReference
             ret.Retcode = "0";
             ret.Ret = ret.Retcode.Equals("0");
             ret.Retinfo = "";
-            ret.Storecardbalance=decimal.Parse(ja["StoreCardBalance"].ToString());
-            ret.Integraloverall=decimal.Parse(ja["IntegralOverall"].ToString());
+            ret.Storecardbalance = decimal.Parse(ja["StoreCardBalance"].ToString());
+            ret.Integraloverall = decimal.Parse(ja["IntegralOverall"].ToString());
             try
             {
                 ret.Couponsoverall = decimal.Parse(ja["CouponsOverall"].ToString());
@@ -326,7 +336,7 @@ namespace WebServiceReference
             JObject jaCard = (JObject)jr[0];
             ret.Mcard = jaCard["cardno"].ToString();
             ret.Mobile = ja["mobile"].ToString();
-            ret.Name=ja["name"].ToString();
+            ret.Name = ja["name"].ToString();
             try
             {
                 ret.Gender = int.Parse(ja["gender"].ToString());
@@ -372,7 +382,9 @@ namespace WebServiceReference
             writer.WriteValue(chargetype.ToString());
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【StoreCardDeposit】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【StoreCardDeposit】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -403,7 +415,7 @@ namespace WebServiceReference
         /// <param name="fmemo"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static TCandaoRet_CardLose CardLose(string branch_id, string securitycode, string cardno, string fmemo,string password)
+        public static TCandaoRet_CardLose CardLose(string branch_id, string securitycode, string cardno, string fmemo, string password)
         {
             TCandaoRet_CardLose ret = new TCandaoRet_CardLose();
             string address = String.Format("http://{0}/member/deal/CardLose.json", WebServiceReference.Candaomemberserver);
@@ -422,7 +434,9 @@ namespace WebServiceReference
             writer.WriteValue(fmemo);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【CardLose】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【CardLose】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -448,7 +462,7 @@ namespace WebServiceReference
         /// <param name="cardno"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static TCandaoRetBase ChangePwd(string branch_id, string securitycode, string cardno,string password )
+        public static TCandaoRetBase ChangePwd(string branch_id, string securitycode, string cardno, string password)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
             string address = String.Format("http://{0}/" + RestClient.apiPath + "/padinterface/ChangePwd.json", WebServiceReference.Candaomemberserver);
@@ -465,7 +479,9 @@ namespace WebServiceReference
             writer.WriteValue(cardno);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【ChangePwd】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【ChangePwd】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -489,7 +505,7 @@ namespace WebServiceReference
         /// <param name="password"></param>
         /// <param name="fmemo"></param>
         /// <returns></returns>
-        public static TCandaoRetBase UnCardLose(string branch_id, string securitycode, string cardno, string password,string fmemo)
+        public static TCandaoRetBase UnCardLose(string branch_id, string securitycode, string cardno, string password, string fmemo)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
             string address = String.Format("http://{0}/" + RestClient.apiPath + "/padinterface/UnCardLose.json", WebServiceReference.Candaomemberserver);
@@ -508,7 +524,9 @@ namespace WebServiceReference
             writer.WriteValue(fmemo);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【UnCardLose】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【UnCardLose】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -530,7 +548,7 @@ namespace WebServiceReference
         /// <param name="securitycode"></param>
         /// <param name="userid"></param>
         /// <returns></returns>
-        public static TCandaoRetBase Logout(string branch_id, string securitycode,string userid)
+        public static TCandaoRetBase Logout(string branch_id, string securitycode, string userid)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
             string address = String.Format("http://{0}/" + RestClient.apiPath + "/padinterface/Logout.json", WebServiceReference.Candaomemberserver);
@@ -545,7 +563,9 @@ namespace WebServiceReference
             writer.WriteValue(userid);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【Logout】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【Logout】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -592,7 +612,9 @@ namespace WebServiceReference
             writer.WriteValue(memberinfo.Member_avatar);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【MemberEdit】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【MemberEdit】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -640,7 +662,9 @@ namespace WebServiceReference
             writer.WriteValue(fmemo);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【CardCancellation】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【CardCancellation】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -670,7 +694,7 @@ namespace WebServiceReference
         /// <param name="securitycode"></param>
         /// <param name="mobile"></param>
         /// <returns></returns>
-        public static TCandaoRetBase sendAccountByMobile(string branch_id, string securitycode, string mobile, out string valicode)
+        public static TCandaoRetBase SendAccountByMobile(string branch_id, string securitycode, string mobile, out string valicode)
         {
             valicode = "";
             TCandaoRetBase ret = new TCandaoRetBase();
@@ -686,7 +710,9 @@ namespace WebServiceReference
             writer.WriteValue(mobile);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【SendAccountByMobile】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【SendAccountByMobile】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -734,6 +760,7 @@ namespace WebServiceReference
             branch_id = ja["branch_id"].ToString();
             return ret;
         }
+
         public static TCandaoRetBase MemberLogin(string orderid, string mobile)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
@@ -747,7 +774,9 @@ namespace WebServiceReference
             writer.WriteValue(mobile);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【MemberLogin】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【MemberLogin】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -761,6 +790,7 @@ namespace WebServiceReference
             ret.Retinfo = ja["RetInfo"].ToString();
             return ret;
         }
+
         public static TCandaoRetBase MemberLogout(string orderid, string mobile)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
@@ -774,7 +804,9 @@ namespace WebServiceReference
             writer.WriteValue(mobile);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【MemberLogout】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【MemberLogout】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -799,7 +831,9 @@ namespace WebServiceReference
             writer.WriteValue(orderid);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【DeleteOrderMember】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【DeleteOrderMember】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -855,7 +889,9 @@ namespace WebServiceReference
             writer.WriteValue(ordermemberinfo.Inflated1);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【AddOrderMember】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【AddOrderMember】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -869,7 +905,8 @@ namespace WebServiceReference
             ret.Retinfo = ja["RetInfo"].ToString();
             return ret;
         }
-        public static TCandaoRetBase getOrderMember(string orderid)
+
+        public static TCandaoRetBase GetOrderMember(string orderid)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
             string address = String.Format("http://{0}/newspicyway/member/GetOrderMember.json", RestClient.server2);
@@ -880,7 +917,9 @@ namespace WebServiceReference
             writer.WriteValue(orderid);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【getOrderMember】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【getOrderMember】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -900,17 +939,15 @@ namespace WebServiceReference
             catch { }
             return ret;
         }
-           /*
-           18、AddOrderMember.json
-           20、GetOrderMember.json 
-            */
+
         /// <summary>
         /// 手机号重复校验
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="securitycode"></param>
+        /// <param name="mobile"></param>
         /// <returns></returns>
-        public static TCandaoRetBase validateTbMemberManager(string branch_id, string securitycode, string mobile)
+        public static TCandaoRetBase ValidateTbMemberManager(string branchId, string securitycode, string mobile)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
             string address = String.Format("http://{0}/member/memberManager/validateTbMemberManager", WebServiceReference.Candaomemberserver);
@@ -918,14 +955,16 @@ namespace WebServiceReference
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
             writer.WritePropertyName("branch_id");
-            writer.WriteValue(branch_id);
+            writer.WriteValue(branchId);
             writer.WritePropertyName("securityCode");
             writer.WriteValue(securitycode);
             writer.WritePropertyName("mobile");
             writer.WriteValue(mobile);
             writer.WriteEndObject();
             writer.Flush();
+            AllLog.Instance.I(string.Format("【validateTbMemberManager】 reqeust：{0}。", sw));
             String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【validateTbMemberManager】 result：{0}。", jsonResult));
             JObject ja = null;
             ret.Ret = true;
             try
@@ -939,86 +978,13 @@ namespace WebServiceReference
             ret.Retinfo = ja["RetInfo"].ToString();
             return ret;
         }
-        public static void writeObject(ref JsonWriter writer, string PropertyName, string value)
+
+        public static void WriteObject(ref JsonWriter writer, string propertyName, string value)
         {
             if (value == null)
                 value = "";
-            writer.WritePropertyName(PropertyName);
+            writer.WritePropertyName(propertyName);
             writer.WriteValue(value);
-        }
-        public static void writeObject(ref JsonWriter writer, string PropertyName, double value)
-        {
-            if (value == null)
-                value = 0;
-            writer.WritePropertyName(PropertyName);
-            writer.WriteValue(value);
-        }
-        public static void writeObject(ref JsonWriter writer, string PropertyName, int value)
-        {
-            if (value == null)
-                value = 0;
-            writer.WritePropertyName(PropertyName);
-            writer.WriteValue(value);
-        }
-
-        /// 时间戳转为C#格式时间
-        /// </summary>
-        /// <param name=”timeStamp”></param>
-        /// <returns></returns>
-        private static DateTime GetStampTime(string timeStamp)
-        {
-            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
-            Int64 lTime = Int64.Parse(timeStamp + "0000000");// 
-            TimeSpan toNow = new TimeSpan(lTime); return dtStart.Add(toNow);
         }
     }
 }
-
-
-/*
-{
-    "birthday": "815328000000",
-    "CardLevel": "",
-    "RegDate": "1446540549000",
-    "member_avatar": "",
-    "CouponsOverall": "",
-    "CardList": [
-        {
-            "birthday": "815328000000",
-            "updatetime": "",
-            "status": "1",
-            "branch_addr": "",
-            "tenant_id": "100013",
-            "member_avatar": "",
-            "branch_phone": "",
-            "password": "",
-            "updateuser": "",
-            "member_id": "1111291",
-            "member_address": "",
-            "createtime": "1446540549000",
-            "id": "1111291",
-            "createuser": "李晓敏",
-            "level": "",
-            "card_type": "",
-            "name": "1",
-            "gender": "0",
-            "cardno": "100013000004",
-            "valid_date": "",
-            "channel": "0",
-            "branch_id": "586313",
-            "branch_name": "",
-            "mobile": "18625208281"
-        }
-    ],
-    "MemberAddress": "",
-    "StoreCardBalance": "0.0",
-    "TraceCode": "",
-    "MCard": "",
-    "TicketInfo": "",
-    "name": "1",
-    "gender": "0",
-    "IntegralOverall": "0.0",
-    "CardType": "",
-    "mobile": "18625208281"
-}
-*/

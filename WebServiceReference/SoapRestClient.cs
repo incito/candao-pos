@@ -2819,7 +2819,7 @@ namespace WebServiceReference
             return jrorder != null;
         }
 
-        public static bool deletePosOperation(string tableno)
+        public static bool DeletePosOperation(string tableno)
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/deletePosOperation/{0}", tableno);
