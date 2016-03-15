@@ -1677,7 +1677,7 @@ namespace Main
                 if (membersystem == 1)
                 {
                     //餐道反结算会员要先从java后台调用接口获取当前帐单会员结算信息，如果有可以反结的会员结算信息才反结+++++++++
-                    TCandaoRetBase ret = CanDaoMemberClient.getOrderMember(Globals.CurrOrderInfo.orderid);
+                    TCandaoRetBase ret = CanDaoMemberClient.GetOrderMember(Globals.CurrOrderInfo.orderid);
                     if (ret.Ret)
                     {
                         if (!VoidSale_CanDao(out info, ret))
@@ -3920,42 +3920,39 @@ namespace Main
                 {
                     num = 0;
                     if (!ShowInputNum("请输入退菜数量!", "退菜数量：", out num, maxnum))
-                    {
                         return;
-                    }
                 }
-                //调用接口减餐具
-                string discardUserId = "";
+
+                string discardUserId;
                 if (!frmAuthorize.ShowAuthorize("退菜权限验证", Globals.UserInfo.UserID, "030102", out discardUserId))
-                {
                     return;
-                }
+
                 //调用退菜接口
                 double backnum = num;
                 string discardReason = "";
-                //string orderNo,string tableno,string discardUserId,string userid,DataTable dt,double backnum
-                if (BackDish.backDish(Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo, discardUserId, Globals.UserInfo.UserID, dt, backnum, discardReason))
+                var result = BackDish.backDish(Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo, discardUserId, Globals.UserInfo.UserID, dt, backnum, discardReason);
+
+                opentable2();
+                if (!result)
                 {
-                    opentable2();
-                    try
-                    {
-                        RestClient.deletePosOperation(Globals.CurrTableInfo.tableNo);
-                    }
-                    catch { }
-                    Warning("退菜完成!");
-                    return;
-                }
-                else
-                {
-                    opentable2();
                     Warning("退菜失败!");
                     return;
                 }
 
+                msgorderid = Globals.CurrOrderInfo.orderid; //广播消息到PAD同步菜单
+                ThreadPool.QueueUserWorkItem(t => { broadMsg2201(); });
+                try
+                {
+                    RestClient.DeletePosOperation(Globals.CurrTableInfo.tableNo);
+                }
+                catch(Exception ex)
+                {
+                    AllLog.Instance.E(ex);
+                }
+                Warning("退菜完成!");
             }
-
-
         }
+
         public void ShowAccounts(object serder, EventArgs e, int ordertype)
         {
             //ordertype=1赠送
