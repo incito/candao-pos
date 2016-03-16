@@ -137,6 +137,11 @@ namespace Common
         /// </summary>
         public static List<BankInfo> BankInfos { get; set; }
 
+        /// <summary>
+        /// 分店信息。
+        /// </summary>
+        public static BranchInfo BranchInfo { get; set; }
+
         //客用单
         public static DataTable CustPrintTable = new DataTable();
         /// <summary>

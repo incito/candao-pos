@@ -15,6 +15,24 @@ namespace WebServiceReference.ServiceImpl
 {
     public class RestaurantServiceImpl : IRestaurantService
     {
+        public Tuple<string, BranchInfo> GetBranchInfo()
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/getbranchinfo.json", RestClient.JavaServer, RestClient.ApiPath);
+                var result = HttpHelper.HttpGet<GetBranchInfoResponse>(addr);
+                if (result.IsSuccess)//这个接口1是成功，0是失败。
+                    return new Tuple<string, BranchInfo>(result.msg ?? "获取分店信息失败。", null);
+
+                var data = DataConverter.ToBranchInfo(result.data);
+                return new Tuple<string, BranchInfo>(null, data);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, BranchInfo>(ex.Message, null);
+            }
+        }
+
         public string Clearner(string userId, string userName)
         {
             var paramList = new List<string>

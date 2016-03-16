@@ -13,6 +13,11 @@ namespace Models.Response
         public string result { get; set; }
 
         /// <summary>
+        /// 错误信息。
+        /// </summary>
+        public string msg { get; set; }
+
+        /// <summary>
         /// 是否登录成功。
         /// </summary>
         public bool IsSuccess

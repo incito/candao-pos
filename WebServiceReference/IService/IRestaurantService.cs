@@ -7,6 +7,11 @@ namespace WebServiceReference.IService
 {
     public interface IRestaurantService
     {
+        /// <summary>
+        /// 获取分店信息。
+        /// </summary>
+        /// <returns></returns>
+        Tuple<string, BranchInfo> GetBranchInfo();
 
         /// <summary>
         /// 清机。

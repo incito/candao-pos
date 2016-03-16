@@ -5,12 +5,13 @@
     /// </summary>
     public class BigDataRegisterRequest : BigDataRequest<BigDataRegisterBody>
     {
-        public BigDataRegisterRequest(string branchId, string appkey)
+        public BigDataRegisterRequest(string branchId, string branchName, string appkey)
         {
             head.method = "appsList";
             var body = new BigDataRegisterBody
             {
                 appkey = appkey,
+                appname = branchName,
                 stores_id = branchId
             };
             data.Add(body);

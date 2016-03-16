@@ -14,7 +14,7 @@ namespace WebServiceReference.ServiceImpl
         public string RegisterPos()
         {
             var addr = "http://" + RestClient.BigDataServer;
-            var request = new BigDataRegisterRequest(RestClient.BranchId, RestClient.Mac);
+            var request = new BigDataRegisterRequest(Globals.BranchInfo.BranchId, Globals.BranchInfo.BranchName, RestClient.Mac);
             try
             {
                 var result = HttpHelper.HttpPost<BigDataResponse>(addr, request);

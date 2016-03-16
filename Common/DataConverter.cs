@@ -696,5 +696,14 @@ namespace Common
             };
         }
 
+        public static BranchInfo ToBranchInfo(BranchInfoData data)
+        {
+            return new BranchInfo
+            {
+                BranchId = data.branchid,
+                BranchAddress = data.branchaddress,
+                BranchName = data.branchname,
+            };
+        } 
     }
 }

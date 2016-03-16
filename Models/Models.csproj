@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="BankInfo.cs" />
     <Compile Include="Bill_Order.cs" />
+    <Compile Include="BranchInfo.cs" />
     <Compile Include="CandaoMember\TCandaoMemberCardInfo.cs" />
     <Compile Include="CandaoMember\TCandaoMemberInfo.cs" />
     <Compile Include="CandaoMember\TCandaoRegMemberInfo.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Response\AuthorizeLoginResponse.cs" />
     <Compile Include="Response\BigDataResponse.cs" />
     <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />
+    <Compile Include="Response\GetBranchInfoResponse.cs" />
     <Compile Include="Response\GetRestaurantTradeTimeResponse.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\JavaResponse.cs" />
