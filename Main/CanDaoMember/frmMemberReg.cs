@@ -115,7 +115,7 @@ namespace Main
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                TCandaoRetBase ret2 = CanDaoMemberClient.validateTbMemberManager(Globals.branch_id, "", edtMobile.Text);
+                TCandaoRetBase ret2 = CanDaoMemberClient.ValidateTbMemberManager(Globals.branch_id, "", edtMobile.Text);
                 if(!ret2.Retcode.Equals("0"))
                 {
                     Warning(ret2.Retinfo);
@@ -266,7 +266,7 @@ namespace Main
                 {
                     btnGetIdentCode.Enabled = false;
                     valicode = "";
-                    CanDaoMemberClient.sendAccountByMobile(Globals.branch_id, "", edtMobile.Text, out valicode);
+                    CanDaoMemberClient.SendAccountByMobile(Globals.branch_id, "", edtMobile.Text, out valicode);
                     if (valicode.Equals(""))
                     {
                         Warning("∑¢ÀÕ ß∞‹£¨«Î÷ÿ ‘£°");

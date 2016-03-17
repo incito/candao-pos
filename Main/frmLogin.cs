@@ -24,6 +24,7 @@ using Common;
 using Library;
 using System.IO;
 using Models;
+using Models.Enum;
 using WebServiceReference;
 using ReportsFastReport;
 using Newtonsoft.Json;
@@ -165,7 +166,7 @@ namespace Main
              string dataSetDB = "user";// GetDataSetDBName();
              
              //LoginUser loginUser = new LoginUser(userID, password, dataSetID, dataSetDB);
-             string loginReturn=RestClient.Login(userID, password,((int)eRightType.right1).ToString());
+             string loginReturn=RestClient.Login(userID, password,((int)EnumRightType.Login).ToString());
              
              if (loginReturn=="0") //调用登录策略
              {

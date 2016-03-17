@@ -94,7 +94,6 @@ namespace Main
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1008, 78);
             this.panel1.TabIndex = 235;
-            this.panel1.DoubleClick += new System.EventHandler(this.panel1_DoubleClick);
             // 
             // pictureBox3
             // 
@@ -209,7 +208,6 @@ namespace Main
             this.pnlState3.Size = new System.Drawing.Size(75, 38);
             this.pnlState3.TabIndex = 237;
             this.pnlState3.Visible = false;
-            this.pnlState3.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlState3_Paint);
             // 
             // lblState3
             // 
@@ -321,12 +319,11 @@ namespace Main
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(1008, 708);
             this.pnlMain.TabIndex = 233;
-            this.pnlMain.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
             // 
             // ucTable1
             // 
             this.ucTable1.BackColor = System.Drawing.Color.LightSalmon;
-            this.ucTable1.Location = new System.Drawing.Point(9, 80);
+            this.ucTable1.Location = new System.Drawing.Point(10, 81);
             this.ucTable1.Name = "ucTable1";
             this.ucTable1.Size = new System.Drawing.Size(87, 57);
             this.ucTable1.TabIndex = 0;

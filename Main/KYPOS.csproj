@@ -157,6 +157,7 @@
     <Compile Include="CanDaoMember\frmMemberQuery.Designer.cs">
       <DependentUpon>frmMemberQuery.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommonHelper.cs" />
     <Compile Include="frmCombodish.cs">
       <SubType>Form</SubType>
     </Compile>

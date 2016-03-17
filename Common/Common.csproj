@@ -46,7 +46,16 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Lib\System.Net.Http.WebRequest.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -59,15 +68,18 @@
     <Compile Include="ConvertEx.cs" />
     <Compile Include="CustomException.cs" />
     <Compile Include="DataConverter.cs" />
+    <Compile Include="DataServerResultHelper.cs" />
     <Compile Include="DetailButtons.cs" />
     <Compile Include="Encoder.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HexCryptString.cs" />
+    <Compile Include="HttpHelper.cs" />
     <Compile Include="IniFileMgr.cs" />
     <Compile Include="IniPos.cs" />
     <Compile Include="ItemObject.cs" />
     <Compile Include="IWriteSQLConfigValue.cs" />
     <Compile Include="JsonClass.cs" />
+    <Compile Include="JsonHelper.cs" />
     <Compile Include="Loginer.cs" />
     <Compile Include="MenuType.cs" />
     <Compile Include="Msg.cs" />
@@ -90,8 +102,10 @@
     <ProjectReference Include="..\NewtonsoftJson\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj">
       <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
       <Name>Newtonsoft.Json.Net40</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

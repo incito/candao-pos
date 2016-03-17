@@ -618,7 +618,6 @@
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(334, 515);
             this.panel6.TabIndex = 24;
-            this.panel6.Paint += new System.Windows.Forms.PaintEventHandler(this.panel6_Paint);
             // 
             // pnlMore
             // 
@@ -1256,7 +1255,6 @@
             this.pnlCash.Name = "pnlCash";
             this.pnlCash.Size = new System.Drawing.Size(674, 627);
             this.pnlCash.TabIndex = 1;
-            this.pnlCash.Paint += new System.Windows.Forms.PaintEventHandler(this.panel9_Paint);
             // 
             // lblInvoice
             // 
@@ -1575,6 +1573,7 @@
             // 
             // btnyh3
             // 
+            this.btnyh3.BackColor = System.Drawing.Color.White;
             this.btnyh3.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh3.Font = new System.Drawing.Font("Tahoma", 10F);
@@ -1584,7 +1583,7 @@
             this.btnyh3.Size = new System.Drawing.Size(93, 46);
             this.btnyh3.TabIndex = 278;
             this.btnyh3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnyh3.UseVisualStyleBackColor = true;
+            this.btnyh3.UseVisualStyleBackColor = false;
             this.btnyh3.Click += new System.EventHandler(this.btnyh1_Click);
             // 
             // btnyh2

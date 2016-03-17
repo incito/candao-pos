@@ -7,8 +7,14 @@ using System.Reflection;
 using Common;
 using WebServiceReference;
 using System.Diagnostics;
+using System.Linq;
 using DevExpress.UserSkins;
 using DevExpress.Skins;
+using KYPOS;
+using Library;
+using Models.Enum;
+using WebServiceReference.IService;
+using WebServiceReference.ServiceImpl;
 
 /************************************************************************* 
  * 程序说明: 程序入口
@@ -36,39 +42,101 @@ namespace Main
             Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
             frmStart.frm.setMsg("检测实例...");
             Process instance = RunningInstance();
-            if (instance == null)
+            if (instance != null)//已经有一个实例在运行
             {
-                //1.1 没有实例在运行
-
-            }
-            else
-            {
-                //1.2 已经有一个实例在运行
                 HandleRunningInstance(instance);
                 return;
             }
-            //Program.CheckInstance();//检查程序是否运行多实例
-            frmStart.frm.setMsg("读取设置...");
+            frmStart.frm.setMsg("读取配置文件...");
             SystemConfig.ReadSettings(); //读取用户自定义设置
-
-            /*if (false == BridgeFactory.InitializeBridge())//初始化桥接功能
-            {
-                Application.Exit();
-                return;
-            }*/
 
             BonusSkins.Register();//注册Dev酷皮肤
             //OfficeSkins.Register();////注册Office样式的皮肤
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
             RestClient.GetSoapRemoteAddress();
+
+            frmStart.frm.setMsg("获取系统设置...");
+            try
+            {
+                RestClient.getSystemSetData(out Globals.roundinfo);
+            }
+            catch
+            {
+                // ignored
+            }
+
+            frmStart.frm.setMsg("获取营业时间...");
+            IRestaurantService service = new RestaurantServiceImpl();
+            try
+            {
+                var result = service.GetRestaurantTradeTime();
+                if (!string.IsNullOrEmpty(result.Item1))
+                {
+                    frmBase.Warning(result.Item1);
+                    return;
+                }
+
+                Globals.TradeTime = result.Item2;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            frmStart.frm.setMsg("检查之前是否结业...");
+            var endworkResult = service.CheckWhetherTheLastEndWork();
+            if (!string.IsNullOrEmpty(endworkResult.Item1))
+            {
+                frmBase.Warning(endworkResult.Item1);
+                return;
+            }
+            if (!endworkResult.Item2)//未结业走强制结业流程。
+            {
+                var allTableResult = service.GetAllTableInfoes();
+                if (!string.IsNullOrEmpty(allTableResult.Item1))
+                {
+                    frmBase.Warning(allTableResult.Item1);
+                    return;
+                }
+
+                if (allTableResult.Item2.Any(t => t.TableStatus == EnumTableStatus.Dinner))//还有就餐的餐台，就让收银员登录，结账。
+                {
+                    frmBase.Warning("昨日还有未结账餐台，请先登录收银员账号并结账，然后进行清机和结业。");
+                    while (true)
+                    {
+                        var loginResult = CashierLogin();
+                        if (!loginResult.HasValue)
+                        {
+                            frmBase.Warning("请登录收银员账号以便结账餐台。");
+                            continue;
+                        }
+
+                        if (!loginResult.Value)//取消登录。
+                            return;
+
+                        MainForm.Show();
+                        MainForm.SetInForcedEndWorkModel();
+                        Application.Run();
+                        return;
+                    }
+                }
+
+                if (!CommonHelper.ClearAllMachine(true))
+                    return;
+
+                frmBase.Warning("昨日还有未结业，请先结业。");
+                CommonHelper.EndWork();
+                return;
+            }
+
             //如果还没有开业，提示开业授权
-            string reinfo="";
+            string reinfo = "";
             frmStart.frm.setMsg("检查是否开业...");
             try
             {
                 if (!RestClient.OpenUp("", "", 0, out reinfo))
                 {
-                    Thread.Sleep(1000);
+                    //Thread.Sleep(1000);
                     try
                     { frmStart.frm.Close(); }
                     catch { }
@@ -80,7 +148,7 @@ namespace Main
                     else
                     {
                         //经理权限开业
-                        if (!frmPermission2.ShowPermission2("开业经理授权", eRightType.right2))
+                        if (!frmPermission2.ShowPermission2("开业经理授权", EnumRightType.OpenUp))
                         {
                             Application.Exit();
                             return;
@@ -96,7 +164,6 @@ namespace Main
             }
             //注意：先打开登陆窗体,登陆成功后正式运行程序(MDI主窗体)
             frmStart.frm.setMsg("开始登录...");
-            Thread.Sleep(1000);
 
             if (frmLogin.Login())
             {
@@ -114,6 +181,22 @@ namespace Main
             }
             else//登录失败,退出程序
                 Application.Exit();
+        }
+
+        /// <summary>
+        /// 收银员登录，如果登录成功返回true，不是收银员返回null，登录失败返回false。
+        /// </summary>
+        /// <returns></returns>
+        private static bool? CashierLogin()
+        {
+            if (frmLogin.Login())
+            {
+                if (!Globals.userRight.getSyRigth())
+                    return null;
+
+                return frmPosMainV3.checkInputTellerCash();
+            }
+            return false;
         }
 
         static void Application_ApplicationExit(object sender, EventArgs e)

@@ -77,16 +77,7 @@ namespace Common
             return right5;
         }
     }
-    public enum eRightType
-    {
-        right0,//保留
-        right1,//登录
-        right2,//开业
-        right3,//反结算
-        right4,//清机
-        right5,//结业
-        right6 //收银
-    }
+
     public class Globals
     {
         [DllImport("kernel32.dll")]
@@ -135,6 +126,11 @@ namespace Common
         public static TSetting cjSetting;//餐具设置
         public static JArray cjFood;//餐具
         public static String branch_id = "";//分店ID号
+
+        /// <summary>
+        /// 店铺营业时间。
+        /// </summary>
+        public static RestaurantTradeTime TradeTime { get; set; }
 
         /// <summary>
         /// 所有银行集合。

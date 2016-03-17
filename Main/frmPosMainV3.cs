@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,6 +17,7 @@ using ReportsFastReport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Models.CandaoMember;
+using Models.Enum;
 
 namespace Main
 {
@@ -45,7 +47,7 @@ namespace Main
 
         private float decgz2 = 0;//挂帐负数
         private float decym = 0;//优免负数
-        private bool maling = true;
+        private bool maling = true;//抹零（一万只草泥马洪流滚过，什么命名）
 
         private string membercard = "";
         private float psStoredCardsBalance = 0;
@@ -80,45 +82,18 @@ namespace Main
         private bool isopened = false;
         private string msgorderid = "";
         private bool isopentable2 = false;
+
         //记录每张台下单序列的INI文件
         public frmPosMainV3()
         {
             InitializeComponent();
         }
-        public static bool ShowPosMain(string tableno, int status)
-        {
-            try
-            {
-                frmPosMainV3 frm = new frmPosMainV3();
-                frm.currtableno = tableno;
-                frm.edtRoom.Text = tableno;
-                frm.maling = true;
-                if (status == 0)
-                {
-                    //frm.tmrOpenTable.Enabled = true; 
-                    frm.showOpenTable();
 
-                }
-                else
-                {
-                    frm.hideOpenTable();
-                    frm.isreback = status == 9;
-                    frm.tmrOpen.Enabled = true;
-                }
-                frm.ShowDialog();
-                return frm.DialogResult == DialogResult.OK;
-            }
-            finally
-            {
-            }
-
-        }
-        public void showFrm(string tableno, int status)
+        public void ShowFrm(string tableno, int status)
         {
             try
             {
                 SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
-                //frmPosMain frm = new frmPosMain();
                 currtableno = tableno;
                 edtRoom.Text = tableno;
                 pnlCash.Enabled = false;
@@ -130,7 +105,7 @@ namespace Main
                 lblAmount.Text = String.Format("合计金额：{0}元", 0);
                 try
                 {
-                    hideOpenTable();
+                    HideOpenTable();
                 }
                 catch { }
                 if (status == 0)
@@ -151,17 +126,16 @@ namespace Main
                     }
                 xtraTabControl1.SelectedTabPageIndex = 0;
                 ShowDialog();
-                //return DialogResult == DialogResult.OK;
             }
             finally
             {
             }
         }
+
         public void showFrmWm(string tableno)
         {
             try
             {
-                //frmPosMain frm = new frmPosMain();
                 currtableno = tableno;
                 edtRoom.Text = tableno;
                 iswm = true;
@@ -180,78 +154,30 @@ namespace Main
                 StartWm();
                 Globals.ShoppTable.Clear();
                 ShowDialog();
-                //return DialogResult == DialogResult.OK;
             }
             finally
             {
             }
         }
-        private void panel6_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
-
-        private void pictureBox2_Click(object sender, EventArgs e)
-        {
-
-
-        }
-
-        private void panel9_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-        private void edtFocus()
-        {
-            if (xtraTabControl1.SelectedTabPageIndex == 0)
-                edtAmount.Focus();
-            else
-                if (xtraTabControl1.SelectedTabPageIndex == 1)
-                    edtCard.Focus();
-                else
-                    if (xtraTabControl1.SelectedTabPageIndex == 2)
-                        edtMember.Focus();
-                    else
-                        if (xtraTabControl1.SelectedTabPageIndex == 3)
-                            edtGzAmount.Focus();
-                        else
-                            if (xtraTabControl1.SelectedTabPageIndex == 4)
-                                edtZfb.Focus();
-                            else
-                                if (xtraTabControl1.SelectedTabPageIndex == 5)
-                                    edtWx.Focus();
-        }
         private void button16_Click(object sender, EventArgs e)
         {
-            //edtFocus();
             SendKeys.Send(((Button)sender).Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
         }
 
         private void button17_Click(object sender, EventArgs e)
         {
-            //edtFocus();
             SendKeys.Send(button16.Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
             SendKeys.Send(button16.Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
         }
 
         private void button28_Click(object sender, EventArgs e)
         {
-            //edtFocus();
             SendKeys.Send("{Backspace}");
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
-        }
-
-        private void button27_Click(object sender, EventArgs e)
-        {
-            //
-
         }
 
         private void xtraTabControl1_SelectedPageChanged(object sender, DevExpress.XtraTab.TabPageChangedEventArgs e)
@@ -605,7 +531,12 @@ namespace Main
                 tbyh.Rows.Add(dr);
             }
         }
-        private void opentable2()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="onlyGetTableInfo">结算完成后仅获取餐桌信息，不必要获取餐桌详情，提高效率。</param>
+        private void Opentable2(bool onlyGetTableInfo = false)
         {
             try
             {
@@ -616,8 +547,8 @@ namespace Main
                 Globals.CurrOrderInfo.Invoicetitle = "";
                 this.SetButtonEnable(false);
                 this.Update();//必须
-                string TableName = edtRoom.Text;
-                string loginReturn = RestClient.GetServerTableInfo(TableName, Globals.UserInfo.UserID);
+                string tableName = edtRoom.Text;
+                string loginReturn = RestClient.GetServerTableInfo(tableName, Globals.UserInfo.UserID);
                 if (loginReturn == "0") //调用
                 {
                     Warning("未找到帐单,请确认是否已开台!");
@@ -635,7 +566,13 @@ namespace Main
                     }
                     else
                     {
-                        //返回成功
+                        if (onlyGetTableInfo)
+                        {
+                            getAmount();
+                            Cursor = Cursors.Default;
+                            return;
+                        }
+
                         RestClient.GetServerTableList(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);
                         if (!Globals.CurrOrderInfo.memberno.Equals(""))
                         {
@@ -699,11 +636,6 @@ namespace Main
             lblRs.Text = String.Format("人数：{0}", Globals.CurrOrderInfo.custnum);
             lblZd.Text = String.Format("帐单：{0}", Globals.CurrOrderInfo.orderid);
 
-            /*DataView dv = new DataView(Globals.OrderTable);
-            dv.AllowNew = false;
-            this.dgvBill.AutoGenerateColumns = false;
-            this.dgvBill.DataSource = dv;*/
-            //Globals.CurrTableInfo.amount = 171;
             btnRBill.Enabled = false;
             btnPrintMember1.Enabled = false;
             btnRePrint.Enabled = false;
@@ -719,7 +651,7 @@ namespace Main
             lblAmount2.ForeColor = Color.Red;
             //pnlCash.Enabled = true;
             //如果订单已结算就不能结算了
-            if (checkCallBill() && (!iswm))
+            if (CheckCallBill() && (!iswm))
             {
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
@@ -746,7 +678,7 @@ namespace Main
             edtAmount.Focus();
             edtReturn.Text = "0";
             //getAmount();
-            if (checkCallBill())
+            if (CheckCallBill())
             {
                 btnDelete.Visible = false;
                 lblSum.Text = "已结算";
@@ -757,16 +689,6 @@ namespace Main
             {
                 btnAdd.Visible = true;
                 btnDec.Visible = true;
-                if (!iswm)
-                {
-                    //btnAdd.Visible = false;
-                    //btnDec.Visible = false;
-                    if (dgvBill.RowCount <= 0)
-                    {
-                        //btnAdd.Visible = false;
-                        //btnDec.Visible = false;
-                    }
-                }
                 btnDelete.Visible = true;
             }
             //btnDelete.Visible = !RestClient.isClearCoupon();
@@ -788,18 +710,13 @@ namespace Main
                             lblMember.Text = String.Format("会员：{0}", Globals.CurrOrderInfo.memberno);
                             btnFind.Tag = 1;
                             btnFind.Text = "退出";
-                            //try
-                            //{
-                            //    QueryMemberCard(); //启动的时候不要查询会员 20151008
-                            //}
-                            //catch { }
-                            //调用会员价接口
+                            
                             try
                             {
                                 if (!isopentable2)
                                 {
                                     RestClient.setMemberPrice(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, edtMemberCard.Text);
-                                    opentable2();
+                                    Opentable2();
                                 }
                             }
                             catch { }
@@ -809,11 +726,12 @@ namespace Main
             }
             catch { }
         }
+
         /// <summary>
         /// 帐单是否已结算 TRUE 
         /// </summary>
         /// <returns></returns>
-        private bool checkCallBill()
+        private bool CheckCallBill()
         {
             int orderstatus = Globals.CurrOrderInfo.orderstatus;
             if ((orderstatus != 1) && (orderstatus != 2) && (orderstatus != 3))
@@ -1038,12 +956,10 @@ namespace Main
 
         private void button27_Click_1(object sender, EventArgs e)
         {
-            //
             bool isok = false;
-            decimal invoiceAmount = 0;
             try
             {
-                this.Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
                 if (edtYHCard == focusedt)
                 {
                     edtCard.SelectAll();
@@ -1052,12 +968,19 @@ namespace Main
                 }
                 if (edtMemberCard == focusedt)
                 {
-                    //QueryMemberCard();
                     querymember();
                     return;
                 }
-                opentable2();
-                getAmount();
+
+                Opentable2();
+                //getAmount();
+
+                if (!CheckBillCanPay())//检查有没有未称重的，有就不能结帐
+                {
+                    Warning("还有未称重菜品,不能结帐...");
+                    return;
+                }
+
                 if (Math.Round(payamount - getamount + amountroundtz, 2) > 0)
                 {
                     Warning("还有未收金额...");
@@ -1122,18 +1045,13 @@ namespace Main
                         Warning("实际输入金额大于应收,请确认...");
                     }
                 }
-                ///检查有没有未称重的，有就不能结帐
-                if (!CheckBillCanPay())
-                {
-                    Warning("还有未称重菜品,不能结帐...");
-                    return;
-                }
-                invoiceAmount = (decimal)Globals.CurrTableInfo.amount;
+
+                var invoiceAmount = (decimal)Globals.CurrTableInfo.amount;
                 string settleorderorderid = Globals.CurrOrderInfo.orderid;
                 bool ismember = false;
                 if (AskQuestion("台号：" + Globals.CurrTableInfo.tableName + "确定现在结算吗?"))
                 {
-                    ///如果是外卖，先开台,再上传菜品，再结算（外卖单品类优惠怎么用呢?,1、下单后循环优惠ID，使用一遍单品类的优惠，或者外卖我打包上传一下所有菜品的JSON数组，服务器端再返回优惠金额）
+                    //如果是外卖，先开台,再上传菜品，再结算（外卖单品类优惠怎么用呢?,1、下单后循环优惠ID，使用一遍单品类的优惠，或者外卖我打包上传一下所有菜品的JSON数组，服务器端再返回优惠金额）
                     if (iswm)
                     {
                         Globals.CurrOrderInfo.userid = Globals.UserInfo.UserID;
@@ -1142,7 +1060,7 @@ namespace Main
                         if (string.IsNullOrEmpty(settleorderorderid))
                             return;
 
-                        ///如果是外卖先结算会员，如果会员结算失败就不再结算帐单
+                        //如果是外卖先结算会员，如果会员结算失败就不再结算帐单
                         isok = wmAccount(0);
                         if (isok)
                         {
@@ -1165,11 +1083,8 @@ namespace Main
                                 float psccash = amountrmb + amountyhk + amountgz + amountzfb + amountwx;//现金 用于会员积分
                                 float pscpoint = amountjf; //使用积分付款
                                 float pszStore = amounthyk;//使用储值余额付款
-                                float tmppsccash = psccash - returnamount;
-                                if (tmppsccash < 0)
-                                {
-                                    tmppsccash = 0;
-                                }
+                                float tmppsccash = Math.Max(0, psccash - returnamount);
+
                                 //使用优惠券
                                 String tickstrs = getTicklistStr();
                                 if (tmppsccash > 0 || pscpoint > 0 || tickstrs.Length > 0 || amounthyk > 0)
@@ -1178,54 +1093,33 @@ namespace Main
                                     try
                                     {
                                         string pwd = "0";
-                                        if (edtPwd.Text.Trim().ToString().Length > 0)
+                                        if (edtPwd.Text.Trim().Length > 0)
                                         {
                                             pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
                                         }
                                         bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
-                                        //string data = json["Data"].ToString();
-                                        if (!data)
+                                        if (data)
                                         {
-
-                                        }
-                                        else
-                                        {
-                                            try
-                                            {
-                                                ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-                                            }
-                                            catch { }
+                                            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                             isok = true;
                                         }
                                     }
-                                    catch
+                                    catch (Exception ex)
                                     {
-                                        //检查会员有没有成功，如果有成功就不反结算
-                                        //
-                                        //posrebacksettleorder
+                                        AllLog.Instance.E("会员消费异常。" + ex.Message);
                                         RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
                                         Warning("会员积分，结算失败!");
                                     }
                                 }
                                 else
                                 {
-                                    try
-                                    {
-                                        ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-                                    }
-                                    catch { }
-                                    //threadOpenCash 打开钱箱用线程
+                                    ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                     isok = true;
                                 }
                             }
                             else
                             {
-                                try
-                                {
-                                    ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-                                }
-                                catch { }
-                                //threadOpenCash 打开钱箱用线程
+                                ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                 isok = true;
                             }
                             if (isok)
@@ -1234,45 +1128,49 @@ namespace Main
                                 {
                                     RestClient.debitamout(Globals.CurrOrderInfo.orderid);
                                 }
-                                catch { }
+                                catch (Exception ex)
+                                {
+                                    AllLog.Instance.E("计算实收接口异常。" + ex.Message);
+                                }
                             }
                         }
                     }
-                    opentable2();
+
+                    Opentable2(true);
                     if (isok)
                     {
-                        /*try
-                        {
-                            RestClient.caleTableAmount(Globals.UserInfo.UserID, settleorderorderid);
-                        }
-                        catch { }*/
-                        //结算成功
-                        try
-                        {
-                            PrintBill2();
-                        }
-                        catch { }
-
-                        Application.DoEvents();
-                        if (ismember)
+                        ThreadPool.QueueUserWorkItem(t =>
                         {
                             try
                             {
-                                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
+                                PrintBill2();
                             }
-                            catch { }
-                        }
+                            catch (Exception ex)
+                            {
+                                AllLog.Instance.E("打印结账单异常。" + ex.Message);
+                            }
+
+                            Application.DoEvents();
+                            if (ismember)
+                            {
+                                try
+                                {
+                                    ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
+                                }
+                                catch (Exception ex)
+                                {
+                                    AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
+                                }
+                            }
+                        });
+
                         if (!iswm)
                         {
-                            msgorderid = settleorderorderid;
-                            Thread thread = new Thread(broadMsg);
-                            thread.Start();// 
+                            ThreadPool.QueueUserWorkItem(t => { broadMsg(); });
                         }
-                        try
-                        {
-                            canClose();
-                        }
-                        catch { }
+
+                        CanClose();
+
                         //如果是外卖 需要使用优惠券 ，并初始化外卖台，可以开始下一单
                         if (iswm)
                         {
@@ -1280,7 +1178,8 @@ namespace Main
                             Globals.ShoppTable.Clear();
                             ShowWm();
                         }
-                        ///如果开发票那么弹出一个框提示开发票 Globals.CurrOrderInfo.Invoicetitle
+
+                        //如果开发票那么弹出一个框提示开发票 Globals.CurrOrderInfo.Invoicetitle
                         if (!iswm)
                         {
                             if (!Globals.CurrOrderInfo.Invoicetitle.Equals(""))
@@ -1294,9 +1193,8 @@ namespace Main
             }
             finally
             {
-                this.Cursor = Cursors.Default;
+                Cursor = Cursors.Default;
             }
-
         }
 
         private void broadMsg()
@@ -1667,7 +1565,7 @@ namespace Main
                 {
                     return;
                 }
-                if (!frmPermission2.ShowPermission2("反结算经理授权", eRightType.right3))
+                if (!frmPermission2.ShowPermission2("反结算经理授权", EnumRightType.AntiSettlement))
                 {
                     return;
                 }
@@ -1677,7 +1575,7 @@ namespace Main
                 if (membersystem == 1)
                 {
                     //餐道反结算会员要先从java后台调用接口获取当前帐单会员结算信息，如果有可以反结的会员结算信息才反结+++++++++
-                    TCandaoRetBase ret = CanDaoMemberClient.getOrderMember(Globals.CurrOrderInfo.orderid);
+                    TCandaoRetBase ret = CanDaoMemberClient.GetOrderMember(Globals.CurrOrderInfo.orderid);
                     if (ret.Ret)
                     {
                         if (!VoidSale_CanDao(out info, ret))
@@ -1707,12 +1605,16 @@ namespace Main
                         return;
                     }
                 }
-                if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, inputMemo).Equals("0"))
+                string msg;
+                if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, inputMemo, out msg))
                 {
                     Warning("帐单反结算失败...");
                 }
                 else
                 {
+                    if (!string.IsNullOrEmpty(msg))
+                        Warning(msg);
+
                     if (membersystem == 1)
                     {
                         try
@@ -1724,7 +1626,7 @@ namespace Main
                 }
                 try
                 {
-                    hideOpenTable();
+                    HideOpenTable();
                 }
                 catch { }
                 Thread.Sleep(1000);
@@ -1860,7 +1762,7 @@ namespace Main
             {
                 try
                 {
-                    hideOpenTable();
+                    HideOpenTable();
                 }
                 catch { }
                 opentable();
@@ -1986,7 +1888,7 @@ namespace Main
             {
                 //
                 e.KeyChar = (char)0;
-                if (!checkCallBill())
+                if (!CheckCallBill())
                 {
                     xtraTabControl1.SelectedTabPageIndex = 2;
                     edtMemberCard.Text = "";
@@ -2105,7 +2007,7 @@ namespace Main
                     try
                     {
                         CanDaoMemberClient.MemberLogin(Globals.CurrOrderInfo.orderid, edtMemberCard.Text.Trim().ToString());
-                        opentable2();
+                        Opentable2();
                     }
                     catch { }
                     if (iswm)
@@ -2189,7 +2091,7 @@ namespace Main
                 try
                 {
                     RestClient.setMemberPrice(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, edtMemberCard.Text.Trim().ToString());
-                    opentable2();
+                    Opentable2();
                 }
                 catch { }
                 if (iswm)
@@ -2546,6 +2448,7 @@ namespace Main
                 if (lastpagecount > 0)
                     pagecount = pagecount + 1;
                 FillBtn(pagecurr);
+                Update();
                 setupdownbtn();
                 //CreateTableArr();
                 //UpdateTableStatus();
@@ -2670,6 +2573,12 @@ namespace Main
                 {
                     btn.Tag = vcr;
                     btn.Text = vcr.couponname;
+                    if (!string.IsNullOrEmpty(vcr.Color))
+                    {
+                        int argb = -1;
+                        if (int.TryParse(vcr.Color.TrimStart('#'), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out argb))
+                            btn.BackColor = Color.FromArgb(argb);
+                    }
                 }
             }
         }
@@ -2678,27 +2587,6 @@ namespace Main
             if (jarrTables == null)
             {
 
-            }
-        }
-        private void btnup_Click(object sender, EventArgs e)
-        {
-            checkjarrTables();
-            if (pagecurr > 1)
-            {
-                pagecurr = pagecurr - 1;
-                FillBtn(pagecurr);
-                setupdownbtn();
-            }
-        }
-
-        private void btndown_Click(object sender, EventArgs e)
-        {
-            checkjarrTables();
-            if (pagecurr < pagecount)
-            {
-                pagecurr = pagecurr + 1;
-                FillBtn(pagecurr);
-                setupdownbtn();
             }
         }
 
@@ -2747,7 +2635,6 @@ namespace Main
                     vcr.freeamount = (decimal)amount;
                     addrow(vcr, 6, false, 1);
                     vcr.freeamount = 0;
-                    getAmount();
                     //是折扣优惠 需要有份可折扣菜品列表 用服务端计算各菜品折后金额
                     //addrow(vcr, 1);  
                     /*if (vcr.wholesingle == "1")
@@ -3591,7 +3478,8 @@ namespace Main
             }
             catch { }
         }
-        private void canClose()
+
+        private void CanClose()
         {
             int autoClose = RestClient.getAutoClose();
             if (autoClose > 0)
@@ -3665,7 +3553,7 @@ namespace Main
         {
             try
             {
-                hideOpenTable();
+                HideOpenTable();
             }
             catch { }
             if (isopened)
@@ -3715,14 +3603,13 @@ namespace Main
             frmopentable.edtUserid.Focus();
 
         }
-        public void hideOpenTable()
+
+        public void HideOpenTable()
         {
             if (frmopentable == null)
-            {
                 return;
-            }
+
             frmopentable.Hide();
-            //pnlCash.Enabled = false;
             xtraTabControl2.Visible = true;
             xtraTabControl1.Visible = true;
         }
@@ -3816,7 +3703,7 @@ namespace Main
                         string dishid = dr["dishid"].ToString();
                         string primarykey = dr["primarykey"].ToString();
                         RestClient.updateDishWeight(Globals.CurrTableInfo.tableNo, dishid, primarykey, num2.ToString());
-                        opentable2();
+                        Opentable2();
                     }
                     return;
                 }
@@ -3870,7 +3757,7 @@ namespace Main
                         string dishid2 = dr["dishid"].ToString();
                         string primarykey = dr["primarykey"].ToString();
                         RestClient.updateDishWeight(Globals.CurrTableInfo.tableNo, dishid2, primarykey, num.ToString());
-                        opentable2();
+                        Opentable2();
                     }
                     return;
                 }
@@ -3920,42 +3807,39 @@ namespace Main
                 {
                     num = 0;
                     if (!ShowInputNum("请输入退菜数量!", "退菜数量：", out num, maxnum))
-                    {
                         return;
-                    }
                 }
-                //调用接口减餐具
-                string discardUserId = "";
+
+                string discardUserId;
                 if (!frmAuthorize.ShowAuthorize("退菜权限验证", Globals.UserInfo.UserID, "030102", out discardUserId))
-                {
                     return;
-                }
+
                 //调用退菜接口
                 double backnum = num;
                 string discardReason = "";
-                //string orderNo,string tableno,string discardUserId,string userid,DataTable dt,double backnum
-                if (BackDish.backDish(Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo, discardUserId, Globals.UserInfo.UserID, dt, backnum, discardReason))
+                var result = BackDish.backDish(Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo, discardUserId, Globals.UserInfo.UserID, dt, backnum, discardReason);
+
+                Opentable2();
+                if (!result)
                 {
-                    opentable2();
-                    try
-                    {
-                        RestClient.deletePosOperation(Globals.CurrTableInfo.tableNo);
-                    }
-                    catch { }
-                    Warning("退菜完成!");
-                    return;
-                }
-                else
-                {
-                    opentable2();
                     Warning("退菜失败!");
                     return;
                 }
 
+                msgorderid = Globals.CurrOrderInfo.orderid; //广播消息到PAD同步菜单
+                ThreadPool.QueueUserWorkItem(t => { broadMsg2201(); });
+                try
+                {
+                    RestClient.DeletePosOperation(Globals.CurrTableInfo.tableNo);
+                }
+                catch(Exception ex)
+                {
+                    AllLog.Instance.E(ex);
+                }
+                Warning("退菜完成!");
             }
-
-
         }
+
         public void ShowAccounts(object serder, EventArgs e, int ordertype)
         {
             //ordertype=1赠送
@@ -4584,12 +4468,12 @@ namespace Main
             //cleantable
             try
             {
-                opentable2();
+                Opentable2();
             }
             catch { }
             if (dgvBill.Rows.Count <= 0)
             {
-                if (!checkCallBill())
+                if (!CheckCallBill())
                 {
                     if (!AskQuestion("确定要取消帐单吗?"))
                         return;
@@ -4757,14 +4641,16 @@ namespace Main
                         bool qret = QueryMemberCard2_CanDao(out msg);
                         if (!qret)
                         {
-                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结");
+                            string weChatMsg;
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结", out weChatMsg);
                             Warning("获取会员卡号失败:" + msg);
                             return false;
                         }
                         if (cardno.Trim().Equals(""))
                         {
                             //RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
-                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结");
+                            string weChatMsg;
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结", out weChatMsg);
                             Warning("获取会员卡号失败:" + msg);
                             return false;
                         }
@@ -4782,7 +4668,8 @@ namespace Main
                     TCandaoRet_Sale ret = CanDaoMemberClient.MemberSale(membersale);
                     if (!ret.Ret)
                     {
-                        RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结");
+                        string weChatMsg;
+                        RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结", out weChatMsg);
                         Warning(ret.Retinfo);
                         return false;
                     }
@@ -4906,7 +4793,7 @@ namespace Main
                 try
                 {
                     RestClient.setMemberPrice(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard);
-                    opentable2();
+                    Opentable2();
                 }
                 catch { }
                 if (iswm)
@@ -5153,7 +5040,7 @@ namespace Main
                     querymember();
                     return;
                 }
-                opentable2();
+                Opentable2();
                 getAmount();
                 if (Math.Round(payamount - getamount + amountroundtz, 2) > 0)
                 {
@@ -5295,7 +5182,7 @@ namespace Main
                         isok = true;
                     }
                 }
-                opentable2();
+                Opentable2();
                 if (isok)
                 {
                     if (ismember)

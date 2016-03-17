@@ -56,7 +56,19 @@
     <Compile Include="CandaoMember\TCandaoRet_CardLose.cs" />
     <Compile Include="CandaoMember\TCandaoRet_StoreCardDeposit.cs" />
     <Compile Include="CandaoMember\TCandaoRet_VoidSale.cs" />
-    <Compile Include="OnAccountCompanyResponse.cs" />
+    <Compile Include="Enum\EnumRightType.cs" />
+    <Compile Include="Enum\EnumTableStatus.cs" />
+    <Compile Include="Enum\EnumTableType.cs" />
+    <Compile Include="NoClearMachineInfo.cs" />
+    <Compile Include="Request\AuthorizeLoginRequest.cs" />
+    <Compile Include="Response\AuthorizeLoginResponse.cs" />
+    <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />
+    <Compile Include="Response\GetRestaurantTradeTimeResponse.cs" />
+    <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
+    <Compile Include="Response\JavaResponse.cs" />
+    <Compile Include="Response\TableInfoResponse.cs" />
+    <Compile Include="Response\UnclearPosResponse.cs" />
+    <Compile Include="RestaurantTradeTime.cs" />
     <Compile Include="SystemModels\BusinessCommonFields.cs" />
     <Compile Include="SystemModels\TEmailBody.cs" />
     <Compile Include="SystemModels\TAttachFile.cs" />
@@ -65,6 +77,7 @@
     <Compile Include="SystemModels\TUser.cs" />
     <Compile Include="SystemModels\TUserGroup.cs" />
     <Compile Include="CandaoMember\TCandaoRet_Sale.cs" />
+    <Compile Include="TableInfo.cs" />
     <Compile Include="TComboDish.cs" />
     <Compile Include="TGzInfo.cs" />
     <Compile Include="TMemberStoredInfo.cs" />
@@ -74,6 +87,7 @@
     <Compile Include="TShopping.cs" />
     <Compile Include="TOrder.cs" />
     <Compile Include="TTable.cs" />
+    <Compile Include="UnclearPosInfo.cs" />
     <Compile Include="v_coupon_rule.cs" />
   </ItemGroup>
   <ItemGroup>

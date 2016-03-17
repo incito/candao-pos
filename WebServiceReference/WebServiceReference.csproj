@@ -61,9 +61,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanDaoMemberClient.cs" />
+    <Compile Include="IService\IAccountService.cs" />
+    <Compile Include="IService\IRestaurantService.cs" />
     <Compile Include="MemberClient.cs" />
     <Compile Include="MessageCenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceImpl\AccountServiceImpl.cs" />
+    <Compile Include="ServiceImpl\RestaurantServiceImpl.cs" />
     <Compile Include="SoapRestClient.cs" />
     <Compile Include="WebServiceReference.cs" />
   </ItemGroup>
@@ -77,6 +81,7 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{269ECEFF-B6C2-4708-86BA-AFBB1A2B045C}</Project>
       <Name>Common</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{2cf256b2-f5e0-4670-8644-08ddf65b0009}</Project>

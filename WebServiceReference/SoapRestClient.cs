@@ -80,7 +80,7 @@ namespace WebServiceReference
         /// 获取MAC地址。
         /// </summary>
         /// <returns></returns>
-        private static string GetMacAddr()
+        public static string GetMacAddr()
         {
             string mac = GetMacByWMI();
             if (string.IsNullOrEmpty(mac))
@@ -592,9 +592,9 @@ namespace WebServiceReference
             return "0";
         }
 
+
         /// <summary>
         ///登录
-        /// </summary>
         /// </summary>
         /// <param name="userid"></param>
         /// <param name="password"></param>
@@ -1026,8 +1026,9 @@ namespace WebServiceReference
         /// <param name="OrderID"></param>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public static string rebacksettleorder(string OrderID, string UserID, string reason)
+        public static bool rebacksettleorder(string OrderID, string UserID, string reason, out string msg)
         {
+            msg = null;
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/rebacksettleorder.json", server2);
             AllLog.Instance.I(string.Format("【rebacksettleorder】 OrderID：{0}，reason：{1}。", OrderID, reason));
             StringWriter sw = new StringWriter();
@@ -1044,16 +1045,17 @@ namespace WebServiceReference
             String jsonResult = Post_Rest(address, sw);
             AllLog.Instance.I(string.Format("【rebacksettleorder】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-                return "";
+                return false;
 
             string result = "1";
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 result = ja["result"].ToString();
+                msg = ja["msg"].ToString();
             }
             catch { }
-            return result;
+            return result.Equals("0");
         }
 
         public static string debitamout(string OrderID)
@@ -2817,7 +2819,7 @@ namespace WebServiceReference
             return jrorder != null;
         }
 
-        public static bool deletePosOperation(string tableno)
+        public static bool DeletePosOperation(string tableno)
         {
             string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/deletePosOperation/{0}", tableno);
