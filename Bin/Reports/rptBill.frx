@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="06/16/2011 14:52:11" ReportInfo.Modified="03/18/2016 17:23:49" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="06/16/2011 14:52:11" ReportInfo.Modified="03/18/2016 17:34:27" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -121,8 +121,8 @@ namespace FastReport
       <TextObject Name="edtreport_title" Left="3" Top="9.45" Width="274.05" Height="18.9" Text="撸8" HorzAlign="Center" Font="黑体, 14pt"/>
     </ReportTitleBand>
     <DataBand Name="Data1" Top="223" Width="289.17" Height="21.92" CanGrow="true" DataSource="tb_data">
-      <TextObject Name="Text12" Left="151.2" Width="49.14" Height="18.9" Text="[tb_data.单价]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text13" Left="201.85" Width="56.7" Height="21.92" Text="[tb_data.金额]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text12" Left="151.2" Width="49.14" Height="18.9" CanGrow="true" CanBreak="false" Text="[tb_data.单价]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" Font="宋体, 9pt"/>
+      <TextObject Name="Text13" Left="201.85" Width="56.7" Height="21.92" CanGrow="true" CanBreak="false" Text="[tb_data.金额]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" Font="宋体, 9pt"/>
       <TextObject Name="Text11" Left="111.4" Width="49.14" Height="18.9" CanGrow="true" CanBreak="false" Text="[tb_data.数量]" Font="宋体, 9pt"/>
       <TextObject Name="Text6" Left="5.67" Width="103.95" Height="18.9" CanGrow="true" CanBreak="false" Text="[tb_data.品项]" Font="宋体, 9pt"/>
     </DataBand>
