@@ -76,6 +76,7 @@
     <Compile Include="HttpHelper.cs" />
     <Compile Include="IniFileMgr.cs" />
     <Compile Include="IniPos.cs" />
+    <Compile Include="InternationaHelper.cs" />
     <Compile Include="ItemObject.cs" />
     <Compile Include="IWriteSQLConfigValue.cs" />
     <Compile Include="JsonClass.cs" />

@@ -553,7 +553,7 @@ namespace Main
             {
                 btntables[i].Tag = -1;
             }
-            ///用两次循环实现，第一次填充，第二次隐藏  加入分页功能
+            //用两次循环实现，第一次填充，第二次隐藏  加入分页功能
             if (jarrTables != null)
             {
                 int i = 0;                //int tmpi = (currpage_type - 1) * btncount;
@@ -588,6 +588,7 @@ namespace Main
                     tableid = ja["dishid"].ToString();
                     tableName = ja["title"].ToString();
                     tableNo = ja["title"].ToString();
+                    tableNo = InternationaHelper.GetBeforeSeparatorFlagData(tableNo);
                     tabletype = ja["dishtype"].ToString();
                     weigh = int.Parse(ja["weigh"].ToString());
                     orderstatus = 0;
