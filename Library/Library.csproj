@@ -145,6 +145,9 @@
     <Compile Include="SelectBankWindow.xaml.cs">
       <DependentUpon>SelectBankWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SelectGiftDishWindow.xaml.cs">
+      <DependentUpon>SelectGiftDishWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TaskService.cs" />
     <Compile Include="SelectClearMachineStepWindow.xaml.cs">
       <DependentUpon>SelectClearMachineStepWindow.xaml</DependentUpon>
@@ -407,6 +410,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SelectClearMachineStepWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SelectGiftDishWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

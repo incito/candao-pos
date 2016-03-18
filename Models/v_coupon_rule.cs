@@ -255,13 +255,19 @@ namespace Models
             set { _type = value; }
             get { return _type; }
         }
+
+        /// <summary>
+        /// 当是手工优免类型时，这里0：赠菜，1：折扣，2：减免。
+        /// </summary>
+        public string FreeReason { get; set; }
+
         #endregion Model
-        public static int  strtoint(string str)
+        public static int strtoint(string str)
         {
-            int re=0;
+            int re = 0;
             try
             {
-                re = int.Parse(str); 
+                re = int.Parse(str);
             }
             catch { re = 0; }
             return re;
@@ -286,7 +292,7 @@ namespace Models
             catch { re = 0; }
             return re;
         }
-        public static VCouponRule  Parse(JObject ja)
+        public static VCouponRule Parse(JObject ja)
         {
             VCouponRule vcr = new VCouponRule();
 
@@ -312,7 +318,8 @@ namespace Models
             if (vcr.banktype == "100")
             {
                 vcr.dishnum = strtoint(ja["dishnum"].ToString());
-            }else
+            }
+            else
             {
                 vcr.dishnum = 20;
             }
@@ -348,18 +355,20 @@ namespace Models
         {
             VCouponRule vcr = new VCouponRule();
             try
-            {     
-               vcr.couponname = ja["name"].ToString();
+            {
+                vcr.couponname = ja["name"].ToString();
             }
-            catch {
+            catch
+            {
                 try
                 {
                     vcr.couponname = ja["free_reason"].ToString();
                 }
                 catch { vcr.couponname = ja["couponname"].ToString(); }
             }
+            vcr.FreeReason = ja["free_reason"] != null ? ja["free_reason"].ToString() : null;
             //vcr.couponname = ja["name"].ToString();//couponname
-            if(vcr.couponname.Equals(""))
+            if (vcr.couponname.Equals(""))
             {
                 try
                 { vcr.couponname = ja["company_name"].ToString(); }
@@ -382,7 +391,7 @@ namespace Models
                 vcr.banktype = ja["type"].ToString(); //banktype
             }
             catch { vcr.banktype = "06"; }
-            
+
             if (vcr.banktype == "100")
             {
                 vcr.dishnum = strtoint(ja["dishnum"].ToString());
@@ -395,7 +404,7 @@ namespace Models
             vcr.freedishnum = 0;// strtoint(ja["freedishnum"].ToString());
             vcr.couponway = 0;// strtoint(ja["couponway"].ToString());
             vcr.comsumeway = 0;// strtoint(ja["comsumeway"].ToString());
-            
+
             try
             {
                 vcr.couponrate = decimal.Parse(ja["discount"].ToString()); //banktype
@@ -423,7 +432,7 @@ namespace Models
                 vcr.freeamount = strtodecimal(amount);
             }
             else
-              vcr.freeamount = strtodecimal(bill_amount) - strtodecimal(amount);//freeamount
+                vcr.freeamount = strtodecimal(bill_amount) - strtodecimal(amount);//freeamount
             try
             {
                 vcr.partnername = ja["company_name"].ToString(); //partnername
@@ -449,7 +458,7 @@ namespace Models
                     vcr.debitamount = 0;
                 }
                 else
-                  vcr.debitamount = strtodecimal(amount);//strtodecimal(ja["debitamount"].ToString());
+                    vcr.debitamount = strtodecimal(amount);//strtodecimal(ja["debitamount"].ToString());
             }
             catch { vcr.debitamount = 0; }
             try
@@ -462,7 +471,7 @@ namespace Models
                 vcr.sub_type = ja["sub_type"].ToString();
             }
             catch { vcr.sub_type = ""; }
-            
+
             if (vcr.sub_type == null)
                 vcr.sub_type = "";
             return vcr;

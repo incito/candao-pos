@@ -1,0 +1,105 @@
+﻿<Window x:Class="Library.SelectGiftDishWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="750" Height="690" Title="赠送菜品选择窗口"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="Boolean2VisibilityCvt"/>
+        <ItemsPanelTemplate x:Key="LbWrapPanelTemplate">
+            <WrapPanel Orientation="Horizontal" Width="730"/>
+        </ItemsPanelTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Background="#FFFFC080" Height="65">
+            <Grid>
+                <Image HorizontalAlignment="Left" Source="Resources/0111-_31_cd.png" />
+                <Button HorizontalAlignment="Right" Click="ButtonCancel_OnClick">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Image Source="Resources/下载.png" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+        
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="赠送菜品：" FontSize="20"/>
+            <ListBox Grid.Row="1" ItemsSource="{Binding GiftDishes}" ItemsPanel="{StaticResource LbWrapPanelTemplate}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1"  Width="110" Height="60" Margin="5" MouseLeftButtonDown="Bd_OnMouseLeftButtonDown">
+                                        <Grid>
+                                            <TextBlock Foreground="{TemplateBinding Foreground}" Text="{Binding DishName}" FontSize="20" TextWrapping="Wrap"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,6,3"/>
+                                            <TextBlock HorizontalAlignment="Right" Foreground="Red" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,0,2,2" Text="{Binding NumString}" Visibility="{Binding ShowSelectString, Converter={StaticResource Boolean2VisibilityCvt}}"/>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                                <Setter Property="Background" Value="DimGray"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            
+            <TextBlock x:Name="TbGiftReason" Grid.Row="2" Text="赠菜原因：" FontSize="20"/>
+            <ListBox x:Name="LbGiftReason" Grid.Row="3" ItemsSource="{Binding GiftReasons}" SelectedItem="{Binding SelectedReason}" ItemsPanel="{StaticResource LbWrapPanelTemplate}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1" Width="110" Height="45" Margin="5">
+                                        <TextBlock Foreground="{TemplateBinding Foreground}" Text="{Binding .}" FontSize="20" TextWrapping="Wrap"  VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter Property="Background" Value="DimGray"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button  Click="ButtonConfirm_OnClick">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Image Source="Resources/ok.png" Width="70"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Margin="20,0,0,0" Click="ButtonCancel_OnClick">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Image Source="Resources/close.png" Width="70"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
