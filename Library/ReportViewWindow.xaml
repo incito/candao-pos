@@ -1,0 +1,45 @@
+﻿<Window xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"  x:Class="Library.ReportViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="750" Height="690" 
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Background="#FFFFC080" Height="65">
+            <Grid>
+                <Image HorizontalAlignment="Left" Source="Resources/0111-_31_cd.png" />
+                <Button HorizontalAlignment="Right" Click="ButtonCancel_OnClick">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Image Source="Resources/下载.png" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+        
+        <dx:DXTabControl Grid.Row="1" Margin="5">
+            <dx:DXTabItem>
+                <dx:DXTabItem.Header>
+                    <TextBlock Text="品项销售明细" FontSize="20" Height="30" VerticalAlignment="Center" />
+                </dx:DXTabItem.Header>
+                <dx:DXTabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                    </Grid>
+                </dx:DXTabItem.Content>
+            </dx:DXTabItem>
+            <dx:DXTabControl.View>
+                <dx:TabControlScrollView HeaderLocation="Left" HeaderOrientation="Horizontal" />
+            </dx:DXTabControl.View>
+        </dx:DXTabControl>
+    </Grid>
+</Window>

@@ -67,6 +67,8 @@ namespace Main
 
             frmStart.frm.setMsg("获取营业时间...");
             IRestaurantService service = new RestaurantServiceImpl();
+            var test = service.GetDishSaleInfo(EnumDishSalePeriodsType.ThisMonth);
+            AllLog.Instance.E(string.Join(",", test.Item2.DishSaleInfos));
             try
             {
                 var result = service.GetRestaurantTradeTime();

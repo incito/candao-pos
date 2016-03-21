@@ -5,6 +5,7 @@ using System.Windows.Forms.VisualStyles;
 using CanDao.Pos.Model.Response;
 using Common;
 using Models;
+using Models.Enum;
 using Models.Request;
 using Models.Response;
 using Newtonsoft.Json;
@@ -112,6 +113,25 @@ namespace WebServiceReference.ServiceImpl
             catch (Exception ex)
             {
                 return new Tuple<string, RestaurantTradeTime>(ex.Message, null);
+            }
+        }
+
+        public Tuple<string, DishSaleFullInfo> GetDishSaleInfo(EnumDishSalePeriodsType periodsType)
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/getItemSellDetail.json", RestClient.server, RestClient.apiPath);
+                var request = new Dictionary<string, string>();
+                request.Add("flag", ((int)periodsType).ToString());
+                var response = HttpHelper.HttpGet<GetDishSaleInfoResponse>(addr, request);
+                if (!response.IsSuccess)
+                    return new Tuple<string, DishSaleFullInfo>(response.msg ?? "获取品项销售明细失败。", null);
+
+                return new Tuple<string, DishSaleFullInfo>(null, DataConverter.ToDishSaleFullInfo(response));
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, DishSaleFullInfo>(ex.Message, null);
             }
         }
     }

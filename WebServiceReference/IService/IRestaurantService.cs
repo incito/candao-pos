@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Models;
+using Models.Enum;
 using Models.Request;
 
 namespace WebServiceReference.IService
 {
     public interface IRestaurantService
     {
-
         /// <summary>
         /// 清机。
         /// </summary>
@@ -39,5 +39,12 @@ namespace WebServiceReference.IService
         /// </summary>
         /// <returns></returns>
         Tuple<string, RestaurantTradeTime> GetRestaurantTradeTime();
+
+        /// <summary>
+        /// 获取品项销售明细。
+        /// </summary>
+        /// <param name="periodsType">统计周期。</param>
+        /// <returns></returns>
+        Tuple<string, DishSaleFullInfo> GetDishSaleInfo(EnumDishSalePeriodsType periodsType);
     }
 }
