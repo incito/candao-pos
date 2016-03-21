@@ -5,6 +5,8 @@
     /// </summary>
     public class DishSaleInfo
     {
+        public int Index { get; set; }
+
         /// <summary>
         /// 菜品名称。
         /// </summary>
@@ -13,7 +15,7 @@
         /// <summary>
         /// 销售数量。
         /// </summary>
-        public int SalesCount { get; set; }
+        public decimal SalesCount { get; set; }
 
         /// <summary>
         /// 销售金额。

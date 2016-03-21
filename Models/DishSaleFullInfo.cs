@@ -11,5 +11,11 @@ namespace Models
 
         public DateTime EndTime { get; set; }
 
+        public string BranchId { get; set; }
+
+        public decimal TotalAmount { get; set; }
+
+        public DateTime CurrentTime { get; set; }
+
     }
 }

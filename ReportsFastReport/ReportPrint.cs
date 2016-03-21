@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data;
+using System.Reflection;
 using FastReport;
 using FastReport.Data;
 using Common;
@@ -42,6 +43,9 @@ namespace ReportsFastReport
 
         public static void PrintDishSaleDetail(DishSaleFullInfo fullInfo)
         {
+            fullInfo.BranchId = "121211";
+            fullInfo.CurrentTime = DateTime.Now;
+            fullInfo.TotalAmount = fullInfo.DishSaleInfos != null ? fullInfo.DishSaleInfos.Sum(t => t.SalesAmount) : 0;
             DataTable mainDb = ToMainDb(fullInfo);
             DataTable detailDb = ToDetailDb(fullInfo.DishSaleInfos);
             DataSet ds = new DataSet();
@@ -51,49 +55,95 @@ namespace ReportsFastReport
             rptReport.Clear();
             string file = Application.StartupPath + @"\Reports\DishSaleDetail.frx";
             rptReport.Load(file);//加载报表模板文件
-            InitializeReport(ds, ref rptReport, mainDb.TableName);
+            InitializeReport(ds, ref rptReport, detailDb.TableName);
             PrintRpt(rptReport, 1);
         }
 
         private static DataTable ToMainDb(DishSaleFullInfo fullInfo)
         {
             var tb = new DataTable("tb_main");
-            DataColumn dc = new DataColumn("StartTime", typeof (DateTime)) {Caption = "起始时间"};
+            DataColumn dc = CreateDataColumn(typeof(DateTime), "起始时间", "StartTime", DateTime.MinValue);
             tb.Columns.Add(dc);
-            dc = new DataColumn("EndTime", typeof (DateTime)) {Caption = "结束时间"};
+            dc = CreateDataColumn(typeof(DateTime), "结束时间", "EndTime", DateTime.MinValue);
             tb.Columns.Add(dc);
-            dc = new DataColumn("CurrentTime", typeof (DateTime)) {Caption = "当前时间"};
+            dc = CreateDataColumn(typeof(DateTime), "当前时间", "CurrentTime", DateTime.MinValue);
             tb.Columns.Add(dc);
-            dc = new DataColumn("BranchId", typeof(string)) { Caption = "门店编号" };
+            dc = CreateDataColumn(typeof(string), "门店编号", "BranchId", "");
             tb.Columns.Add(dc);
-            dc = new DataColumn("TotalAmount", typeof(string)) { Caption = "合计金额" };
+            dc = CreateDataColumn(typeof(decimal), "合计金额", "TotalAmount", 0m);
             tb.Columns.Add(dc);
 
-            DataRow dr = tb.NewRow();
-            dr["StartTime"] = fullInfo.StartTime;
-            dr["EndTime"] = fullInfo.EndTime;
-            dr["CurrentTime"] = DateTime.Now;
-            dr["BranchId"] = Globals.branch_id;
-            dr["TotalAmount"] = fullInfo.DishSaleInfos.Sum(t => t.SalesAmount);
-
-            tb.Rows.Add(dr);
-
+            AddObject2DataTable(tb, fullInfo);
             return tb;
         }
 
         private static DataTable ToDetailDb(List<DishSaleInfo> list)
         {
             var tb = new DataTable("tb_data");
-            DataColumn dc = new DataColumn("Index", typeof(int)) { Caption = "序号" };
+            DataColumn dc = CreateDataColumn(typeof(int), "序号", "Index", 0);
             tb.Columns.Add(dc);
-            dc = new DataColumn("Name", typeof(string)) { Caption = "品项" };
+            dc = CreateDataColumn(typeof(string), "品项", "Name", "");
             tb.Columns.Add(dc);
-            dc = new DataColumn("DishCount", typeof(double)) { Caption = "数量" };
+            dc = CreateDataColumn(typeof(decimal), "数量", "SalesCount", 0m);
             tb.Columns.Add(dc);
-            dc = new DataColumn("DishAmount", typeof(double)) { Caption = "金额" };
+            dc = CreateDataColumn(typeof(decimal), "金额", "SalesAmount", 0m);
             tb.Columns.Add(dc);
 
+            if (list != null)
+                list.ForEach(t => AddObject2DataTable(tb, t));
+
             return tb;
+        }
+
+        private static DataColumn CreateDataColumn(Type type, string caption, string columnName, object defaultValue)
+        {
+            return new DataColumn(columnName, type)
+            {
+                Caption = caption,
+                DefaultValue = defaultValue
+            };
+        }
+
+        private static void AddObject2DataTable(DataTable db, object data)
+        {
+            if (db == null || data == null)
+                return;
+
+            try
+            {
+                DataRow dr = db.NewRow();
+                var ppies = data.GetType().GetProperties();
+                foreach (var ppy in ppies)
+                {
+                    object obj = null;
+                    try
+                    {
+                        obj = dr[ppy.Name];
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+
+                    
+                    if (!IsValueType(ppy))
+                        continue;
+
+                    dr[ppy.Name] = ppy.GetValue(data, null);
+                }
+
+                db.Rows.Add(dr);
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("添加对象到DataTable时异常。", ex);
+            }
+        }
+
+        private static bool IsValueType(PropertyInfo ppy)
+        {
+            return (ppy.PropertyType == typeof (int) || ppy.PropertyType == typeof (decimal) ||
+                    ppy.PropertyType == typeof (string) || ppy.PropertyType == typeof (double) || ppy.PropertyType == typeof(DateTime));
         }
 
         /// <summary>

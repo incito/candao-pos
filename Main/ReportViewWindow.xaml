@@ -84,7 +84,7 @@
                             <Button Content="上月" FontSize="20" FontWeight="Bold" Margin="3" Tag="LastMonth"  Click="ButtonPeriod_OnClick"/>
                             <Button Content="打印" FontSize="20" FontWeight="Bold" Margin="30,0,0,0" Click="ButtonPrint_OnClick"/>
                         </StackPanel>
-                        <dxg:GridControl Grid.Row="1" ItemsSource="{Binding DishSaleInfos}">
+                        <dxg:GridControl x:Name="DcDishView" Grid.Row="1" ItemsSource="{Binding DishSaleInfos}" EndSorting="DcDishView_OnEndSorting">
                             <dxg:GridControl.Columns>
                                 <dxg:GridColumn Header="品项" VisibleIndex="1" FieldName="Name"/>
                                 <dxg:GridColumn Header="数量" VisibleIndex="2" FieldName="SalesCount"/>

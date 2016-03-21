@@ -86,7 +86,15 @@ namespace KYPOS
 
         private void ButtonPrint_OnClick(object sender, RoutedEventArgs e)
         {
+            if(_dishSaleFullInfo == null)
+                return;
+
             ReportPrint.PrintDishSaleDetail(_dishSaleFullInfo);
+        }
+
+        private void DcDishView_OnEndSorting(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
