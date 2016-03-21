@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using Common;
 using Library;
 using Models;
@@ -17,7 +20,28 @@ namespace KYPOS
     /// </summary>
     public partial class ReportViewWindow
     {
+        #region Fields
+
+        /// <summary>
+        /// 当前选中的周期。
+        /// </summary>
+        private ToggleButton _curSelectTbBtn;
+
+        /// <summary>
+        /// 品项全信息。
+        /// </summary>
         private DishSaleFullInfo _dishSaleFullInfo;
+
+        /// <summary>
+        /// 当前视图序号。
+        /// </summary>
+        private int _curViewIndex;
+
+        private const int PageSize = 11;
+
+        #endregion
+
+        #region Constructor
 
         public ReportViewWindow()
         {
@@ -27,10 +51,18 @@ namespace KYPOS
             DataContext = this;
         }
 
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// 品项销售信息集合。
         /// </summary>
         public ObservableCollection<DishSaleInfo> DishSaleInfos { get; private set; }
+
+        #endregion
+
+        #region Event Methods
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
         {
@@ -38,13 +70,95 @@ namespace KYPOS
             Close();
         }
 
-        private void ButtonPeriod_OnClick(object sender, RoutedEventArgs e)
+        private void ReportViewWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            var typeString = ((Button)sender).Tag as string;
-            var enumType = (EnumDishSalePeriodsType)Enum.Parse(typeof(EnumDishSalePeriodsType), typeString);
+            TbToday.IsChecked = true;
+        }
 
+        private void ButtonPrint_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_dishSaleFullInfo == null || _dishSaleFullInfo.DishSaleInfos == null || !_dishSaleFullInfo.DishSaleInfos.Any())
+            {
+                frmBase.Warning("没有需要打印的品项明细数据。");
+                return;
+            }
+
+            ReportPrint.PrintDishSaleDetail(_dishSaleFullInfo);
+        }
+
+        private void DcDishView_OnEndSorting(object sender, RoutedEventArgs e)
+        {
+            var sortInfo = DcDishView.SortInfo.First();
+            if (sortInfo.SortOrder == ListSortDirection.Descending)
+            {
+                if (sortInfo.FieldName == "Name")
+                    _dishSaleFullInfo.DishSaleInfos = _dishSaleFullInfo.DishSaleInfos.OrderByDescending(t => t.Name).ToList();
+                else if (sortInfo.FieldName == "SalesAmount")
+                    _dishSaleFullInfo.DishSaleInfos = _dishSaleFullInfo.DishSaleInfos.OrderByDescending(t => t.SalesAmount).ToList();
+                else if (sortInfo.FieldName == "SalesCount")
+                    _dishSaleFullInfo.DishSaleInfos = _dishSaleFullInfo.DishSaleInfos.OrderByDescending(t => t.SalesCount).ToList();
+            }
+            else
+            {
+                if (sortInfo.FieldName == "Name")
+                    _dishSaleFullInfo.DishSaleInfos = _dishSaleFullInfo.DishSaleInfos.OrderBy(t => t.Name).ToList();
+                else if (sortInfo.FieldName == "SalesAmount")
+                    _dishSaleFullInfo.DishSaleInfos = _dishSaleFullInfo.DishSaleInfos.OrderBy(t => t.SalesAmount).ToList();
+                else if (sortInfo.FieldName == "SalesCount")
+                    _dishSaleFullInfo.DishSaleInfos = _dishSaleFullInfo.DishSaleInfos.OrderBy(t => t.SalesCount).ToList();
+            }
+            var index = 1;
+            _dishSaleFullInfo.DishSaleInfos.ForEach(t => t.Index = index++);
+        }
+
+        private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+            _curSelectTbBtn = (ToggleButton)sender;
+            var enumType = (EnumDishSalePeriodsType)Enum.Parse(typeof(EnumDishSalePeriodsType), (string)((ToggleButton)sender).Tag);
             TaskService.Start(enumType, GetDishSaleDataProcess, GetDishSaleDataComplete, "获取品项明细数据中...");
         }
+
+        private void TbToday_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var tgBtn = (ToggleButton)sender;
+            if (_curSelectTbBtn != null && _curSelectTbBtn.Equals(tgBtn))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (_curSelectTbBtn != null)
+                _curSelectTbBtn.IsChecked = false;
+        }
+
+        private void BtnLast_OnClick(object sender, RoutedEventArgs e)
+        {
+            BtnNext.IsEnabled = true;
+            var newIndex = --_curViewIndex * PageSize;
+            if (newIndex < 0)
+            {
+                newIndex = 0;
+                BtnLast.IsEnabled = false;
+            }
+
+            DcDishView.View.ScrollIntoView(newIndex);
+        }
+
+        private void BtnNext_OnClick(object sender, RoutedEventArgs e)
+        {
+            BtnLast.IsEnabled = true;
+            var newIndex = ++_curViewIndex*PageSize;
+            if (newIndex >= DishSaleInfos.Count)
+            {
+                newIndex = DishSaleInfos.Count - 1;
+                BtnNext.IsEnabled = false;
+            }
+
+            DcDishView.View.ScrollIntoView(newIndex);
+        }
+        #endregion
+
+        #region Prvate Methods
 
         private object GetDishSaleDataProcess(object param)
         {
@@ -54,47 +168,31 @@ namespace KYPOS
 
         private void GetDishSaleDataComplete(object arg)
         {
-            var result = (Tuple<string, DishSaleFullInfo>)arg;
-            if (!string.IsNullOrEmpty(result.Item1))
+            try
             {
-                frmBase.Warning(result.Item1);
-                return;
-            }
-
-            _dishSaleFullInfo = result.Item2;
-            DishSaleInfos.Clear();
-            if (result.Item2 != null)
-            {
-                Dispatcher.BeginInvoke((Action)delegate
+                var result = (Tuple<string, DishSaleFullInfo>) arg;
+                if (!string.IsNullOrEmpty(result.Item1))
                 {
-                    try
-                    {
-                        result.Item2.DishSaleInfos.ForEach(DishSaleInfos.Add);
-                    }
-                    catch (Exception ex)
-                    {
-                        AllLog.Instance.E(ex.Message);
-                    }
-                });
+                    frmBase.Warning(result.Item1);
+                    return;
+                }
+
+                _dishSaleFullInfo = result.Item2;
+                DishSaleInfos.Clear();
+                if (result.Item2 != null)
+                    result.Item2.DishSaleInfos.ForEach(DishSaleInfos.Add);
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E(ex);
+            }
+            finally
+            {
+                TbTotalCount.Text = string.Format("总数：{0}", DishSaleInfos.Count);
             }
         }
 
-        private void ReportViewWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            ButtonPeriod_OnClick(BtToday, null);//默认获取今天的数据。
-        }
+        #endregion
 
-        private void ButtonPrint_OnClick(object sender, RoutedEventArgs e)
-        {
-            if(_dishSaleFullInfo == null)
-                return;
-
-            ReportPrint.PrintDishSaleDetail(_dishSaleFullInfo);
-        }
-
-        private void DcDishView_OnEndSorting(object sender, RoutedEventArgs e)
-        {
-            
-        }
     }
 }

@@ -156,20 +156,20 @@ namespace Main
             }
             finally
             {
-                btnRefresh.Tag = 0;
+                btnReport.Tag = 0;
                 this.Cursor = Cursors.Default;
                 timer2.Enabled = true;
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void RefreshAllTableStatus()
         {
             //
             try
             {
-                UpdateRefreshBtnStatus(5);
+                btnReport.Tag = 5;
                 this.Cursor = Cursors.WaitCursor;
-                btnRefresh.Enabled = false;
+                btnReport.Enabled = false;
                 timer2.Stop();
                 this.Update();//必须
 
@@ -190,7 +190,7 @@ namespace Main
             finally
             {
                 this.Cursor = Cursors.Default;
-                btnRefresh.Enabled = true;
+                btnReport.Enabled = true;
                 timer2.Start();
             }
         }
@@ -278,11 +278,11 @@ namespace Main
                     Warning("结业时间到了，请及时结业。");
                 }
 
-                int inttime = int.Parse(btnRefresh.Tag.ToString());
+                int inttime = int.Parse(btnReport.Tag.ToString());
                 if (inttime > 0)
-                    UpdateRefreshBtnStatus(--inttime);
+                    btnReport.Tag = --inttime;
                 else
-                    button3_Click(null, null);
+                    RefreshAllTableStatus();
             }
             finally
             {
@@ -292,9 +292,9 @@ namespace Main
 
         private void UpdateRefreshBtnStatus(int inttime)
         {
-            btnRefresh.Tag = inttime;
-            btnRefresh.Text = String.Format("刷新[{0}]", inttime);
-            btnRefresh.Update();
+            btnReport.Tag = inttime;
+            btnReport.Text = String.Format("刷新[{0}]", inttime);
+            btnReport.Update();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -410,7 +410,7 @@ namespace Main
             }
             finally
             {
-                btnRefresh.Tag = 0;
+                btnReport.Tag = 0;
                 this.Cursor = Cursors.Default;
                 timer2.Enabled = true;
             }
@@ -438,6 +438,19 @@ namespace Main
             }
             catch { }
             Application.Exit();
+        }
+
+        /// <summary>
+        /// 报表。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnReport_Click(object sender, EventArgs e)
+        {
+            timer2.Stop();
+            (new ReportViewWindow()).ShowDialog();
+            RefreshAllTableStatus();
+            timer2.Start();
         }
     }
 }

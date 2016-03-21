@@ -714,7 +714,7 @@ namespace Common
             {
                 Name = response.dishName,
                 SalesCount =  response.dishCount,
-                SalesAmount = response.totlePrice,
+                SalesAmount = response.totlePrice ?? 0m,
             };
         }
     }

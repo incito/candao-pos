@@ -65,10 +65,7 @@ namespace Main
             }
 
             frmStart.frm.setMsg("获取营业时间...");
-            ReportPrint.Init();
             IRestaurantService service = new RestaurantServiceImpl();
-            var wnd = new ReportViewWindow();
-            wnd.ShowDialog();
             try
             {
                 var result = service.GetRestaurantTradeTime();

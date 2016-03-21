@@ -11,6 +11,8 @@ namespace Models
         {
             BeginTime = DateTime.ParseExact(beginTime, "HH:mm", null).AddDays(1);
             EndTime = DateTime.ParseExact(endTime, "HH:mm", null);
+            if (endTime == "00:00")
+                EndTime = EndTime.AddDays(1);
         }
 
         /// <summary>

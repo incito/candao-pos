@@ -23,7 +23,7 @@ namespace Models.Response
 
         public int dishCount { get; set; }
 
-        public decimal totlePrice { get; set; }
+        public decimal? totlePrice { get; set; }
     }
 
     public class PeriodTimeResponse
