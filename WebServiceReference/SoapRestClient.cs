@@ -1509,14 +1509,13 @@ namespace WebServiceReference
             writer.WriteValue(disrate.ToString());
             writer.WritePropertyName("type");
             writer.WriteValue(type);
-            writer.WritePropertyName("sub_type");
-            writer.WriteValue(sub_type);
             //需要增加一个参数 PreferentialAmt记录所有已选的挂帐和优免金额 preferentialAmt 传给后台计算的时候去掉优惠
             writer.WritePropertyName("preferentialAmt");
             writer.WriteValue(preferentialAmt.ToString());
             writer.WriteEndObject();
             writer.Flush();
             string jsonText = sw.GetStringBuilder().ToString();
+            AllLog.Instance.I(string.Format("【usePreferentialItem】 request：{0}，", sw));
             String jsonResult = Post_Rest(address, sw);
             AllLog.Instance.I(string.Format("【usePreferentialItem】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
