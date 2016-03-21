@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace Library.Converter
-{/// <summary>
+namespace KYPOS.Converter
+{
+    /// <summary>
     /// index 转为count 
     /// </summary>
     public class IndexCountConverter : IValueConverter

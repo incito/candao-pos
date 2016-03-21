@@ -40,6 +40,62 @@ namespace ReportsFastReport
             frmProgress = new frmPrintProgress();
         }
 
+        public static void PrintDishSaleDetail(DishSaleFullInfo fullInfo)
+        {
+            DataTable mainDb = ToMainDb(fullInfo);
+            DataTable detailDb = ToDetailDb(fullInfo.DishSaleInfos);
+            DataSet ds = new DataSet();
+            ds.Tables.Add(mainDb);
+            ds.Tables.Add(detailDb);
+
+            rptReport.Clear();
+            string file = Application.StartupPath + @"\Reports\DishSaleDetail.frx";
+            rptReport.Load(file);//加载报表模板文件
+            InitializeReport(ds, ref rptReport, mainDb.TableName);
+            PrintRpt(rptReport, 1);
+        }
+
+        private static DataTable ToMainDb(DishSaleFullInfo fullInfo)
+        {
+            var tb = new DataTable("tb_main");
+            DataColumn dc = new DataColumn("StartTime", typeof (DateTime)) {Caption = "起始时间"};
+            tb.Columns.Add(dc);
+            dc = new DataColumn("EndTime", typeof (DateTime)) {Caption = "结束时间"};
+            tb.Columns.Add(dc);
+            dc = new DataColumn("CurrentTime", typeof (DateTime)) {Caption = "当前时间"};
+            tb.Columns.Add(dc);
+            dc = new DataColumn("BranchId", typeof(string)) { Caption = "门店编号" };
+            tb.Columns.Add(dc);
+            dc = new DataColumn("TotalAmount", typeof(string)) { Caption = "合计金额" };
+            tb.Columns.Add(dc);
+
+            DataRow dr = tb.NewRow();
+            dr["StartTime"] = fullInfo.StartTime;
+            dr["EndTime"] = fullInfo.EndTime;
+            dr["CurrentTime"] = DateTime.Now;
+            dr["BranchId"] = Globals.branch_id;
+            dr["TotalAmount"] = fullInfo.DishSaleInfos.Sum(t => t.SalesAmount);
+
+            tb.Rows.Add(dr);
+
+            return tb;
+        }
+
+        private static DataTable ToDetailDb(List<DishSaleInfo> list)
+        {
+            var tb = new DataTable("tb_data");
+            DataColumn dc = new DataColumn("Index", typeof(int)) { Caption = "序号" };
+            tb.Columns.Add(dc);
+            dc = new DataColumn("Name", typeof(string)) { Caption = "品项" };
+            tb.Columns.Add(dc);
+            dc = new DataColumn("DishCount", typeof(double)) { Caption = "数量" };
+            tb.Columns.Add(dc);
+            dc = new DataColumn("DishAmount", typeof(double)) { Caption = "金额" };
+            tb.Columns.Add(dc);
+
+            return tb;
+        }
+
         /// <summary>
         /// 打印预结单2
         /// </summary>

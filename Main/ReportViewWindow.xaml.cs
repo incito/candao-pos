@@ -1,26 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Services.Client;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms.VisualStyles;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Common;
+using Library;
 using Models;
 using Models.Enum;
+using ReportsFastReport;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
 
-namespace Library
+namespace KYPOS
 {
     /// <summary>
     /// 报表显示窗口。
@@ -75,7 +65,7 @@ namespace Library
             DishSaleInfos.Clear();
             if (result.Item2 != null)
             {
-                Dispatcher.BeginInvoke((Action) delegate
+                Dispatcher.BeginInvoke((Action)delegate
                 {
                     try
                     {
@@ -92,6 +82,11 @@ namespace Library
         private void ReportViewWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             ButtonPeriod_OnClick(BtToday, null);//默认获取今天的数据。
+        }
+
+        private void ButtonPrint_OnClick(object sender, RoutedEventArgs e)
+        {
+            ReportPrint.PrintDishSaleDetail(_dishSaleFullInfo);
         }
     }
 }

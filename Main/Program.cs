@@ -13,6 +13,7 @@ using DevExpress.Skins;
 using KYPOS;
 using Library;
 using Models.Enum;
+using ReportsFastReport;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
 
@@ -29,8 +30,6 @@ namespace Main
         [STAThread]
         static void Main()
         {
-
-            RestClient.getTicketList("102073024|4900|2015-07-14|会员生日49元购鱼券|1||0.000000,0.000000,false,,");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Globals.ProductVersion = Application.ProductVersion;
@@ -66,6 +65,7 @@ namespace Main
             }
 
             frmStart.frm.setMsg("获取营业时间...");
+            ReportPrint.Init();
             IRestaurantService service = new RestaurantServiceImpl();
             var wnd = new ReportViewWindow();
             wnd.ShowDialog();
