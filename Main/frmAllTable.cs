@@ -266,17 +266,17 @@ namespace Main
             {
                 timer2.Enabled = false;
 
-                //if (DateTime.Now > Globals.TradeTime.BeginTime) //当前时间大于开业时间，强制结业
-                //{
-                //    Globals.TradeTime.BeginTime = Globals.TradeTime.BeginTime.AddDays(1);
-                //    Warning("昨天还未结业，请先结业。");
-                //    SetInForcedEndWorkModel();
-                //}
-                //else if (DateTime.Now > Globals.TradeTime.EndTime.AddSeconds(10))//当前时间大于结业时间，提示结业，与真实的时间提前10秒。
-                //{
-                //    Globals.TradeTime.EndTime = Globals.TradeTime.EndTime.AddDays(1);//提示一次以后就要把结业时间计算成下一次结业，不然每一秒都会提示该信息。
-                //    Warning("结业时间到了，请及时结业。");
-                //}
+                if (DateTime.Now > Globals.TradeTime.BeginTime) //当前时间大于开业时间，强制结业
+                {
+                    Globals.TradeTime.BeginTime = Globals.TradeTime.BeginTime.AddDays(1);
+                    Warning("昨天还未结业，请先结业。");
+                    SetInForcedEndWorkModel();
+                }
+                else if (DateTime.Now > Globals.TradeTime.EndTime.AddSeconds(10))//当前时间大于结业时间，提示结业，与真实的时间提前10秒。
+                {
+                    Globals.TradeTime.EndTime = Globals.TradeTime.EndTime.AddDays(1);//提示一次以后就要把结业时间计算成下一次结业，不然每一秒都会提示该信息。
+                    Warning("结业时间到了，请及时结业。");
+                }
 
                 int inttime = int.Parse(btnRefresh.Tag.ToString());
                 if (inttime > 0)
