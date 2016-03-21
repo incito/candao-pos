@@ -2634,7 +2634,8 @@ namespace Main
                     {
                         string inputString;
                         string msg = null;
-                        if (!frmInputText.ShowInputAmount3(frmInputText.EnumInputType.Discount, out inputString))
+                        var inputType = (frmInputText.EnumInputType) (Convert.ToInt32(vcr.FreeReason));
+                        if (!frmInputText.ShowInputAmount3(inputType, out inputString))
                             return;
 
                         try

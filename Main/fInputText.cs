@@ -21,12 +21,12 @@ namespace Main
             /// <summary>
             /// 折扣。
             /// </summary>
-            Discount,
+            Discount = 1,
 
             /// <summary>
             /// 减免。
             /// </summary>
-            Reduce,
+            Reduce = 2,
         }
 
         public string inputNo = "";
