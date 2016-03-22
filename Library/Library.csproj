@@ -135,6 +135,7 @@
     <Compile Include="SelectBankWindow.xaml.cs">
       <DependentUpon>SelectBankWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Simulation.cs" />
     <Compile Include="TaskService.cs" />
     <Compile Include="SelectClearMachineStepWindow.xaml.cs">
       <DependentUpon>SelectClearMachineStepWindow.xaml</DependentUpon>

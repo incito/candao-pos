@@ -12,6 +12,7 @@ using Models.Enum;
 using ReportsFastReport;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
+using Keyboard = Library.Keyboard;
 
 namespace KYPOS
 {
@@ -83,6 +84,9 @@ namespace KYPOS
                 return;
             }
 
+            _dishSaleFullInfo.BranchId = Globals.branch_id;
+            _dishSaleFullInfo.CurrentTime = DateTime.Now;
+            _dishSaleFullInfo.TotalAmount = _dishSaleFullInfo.DishSaleInfos != null ? _dishSaleFullInfo.DishSaleInfos.Sum(t => t.SalesAmount) : 0;
             ReportPrint.PrintDishSaleDetail(_dishSaleFullInfo);
         }
 
@@ -107,8 +111,8 @@ namespace KYPOS
                 else if (sortInfo.FieldName == "SalesCount")
                     _dishSaleFullInfo.DishSaleInfos = _dishSaleFullInfo.DishSaleInfos.OrderBy(t => t.SalesCount).ToList();
             }
-            var index = 1;
-            _dishSaleFullInfo.DishSaleInfos.ForEach(t => t.Index = index++);
+
+            UpdateDishIndex();
         }
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
@@ -133,28 +137,16 @@ namespace KYPOS
 
         private void BtnLast_OnClick(object sender, RoutedEventArgs e)
         {
-            BtnNext.IsEnabled = true;
-            var newIndex = --_curViewIndex * PageSize;
-            if (newIndex < 0)
-            {
-                newIndex = 0;
-                BtnLast.IsEnabled = false;
-            }
-
-            DcDishView.View.ScrollIntoView(newIndex);
+            DcDishView.Focus();
+            Keyboard.Press(Key.PageUp);
+            Keyboard.Release(Key.PageUp);
         }
 
         private void BtnNext_OnClick(object sender, RoutedEventArgs e)
         {
-            BtnLast.IsEnabled = true;
-            var newIndex = ++_curViewIndex*PageSize;
-            if (newIndex >= DishSaleInfos.Count)
-            {
-                newIndex = DishSaleInfos.Count - 1;
-                BtnNext.IsEnabled = false;
-            }
-
-            DcDishView.View.ScrollIntoView(newIndex);
+            DcDishView.Focus();
+            Keyboard.Press(Key.PageDown);
+            Keyboard.Release(Key.PageDown);
         }
         #endregion
 
@@ -178,6 +170,7 @@ namespace KYPOS
                 }
 
                 _dishSaleFullInfo = result.Item2;
+                UpdateDishIndex();
                 DishSaleInfos.Clear();
                 if (result.Item2 != null)
                     result.Item2.DishSaleInfos.ForEach(DishSaleInfos.Add);
@@ -190,6 +183,15 @@ namespace KYPOS
             {
                 TbTotalCount.Text = string.Format("总数：{0}", DishSaleInfos.Count);
             }
+        }
+
+        /// <summary>
+        /// 更新菜品序号。
+        /// </summary>
+        private void UpdateDishIndex()
+        {
+            var index = 1;
+            _dishSaleFullInfo.DishSaleInfos.ForEach(t => t.Index = index++);
         }
 
         #endregion

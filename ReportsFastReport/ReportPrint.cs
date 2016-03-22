@@ -43,9 +43,6 @@ namespace ReportsFastReport
 
         public static void PrintDishSaleDetail(DishSaleFullInfo fullInfo)
         {
-            fullInfo.BranchId = "121211";
-            fullInfo.CurrentTime = DateTime.Now;
-            fullInfo.TotalAmount = fullInfo.DishSaleInfos != null ? fullInfo.DishSaleInfos.Sum(t => t.SalesAmount) : 0;
             DataTable mainDb = ToMainDb(fullInfo);
             DataTable detailDb = ToDetailDb(fullInfo.DishSaleInfos);
             DataSet ds = new DataSet();
