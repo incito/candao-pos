@@ -21,7 +21,7 @@ namespace Models.Response
     {
         public string dishName { get; set; }
 
-        public int dishCount { get; set; }
+        public decimal dishCount { get; set; }
 
         public decimal? totlePrice { get; set; }
     }
