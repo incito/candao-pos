@@ -4,7 +4,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converter="clr-namespace:KYPOS.Converter"
-        Width="820" Height="690" 
+        Width="820" Height="690" Title="报表查看"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="true"
         Loaded="ReportViewWindow_OnLoaded">
     <Window.Resources>

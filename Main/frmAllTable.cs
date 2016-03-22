@@ -169,7 +169,6 @@ namespace Main
             {
                 btnReport.Tag = 5;
                 this.Cursor = Cursors.WaitCursor;
-                btnReport.Enabled = false;
                 timer2.Stop();
                 this.Update();//±ØÐë
 
@@ -190,7 +189,6 @@ namespace Main
             finally
             {
                 this.Cursor = Cursors.Default;
-                btnReport.Enabled = true;
                 timer2.Start();
             }
         }
@@ -288,13 +286,6 @@ namespace Main
             {
                 timer2.Enabled = true;
             }
-        }
-
-        private void UpdateRefreshBtnStatus(int inttime)
-        {
-            btnReport.Tag = inttime;
-            btnReport.Text = String.Format("Ë¢ÐÂ[{0}]", inttime);
-            btnReport.Update();
         }
 
         private void button1_Click(object sender, EventArgs e)
