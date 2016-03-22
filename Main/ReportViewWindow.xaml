@@ -5,7 +5,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converter="clr-namespace:KYPOS.Converter"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-        Width="820" Height="500" Title="报表查看"
+        Width="820" Height="690" Title="报表查看"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="true"
         Loaded="ReportViewWindow_OnLoaded">
     <Window.Resources>
@@ -86,7 +86,7 @@
                 </Button>
             </Grid>
         </Border>
-        
+
         <dx:DXTabControl Grid.Row="1" Margin="5">
             <dx:DXTabItem>
                 <dx:DXTabItem.Header>
@@ -97,6 +97,8 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="80"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ToggleButton x:Name="TbToday" Content="今天" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="3" Style="{StaticResource TbStyle}" Tag="Today" PreviewMouseDown="TbToday_OnPreviewMouseDown" Checked="ToggleButton_OnChecked"/>
@@ -105,6 +107,7 @@
                             <ToggleButton Content="上月" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="3" Style="{StaticResource TbStyle}" Tag="LastMonth" PreviewMouseDown="TbToday_OnPreviewMouseDown" Checked="ToggleButton_OnChecked"/>
                         </StackPanel>
                         <Button Grid.Row="0" Content="打印" HorizontalAlignment="Right" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="90,0,0,0" Click="ButtonPrint_OnClick"/>
+
                         <dxg:GridControl x:Name="DcDishView" Grid.Row="1" ItemsSource="{Binding DishSaleInfos}" EndSorting="DcDishView_OnEndSorting">
                             <dxg:GridControl.Columns>
                                 <dxg:GridColumn Header="品项名称" VisibleIndex="1" FieldName="Name"/>
@@ -116,6 +119,16 @@
                                 <dxg:TableView Style="{StaticResource TableViewNavRowStyle}" AutoWidth="True"/>
                             </dxg:GridControl.View>
                         </dxg:GridControl>
+
+                        <TextBlock x:Name="TbTotalDish" Grid.Row="2" Text="品项个数：" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="TbTotalCount" Grid.Row="2" Text="数量总计：" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="TbTotalAmount" Grid.Row="2" Text="金额合计：" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+                        <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,5">
+                            <Button x:Name="BtnLast" Content="上翻" FontSize="20" Width="120" Height="50" Margin="3" Click="BtnLast_OnClick"/>
+                            <Button x:Name="BtnNext" Content="下翻" FontSize="20" Width="120" Height="50" Margin="30,3,3,3" Click="BtnNext_OnClick"/>
+                        </StackPanel>
+
                     </Grid>
                 </dx:DXTabItem.Content>
             </dx:DXTabItem>
@@ -123,12 +136,6 @@
                 <dx:TabControlScrollView HeaderLocation="Left" HeaderOrientation="Horizontal" />
             </dx:DXTabControl.View>
         </dx:DXTabControl>
-        
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-            <Button x:Name="BtnLast" Content="上翻" FontSize="20" Width="120" Height="50" Margin="3" Click="BtnLast_OnClick"/>
-            <Button x:Name="BtnNext" Content="下翻" FontSize="20" Width="120" Height="50" Margin="30,3,3,3" Click="BtnNext_OnClick"/>
-        </StackPanel>
 
-        <TextBlock x:Name="TbTotalCount" Grid.Row="2" Text="总数：" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right"/>
     </Grid>
 </Window>

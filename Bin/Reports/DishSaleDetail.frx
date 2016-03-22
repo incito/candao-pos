@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="06/16/2011 14:52:11" ReportInfo.Modified="03/22/2016 16:44:00" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="06/16/2011 14:52:11" ReportInfo.Modified="03/22/2016 18:15:50" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,29 +37,29 @@ namespace FastReport
     </TableDataSource>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="80" PaperHeight="188" LeftMargin="2.5" TopMargin="0" RightMargin="1" BottomMargin="0" FirstPageSource="15" OtherPagesSource="15" Guides="-9.45">
-    <ReportTitleBand Name="ReportTitle1" Width="289.17" Height="116.85">
+    <ReportTitleBand Name="ReportTitle1" Width="289.17" Height="102.06">
       <RichObject Name="Rich1" Left="0.78" Top="5.9" Width="278.95" Height="28.35" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'ba\'da\'cc\'e5;}{\f1\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\qc\f0\fs28\lang2052\'c6\'b7\'cf\'ee\'cf\'fa\'ca\'db\'c3\'f7\'cf\'b8\f1\fs18\par&#13;&#10;}&#13;&#10;"/>
-      <RichObject Name="Rich12" Left="5.67" Top="53.81" Width="87.61" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\f0\fs16\lang2052\'c3\'c5\'b5\'ea\'b1\'e0\'ba\'c5\'a3\'ba\lang1033 [tb_main.\'c3\'c5\'b5\'ea\'b1\'e0\'ba\'c5]\fs18\lang2052\par&#13;&#10;}&#13;&#10;"/>
-      <LineObject Name="Line5" Left="9.45" Top="82.5" Width="264.6" Border.Style="Double" Diagonal="true"/>
-      <RichObject Name="Rich15" Left="43.47" Top="88.5" Width="115.29" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\qc\b\f0\fs18\lang2052\'c6\'b7\'cf\'ee\b0\par&#13;&#10;}&#13;&#10;"/>
-      <RichObject Name="Rich16" Left="164.43" Top="88.5" Width="49.14" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'ca\'fd\'c1\'bf\b0\par&#13;&#10;}&#13;&#10;"/>
-      <RichObject Name="Rich18" Left="215.46" Top="88.5" Width="52.92" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'bd\'f0\'b6\'ee\b0\par&#13;&#10;}&#13;&#10;"/>
-      <LineObject Name="Line8" Left="9.45" Top="86.05" Width="264.6" Border.Style="Dash" Diagonal="true"/>
-      <LineObject Name="Line9" Left="8.45" Top="108.95" Width="264.6" Border.Style="Dash" Diagonal="true"/>
+      <RichObject Name="Rich12" Left="5.67" Top="55.81" Width="87.61" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\f0\fs16\lang2052\'c3\'c5\'b5\'ea\'b1\'e0\'ba\'c5\'a3\'ba\lang1033 [tb_main.\'c3\'c5\'b5\'ea\'b1\'e0\'ba\'c5]\fs18\lang2052\par&#13;&#10;}&#13;&#10;"/>
+      <LineObject Name="Line5" Left="9.45" Top="54.15" Width="264.6" Border.Style="Double" Diagonal="true"/>
+      <RichObject Name="Rich15" Left="43.47" Top="78.5" Width="115.29" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\qc\b\f0\fs18\lang2052\'c6\'b7\'cf\'ee\b0\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich16" Left="164.43" Top="78.5" Width="49.14" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 6.3.9600}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'ca\'fd\'c1\'bf\b0\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich18" Left="215.46" Top="78.5" Width="52.92" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'bd\'f0\'b6\'ee\b0\par&#13;&#10;}&#13;&#10;"/>
+      <LineObject Name="Line8" Left="6.45" Top="77.05" Width="264.6" Border.Style="Dash" Diagonal="true"/>
+      <LineObject Name="Line9" Left="8.45" Top="98.95" Width="264.6" Border.Style="Dash" Diagonal="true"/>
       <TextObject Name="Text10" Left="5.67" Top="37.8" Width="113.4" Height="18.9" Text="[tb_main.起始时间]" Format="Custom" Format.Format="yyyy-MM-dd HH:mm:ss" WordWrap="false" Font="宋体, 8pt"/>
-      <TextObject Name="Text19" Left="119.63" Top="36.8" Width="18.9" Height="18.9" Text="至" Font="宋体, 9pt"/>
+      <TextObject Name="Text19" Left="119.63" Top="36.8" Width="18.9" Height="18.9" Text="至" Font="宋体, 8pt"/>
       <TextObject Name="Text20" Left="140.3" Top="36.8" Width="119.07" Height="18.9" Text="[tb_main.结束时间]" Format="Custom" Format.Format="yyyy-MM-dd HH:mm:ss" WordWrap="false" Font="宋体, 8pt"/>
-      <RichObject Name="Rich19" Left="5.67" Top="88.5" Width="32.13" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'d0\'f2\'ba\'c5\b0\par&#13;&#10;}&#13;&#10;"/>
-      <TextObject Name="Text2" Left="139.75" Top="54.7" Width="120.96" Height="18.9" Text="[tb_main.当前时间]" Format="Custom" Format.Format="yyyy-MM-dd HH:mm:ss" WordWrap="false" Font="宋体, 8pt"/>
-      <TextObject Name="Text21" Left="89.28" Top="54.81" Width="56.7" Height="18.9" Text="打印时间" Font="宋体, 8pt"/>
+      <RichObject Name="Rich19" Left="5.67" Top="78.5" Width="32.13" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'d0\'f2\'ba\'c5\b0\par&#13;&#10;}&#13;&#10;"/>
+      <TextObject Name="Text2" Left="139.75" Top="56.7" Width="120.96" Height="18.9" Text="[tb_main.当前时间]" Format="Custom" Format.Format="yyyy-MM-dd HH:mm:ss" WordWrap="false" Font="宋体, 8pt"/>
+      <TextObject Name="Text21" Left="89.28" Top="56.81" Width="56.7" Height="18.9" Text="打印时间" Font="宋体, 8pt"/>
     </ReportTitleBand>
-    <DataBand Name="Data1" Top="119.52" Width="289.17" Height="19.9" CanGrow="true" DataSource="tb_data" KeepDetail="true">
+    <DataBand Name="Data1" Top="104.73" Width="289.17" Height="19.9" CanGrow="true" DataSource="tb_data" KeepDetail="true">
       <TextObject Name="Text12" Left="164.43" Width="49.14" Height="18.9" Text="[tb_data.数量]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" WordWrap="false" Font="宋体, 9pt"/>
       <TextObject Name="Text13" Left="215.46" Width="56.7" Height="18.9" Text="[tb_data.金额]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" WordWrap="false" Font="宋体, 9pt"/>
       <TextObject Name="Text1" Left="9.45" Width="32.13" Height="18.9" CanGrow="true" CanBreak="false" Text="[tb_data.序号]" Font="宋体, 9pt"/>
       <TextObject Name="Text3" Left="47.25" Width="113.4" Height="18.9" CanGrow="true" CanBreak="false" Text="[tb_data.品项]" Font="宋体, 9pt"/>
     </DataBand>
-    <ReportSummaryBand Name="ReportSummary1" Top="142.08" Width="289.17" Height="28.35">
+    <ReportSummaryBand Name="ReportSummary1" Top="127.29" Width="289.17" Height="28.35">
       <LineObject Name="Line10" Left="274.05" Width="-264.6" Border.Style="Dash" Diagonal="true"/>
       <TextObject Name="TbTotal" Left="189" Top="8.45" Width="85.05" Height="18.9" Text="[tb_main.合计金额]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="," Format.NegativePattern="1" HorzAlign="Center" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
       <TextObject Name="Text22" Left="157.43" Top="8.45" Width="47.25" Height="18.9" Text="合计：" HorzAlign="Right" Font="宋体, 9pt"/>

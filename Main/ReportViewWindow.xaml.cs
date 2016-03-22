@@ -162,7 +162,7 @@ namespace KYPOS
         {
             try
             {
-                var result = (Tuple<string, DishSaleFullInfo>) arg;
+                var result = (Tuple<string, DishSaleFullInfo>)arg;
                 if (!string.IsNullOrEmpty(result.Item1))
                 {
                     frmBase.Warning(result.Item1);
@@ -181,7 +181,9 @@ namespace KYPOS
             }
             finally
             {
-                TbTotalCount.Text = string.Format("总数：{0}", DishSaleInfos.Count);
+                TbTotalDish.Text = string.Format("品项个数：{0}", DishSaleInfos.Count);
+                TbTotalCount.Text = string.Format("数量总计：{0}", DishSaleInfos.Sum(t => t.SalesCount));
+                TbTotalAmount.Text = string.Format("金额合计：{0}", DishSaleInfos.Sum(t => t.SalesAmount));
             }
         }
 
