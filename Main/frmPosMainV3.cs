@@ -2678,7 +2678,7 @@ namespace Main
                         vcr.freeamount = 0;
                     }
                 }
-                else if (vcr.banktype.Equals("02") || vcr.banktype.Equals("01"))
+                else if (vcr.banktype.Equals("02") || vcr.banktype.Equals("01") || (vcr.banktype.Equals("09") && vcr.couponrate > 0))
                 {
                     if (!AskQuestion("确定使用：" + vcr.couponname))
                         return;
