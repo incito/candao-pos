@@ -1338,11 +1338,11 @@ namespace Main
             {
                 payAmount = amountgz,
                 payWay = "13",//挂帐2 挂帐2是13  
-                memerberCardNo = edtGz.Text,
-                bankCardNo = gztag, //保存券编号   
+                memerberCardNo = "",
+                bankCardNo = edtGz.Text,
                 couponnum = "0",
                 couponid = "",
-                coupondetailid = "",
+                coupondetailid = gztag, //保存券编号   
             };
             obj[3] = pay5;
             var pay6 = new PayType
@@ -2634,7 +2634,7 @@ namespace Main
                     {
                         string inputString;
                         string msg = null;
-                        var inputType = (frmInputText.EnumInputType) (Convert.ToInt32(vcr.FreeReason));
+                        var inputType = (frmInputText.EnumInputType)(Convert.ToInt32(vcr.FreeReason));
                         if (!frmInputText.ShowInputAmount3(inputType, out inputString))
                             return;
 
@@ -2678,7 +2678,7 @@ namespace Main
                         vcr.freeamount = 0;
                     }
                 }
-                else if (vcr.banktype.Equals("02") || vcr.banktype.Equals("01") || (vcr.banktype.Equals("09") && vcr.couponrate > 0))
+                else if (vcr.banktype.Equals("02") || vcr.banktype.Equals("01") || (vcr.banktype.Equals("09") && vcr.couponrate > 0) || (vcr.banktype.Equals("08") && vcr.couponrate > 0))
                 {
                     if (!AskQuestion("确定使用：" + vcr.couponname))
                         return;
