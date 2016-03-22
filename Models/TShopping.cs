@@ -121,6 +121,12 @@ namespace Models
             get { return _dishunit; }
             set { _dishunit = value; }
         }
+
+        /// <summary>
+        /// 原始单位（中英文国际化后单位只显示中文）
+        /// </summary>
+        public string DishUnitSrc { get; set; }
+
         public string Title
         {
             get { return _title; }
@@ -205,180 +211,76 @@ namespace Models
         {
             DataTable tbyh=new DataTable();
             tbyh.Columns.Clear();
-            DataColumn column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "帐单号";
-            column.ColumnName = "orderid";
-            column.DefaultValue = "";
+            var column = DataTableHelper.CreateDataColumn(typeof (string), "账单号", "orderid", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "下单员工";
-            column.ColumnName = "userid";
-            column.DefaultValue = "";
+            column = DataTableHelper.CreateDataColumn(typeof(string), "下单员工", "userid", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.DateTime");
-            column.AllowDBNull = false;
-            column.Caption = "下单时间";
-            column.ColumnName = "ordertime";
-            //column.DefaultValue = 0;
+            column = DataTableHelper.CreateDataColumn(typeof(DateTime), "下单时间", "ordertime", DateTime.MinValue);
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Int32");
-            column.AllowDBNull = false;
-            column.Caption = "状态";
-            column.ColumnName = "orderstatus";
-            column.DefaultValue = 0;
+            column = DataTableHelper.CreateDataColumn(typeof(int), "状态", "orderstatus", 0);
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Double");
-            column.AllowDBNull = false;
-            column.Caption = "数量";
-            column.ColumnName = "dishnum";
-            column.DefaultValue = 0;
+            column = DataTableHelper.CreateDataColumn(typeof(double), "数量", "dishnum", 0d);
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "桌号";
-            column.ColumnName = "tableid";
-            column.DefaultValue = "";
+            column = DataTableHelper.CreateDataColumn(typeof(string), "桌号", "tableid", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "菜品编号";
-            column.ColumnName = "dishid";
-            column.DefaultValue = "";
+            column = DataTableHelper.CreateDataColumn(typeof(string), "菜品编号", "dishid", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "忌口";
-            column.ColumnName = "avoid";
-            //column.DefaultValue = 1;
+            column = DataTableHelper.CreateDataColumn(typeof(string), "忌口", "avoid", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Int32");
-            column.AllowDBNull = false;
-            column.Caption = "编号";
-            column.ColumnName = "dishidleft";
-            column.DefaultValue = 1;
+            column = DataTableHelper.CreateDataColumn(typeof(int), "编号", "dishidleft", 1);
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "菜品名称";
-            column.ColumnName = "title"; 
-            //column.DefaultValue = 0;
+            column = DataTableHelper.CreateDataColumn(typeof(string), "菜品名称", "title", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "单位";
-            column.ColumnName = "dishunit"; 
-            //column.DefaultValue = "0";
+            column = DataTableHelper.CreateDataColumn(typeof(string), "单位", "dishunit", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Double");
-            column.AllowDBNull = false;
-            column.Caption = "会员价";
-            column.ColumnName = "memberprice"; 
-            column.DefaultValue = 0;
+            column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Double");
-            column.AllowDBNull = false;
-            column.Caption = "单价";
-            column.ColumnName = "price";
-            column.DefaultValue = 0;
+            column = DataTableHelper.CreateDataColumn(typeof(double), "会员价", "memberprice", 0d);
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Double");
-            column.AllowDBNull = false;
-            column.Caption = "单价2";
-            column.ColumnName = "price2";
-            column.DefaultValue = 0;
+            column = DataTableHelper.CreateDataColumn(typeof(double), "单价", "price", 0d);
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Double");
-            column.AllowDBNull = false;
-            column.Caption = "金额";
-            column.ColumnName = "amount";
-            column.DefaultValue = 0;
+            column = DataTableHelper.CreateDataColumn(typeof(double), "单价2", "price2", 0d);
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "source";
-            column.ColumnName = "source";
+            column = DataTableHelper.CreateDataColumn(typeof(double), "金额", "amount", 0d);
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "parentdishid";
-            column.ColumnName = "parentdishid";
+            column = DataTableHelper.CreateDataColumn(typeof(string), "source", "source", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "groupid";
-            column.ColumnName = "groupid";
+            column = DataTableHelper.CreateDataColumn(typeof(string), "parentdishid", "parentdishid", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "ispot";
-            column.ColumnName = "ispot";
+            column = DataTableHelper.CreateDataColumn(typeof(string), "groupid", "groupid", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Int32");
-            column.AllowDBNull = false;
-            column.Caption = "ordertype";
-            column.ColumnName = "ordertype";
+            column = DataTableHelper.CreateDataColumn(typeof(string), "ispot", "ispot", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.String");
-            column.AllowDBNull = false;
-            column.Caption = "Groupid2";
-            column.ColumnName = "Groupid2";
+            column = DataTableHelper.CreateDataColumn(typeof(int), "ordertype", "ordertype", 1);
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Int32");
-            column.AllowDBNull = false;
-            column.Caption = "weigh";
-            column.ColumnName = "weigh";
+            column = DataTableHelper.CreateDataColumn(typeof(string), "Groupid2", "Groupid2", "");
             tbyh.Columns.Add(column);
 
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Int32");
-            column.AllowDBNull = false;
-            column.Caption = "primarydishtype";
-            column.ColumnName = "primarydishtype";
+            column = DataTableHelper.CreateDataColumn(typeof(int), "weigh", "weigh", 1);
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(int), "primarydishtype", "primarydishtype", 1);
             tbyh.Columns.Add(column);
             
             shopptable = tbyh;
@@ -420,6 +322,7 @@ namespace Models
             dr["dishidleft"] = dishrow.Dishidleft;
             dr["title"] = dishrow.Title;
             dr["dishunit"] = dishrow.Dishunit;
+            dr["dishunitSrc"] = dishrow.DishUnitSrc;
             dr["memberprice"] = dishrow.Memberprice;
             dr["price"] = dishrow.Price ;
             dr["price2"] = dishrow.Price2;

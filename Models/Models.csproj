@@ -56,6 +56,7 @@
     <Compile Include="CandaoMember\TCandaoRet_CardLose.cs" />
     <Compile Include="CandaoMember\TCandaoRet_StoreCardDeposit.cs" />
     <Compile Include="CandaoMember\TCandaoRet_VoidSale.cs" />
+    <Compile Include="DataTableHelper.cs" />
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumTableStatus.cs" />
     <Compile Include="Enum\EnumTableType.cs" />

@@ -753,9 +753,10 @@ namespace Main
             dishinfo.Dishid = ja["dishid"].ToString();
             dishinfo.Avoid = "";
             dishinfo.Dishidleft = 1;
-            dishinfo.Title = ja["title"].ToString();
+            dishinfo.Title = InternationaHelper.GetBeforeSeparatorFlagData(ja["title"].ToString());
             dishinfo.DishType = ja["dishtype"].ToString();
-            dishinfo.Dishunit = ja["unit"].ToString();
+            dishinfo.DishUnitSrc = ja["unit"].ToString();
+            dishinfo.Dishunit = InternationaHelper.GetBeforeSeparatorFlagData(ja["unit"].ToString());
             dishinfo.Weigh = int.Parse(ja["weigh"].ToString());
             dishinfo.Memberprice = 0;
             dishinfo.Level = "0";

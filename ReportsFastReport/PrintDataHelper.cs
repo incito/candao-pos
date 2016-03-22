@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Common;
+using Models;
 using Newtonsoft.Json.Linq;
 
 namespace ReportsFastReport
@@ -20,15 +21,15 @@ namespace ReportsFastReport
         public static DataTable GetOrderListDb(JArray jArray)
         {
             DataTable dt = new DataTable("tb_data");
-            dt.Columns.Add(CreateDataColumn(typeof(decimal), "金额", "Amount", 0));
-            dt.Columns.Add(CreateDataColumn(typeof(string), "数量", "DishNumUnit", ""));
-            dt.Columns.Add(CreateDataColumn(typeof(decimal), "单价", "DishPrice", 0));
-            dt.Columns.Add(CreateDataColumn(typeof(string), "品项", "DishName", ""));
+            dt.Columns.Add(DataTableHelper.CreateDataColumn(typeof(decimal), "金额", "Amount", 0));
+            dt.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "数量", "DishNumUnit", ""));
+            dt.Columns.Add(DataTableHelper.CreateDataColumn(typeof(decimal), "单价", "DishPrice", 0));
+            dt.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "品项", "DishName", ""));
 
             var dataList = ToOrderDishPrintInfoes(jArray);
             if (dataList != null)
             {
-                dataList.ForEach(t => AddObject2DataTable(dt, t));
+                dataList.ForEach(t => DataTableHelper.AddObject2DataTable(dt, t));
             }
 
             return dt;
@@ -61,41 +62,6 @@ namespace ReportsFastReport
                 DishPrice = GetJObjectDecimal(dataJObj, "orderprice")
             };
             return item;
-        }
-
-        private static DataColumn CreateDataColumn(Type type, string caption, string columnName, object defaultValue)
-        {
-            return new DataColumn(columnName, type)
-            {
-                AllowDBNull = false,
-                Caption = caption,
-                DefaultValue = defaultValue
-            };
-        }
-
-        private static void AddObject2DataTable(DataTable db, object data)
-        {
-            if (db == null || data == null)
-                return;
-
-            try
-            {
-                DataRow dr = db.NewRow();
-                var ppies = data.GetType().GetProperties();
-                foreach (var ppy in ppies)
-                {
-                    if (dr[ppy.Name] == null)
-                        continue;
-
-                    dr[ppy.Name] = ppy.GetValue(data, null);
-                }
-
-                db.Rows.Add(dr);
-            }
-            catch (Exception ex)
-            {
-                AllLog.Instance.E("添加对象到DataTable时异常。", ex);
-            }
         }
 
         private static string GetJObjectString(JObject jObj, string key, string defaultValue = "")
