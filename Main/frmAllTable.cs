@@ -69,7 +69,6 @@ namespace Main
 
         private void frmAllTable_Load(object sender, EventArgs e)
         {
-            ReportPrint.Init();
             ThreadPool.QueueUserWorkItem(t =>
             {
                 if (Globals.BankInfos == null)
