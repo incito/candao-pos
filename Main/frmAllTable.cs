@@ -69,7 +69,6 @@ namespace Main
 
         private void frmAllTable_Load(object sender, EventArgs e)
         {
-            ReportPrint.Init();
             ThreadPool.QueueUserWorkItem(t =>
             {
                 if (Globals.BankInfos == null)
@@ -233,9 +232,9 @@ namespace Main
                     table.lblNo.Click += ucTable1_Click;
                     table.lbl2.Click += ucTable1_Click;
                     _tableControls.Add(table);
-                    if (_isForcedEndWorkModel)//如果是强制结业模式，则只允许操作就餐餐台。
-                        table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
-                    //frmProgress.frm.SetProgress("正在加载桌台资料..." + tableInfo.TableNo, TableInfos.Count, idx);
+                    table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
+                    //if (_isForcedEndWorkModel)//如果是强制结业模式，则只允许操作就餐餐台。
+                    //    table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
                     idx++;
                 }
             }

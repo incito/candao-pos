@@ -247,6 +247,7 @@
             this.tmrClose = new System.Windows.Forms.Timer(this.components);
             this.tmrOpenTable = new System.Windows.Forms.Timer(this.components);
             this.iltDbgBill = new System.Windows.Forms.ImageList(this.components);
+            this.btnClearnTable = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgWidgh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -1774,6 +1775,7 @@
             this.xtraTabPage1.Appearance.HeaderDisabled.Options.UseBorderColor = true;
             this.xtraTabPage1.Appearance.PageClient.BackColor = System.Drawing.Color.White;
             this.xtraTabPage1.Appearance.PageClient.Options.UseBackColor = true;
+            this.xtraTabPage1.Controls.Add(this.btnClearnTable);
             this.xtraTabPage1.Controls.Add(this.pnlNum);
             this.xtraTabPage1.Controls.Add(this.pnlSum);
             this.xtraTabPage1.Controls.Add(this.pnlz);
@@ -2027,7 +2029,7 @@
             this.pnlSum.Controls.Add(this.lblSum);
             this.pnlSum.Location = new System.Drawing.Point(9, 284);
             this.pnlSum.Name = "pnlSum";
-            this.pnlSum.Size = new System.Drawing.Size(634, 61);
+            this.pnlSum.Size = new System.Drawing.Size(552, 61);
             this.pnlSum.TabIndex = 279;
             // 
             // lblSum
@@ -2036,7 +2038,7 @@
             this.lblSum.Font = new System.Drawing.Font("宋体", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblSum.Location = new System.Drawing.Point(0, 0);
             this.lblSum.Name = "lblSum";
-            this.lblSum.Size = new System.Drawing.Size(634, 61);
+            this.lblSum.Size = new System.Drawing.Size(552, 61);
             this.lblSum.TabIndex = 279;
             this.lblSum.Text = "收款：";
             // 
@@ -3131,6 +3133,17 @@
             this.iltDbgBill.Images.SetKeyName(0, "weigh_icon.png");
             this.iltDbgBill.Images.SetKeyName(1, "weigh_blue.png");
             // 
+            // btnClearnTable
+            // 
+            this.btnClearnTable.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnClearnTable.Location = new System.Drawing.Point(564, 282);
+            this.btnClearnTable.Name = "btnClearnTable";
+            this.btnClearnTable.Size = new System.Drawing.Size(76, 65);
+            this.btnClearnTable.TabIndex = 281;
+            this.btnClearnTable.Text = "清台";
+            this.btnClearnTable.UseVisualStyleBackColor = true;
+            this.btnClearnTable.Click += new System.EventHandler(this.btnClearnTable_Click);
+            // 
             // frmPosMainV3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -3438,5 +3451,6 @@
         private DevExpress.XtraEditors.TextEdit edtCard;
         private System.Windows.Forms.Label label16;
         private DevExpress.XtraEditors.TextEdit edtYHCard;
+        private System.Windows.Forms.Button btnClearnTable;
     }
 }

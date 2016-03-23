@@ -1164,10 +1164,10 @@ namespace Main
                             }
                         });
 
-                        if (!iswm)
-                        {
-                            ThreadPool.QueueUserWorkItem(t => { broadMsg(); });
-                        }
+                        //if (!iswm) 咖啡模式结账都不发送消息。
+                        //{
+                        //    ThreadPool.QueueUserWorkItem(t => { broadMsg(); });
+                        //}
 
                         CanClose();
 
@@ -5220,29 +5220,28 @@ namespace Main
             if (wnd.ShowDialog() == true)
                 SelectedBankInfo = wnd.SelectedBank;
         }
+
+        private void btnClearnTable_Click(object sender, EventArgs e)
+        {
+            if (!AskQuestion("确定要清台吗?"))
+                return;
+            if (RestClient.cleantable(Globals.CurrTableInfo.tableNo))
+            {
+                try
+                {
+                    RestClient.broadcastmsg(1005, Globals.CurrOrderInfo.orderid); //这里是发清帐单指令1005
+                }
+                catch(Exception ex)
+                {
+                    AllLog.Instance.E(ex);
+                }
+                Warning("取消帐单完成!");
+                Close();
+            }
+            else
+            {
+                Warning("取消帐单失败!");
+            }
+        }
     }
 }
-
-/*
- * 优免 ： 1、团购  2、公关 3、代金券 3、会员 4、其它 
- * 
- * 优惠大类： 团购 银行 会员 自营 合作
- * 
- * t_coupon_rule;
-  couponrate 折扣比率
-  couponamount 折扣金额
-  freeamount 优免金额
-  debitamount 挂账金额
- 
- * 
- * 
- * Coupons_Name,Coupon_code,Coupon_Amount,Coupon_No
-本次消费券列表（pszTicketList）
-参数名称	规格	说明
-Coupons_Name1[30]	Char*	消费券1名称（不足30位时后面的补空格）
-Coupon_code1[15]	Char*	消费券1券编码(不足15位时采用高位字符0)
-Coupon_Amount1[12]	Char *	消费券1金额(不足12位时采用高位字符0)
-Coupon_No1[4]	Char *	消费券1张数（不足4位时采用高位补字符0）
- * 
- * 7069-5169-6039-9886-5095
-*/
