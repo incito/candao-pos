@@ -2,7 +2,7 @@
 
 namespace Models
 {
-    public class BackDishInfo
+    public class BackAllDishInfo
     {
         public EnumBackDishType BackDishType { get; set; }
 

@@ -5,6 +5,7 @@ using System.Windows.Forms.VisualStyles;
 using CanDao.Pos.Model.Response;
 using Common;
 using Models;
+using Models.Enum;
 using Models.Request;
 using Models.Response;
 using Newtonsoft.Json;
@@ -115,6 +116,30 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
+        public string BackAllDish(string tableNo, string orderId)
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/discarddish.json", RestClient.server, RestClient.apiPath);
+                BackAllDishInfo dishInfo = new BackAllDishInfo
+                {
+                    BackDishType = EnumBackDishType.All,
+                    DiscardReason = "",
+                    OrderId = orderId,
+                    TableNo = tableNo,
+                    UserName = Globals.UserInfo.UserName,
+                };
+                var request = DataConverter.ToBackDishRequest(dishInfo);
+                var response = HttpHelper.HttpPost(addr, request);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("整桌退菜异常。", ex.Message);
+                return ex.Message;
+            }
+        }
+
         public Tuple<string, List<string>> GetAllAnimals()
         {
             try
@@ -129,6 +154,7 @@ namespace WebServiceReference.ServiceImpl
             }
             catch (Exception ex)
             {
+                AllLog.Instance.E("获取所有玩偶异常。", ex.Message);
                 return new Tuple<string, List<string>>(ex.Message, null);
             }
         }

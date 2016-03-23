@@ -697,7 +697,7 @@ namespace Common
             };
         }
 
-        public static BackDishRequest ToBackDishRequest(BackDishInfo info)
+        public static BackDishRequest ToBackDishRequest(BackAllDishInfo info)
         {
             return new BackDishRequest
             {

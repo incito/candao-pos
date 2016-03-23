@@ -141,6 +141,7 @@ namespace Common
             if (type != HttpType.Get)
             {
                 var dataString = data != null ? data.ToJson() : "";
+                AllLog.Instance.I(string.Format("uri:{0}, type:{1}, request:{2}", uri, type, dataString));
                 var dataArray = Encoding.UTF8.GetBytes(dataString);
                 request.ContentLength = dataArray.Length;
                 using (Stream sr = request.GetRequestStream())
@@ -154,7 +155,9 @@ namespace Common
             {
                 using (StreamReader str = new StreamReader(stream, Encoding.UTF8))
                 {
-                    return str.ReadToEnd();
+                    var result = str.ReadToEnd();
+                    AllLog.Instance.I(string.Format("uri:{0}, type:{1}, result:{2}", uri, type, result));
+                    return result;
                 }
             }
 

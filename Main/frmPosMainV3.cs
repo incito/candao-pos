@@ -103,14 +103,11 @@ namespace Main
                 lblMsg.Text = "";
                 lblAmount2.Text = String.Format("应收金额：{0}元", 0);
                 lblAmount.Text = String.Format("合计金额：{0}元", 0);
-                try
-                {
-                    HideOpenTable();
-                }
-                catch { }
+
+                HideOpenTable();
+
                 if (status == 0)
                 {
-                    //tmrOpenTable.Enabled = true;
                     showOpenTable();
                 }
                 else
@@ -734,12 +731,7 @@ namespace Main
         private bool CheckCallBill()
         {
             int orderstatus = Globals.CurrOrderInfo.orderstatus;
-            if ((orderstatus != 1) && (orderstatus != 2) && (orderstatus != 3))
-            {
-                return false;
-            }
-            else
-                return true;
+            return (orderstatus == 1) || (orderstatus == 2) || (orderstatus == 3);
         }
 
         private void edtRoom_Enter(object sender, EventArgs e)
@@ -5225,6 +5217,9 @@ namespace Main
         {
             if (!AskQuestion("确定要清台吗?"))
                 return;
+
+
+
             if (RestClient.cleantable(Globals.CurrTableInfo.tableNo))
             {
                 try
@@ -5235,12 +5230,12 @@ namespace Main
                 {
                     AllLog.Instance.E(ex);
                 }
-                Warning("取消帐单完成!");
+                Warning("清台完成。");
                 Close();
             }
             else
             {
-                Warning("取消帐单失败!");
+                Warning("清台失败。");
             }
         }
     }

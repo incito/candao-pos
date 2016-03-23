@@ -41,6 +41,14 @@ namespace WebServiceReference.IService
         Tuple<string, RestaurantTradeTime> GetRestaurantTradeTime();
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tableNo"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        string BackAllDish(string tableNo, string orderId);
+
+        /// <summary>
         /// 获取所有小熊。
         /// </summary>
         /// <returns></returns>
