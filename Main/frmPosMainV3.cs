@@ -4237,6 +4237,14 @@ namespace Main
                 }
 
                 RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。
+                try
+                {
+                    RestClient.debitamout(Globals.CurrOrderInfo.orderid);
+                }
+                catch (Exception ex)
+                {
+                    AllLog.Instance.E("计算实收接口异常。" + ex.Message);
+                }
             }
             else
             {
