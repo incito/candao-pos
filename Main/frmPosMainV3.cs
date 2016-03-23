@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Models.CandaoMember;
 using Models.Enum;
+using WebServiceReference.ServiceImpl;
 
 namespace Main
 {
@@ -181,7 +182,7 @@ namespace Main
         {
             pnlz.Parent = xtraTabControl1.SelectedTabPage;
             pnlNum.Parent = xtraTabControl1.SelectedTabPage;
-            pnlSum.Parent = xtraTabControl1.SelectedTabPage;
+            PanelBottom.Parent = xtraTabControl1.SelectedTabPage;
             //pnlz.Parent = xtraTabControl1.SelectedTabPage;
             if (xtraTabControl1.SelectedTabPageIndex == 0)
             {
@@ -707,7 +708,7 @@ namespace Main
                             lblMember.Text = String.Format("会员：{0}", Globals.CurrOrderInfo.memberno);
                             btnFind.Tag = 1;
                             btnFind.Text = "退出";
-                            
+
                             try
                             {
                                 if (!isopentable2)
@@ -907,11 +908,11 @@ namespace Main
             lblSum.Text = String.Format("收款：{0}", tmpstr);
             if (Math.Round(getamount - amountroundtz, 2) >= payamount)
             {
-                pnlSum.BackColor = Color.DarkSeaGreen;
+                PanelBottom.BackColor = Color.DarkSeaGreen;
             }
             else
             {
-                pnlSum.BackColor = Color.Bisque;
+                PanelBottom.BackColor = Color.Bisque;
             }
             ShowLeftInfo();
 
@@ -1053,7 +1054,7 @@ namespace Main
                             return;
 
                         //如果是外卖先结算会员，如果会员结算失败就不再结算帐单
-                        isok = wmAccount(0);
+                        isok = WmAccount(0);
                         if (isok)
                         {
                             ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
@@ -1156,10 +1157,10 @@ namespace Main
                             }
                         });
 
-                        //if (!iswm) 咖啡模式结账都不发送消息。
-                        //{
-                        //    ThreadPool.QueueUserWorkItem(t => { broadMsg(); });
-                        //}
+                        if (!iswm)
+                        {
+                            ThreadPool.QueueUserWorkItem(t => { BroadSettlementMsg(); });
+                        }
 
                         CanClose();
 
@@ -1189,22 +1190,20 @@ namespace Main
             }
         }
 
-        private void broadMsg()
+        /// <summary>
+        /// 广播结算消息。
+        /// </summary>
+        private void BroadSettlementMsg()
         {
-            try
-            {
-                RestClient.broadcastmsg(1002, msgorderid); //这里是发结算指令1002
-            }
-            catch { }
-            //广播给手环2002
-            try
-            {
-                //发   服务员|台号|帐单号
-                string msg = String.Format("{0}|{1}|{2}", Globals.CurrOrderInfo.userid, Globals.CurrTableInfo.tableNo, msgorderid);
-                RestClient.broadcastmsg(2002, msg); //这里是发结算指令1002
-            }
-            catch { }
+            var msg = string.Format("{0}|{1}|{2}", Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid,
+                    ysamount);
+            RestClient.broadcastmsg(2501, msg);//广播消息给PAD
+
+            //发   服务员|台号|帐单号
+            msg = String.Format("{0}|{1}|{2}", Globals.CurrOrderInfo.userid, Globals.CurrTableInfo.tableNo, msgorderid);
+            RestClient.broadcastmsg(2002, msg); //广播消息给手环。
         }
+
         private void broadMsg2201()
         {
             try
@@ -1213,6 +1212,7 @@ namespace Main
             }
             catch { }
         }
+
         private String getTicklistStr()
         {
             //Coupons_Name 30,Coupon_code 15,Coupon_Amount 12,Coupon_No 4
@@ -3824,7 +3824,7 @@ namespace Main
                 {
                     RestClient.DeletePosOperation(Globals.CurrTableInfo.tableNo);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     AllLog.Instance.E(ex);
                 }
@@ -3861,16 +3861,12 @@ namespace Main
                         btnOpen.Visible = true;
                         if (Globals.ShoppTable.Rows.Count > 0)
                         {
-                            if (startorder(ordertype))
+                            if (startorder(ordertype, Globals.AvoidCertainFood))
                             {
-                                try
-                                {
-                                    msgorderid = Globals.CurrOrderInfo.orderid; //广播消息到PAD同步菜单
-                                    Thread thread = new Thread(broadMsg2201);
-                                    thread.Start();// 
+                                msgorderid = Globals.CurrOrderInfo.orderid; //广播消息到PAD同步菜单
+                                Thread thread = new Thread(broadMsg2201);
+                                thread.Start();
 
-                                }
-                                catch { }
                                 Globals.ShoppTable.Clear();
                                 btnOpen_Click(serder, e);
                             }
@@ -4061,13 +4057,15 @@ namespace Main
             Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
             //
         }
-        private bool bookorder(string sequence, int ordertype)
+
+        private bool bookorder(string sequence, int ordertype, string sperequire)
         {
             //下单
             //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";//tableid //Globals.UserInfo.UserID
-            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, int.Parse(sequence), ordertype);
+            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, int.Parse(sequence), ordertype, sperequire);
         }
-        private bool startorder(int ordertype)
+
+        private bool startorder(int ordertype, string sperequire)
         {
             //下单
             bool re = false;
@@ -4101,29 +4099,21 @@ namespace Main
 
             try
             {
-                re = bookorder(seqno_str.ToString(), ordertype);
-                if (!re)
+                int index = 0;
+                do
                 {
-                    Thread.Sleep(500);
-                    re = bookorder(seqno_str.ToString(), ordertype);
-                }
-                if (!re)
-                {
-                    Thread.Sleep(500);
-                    re = bookorder(seqno_str.ToString(), ordertype);
-                }
-                if (!re)
-                {
-                    Thread.Sleep(500);
-                    re = bookorder(seqno_str.ToString(), ordertype);
-                }
+                    re = bookorder(seqno_str, ordertype, sperequire);
+                } while (index++ < 3 && !re);
             }
-            catch { }
+            catch(Exception ex)
+            {
+                AllLog.Instance.E(ex);
+            }
+
             if (!re)
             {
                 ShowOrder();
                 Warning("下单失败，请检查网络!");
-
             }
             else
             {
@@ -4132,10 +4122,11 @@ namespace Main
             }
             return re;
         }
+
         /// <summary>
         /// 外卖结算 需要先结算会员，如果失败就不下单不调用java结算
         /// </summary>
-        private bool wmAccount(int ordertype)
+        private bool WmAccount(int ordertype)
         {
             bool isok = true;
             if (membercard.Length > 0)
@@ -4205,7 +4196,7 @@ namespace Main
                     int index = 1;
                     do
                     {
-                        re = bookorder(index.ToString(), ordertype);
+                        re = bookorder(index.ToString(), ordertype, Globals.AvoidCertainFood);
                     } while (index++ < 9 && !re);//下单失败多尝试几次。
                 }
                 catch (Exception ex)
@@ -5218,7 +5209,16 @@ namespace Main
             if (!AskQuestion("确定要清台吗?"))
                 return;
 
-
+            if (Globals.CurrOrderInfo.orderstatus == 0)//账单未结账，做全单退菜。
+            {
+                var service = new RestaurantServiceImpl();
+                var result = service.BackAllDish(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    Warning(string.Format("{0}{1}{2}", result, Environment.NewLine, "清台失败。"));
+                    return;
+                }
+            }
 
             if (RestClient.cleantable(Globals.CurrTableInfo.tableNo))
             {
@@ -5226,7 +5226,7 @@ namespace Main
                 {
                     RestClient.broadcastmsg(1005, Globals.CurrOrderInfo.orderid); //这里是发清帐单指令1005
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     AllLog.Instance.E(ex);
                 }
@@ -5236,6 +5236,27 @@ namespace Main
             else
             {
                 Warning("清台失败。");
+            }
+        }
+
+        private void DisableButtonByOrderStatus(int orderStatus)
+        {
+            btnAdd.Enabled = false;
+            btnOrder2.Enabled = false;
+            btnDec.Enabled = false;
+            xtraTabControl2.Enabled = false;
+            btnMore.Enabled = false;
+            xtraTabControl1.Enabled = false;
+            btnRBill.Enabled = false;
+
+            if (orderStatus == 0)
+            {
+                btnDec.Enabled = true;
+                btnAdd.Enabled = true;
+                btnOrder2.Enabled = true;
+            }
+            else if (orderStatus == 3)
+            {
             }
         }
     }

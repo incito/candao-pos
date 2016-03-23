@@ -56,9 +56,6 @@ namespace Main
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
             RestClient.GetSoapRemoteAddress();
 
-            var wnd = new SelectAnimalWindow();
-            wnd.ShowDialog();
-
             ReportPrint.Init();
             frmStart.frm.setMsg("获取系统设置...");
             try

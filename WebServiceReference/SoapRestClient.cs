@@ -1390,13 +1390,12 @@ namespace WebServiceReference
         /// <returns></returns>
         public static void broadcastmsg(int msgid, string msg)
         {
-            string ipaddress = GetLocalIp();
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/broadcastmsg/{0}/{1}/{2}", Globals.UserInfo.UserID, msgid, msg);
             AllLog.Instance.I(string.Format("【broadcastmsg】 msgid：{0}，msg：{1}。", msgid, msg));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【broadcastmsg】 result：{0}。", jsonResult));
             if (jsonResult.Equals("0"))
-                throw new Exception("连接服务器失败...");
+                AllLog.Instance.E("连接服务器失败...");
         }
 
         public static void putOrder(string tableno, string orderid, TGzInfo gzinfo)
@@ -2323,7 +2322,16 @@ namespace WebServiceReference
             return result;
         }
 
-        public static string getAllFoodArray(ref JsonWriter writer, DataTable dt, string orderid, int ordertype)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="dt"></param>
+        /// <param name="orderid"></param>
+        /// <param name="ordertype"></param>
+        /// <param name="sperequire">忌口信息。</param>
+        /// <returns></returns>
+        public static string getAllFoodArray(ref JsonWriter writer, DataTable dt, string orderid, int ordertype, string sperequire)
         {
             writer.WriteStartArray();
             string str0 = "0";
@@ -2369,8 +2377,8 @@ namespace WebServiceReference
                             dishtype = 2;
                             writer.WritePropertyName("dishes");
                             writer.WriteStartArray();
-                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, true, primarykey);
-                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, false, primarykey);
+                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, true, primarykey, sperequire);
+                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, false, primarykey, sperequire);
                             writer.WriteEndArray();
                         }
                         else
@@ -2378,8 +2386,7 @@ namespace WebServiceReference
                             //鱼锅
                             dishtype = 1;
                             writer.WritePropertyName("dishes");
-                            writer.WriteStartArray();
-                            writeDishes(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, primarykey);
+                            writer.WriteStartArray();writeDishes(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, primarykey, sperequire);
                             writer.WriteEndArray();
                         }
 
@@ -2407,7 +2414,7 @@ namespace WebServiceReference
                     writer.WritePropertyName("dishnum");
                     writer.WriteValue(double.Parse(dishnum));
                     writer.WritePropertyName("sperequire"); //忌口
-                    writer.WriteValue("");
+                    writer.WriteValue(sperequire);
                     writer.WritePropertyName("primarykey"); ////
                     writer.WriteValue(primarykey);
                     string dishstatus = "0";
@@ -2427,7 +2434,7 @@ namespace WebServiceReference
             return "";
         }
 
-        private static void writeCombos(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype, bool isfish, string primarykey)
+        private static void writeCombos(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype, bool isfish, string primarykey, string sperequire)
         {
             string str0 = "0";
             string str1 = "1";
@@ -2483,7 +2490,7 @@ namespace WebServiceReference
                             dr["Groupid2"] = groupid;
                             writer.WriteStartArray();
                             string primarykey2 = "";
-                            writeDishes(orderid, ref writer, dt, groupid2, ordertype, primarykey2);
+                            writeDishes(orderid, ref writer, dt, groupid2, ordertype, primarykey2, sperequire);
                             writer.WriteEndArray();
                         }
                         else
@@ -2509,7 +2516,7 @@ namespace WebServiceReference
                         writer.WritePropertyName("dishnum");
                         writer.WriteValue(double.Parse(dishnum));
                         writer.WritePropertyName("sperequire"); //忌口
-                        writer.WriteValue("");
+                        writer.WriteValue(sperequire);
                         writer.WritePropertyName("primarykey"); ////
                         writer.WriteValue(getGUID());
                         string dishstatus = "0";
@@ -2530,7 +2537,7 @@ namespace WebServiceReference
             }
         }
 
-        private static void writeDishes(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype, string primarykey)
+        private static void writeDishes(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype, string primarykey, string sperequire)
         {
             string str0 = "0";
             string str1 = "1";
@@ -2591,7 +2598,7 @@ namespace WebServiceReference
                         writer.WritePropertyName("dishnum");
                         writer.WriteValue(double.Parse(dishnum));
                         writer.WritePropertyName("sperequire"); //忌口
-                        writer.WriteValue("");
+                        writer.WriteValue(sperequire);
                         writer.WritePropertyName("primarykey"); ////
                         writer.WriteValue(primarykeydish);
                         string dishstatus = "0";
@@ -2621,7 +2628,7 @@ namespace WebServiceReference
             return str;
         }
 
-        public static bool bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype)
+        public static bool bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype, string sperequire)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);
             AllLog.Instance.I(string.Format("【bookorderList】 tableid：{0}，orderid：{1}，sequence：{2}。", tableid, orderid, sequence));
@@ -2639,7 +2646,7 @@ namespace WebServiceReference
             writer.WritePropertyName("sequence");
             writer.WriteValue(sequence);
             writer.WritePropertyName("rows");//所有菜品
-            getAllFoodArray(ref writer, dt, orderid, ordertype);
+            getAllFoodArray(ref writer, dt, orderid, ordertype, sperequire);
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);

@@ -136,7 +136,7 @@ namespace WebServiceReference.ServiceImpl
             catch (Exception ex)
             {
                 AllLog.Instance.E("整桌退菜异常。", ex.Message);
-                return ex.Message;
+                return "整桌退菜异常。" + ex.Message;
             }
         }
 

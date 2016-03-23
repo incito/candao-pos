@@ -29,7 +29,8 @@ namespace Library
         public SelectAnimalWindow()
         {
             InitializeComponent();
-            Animals = new ObservableCollection<string>();
+            if(Animals == null)
+                Animals = new ObservableCollection<string>();
 
             DataContext = this;
         }
