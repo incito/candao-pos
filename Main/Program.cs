@@ -13,6 +13,7 @@ using DevExpress.Skins;
 using KYPOS;
 using Library;
 using Models.Enum;
+using ReportsFastReport;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
 
@@ -55,6 +56,7 @@ namespace Main
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
             RestClient.GetSoapRemoteAddress();
 
+            ReportPrint.Init();
             frmStart.frm.setMsg("获取系统设置...");
             try
             {
