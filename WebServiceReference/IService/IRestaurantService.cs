@@ -40,6 +40,10 @@ namespace WebServiceReference.IService
         /// <returns></returns>
         Tuple<string, RestaurantTradeTime> GetRestaurantTradeTime();
 
-
+        /// <summary>
+        /// 获取所有小熊。
+        /// </summary>
+        /// <returns></returns>
+        Tuple<string, List<string>> GetAllAnimals();
     }
 }

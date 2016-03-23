@@ -114,5 +114,23 @@ namespace WebServiceReference.ServiceImpl
                 return new Tuple<string, RestaurantTradeTime>(ex.Message, null);
             }
         }
+
+        public Tuple<string, List<string>> GetAllAnimals()
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/allanimals.json", RestClient.server, RestClient.apiPath);
+                var response = HttpHelper.HttpGet<GetAllAnimalsResponse>(addr);
+                if (!response.IsSuccess)
+                    return new Tuple<string, List<string>>(response.msg ?? "获取所有小熊数据失败。", null);
+
+                var result = response.data != null ? response.data.Select(t => t.name).ToList() : null;
+                return new Tuple<string, List<string>>(null, result);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, List<string>>(ex.Message, null);
+            }
+        }
     }
 }

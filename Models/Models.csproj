@@ -66,6 +66,7 @@
     <Compile Include="Request\BackDishRequest.cs" />
     <Compile Include="Response\AuthorizeLoginResponse.cs" />
     <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />
+    <Compile Include="Response\GetAllAnimalsResponse.cs" />
     <Compile Include="Response\GetRestaurantTradeTimeResponse.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\JavaResponse.cs" />

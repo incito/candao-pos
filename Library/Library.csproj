@@ -142,6 +142,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ResImage.resx</DependentUpon>
     </Compile>
+    <Compile Include="SelectAnimalWindow.xaml.cs">
+      <DependentUpon>SelectAnimalWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SelectBankWindow.xaml.cs">
       <DependentUpon>SelectBankWindow.xaml</DependentUpon>
     </Compile>
@@ -399,6 +402,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="OtherMachineNoClearnWarningWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SelectAnimalWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,7 +19,7 @@ namespace Business
 
         public static bool BackAllDish(string orderNo, string tableNo, string userId, string reason = "")
         {
-            
+            return false;
         }
 
         public static bool backDish(string orderNo, string tableno, string discardUserId, string userid, DataTable dt, double backnum, string discardReason)

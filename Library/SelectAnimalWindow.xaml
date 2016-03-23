@@ -1,0 +1,71 @@
+﻿<Window x:Class="Library.SelectAnimalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="750" Height="690" Title="选择玩偶窗口"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False"
+        Loaded="SelectAnimalWindow_OnLoaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Background="#FFFFC080" Height="65">
+            <Grid>
+                <Image HorizontalAlignment="Left" Source="Resources/0111-_31_cd.png" />
+                <Button HorizontalAlignment="Right" Click="ButtonCancel_OnClick">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Image Source="Resources/下载.png" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+        
+        <ListBox Grid.Row="1" ItemsSource="{Binding Animals}" SelectedItem="{Binding SelectedAnimal}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" Width="730"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Background" Value="Gray"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border Background="{TemplateBinding Background}" Width="100" Height="40" Margin="3">
+                                    <TextBlock Foreground="{TemplateBinding Foreground}" FontSize="18" Text="{Binding .}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="DarkKhaki"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button  Click="ButtonConfirm_OnClick">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Image Source="Resources/ok.png" Width="70"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Margin="20,0,0,0" Click="ButtonCancel_OnClick">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Image Source="Resources/close.png" Width="70"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
