@@ -16,6 +16,12 @@ namespace Business
     public class BackDish
     {
         public static DataTable backdt = null;
+
+        public static bool BackAllDish(string orderNo, string tableNo, string userId, string reason = "")
+        {
+            
+        }
+
         public static bool backDish(string orderNo, string tableno, string discardUserId, string userid, DataTable dt, double backnum, string discardReason)
         {
             double tmpbacknum = backnum;
@@ -167,7 +173,7 @@ namespace Business
             writeObject(ref writer, "userName", userid);
             writeObject(ref writer, "dishunit", dishunit);
             writeObject(ref writer, "dishNum", getdishNum(dishNum));// 
-            writeObject(ref writer,"actionType","0");
+            writeObject(ref writer,"actionType","0");//0退单个菜，1：整单。
             writeObject(ref writer, "dishtype", "0");
             writeObject(ref writer, "dishNo", dishNo);
             writer.WriteEndObject();

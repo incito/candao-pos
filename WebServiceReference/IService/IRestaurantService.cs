@@ -39,5 +39,7 @@ namespace WebServiceReference.IService
         /// </summary>
         /// <returns></returns>
         Tuple<string, RestaurantTradeTime> GetRestaurantTradeTime();
+
+
     }
 }

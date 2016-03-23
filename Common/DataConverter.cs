@@ -22,6 +22,7 @@ using System.Xml;
 using CanDao.Pos.Model.Response;
 using Models;
 using Models.Enum;
+using Models.Request;
 using Models.Response;
 
 namespace Common
@@ -696,5 +697,16 @@ namespace Common
             };
         }
 
+        public static BackDishRequest ToBackDishRequest(BackDishInfo info)
+        {
+            return new BackDishRequest
+            {
+                actionType = ((int)info.BackDishType).ToString(),
+                currenttableid = info.TableNo,
+                discardReason = info.DiscardReason,
+                discardUserId = info.UserName,
+                orderNo = info.OrderId,
+            };
+        }
     }
 }

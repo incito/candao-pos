@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackDishInfo.cs" />
     <Compile Include="BankInfo.cs" />
     <Compile Include="Bill_Order.cs" />
     <Compile Include="CandaoMember\TCandaoMemberCardInfo.cs" />
@@ -56,11 +57,13 @@
     <Compile Include="CandaoMember\TCandaoRet_CardLose.cs" />
     <Compile Include="CandaoMember\TCandaoRet_StoreCardDeposit.cs" />
     <Compile Include="CandaoMember\TCandaoRet_VoidSale.cs" />
+    <Compile Include="Enum\EnumBackDishType.cs" />
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumTableStatus.cs" />
     <Compile Include="Enum\EnumTableType.cs" />
     <Compile Include="NoClearMachineInfo.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
+    <Compile Include="Request\BackDishRequest.cs" />
     <Compile Include="Response\AuthorizeLoginResponse.cs" />
     <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />
     <Compile Include="Response\GetRestaurantTradeTimeResponse.cs" />
