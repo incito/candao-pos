@@ -610,16 +610,13 @@ namespace Main
                         price = ja["price"].ToString();
                     }
                     if (tabletype.Equals("1"))
-                    {
                         btntables[j].lbl2.Text = "";
-                    }
                     else
-                      btntables[j].lbl2.Text = string.Format("{0}/{1}", price, ja["unit"].ToString());
+                        btntables[j].lbl2.Text = string.Format("{0}/{1}", price, InternationaHelper.GetBeforeSeparatorFlagData(ja["unit"].ToString()));
+
                     if (weigh==1)
-                    {
-                        //是称重
                         btntables[j].lbl2.Text += "  称重";
-                    }
+
                     btntables[j].status = orderstatus;
                     btntables[j].lblNo.Tag = ja;
                     btntables[j].lbl2.Tag = ja;
@@ -756,7 +753,6 @@ namespace Main
             dishinfo.Title = InternationaHelper.GetBeforeSeparatorFlagData(ja["title"].ToString());
             dishinfo.DishType = ja["dishtype"].ToString();
             dishinfo.DishUnitSrc = ja["unit"].ToString();
-            dishinfo.Dishunit = InternationaHelper.GetBeforeSeparatorFlagData(ja["unit"].ToString());
             dishinfo.Weigh = int.Parse(ja["weigh"].ToString());
             dishinfo.Memberprice = 0;
             dishinfo.Level = "0";
@@ -839,7 +835,7 @@ namespace Main
                         dishinfo.Dishnum = 1;
                         dishinfo.Parentdishid = potDishInfo.PotInfo.Parentdishid;
                         dishinfo.Groupid = potDishInfo.PotInfo.Groupid;
-                        dishinfo.Dishunit = "份";
+                        dishinfo.DishUnitSrc = "份";
                         dishinfo.Orderstatus = 0;
                         potDishInfo.PotInfo.Orderstatus = 2;
                         potDishInfo.FishDishInfo1.Orderstatus = 3;

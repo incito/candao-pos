@@ -30,7 +30,7 @@ namespace Models
         private decimal _memberprice;//会员价
         private int _dishidleft;//编号
         private string _title;//菜品名称
-        private string _dishunit;//单位
+        private string _dishunit;
         private decimal _amount;//金额
         private string _source;//分类
         private string _dishtype;//类别
@@ -44,6 +44,7 @@ namespace Models
         private int _weigh;//是不是称重
         private int _primarydishtype;
         private string _level;
+        private string _dishUnitSrc;
 
         public int Primarydishtype
         {
@@ -116,16 +117,24 @@ namespace Models
             get { return _price2; }
             set { _price2 = value; }
         }
-        public string Dishunit
-        {
-            get { return _dishunit; }
-            set { _dishunit = value; }
-        }
+
+        /// <summary>
+        /// 单位。
+        /// </summary>
+        public string Dishunit { get; private set; }
 
         /// <summary>
         /// 原始单位（中英文国际化后单位只显示中文）
         /// </summary>
-        public string DishUnitSrc { get; set; }
+        public string DishUnitSrc
+        {
+            get { return _dishUnitSrc; }
+            set
+            {
+                _dishUnitSrc = value;
+                Dishunit = InternationaHelper.GetBeforeSeparatorFlagData(value);
+            }
+        }
 
         public string Title
         {

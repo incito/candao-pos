@@ -1,4 +1,4 @@
-﻿namespace Common
+﻿namespace Models
 {
     /// <summary>
     /// 国际化辅助类。

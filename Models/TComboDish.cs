@@ -164,6 +164,7 @@ namespace Models
             }
             return combo;
         }
+
         public static t_shopping parseonly(JObject ja,bool ispot)
         {
             t_shopping dishinfo = new t_shopping();
@@ -181,7 +182,8 @@ namespace Models
             dishinfo.Dishidleft = 1;
             dishinfo.Title = ja["contactdishname"].ToString();
             dishinfo.DishType = ja["dishtype"].ToString();
-            dishinfo.Dishunit = ja["dishunitid"].ToString();
+            dishinfo.DishUnitSrc = ja["dishunitid"].ToString();
+            //dishinfo.Dishunit = ja["dishunitid"].ToString();
             dishinfo.Memberprice = 0;
             decimal price = 0;
             string pricestr = "";
