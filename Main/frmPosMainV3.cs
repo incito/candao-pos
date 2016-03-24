@@ -3841,6 +3841,8 @@ namespace Main
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = true;
             xtraTabControl1.Visible = true;
+            xtraTabControl1.Enabled = true;
+            xtraTabControl2.Enabled = true;
             pnlSum.Visible = true;
             btnClearnTable.Visible = true;
             pnlAmount.Visible = true;
