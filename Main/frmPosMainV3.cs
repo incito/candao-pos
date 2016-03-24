@@ -84,6 +84,11 @@ namespace Main
         private string msgorderid = "";
         private bool isopentable2 = false;
 
+        /// <summary>
+        /// 如果清台失败重试次数。
+        /// </summary>
+        private int _retryClearTableTimes = 0;
+
         //记录每张台下单序列的INI文件
         public frmPosMainV3()
         {
@@ -5266,6 +5271,7 @@ namespace Main
             if (!AskQuestion("确定要清台吗?"))
                 return;
 
+            _retryClearTableTimes = 0;
             if (Globals.CurrOrderInfo.orderstatus == 0 && Globals.OrderTable.Rows.Count > 0)//账单未结账，做全单退菜。
                 TaskService.Start(null, BackAllDishProcess, BackAllDishComplete, "已点菜品退菜中...");
             else
@@ -5289,6 +5295,7 @@ namespace Main
 
         private void ClearnTableAsync(string loadingMsg)
         {
+
             TaskService.Start(null, ClearnTableProcess, ClearnTableComplete, loadingMsg);
         }
 
@@ -5310,17 +5317,22 @@ namespace Main
 
         private void ClearnTableComplete(object arg)
         {
-            if ((bool)arg)
+            var result = (bool)arg;
+            var msg = result ? "清台成功" : "清台失败";
+            AllLog.Instance.I(msg);
+
+            if (!result && _retryClearTableTimes++ < 3)
             {
-                Warning("清台成功。");
+                ClearnTableAsync(iswm ? null : string.Format("执行清台中(重试第{0}次)...", _retryClearTableTimes));
+                return;
+            }
+
+            if (!iswm)
+            {
+                Warning(msg);
                 Close();
             }
-            else
-            {
-                Warning("清台失败。");
-            }
         }
-
 
         private void DisableButtonByOrderStatus(int orderStatus)
         {
