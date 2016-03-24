@@ -167,7 +167,8 @@ namespace ReportsFastReport
             DataTable yh = new DataTable();
             yh = yhList.Copy();
             dtOrder = Bill_Order.getOrder(jrOrder);
-            dtList = Bill_Order.getOrder_List(jrList);
+            //dtList = Bill_Order.getOrder_List(jrList);
+            dtList = PrintDataHelper.GetOrderListDb(jrList);
             dtJs = Bill_Order.getOrder_Js(jrJS);
             DataTable dtSettlementDetail = Bill_Order.GetSettlementDetailTable(GetPresettlementDetailList((JObject)jrOrder[0], ra));
             rptReport.Clear();
@@ -239,7 +240,8 @@ namespace ReportsFastReport
             DataTable dtJs = null;
 
             dtOrder = Bill_Order.getOrder(jrOrder);
-            dtList = Bill_Order.getOrder_List(jrList);
+            //dtList = Bill_Order.getOrder_List(jrList);
+            dtList = PrintDataHelper.GetOrderListDb(jrList);
             dtJs = Bill_Order.getOrder_Js(jrJS);
             DataTable dtSettlementDetail = Bill_Order.GetSettlementDetailTable(GetSettlementDetailList((JObject)jrOrder[0]));
             rptReport.Clear();
@@ -366,7 +368,8 @@ namespace ReportsFastReport
             DataTable dtJs = null;
 
             dtOrder = Models.Bill_Order.getOrder(jrOrder);
-            dtList = Models.Bill_Order.getOrder_List(jrList);
+            //dtList = Models.Bill_Order.getOrder_List(jrList);
+            dtList = PrintDataHelper.GetOrderListDb(jrList);
             dtJs = Models.Bill_Order.getOrder_Js(jrJS);
             rptReport.Clear();
             string file = Application.StartupPath + @"\Reports\rptBill3.frx";

@@ -3782,7 +3782,7 @@ namespace Main
                 DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
                 double num = double.Parse(dr["dishnum"].ToString());
                 string dishid = dr["dishid"].ToString();
-                string dishunit = dr["dishunit"].ToString();
+                string dishunit = dr["dishunitSrc"].ToString();//dr["dishunit"].ToString();//国际化要使用原始单位。
                 string msg = "";
                 //如果选择的菜品是待称重，输入称重后数量
                 string dishstatus = dr["dishstatus"].ToString();

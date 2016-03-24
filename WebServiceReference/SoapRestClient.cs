@@ -838,31 +838,17 @@ namespace WebServiceReference
                     dt.Clear();
                     dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
                     Globals.OrderTable.Clear();
-                    Globals.OrderTable = null;
-                    if (dt.Rows.Count > 0)
+
+                    //国际化处理品项名称和单位
+                    var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
+                    dt.Columns.Add(column);
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        DataRow dr = dt.Rows[0];
-                        if (dr[0].ToString().Equals(""))
-                        {
-                            dt.Rows.RemoveAt(0);
-                        }
+                        dr["title"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                        dr["dishunitSrc"] = dr["dishunit"];
+                        dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
                     }
-                    if (dt.Rows.Count > 0)
-                    {
-                        DataRow dr = dt.Rows[0];
-                        if (dr[0].ToString().Equals(""))
-                        {
-                            dt.Rows.RemoveAt(0);
-                        }
-                    }
-                    if (dt.Rows.Count > 0)
-                    {
-                        DataRow dr = dt.Rows[dt.Rows.Count - 1];
-                        if (dr[0].ToString().Equals(""))
-                        {
-                            dt.Rows.RemoveAt(dt.Rows.Count - 1);
-                        }
-                    }
+
                     Globals.OrderTable = dt;
                 }
             }
@@ -983,23 +969,17 @@ namespace WebServiceReference
                 dt.Clear();
                 dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
                 Globals.OrderTable.Clear();
-                Globals.OrderTable = null;
-                if (dt.Rows.Count > 0)
+
+                //国际化处理品项名称和单位
+                var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
+                dt.Columns.Add(column);
+                foreach (DataRow dr in dt.Rows)
                 {
-                    DataRow dr = dt.Rows[0];
-                    if (dr[0].ToString().Equals(""))
-                    {
-                        dt.Rows.RemoveAt(0);
-                    }
+                    dr["title"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                    dr["dishunitSrc"] = dr["dishunit"];
+                    dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
                 }
-                if (dt.Rows.Count > 0)
-                {
-                    DataRow dr = dt.Rows[dt.Rows.Count - 1];
-                    if (dr[0].ToString().Equals(""))
-                    {
-                        dt.Rows.RemoveAt(dt.Rows.Count - 1);
-                    }
-                }
+
                 Globals.OrderTable = dt;
             }
             return result;
@@ -2404,7 +2384,7 @@ namespace WebServiceReference
                     string userid = dr["userid"].ToString();
                     writer.WritePropertyName("userName");
                     writer.WriteValue(userid);
-                    string dishunit = dr["dishunit"].ToString();
+                    string dishunit = dr["dishunitSrc"].ToString();//dr["dishunit"].ToString();//国际化以后采用原始单位。
                     writer.WritePropertyName("dishunit");
                     writer.WriteValue(dishunit);
                     writer.WritePropertyName("orderid");
@@ -2503,7 +2483,7 @@ namespace WebServiceReference
                         string userid = dr["userid"].ToString();
                         writer.WritePropertyName("userName");
                         writer.WriteValue(userid);
-                        string dishunit = dr["dishunit"].ToString();
+                        string dishunit = dr["dishunitSrc"].ToString();//dr["dishunit"].ToString();//国际化以后采用原始单位。
                         writer.WritePropertyName("dishunit");
                         writer.WriteValue(dishunit);
                         writer.WritePropertyName("orderid");
@@ -2588,7 +2568,7 @@ namespace WebServiceReference
                         string userid = dr["userid"].ToString();
                         writer.WritePropertyName("userName");
                         writer.WriteValue(userid);
-                        string dishunit = dr["dishunit"].ToString();
+                        string dishunit = dr["dishunitSrc"].ToString();//dr["dishunit"].ToString();//国际化以后采用原始单位。
                         writer.WritePropertyName("dishunit");
                         writer.WriteValue(dishunit);
                         writer.WritePropertyName("orderid");
@@ -2808,6 +2788,7 @@ namespace WebServiceReference
             String OrderJson = "";
             JArray jrOrder = null;
             string ipaddress = GetLocalIp();
+            dishunit = dishunit.Replace("#", "&quot"); //DataServer接口不能直接传 '#'，大坑。
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getBackDishInfo/{0}/{1}/{2}/{3}/", orderid, dishid, dishunit, tableno);
             AllLog.Instance.I(string.Format("【getBackDishInfo】 orderid：{0}，dishid：{1}，tableno：{2}。", orderid, dishid, tableno));
             String jsonResult = Request_Rest(address);

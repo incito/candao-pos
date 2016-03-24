@@ -113,8 +113,10 @@ namespace Newtonsoft.Json.Converters
             DataRow dr = dt.NewRow();
             reader.Read();
 
+            bool hasValue = false;
             while (reader.TokenType == JsonToken.PropertyName)
             {
+                hasValue = true;
                 string columnName = (string)reader.Value;
 
                 reader.Read();
@@ -169,8 +171,11 @@ namespace Newtonsoft.Json.Converters
                 reader.Read();
             }
 
-            dr.EndEdit();
-            dt.Rows.Add(dr);
+            if (hasValue)
+            {
+                dr.EndEdit();
+                dt.Rows.Add(dr);
+            }
         }
 
         private static Type GetColumnDataType(JsonReader reader)

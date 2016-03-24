@@ -58,6 +58,7 @@
     <Compile Include="CandaoMember\TCandaoRet_VoidSale.cs" />
     <Compile Include="DishSaleFullInfo.cs" />
     <Compile Include="DishSaleInfo.cs" />
+    <Compile Include="DataTableHelper.cs" />
     <Compile Include="Enum\EnumDishSalePeriodsType.cs" />
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumTableStatus.cs" />

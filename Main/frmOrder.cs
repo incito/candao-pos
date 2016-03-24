@@ -553,7 +553,7 @@ namespace Main
             {
                 btntables[i].Tag = -1;
             }
-            ///用两次循环实现，第一次填充，第二次隐藏  加入分页功能
+            //用两次循环实现，第一次填充，第二次隐藏  加入分页功能
             if (jarrTables != null)
             {
                 int i = 0;                //int tmpi = (currpage_type - 1) * btncount;
@@ -588,6 +588,7 @@ namespace Main
                     tableid = ja["dishid"].ToString();
                     tableName = ja["title"].ToString();
                     tableNo = ja["title"].ToString();
+                    tableNo = InternationaHelper.GetBeforeSeparatorFlagData(tableNo);
                     tabletype = ja["dishtype"].ToString();
                     weigh = int.Parse(ja["weigh"].ToString());
                     orderstatus = 0;
@@ -752,9 +753,10 @@ namespace Main
             dishinfo.Dishid = ja["dishid"].ToString();
             dishinfo.Avoid = "";
             dishinfo.Dishidleft = 1;
-            dishinfo.Title = ja["title"].ToString();
+            dishinfo.Title = InternationaHelper.GetBeforeSeparatorFlagData(ja["title"].ToString());
             dishinfo.DishType = ja["dishtype"].ToString();
-            dishinfo.Dishunit = ja["unit"].ToString();
+            dishinfo.DishUnitSrc = ja["unit"].ToString();
+            dishinfo.Dishunit = InternationaHelper.GetBeforeSeparatorFlagData(ja["unit"].ToString());
             dishinfo.Weigh = int.Parse(ja["weigh"].ToString());
             dishinfo.Memberprice = 0;
             dishinfo.Level = "0";

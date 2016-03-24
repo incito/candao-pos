@@ -279,6 +279,7 @@ namespace Models
             jarray2DataTable(jr, ref dt);
             return dt;
         }
+
         /// <summary>
         ///  JArray转为单体表
         /// </summary>
@@ -329,6 +330,7 @@ namespace Models
             jarray2DataTable(jr, ref dt);
             return dt;
         }
+
         /// <summary>
         ///  JArray转为结算表
         /// </summary>

@@ -88,6 +88,8 @@
     <Compile Include="frmReportUser.Designer.cs">
       <DependentUpon>frmReportUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="OrderDishPrintInfo.cs" />
+    <Compile Include="PrintDataHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
