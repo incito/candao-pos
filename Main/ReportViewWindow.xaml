@@ -110,10 +110,16 @@
 
                         <dxg:GridControl x:Name="DcDishView" Grid.Row="1" ItemsSource="{Binding DishSaleInfos}" EndSorting="DcDishView_OnEndSorting">
                             <dxg:GridControl.Columns>
-                                <dxg:GridColumn Header="品项名称" VisibleIndex="1" FieldName="Name"/>
+                                <dxg:GridColumn Header="品项名称" VisibleIndex="1" FieldName="Name">
+                                    <dxg:GridColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding RowData.Row.Name}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                        </DataTemplate>
+                                    </dxg:GridColumn.CellTemplate>
+                                </dxg:GridColumn>
                                 <dxg:GridColumn Header="销售数量" VisibleIndex="2" FieldName="SalesCount"  />
                                 <dxg:GridColumn Header="销售金额" VisibleIndex="3" FieldName="SalesAmount"
-                                               EditSettings="{dxe:SpinSettings HorizontalContentAlignment=Center, MaskType=Numeric, Mask=c, MaskUseAsDisplayFormat=True, MinValue=0}"/>
+                                               EditSettings="{dxe:SpinSettings HorizontalContentAlignment=Right, MaskType=Numeric, Mask=c, MaskUseAsDisplayFormat=True, MinValue=0}"/>
                             </dxg:GridControl.Columns>
                             <dxg:GridControl.View>
                                 <dxg:TableView Style="{StaticResource TableViewNavRowStyle}" AutoWidth="True"/>
