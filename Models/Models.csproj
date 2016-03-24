@@ -61,6 +61,7 @@
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumTableStatus.cs" />
     <Compile Include="Enum\EnumTableType.cs" />
+    <Compile Include="GiftDishInfo.cs" />
     <Compile Include="NoClearMachineInfo.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
     <Compile Include="Request\BackDishRequest.cs" />

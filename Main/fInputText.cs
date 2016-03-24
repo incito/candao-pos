@@ -13,7 +13,23 @@ namespace Main
 {
     public partial class frmInputText : frmBase
     {
-        public string inputNo="";
+        /// <summary>
+        /// 数据类型。
+        /// </summary>
+        public enum EnumInputType
+        {
+            /// <summary>
+            /// 折扣。
+            /// </summary>
+            Discount = 1,
+
+            /// <summary>
+            /// 减免。
+            /// </summary>
+            Reduce = 2,
+        }
+
+        public string inputNo = "";
         public static string ShowInputText()
         {
             frmInputText inputtext = new frmInputText();
@@ -22,15 +38,15 @@ namespace Main
             return inputtext.inputNo;
         }
 
-        public static bool ShowInputAmount(string caption,string lbltext,out string input)
+        public static bool ShowInputAmount(string caption, string lbltext, out string input)
         {
             frmInputText inputtext = new frmInputText();
             inputtext.Text = caption;
             inputtext.lblTitle.Text = lbltext;
             inputtext.ShowDialog();
-            input=inputtext.inputNo;
+            input = inputtext.inputNo;
             inputtext.rbtDiscount.Visible = false;
-            bool re=  inputtext.DialogResult == DialogResult.OK;
+            bool re = inputtext.DialogResult == DialogResult.OK;
             try
             {
                 inputtext.Close();
@@ -38,11 +54,36 @@ namespace Main
             catch { }
             try
             {
-                inputtext=null;
+                inputtext = null;
             }
             catch { }
             return re;
         }
+
+        public static bool ShowInputAmount3(EnumInputType type, out string input)
+        {
+            input = null;
+            frmInputText frm = new frmInputText { Text = "输入" };
+            frm.lblTitle.Text = "优免金额";
+            switch (type)
+            {
+                case EnumInputType.Discount:
+                    frm.rbtAmount.Visible = false;
+                    frm.rbtDiscount.Checked = true;
+                    break;
+                case EnumInputType.Reduce:
+                    frm.rbtDiscount.Visible = false;
+                    frm.rbtAmount.Checked = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("type", type, null);
+            }
+
+            var result = frm.ShowDialog();
+            input = frm.inputNo;
+            return result == DialogResult.OK;
+        }
+
         public static bool ShowInputAmount2(string caption, string lbltext, out string input, out int type)
         {
             frmInputText inputtext = new frmInputText();
@@ -115,11 +156,11 @@ namespace Main
         {
             //
             //if (!AskQuestion("确定要使用鱼券："+edtMemberCard.Text)) return;
-            if(edtMemberCard.Text.Length>0)
+            if (edtMemberCard.Text.Length > 0)
             {
-                if(rbtDiscount.Checked)
+                if (rbtDiscount.Checked)
                 {
-                    if(float.Parse(edtMemberCard.Text)>=100)
+                    if (float.Parse(edtMemberCard.Text) >= 100)
                     {
                         edtMemberCard.Focus();
                         edtMemberCard.SelectAll();
@@ -132,9 +173,9 @@ namespace Main
                         return;
                     }
                 }
-               inputNo = edtMemberCard.Text;
-               this.DialogResult= DialogResult.OK;
-               Close();
+                inputNo = edtMemberCard.Text;
+                this.DialogResult = DialogResult.OK;
+                Close();
             }
         }
         private void setBtnFocus()

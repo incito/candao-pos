@@ -40,11 +40,6 @@ namespace Main
             this.button19 = new System.Windows.Forms.Button();
             this.button20 = new System.Windows.Forms.Button();
             this.dgvBill = new System.Windows.Forms.DataGridView();
-            this.gzName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.parternerid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.relaperson = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.telephone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.code = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button15 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
@@ -77,6 +72,11 @@ namespace Main
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.gzName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.parternerid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.relaperson = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.telephone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.code = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.edtTableNo.Properties)).BeginInit();
@@ -227,48 +227,6 @@ namespace Main
             this.dgvBill.TabIndex = 4;
             this.dgvBill.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvBill_MouseDown);
             this.dgvBill.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dgvBill_MouseUp);
-            // 
-            // gzName
-            // 
-            this.gzName.DataPropertyName = "name";
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.gzName.DefaultCellStyle = dataGridViewCellStyle2;
-            this.gzName.HeaderText = "挂帐单位";
-            this.gzName.Name = "gzName";
-            this.gzName.ReadOnly = true;
-            this.gzName.Width = 800;
-            // 
-            // parternerid
-            // 
-            this.parternerid.DataPropertyName = "parternerid";
-            this.parternerid.HeaderText = "parternerid";
-            this.parternerid.Name = "parternerid";
-            this.parternerid.ReadOnly = true;
-            this.parternerid.Visible = false;
-            // 
-            // relaperson
-            // 
-            this.relaperson.DataPropertyName = "relaperson";
-            this.relaperson.HeaderText = "relaperson";
-            this.relaperson.Name = "relaperson";
-            this.relaperson.ReadOnly = true;
-            this.relaperson.Visible = false;
-            // 
-            // telephone
-            // 
-            this.telephone.DataPropertyName = "telephone";
-            this.telephone.HeaderText = "telephone";
-            this.telephone.Name = "telephone";
-            this.telephone.ReadOnly = true;
-            this.telephone.Visible = false;
-            // 
-            // code
-            // 
-            this.code.DataPropertyName = "code";
-            this.code.HeaderText = "code";
-            this.code.Name = "code";
-            this.code.ReadOnly = true;
-            this.code.Visible = false;
             // 
             // panel4
             // 
@@ -695,6 +653,48 @@ namespace Main
             this.pictureBox1.Size = new System.Drawing.Size(280, 66);
             this.pictureBox1.TabIndex = 26;
             this.pictureBox1.TabStop = false;
+            // 
+            // gzName
+            // 
+            this.gzName.DataPropertyName = "name";
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.gzName.DefaultCellStyle = dataGridViewCellStyle2;
+            this.gzName.HeaderText = "挂帐单位";
+            this.gzName.Name = "gzName";
+            this.gzName.ReadOnly = true;
+            this.gzName.Width = 800;
+            // 
+            // parternerid
+            // 
+            this.parternerid.DataPropertyName = "preferential";
+            this.parternerid.HeaderText = "preferential";
+            this.parternerid.Name = "parternerid";
+            this.parternerid.ReadOnly = true;
+            this.parternerid.Visible = false;
+            // 
+            // relaperson
+            // 
+            this.relaperson.DataPropertyName = "relaperson";
+            this.relaperson.HeaderText = "relaperson";
+            this.relaperson.Name = "relaperson";
+            this.relaperson.ReadOnly = true;
+            this.relaperson.Visible = false;
+            // 
+            // telephone
+            // 
+            this.telephone.DataPropertyName = "telephone";
+            this.telephone.HeaderText = "telephone";
+            this.telephone.Name = "telephone";
+            this.telephone.ReadOnly = true;
+            this.telephone.Visible = false;
+            // 
+            // code
+            // 
+            this.code.DataPropertyName = "code";
+            this.code.HeaderText = "code";
+            this.code.Name = "code";
+            this.code.ReadOnly = true;
+            this.code.Visible = false;
             // 
             // frmSelectGz
             // 
