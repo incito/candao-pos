@@ -712,7 +712,7 @@ namespace Common
         {
             return new DishSaleInfo
             {
-                Name = response.dishName,
+                Name = InternationaHelper.FilterSeparatorFlag(response.dishName),
                 SalesCount =  response.dishCount,
                 SalesAmount = response.totlePrice ?? 0m,
             };
