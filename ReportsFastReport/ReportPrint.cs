@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data;
+using System.Reflection;
 using FastReport;
 using FastReport.Data;
 using Common;
@@ -38,6 +39,108 @@ namespace ReportsFastReport
         public static void Init()
         {
             frmProgress = new frmPrintProgress();
+        }
+
+        public static void PrintDishSaleDetail(DishSaleFullInfo fullInfo)
+        {
+            DataTable mainDb = ToMainDb(fullInfo);
+            DataTable detailDb = ToDetailDb(fullInfo.DishSaleInfos);
+            DataSet ds = new DataSet();
+            ds.Tables.Add(mainDb);
+            ds.Tables.Add(detailDb);
+
+            rptReport.Clear();
+            string file = Application.StartupPath + @"\Reports\DishSaleDetail.frx";
+            rptReport.Load(file);//加载报表模板文件
+            InitializeReport(ds, ref rptReport, detailDb.TableName);
+            PrintRpt(rptReport, 1);
+        }
+
+        private static DataTable ToMainDb(DishSaleFullInfo fullInfo)
+        {
+            var tb = new DataTable("tb_main");
+            DataColumn dc = CreateDataColumn(typeof(DateTime), "起始时间", "StartTime", DateTime.MinValue);
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(DateTime), "结束时间", "EndTime", DateTime.MinValue);
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(DateTime), "当前时间", "CurrentTime", DateTime.MinValue);
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(string), "门店编号", "BranchId", "");
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(decimal), "合计金额", "TotalAmount", 0m);
+            tb.Columns.Add(dc);
+
+            AddObject2DataTable(tb, fullInfo);
+            return tb;
+        }
+
+        private static DataTable ToDetailDb(List<DishSaleInfo> list)
+        {
+            var tb = new DataTable("tb_data");
+            DataColumn dc = CreateDataColumn(typeof(int), "序号", "Index", 0);
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(string), "品项", "Name", "");
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(decimal), "数量", "SalesCount", 0m);
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(decimal), "金额", "SalesAmount", 0m);
+            tb.Columns.Add(dc);
+
+            if (list != null)
+                list.ForEach(t => AddObject2DataTable(tb, t));
+
+            return tb;
+        }
+
+        private static DataColumn CreateDataColumn(Type type, string caption, string columnName, object defaultValue)
+        {
+            return new DataColumn(columnName, type)
+            {
+                Caption = caption,
+                DefaultValue = defaultValue
+            };
+        }
+
+        private static void AddObject2DataTable(DataTable db, object data)
+        {
+            if (db == null || data == null)
+                return;
+
+            try
+            {
+                DataRow dr = db.NewRow();
+                var ppies = data.GetType().GetProperties();
+                foreach (var ppy in ppies)
+                {
+                    object obj = null;
+                    try
+                    {
+                        obj = dr[ppy.Name];
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+
+                    
+                    if (!IsValueType(ppy))
+                        continue;
+
+                    dr[ppy.Name] = ppy.GetValue(data, null);
+                }
+
+                db.Rows.Add(dr);
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("添加对象到DataTable时异常。", ex);
+            }
+        }
+
+        private static bool IsValueType(PropertyInfo ppy)
+        {
+            return (ppy.PropertyType == typeof (int) || ppy.PropertyType == typeof (decimal) ||
+                    ppy.PropertyType == typeof (string) || ppy.PropertyType == typeof (double) || ppy.PropertyType == typeof(DateTime));
         }
 
         /// <summary>

@@ -543,6 +543,16 @@ namespace KYPOS.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Report48 {
+            get {
+                object obj = ResourceManager.GetObject("Report48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap resize_png_new {
             get {
                 object obj = ResourceManager.GetObject("resize_png_new", resourceCulture);

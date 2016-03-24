@@ -18,6 +18,7 @@ using System.Text;
 using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using System.ComponentModel;
+using System.Linq;
 using System.Xml;
 using CanDao.Pos.Model.Response;
 using Models;
@@ -696,5 +697,25 @@ namespace Common
             };
         }
 
+        public static DishSaleFullInfo ToDishSaleFullInfo(GetDishSaleInfoResponse response)
+        {
+            var item = new DishSaleFullInfo();
+            item.StartTime = DateTime.ParseExact(response.time.startTime, "yyyy-MM-dd HH:mm:ss", null);
+            item.EndTime = DateTime.ParseExact(response.time.endTime, "yyyy-MM-dd HH:mm:ss", null);
+            if (response.data != null)
+                item.DishSaleInfos = response.data.Select(ToDishSaleInfo).ToList();
+
+            return item;
+        }
+
+        public static DishSaleInfo ToDishSaleInfo(DishSaleInfoDataResponse response)
+        {
+            return new DishSaleInfo
+            {
+                Name = response.dishName,
+                SalesCount =  response.dishCount,
+                SalesAmount = response.totlePrice ?? 0m,
+            };
+        }
     }
 }

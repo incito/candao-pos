@@ -30,8 +30,6 @@ namespace Main
         [STAThread]
         static void Main()
         {
-
-            RestClient.getTicketList("102073024|4900|2015-07-14|会员生日49元购鱼券|1||0.000000,0.000000,false,,");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Globals.ProductVersion = Application.ProductVersion;
@@ -55,7 +53,6 @@ namespace Main
             //OfficeSkins.Register();////注册Office样式的皮肤
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
             RestClient.GetSoapRemoteAddress();
-
             ReportPrint.Init();
             frmStart.frm.setMsg("获取系统设置...");
             try
