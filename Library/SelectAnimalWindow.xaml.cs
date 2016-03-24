@@ -29,8 +29,7 @@ namespace Library
         public SelectAnimalWindow()
         {
             InitializeComponent();
-            if(Animals == null)
-                Animals = new ObservableCollection<string>();
+            Animals = new ObservableCollection<string>();
 
             DataContext = this;
         }
@@ -55,6 +54,8 @@ namespace Library
         {
             if (AnimalsCache == null || !AnimalsCache.Any())
                 TaskService.Start(null, GetAllAnimalProcess, GetAllAnimalComplete);
+            else
+                AnimalsCache.ForEach(Animals.Add);
         }
 
         private object GetAllAnimalProcess(object param)

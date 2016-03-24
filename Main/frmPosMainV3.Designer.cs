@@ -160,6 +160,7 @@
             this.btn3 = new System.Windows.Forms.Button();
             this.button25 = new System.Windows.Forms.Button();
             this.button26 = new System.Windows.Forms.Button();
+            this.pnlSum = new System.Windows.Forms.Panel();
             this.lblSum = new System.Windows.Forms.Label();
             this.pnlz = new System.Windows.Forms.Panel();
             this.btnPay2 = new System.Windows.Forms.Button();
@@ -247,8 +248,6 @@
             this.tmrClose = new System.Windows.Forms.Timer(this.components);
             this.tmrOpenTable = new System.Windows.Forms.Timer(this.components);
             this.iltDbgBill = new System.Windows.Forms.ImageList(this.components);
-            this.pnlSum = new System.Windows.Forms.Panel();
-            this.PanelBottom = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgWidgh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -277,6 +276,7 @@
             this.xtraTabControl1.SuspendLayout();
             this.xtraTabPage1.SuspendLayout();
             this.pnlNum.SuspendLayout();
+            this.pnlSum.SuspendLayout();
             this.pnlz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.edtReturn.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtAmount.Properties)).BeginInit();
@@ -302,8 +302,6 @@
             this.xtraTabPage9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.edtWxAmount.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtWx.Properties)).BeginInit();
-            this.pnlSum.SuspendLayout();
-            this.PanelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -1239,7 +1237,6 @@
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.PanelBottom);
             this.panel4.Controls.Add(this.pnlCash);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(334, 78);
@@ -1250,23 +1247,26 @@
             // pnlCash
             // 
             this.pnlCash.BackColor = System.Drawing.Color.White;
+            this.pnlCash.Controls.Add(this.btnClearnTable);
+            this.pnlCash.Controls.Add(this.lblInvoice);
+            this.pnlCash.Controls.Add(this.pnlSum);
             this.pnlCash.Controls.Add(this.xtraTabControl2);
             this.pnlCash.Controls.Add(this.xtraTabControl1);
             this.pnlCash.Controls.Add(this.label6);
+            this.pnlCash.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCash.Enabled = false;
             this.pnlCash.Location = new System.Drawing.Point(0, 0);
             this.pnlCash.Name = "pnlCash";
-            this.pnlCash.Size = new System.Drawing.Size(674, 521);
+            this.pnlCash.Size = new System.Drawing.Size(674, 627);
             this.pnlCash.TabIndex = 1;
             // 
             // lblInvoice
             // 
-            this.lblInvoice.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblInvoice.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblInvoice.ForeColor = System.Drawing.Color.SteelBlue;
-            this.lblInvoice.Location = new System.Drawing.Point(0, 73);
+            this.lblInvoice.Location = new System.Drawing.Point(6, 590);
             this.lblInvoice.Name = "lblInvoice";
-            this.lblInvoice.Size = new System.Drawing.Size(674, 27);
+            this.lblInvoice.Size = new System.Drawing.Size(648, 24);
             this.lblInvoice.TabIndex = 302;
             this.lblInvoice.Tag = "171";
             // 
@@ -1752,7 +1752,7 @@
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.PaintStyleName = "Flat";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(659, 311);
+            this.xtraTabControl1.Size = new System.Drawing.Size(655, 315);
             this.xtraTabControl1.TabIndex = 261;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -1785,14 +1785,14 @@
             this.xtraTabPage1.Controls.Add(this.edtAmount);
             this.xtraTabPage1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Document, ((byte)(134)));
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(659, 278);
+            this.xtraTabPage1.Size = new System.Drawing.Size(655, 282);
             this.xtraTabPage1.Text = "现金支付";
             this.xtraTabPage1.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
             // 
             // btnClearnTable
             // 
             this.btnClearnTable.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnClearnTable.Location = new System.Drawing.Point(573, 3);
+            this.btnClearnTable.Location = new System.Drawing.Point(573, 522);
             this.btnClearnTable.Name = "btnClearnTable";
             this.btnClearnTable.Size = new System.Drawing.Size(76, 65);
             this.btnClearnTable.TabIndex = 281;
@@ -2034,13 +2034,22 @@
             this.button26.UseVisualStyleBackColor = true;
             this.button26.Click += new System.EventHandler(this.button16_Click);
             // 
+            // pnlSum
+            // 
+            this.pnlSum.BackColor = System.Drawing.Color.Bisque;
+            this.pnlSum.Controls.Add(this.lblSum);
+            this.pnlSum.Location = new System.Drawing.Point(3, 522);
+            this.pnlSum.Name = "pnlSum";
+            this.pnlSum.Size = new System.Drawing.Size(564, 61);
+            this.pnlSum.TabIndex = 279;
+            // 
             // lblSum
             // 
             this.lblSum.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSum.Font = new System.Drawing.Font("宋体", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblSum.Location = new System.Drawing.Point(0, 0);
             this.lblSum.Name = "lblSum";
-            this.lblSum.Size = new System.Drawing.Size(567, 65);
+            this.lblSum.Size = new System.Drawing.Size(564, 61);
             this.lblSum.TabIndex = 279;
             this.lblSum.Text = "收款：";
             // 
@@ -3135,27 +3144,6 @@
             this.iltDbgBill.Images.SetKeyName(0, "weigh_icon.png");
             this.iltDbgBill.Images.SetKeyName(1, "weigh_blue.png");
             // 
-            // pnlSum
-            // 
-            this.pnlSum.BackColor = System.Drawing.Color.Bisque;
-            this.pnlSum.Controls.Add(this.lblSum);
-            this.pnlSum.Location = new System.Drawing.Point(0, 3);
-            this.pnlSum.Name = "pnlSum";
-            this.pnlSum.Size = new System.Drawing.Size(567, 65);
-            this.pnlSum.TabIndex = 279;
-            // 
-            // PanelBottom
-            // 
-            this.PanelBottom.BackColor = System.Drawing.Color.White;
-            this.PanelBottom.Controls.Add(this.lblInvoice);
-            this.PanelBottom.Controls.Add(this.btnClearnTable);
-            this.PanelBottom.Controls.Add(this.pnlSum);
-            this.PanelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.PanelBottom.Location = new System.Drawing.Point(0, 527);
-            this.PanelBottom.Name = "PanelBottom";
-            this.PanelBottom.Size = new System.Drawing.Size(674, 100);
-            this.PanelBottom.TabIndex = 2;
-            // 
             // frmPosMainV3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -3213,6 +3201,7 @@
             this.xtraTabPage1.ResumeLayout(false);
             this.xtraTabPage1.PerformLayout();
             this.pnlNum.ResumeLayout(false);
+            this.pnlSum.ResumeLayout(false);
             this.pnlz.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.edtReturn.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtAmount.Properties)).EndInit();
@@ -3243,8 +3232,6 @@
             this.xtraTabPage9.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.edtWxAmount.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtWx.Properties)).EndInit();
-            this.pnlSum.ResumeLayout(false);
-            this.PanelBottom.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -3313,6 +3300,7 @@
         private System.Windows.Forms.Button btn3;
         private System.Windows.Forms.Button button25;
         private System.Windows.Forms.Button button26;
+        private System.Windows.Forms.Panel pnlSum;
         private System.Windows.Forms.Label lblSum;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Timer tmrOpen;
@@ -3464,7 +3452,5 @@
         private System.Windows.Forms.Label label16;
         private DevExpress.XtraEditors.TextEdit edtYHCard;
         private System.Windows.Forms.Button btnClearnTable;
-        private System.Windows.Forms.Panel pnlSum;
-        private System.Windows.Forms.Panel PanelBottom;
     }
 }

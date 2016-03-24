@@ -182,7 +182,7 @@ namespace Main
         {
             pnlz.Parent = xtraTabControl1.SelectedTabPage;
             pnlNum.Parent = xtraTabControl1.SelectedTabPage;
-            PanelBottom.Parent = xtraTabControl1.SelectedTabPage;
+            pnlSum.Parent = xtraTabControl1.SelectedTabPage;
             //pnlz.Parent = xtraTabControl1.SelectedTabPage;
             if (xtraTabControl1.SelectedTabPageIndex == 0)
             {
@@ -649,6 +649,8 @@ namespace Main
             lblAmount2.ForeColor = Color.Red;
             //pnlCash.Enabled = true;
             //如果订单已结算就不能结算了
+            pnlCash.Enabled = true;
+            btnClearnTable.Enabled = true;
             if (CheckCallBill() && (!iswm))
             {
                 btnOrderML.Enabled = false;
@@ -660,13 +662,10 @@ namespace Main
                 btnRePrintCust.Enabled = false;
                 lblAmount2.ForeColor = Color.Green;
                 Globals.CurrTableInfo.amount = 0;
-                pnlCash.Enabled = false;
+                xtraTabControl1.Enabled = false;
+                xtraTabControl2.Enabled = false;
                 lblSum.Text = "已结算";
                 btnRePrint.Enabled = true;
-            }
-            else
-            {
-                pnlCash.Enabled = true;
             }
 
             lblAmount2.Text = String.Format("应收金额：{0}元", ysamount);
@@ -908,11 +907,11 @@ namespace Main
             lblSum.Text = String.Format("收款：{0}", tmpstr);
             if (Math.Round(getamount - amountroundtz, 2) >= payamount)
             {
-                PanelBottom.BackColor = Color.DarkSeaGreen;
+                pnlSum.BackColor = Color.DarkSeaGreen;
             }
             else
             {
-                PanelBottom.BackColor = Color.Bisque;
+                pnlSum.BackColor = Color.Bisque;
             }
             ShowLeftInfo();
 
@@ -3623,6 +3622,8 @@ namespace Main
             frmorder.Show();
             xtraTabControl2.Visible = false;
             xtraTabControl1.Visible = false;
+            pnlSum.Visible = false;
+            btnClearnTable.Visible = false;
             pnlAmount.Visible = false;
             panel7.Visible = false;
             //btnOpen.Visible = false;
@@ -3840,6 +3841,8 @@ namespace Main
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = true;
             xtraTabControl1.Visible = true;
+            pnlSum.Visible = true;
+            btnClearnTable.Visible = true;
             pnlAmount.Visible = true;
             panel7.Visible = true;
             SetShowOrderFrm(false);
@@ -3885,6 +3888,8 @@ namespace Main
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = false;
             xtraTabControl1.Visible = false;
+            pnlSum.Visible = false;
+            btnClearnTable.Visible = false;
             pnlAmount.Visible = false;
             panel7.Visible = false;
             //btnOpen.Visible = false; 
@@ -4105,7 +4110,7 @@ namespace Main
                     re = bookorder(seqno_str, ordertype, sperequire);
                 } while (index++ < 3 && !re);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AllLog.Instance.E(ex);
             }
@@ -4220,6 +4225,18 @@ namespace Main
                 }
 
                 RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。
+                ClearnTableAsync(null);
+                ThreadPool.QueueUserWorkItem(t =>
+                {
+                    try
+                    {
+                        RestClient.debitamout(Globals.CurrOrderInfo.orderid);
+                    }
+                    catch (Exception ex)
+                    {
+                        AllLog.Instance.E("计算实收接口异常。" + ex.Message);
+                    }
+                });
             }
             else
             {
@@ -5209,28 +5226,53 @@ namespace Main
             if (!AskQuestion("确定要清台吗?"))
                 return;
 
-            if (Globals.CurrOrderInfo.orderstatus == 0)//账单未结账，做全单退菜。
-            {
-                var service = new RestaurantServiceImpl();
-                var result = service.BackAllDish(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid);
-                if (!string.IsNullOrEmpty(result))
-                {
-                    Warning(string.Format("{0}{1}{2}", result, Environment.NewLine, "清台失败。"));
-                    return;
-                }
-            }
+            if (Globals.CurrOrderInfo.orderstatus == 0 && Globals.OrderTable.Rows.Count > 0)//账单未结账，做全单退菜。
+                TaskService.Start(null, BackAllDishProcess, BackAllDishComplete, "已点菜品退菜中...");
+            else
+                ClearnTableAsync("执行清台中...");
+        }
 
-            if (RestClient.cleantable(Globals.CurrTableInfo.tableNo))
+        private object BackAllDishProcess(object arg)
+        {
+            var service = new RestaurantServiceImpl();
+            return service.BackAllDish(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid);
+        }
+
+        private void BackAllDishComplete(object arg)
+        {
+            var result = arg as string;
+            if (!string.IsNullOrEmpty(result))
+                Warning(string.Format("{0}{1}{2}", result, Environment.NewLine, "清台失败。"));
+
+            ClearnTableAsync("执行清台中...");
+        }
+
+        private void ClearnTableAsync(string loadingMsg)
+        {
+            TaskService.Start(null, ClearnTableProcess, ClearnTableComplete, loadingMsg);
+        }
+
+        private object ClearnTableProcess(object arg)
+        {
+            if (!RestClient.cleantable(Globals.CurrTableInfo.tableNo))
+                return false;
+
+            try
             {
-                try
-                {
-                    RestClient.broadcastmsg(1005, Globals.CurrOrderInfo.orderid); //这里是发清帐单指令1005
-                }
-                catch (Exception ex)
-                {
-                    AllLog.Instance.E(ex);
-                }
-                Warning("清台完成。");
+                RestClient.broadcastmsg(1005, Globals.CurrOrderInfo.orderid); //这里是发清帐单指令1005
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E(ex);
+            }
+            return true;
+        }
+
+        private void ClearnTableComplete(object arg)
+        {
+            if ((bool)arg)
+            {
+                Warning("清台成功。");
                 Close();
             }
             else
@@ -5238,6 +5280,7 @@ namespace Main
                 Warning("清台失败。");
             }
         }
+
 
         private void DisableButtonByOrderStatus(int orderStatus)
         {

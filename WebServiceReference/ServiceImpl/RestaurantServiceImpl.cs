@@ -127,11 +127,11 @@ namespace WebServiceReference.ServiceImpl
                     DiscardReason = "",
                     OrderId = orderId,
                     TableNo = tableNo,
-                    UserName = Globals.UserInfo.UserName,
+                    UserName = Globals.UserInfo.UserID,
                 };
                 var request = DataConverter.ToBackDishRequest(dishInfo);
-                var response = HttpHelper.HttpPost(addr, request);
-                return response;
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                return response.IsSuccess ? null : "退菜失败。";
             }
             catch (Exception ex)
             {
