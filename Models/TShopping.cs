@@ -530,7 +530,7 @@ namespace Models
             dishinfo.Dishidleft = 1;
             dishinfo.Title = ja["dishname"].ToString();
             dishinfo.DishType = ja["dishtype"].ToString();
-            dishinfo.Dishunit = ja["unit"].ToString();
+            dishinfo.DishUnitSrc = ja["unit"].ToString();
             dishinfo.Ordertype = 0;
             dishinfo.Memberprice = 0;
             if (CurrOrderInfo.memberno == null)
