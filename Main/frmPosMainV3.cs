@@ -660,6 +660,8 @@ namespace Main
             //如果订单已结算就不能结算了
             pnlCash.Enabled = true;
             btnClearnTable.Enabled = true;
+            xtraTabControl1.Enabled = true;
+            xtraTabControl2.Enabled = true;
             if (CheckCallBill() && (!iswm))
             {
                 btnOrderML.Enabled = false;
@@ -4429,6 +4431,8 @@ namespace Main
             btnOrder.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
+            pnlSum.Visible = false;
+            btnClearnTable.Visible = false;
             panel7.Visible = false;
             btnOpen.Visible = false;
             SetShowOrderFrm(true);
