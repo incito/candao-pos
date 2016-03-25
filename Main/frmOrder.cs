@@ -22,7 +22,7 @@ namespace Main
         [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool LockWindowUpdate(IntPtr hwnd);
         public delegate void ShoppingChange(object serder, EventArgs e);
-        public delegate void Accounts(object serder, EventArgs e,int ordertype);
+        public delegate void Accounts(object serder, EventArgs e, int ordertype);
         public delegate void FrmClose(object serder, EventArgs e);
         private int downx = 0;
         private int downy = 0;
@@ -37,13 +37,13 @@ namespace Main
         private JArray jarrTables = null;
         private JArray jarrType = null;
         private string py2 = "";
-        private int btncount=32;//jarrTables.Count 36
+        private int btncount = 32;//jarrTables.Count 36
         public event ShoppingChange shoppingChange;
         public event Accounts accounts;
         private Library.UserControls.ucTable selectbtn = null;
         private bool iswm = true;
         private string menuid = "";
-        private int dishcount_type=0;//分类中的菜品数量
+        private int dishcount_type = 0;//分类中的菜品数量
         private int pagecount_type = 0;//一个分类中的菜品有多少页
         private int currpage_type = 0;//当前分类第几页菜品
         private string selectSource = "";
@@ -51,8 +51,8 @@ namespace Main
         {
             frmOrder frm = new frmOrder();
             frm.ShowDialog();
-            bool ret=frm.DialogResult == DialogResult.OK;
-            if(ret)
+            bool ret = frm.DialogResult == DialogResult.OK;
+            if (ret)
             {
                 //gzname = frm.dgvBill.SelectedRows[0].Cells["gzName"].Value.ToString();
                 //id = frm.dgvBill.SelectedRows[0].Cells["parternerid"].Value.ToString(); 
@@ -112,7 +112,7 @@ namespace Main
         private void OnAccounts(int ordertype)
         {
             if (accounts != null)
-                accounts(this, new EventArgs(), ordertype); 
+                accounts(this, new EventArgs(), ordertype);
         }
         private void frmPettyCash_Activated(object sender, EventArgs e)
         {
@@ -234,7 +234,7 @@ namespace Main
             JArray jrtype = null;
             try
             {
-                if (!RestClient.getFoodType( out jrtype))
+                if (!RestClient.getFoodType(out jrtype))
                 {
                     return;
                 }
@@ -334,7 +334,7 @@ namespace Main
 
         private void button1_Click(object sender, EventArgs e)
         {
-           ///
+            ///
             if (Globals.ShoppTable.Rows.Count <= 0)
                 return;
             if (!AskQuestion("确定要清空已选吗?"))
@@ -358,9 +358,9 @@ namespace Main
             }
             else
             {
-                if (Globals.ShoppTable.Rows.Count>0)
+                if (Globals.ShoppTable.Rows.Count > 0)
                 {
-                    if (!AskQuestion( Globals.CurrTableInfo.tableName + "确定下单吗?"))
+                    if (!AskQuestion(Globals.CurrTableInfo.tableName + "确定下单吗?"))
                     {
                         return;
                     }
@@ -400,10 +400,10 @@ namespace Main
             btnTypetables[7] = btnType8;
             btnTypetables[8] = btnType9;
             btnTypetables[9] = btnType10;
-            for (int i = 0; i <= btnTypetables.Length-1; i++)
+            for (int i = 0; i <= btnTypetables.Length - 1; i++)
             {
                 btnTypetables[i].lbl2.Text = "";
-                
+
                 btnTypetables[i].lbl2.TextAlign = ContentAlignment.BottomLeft;
                 btnTypetables[i].lblNo.TextAlign = ContentAlignment.BottomLeft;
                 btnTypetables[i].lblNo.Text = "";
@@ -420,9 +420,9 @@ namespace Main
                 btnTypetables[i].lbl2.Font = new System.Drawing.Font("Tahoma", 10F);
                 btnTypetables[i].lbl2.ForeColor = Color.Black;
                 btnTypetables[i].lblNo.TextAlign = ContentAlignment.TopLeft;
-                btnTypetables[i].lblNo.Height =20;
+                btnTypetables[i].lblNo.Height = 20;
                 btnTypetables[i].lbl2.TextAlign = ContentAlignment.TopRight;
-                
+
             }
 
         }
@@ -431,13 +431,13 @@ namespace Main
         {
             JObject ja = null;
             int j = 0;
-            string itemdesc="";
-            string itemsort="";
-            string itemid="";
+            string itemdesc = "";
+            string itemsort = "";
+            string itemid = "";
             string isShow = "";
             selectbtn = null;
             setSelectTypeColor();
-            if (jarrType.Count<=10)
+            if (jarrType.Count <= 10)
             {
                 btnTypeUp.Enabled = false;
                 btnTypeDown.Enabled = false;
@@ -464,7 +464,7 @@ namespace Main
             if (currpage > pagecount)
                 currpage = pagecount;
             btnTypeDown.Tag = pagecount;
-            int ivalue=(currpage) * 10;
+            int ivalue = (currpage) * 10;
             if (jarrType != null)
             {
                 for (int i = ivalue; i <= jarrType.Count - 1; i++)
@@ -524,14 +524,14 @@ namespace Main
             btnDishPageUp.Enabled = false;
             pagecount_type = 0;
             currpage_type = 0;
-            if (dishcount_type>0)
+            if (dishcount_type > 0)
             {
                 currpage_type = 1;
                 pagecount_type = dishcount_type / btncount;
                 if (dishcount_type % btncount > 0)
                 { pagecount_type = pagecount_type + 1; }
             }
-            if(pagecount_type>1)
+            if (pagecount_type > 1)
             {
                 btnDishPageDown.Enabled = true;
                 btnDishPageUp.Enabled = true;
@@ -545,8 +545,8 @@ namespace Main
             string tableNo = "";
             string tabletype = "";
             int orderstatus = 0;
-            string dishpy="";
-            string py=edtPy.Text;
+            string dishpy = "";
+            string py = edtPy.Text;
             int weigh = 0;
             int j = 0;
             for (int i = 0; i <= btncount - 1; i++)
@@ -614,7 +614,7 @@ namespace Main
                     else
                         btntables[j].lbl2.Text = string.Format("{0}/{1}", price, InternationaHelper.GetBeforeSeparatorFlagData(ja["unit"].ToString()));
 
-                    if (weigh==1)
+                    if (weigh == 1)
                         btntables[j].lbl2.Text += "  称重";
 
                     btntables[j].status = orderstatus;
@@ -628,21 +628,21 @@ namespace Main
                     }
                 }
             }
-            if (ja!=null)
-              menuid = ja["menuid"].ToString();
+            if (ja != null)
+                menuid = ja["menuid"].ToString();
             for (int i = 0; i <= btncount - 1; i++)
             {
                 int btntag = int.Parse(btntables[i].Tag.ToString());
-                if(btntag<0)
+                if (btntag < 0)
                 {
                     btntables[i].Visible = false;
                 }
             }
-            if(j<=0)
+            if (j <= 0)
             {
-                if(edtPy.Text.Length>0)
+                if (edtPy.Text.Length > 0)
                 {
-                    py2=edtPy.Text.Substring(0, edtPy.Text.Length - 1);
+                    py2 = edtPy.Text.Substring(0, edtPy.Text.Length - 1);
                     tmrClear.Enabled = true;
                 }
             }
@@ -674,7 +674,7 @@ namespace Main
                 btntables[i].lbl2.MouseUp += ucTable1_MouseUp;
                 btntables[i].lblNo.MouseLeave += ucTable1_MouseLeave;
                 btntables[i].lbl2.MouseLeave += ucTable1_MouseLeave;
-                
+
 
                 /*ja = (JObject)jarrTables[i];
                 tableid = ja["dishid"].ToString();
@@ -684,7 +684,7 @@ namespace Main
                 orderstatus = 0;// int.Parse(ja["status"].ToString());
                 btntables[i].lblNo.Text = tableNo;*/
                 btntables[i].lblNo.Font = new System.Drawing.Font("Tahoma", 12F);
-                btntables[i].lbl2.Font =  ucTable1.lbl2.Font;//; btntables[i].lblNo.Font;
+                btntables[i].lbl2.Font = ucTable1.lbl2.Font;//; btntables[i].lblNo.Font;
                 btntables[i].lbl2.ForeColor = Color.Black;
                 btntables[i].lblNo.ForeColor = Color.White;
                 btntables[i].BorderStyle = BorderStyle.FixedSingle;
@@ -915,10 +915,10 @@ namespace Main
             {
                 return;
 
-              //if (!AskQuestion("确定要挂帐吗?"))
-              //{
-              //    return;
-              // }
+                //if (!AskQuestion("确定要挂帐吗?"))
+                //{
+                //    return;
+                // }
             }
             //挂帐 开台/下单/（关台，不结账）
             setOrder(gzinfo);
@@ -937,7 +937,8 @@ namespace Main
             try
             {
                 Thread.Sleep(1000);
-            }catch{}
+            }
+            catch { }
             Globals.CurrOrderInfo.orderid = orderid;
             Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
             if (!bookOrder())
@@ -955,59 +956,36 @@ namespace Main
             //挂完单，把台关掉，再清掉购物车开新单
             //
         }
+
         private bool bookOrder()
         {
             //下单
             bool re = false;
             try
             {
-                re = bookorder("1");
-                if (!re)
+                int index = 1;
+                do
                 {
-                    re = bookorder("2");
-                }
-                if (!re)
-                {
-                    re = bookorder("3");
-                }
-                if (!re)
-                {
-                    re = bookorder("4");
-                }
-                if (!re)
-                {
-                    re = bookorder("5");
-                }
-                if (!re)
-                {
-                    re = bookorder("6");
-                }
-                if (!re)
-                {
-                    re = bookorder("7");
-                }
-                if (!re)
-                {
-                    re = bookorder("8");
-                }
+                    re = bookorder(index++.ToString());
+                } while (!re && index < 9);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E(ex);
+            }
             if (!re)
             {
-                ///把台关掉，帐单删掉,让用户重点
-                ///userid:string;orderid:string;tableno:string
                 RestClient.cancelOrder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo);
                 Warning("下单失败，请检查网络!");
-                ////如果会员已经成功，那么只能把雅座中的交易撤销，再重新下单
             }
             return re;
-
         }
+
         private bool bookorder(string sequence)
         {
             //下单
             //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";
-            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,int.Parse(sequence),0);
+            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, int.Parse(sequence), 0);
         }
 
         private void btnType1_Load(object sender, EventArgs e)
@@ -1028,7 +1006,7 @@ namespace Main
 
         private void btnTypeUp_Click(object sender, EventArgs e)
         {
-            int currpage=int.Parse(btnTypeUp.Tag.ToString());
+            int currpage = int.Parse(btnTypeUp.Tag.ToString());
             if (currpage <= 0)
                 return;
             currpage = currpage - 1;
@@ -1041,8 +1019,8 @@ namespace Main
         private void btnTypeDown_Click(object sender, EventArgs e)
         {
             int currpage = int.Parse(btnTypeUp.Tag.ToString());
-            int pagecount=int.Parse(btnTypeDown.Tag.ToString());
-            if (currpage >= (pagecount-1))
+            int pagecount = int.Parse(btnTypeDown.Tag.ToString());
+            if (currpage >= (pagecount - 1))
                 return;
             currpage = currpage + 1;
             btnTypeUp.Tag = currpage;
@@ -1115,7 +1093,7 @@ namespace Main
                 }
             }
             catch { }
-            
+
             for (int i = 0; i <= btnTypetables.Length - 1; i++)
             {
                 //把分类中的数量显示到按钮上
@@ -1161,7 +1139,7 @@ namespace Main
         private void btnDishPageUp_Click(object sender, EventArgs e)
         {
             //
-            if(currpage_type>1)
+            if (currpage_type > 1)
             {
                 currpage_type = currpage_type - 1;
                 refreshBtn();

@@ -4113,6 +4113,7 @@ namespace Main
             //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";//tableid //Globals.UserInfo.UserID
             return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, int.Parse(sequence), ordertype);
         }
+
         private bool startorder(int ordertype)
         {
             //下单
@@ -4147,29 +4148,22 @@ namespace Main
 
             try
             {
-                re = bookorder(seqno_str.ToString(), ordertype);
-                if (!re)
+                int index = 0;
+                do
                 {
-                    Thread.Sleep(500);
-                    re = bookorder(seqno_str.ToString(), ordertype);
-                }
-                if (!re)
-                {
-                    Thread.Sleep(500);
-                    re = bookorder(seqno_str.ToString(), ordertype);
-                }
-                if (!re)
-                {
-                    Thread.Sleep(500);
-                    re = bookorder(seqno_str.ToString(), ordertype);
-                }
+                    if (index != 0)
+                        Thread.Sleep(500);
+                    re = bookorder(seqno_str, ordertype);
+                } while (!re && index++ < 4);
             }
-            catch { }
+            catch(Exception ex)
+            {
+                AllLog.Instance.E(ex);
+            }
             if (!re)
             {
                 ShowOrder();
                 Warning("下单失败，请检查网络!");
-
             }
             else
             {
@@ -4178,6 +4172,7 @@ namespace Main
             }
             return re;
         }
+
         /// <summary>
         /// 外卖结算 需要先结算会员，如果失败就不下单不调用java结算
         /// </summary>
