@@ -1052,7 +1052,8 @@ namespace Main
                 var invoiceAmount = (decimal)Globals.CurrTableInfo.amount;
                 string settleorderorderid = Globals.CurrOrderInfo.orderid;
                 bool ismember = false;
-                if (AskQuestion("台号：" + Globals.CurrTableInfo.tableName + "确定现在结算吗?"))
+                var tableNo = iswm ? Globals.AvoidCertainFood : Globals.CurrTableInfo.tableNo;
+                if (AskQuestion("台号：" + tableNo + "确定现在结算吗?"))
                 {
                     //如果是外卖，先开台,再上传菜品，再结算（外卖单品类优惠怎么用呢?,1、下单后循环优惠ID，使用一遍单品类的优惠，或者外卖我打包上传一下所有菜品的JSON数组，服务器端再返回优惠金额）
                     if (iswm)
