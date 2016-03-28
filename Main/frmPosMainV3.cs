@@ -1205,14 +1205,14 @@ namespace Main
         {
             try
             {
-                RestClient.broadcastmsg(1002, msgorderid); //这里是发结算指令1002
+                RestClient.broadcastmsg(1002, Globals.CurrOrderInfo.orderid); //这里是发结算指令1002
             }
             catch { }
             //广播给手环2002
             try
             {
                 //发   服务员|台号|帐单号
-                string msg = String.Format("{0}|{1}|{2}", Globals.CurrOrderInfo.userid, Globals.CurrTableInfo.tableNo, msgorderid);
+                string msg = String.Format("{0}|{1}|{2}", Globals.CurrOrderInfo.userid, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid);
                 RestClient.broadcastmsg(2002, msg); //这里是发结算指令1002
             }
             catch { }
