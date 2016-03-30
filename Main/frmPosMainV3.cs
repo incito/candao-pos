@@ -3226,23 +3226,6 @@ namespace Main
             pnlNum.Visible = true;
         }
 
-        private void btnRePrint_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!AskQuestion("台号：" + Globals.CurrTableInfo.tableName + "确定要重印结帐单吗?"))
-                {
-                    return;
-                }
-                this.Cursor = Cursors.WaitCursor;
-                PrintBill2();
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
-
-        }
         private void PrintBill2()
         {
             if (iswm)
@@ -3969,8 +3952,8 @@ namespace Main
                 Globals.CurrTableInfo.amount = 0;
                 lblAmountWm.Text = string.Format("合计金额：{0}", 0);
                 lblAmount.Text = string.Format("合计金额：{0}", 0);
-                Globals.CurrOrderInfo.orderid = "";
-                Globals.CurrOrderInfo.orderstatus = 0;
+                //Globals.CurrOrderInfo.orderid = "";
+                //Globals.CurrOrderInfo.orderstatus = 0;
                 lblZd.Text = "帐单：";
                 pnlCash.Enabled = true;
                 edtRoom.Enabled = false;
