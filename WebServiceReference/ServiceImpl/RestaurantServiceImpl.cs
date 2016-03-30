@@ -34,7 +34,8 @@ namespace WebServiceReference.ServiceImpl
                 JObject ja = (JObject)JsonConvert.DeserializeObject(DataServerResultHelper.GetDataServerReturnData(result));
                 if (!ja["Data"].ToString().Equals("1"))
                 {
-                    return ja["Info"] != null ? ja["Info"].ToString() : "清机失败。";
+                    var msg = ja["Info"] != null ? ja["Info"].ToString() : "清机失败。";
+                    return string.IsNullOrEmpty(msg) ? "清机失败。" : msg;
                 }
                 return null;
             }

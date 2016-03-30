@@ -265,7 +265,7 @@ namespace Main
             {
                 string reinfo = "";
 
-                if (!RestClient.InputTellerCash("0", 0, 0, out reinfo))
+                if (!RestClient.InputTellerCash(Globals.UserInfo.UserID, 0, 0, out reinfo))
                 {
                     if (!frmPettyCash.ShowPettyCash())
                     {
@@ -570,19 +570,16 @@ namespace Main
                     }
                     else
                     {
-                        if (onlyGetTableInfo)
+                        if (!onlyGetTableInfo)
                         {
-                            getAmount();
-                            Cursor = Cursors.Default;
-                            return;
+                            RestClient.GetServerTableList(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);
+                            if (!Globals.CurrOrderInfo.memberno.Equals(""))
+                            {
+                                membercard = Globals.CurrOrderInfo.memberno;
+                                edtMemberCard.Text = membercard;
+                            }
                         }
 
-                        RestClient.GetServerTableList(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);
-                        if (!Globals.CurrOrderInfo.memberno.Equals(""))
-                        {
-                            membercard = Globals.CurrOrderInfo.memberno;
-                            edtMemberCard.Text = membercard;
-                        }
                         //ShowLeftInfo();
                         getOrderInvoiceTitle();
                         amountml = 0;
