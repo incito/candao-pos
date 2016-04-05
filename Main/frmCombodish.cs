@@ -692,14 +692,13 @@ namespace Main
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            this.pnlMain.VerticalScroll.Value = 100;
+            pnlMain.VerticalScroll.Value += 100;
         }
 
         private void btnUp_Click(object sender, EventArgs e)
         {
-            this.pnlMain.VerticalScroll.Value = 100;
-            Thread.Sleep(10);
-            this.pnlMain.VerticalScroll.Value = 0;
+            var curValue = pnlMain.VerticalScroll.Value;
+            pnlMain.VerticalScroll.Value = Math.Max(0, curValue - 100);
         }
     }
     public class TComboFromControl
