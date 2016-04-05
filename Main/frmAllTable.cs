@@ -179,7 +179,7 @@ namespace Main
                     return;
                 }
 
-                TableInfos = result.Item2;
+                TableInfos = result.Item2.Where(t=>t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
                 CreateTableControls();
 
                 lblState0.Text = string.Format("空闲({0})", TableInfos.Count(t => t.TableStatus == EnumTableStatus.Idle));
