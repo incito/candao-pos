@@ -32,6 +32,7 @@ namespace Common
     /// </summary>
     public class DataConverter
     {
+        private const string DateTimeFmt = "yyyy-MM-dd HH:mm:ss";
 
         /// <summary>
         /// 根据类型创建表结构
@@ -310,7 +311,7 @@ namespace Common
             list.Add(typeof(System.String));
             return list;
         }
-        
+
         /// <summary>
         /// SQL SERVER数据类型（如：varchar）转换为SqlDbType类型
         /// </summary>
@@ -484,7 +485,7 @@ namespace Common
         /// <param name="value">值</param>
         public static void SetDataRowValue(DataRow row, string fieldName, object value)
         {
-            row[fieldName] = (value == null || ConvertEx.ToString(value) == Globals.DEF_NULL_VALUE) ? DBNull.Value : value;            
+            row[fieldName] = (value == null || ConvertEx.ToString(value) == Globals.DEF_NULL_VALUE) ? DBNull.Value : value;
         }
 
         /// <summary>
@@ -694,6 +695,8 @@ namespace Common
                 TableType = (EnumTableType)response.tabletype,
                 MinPrice = Math.Round(response.minprice, 2),
                 FixPrice = Math.Round(response.fixprice, 2),
+                BeginTime = ParseString2DateTime(response.begintime),
+                Amount = response.amount,
             };
         }
 
@@ -713,9 +716,17 @@ namespace Common
             return new DishSaleInfo
             {
                 Name = InternationaHelper.FilterSeparatorFlag(response.dishName),
-                SalesCount =  response.dishCount,
+                SalesCount = response.dishCount,
                 SalesAmount = response.totlePrice ?? 0m,
             };
+        }
+
+        private static DateTime? ParseString2DateTime(string timeStr)
+        {
+            if (string.IsNullOrEmpty(timeStr))
+                return null;
+
+            return DateTime.ParseExact(timeStr, DateTimeFmt, null);
         }
     }
 }

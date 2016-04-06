@@ -12,7 +12,6 @@ using Library.UserControls;
 using Models;
 using Models.Enum;
 using Newtonsoft.Json.Linq;
-using ReportsFastReport;
 using WebServiceReference;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
@@ -24,11 +23,11 @@ namespace Main
         [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool LockWindowUpdate(IntPtr hwnd);
 
-        private List<ucTable> _tableControls;
-        private const int Rowcount = 10;
-        private int btnWidth = 88;
-        private int btnHeight = 58;
-        private int btnSpace = 10;
+        private List<UcTable> _tableControls;
+        private const int Rowcount = 8;
+        private int btnWidth = 115;
+        private int btnHeight = 90;
+        private int btnSpace = 9;
 
         private bool _isForcedEndWorkModel;//是否是强制结业模式。
 
@@ -59,12 +58,6 @@ namespace Main
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             if (AskQuestion("确定要退出系统吗？")) Application.Exit();
-        }
-
-        private void ucTable1_Load(object sender, EventArgs e)
-        {
-            ((ucTable)sender).lblNo.Click += new EventHandler(ucTable1_Click);
-            ((ucTable)sender).lbl2.Click += new EventHandler(ucTable1_Click);
         }
 
         private void frmAllTable_Load(object sender, EventArgs e)
@@ -141,14 +134,14 @@ namespace Main
                     // ignored
                 }
             }
-            ucTable uctable = ((ucTable)((Label)sender).Tag);
-            string tableno = uctable.lblNo.Text;
+            var tableInfo = ((UcTable)sender).TableInfo;
+            string tableno = tableInfo.TableNo;
             try
             {
                 this.Cursor = Cursors.WaitCursor;
                 timer2.Enabled = false;
                 //frmPosMain.ShowPosMain(tableno, uctable.status);
-                frmpos.ShowFrm(tableno, uctable.status);
+                frmpos.ShowFrm(tableno, (int)tableInfo.TableStatus);
 
                 if (_isForcedEndWorkModel)//如果已经是强制结业模式，就继续设定成强制结业（结算是在另外的弹出窗口）
                     SetInForcedEndWorkModel();
@@ -208,38 +201,34 @@ namespace Main
                 {
                     foreach (var tableControl in _tableControls)
                     {
-                        tableControl.lblNo.Click -= ucTable1_Click;
-                        tableControl.lbl2.Click -= ucTable1_Click;
+                        tableControl.Click -= ucTable1_Click;
                         tableControl.Parent = null;
                     }
                 }
-                _tableControls = new List<ucTable>();
+                _tableControls = new List<UcTable>();
 
                 foreach (var tableInfo in TableInfos)
                 {
                     var colindex = (idx % Rowcount);
                     var rowindex = idx / Rowcount;
-                    ucTable table = new ucTable(tableInfo)
+                    var table = new UcTable(tableInfo)
                     {
                         Parent = pnlMain,
                         Width = btnWidth,
                         Height = btnHeight,
-                        Left = colindex * btnWidth + ucTable1.Left + (colindex * btnSpace),
-                        Top = btnHeight * rowindex + ucTable1.Top + (rowindex * btnSpace),
+                        Left = colindex * btnWidth + btnSpace + (colindex * btnSpace),
+                        Top = btnHeight * rowindex + 75 + btnSpace + (rowindex * btnSpace),
                     };
-                    table.lblNo.Click += ucTable1_Click;
-                    table.lbl2.Click += ucTable1_Click;
+                    table.Click += ucTable1_Click;
                     _tableControls.Add(table);
                     if (_isForcedEndWorkModel)//如果是强制结业模式，则只允许操作就餐餐台。
                         table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
-                    //frmProgress.frm.SetProgress("正在加载桌台资料..." + tableInfo.TableNo, TableInfos.Count, idx);
                     idx++;
                 }
             }
             finally
             {
                 LockWindowUpdate(IntPtr.Zero);
-                //frmProgress.frm.Close();
             }
         }
 
@@ -277,7 +266,11 @@ namespace Main
 
                 int inttime = int.Parse(btnReport.Tag.ToString());
                 if (inttime > 0)
+                {
                     btnReport.Tag = --inttime;
+                    if (_tableControls != null)
+                        _tableControls.ForEach(t => t.UpdateTimeView());
+                }
                 else
                     RefreshAllTableStatus();
             }
