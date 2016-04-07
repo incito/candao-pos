@@ -586,7 +586,6 @@ namespace Main
                         amountroundtz = 0;
                         getAmount();
                         this.SetButtonEnable(true);
-                        btnml_Click(btnml, null);
                     }
             }
             catch (CustomException ex)
