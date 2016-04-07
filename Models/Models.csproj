@@ -90,7 +90,6 @@
     <Compile Include="TableInfo.cs" />
     <Compile Include="TComboDish.cs" />
     <Compile Include="TGzInfo.cs" />
-    <Compile Include="TipFullInfo.cs" />
     <Compile Include="TipInfo.cs" />
     <Compile Include="TMemberStoredInfo.cs" />
     <Compile Include="TPotDishInfo.cs" />

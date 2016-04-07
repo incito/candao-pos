@@ -122,7 +122,7 @@ namespace WebServiceReference.ServiceImpl
             try
             {
                 var addr = string.Format("http://{0}/{1}/padinterface/getItemSellDetail.json", RestClient.server, RestClient.apiPath);
-                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
+                var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
                 var response = HttpHelper.HttpGet<GetDishSaleInfoResponse>(addr, request);
                 if (!response.IsSuccess)
                     return new Tuple<string, DishSaleFullInfo>(response.msg ?? "获取品项销售明细失败。", null);
@@ -135,21 +135,25 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
-        public Tuple<string, TipFullInfo> GetTipInfos(EnumStatisticsPeriodsType periodsType)
+        public Tuple<string, List<TipInfo>> GetTipInfos(EnumStatisticsPeriodsType periodsType)
         {
             try
             {
-                var addr = string.Format("http://{0}/{1}/padinterface/getItemSellDetail.json", RestClient.server, RestClient.apiPath);
-                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
+                var addr = string.Format("http://{0}/{1}/tip/tipList", RestClient.server, RestClient.apiPath);
+                var request = new Dictionary<string, string> { { "timeType", ((int)periodsType).ToString() } };
                 var response = HttpHelper.HttpGet<GetTipInfoResponse>(addr, request);
                 if (!response.IsSuccess)
-                    return new Tuple<string, TipFullInfo>(response.msg ?? "获取品项销售明细失败。", null);
+                    return new Tuple<string, List<TipInfo>>(response.msg ?? "获取品项销售明细失败。", null);
 
-                return new Tuple<string, TipFullInfo>(null, DataConverter.ToTipFullInfo(response));
+                var result = new List<TipInfo>();
+                if (response.resultList != null)
+                    result = response.resultList.Select(DataConverter.ToTipInfo).ToList();
+
+                return new Tuple<string, List<TipInfo>>(null, result);
             }
             catch (Exception ex)
             {
-                return new Tuple<string, TipFullInfo>(ex.Message, null);
+                return new Tuple<string, List<TipInfo>>(ex.Message, null);
             }
         }
     }

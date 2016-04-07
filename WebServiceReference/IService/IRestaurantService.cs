@@ -52,6 +52,6 @@ namespace WebServiceReference.IService
         /// </summary>
         /// <param name="periodsType">统计周期。</param>
         /// <returns></returns>
-        Tuple<string, TipFullInfo> GetTipInfos(EnumStatisticsPeriodsType periodsType);
+        Tuple<string, List<TipInfo>> GetTipInfos(EnumStatisticsPeriodsType periodsType);
     }
 }

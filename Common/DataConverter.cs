@@ -722,24 +722,13 @@ namespace Common
             };
         }
 
-        public static TipFullInfo ToTipFullInfo(GetTipInfoResponse response)
-        {
-            var item = new TipFullInfo();
-            item.StartTime = DateTime.ParseExact(response.time.startTime, DateTimeFmt, null);
-            item.EndTime = DateTime.ParseExact(response.time.endTime, DateTimeFmt, null);
-            if (response.data != null)
-                item.TipInfos = response.data.Select(ToTipInfo).ToList();
-
-            return item;
-        }
-
-        private static TipInfo ToTipInfo(TipInfoDataResponse response)
+        public static TipInfo ToTipInfo(TipInfoDataResponse response)
         {
             return new TipInfo
             {
-                WaiterName = response.username,
-                TipCount = response.count,
-                TipAmount = response.amount,
+                WaiterName = response.waiterName,
+                TipCount = response.serviceCount,
+                TipAmount = response.tipMoney,
             };
         }
     }
