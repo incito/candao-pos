@@ -45,6 +45,13 @@ namespace WebServiceReference.IService
         /// </summary>
         /// <param name="periodsType">统计周期。</param>
         /// <returns></returns>
-        Tuple<string, DishSaleFullInfo> GetDishSaleInfo(EnumDishSalePeriodsType periodsType);
+        Tuple<string, DishSaleFullInfo> GetDishSaleInfo(EnumStatisticsPeriodsType periodsType);
+
+        /// <summary>
+        /// 获取小费明细。
+        /// </summary>
+        /// <param name="periodsType">统计周期。</param>
+        /// <returns></returns>
+        Tuple<string, TipFullInfo> GetTipInfos(EnumStatisticsPeriodsType periodsType);
     }
 }

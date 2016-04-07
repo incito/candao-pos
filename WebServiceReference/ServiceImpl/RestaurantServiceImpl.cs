@@ -117,13 +117,12 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
-        public Tuple<string, DishSaleFullInfo> GetDishSaleInfo(EnumDishSalePeriodsType periodsType)
+        public Tuple<string, DishSaleFullInfo> GetDishSaleInfo(EnumStatisticsPeriodsType periodsType)
         {
             try
             {
                 var addr = string.Format("http://{0}/{1}/padinterface/getItemSellDetail.json", RestClient.server, RestClient.apiPath);
-                var request = new Dictionary<string, string>();
-                request.Add("flag", ((int)periodsType).ToString());
+                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
                 var response = HttpHelper.HttpGet<GetDishSaleInfoResponse>(addr, request);
                 if (!response.IsSuccess)
                     return new Tuple<string, DishSaleFullInfo>(response.msg ?? "获取品项销售明细失败。", null);
@@ -133,6 +132,24 @@ namespace WebServiceReference.ServiceImpl
             catch (Exception ex)
             {
                 return new Tuple<string, DishSaleFullInfo>(ex.Message, null);
+            }
+        }
+
+        public Tuple<string, TipFullInfo> GetTipInfos(EnumStatisticsPeriodsType periodsType)
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/getItemSellDetail.json", RestClient.server, RestClient.apiPath);
+                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
+                var response = HttpHelper.HttpGet<GetTipInfoResponse>(addr, request);
+                if (!response.IsSuccess)
+                    return new Tuple<string, TipFullInfo>(response.msg ?? "获取品项销售明细失败。", null);
+
+                return new Tuple<string, TipFullInfo>(null, DataConverter.ToTipFullInfo(response));
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, TipFullInfo>(ex.Message, null);
             }
         }
     }

@@ -59,7 +59,7 @@
     <Compile Include="DishSaleFullInfo.cs" />
     <Compile Include="DishSaleInfo.cs" />
     <Compile Include="DataTableHelper.cs" />
-    <Compile Include="Enum\EnumDishSalePeriodsType.cs" />
+    <Compile Include="Enum\EnumStatisticsPeriodsType.cs" />
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumTableStatus.cs" />
     <Compile Include="Enum\EnumTableType.cs" />
@@ -72,8 +72,10 @@
     <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />
     <Compile Include="Response\GetDishSaleInfoResponse.cs" />
     <Compile Include="Response\GetRestaurantTradeTimeResponse.cs" />
+    <Compile Include="Response\GetTipInfoResponse.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\JavaResponse.cs" />
+    <Compile Include="Response\PeriodTimeResponse.cs" />
     <Compile Include="Response\TableInfoResponse.cs" />
     <Compile Include="Response\UnclearPosResponse.cs" />
     <Compile Include="RestaurantTradeTime.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="TableInfo.cs" />
     <Compile Include="TComboDish.cs" />
     <Compile Include="TGzInfo.cs" />
+    <Compile Include="TipFullInfo.cs" />
+    <Compile Include="TipInfo.cs" />
     <Compile Include="TMemberStoredInfo.cs" />
     <Compile Include="TPotDishInfo.cs" />
     <Compile Include="TRoundInfo.cs" />

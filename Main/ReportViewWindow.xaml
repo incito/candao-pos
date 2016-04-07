@@ -87,8 +87,8 @@
             </Grid>
         </Border>
 
-        <dx:DXTabControl Grid.Row="1" Margin="5">
-            <dx:DXTabItem>
+        <dx:DXTabControl Grid.Row="1" Margin="5" SelectionChanged="DXTabControl_OnSelectionChanged">
+            <dx:DXTabItem x:Name="DxTiDish">
                 <dx:DXTabItem.Header>
                     <TextBlock Text="品项销售明细" FontSize="20" FontWeight="Bold" Height="40"/>
                 </dx:DXTabItem.Header>
@@ -133,6 +133,51 @@
                         <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,5">
                             <Button x:Name="BtnLast" Content="上翻" FontSize="20" Width="120" Height="50" Margin="3" Click="BtnLast_OnClick"/>
                             <Button x:Name="BtnNext" Content="下翻" FontSize="20" Width="120" Height="50" Margin="30,3,3,3" Click="BtnNext_OnClick"/>
+                        </StackPanel>
+
+                    </Grid>
+                </dx:DXTabItem.Content>
+            </dx:DXTabItem>
+
+            <dx:DXTabItem x:Name="DxTiTip">
+                <dx:DXTabItem.Header>
+                    <TextBlock Text="小费统计明细" FontSize="20" FontWeight="Bold" Height="40"/>
+                </dx:DXTabItem.Header>
+                <dx:DXTabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ToggleButton x:Name="TbTipToday" Content="今天" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="3" Style="{StaticResource TbStyle}" Tag="Today" PreviewMouseDown="TbToday_OnPreviewMouseDown" Checked="ToggleButton_OnChecked"/>
+                            <ToggleButton Content="本周" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="3" Style="{StaticResource TbStyle}" Tag="ThisWeek" PreviewMouseDown="TbToday_OnPreviewMouseDown" Checked="ToggleButton_OnChecked"/>
+                            <ToggleButton Content="本月" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="3" Style="{StaticResource TbStyle}" Tag="ThisMonth" PreviewMouseDown="TbToday_OnPreviewMouseDown" Checked="ToggleButton_OnChecked"/>
+                            <ToggleButton Content="上月" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="3" Style="{StaticResource TbStyle}" Tag="LastMonth" PreviewMouseDown="TbToday_OnPreviewMouseDown" Checked="ToggleButton_OnChecked"/>
+                        </StackPanel>
+                        
+                        <dxg:GridControl x:Name="DcTipView" Grid.Row="1" ItemsSource="{Binding TipInfos}" EndSorting="DcDishView_OnEndSorting">
+                            <dxg:GridControl.Columns>
+                                <dxg:GridColumn Header="服务员" VisibleIndex="1" FieldName="WaiterName">
+                                    <dxg:GridColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding RowData.Row.Name}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                        </DataTemplate>
+                                    </dxg:GridColumn.CellTemplate>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn Header="小费次数" VisibleIndex="2" FieldName="TipCount"  />
+                                <dxg:GridColumn Header="小费金额" VisibleIndex="3" FieldName="TipAmount"
+                                               EditSettings="{dxe:SpinSettings HorizontalContentAlignment=Right, MaskType=Numeric, Mask=c, MaskUseAsDisplayFormat=True, MinValue=0}"/>
+                            </dxg:GridControl.Columns>
+                            <dxg:GridControl.View>
+                                <dxg:TableView Style="{StaticResource TableViewNavRowStyle}" AutoWidth="True"/>
+                            </dxg:GridControl.View>
+                        </dxg:GridControl>
+
+                        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,5">
+                            <Button x:Name="BtnTipLast" Content="上翻" FontSize="20" Width="120" Height="50" Margin="3" Click="BtnTipLast_OnClick"/>
+                            <Button x:Name="BtnTipNext" Content="下翻" FontSize="20" Width="120" Height="50" Margin="30,3,3,3" Click="BtnTipNext_OnClick"/>
                         </StackPanel>
 
                     </Grid>
