@@ -135,25 +135,42 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
-        public Tuple<string, List<TipInfo>> GetTipInfos(EnumStatisticsPeriodsType periodsType)
+        public string BillingTip(string orderId, float tipAmount)
         {
             try
             {
-                var addr = string.Format("http://{0}/{1}/tip/tipList", RestClient.server, RestClient.apiPath);
-                var request = new Dictionary<string, string> { { "timeType", ((int)periodsType).ToString() } };
-                var response = HttpHelper.HttpGet<GetTipInfoResponse>(addr, request);
+                var addr = string.Format("http://{0}/{1}/tip/tipBilling", RestClient.server, RestClient.apiPath);
+                var request = new BillingTipRequest { orderid = orderId, paid = tipAmount };
+                var response = HttpHelper.HttpPost<JavaResponse1>(addr, request);
                 if (!response.IsSuccess)
-                    return new Tuple<string, List<TipInfo>>(response.msg ?? "获取品项销售明细失败。", null);
-
-                var result = new List<TipInfo>();
-                if (response.resultList != null)
-                    result = response.resultList.Select(DataConverter.ToTipInfo).ToList();
-
-                return new Tuple<string, List<TipInfo>>(null, result);
+                    return string.IsNullOrEmpty(response.msg) ? "小费结算失败。" : response.msg;
+                return null;
             }
             catch (Exception ex)
             {
-                return new Tuple<string, List<TipInfo>>(ex.Message, null);
+                return ex.Message;
+            }
+        }
+
+        public Tuple<string, TipFullInfo> GetTipInfos(EnumStatisticsPeriodsType periodsType)
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/tip/tipList.json", RestClient.server, RestClient.apiPath);
+                var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
+                var response = HttpHelper.HttpGet<GetTipInfoResponse>(addr, request);
+                if (!response.IsSuccess)
+                {
+                    var msg = !string.IsNullOrEmpty(response.msg) ? response.msg : "获取小费统计信息失败。";
+                    AllLog.Instance.E(msg);
+                    return new Tuple<string, TipFullInfo>(msg, null);
+                }
+
+                return new Tuple<string, TipFullInfo>(null, DataConverter.ToTipFullInfo(response));
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, TipFullInfo>(ex.Message, null);
             }
         }
     }

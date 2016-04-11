@@ -5,24 +5,13 @@ namespace Models.Response
     /// <summary>
     /// 获取小费统计信息返回类。
     /// </summary>
-    public class GetTipInfoResponse
+    public class GetTipInfoResponse : JavaResponse
     {
-        /// <summary>
-        /// 结果。1表示成功，2标识失败。
-        /// </summary>
-        public string code { get; set; }
-
-        /// <summary>
-        /// 是否登录成功。
-        /// </summary>
-        public bool IsSuccess
-        {
-            get { return code.Equals("1"); }
-        }
-
         public string msg { get; set; }
 
-        public List<TipInfoDataResponse> resultList { get; set; }
+        public PeriodTimeResponse time { get; set; }
+
+        public List<TipInfoDataResponse> data { get; set; }
     }
 
     /// <summary>

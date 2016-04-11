@@ -139,7 +139,7 @@ namespace KYPOS
 
         private void ReportDishInfoControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!this.IsInDesignTool())
+            if (_curSelectTbBtn == null)
                 TbToday.IsChecked = true;
         }
 

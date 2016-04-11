@@ -41,6 +41,10 @@ namespace ReportsFastReport
             frmProgress = new frmPrintProgress();
         }
 
+        /// <summary>
+        /// 打印品项销售明细。
+        /// </summary>
+        /// <param name="fullInfo"></param>
         public static void PrintDishSaleDetail(DishSaleFullInfo fullInfo)
         {
             DataTable mainDb = ToMainDb(fullInfo);
@@ -56,7 +60,12 @@ namespace ReportsFastReport
             PrintRpt(rptReport, 1);
         }
 
-        private static DataTable ToMainDb(DishSaleFullInfo fullInfo)
+        /// <summary>
+        /// 转成主表。
+        /// </summary>
+        /// <param name="fullInfo"></param>
+        /// <returns></returns>
+        private static DataTable ToMainDb(StatisticInfoBase fullInfo)
         {
             var tb = new DataTable("tb_main");
             DataColumn dc = CreateDataColumn(typeof(DateTime), "起始时间", "StartTime", DateTime.MinValue);
@@ -74,6 +83,11 @@ namespace ReportsFastReport
             return tb;
         }
 
+        /// <summary>
+        /// 转成明细表。
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         private static DataTable ToDetailDb(List<DishSaleInfo> list)
         {
             var tb = new DataTable("tb_data");
@@ -84,6 +98,47 @@ namespace ReportsFastReport
             dc = CreateDataColumn(typeof(decimal), "数量", "SalesCount", 0m);
             tb.Columns.Add(dc);
             dc = CreateDataColumn(typeof(decimal), "金额", "SalesAmount", 0m);
+            tb.Columns.Add(dc);
+
+            if (list != null)
+                list.ForEach(t => AddObject2DataTable(tb, t));
+
+            return tb;
+        }
+
+        /// <summary>
+        /// 打印小费明细。
+        /// </summary>
+        /// <param name="fullInfo"></param>
+        public static void PrintTipDetail(TipFullInfo fullInfo)
+        {
+            DataTable mainDb = ToMainDb(fullInfo);
+            DataTable detailDb = ToDetailDb(fullInfo.TipInfos);
+            DataSet ds = new DataSet();
+            ds.Tables.Add(mainDb);
+            ds.Tables.Add(detailDb);
+
+            rptReport.Clear();
+            rptReport.Load(Application.StartupPath + @"\Reports\TipDetail.frx");//加载报表模板文件
+            InitializeReport(ds, ref rptReport, detailDb.TableName);
+            PrintRpt(rptReport, 1);
+        }
+
+        /// <summary>
+        /// 转成明细表。
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private static DataTable ToDetailDb(List<TipInfo> list)
+        {
+            var tb = new DataTable("tb_data");
+            DataColumn dc = CreateDataColumn(typeof(int), "序号", "Index", 0);
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(string), "服务员", "WaiterName", "");
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(decimal), "小费次数", "TipCount", 0m);
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(decimal), "小费金额", "TipAmount", 0m);
             tb.Columns.Add(dc);
 
             if (list != null)

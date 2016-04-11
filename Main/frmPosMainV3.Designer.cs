@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -80,6 +81,7 @@
             this.amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dishstatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlAmount = new System.Windows.Forms.Panel();
+            this.lbTip = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
@@ -98,10 +100,10 @@
             this.lblRs = new System.Windows.Forms.Label();
             this.lblDesk = new System.Windows.Forms.Label();
             this.edtRoom = new DevExpress.XtraEditors.TextEdit();
-            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu();
+            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu(this.components);
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
-            this.barManager1 = new DevExpress.XtraBars.BarManager();
+            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -240,12 +242,12 @@
             this.label22 = new System.Windows.Forms.Label();
             this.edtWx = new DevExpress.XtraEditors.TextEdit();
             this.label6 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer();
-            this.tmrOpen = new System.Windows.Forms.Timer();
-            this.imageList1 = new System.Windows.Forms.ImageList();
-            this.tmrClose = new System.Windows.Forms.Timer();
-            this.tmrOpenTable = new System.Windows.Forms.Timer();
-            this.iltDbgBill = new System.Windows.Forms.ImageList();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpen = new System.Windows.Forms.Timer(this.components);
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.tmrClose = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpenTable = new System.Windows.Forms.Timer(this.components);
+            this.iltDbgBill = new System.Windows.Forms.ImageList(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgWidgh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -626,7 +628,7 @@
             this.pnlMore.Controls.Add(this.btnCancelOrder);
             this.pnlMore.Controls.Add(this.btnRePrintCust);
             this.pnlMore.Controls.Add(this.btnPrintMember1);
-            this.pnlMore.Location = new System.Drawing.Point(156, 192);
+            this.pnlMore.Location = new System.Drawing.Point(162, 183);
             this.pnlMore.Name = "pnlMore";
             this.pnlMore.Size = new System.Drawing.Size(120, 257);
             this.pnlMore.TabIndex = 280;
@@ -713,10 +715,10 @@
             this.lblAmountWm.ForeColor = System.Drawing.Color.Gray;
             this.lblAmountWm.Location = new System.Drawing.Point(-1, 254);
             this.lblAmountWm.Name = "lblAmountWm";
-            this.lblAmountWm.Size = new System.Drawing.Size(135, 24);
+            this.lblAmountWm.Size = new System.Drawing.Size(85, 24);
             this.lblAmountWm.TabIndex = 301;
             this.lblAmountWm.Tag = "171";
-            this.lblAmountWm.Text = "合计金额：";
+            this.lblAmountWm.Text = "消费：";
             this.lblAmountWm.Visible = false;
             // 
             // button8
@@ -929,6 +931,7 @@
             // 
             // pnlAmount
             // 
+            this.pnlAmount.Controls.Add(this.lbTip);
             this.pnlAmount.Controls.Add(this.button3);
             this.pnlAmount.Controls.Add(this.btnDelete);
             this.pnlAmount.Controls.Add(this.button7);
@@ -942,6 +945,17 @@
             this.pnlAmount.Size = new System.Drawing.Size(334, 220);
             this.pnlAmount.TabIndex = 1;
             this.pnlAmount.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlAmount_Paint);
+            // 
+            // lbTip
+            // 
+            this.lbTip.AutoSize = true;
+            this.lbTip.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbTip.ForeColor = System.Drawing.Color.Gray;
+            this.lbTip.Location = new System.Drawing.Point(186, 8);
+            this.lbTip.Name = "lbTip";
+            this.lbTip.Size = new System.Drawing.Size(73, 24);
+            this.lbTip.TabIndex = 302;
+            this.lbTip.Text = "小费:";
             // 
             // button3
             // 
@@ -995,10 +1009,10 @@
             this.lblAmount2.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblAmount2.Location = new System.Drawing.Point(-2, 127);
             this.lblAmount2.Name = "lblAmount2";
-            this.lblAmount2.Size = new System.Drawing.Size(135, 24);
+            this.lblAmount2.Size = new System.Drawing.Size(85, 24);
             this.lblAmount2.TabIndex = 281;
             this.lblAmount2.Tag = "171";
-            this.lblAmount2.Text = "应收金额：";
+            this.lblAmount2.Text = "应收：";
             // 
             // label5
             // 
@@ -1018,10 +1032,10 @@
             this.lblAmount.ForeColor = System.Drawing.Color.Gray;
             this.lblAmount.Location = new System.Drawing.Point(-3, 6);
             this.lblAmount.Name = "lblAmount";
-            this.lblAmount.Size = new System.Drawing.Size(135, 24);
+            this.lblAmount.Size = new System.Drawing.Size(85, 24);
             this.lblAmount.TabIndex = 278;
             this.lblAmount.Tag = "171";
-            this.lblAmount.Text = "合计金额：";
+            this.lblAmount.Text = "消费：";
             this.lblAmount.Click += new System.EventHandler(this.lblAmount_Click);
             // 
             // dgvjs
@@ -3421,5 +3435,6 @@
         private DevExpress.XtraEditors.TextEdit edtYHCard;
         private DevExpress.XtraTab.XtraTabPage xtpOther;
         private DevExpress.XtraTab.XtraTabPage xtpCo;
+        private System.Windows.Forms.Label lbTip;
     }
 }

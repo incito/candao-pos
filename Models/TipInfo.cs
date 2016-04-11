@@ -1,7 +1,7 @@
 ﻿namespace Models
 {
     /// <summary>
-    /// 消费信息。
+    /// 小费信息。
     /// </summary>
     public class TipInfo
     {

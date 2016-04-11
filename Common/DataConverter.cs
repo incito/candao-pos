@@ -722,7 +722,20 @@ namespace Common
             };
         }
 
-        public static TipInfo ToTipInfo(TipInfoDataResponse response)
+        public static TipFullInfo ToTipFullInfo(GetTipInfoResponse response)
+        {
+            var item = new TipFullInfo
+            {
+                StartTime = DateTime.ParseExact(response.time.startTime, DateTimeFmt, null),
+                EndTime = DateTime.ParseExact(response.time.endTime, DateTimeFmt, null)
+            };
+            if (response.data != null)
+                item.TipInfos = response.data.Select(ToTipInfo).ToList();
+
+            return item;
+        }
+
+        private static TipInfo ToTipInfo(TipInfoDataResponse response)
         {
             return new TipInfo
             {

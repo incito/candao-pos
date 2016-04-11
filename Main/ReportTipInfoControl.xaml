@@ -82,8 +82,9 @@
             <ToggleButton Content="本月" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="3" Style="{StaticResource TbStyle}" Tag="ThisMonth" PreviewMouseDown="TbToday_OnPreviewMouseDown" Checked="ToggleButton_OnChecked"/>
             <ToggleButton Content="上月" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="3" Style="{StaticResource TbStyle}" Tag="LastMonth" PreviewMouseDown="TbToday_OnPreviewMouseDown" Checked="ToggleButton_OnChecked"/>
         </StackPanel>
+        <Button Grid.Row="0" Content="打印" HorizontalAlignment="Right" FontSize="20" FontWeight="Bold" Width="70" Height="50" Margin="90,0,0,0" Click="ButtonPrint_OnClick"/>
 
-        <dxg:GridControl x:Name="DcTipView" Grid.Row="1" ItemsSource="{Binding TipInfos}">
+        <dxg:GridControl x:Name="DcTipView" Grid.Row="1" ItemsSource="{Binding TipInfos}" EndSorting="DcTipView_OnEndSorting">
             <dxg:GridControl.Columns>
                 <dxg:GridColumn Header="服务员" VisibleIndex="1" FieldName="WaiterName">
                     <dxg:GridColumn.CellTemplate>
@@ -101,8 +102,6 @@
             </dxg:GridControl.View>
         </dxg:GridControl>
 
-        <TextBlock x:Name="TbTotalDish" Grid.Row="2" Text="品项个数：" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        <TextBlock x:Name="TbTotalCount" Grid.Row="2" Text="数量总计：" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <TextBlock x:Name="TbTotalAmount" Grid.Row="2" Text="金额合计：" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
         <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,5">
