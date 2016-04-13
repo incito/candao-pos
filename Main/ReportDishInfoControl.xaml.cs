@@ -107,7 +107,7 @@ namespace KYPOS
         {
             _curSelectTbBtn = (ToggleButton)sender;
             var enumType = (EnumStatisticsPeriodsType)Enum.Parse(typeof(EnumStatisticsPeriodsType), (string)((ToggleButton)sender).Tag);
-            TaskService.Start(enumType, GetDishSaleDataProcess, GetDishSaleDataComplete, "获取品项明细数据中...");
+            TaskService.Start(enumType, GetDishSaleDataProcess, GetDishSaleDataComplete, null);
         }
 
         private void TbToday_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)

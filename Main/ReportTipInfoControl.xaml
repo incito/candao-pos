@@ -89,7 +89,7 @@
                 <dxg:GridColumn Header="服务员" VisibleIndex="1" FieldName="WaiterName">
                     <dxg:GridColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding RowData.Row.Name}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding RowData.Row.WaiterName}" VerticalAlignment="Center" TextWrapping="Wrap"/>
                         </DataTemplate>
                     </dxg:GridColumn.CellTemplate>
                 </dxg:GridColumn>

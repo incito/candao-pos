@@ -103,7 +103,7 @@ namespace KYPOS
         {
             _curSelectTbBtn = (ToggleButton)sender;
             var enumType = (EnumStatisticsPeriodsType)Enum.Parse(typeof(EnumStatisticsPeriodsType), (string)((ToggleButton)sender).Tag);
-            TaskService.Start(enumType, GetTipInfoProcess, GetTipInfoComplete, "获取小费统计数据中...");
+            TaskService.Start(enumType, GetTipInfoProcess, GetTipInfoComplete, null);
         }
 
         private void TbToday_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)

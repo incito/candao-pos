@@ -139,7 +139,7 @@ namespace WebServiceReference.ServiceImpl
         {
             try
             {
-                var addr = string.Format("http://{0}/{1}/tip/tipBilling", RestClient.server, RestClient.apiPath);
+                var addr = string.Format("http://{0}/{1}/tip/tipBilling.json", RestClient.server, RestClient.apiPath);
                 var request = new BillingTipRequest { orderid = orderId, paid = tipAmount };
                 var response = HttpHelper.HttpPost<JavaResponse1>(addr, request);
                 if (!response.IsSuccess)

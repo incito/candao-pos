@@ -1096,6 +1096,15 @@ namespace Main
                             {
                                 var service = new RestaurantServiceImpl();
                                 var result = service.BillingTip(Globals.CurrOrderInfo.orderid, amountTip);
+                                if (!string.IsNullOrEmpty(result))
+                                {
+                                    Warning(result);
+                                    isok = false;
+                                }
+                                else
+                                {
+                                    isok = true;
+                                }
                             }
 
                             if (isok)

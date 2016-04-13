@@ -564,6 +564,7 @@ namespace Models
             column = newDataColumn("System.Double", "本班赠单金额", "tPresentedMoney", (Double)0.00);
             dt.Columns.Add(column);
             column = newDataColumn("System.Double", "本班退菜金额", "tRFoodMoney", (Double)0.00);
+            dt.Columns.Add(newDataColumn("System.Double", "本班小费金额", "tipTotalAmount", (Double)0.00));
             dt.Columns.Add(column);
             column = newDataColumn("System.Double", "品项消费", "itemMoney", (Double)0.00);
             dt.Columns.Add(column);
