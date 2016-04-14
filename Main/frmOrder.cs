@@ -475,7 +475,7 @@ namespace Main
                     itemid = ja["itemid"].ToString();
                     isShow = ja["isShow"].ToString();
                     btnTypetables[j].Visible = true;
-                    btnTypetables[j].lblNo.Text = itemdesc;
+                    btnTypetables[j].lblNo.Text = InternationaHelper.GetBeforeSeparatorFlagData(itemdesc);
                     btnTypetables[j].lblNo.Tag = ja;
                     btnTypetables[j].lbl2.Tag = ja;
                     btnTypetables[j].Tag = i;
