@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="06/16/2011 14:52:11" ReportInfo.Modified="04/12/2016 17:17:02" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="06/16/2011 14:52:11" ReportInfo.Modified="04/14/2016 17:59:21" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -118,11 +118,21 @@ namespace FastReport
       </DataHeaderBand>
     </DataBand>
     <DataBand Name="Data3" Top="233.63" Width="253.64" Height="18.9" DataSource="tb_JSMX">
-      <TextObject Name="Text4" Left="2.45" Width="113.4" Height="18.9" Text="[tb_JSMX.明细名称]" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text4" Left="7.56" Width="113.4" Height="18.9" Text="[tb_JSMX.明细名称]" WordWrap="false" Font="宋体, 9pt"/>
       <TextObject Name="Text5" Left="122.85" Width="94.5" Height="18.9" Text="[tb_JSMX.明细金额]" Format="Currency" Format.UseLocale="true" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
       <DataHeaderBand Name="DataHeader2" Top="211.3" Width="253.64" Height="19.66" Border.Lines="Top, Bottom" Border.TopLine.Style="Dash" Border.BottomLine.Style="Dash">
         <RichObject Name="Rich20" Left="0.67" Top="0.45" Width="257.04" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\colortbl ;\red0\green0\blue0;}&#13;&#10;{\*\generator Riched20 10.0.10240}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs20\lang2052\'bd\'e1\'cb\'e3\'b1\'b8\'d7\'a2\'a3\'ba\cf1\b0\fs18\par&#13;&#10;}&#13;&#10;"/>
       </DataHeaderBand>
+      <DataFooterBand Name="dfTipPaid" Top="255.2" Width="253.64" Height="22.68" Border.Lines="Top" Border.TopLine.Style="Dash">
+        <TextObject Name="Text7" Left="7.56" Top="1.89" Width="113.4" Height="18.9" Text="小费：" Font="宋体, 9pt"/>
+        <TextObject Name="Text10" Left="122.85" Top="1.89" Width="94.5" Height="18.9" Text="[tb_Order.小费实付金额]" Format="Currency" Format.UseLocale="true" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
+      </DataFooterBand>
     </DataBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="280.54" Width="253.64" Height="70.72" Border.Lines="Top" Border.TopLine.Style="Double">
+      <TextObject Name="edtreport_tele" Left="5.67" Top="4.45" Width="245.7" Height="15.12" Text="电话：010-65681066" Font="宋体, 9pt"/>
+      <TextObject Name="edtreport_address" Left="41.12" Top="23.35" Width="226.8" Height="34.02" Text="北京朝阳区建国路甲108号北京雷特斯酒店B1层" Font="宋体, 9pt"/>
+      <TextObject Name="edtreport_web" Left="6.45" Top="50.6" Width="245.7" Height="15.12" Font="宋体, 9pt"/>
+      <TextObject Name="Text18" Left="5.67" Top="23.35" Width="45.36" Height="34.02" Text="地址：" Font="宋体, 9pt"/>
+    </ReportSummaryBand>
   </ReportPage>
 </Report>

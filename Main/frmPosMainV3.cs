@@ -827,6 +827,7 @@ namespace Main
             amountTip = Math.Min(Globals.CurrTableInfo.TipAmount, Math.Max(0, (float)Math.Round(getamountsy - payamount + amountym, 2))); //小费等于付款金额-应收金额，必须大于0且小于设定的值。
             amountTip = Math.Min(amountTip, amountrmb);//小费的来源只是现金，不能超过现金金额。
             returnamount = Math.Max(0, (float)Math.Round(getamount2 - (payamount - getamount3) - amountTip - amountroundtz, 2));
+            returnamount = Math.Min(returnamount, amountrmb - amountTip);//找零的来源只是现金，不能超过现金金额。
             edtReturn.Text = returnamount.ToString(CultureInfo.InvariantCulture);
             String tmpstr = "";
             if (amountrmb > 0)
@@ -853,16 +854,15 @@ namespace Main
 
             if (amountml > 0)
                 tmpstr += string.Format("抹零{0} ", amountml);
-            if (amountTip > 0)
-                tmpstr += string.Format("小费{0} ", amountTip);
             if (returnamount > 0)
                 tmpstr += string.Format("找零{0} ", returnamount);
             else
             {
                 if (getamount <= 0)
                 {
-                    if (Math.Round(payamount - getamount + amountroundtz, 2) > 0)
-                        tmpstr += string.Format("需收款{0} ", payamount - getamount + amountroundtz);
+                    var needAmount = Math.Round(payamount - getamount + amountroundtz + Globals.CurrTableInfo.TipAmount, 2);
+                    if (needAmount > 0)
+                        tmpstr += string.Format("需收款{0} ", needAmount);
                 }
                 else
                 {
@@ -940,27 +940,27 @@ namespace Main
                     return;
                 }
 
-                if (amountTip < Globals.CurrTableInfo.TipAmount)
-                {
-                    if (!AskQuestion(string.Format("还有{0}元小费未结算。", Globals.CurrTableInfo.TipAmount - amountTip)))
-                        return;
-                }
-                if (amountrmb < Globals.CurrTableInfo.TipAmount)
-                {
-                    if (!AskQuestion("小费强烈建议用现金支付。"))
-                        return;
-                }
                 if (Math.Round(payamount - getamount + amountroundtz, 2) > 0)
                 {
                     Warning("还有未收金额...");
                     return;
+                }
+                if (amountTip < Globals.CurrTableInfo.TipAmount && Math.Round(getamountsy - payamount + amountym, 2) > amountTip)
+                {
+                    Warning(string.Format("小费{0}元，必须使用现金结算。", Globals.CurrTableInfo.TipAmount));
+                    return;
+                }
+                if (amountTip < Globals.CurrTableInfo.TipAmount)
+                {
+                    if (!AskQuestion(string.Format("还有{0}元小费未结算。", Globals.CurrTableInfo.TipAmount - amountTip)))
+                        return;
                 }
                 if (returnamount >= 100)
                 {
                     Warning("找零不能大于100...");
                     return;
                 }
-                if (amountrmb <= 0)
+                if (returnamount <= 0)
                 {
                     if (amountyhk > payamount)
                     {
@@ -1124,30 +1124,27 @@ namespace Main
                     Opentable2(true);
                     if (isok)
                     {
-                        ThreadPool.QueueUserWorkItem(t =>
+                        try
+                        {
+                            PrintBill2();
+                        }
+                        catch (Exception ex)
+                        {
+                            AllLog.Instance.E("打印结账单异常。" + ex.Message);
+                        }
+
+                        Application.DoEvents();
+                        if (ismember)
                         {
                             try
                             {
-                                PrintBill2();
+                                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
                             }
                             catch (Exception ex)
                             {
-                                AllLog.Instance.E("打印结账单异常。" + ex.Message);
+                                AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
                             }
-
-                            Application.DoEvents();
-                            if (ismember)
-                            {
-                                try
-                                {
-                                    ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
-                                }
-                                catch (Exception ex)
-                                {
-                                    AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
-                                }
-                            }
-                        });
+                        }
 
                         if (!iswm)
                         {
@@ -1258,7 +1255,7 @@ namespace Main
                 ReportAmount ra;
                 ra.orderid = Globals.CurrOrderInfo.orderid;
                 ra.amount = Math.Round(Convert.ToDecimal(Globals.CurrTableInfo.amount), 2);
-                ra.ysAmount = Math.Round(Convert.ToDecimal(ysamount), 2);
+                ra.ysAmount = Math.Round(Convert.ToDecimal(ysamount - Globals.CurrTableInfo.TipAmount), 2);
                 ra.mlAmount = Math.Round(Convert.ToDecimal(amountml), 2); //amountml;
                 ra.amountgz = Math.Round(Convert.ToDecimal(amountgz2), 2); //amountgz2;
                 ra.amountym = Math.Round(Convert.ToDecimal(amountym), 2); //amountym;

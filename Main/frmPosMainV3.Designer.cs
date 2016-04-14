@@ -628,7 +628,7 @@
             this.pnlMore.Controls.Add(this.btnCancelOrder);
             this.pnlMore.Controls.Add(this.btnRePrintCust);
             this.pnlMore.Controls.Add(this.btnPrintMember1);
-            this.pnlMore.Location = new System.Drawing.Point(162, 183);
+            this.pnlMore.Location = new System.Drawing.Point(162, 200);
             this.pnlMore.Name = "pnlMore";
             this.pnlMore.Size = new System.Drawing.Size(120, 257);
             this.pnlMore.TabIndex = 280;
@@ -951,7 +951,7 @@
             this.lbTip.AutoSize = true;
             this.lbTip.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbTip.ForeColor = System.Drawing.Color.Gray;
-            this.lbTip.Location = new System.Drawing.Point(186, 8);
+            this.lbTip.Location = new System.Drawing.Point(180, 8);
             this.lbTip.Name = "lbTip";
             this.lbTip.Size = new System.Drawing.Size(73, 24);
             this.lbTip.TabIndex = 302;

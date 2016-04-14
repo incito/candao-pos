@@ -240,6 +240,8 @@ namespace Models
             dt.Columns.Add(column);
             column = newDataColumn("System.Double", "赠送金额", "zdAmount", (Double)0.00);
             dt.Columns.Add(column);
+            dt.Columns.Add(newDataColumn("System.Double", "小费金额", "tipAmount", 0d));
+            dt.Columns.Add(newDataColumn("System.Double", "小费实付金额", "tipPaid", 0d));
             jarray2DataTable(jr, ref dt);
             return dt;
         }

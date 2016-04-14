@@ -35,6 +35,8 @@ namespace ReportsFastReport
         private static ReportAmount ramount;
         private static Report rptReport = new Report();
         private static frmPrintProgress frmProgress;// = new frmPrintProgress();
+        private static decimal tipAmount;
+        private static decimal tipPaid;
 
         public static void Init()
         {
@@ -177,7 +179,7 @@ namespace ReportsFastReport
                         continue;
                     }
 
-                    
+
                     if (!IsValueType(ppy))
                         continue;
 
@@ -194,8 +196,8 @@ namespace ReportsFastReport
 
         private static bool IsValueType(PropertyInfo ppy)
         {
-            return (ppy.PropertyType == typeof (int) || ppy.PropertyType == typeof (decimal) ||
-                    ppy.PropertyType == typeof (string) || ppy.PropertyType == typeof (double) || ppy.PropertyType == typeof(DateTime));
+            return (ppy.PropertyType == typeof(int) || ppy.PropertyType == typeof(decimal) ||
+                    ppy.PropertyType == typeof(string) || ppy.PropertyType == typeof(double) || ppy.PropertyType == typeof(DateTime));
         }
 
         /// <summary>
@@ -222,6 +224,8 @@ namespace ReportsFastReport
             DataTable yh = new DataTable();
             yh = yhList.Copy();
             dtOrder = Bill_Order.getOrder(jrOrder);
+            tipAmount = Convert.ToDecimal(((JObject)jrOrder[0])["tipAmount"].ToString());
+            tipPaid = Convert.ToDecimal(((JObject)jrOrder[0])["tipPaid"].ToString());
             //dtList = Bill_Order.getOrder_List(jrList);
             dtList = PrintDataHelper.GetOrderListDb(jrList);
             dtJs = Bill_Order.getOrder_Js(jrJS);
@@ -298,6 +302,8 @@ namespace ReportsFastReport
             //dtList = Bill_Order.getOrder_List(jrList);
             dtList = PrintDataHelper.GetOrderListDb(jrList);
             dtJs = Bill_Order.getOrder_Js(jrJS);
+            tipAmount = Convert.ToDecimal(((JObject)jrOrder[0])["tipAmount"].ToString());
+            tipPaid = Convert.ToDecimal(((JObject)jrOrder[0])["tipPaid"].ToString());
             DataTable dtSettlementDetail = Bill_Order.GetSettlementDetailTable(GetSettlementDetailList((JObject)jrOrder[0]));
             rptReport.Clear();
             string file = Application.StartupPath + @"\Reports\rptBill2.frx";
@@ -587,6 +593,8 @@ namespace ReportsFastReport
         {
             try
             {
+                Thread.CurrentThread.ApartmentState = ApartmentState.STA;
+
                 //显示打印对话框
                 ShowReportFrm();
                 //Application.DoEvents();
@@ -621,6 +629,12 @@ namespace ReportsFastReport
                     AddedtValue(ref rtp, "edtRound2", "抹零：");
                     AddedtValue(ref rtp, "edtmlAmount", ramount.mlAmount.ToString("f2"));
                 }
+
+                if (tipAmount == 0)
+                    visiableObj(ref rtp, "dfTipAmount", false);
+
+                if (tipPaid == 0)
+                    visiableObj(ref rtp, "dfTipPaid", false);
 
                 if (RestClient.getShowReport())
                 {
