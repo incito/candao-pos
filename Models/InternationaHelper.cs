@@ -22,8 +22,8 @@
         /// <returns></returns>
         public static string GetBeforeSeparatorFlagData(string srcString)
         {
-            int index = srcString.IndexOf('#');
-            return index > 0 ? srcString.Substring(0, srcString.IndexOf('#')) : srcString;
+            var index = srcString.IndexOf('#');
+            return index > 0 ? srcString.Substring(0, index) : srcString;
         }
     }
 }
