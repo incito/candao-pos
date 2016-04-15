@@ -804,15 +804,13 @@ namespace Main
             amountjf = string2float(edtJf.Text);//会员积分 会员积分不找零
             amountzfb = string2float(edtZfbAmount.Text); //实收
             amountwx = string2float(edtWxAmount.Text); //实收
-            ysamount = Globals.CurrTableInfo.amount + Globals.CurrTableInfo.TipAmount - amountgz2 - amountym;
-            ysamount = (float)Math.Round((double)ysamount, 2);
+            ysamount = (float)Math.Round(Globals.CurrTableInfo.amount - amountgz2 - amountym, 2);
             amountml = 0;
             amountroundtz = 0;
             setamountml();//获取自动抹零金额
 
-            ysamount = ysamount - amountml;
-            if (ysamount < 0)
-                ysamount = 0;
+            ysamount = Math.Max(0, ysamount - amountml);
+            ysamount += Globals.CurrTableInfo.TipAmount;//应收+小费
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
             /*if(amountjf>0)
@@ -824,7 +822,7 @@ namespace Main
             }*/
             float getamount2 = amountrmb + amountyhk + amountml + amounthyk + amountgz2 + amountzfb + amountwx;//人民币，会员卡，银行卡，挂帐2 抹零
             float getamount3 = getamount - getamount2;//其他所有优免
-            amountTip = Math.Min(Globals.CurrTableInfo.TipAmount, Math.Max(0, (float)Math.Round(getamountsy - payamount + amountym, 2))); //小费等于付款金额-应收金额，必须大于0且小于设定的值。
+            amountTip = Math.Min(Globals.CurrTableInfo.TipAmount, Math.Max(0, (float)Math.Round(getamountsy - (ysamount - Globals.CurrTableInfo.TipAmount), 2))); //小费等于付款金额-应收金额，必须大于0且小于设定的值。
             amountTip = Math.Min(amountTip, amountrmb);//小费的来源只是现金，不能超过现金金额。
             returnamount = Math.Max(0, (float)Math.Round(getamount2 - (payamount - getamount3) - amountTip - amountroundtz, 2));
             returnamount = Math.Min(returnamount, amountrmb - amountTip);//找零的来源只是现金，不能超过现金金额。
@@ -833,13 +831,13 @@ namespace Main
             if (amountrmb > 0)
                 tmpstr = string.Format("现金{0} ", amountrmb);
             if (amountgz > 0)
-                tmpstr += string.Format("挂帐{0} ", amountgz);
+                tmpstr += string.Format("挂帐单位{0} ", amountgz);
             if (amounthyk > 0)
                 tmpstr += string.Format("储值{0} ", amounthyk);
             if (amountjf > 0)
                 tmpstr += string.Format("积分{0} ", amountjf);
             if (amountgz2 > 0)
-                tmpstr += string.Format("挂帐2{0} ", amountgz2);
+                tmpstr += string.Format("挂帐{0} ", amountgz2);
             if (amountyhk > 0)
                 tmpstr += string.Format("刷卡{0} ", amountyhk);
             if (amountzfb > 0)
@@ -945,7 +943,7 @@ namespace Main
                     Warning("还有未收金额...");
                     return;
                 }
-                if (amountTip < Globals.CurrTableInfo.TipAmount && Math.Round(getamountsy - payamount + amountym, 2) > amountTip)
+                if (amountTip < Globals.CurrTableInfo.TipAmount && Math.Round(getamountsy - ysamount + Globals.CurrTableInfo.TipAmount, 2) > amountTip)
                 {
                     Warning(string.Format("小费{0}元，必须使用现金结算。", Globals.CurrTableInfo.TipAmount));
                     return;
