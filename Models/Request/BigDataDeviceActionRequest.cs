@@ -25,7 +25,7 @@ namespace Models.Request
         /// <summary>
         /// 1：单个；2：一对。
         /// </summary>
-        public string type { get; set; }
+        public int type { get; set; }
 
         /// <summary>
         /// 当type为单个类型时，该值为null；当type为一对类型时，该值代表开始与结束配对。

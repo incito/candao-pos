@@ -8,7 +8,7 @@
         /// <summary>
         /// 分店ID。
         /// </summary>
-        public string BranchId { get; set; }
+        public int BranchId { get; set; }
 
         /// <summary>
         /// 分店地址。

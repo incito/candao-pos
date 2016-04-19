@@ -8,7 +8,7 @@ namespace Models
     /// </summary>
     public class DeviceActionInfo
     {
-        public DeviceActionInfo(EnumDeviceAction action, string orderId, string key = null)
+        public DeviceActionInfo(EnumDeviceAction action, string orderId, string key = "")
         {
             DeviceAction = action;
             Time = DateTime.Now;

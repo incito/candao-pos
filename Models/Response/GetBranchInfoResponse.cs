@@ -19,7 +19,7 @@
 
         public string branchcode { get; set; }
 
-        public string branchid { get; set; }
+        public int branchid { get; set; }
 
         public string serverversion { get; set; }
 

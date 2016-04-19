@@ -67,7 +67,7 @@ namespace WebServiceReference.ServiceImpl
                 appkey = RestClient.Mac,
                 bill_code = actionInfo.OrderId,
                 corrkey = actionInfo.Key,
-                type = string.IsNullOrEmpty(actionInfo.Key) ? "1" : "2",
+                type = string.IsNullOrEmpty(actionInfo.Key) ? 1 : 2,
                 event_code = "pos000" + (int) actionInfo.DeviceAction,
                 time = actionInfo.Time.ToString("yyyy-MM-dd HH:mm:ss"),
             };

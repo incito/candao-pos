@@ -5,7 +5,7 @@
     /// </summary>
     public class BigDataRegisterRequest : BigDataRequest<BigDataRegisterBody>
     {
-        public BigDataRegisterRequest(string branchId, string branchName, string appkey)
+        public BigDataRegisterRequest(int branchId, string branchName, string appkey)
         {
             head.method = "appsList";
             var body = new BigDataRegisterBody
@@ -29,7 +29,7 @@
             appname = "餐道";
         }
 
-        public string stores_id { get; set; }
+        public int stores_id { get; set; }
 
         public string appkey { get; set; }
 
