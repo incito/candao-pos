@@ -122,7 +122,7 @@ namespace ReportsFastReport
                         continue;
                     }
 
-                    
+
                     if (!IsValueType(ppy))
                         continue;
 
@@ -139,8 +139,8 @@ namespace ReportsFastReport
 
         private static bool IsValueType(PropertyInfo ppy)
         {
-            return (ppy.PropertyType == typeof (int) || ppy.PropertyType == typeof (decimal) ||
-                    ppy.PropertyType == typeof (string) || ppy.PropertyType == typeof (double) || ppy.PropertyType == typeof(DateTime));
+            return (ppy.PropertyType == typeof(int) || ppy.PropertyType == typeof(decimal) ||
+                    ppy.PropertyType == typeof(string) || ppy.PropertyType == typeof(double) || ppy.PropertyType == typeof(DateTime));
         }
 
         /// <summary>
@@ -624,6 +624,9 @@ namespace ReportsFastReport
 
         private static void ShowReportFrm()
         {
+            if (frmProgress == null || frmProgress.IsDisposed)
+                return;
+
             if (frmProgress.IsHandleCreated && frmProgress.InvokeRequired)
             {
                 frmProgress.BeginInvoke((Action)delegate
@@ -639,6 +642,9 @@ namespace ReportsFastReport
 
         private static void HideReportFrm()
         {
+            if (frmProgress == null || frmProgress.IsDisposed)
+                return;
+
             if (frmProgress.IsHandleCreated)
             {
                 if (frmProgress.InvokeRequired)

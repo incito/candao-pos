@@ -993,22 +993,22 @@ namespace Main
                 }
                 if (amountrmb <= 0)
                 {
-                    if (amountyhk > payamount)
+                    if (amountyhk > ysamount)
                     {
                         Warning("请输入正确的刷卡金额...");
                         return;
                     }
-                    if (amounthyk > payamount)
+                    if (amounthyk > ysamount)
                     {
                         Warning("请输入正确的会员卡金额...");
                         return;
                     }
-                    if (amountzfb > payamount)
+                    if (amountzfb > ysamount)
                     {
                         Warning("请输入正确的支付宝金额...");
                         return;
                     }
-                    if (amountwx > payamount)
+                    if (amountwx > ysamount)
                     {
                         Warning("请输入正确的微信金额...");
                         return;
