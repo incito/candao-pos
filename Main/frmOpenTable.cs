@@ -9,6 +9,7 @@ using Library;
 using Common;
 using System.IO;
 using Models;
+using Models.Enum;
 using WebServiceReference;
 
 namespace Main
@@ -193,6 +194,9 @@ namespace Main
                 Warning("¿ªÌ¨Ê§°Ü,1£¡");
                 return;
             }
+            var openTableAction = new DeviceActionInfo(EnumDeviceAction.OpenTable, orderid);
+            BigDataHelper.DeviceActionAsync(openTableAction);
+
             Globals.CurrOrderInfo.orderid = orderid;
             Globals.CurrOrderInfo.userid = edtUserid.Text;
             IniPos.setPosIniVlaue(Application.StartupPath, "ORDERCJ", orderid,edtCj.Text);

@@ -141,7 +141,7 @@ namespace Main
 
                 lblAmount.Text = "ø®”‡∂Ó:";
                 String mmtext = "";
-                TCandaoRet_StoreCardDeposit ret = CanDaoMemberClient.StoreCardDeposit(Globals.branch_id, "", _memberInfo.Cardno, Globals.branch_id, decimal.Parse(edtAmount.Text), 0, rgpPayType.SelectedIndex);
+                TCandaoRet_StoreCardDeposit ret = CanDaoMemberClient.StoreCardDeposit(Globals.BranchInfo.BranchId, "", _memberInfo.Cardno, Globals.BranchInfo.BranchId, decimal.Parse(edtAmount.Text), 0, rgpPayType.SelectedIndex);
                 if (!ret.Ret)
                 {
                     Warning(ret.Retinfo);

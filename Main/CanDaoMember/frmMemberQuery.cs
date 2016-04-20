@@ -141,7 +141,7 @@ namespace Main
             if (e.KeyChar == 13)
             {
                 //µ÷ÓÃ²éÑ¯
-                memberInfo = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", edtMobile.Text, edtPwd.Text);
+                memberInfo = CanDaoMemberClient.QueryBalance(Globals.BranchInfo.BranchId, "", edtMobile.Text, edtPwd.Text);
                 if (!memberInfo.Retcode.Equals("0"))
                 {
                     Warning(memberInfo.Retinfo);
@@ -178,7 +178,7 @@ namespace Main
             {
                 return;
             }
-            TCandaoRet_CardLose cardlose = CanDaoMemberClient.CardLose(Globals.branch_id, "", memberInfo.Cardno, "", "");
+            TCandaoRet_CardLose cardlose = CanDaoMemberClient.CardLose(Globals.BranchInfo.BranchId, "", memberInfo.Cardno, "", "");
             if(!cardlose.Ret)
             {
                 Warning(cardlose.Retinfo);
@@ -202,7 +202,7 @@ namespace Main
             {
                 return;
             }
-            TCandaoRet_CardLose cardlose = CanDaoMemberClient.CardCancellation(Globals.branch_id, "", edtMobile.Text, "", "");
+            TCandaoRet_CardLose cardlose = CanDaoMemberClient.CardCancellation(Globals.BranchInfo.BranchId, "", edtMobile.Text, "", "");
             if (!cardlose.Ret)
             {
                 Warning(cardlose.Retinfo);

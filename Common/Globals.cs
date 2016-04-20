@@ -125,7 +125,11 @@ namespace Common
         public static TRoundInfo roundinfo;//零头处理方式
         public static TSetting cjSetting;//餐具设置
         public static JArray cjFood;//餐具
-        public static String branch_id = "";//分店ID号
+
+        /// <summary>
+        /// 分店ID。
+        /// </summary>
+        public static String BranchId { get; set; }
 
         /// <summary>
         /// 店铺营业时间。
@@ -136,6 +140,11 @@ namespace Common
         /// 所有银行集合。
         /// </summary>
         public static List<BankInfo> BankInfos { get; set; }
+
+        /// <summary>
+        /// 分店信息。
+        /// </summary>
+        public static BranchInfo BranchInfo { get; set; }
 
         //客用单
         public static DataTable CustPrintTable = new DataTable();

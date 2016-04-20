@@ -17,7 +17,7 @@ namespace WebServiceReference
         public static bool InsertTinvoice(string memberNo, string deviceId, string invoiceTitle, string orderid)
         {
             bool ret =false;
-            string address = String.Format("http://{0}/" + RestClient.apiPath + "/padinterface/InsertTinvoice.json", RestClient.server2);
+            string address = String.Format("http://{0}/" + RestClient.ApiPath + "/padinterface/InsertTinvoice.json", RestClient.JavaServer);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -45,7 +45,7 @@ namespace WebServiceReference
         public static bool findInvoiceByOrderid(string orderid,ref string invoice_title)
         {
             bool ret = false;
-            string address = String.Format("http://{0}/" + RestClient.apiPath + "/padinterface/findInvoiceByOrderid.json", RestClient.server2);
+            string address = String.Format("http://{0}/" + RestClient.ApiPath + "/padinterface/findInvoiceByOrderid.json", RestClient.JavaServer);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();
@@ -79,7 +79,7 @@ namespace WebServiceReference
         public static bool updateInvoice(string orderid, decimal invoice_amount, string cardno)
         {
             bool ret = false;
-            string address = String.Format("http://{0}/" + RestClient.apiPath + "/padinterface/updateInvoice.json", RestClient.server2);
+            string address = String.Format("http://{0}/" + RestClient.ApiPath + "/padinterface/updateInvoice.json", RestClient.JavaServer);
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
             writer.WriteStartObject();

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="BankInfo.cs" />
     <Compile Include="Bill_Order.cs" />
+    <Compile Include="BranchInfo.cs" />
     <Compile Include="CandaoMember\TCandaoMemberCardInfo.cs" />
     <Compile Include="CandaoMember\TCandaoMemberInfo.cs" />
     <Compile Include="CandaoMember\TCandaoRegMemberInfo.cs" />
@@ -60,6 +61,8 @@
     <Compile Include="DishSaleInfo.cs" />
     <Compile Include="DataTableHelper.cs" />
     <Compile Include="Enum\EnumDishSalePeriodsType.cs" />
+    <Compile Include="DeviceActionInfo.cs" />
+    <Compile Include="Enum\EnumDeviceAction.cs" />
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumTableStatus.cs" />
     <Compile Include="Enum\EnumTableType.cs" />
@@ -68,9 +71,15 @@
     <Compile Include="NoClearMachineInfo.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
     <Compile Include="Request\GetDishSaleRequest.cs" />
+    <Compile Include="Request\BigDataDeviceActionRequest.cs" />
+    <Compile Include="Request\BigDataHeader.cs" />
+    <Compile Include="Request\BigDataRegisterRequest.cs" />
+    <Compile Include="Request\BigDataRequest.cs" />
     <Compile Include="Response\AuthorizeLoginResponse.cs" />
+    <Compile Include="Response\BigDataResponse.cs" />
     <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />
     <Compile Include="Response\GetDishSaleInfoResponse.cs" />
+    <Compile Include="Response\GetBranchInfoResponse.cs" />
     <Compile Include="Response\GetRestaurantTradeTimeResponse.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\JavaResponse.cs" />
