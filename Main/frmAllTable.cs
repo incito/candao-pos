@@ -179,7 +179,7 @@ namespace Main
                     return;
                 }
 
-                TableInfos = result.Item2.Where(t=>t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
+                TableInfos = result.Item2.Where(t => t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
                 CreateTableControls();
 
                 lblState0.Text = string.Format("空闲({0})", TableInfos.Count(t => t.TableStatus == EnumTableStatus.Idle));
@@ -437,8 +437,9 @@ namespace Main
         /// <param name="e"></param>
         private void btnReport_Click(object sender, EventArgs e)
         {
+            AllLog.Instance.I("点击报表按钮...");
             timer2.Stop();
-            (new ReportViewWindow()).ShowDialog();
+            ReportViewWindow.Instance.ShowDialog();
             RefreshAllTableStatus();
             timer2.Start();
         }

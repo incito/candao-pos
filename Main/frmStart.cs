@@ -23,16 +23,8 @@ namespace Main
         }
         public void setMsg(string msg)
         {
-            lblMsg.Text = msg;
-            lblMsg.Update();
-            Application.DoEvents();
-            lblMsg.Update();
+            LbMsg.Text = msg;
         }
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-     
-        }
-
         private void pbxMain_Click(object sender, EventArgs e)
         {
 

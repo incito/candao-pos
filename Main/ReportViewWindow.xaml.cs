@@ -23,6 +23,9 @@ namespace KYPOS
     {
         #region Fields
 
+        private static ReportViewWindow _instance;
+        private static readonly object LockObj = new object();
+
         /// <summary>
         /// 当前选中的周期。
         /// </summary>
@@ -44,9 +47,11 @@ namespace KYPOS
 
         #region Constructor
 
-        public ReportViewWindow()
+        private ReportViewWindow()
         {
+            AllLog.Instance.I("开始报表窗口初始化");
             InitializeComponent();
+            AllLog.Instance.I("报表窗口初始化完成");
             DishSaleInfos = new ObservableCollection<DishSaleInfo>();
 
             DataContext = this;
@@ -55,6 +60,24 @@ namespace KYPOS
         #endregion
 
         #region Properties
+
+        public static ReportViewWindow Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (LockObj)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new ReportViewWindow();
+                        }
+                    }
+                }
+                return _instance;
+            }
+        }
 
         /// <summary>
         /// 品项销售信息集合。
@@ -73,6 +96,7 @@ namespace KYPOS
 
         private void ReportViewWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            AllLog.Instance.I("报表窗口加载完成");
             TbToday.IsChecked = true;
         }
 
@@ -117,6 +141,7 @@ namespace KYPOS
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
         {
+            AllLog.Instance.I("开始获取品项明细数据...");
             _curSelectTbBtn = (ToggleButton)sender;
             var enumType = (EnumDishSalePeriodsType)Enum.Parse(typeof(EnumDishSalePeriodsType), (string)((ToggleButton)sender).Tag);
             TaskService.Start(enumType, GetDishSaleDataProcess, GetDishSaleDataComplete, "获取品项明细数据中...");
@@ -149,6 +174,11 @@ namespace KYPOS
             Keyboard.Release(Key.PageDown);
         }
         #endregion
+
+        public void Init()
+        {
+            
+        }
 
         #region Prvate Methods
 
