@@ -1,4 +1,5 @@
-﻿using Models.Enum;
+﻿using System;
+using Models.Enum;
 
 namespace Models
 {
@@ -55,5 +56,15 @@ namespace Models
         public decimal MinPrice { get; set; }
 
         public decimal FixPrice { get; set; }
+
+        /// <summary>
+        /// 开台时间。
+        /// </summary>
+        public DateTime? BeginTime { get; set; }
+
+        /// <summary>
+        /// 应收金额。
+        /// </summary>
+        public decimal? Amount { get; set; }
     }
 }

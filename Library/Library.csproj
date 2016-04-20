@@ -167,11 +167,17 @@
     <Compile Include="UserControls\ucPanel.Designer.cs">
       <DependentUpon>ucPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ucTable.cs">
+    <Compile Include="UserControls\ucDish.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ucTable.Designer.cs">
-      <DependentUpon>ucTable.cs</DependentUpon>
+    <Compile Include="UserControls\ucDish.Designer.cs">
+      <DependentUpon>ucDish.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UcTable.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UcTable.Designer.cs">
+      <DependentUpon>UcTable.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ucValueEdit.cs">
       <SubType>UserControl</SubType>
@@ -232,8 +238,8 @@
       <DependentUpon>ucCheckedListBoxEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ucTable.resx">
-      <DependentUpon>ucTable.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UcTable.resx">
+      <DependentUpon>UcTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ucValueEdit.resx">
       <DependentUpon>ucValueEdit.cs</DependentUpon>
