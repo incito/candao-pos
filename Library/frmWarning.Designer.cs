@@ -41,7 +41,7 @@
             // 
             // RtbMsg
             // 
-            this.RtbMsg.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.RtbMsg.BackColor = System.Drawing.Color.White;
             this.RtbMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.RtbMsg.Cursor = System.Windows.Forms.Cursors.Default;
             this.RtbMsg.Enabled = false;
