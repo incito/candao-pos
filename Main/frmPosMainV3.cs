@@ -812,6 +812,7 @@ namespace Main
             ysamount = Math.Max(0, ysamount - amountml);
             ysamount += Globals.CurrTableInfo.TipAmount;//应收+小费
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
+            getamount = (float) Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
             /*if(amountjf>0)
             {
@@ -960,22 +961,22 @@ namespace Main
                 }
                 if (returnamount <= 0)
                 {
-                    if (amountyhk > payamount)
+                    if (amountyhk > ysamount)
                     {
                         Warning("请输入正确的刷卡金额...");
                         return;
                     }
-                    if (amounthyk > payamount)
+                    if (amounthyk > ysamount)
                     {
                         Warning("请输入正确的会员卡金额...");
                         return;
                     }
-                    if (amountzfb > payamount)
+                    if (amountzfb > ysamount)
                     {
                         Warning("请输入正确的支付宝金额...");
                         return;
                     }
-                    if (amountwx > payamount)
+                    if (amountwx > ysamount)
                     {
                         Warning("请输入正确的微信金额...");
                         return;
@@ -1064,7 +1065,9 @@ namespace Main
                                         {
                                             pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
                                         }
-                                        bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
+                                        bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,
+                                            membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1,
+                                            amounthyk, tickstrs, pwd, (float) Math.Round(memberyhqamount, 2));
                                         if (data)
                                         {
                                             ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
@@ -1074,8 +1077,15 @@ namespace Main
                                     catch (Exception ex)
                                     {
                                         AllLog.Instance.E("会员消费异常。" + ex.Message);
-                                        RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
-                                        Warning("会员积分，结算失败!");
+                                    }
+                                    finally
+                                    {
+                                        if (!isok)
+                                        {
+                                            RestClient.posrebacksettleorder(Globals.UserInfo.UserID,
+                                                Globals.CurrOrderInfo.orderid);
+                                            Warning("会员积分，结算失败!");
+                                        }
                                     }
                                 }
                                 else
