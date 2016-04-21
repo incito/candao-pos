@@ -35,12 +35,18 @@ namespace ReportsFastReport
         private static ReportAmount ramount;
         private static Report rptReport = new Report();
         private static frmPrintProgress frmProgress;// = new frmPrintProgress();
+        private static decimal tipAmount;
+        private static decimal tipPaid;
 
         public static void Init()
         {
             frmProgress = new frmPrintProgress();
         }
 
+        /// <summary>
+        /// 打印品项销售明细。
+        /// </summary>
+        /// <param name="fullInfo"></param>
         public static void PrintDishSaleDetail(DishSaleFullInfo fullInfo)
         {
             DataTable mainDb = ToMainDb(fullInfo);
@@ -56,7 +62,12 @@ namespace ReportsFastReport
             PrintRpt(rptReport, 1);
         }
 
-        private static DataTable ToMainDb(DishSaleFullInfo fullInfo)
+        /// <summary>
+        /// 转成主表。
+        /// </summary>
+        /// <param name="fullInfo"></param>
+        /// <returns></returns>
+        private static DataTable ToMainDb(StatisticInfoBase fullInfo)
         {
             var tb = new DataTable("tb_main");
             DataColumn dc = CreateDataColumn(typeof(DateTime), "起始时间", "StartTime", DateTime.MinValue);
@@ -74,6 +85,11 @@ namespace ReportsFastReport
             return tb;
         }
 
+        /// <summary>
+        /// 转成明细表。
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         private static DataTable ToDetailDb(List<DishSaleInfo> list)
         {
             var tb = new DataTable("tb_data");
@@ -84,6 +100,47 @@ namespace ReportsFastReport
             dc = CreateDataColumn(typeof(decimal), "数量", "SalesCount", 0m);
             tb.Columns.Add(dc);
             dc = CreateDataColumn(typeof(decimal), "金额", "SalesAmount", 0m);
+            tb.Columns.Add(dc);
+
+            if (list != null)
+                list.ForEach(t => AddObject2DataTable(tb, t));
+
+            return tb;
+        }
+
+        /// <summary>
+        /// 打印小费明细。
+        /// </summary>
+        /// <param name="fullInfo"></param>
+        public static void PrintTipDetail(TipFullInfo fullInfo)
+        {
+            DataTable mainDb = ToMainDb(fullInfo);
+            DataTable detailDb = ToDetailDb(fullInfo.TipInfos);
+            DataSet ds = new DataSet();
+            ds.Tables.Add(mainDb);
+            ds.Tables.Add(detailDb);
+
+            rptReport.Clear();
+            rptReport.Load(Application.StartupPath + @"\Reports\TipDetail.frx");//加载报表模板文件
+            InitializeReport(ds, ref rptReport, detailDb.TableName);
+            PrintRpt(rptReport, 1);
+        }
+
+        /// <summary>
+        /// 转成明细表。
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private static DataTable ToDetailDb(List<TipInfo> list)
+        {
+            var tb = new DataTable("tb_data");
+            DataColumn dc = CreateDataColumn(typeof(int), "序号", "Index", 0);
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(string), "服务员", "WaiterName", "");
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(decimal), "小费次数", "TipCount", 0m);
+            tb.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(decimal), "小费金额", "TipAmount", 0m);
             tb.Columns.Add(dc);
 
             if (list != null)
@@ -122,7 +179,7 @@ namespace ReportsFastReport
                         continue;
                     }
 
-                    
+
                     if (!IsValueType(ppy))
                         continue;
 
@@ -139,8 +196,8 @@ namespace ReportsFastReport
 
         private static bool IsValueType(PropertyInfo ppy)
         {
-            return (ppy.PropertyType == typeof (int) || ppy.PropertyType == typeof (decimal) ||
-                    ppy.PropertyType == typeof (string) || ppy.PropertyType == typeof (double) || ppy.PropertyType == typeof(DateTime));
+            return (ppy.PropertyType == typeof(int) || ppy.PropertyType == typeof(decimal) ||
+                    ppy.PropertyType == typeof(string) || ppy.PropertyType == typeof(double) || ppy.PropertyType == typeof(DateTime));
         }
 
         /// <summary>
@@ -167,6 +224,8 @@ namespace ReportsFastReport
             DataTable yh = new DataTable();
             yh = yhList.Copy();
             dtOrder = Bill_Order.getOrder(jrOrder);
+            tipAmount = Convert.ToDecimal(((JObject)jrOrder[0])["tipAmount"].ToString());
+            tipPaid = Convert.ToDecimal(((JObject)jrOrder[0])["tipPaid"].ToString());
             //dtList = Bill_Order.getOrder_List(jrList);
             dtList = PrintDataHelper.GetOrderListDb(jrList);
             dtJs = Bill_Order.getOrder_Js(jrJS);
@@ -243,6 +302,8 @@ namespace ReportsFastReport
             //dtList = Bill_Order.getOrder_List(jrList);
             dtList = PrintDataHelper.GetOrderListDb(jrList);
             dtJs = Bill_Order.getOrder_Js(jrJS);
+            tipAmount = Convert.ToDecimal(((JObject)jrOrder[0])["tipAmount"].ToString());
+            tipPaid = Convert.ToDecimal(((JObject)jrOrder[0])["tipPaid"].ToString());
             DataTable dtSettlementDetail = Bill_Order.GetSettlementDetailTable(GetSettlementDetailList((JObject)jrOrder[0]));
             rptReport.Clear();
             string file = Application.StartupPath + @"\Reports\rptBill2.frx";
@@ -532,6 +593,8 @@ namespace ReportsFastReport
         {
             try
             {
+                Thread.CurrentThread.ApartmentState = ApartmentState.STA;
+
                 //显示打印对话框
                 ShowReportFrm();
                 //Application.DoEvents();
@@ -566,6 +629,12 @@ namespace ReportsFastReport
                     AddedtValue(ref rtp, "edtRound2", "抹零：");
                     AddedtValue(ref rtp, "edtmlAmount", ramount.mlAmount.ToString("f2"));
                 }
+
+                if (tipAmount == 0)
+                    visiableObj(ref rtp, "dfTipAmount", false);
+
+                if (tipPaid == 0)
+                    visiableObj(ref rtp, "dfTipPaid", false);
 
                 if (RestClient.getShowReport())
                 {

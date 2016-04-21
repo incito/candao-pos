@@ -51,6 +51,8 @@ namespace Common
                 s += "\n" + innerMsg;
             }
 
+            s += "\n" + e.StackTrace;
+
             Warning(s);
         }
 

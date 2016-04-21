@@ -158,6 +158,14 @@ namespace Models
             set { _tablename = value; }
             get { return _tablename; }
         }
+
+
+        /// <summary>
+        /// 小费金额。
+        /// </summary>
+        public float TipAmount { get; set; }
+
+
         #endregion Model
 
     }

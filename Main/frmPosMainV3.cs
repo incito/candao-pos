@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Models.CandaoMember;
 using Models.Enum;
+using WebServiceReference.ServiceImpl;
 
 namespace Main
 {
@@ -32,6 +33,10 @@ namespace Main
         private float amounthyk = 0;//实收hyk
         private float amountzfb = 0;//实收支付宝
         private float amountwx = 0;//实收微信
+        /// <summary>
+        /// 小费。
+        /// </summary>
+        private float amountTip = 0;//小费
 
         private float returnamount = 0;//返还
         private float amountgz = 0;//挂帐
@@ -101,8 +106,9 @@ namespace Main
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
                 lblMsg.Text = "";
-                lblAmount2.Text = String.Format("应收金额：{0}元", 0);
-                lblAmount.Text = String.Format("合计金额：{0}元", 0);
+                lblAmount2.Text = "应收:0";
+                lblAmount.Text = "消费:0";
+                lbTip.Text = "小费:0";
                 try
                 {
                     HideOpenTable();
@@ -671,8 +677,9 @@ namespace Main
                 pnlCash.Enabled = true;
             }
 
-            lblAmount2.Text = String.Format("应收金额：{0}元", ysamount);
-            lblAmount.Text = String.Format("合计金额：{0}元", Globals.CurrTableInfo.amount);
+            lblAmount2.Text = String.Format("应收:{0}", ysamount);
+            lblAmount.Text = String.Format("消费:{0}", Globals.CurrTableInfo.amount);
+            lbTip.Text = string.Format("小费:{0}", Globals.CurrTableInfo.TipAmount);
             focusedt = edtAmount;
             //edtAmount.Text = Globals.CurrTableInfo.amount.ToString();
             edtAmount.Focus();
@@ -797,15 +804,13 @@ namespace Main
             amountjf = string2float(edtJf.Text);//会员积分 会员积分不找零
             amountzfb = string2float(edtZfbAmount.Text); //实收
             amountwx = string2float(edtWxAmount.Text); //实收
-            ysamount = Globals.CurrTableInfo.amount - amountgz2 - amountym;
-            ysamount = (float)Math.Round((double)ysamount, 2);
+            ysamount = (float)Math.Round(Globals.CurrTableInfo.amount - amountgz2 - amountym, 2);
             amountml = 0;
             amountroundtz = 0;
             setamountml();//获取自动抹零金额
 
-            ysamount = ysamount - amountml;
-            if (ysamount < 0)
-                ysamount = 0;
+            ysamount = Math.Max(0, ysamount - amountml);
+            ysamount += Globals.CurrTableInfo.TipAmount;//应收+小费
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
             /*if(amountjf>0)
@@ -817,99 +822,51 @@ namespace Main
             }*/
             float getamount2 = amountrmb + amountyhk + amountml + amounthyk + amountgz2 + amountzfb + amountwx;//人民币，会员卡，银行卡，挂帐2 抹零
             float getamount3 = getamount - getamount2;//其他所有优免
-            returnamount = 0;//返还
-            if (getamount3 >= payamount)
-            {
-                returnamount = 0;
-            }
-            else
-            {
-                if (amountrmb > 0) //人民币大于零才能找零
-                {
-                    returnamount = (float)Math.Round(getamount2 - (payamount - getamount3) - amountroundtz, 2);
-                }
-            }
-            /*if (payamount < getamount2)
-            {
-                returnamount = getamount2 - payamount;
-                if ((amountgz2 + amountym)>payamount)
-                {
-                    returnamount = 0;
-                }
-            }*/
-            //显示界面
-            if (returnamount < 0)
-            {
-                returnamount = 0;
-            }
-            returnamount = float.Parse(Math.Round(returnamount, 2).ToString());
-
-            edtReturn.Text = returnamount.ToString();
+            amountTip = Math.Min(Globals.CurrTableInfo.TipAmount, Math.Max(0, (float)Math.Round(getamountsy - (ysamount - Globals.CurrTableInfo.TipAmount), 2))); //小费等于付款金额-应收金额，必须大于0且小于设定的值。
+            amountTip = Math.Min(amountTip, amountrmb);//小费的来源只是现金，不能超过现金金额。
+            returnamount = Math.Max(0, (float)Math.Round(getamount2 - (payamount - getamount3) - amountTip - amountroundtz, 2));
+            returnamount = Math.Min(returnamount, amountrmb - amountTip);//找零的来源只是现金，不能超过现金金额。
+            edtReturn.Text = returnamount.ToString(CultureInfo.InvariantCulture);
             String tmpstr = "";
             if (amountrmb > 0)
-            {
-                tmpstr = String.Format("现金{0} ", amountrmb);
-            }
-            if (amountyhk > 0)
-            {
-                tmpstr = tmpstr + String.Format("刷卡{0} ", amountyhk);
-            }
-            if (amountzfb > 0)
-            {
-                tmpstr = tmpstr + String.Format("支付宝{0} ", amountzfb);
-            }
-            if (amountwx > 0)
-            {
-                tmpstr = tmpstr + String.Format("微信{0} ", amountwx);
-            }
+                tmpstr = string.Format("现金{0} ", amountrmb);
             if (amountgz > 0)
-            {
-                tmpstr = tmpstr + String.Format("挂帐{0} ", amountgz);
-            }
-
+                tmpstr += string.Format("挂帐单位{0} ", amountgz);
             if (amounthyk > 0)
-            {
-                tmpstr = tmpstr + String.Format("储值{0} ", amounthyk);
-            }
+                tmpstr += string.Format("储值{0} ", amounthyk);
             if (amountjf > 0)
-            {
-                tmpstr = tmpstr + String.Format("积分{0} ", amountjf);
-            }
+                tmpstr += string.Format("积分{0} ", amountjf);
             if (amountgz2 > 0)
-            {
-                tmpstr = tmpstr + String.Format("挂帐{0} ", amountgz2);
-            }
+                tmpstr += string.Format("挂帐{0} ", amountgz2);
+            if (amountyhk > 0)
+                tmpstr += string.Format("刷卡{0} ", amountyhk);
+            if (amountzfb > 0)
+                tmpstr += string.Format("支付宝{0} ", amountzfb);
+            if (amountwx > 0)
+                tmpstr += string.Format("微信{0} ", amountwx);
+
             if (decgz2 < 0)
-            {
-                tmpstr = tmpstr + String.Format("挂帐多收{0} ", decgz2);
-            }
+                tmpstr += string.Format("挂帐多收{0} ", decgz2);
             if ((amountym + decym) > 0)
-            {
-                tmpstr = tmpstr + String.Format("优免{0} ", amountym + decym);
-            }
+                tmpstr += string.Format("优免{0} ", amountym + decym);
+
             if (amountml > 0)
-            {
-                tmpstr = tmpstr + String.Format("抹零{0} ", amountml);
-            }
+                tmpstr += string.Format("抹零{0} ", amountml);
             if (returnamount > 0)
-            {
-                tmpstr = tmpstr + String.Format("找零{0} ", returnamount);
-            }
+                tmpstr += string.Format("找零{0} ", returnamount);
             else
             {
                 if (getamount <= 0)
                 {
-                    if (Math.Round(payamount - getamount + amountroundtz, 2) > 0)
-                    {
-                        tmpstr = tmpstr + String.Format("需收款{0} ", payamount - getamount + amountroundtz);
-                    }
+                    var needAmount = Math.Round(payamount - getamount + amountroundtz + Globals.CurrTableInfo.TipAmount, 2);
+                    if (needAmount > 0)
+                        tmpstr += string.Format("需收款{0} ", needAmount);
                 }
                 else
                 {
-                    if (Math.Round(payamount - getamount + amountroundtz, 2) > 0)
-                    {
-                        tmpstr = tmpstr + String.Format("还需再收{0} ", Math.Round((payamount - getamount + amountroundtz), 2));
-                    }
+                    var needMoreAmount = Math.Round(payamount + Globals.CurrTableInfo.TipAmount - getamount + amountroundtz, 2);
+                    if (needMoreAmount > 0)
+                        tmpstr += string.Format("还需再收{0} ", needMoreAmount);
                 }
             }
             lblSum.Text = String.Format("收款：{0}", tmpstr);
@@ -986,12 +943,22 @@ namespace Main
                     Warning("还有未收金额...");
                     return;
                 }
+                if (amountTip < Globals.CurrTableInfo.TipAmount && Math.Round(getamountsy - ysamount + Globals.CurrTableInfo.TipAmount, 2) > amountTip)
+                {
+                    Warning(string.Format("小费{0}元，必须使用现金结算。", Globals.CurrTableInfo.TipAmount));
+                    return;
+                }
+                if (amountTip < Globals.CurrTableInfo.TipAmount)
+                {
+                    if (!AskQuestion(string.Format("还有{0}元小费未结算。", Globals.CurrTableInfo.TipAmount - amountTip)))
+                        return;
+                }
                 if (returnamount >= 100)
                 {
                     Warning("找零不能大于100...");
                     return;
                 }
-                if (amountrmb <= 0)
+                if (returnamount <= 0)
                 {
                     if (amountyhk > payamount)
                     {
@@ -1122,6 +1089,22 @@ namespace Main
                                 ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                 isok = true;
                             }
+
+                            if (isok)
+                            {
+                                var service = new RestaurantServiceImpl();
+                                var result = service.BillingTip(Globals.CurrOrderInfo.orderid, amountTip);
+                                if (!string.IsNullOrEmpty(result))
+                                {
+                                    Warning(result);
+                                    isok = false;
+                                }
+                                else
+                                {
+                                    isok = true;
+                                }
+                            }
+
                             if (isok)
                             {
                                 try
@@ -1139,30 +1122,27 @@ namespace Main
                     Opentable2(true);
                     if (isok)
                     {
-                        ThreadPool.QueueUserWorkItem(t =>
+                        try
+                        {
+                            PrintBill2();
+                        }
+                        catch (Exception ex)
+                        {
+                            AllLog.Instance.E("打印结账单异常。" + ex.Message);
+                        }
+
+                        Application.DoEvents();
+                        if (ismember)
                         {
                             try
                             {
-                                PrintBill2();
+                                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
                             }
                             catch (Exception ex)
                             {
-                                AllLog.Instance.E("打印结账单异常。" + ex.Message);
+                                AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
                             }
-
-                            Application.DoEvents();
-                            if (ismember)
-                            {
-                                try
-                                {
-                                    ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
-                                }
-                                catch (Exception ex)
-                                {
-                                    AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
-                                }
-                            }
-                        });
+                        }
 
                         if (!iswm)
                         {
@@ -1273,7 +1253,7 @@ namespace Main
                 ReportAmount ra;
                 ra.orderid = Globals.CurrOrderInfo.orderid;
                 ra.amount = Math.Round(Convert.ToDecimal(Globals.CurrTableInfo.amount), 2);
-                ra.ysAmount = Math.Round(Convert.ToDecimal(ysamount), 2);
+                ra.ysAmount = Math.Round(Convert.ToDecimal(ysamount - Globals.CurrTableInfo.TipAmount), 2);
                 ra.mlAmount = Math.Round(Convert.ToDecimal(amountml), 2); //amountml;
                 ra.amountgz = Math.Round(Convert.ToDecimal(amountgz2), 2); //amountgz2;
                 ra.amountym = Math.Round(Convert.ToDecimal(amountym), 2); //amountym;
@@ -1295,7 +1275,7 @@ namespace Main
             memberyhqamount = 0;
             var pay1 = new PayType
             {
-                payAmount = amountrmb - returnamount,
+                payAmount = amountrmb - returnamount - amountTip,
                 payWay = "0", //现金
                 memerberCardNo = "",
                 bankCardNo = "",
@@ -3562,8 +3542,9 @@ namespace Main
         {
             decimal amount = t_shopping.getAmount(ref Globals.ShoppTable);
             Globals.CurrTableInfo.amount = (float)amount;
-            lblAmountWm.Text = string.Format("合计金额：{0}", amount);
-            lblAmount.Text = string.Format("合计金额：{0}", amount);
+            lblAmountWm.Text = string.Format("消费:{0}", amount);
+            lblAmount.Text = string.Format("消费:{0}", amount);
+            lbTip.Text = string.Format("小费:{0}", Globals.CurrTableInfo.TipAmount);
             getAmount();
         }
         private void openfrmClose(object serder, EventArgs e)
@@ -3949,8 +3930,9 @@ namespace Main
             {
                 string TableName = edtRoom.Text;
                 Globals.CurrTableInfo.amount = 0;
-                lblAmountWm.Text = string.Format("合计金额：{0}", 0);
-                lblAmount.Text = string.Format("合计金额：{0}", 0);
+                lblAmountWm.Text = string.Format("消费:{0}", 0);
+                lblAmount.Text = string.Format("消费:{0}", 0);
+                lbTip.Text = "小费:0";
                 //Globals.CurrOrderInfo.orderid = "";
                 //Globals.CurrOrderInfo.orderstatus = 0;
                 lblZd.Text = "帐单：";
@@ -4135,7 +4117,7 @@ namespace Main
                     re = bookorder(seqno_str, ordertype);
                 } while (!re && index++ < 4);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AllLog.Instance.E(ex);
             }
