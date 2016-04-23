@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -98,10 +99,10 @@
             this.lblRs = new System.Windows.Forms.Label();
             this.lblDesk = new System.Windows.Forms.Label();
             this.edtRoom = new DevExpress.XtraEditors.TextEdit();
-            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu();
+            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu(this.components);
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
-            this.barManager1 = new DevExpress.XtraBars.BarManager();
+            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -241,12 +242,12 @@
             this.label22 = new System.Windows.Forms.Label();
             this.edtWx = new DevExpress.XtraEditors.TextEdit();
             this.label6 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer();
-            this.tmrOpen = new System.Windows.Forms.Timer();
-            this.imageList1 = new System.Windows.Forms.ImageList();
-            this.tmrClose = new System.Windows.Forms.Timer();
-            this.tmrOpenTable = new System.Windows.Forms.Timer();
-            this.iltDbgBill = new System.Windows.Forms.ImageList();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpen = new System.Windows.Forms.Timer(this.components);
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.tmrClose = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpenTable = new System.Windows.Forms.Timer(this.components);
+            this.iltDbgBill = new System.Windows.Forms.ImageList(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgWidgh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -1382,7 +1383,7 @@
             this.btnyh18.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh18.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh18.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh18.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh18.ForeColor = System.Drawing.Color.Black;
             this.btnyh18.Location = new System.Drawing.Point(487, 104);
             this.btnyh18.Name = "btnyh18";
             this.btnyh18.Size = new System.Drawing.Size(93, 46);
@@ -1397,7 +1398,7 @@
             this.btnyh12.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh12.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh12.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh12.ForeColor = System.Drawing.Color.Black;
             this.btnyh12.Location = new System.Drawing.Point(487, 53);
             this.btnyh12.Name = "btnyh12";
             this.btnyh12.Size = new System.Drawing.Size(93, 46);
@@ -1412,7 +1413,7 @@
             this.btnyh6.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh6.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh6.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh6.ForeColor = System.Drawing.Color.Black;
             this.btnyh6.Location = new System.Drawing.Point(487, 3);
             this.btnyh6.Name = "btnyh6";
             this.btnyh6.Size = new System.Drawing.Size(93, 46);
@@ -1427,7 +1428,7 @@
             this.btnyh17.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh17.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh17.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh17.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh17.ForeColor = System.Drawing.Color.Black;
             this.btnyh17.Location = new System.Drawing.Point(390, 104);
             this.btnyh17.Name = "btnyh17";
             this.btnyh17.Size = new System.Drawing.Size(93, 46);
@@ -1442,7 +1443,7 @@
             this.btnyh16.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh16.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh16.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh16.ForeColor = System.Drawing.Color.Black;
             this.btnyh16.Location = new System.Drawing.Point(293, 104);
             this.btnyh16.Name = "btnyh16";
             this.btnyh16.Size = new System.Drawing.Size(93, 46);
@@ -1457,7 +1458,7 @@
             this.btnyh15.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh15.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh15.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh15.ForeColor = System.Drawing.Color.Black;
             this.btnyh15.Location = new System.Drawing.Point(196, 104);
             this.btnyh15.Name = "btnyh15";
             this.btnyh15.Size = new System.Drawing.Size(93, 46);
@@ -1472,7 +1473,7 @@
             this.btnyh14.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh14.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh14.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh14.ForeColor = System.Drawing.Color.Black;
             this.btnyh14.Location = new System.Drawing.Point(99, 104);
             this.btnyh14.Name = "btnyh14";
             this.btnyh14.Size = new System.Drawing.Size(93, 46);
@@ -1487,7 +1488,7 @@
             this.btnyh13.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh13.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh13.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh13.ForeColor = System.Drawing.Color.Black;
             this.btnyh13.Location = new System.Drawing.Point(3, 104);
             this.btnyh13.Name = "btnyh13";
             this.btnyh13.Size = new System.Drawing.Size(93, 46);
@@ -1502,7 +1503,7 @@
             this.btnyh11.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh11.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh11.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh11.ForeColor = System.Drawing.Color.Black;
             this.btnyh11.Location = new System.Drawing.Point(390, 53);
             this.btnyh11.Name = "btnyh11";
             this.btnyh11.Size = new System.Drawing.Size(93, 46);
@@ -1517,7 +1518,7 @@
             this.btnyh10.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh10.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh10.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh10.ForeColor = System.Drawing.Color.Black;
             this.btnyh10.Location = new System.Drawing.Point(293, 53);
             this.btnyh10.Name = "btnyh10";
             this.btnyh10.Size = new System.Drawing.Size(93, 46);
@@ -1532,7 +1533,7 @@
             this.btnyh9.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh9.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh9.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh9.ForeColor = System.Drawing.Color.Black;
             this.btnyh9.Location = new System.Drawing.Point(196, 53);
             this.btnyh9.Name = "btnyh9";
             this.btnyh9.Size = new System.Drawing.Size(93, 46);
@@ -1547,7 +1548,7 @@
             this.btnyh8.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh8.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh8.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh8.ForeColor = System.Drawing.Color.Black;
             this.btnyh8.Location = new System.Drawing.Point(99, 53);
             this.btnyh8.Name = "btnyh8";
             this.btnyh8.Size = new System.Drawing.Size(93, 46);
@@ -1562,7 +1563,7 @@
             this.btnyh5.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh5.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh5.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh5.ForeColor = System.Drawing.Color.Black;
             this.btnyh5.Location = new System.Drawing.Point(390, 3);
             this.btnyh5.Name = "btnyh5";
             this.btnyh5.Size = new System.Drawing.Size(93, 46);
@@ -1577,7 +1578,7 @@
             this.btnyh4.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh4.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh4.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh4.ForeColor = System.Drawing.Color.Black;
             this.btnyh4.Location = new System.Drawing.Point(293, 3);
             this.btnyh4.Name = "btnyh4";
             this.btnyh4.Size = new System.Drawing.Size(93, 46);
@@ -1593,7 +1594,7 @@
             this.btnyh3.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh3.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh3.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh3.ForeColor = System.Drawing.Color.Black;
             this.btnyh3.Location = new System.Drawing.Point(196, 3);
             this.btnyh3.Name = "btnyh3";
             this.btnyh3.Size = new System.Drawing.Size(93, 46);
@@ -1608,7 +1609,7 @@
             this.btnyh2.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh2.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh2.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh2.ForeColor = System.Drawing.Color.Black;
             this.btnyh2.Location = new System.Drawing.Point(99, 3);
             this.btnyh2.Name = "btnyh2";
             this.btnyh2.Size = new System.Drawing.Size(93, 46);
@@ -1623,7 +1624,7 @@
             this.btnyh7.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh7.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh7.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh7.ForeColor = System.Drawing.Color.Black;
             this.btnyh7.Location = new System.Drawing.Point(3, 53);
             this.btnyh7.Name = "btnyh7";
             this.btnyh7.Size = new System.Drawing.Size(93, 46);
@@ -1638,7 +1639,7 @@
             this.btnyh1.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh1.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh1.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh1.ForeColor = System.Drawing.Color.Black;
             this.btnyh1.Location = new System.Drawing.Point(3, 3);
             this.btnyh1.Name = "btnyh1";
             this.btnyh1.Size = new System.Drawing.Size(93, 46);
