@@ -741,16 +741,5 @@ namespace ReportsFastReport
             }
             catch { }
         }
-        public static void PrintPayAmount(decimal amount)
-        {
-            try
-            {
-                string file = Application.StartupPath + @"\Reports\rptPayAmount.frx";
-                rptReport.Load(file);//加载报表模板文件
-                AddedtValue(ref rptReport, "lblamount", amount.ToString());
-                PrintRpt(rptReport, 1);
-            }
-            catch { }
-        }
     }
 }

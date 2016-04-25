@@ -194,8 +194,8 @@ namespace WebServiceReference
             ret.Integraloverall = decimal.Parse(ja["IntegralOverall"].ToString());
             ret.Addintegral = decimal.Parse(ja["AddIntegral"].ToString());
             ret.Decintegral = decimal.Parse(ja["DecIntegral"].ToString());
-            ret.Decintegral = decimal.Parse(ja["InflatedRate"].ToString());
-            ret.Decintegral = decimal.Parse(ja["NetAmount"].ToString());
+            ret.Inflatedrate = decimal.Parse(ja["InflatedRate"].ToString());
+            ret.Netamount = decimal.Parse(ja["NetAmount"].ToString());
             return ret;
         }
 

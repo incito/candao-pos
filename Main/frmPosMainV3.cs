@@ -981,7 +981,17 @@ namespace Main
                     Warning("还有未称重菜品,不能结帐...");
                     return;
                 }
-
+                if (membercard.Length > 0 && (amounthyk > 0 || amountjf > 0))
+                {
+                    var pwd = "";
+                    if (edtPwd.Text.Trim().Length > 0)
+                        pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
+                    if (string.IsNullOrEmpty(pwd))
+                    {
+                        Warning("会员卡储值消费和积分消费请输入会员密码。");
+                        return;
+                    }
+                }
                 if (Math.Round(payamount - getamount + amountroundtz, 2) > 0)
                 {
                     Warning("还有未收金额...");
@@ -1021,6 +1031,8 @@ namespace Main
                     Warning("找零金额错误...");
                     return;
                 }
+
+
                 if (amounthyk > 0)
                 {
                     if (membercard.Length <= 0)
@@ -1036,6 +1048,24 @@ namespace Main
                     if (amounthyk > payamount)
                     {
                         Warning("会员卡使用金额不能大于应付额...");
+                        return;
+                    }
+                }
+                if (amountjf > 0)
+                {
+                    if (membercard.Length <= 0)
+                    {
+                        Warning("请刷会员卡...");
+                        return;
+                    }
+                    if (amountjf > psIntegralOverall)
+                    {
+                        Warning("会员卡积分不足...");
+                        return;
+                    }
+                    if (amountjf > payamount)
+                    {
+                        Warning("会员卡使用积分不能大于应付额...");
                         return;
                     }
                 }
@@ -1083,7 +1113,6 @@ namespace Main
                             {
                                 float psccash = amountrmb + amountyhk + amountgz + amountzfb + amountwx;//现金 用于会员积分
                                 float pscpoint = amountjf; //使用积分付款
-                                float pszStore = amounthyk;//使用储值余额付款
                                 float tmppsccash = Math.Max(0, psccash - returnamount);
 
                                 //使用优惠券
@@ -1095,9 +1124,7 @@ namespace Main
                                     {
                                         string pwd = "0";
                                         if (edtPwd.Text.Trim().Length > 0)
-                                        {
                                             pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
-                                        }
                                         bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
                                         if (data)
                                         {
@@ -4136,7 +4163,7 @@ namespace Main
                     re = bookorder(seqno_str, ordertype);
                 } while (!re && index++ < 4);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AllLog.Instance.E(ex);
             }
@@ -4705,7 +4732,7 @@ namespace Main
                         ordermemberinfo.Terminal = RestClient.getPosID();
                         ordermemberinfo.Serial = ret.Tracecode;
                         ordermemberinfo.Businessname = WebServiceReference.WebServiceReference.Report_title;
-                        ordermemberinfo.Score = (decimal)pszPoint;
+                        ordermemberinfo.Score = (ret.Addintegral - ret.Decintegral);
                         ordermemberinfo.Scorebalance = ret.Integraloverall;
                         ordermemberinfo.Couponsbalance = "0";
                         ordermemberinfo.Storedbalance = ret.Storecardbalance;
