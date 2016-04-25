@@ -807,7 +807,7 @@ namespace Main
             if (ysamount < 0)
                 ysamount = 0;
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
-            getamount = (float)Math.Round(getamount, 2);
+            getamount = (float) Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
             /*if(amountjf>0)
             {
@@ -1125,7 +1125,9 @@ namespace Main
                                         string pwd = "0";
                                         if (edtPwd.Text.Trim().Length > 0)
                                             pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
-                                        bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
+                                        bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,
+                                            membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1,
+                                            amounthyk, tickstrs, pwd, (float) Math.Round(memberyhqamount, 2));
                                         if (data)
                                         {
                                             ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
@@ -1135,8 +1137,15 @@ namespace Main
                                     catch (Exception ex)
                                     {
                                         AllLog.Instance.E("会员消费异常。" + ex.Message);
-                                        RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
-                                        Warning("会员积分，结算失败!");
+                                    }
+                                    finally
+                                    {
+                                        if (!isok)
+                                        {
+                                            RestClient.posrebacksettleorder(Globals.UserInfo.UserID,
+                                                Globals.CurrOrderInfo.orderid);
+                                            Warning("会员积分，结算失败!");
+                                        }
                                     }
                                 }
                                 else

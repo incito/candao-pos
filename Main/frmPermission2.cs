@@ -60,6 +60,7 @@ namespace Main
 
         private void setBtnFocus()
         {
+            Globals.SetButton(button16);
             Globals.SetButton(button18);
             Globals.SetButton(button19);
             Globals.SetButton(button20);
