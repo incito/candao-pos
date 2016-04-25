@@ -1081,8 +1081,10 @@ namespace Main
                     Opentable2(true);
                     if (isok)
                     {
-                        var action = iswm ? EnumDeviceAction.TakeoutEnd : EnumDeviceAction.DineSettleEnd;//记录外卖或者堂食结账结束行为。
-                        actionList.Add(new DeviceActionInfo(action, Globals.CurrOrderInfo.orderid, actionKey));
+                        if (iswm)
+                            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.TakeoutEnd, Globals.CurrOrderInfo.orderid));
+                        else
+                            actionList.Add(new DeviceActionInfo(EnumDeviceAction.DineSettleEnd, Globals.CurrOrderInfo.orderid, actionKey));
                         ThreadPool.QueueUserWorkItem(t =>
                         {
                             try
@@ -2388,6 +2390,9 @@ namespace Main
                                 break;
                             case "05":
                                 action = EnumDeviceAction.GroupBuyClicking;
+                                break;
+                            case "88":
+                                action = EnumDeviceAction.MemberCouponClicking;
                                 break;
                             case "0602":
                             case "0601":
@@ -3920,7 +3925,7 @@ namespace Main
         {
             try
             {
-                string TableName = edtRoom.Text;
+                BigDataHelper.DeviceActionAsync(EnumDeviceAction.TakeoutBegin);
                 Globals.CurrTableInfo.amount = 0;
                 lblAmountWm.Text = string.Format("合计金额：{0}", 0);
                 lblAmount.Text = string.Format("合计金额：{0}", 0);
@@ -4108,7 +4113,7 @@ namespace Main
                     re = bookorder(seqno_str, ordertype);
                 } while (!re && index++ < 4);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AllLog.Instance.E(ex);
             }
