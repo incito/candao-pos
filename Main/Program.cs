@@ -34,6 +34,7 @@ namespace Main
             Application.SetCompatibleTextRenderingDefault(false);
             Globals.ProductVersion = Application.ProductVersion;
             frmStart.ShowStart();
+            frmStart.frm.setMsg("程序初始化...");
             ReportViewWindow.Instance.Init();
 
             Application.ThreadException += Application_ThreadException;//捕获系统所产生的异常。
