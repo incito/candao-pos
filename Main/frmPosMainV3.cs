@@ -807,7 +807,7 @@ namespace Main
             if (ysamount < 0)
                 ysamount = 0;
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
-            getamount = (float) Math.Round(getamount, 2);
+            getamount = (float)Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
             /*if(amountjf>0)
             {
@@ -1127,7 +1127,7 @@ namespace Main
                                             pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
                                         bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,
                                             membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1,
-                                            amounthyk, tickstrs, pwd, (float) Math.Round(memberyhqamount, 2));
+                                            amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
                                         if (data)
                                         {
                                             ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
@@ -1142,9 +1142,11 @@ namespace Main
                                     {
                                         if (!isok)
                                         {
-                                            RestClient.posrebacksettleorder(Globals.UserInfo.UserID,
-                                                Globals.CurrOrderInfo.orderid);
-                                            Warning("会员积分，结算失败!");
+                                            string msg;
+                                            if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, "会员结算失败,系统自动反结", out msg))
+                                            {
+                                                Warning(!string.IsNullOrEmpty(msg) ? msg : "帐单反结算失败...");
+                                            }
                                         }
                                     }
                                 }
