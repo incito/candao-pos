@@ -829,6 +829,7 @@ namespace WebServiceReference
                 //tablelist
                 string tablelistjson = jaAll["JSJson"].ToString();
                 //JObject jaList = (JObject)JsonConvert.DeserializeObject(tablelistjson);
+                Globals.OrderTable.Clear();
                 if (tablelistjson.Length > 30)
                 {
                     DataTableConverter dtc = new DataTableConverter();
@@ -837,7 +838,6 @@ namespace WebServiceReference
                     dt.TableName = "tb_data";
                     dt.Clear();
                     dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
-                    Globals.OrderTable.Clear();
 
                     //国际化处理品项名称和单位
                     var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
