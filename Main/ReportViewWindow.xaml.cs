@@ -90,8 +90,7 @@ namespace KYPOS
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
-            Close();
+            Hide();
         }
 
         private void ReportViewWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -228,5 +227,10 @@ namespace KYPOS
 
         #endregion
 
+        private void ReportViewWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            Hide();
+            e.Cancel = true;
+        }
     }
 }

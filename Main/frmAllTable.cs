@@ -454,7 +454,6 @@ namespace Main
         /// <param name="e"></param>
         private void btnReport_Click(object sender, EventArgs e)
         {
-            AllLog.Instance.I("点击报表按钮...");
             timer2.Stop();
             ReportViewWindow.Instance.ShowDialog();
             RefreshAllTableStatus();

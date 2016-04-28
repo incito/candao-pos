@@ -7,7 +7,8 @@
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         Width="820" Height="690" Title="报表查看"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="true"
-        Loaded="ReportViewWindow_OnLoaded">
+        Loaded="ReportViewWindow_OnLoaded"
+        Closing="ReportViewWindow_OnClosing">
     <Window.Resources>
         <converter:IndexCountConverter x:Key="IndexCountCvt"/>
 

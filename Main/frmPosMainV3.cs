@@ -1142,6 +1142,8 @@ namespace Main
                                     {
                                         if (!isok)
                                         {
+                                            var memType = RestClient.getMemberSystem() == 0 ? "雅座" : "餐道";
+                                            Warning(string.Format("{0}会员消费结算失败，系统自动反结。", memType));
                                             string msg;
                                             if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, "会员结算失败,系统自动反结", out msg))
                                             {
