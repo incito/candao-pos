@@ -138,10 +138,10 @@ namespace Library
 
         private void pictureBox4_Click(object sender, EventArgs e)
         {
-            float inputNum = 0;
+            double inputNum = 0;
             try
             {
-                inputNum = float.Parse(tbxNum.Text);
+                inputNum = double.Parse(tbxNum.Text);
             }
             catch { inputNum = 0; }
             /*if (inputNum>20)
@@ -156,7 +156,7 @@ namespace Library
                 tbxNum.Focus();
                 return;
             }
-            if(inputNum>this.maxnum)
+            if(inputNum - maxnum > 0.00000001)
             {
                 frmWarning.Warning(String.Format("数量不能多于:{0}", this.maxnum));
                 tbxNum.SelectAll();

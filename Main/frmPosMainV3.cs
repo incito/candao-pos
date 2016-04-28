@@ -2907,7 +2907,7 @@ namespace Main
             //description,ruleid,freeamount,1
             //vcr.memo,vcr.ruleid,vcr.freeamount,vcr.num
             string Coupons_Name = vcr.couponname; //优惠券名称 消费券1名称（不足30位时后面的补空格）
-            if (Coupons_Name.IndexOf(":") > 0)
+            if (Coupons_Name.IndexOf(":") > 0 && Coupons_Name.IndexOf("[") > 1)
             {
                 Coupons_Name = Coupons_Name.Replace("会:", "");
                 Coupons_Name = Coupons_Name.Substring(0, Coupons_Name.IndexOf("["));
@@ -5029,6 +5029,7 @@ namespace Main
                 JArray ja = Globals.GetTableJson(tbyh);
                 string str = ja.ToString();
                 RestClient.saveOrderPreferential(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, str);
+                CheckGzYm();
             }
             catch
             {

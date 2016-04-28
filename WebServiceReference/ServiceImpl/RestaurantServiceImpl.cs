@@ -72,6 +72,8 @@ namespace WebServiceReference.ServiceImpl
                 var dataList = new List<TableInfo>();
                 if (result != null && result.Any())
                     dataList = result.Select(DataConverter.ToTableInfo).ToList();
+
+                AllLog.Instance.E(string.Format("获取到的餐台个数：{0}", dataList.Count));
                 return new Tuple<string, List<TableInfo>>(null, dataList);
             }
             catch (Exception ex)

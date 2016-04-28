@@ -42,7 +42,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
-                                    <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1"  Width="110" Height="60" Margin="5" MouseLeftButtonDown="Bd_OnMouseLeftButtonDown">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="1"  MinWidth="110" MinHeight="60" Margin="5" MouseLeftButtonDown="Bd_OnMouseLeftButtonDown">
                                         <Grid>
                                             <TextBlock Foreground="{TemplateBinding Foreground}" Text="{Binding DishName}" FontSize="20" TextWrapping="Wrap"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,6,3"/>
                                             <TextBlock HorizontalAlignment="Right" Foreground="Red" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,0,2,2" Text="{Binding NumString}" Visibility="{Binding ShowSelectString, Converter={StaticResource Boolean2VisibilityCvt}}"/>
