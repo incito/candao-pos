@@ -981,7 +981,7 @@ namespace Main
                     Warning("还有未称重菜品,不能结帐...");
                     return;
                 }
-                if (membercard.Length > 0 && (amounthyk > 0 || amountjf > 0))
+                if (membercard.Length > 0 && (RestClient.getMemberSystem() == 1) && (amounthyk > 0 || amountjf > 0))
                 {
                     var pwd = "";
                     if (edtPwd.Text.Trim().Length > 0)
