@@ -39,7 +39,7 @@ namespace Main
             frmCombodish frm = new frmCombodish();
             frm.comboDish = comboDish;
             frm.dishinfo = dishinfo;
-            if(!frm.getGroupDetail())
+            if (!frm.getGroupDetail())
             {
                 return false;
             }
@@ -54,7 +54,7 @@ namespace Main
         {
             //
             comboDishPad = new ArrayList();
-            ArrayList onlydishs=comboDish.Onlydishs;
+            ArrayList onlydishs = comboDish.Onlydishs;
             TPotDishInfo potinfo = new TPotDishInfo();
             //组合
             ArrayList combodishs = comboDish.Combodishs;
@@ -166,7 +166,7 @@ namespace Main
             //focusEdt = edtNum1;
             pnlBtn.Parent = this;
             pnlBtn.BringToFront();
-            pnlBtn.Top = this.Height - pnlBtn.Height-50;
+            pnlBtn.Top = this.Height - pnlBtn.Height - 50;
         }
         public void initData(string tableNo)
         {
@@ -176,16 +176,16 @@ namespace Main
         {
             OnfrmClose();
         }
-        private  bool checkSelected()
+        private bool checkSelected()
         {
-            string lblname =""; 
+            string lblname = "";
             TCombo combo;
             for (int i = 0; i <= comboDish.Combodishs.Count - 1; i++)
             {
                 combo = (TCombo)comboDish.Combodishs[i];
-                lblname = "lbl" + combo.Columnid; 
+                lblname = "lbl" + combo.Columnid;
                 Label lbl = (Label)this.Controls.Find(lblname, true)[0];
-                if(lbl.BackColor==lblCombo.BackColor)
+                if (lbl.BackColor == lblCombo.BackColor)
                 {
                     return false;
 
@@ -302,7 +302,7 @@ namespace Main
             for (int i = 0; i <= combocontrols.Count - 1; i++)
             {
                 cfc = (TComboFromControl)combocontrols[i];
-                int num=strtointdef0(cfc.edt.Text);
+                int num = strtointdef0(cfc.edt.Text);
                 if (num > 0)
                 {
                     if (cfc.ispot)
@@ -342,7 +342,7 @@ namespace Main
                 return tmpret;
             try
             {
-                tmpret =(float)Math.Round(float.Parse(str),2);
+                tmpret = (float)Math.Round(float.Parse(str), 2);
             }
             catch { return 0; }
             return tmpret;
@@ -371,16 +371,16 @@ namespace Main
         }
         private bool getGroupDetail()
         {
-            bool ret=false;
+            bool ret = false;
             //JArray groupData=null;
             JObject groupData = null;
             ret = RestClient.getMenuCombodish(dishinfo.Dishid, dishinfo.Menuid, out groupData);
             if (!ret)
             {
                 Warning("获取套餐信息失败!");
-                return  false;
+                return false;
             }
-            comboDish= TComboDish.parse(groupData);
+            comboDish = TComboDish.parse(groupData);
             ret = true;
             return ret;
         }
@@ -388,7 +388,7 @@ namespace Main
         {
             lblDishName.Text = dishinfo.Title;
             //根据套餐内容创建控件显示 controls
-            ArrayList onlydishs=comboDish.Onlydishs;
+            ArrayList onlydishs = comboDish.Onlydishs;
             TPotDishInfo potinfo = new TPotDishInfo();
             //组合
             ArrayList combodishs = comboDish.Combodishs;
@@ -406,7 +406,7 @@ namespace Main
                         lbl = getonlyLabel((TPotDishInfo)combo.Dishs[j]);
                         DevExpress.XtraEditors.TextEdit tbx = getComboTextBox();
                         tbx.Tag = combo;
-                        tbx.Click+= new EventHandler(edtNum1_Click);
+                        tbx.Click += new EventHandler(edtNum1_Click);
                         tbx.TextChanged += new EventHandler(edtNum1_EditValueChanged);
                         tbx.Enter += new EventHandler(edtNum1_Enter);
                         addControlCombo(lbl, (TPotDishInfo)combo.Dishs[j], tbx);
@@ -414,7 +414,7 @@ namespace Main
                     else
                     {
                         //普通菜
-                        lbl = getonlyLabel((t_shopping)combo.Dishs[j],true);
+                        lbl = getonlyLabel((t_shopping)combo.Dishs[j], true);
                         DevExpress.XtraEditors.TextEdit tbx = getComboTextBox();
                         tbx.Tag = combo;
                         tbx.Click += new EventHandler(edtNum1_Click);
@@ -437,7 +437,7 @@ namespace Main
                 else
                 {
                     //普通菜
-                    lbl = getonlyLabel((t_shopping)onlydishs[i],false);
+                    lbl = getonlyLabel((t_shopping)onlydishs[i], false);
                     addControl(lbl, (t_shopping)onlydishs[i], null);
                 }
                 lblLine.Top = lbl.Top + lblHeight;
@@ -458,7 +458,7 @@ namespace Main
         }
         private void addControl(Label lbl, TPotDishInfo potinfo, DevExpress.XtraEditors.TextEdit tbx)
         {
-            
+
             TComboFromControl cfc = new TComboFromControl();
             lbl.Parent = pnlMain;
             lbl.Left = 0;
@@ -495,7 +495,7 @@ namespace Main
             TComboFromControl cfc = new TComboFromControl();
             lbl.Parent = pnlMain;
             lbl.Left = 18;
-            lbl.Top = onlycontrols.Count * lblHeight + combocontrols.Count * (lblHeight ) + comboheight;
+            lbl.Top = onlycontrols.Count * lblHeight + combocontrols.Count * (lblHeight) + comboheight;
             cfc.lbl = lbl;
             lbl.Font = lblSimple.Font;
             lbl.Height = lblHeight;
@@ -509,7 +509,7 @@ namespace Main
                 tbx.Parent = pnlMain;
                 tbx.Font = edtNum1.Font;
                 tbx.Left = 10;
-                tbx.Top = lbl.Top-5;// +lblHeight;
+                tbx.Top = lbl.Top - 5;// +lblHeight;
                 tbx.Left = edtNum1.Left;
                 tbx.Width = edtNum1.Width;
                 cfc.edt = tbx;
@@ -522,7 +522,7 @@ namespace Main
             TComboFromControl cfc = new TComboFromControl();
             lbl.Parent = pnlMain;
             lbl.Left = 18;
-            lbl.Top = onlycontrols.Count * lblHeight + combocontrols.Count * (lblHeight ) + comboheight;
+            lbl.Top = onlycontrols.Count * lblHeight + combocontrols.Count * (lblHeight) + comboheight;
             cfc.lbl = lbl;
             lbl.Font = lblSimple.Font;
             lbl.Height = lblHeight;
@@ -548,8 +548,8 @@ namespace Main
             Label label = new Label();
             String potStr = String.Format("{0}:{1}{2}", potinfo.PotInfo.Title, potinfo.PotInfo.Dishnum, potinfo.PotInfo.Dishunit);
             String dish1Str = String.Format(",{0}:{1}{2}", potinfo.FishDishInfo1.Title, potinfo.FishDishInfo1.Dishnum, potinfo.FishDishInfo1.Dishunit);
-            String dish2Str="";
-            if(potinfo.FishDishInfo2!=null)
+            String dish2Str = "";
+            if (potinfo.FishDishInfo2 != null)
                 dish2Str = String.Format(",{0}:{1}{2}", potinfo.FishDishInfo2.Title, potinfo.FishDishInfo2.Dishnum, potinfo.FishDishInfo2.Dishunit);
             label.Text = String.Format("{0}({1}{2}{3})", potinfo.PotDish.Title, potStr, dish1Str, dish2Str);
             return label;
@@ -559,7 +559,7 @@ namespace Main
             Label label = new Label();
             String dishStr = String.Format("{0}({1}{2})", shoppinginfo.Title, shoppinginfo.Dishnum, shoppinginfo.Dishunit);
             if (iscombo)
-                dishStr = String.Format("{0}({1})", shoppinginfo.Title,  shoppinginfo.Dishunit);
+                dishStr = String.Format("{0}({1})", shoppinginfo.Title, shoppinginfo.Dishunit);
             label.Text = dishStr;
             return label;
         }
@@ -575,7 +575,7 @@ namespace Main
         private DevExpress.XtraEditors.TextEdit getComboTextBox()
         {
             DevExpress.XtraEditors.TextEdit tbx = new DevExpress.XtraEditors.TextEdit();
-            tbx.BorderStyle =DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
+            tbx.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.HotFlat;
             //tbx.BackColor = Color.AntiqueWhite;
             return tbx;
         }
@@ -584,7 +584,7 @@ namespace Main
             bool isin = false;
             foreach (DataRow dr in Globals.OrderTable.Rows)
             {
-                if(dr["dishid"].ToString().Equals(potInfo.PotInfo.Dishid))
+                if (dr["dishid"].ToString().Equals(potInfo.PotInfo.Dishid))
                 {
                     isin = true;
                     break;
@@ -632,7 +632,7 @@ namespace Main
                     groupnum = groupnum + strtointdef0(cfc.edt.Text);
                 }
             }
-            if (groupnum>combo.Endnum)
+            if (groupnum > combo.Endnum)
             {
                 for (int i = 0; i <= combocontrols.Count - 1; i++)
                 {
@@ -646,14 +646,14 @@ namespace Main
                 }
             }
             else
-            if (combo.Endnum == groupnum)
-            {
-                lbl.BackColor = lblCombo2.BackColor;
-            }
-            else
-            {
-                lbl.BackColor = lblCombo.BackColor;
-            }
+                if (combo.Endnum == groupnum)
+                {
+                    lbl.BackColor = lblCombo2.BackColor;
+                }
+                else
+                {
+                    lbl.BackColor = lblCombo.BackColor;
+                }
             String dishStr = String.Format("{0}({1}选{2})->已选：{3}                               ", combo.ItemDesc, combo.Startnum, combo.Endnum, groupnum);
             lbl.Text = dishStr;
         }
@@ -681,8 +681,8 @@ namespace Main
                 for (int i = 0; i <= combocontrols.Count - 1; i++)
                 {
                     TComboFromControl cfc = (TComboFromControl)combocontrols[i];
-                    if (((TCombo)cfc.edt.Tag).Columnid==comb.Columnid)
-                      cfc.edt.Text = "";
+                    if (((TCombo)cfc.edt.Tag).Columnid == comb.Columnid)
+                        cfc.edt.Text = "";
                 }
 
                 edt.Text = "1";
@@ -692,14 +692,12 @@ namespace Main
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            this.pnlMain.VerticalScroll.Value = 100;
+            pnlMain.VerticalScroll.Value = Math.Min(pnlMain.VerticalScroll.Maximum, pnlMain.VerticalScroll.Value + 100);
         }
 
         private void btnUp_Click(object sender, EventArgs e)
         {
-            this.pnlMain.VerticalScroll.Value = 100;
-            Thread.Sleep(10);
-            this.pnlMain.VerticalScroll.Value = 0;
+            pnlMain.VerticalScroll.Value = Math.Max(0, pnlMain.VerticalScroll.Value - 100);
         }
     }
     public class TComboFromControl
