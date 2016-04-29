@@ -18,6 +18,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Models.CandaoMember;
 using Models.Enum;
+using WebServiceReference.ServiceImpl;
+using Timer = System.Timers.Timer;
 
 namespace Main
 {
@@ -83,10 +85,63 @@ namespace Main
         private string msgorderid = "";
         private bool isopentable2 = false;
 
+        /// <summary>
+        /// 长按计时器。
+        /// </summary>
+        private Timer _longPressTimer;
+
+        /// <summary>
+        /// 是否是长按模式。
+        /// </summary>
+        private bool _isLongPressModel;
+
+        /// <summary>
+        /// 当前选择的优惠。
+        /// </summary>
+        private VCouponRule _curCoupon;
+
         //记录每张台下单序列的INI文件
         public frmPosMainV3()
         {
             InitializeComponent();
+
+            _longPressTimer = new Timer(1000);
+            _longPressTimer.Elapsed += PressTimer_Elapsed;
+        }
+
+        /// <summary>
+        /// 长按定时器触发时执行。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PressTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            this.Invoke((Action) delegate
+            {
+                _longPressTimer.Stop();
+                _isLongPressModel = true;
+
+                var msg = "";
+                if (_curCoupon.IsUncommonlyUsed)
+                    msg = string.Format("恢复\"{0}\"为常用优惠{1}（恢复后可在对应分类查看、使用）", _curCoupon.couponname, Environment.NewLine);
+                else
+                    msg = string.Format("设置\"{0}\"为不常用优惠{1}（设置后可在不常用优惠分类查看、使用）", _curCoupon.couponname,
+                        Environment.NewLine);
+
+                if (!AskQuestion(msg))
+                    return;
+
+                var service = new RestaurantServiceImpl();
+                var errMsg = service.SetCouponFavor(_curCoupon.couponid, _curCoupon.IsUncommonlyUsed);
+                if (!string.IsNullOrEmpty(errMsg))
+                {
+                    AllLog.Instance.E("设定优惠券喜好失败：{0}", errMsg);
+                    Msg.Warning(errMsg);
+                    return;
+                }
+
+                xtraTabControl2_SelectedPageChanged(xtraCoupon, null);
+            });
         }
 
         public void ShowFrm(string tableno, int status)
@@ -351,8 +406,8 @@ namespace Main
                 lblMember.Text = String.Format("会员：{0}", "");
                 if (jarrTables != null)
                     jarrTables.Clear();
-                if (xtraTabControl2.SelectedTabPageIndex == 5)
-                    xtraTabControl2.SelectedTabPageIndex = 0;
+                if (xtraCoupon.SelectedTabPageIndex == 5)
+                    xtraCoupon.SelectedTabPageIndex = 0;
                 Array.Resize(ref pszTicketList, 0);
 
                 //单品部份折扣也要清除掉  启用新优惠后取消这个接口
@@ -807,7 +862,7 @@ namespace Main
             if (ysamount < 0)
                 ysamount = 0;
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
-            getamount = (float) Math.Round(getamount, 2);
+            getamount = (float)Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
             /*if(amountjf>0)
             {
@@ -1100,7 +1155,7 @@ namespace Main
                                         }
                                         bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,
                                             membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1,
-                                            amounthyk, tickstrs, pwd, (float) Math.Round(memberyhqamount, 2));
+                                            amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
                                         if (data)
                                         {
                                             ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
@@ -1906,6 +1961,7 @@ namespace Main
                 }
             }
         }
+
         private void QueryMemberCard()
         {
             //多次重试获取
@@ -1954,18 +2010,13 @@ namespace Main
             string msg = "";
             //重试3次
             lblMsg.Text = "";
-            bool ret = QueryMemberCard2(out msg);
-            if (!ret)
+            var ret = false;
+            int index = 1;
+            do
             {
-                setlblMsg(msg);
-                Thread.Sleep(1000);
                 ret = QueryMemberCard2(out msg);
-            }
-            if (!ret)
-            {
-                Thread.Sleep(1000);
-                ret = QueryMemberCard2(out msg);
-            }
+            } while (!ret && index++ < 3);
+
             if (!ret)
             {
                 Warning(msg);
@@ -1976,12 +2027,6 @@ namespace Main
             membercard = edtMemberCard.Text;
             btnFind.Tag = 1;
             btnFind.Text = "退出";
-            /*try
-            {
-
-                addAutoFavorale();
-            }
-            catch { }*/
             lblMsg.Text = "";
             lblMember.Text = String.Format("会员：{0}", edtMemberCard.Text);
             //查询成功
@@ -1989,19 +2034,12 @@ namespace Main
             {
                 btnSelect.Visible = true;
             }
-            Thread.Sleep(1000);
         }
+
         private void setlblMsg(string msg)
         {
             int membersystem = RestClient.getMemberSystem();
-            if (membersystem == 1)
-            {
-                //餐道会员
-                lblMsg.Text = String.Format("餐道：{0}", msg);
-            }
-            else
-                lblMsg.Text = String.Format("雅座：{0}", msg);
-
+            lblMsg.Text = String.Format(membersystem == 1 ? "餐道：{0}" : "雅座：{0}", msg);
         }
 
         private bool QueryMemberCard2(out string msg)
@@ -2079,14 +2117,14 @@ namespace Main
                     return false;
                 }
                 getTicketList(json["psTicketInfo"].ToString());
-                if (xtraTabControl2.SelectedTabPageIndex != 5)
+                if (xtraCoupon.SelectedTabPageIndex != 5)
                 {
-                    xtraTabControl2.SelectedTabPageIndex = 5;
+                    xtraCoupon.SelectedTabPageIndex = 5;
                 }
                 else
                 {
                     //pnlz
-                    xtraTabControl2_SelectedPageChanged(xtraTabControl2, null);
+                    xtraTabControl2_SelectedPageChanged(xtraCoupon, null);
                 }
                 label15.Text = string.Format("储值余额：{0}", psStoredCardsBalance);
                 label9.Text = string.Format("积分余额：{0}", psIntegralOverall);
@@ -2117,6 +2155,7 @@ namespace Main
             msg = "ok";
             return true;
         }
+
         private bool QueryMemberCard3(out string msg)
         {
             //会员查询,
@@ -2353,18 +2392,18 @@ namespace Main
             {
                 this.Cursor = Cursors.WaitCursor;
                 string msg = "";
-                pnlyh.Parent = xtraTabControl2.SelectedTabPage;
+                pnlyh.Parent = xtraCoupon.SelectedTabPage;
                 for (int i = 0; i <= btncount - 1; i++)
                 {
                     string btnname = "btnyh" + (i + 1).ToString();
                     Button btn = getbtn(btnname);
                     if (btn != null)
                     {
-                        btn.Tag = 0;
+                        btn.Tag = null;
                         btn.Text = "";
                     }
                 }
-                if (xtraTabControl2.SelectedTabPageIndex == 5)
+                if (xtraCoupon.SelectedTabPageIndex == 5)
                 {
                     if (edtMemberCard.Text.Length > 0)
                     {
@@ -2426,7 +2465,7 @@ namespace Main
                 this.Cursor = Cursors.WaitCursor;
                 this.Update();//必须
                 //xtraTabControl2.SelectedTabPageIndex 如果是会员优惠券，那么刷卡后再显示
-                if (xtraTabControl2.SelectedTabPageIndex == 5)
+                if (xtraCoupon.SelectedTabPageIndex == 5)
                 {
                     try
                     {
@@ -2445,7 +2484,7 @@ namespace Main
                     catch { }
                     try
                     {
-                        jarrTables = RestClient.getcoupon_rulev2(xtraTabControl2.SelectedTabPage.Tag.ToString(), Globals.CurrOrderInfo.orderid);
+                        jarrTables = RestClient.getcoupon_rulev2(xtraCoupon.SelectedTabPage.Tag.ToString(), Globals.CurrOrderInfo.orderid);
                     }
                     catch (Exception e) { }
                 }
@@ -2602,6 +2641,10 @@ namespace Main
 
         private void btnyh1_Click(object sender, EventArgs e)
         {
+            _longPressTimer.Stop();
+            if (_isLongPressModel)
+                return;
+
             if (Globals.CurrTableInfo.amount <= 0)
             {
                 Warning("帐单还未下单,不能使用优惠...");
@@ -2616,50 +2659,191 @@ namespace Main
                 vcr2 = (VCouponRule)((Button)sender).Tag;
             }
             catch { vcr2 = null; }
+            if (vcr2 == null)
+                return;
+
             Boolean notdiscount = true;
-            if (vcr2 != null)
+            vcr = (VCouponRule)vcr2.Clone();
+            if (vcr.banktype.Equals("07"))//手工优免特殊处理
             {
-                vcr = (VCouponRule)vcr2.Clone();
-                if (vcr.banktype.Equals("07"))//手工优免特殊处理
+                float amount;
+                if (vcr.FreeReason == "0")
                 {
-                    float amount;
-                    if (vcr.FreeReason == "0")
+                    var giftDishWnd = new SelectGiftDishWindow(Globals.OrderTable);
+                    if (giftDishWnd.ShowDialog() == true)
                     {
-                        var giftDishWnd = new SelectGiftDishWindow(Globals.OrderTable);
-                        if (giftDishWnd.ShowDialog() == true)
+                        foreach (GiftDishInfo giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
                         {
-                            foreach (GiftDishInfo giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
+                            vcr.couponname = string.Format("赠菜：{0}", giftDishInfo.DishName);
+                            vcr.freeamount = giftDishInfo.DishPrice * giftDishInfo.SelectGiftNum;
+                            addrow(vcr, 6, false, giftDishInfo.SelectGiftNum);
+                        }
+                    }
+                }
+                else
+                {
+                    string inputString;
+                    string msg = null;
+                    var inputType = (frmInputText.EnumInputType)(Convert.ToInt32(vcr.FreeReason));
+                    if (!frmInputText.ShowInputAmount3(inputType, out inputString))
+                        return;
+
+                    try
+                    {
+                        amount = float.Parse(inputString);
+                    }
+                    catch (Exception ex)
+                    {
+                        AllLog.Instance.E(string.Format("转换输入金额\"{0}\"时异常", inputString), ex);
+                        amount = 0;
+                    }
+
+                    if (vcr.FreeReason == "1")//折扣
+                    {
+                        notdiscount = false;
+                        float disrate = float.Parse(inputString) / 10f;
+                        float preferentialAmt = amountgz2 + amountym;
+                        bool isok = RestClient.usePreferentialItem(vcr.ruleid, disrate, Globals.CurrOrderInfo.orderid, vcr.banktype, vcr.sub_type, ref msg, ref amount, preferentialAmt);
+                        if (!isok)
+                        {
+                            Warning(msg);
+                            return;
+                        }
+                        amount = (float)Math.Round((double)amount, 2);
+                        vcr.couponrate = Convert.ToDecimal(disrate);
+                    }
+
+                    if (amount > payamount)
+                    {
+                        Warning("请输入正确的优免金额!");
+                        return;
+                    }
+                    if (amount <= 0)
+                    {
+                        Warning("请输入正确的优免金额!");
+                        return;
+                    }
+                    vcr.freeamount = (decimal)amount;
+                    addrow(vcr, 6, false, 1);
+                    vcr.freeamount = 0;
+                }
+            }
+            else if (vcr.banktype.Equals("02") || vcr.banktype.Equals("01") || (vcr.banktype.Equals("09") && vcr.couponrate > 0) || (vcr.banktype.Equals("08") && vcr.couponrate > 0))
+            {
+                if (!AskQuestion("确定使用：" + vcr.couponname))
+                    return;
+
+                //整单折扣用本地优免的方法实现
+                notdiscount = false;
+                ysamount = Globals.CurrTableInfo.amount - amountgz2 - amountym - amountml;
+                float amount = 0;
+                string msg = "";
+                float disrate = 0;
+                float preferentialAmt = amountgz2 + amountym;
+                bool isok = RestClient.usePreferentialItem(vcr.ruleid, disrate, Globals.CurrOrderInfo.orderid,
+                    vcr.banktype, vcr.sub_type, ref msg, ref amount, preferentialAmt);
+                //调用接口获取ysamount * (float)(1 - (double)vcr.couponrate / 100.00);
+                if (!isok)
+                {
+                    Warning(msg);
+                    return;
+                }
+                amount = (float)Math.Round((double)amount, 2);
+                vcr.freeamount = (decimal)amount;
+                addrow(vcr, 6, false, 1);
+                vcr.freeamount = 0;
+            }
+            else
+            {
+                if ((vcr.debitamount == -1) || (vcr.freeamount == 999999))
+                {
+                    //如果挂帐填负1
+                    string inputamount = "";
+                    if (!frmInputText.ShowInputAmount("请输入挂帐金额", "金额：", out inputamount))
+                        return;
+                    float amount = 0;
+                    try
+                    {
+                        amount = float.Parse(inputamount);
+                    }
+                    catch
+                    {
+                        amount = 0;
+                    }
+                    if (amount > payamount)
+                    {
+                        Warning("请输入正确的挂帐金额!");
+                        return;
+                    }
+                    if (amount <= 0)
+                    {
+                        Warning("请输入正确的挂帐金额!");
+                        return;
+                    }
+                    vcr.freeamount = 0;
+                    vcr.debitamount = (decimal)amount;
+                    addrow(vcr, 5, false, 1);
+                    vcr.freeamount = 0;
+                }
+                else
+                {
+                    if (vcr.freeamount > 0 || vcr.debitamount > 0)
+                    {
+                        int intpuNum = 0;
+                        if (!ShowInputNum(vcr.couponname, out intpuNum, int.Parse(vcr.dishnum.ToString())))
+                            ////if (!AskQuestion("确定使用：" + vcr.couponname))
+                            return;
+                        //是挂帐和优免 加入结算方式,结算时一起提交给结算接口
+                        if (vcr.banktype == "100")
+                        {
+                            //会员
+                            //如果选择的券已经有，那么提示不能再加
+                            if (!canAddRow(vcr.ruleid))
                             {
-                                vcr.couponname = string.Format("赠菜：{0}", giftDishInfo.DishName);
-                                vcr.freeamount = giftDishInfo.DishPrice * giftDishInfo.SelectGiftNum;
-                                addrow(vcr, 6, false, giftDishInfo.SelectGiftNum);
+                                Warning("券已经选择过，不能再加入!");
+                                return;
+                            }
+
+                            var type = vcr.freeamount > 0 ? 6 : 5;
+                            addrow(vcr, type, true, intpuNum);
+                        }
+                        else
+                        {
+                            for (var i = 0; i < intpuNum; i++)
+                            {
+                                var type = vcr.freeamount > 0 ? 6 : 5;
+                                addrow(vcr, type, true, 1);
                             }
                         }
                     }
-                    else
+                    else if (vcr.freeamount <= 0 && vcr.debitamount <= 0)
                     {
-                        string inputString;
-                        string msg = null;
-                        var inputType = (frmInputText.EnumInputType)(Convert.ToInt32(vcr.FreeReason));
-                        if (!frmInputText.ShowInputAmount3(inputType, out inputString))
+                        //如果都是0就弹出窗口输入金额   输入返回的金额
+                        string inputamount = "";
+                        int type = 0;
+                        if (!frmInputText.ShowInputAmount2("输入", "优免金额", out inputamount, out type))
                             return;
-
+                        float amount = 0;
                         try
                         {
-                            amount = float.Parse(inputString);
+                            amount = float.Parse(inputamount);
                         }
-                        catch (Exception ex)
+                        catch
                         {
-                            AllLog.Instance.E(string.Format("转换输入金额\"{0}\"时异常", inputString), ex);
                             amount = 0;
                         }
-
-                        if (vcr.FreeReason == "1")//折扣
+                        if (type == 1)
                         {
+                            //后台计算折扣
+                            string msg = "";
+                            amount = 0;
                             notdiscount = false;
-                            float disrate = float.Parse(inputString) / 10f;
+                            double disrate1 = float.Parse(inputamount) / 10.00;
+                            float disrate = float.Parse(disrate1.ToString());
                             float preferentialAmt = amountgz2 + amountym;
-                            bool isok = RestClient.usePreferentialItem(vcr.ruleid, disrate, Globals.CurrOrderInfo.orderid, vcr.banktype, vcr.sub_type, ref msg, ref amount, preferentialAmt);
+                            bool isok = RestClient.usePreferentialItem(vcr.ruleid, disrate,
+                                Globals.CurrOrderInfo.orderid, vcr.banktype, vcr.sub_type, ref msg, ref amount,
+                                preferentialAmt); //调用接口获取ysamount * (float)(1 - (double)vcr.couponrate / 100.00);
                             if (!isok)
                             {
                                 Warning(msg);
@@ -2668,7 +2852,6 @@ namespace Main
                             amount = (float)Math.Round((double)amount, 2);
                             vcr.couponrate = Convert.ToDecimal(disrate);
                         }
-
                         if (amount > payamount)
                         {
                             Warning("请输入正确的优免金额!");
@@ -2684,154 +2867,15 @@ namespace Main
                         vcr.freeamount = 0;
                     }
                 }
-                else if (vcr.banktype.Equals("02") || vcr.banktype.Equals("01") || (vcr.banktype.Equals("09") && vcr.couponrate > 0) || (vcr.banktype.Equals("08") && vcr.couponrate > 0))
-                {
-                    if (!AskQuestion("确定使用：" + vcr.couponname))
-                        return;
-
-                    //整单折扣用本地优免的方法实现
-                    notdiscount = false;
-                    ysamount = Globals.CurrTableInfo.amount - amountgz2 - amountym - amountml;
-                    float amount = 0;
-                    string msg = "";
-                    float disrate = 0;
-                    float preferentialAmt = amountgz2 + amountym;
-                    bool isok = RestClient.usePreferentialItem(vcr.ruleid, disrate, Globals.CurrOrderInfo.orderid,
-                        vcr.banktype, vcr.sub_type, ref msg, ref amount, preferentialAmt);
-                    //调用接口获取ysamount * (float)(1 - (double)vcr.couponrate / 100.00);
-                    if (!isok)
-                    {
-                        Warning(msg);
-                        return;
-                    }
-                    amount = (float)Math.Round((double)amount, 2);
-                    vcr.freeamount = (decimal)amount;
-                    addrow(vcr, 6, false, 1);
-                    vcr.freeamount = 0;
-                }
-                else
-                {
-                    if ((vcr.debitamount == -1) || (vcr.freeamount == 999999))
-                    {
-                        //如果挂帐填负1
-                        string inputamount = "";
-                        if (!frmInputText.ShowInputAmount("请输入挂帐金额", "金额：", out inputamount))
-                            return;
-                        float amount = 0;
-                        try
-                        {
-                            amount = float.Parse(inputamount);
-                        }
-                        catch
-                        {
-                            amount = 0;
-                        }
-                        if (amount > payamount)
-                        {
-                            Warning("请输入正确的挂帐金额!");
-                            return;
-                        }
-                        if (amount <= 0)
-                        {
-                            Warning("请输入正确的挂帐金额!");
-                            return;
-                        }
-                        vcr.freeamount = 0;
-                        vcr.debitamount = (decimal)amount;
-                        addrow(vcr, 5, false, 1);
-                        vcr.freeamount = 0;
-                    }
-                    else
-                    {
-                        if (vcr.freeamount > 0 || vcr.debitamount > 0)
-                        {
-                            int intpuNum = 0;
-                            if (!ShowInputNum(vcr.couponname, out intpuNum, int.Parse(vcr.dishnum.ToString())))
-                                ////if (!AskQuestion("确定使用：" + vcr.couponname))
-                                return;
-                            //是挂帐和优免 加入结算方式,结算时一起提交给结算接口
-                            if (vcr.banktype == "100")
-                            {
-                                //会员
-                                //如果选择的券已经有，那么提示不能再加
-                                if (!canAddRow(vcr.ruleid))
-                                {
-                                    Warning("券已经选择过，不能再加入!");
-                                    return;
-                                }
-
-                                var type = vcr.freeamount > 0 ? 6 : 5;
-                                addrow(vcr, type, true, intpuNum);
-                            }
-                            else
-                            {
-                                for (var i = 0; i < intpuNum; i++)
-                                {
-                                    var type = vcr.freeamount > 0 ? 6 : 5;
-                                    addrow(vcr, type, true, 1);
-                                }
-                            }
-                        }
-                        else if (vcr.freeamount <= 0 && vcr.debitamount <= 0)
-                        {
-                            //如果都是0就弹出窗口输入金额   输入返回的金额
-                            string inputamount = "";
-                            int type = 0;
-                            if (!frmInputText.ShowInputAmount2("输入", "优免金额", out inputamount, out type))
-                                return;
-                            float amount = 0;
-                            try
-                            {
-                                amount = float.Parse(inputamount);
-                            }
-                            catch
-                            {
-                                amount = 0;
-                            }
-                            if (type == 1)
-                            {
-                                //后台计算折扣
-                                string msg = "";
-                                amount = 0;
-                                notdiscount = false;
-                                double disrate1 = float.Parse(inputamount) / 10.00;
-                                float disrate = float.Parse(disrate1.ToString());
-                                float preferentialAmt = amountgz2 + amountym;
-                                bool isok = RestClient.usePreferentialItem(vcr.ruleid, disrate,
-                                    Globals.CurrOrderInfo.orderid, vcr.banktype, vcr.sub_type, ref msg, ref amount,
-                                    preferentialAmt); //调用接口获取ysamount * (float)(1 - (double)vcr.couponrate / 100.00);
-                                if (!isok)
-                                {
-                                    Warning(msg);
-                                    return;
-                                }
-                                amount = (float)Math.Round((double)amount, 2);
-                                vcr.couponrate = Convert.ToDecimal(disrate);
-                            }
-                            if (amount > payamount)
-                            {
-                                Warning("请输入正确的优免金额!");
-                                return;
-                            }
-                            if (amount <= 0)
-                            {
-                                Warning("请输入正确的优免金额!");
-                                return;
-                            }
-                            vcr.freeamount = (decimal)amount;
-                            addrow(vcr, 6, false, 1);
-                            vcr.freeamount = 0;
-                        }
-                    }
-                }
-
-                getAmount();
-                if (notdiscount == true)
-                {
-                    //如果使用的是优免和挂帐那么检查前面有没有折扣类的优惠，如果有就提示
-                    checkDisCount();
-                }
             }
+
+            getAmount();
+            if (notdiscount == true)
+            {
+                //如果使用的是优免和挂帐那么检查前面有没有折扣类的优惠，如果有就提示
+                checkDisCount();
+            }
+
             xtraTabControl1_SelectedPageChanged(xtraTabControl1, null);
             //保存优惠内容,以便还原
             JArray ja = Globals.GetTableJson(tbyh);
@@ -2863,7 +2907,7 @@ namespace Main
             //description,ruleid,freeamount,1
             //vcr.memo,vcr.ruleid,vcr.freeamount,vcr.num
             string Coupons_Name = vcr.couponname; //优惠券名称 消费券1名称（不足30位时后面的补空格）
-            if (Coupons_Name.IndexOf(":") > 0)
+            if (Coupons_Name.IndexOf(":") > 0 && Coupons_Name.IndexOf("[") > 1)
             {
                 Coupons_Name = Coupons_Name.Replace("会:", "");
                 Coupons_Name = Coupons_Name.Substring(0, Coupons_Name.IndexOf("["));
@@ -3625,7 +3669,7 @@ namespace Main
             frmopentable.initData(currtableno);
             frmopentable.Show();
             frmopentable.tmrFocus.Enabled = true;
-            xtraTabControl2.Visible = false;
+            xtraCoupon.Visible = false;
             xtraTabControl1.Visible = false;
             frmopentable.edtUserid.Focus();
 
@@ -3637,7 +3681,7 @@ namespace Main
                 return;
 
             frmopentable.Hide();
-            xtraTabControl2.Visible = true;
+            xtraCoupon.Visible = true;
             xtraTabControl1.Visible = true;
         }
         public void StartWm()
@@ -3656,7 +3700,7 @@ namespace Main
             frmorder.Parent = pnlCash;
             frmorder.btnZD.Visible = false;
             frmorder.Show();
-            xtraTabControl2.Visible = false;
+            xtraCoupon.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
             panel7.Visible = false;
@@ -3873,7 +3917,7 @@ namespace Main
             //btnOrder.Visible = true;
             xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
-            xtraTabControl2.Visible = true;
+            xtraCoupon.Visible = true;
             xtraTabControl1.Visible = true;
             pnlAmount.Visible = true;
             panel7.Visible = true;
@@ -3922,7 +3966,7 @@ namespace Main
             btnOrder.Visible = false;
             xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
-            xtraTabControl2.Visible = false;
+            xtraCoupon.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
             panel7.Visible = false;
@@ -4004,7 +4048,7 @@ namespace Main
                 isaddmember = false;
                 isaddFavorale = false;
                 lblMember.Text = String.Format("会员：{0}", "");
-                xtraTabControl2.SelectedTabPageIndex = 0;
+                xtraCoupon.SelectedTabPageIndex = 0;
                 jarrTables.Clear();
                 Array.Resize(ref pszTicketList, 0);
                 //不支持预结单
@@ -4410,7 +4454,7 @@ namespace Main
             frmorder.hideGz();
             xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
-            xtraTabControl2.Visible = false;
+            xtraCoupon.Visible = false;
             btnOrder.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
@@ -4988,6 +5032,7 @@ namespace Main
                 JArray ja = Globals.GetTableJson(tbyh);
                 string str = ja.ToString();
                 RestClient.saveOrderPreferential(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, str);
+                CheckGzYm();
             }
             catch
             {
@@ -5250,29 +5295,20 @@ namespace Main
             if (wnd.ShowDialog() == true)
                 SelectedBankInfo = wnd.SelectedBank;
         }
+
+        /// <summary>
+        /// 优惠券按钮点击时执行。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnyh_MouseDown(object sender, MouseEventArgs e)
+        {
+            _isLongPressModel = false;
+            _curCoupon = ((Button)sender).Tag as VCouponRule;
+            if (_curCoupon == null)
+                return;
+
+            _longPressTimer.Start();
+        }
     }
 }
-
-/*
- * 优免 ： 1、团购  2、公关 3、代金券 3、会员 4、其它 
- * 
- * 优惠大类： 团购 银行 会员 自营 合作
- * 
- * t_coupon_rule;
-  couponrate 折扣比率
-  couponamount 折扣金额
-  freeamount 优免金额
-  debitamount 挂账金额
- 
- * 
- * 
- * Coupons_Name,Coupon_code,Coupon_Amount,Coupon_No
-本次消费券列表（pszTicketList）
-参数名称	规格	说明
-Coupons_Name1[30]	Char*	消费券1名称（不足30位时后面的补空格）
-Coupon_code1[15]	Char*	消费券1券编码(不足15位时采用高位字符0)
-Coupon_Amount1[12]	Char *	消费券1金额(不足12位时采用高位字符0)
-Coupon_No1[4]	Char *	消费券1张数（不足4位时采用高位补字符0）
- * 
- * 7069-5169-6039-9886-5095
-*/

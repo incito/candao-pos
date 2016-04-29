@@ -6,8 +6,6 @@
     public class GetRestaurantTradeTimeResponse : JavaResponse
     {
         public RestaurantTradeTimeRespons detail { get; set; }
-
-        public string info { get; set; }
     }
 
     /// <summary>

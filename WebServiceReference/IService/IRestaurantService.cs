@@ -46,5 +46,13 @@ namespace WebServiceReference.IService
         /// <param name="periodsType">统计周期。</param>
         /// <returns></returns>
         Tuple<string, DishSaleFullInfo> GetDishSaleInfo(EnumDishSalePeriodsType periodsType);
+
+        /// <summary>
+        /// 设置优惠券是常用或不常用。
+        /// </summary>
+        /// <param name="couponId">优惠券ID。</param>
+        /// <param name="isCommonlyUsed">是否是常用，常用的为true，不常用的为false</param>
+        /// <returns>设置成功返回null，否则返回错误信息。</returns>
+        string SetCouponFavor(string couponId, bool isCommonlyUsed);
     }
 }
