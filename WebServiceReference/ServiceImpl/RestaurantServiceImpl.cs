@@ -73,6 +73,8 @@ namespace WebServiceReference.ServiceImpl
                 var dataList = new List<TableInfo>();
                 if (result != null && result.Any())
                     dataList = result.Select(DataConverter.ToTableInfo).ToList();
+
+                AllLog.Instance.E(string.Format("获取到的餐台个数：{0}", dataList.Count));
                 return new Tuple<string, List<TableInfo>>(null, dataList);
             }
             catch (Exception ex)
@@ -133,6 +135,22 @@ namespace WebServiceReference.ServiceImpl
             catch (Exception ex)
             {
                 return new Tuple<string, DishSaleFullInfo>(ex.Message, null);
+            }
+        }
+        public string SetCouponFavor(string couponId, bool isCommonlyUsed)
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/setPreferentialFavor.json", RestClient.server, RestClient.apiPath);
+                var request = new SetCouponFavorRequest { preferential = couponId, operationtype = isCommonlyUsed ? "0" : "1" };
+                var result = HttpHelper.HttpPost<SetCouponFavorResponse>(addr, request);
+                if (!result.IsSuccess)
+                    return !string.IsNullOrEmpty(result.msg) ? result.msg : "设置优惠券状态失败。";
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
         }
     }

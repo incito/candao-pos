@@ -12,254 +12,150 @@ namespace Models
         public VCouponRule()
         { }
         #region Model
-        private string _couponname;
-        private string _description;
-        private DateTime? _begintime;
-        private DateTime? _endtime;
-        private DateTime? _inserttime;
-        private string _ruleid;
-        private string _couponid;
-        private string _dishid;
-        private int? _dishnum;
-        private string _freedishid;
-        private int? _freedishnum;
-        private int? _couponway;
-        private int? _comsumeway;
-        private decimal? _couponrate;
-        private decimal? _couponamount;
-        private decimal? _totalamount;
-        private decimal? _couponcash;
-        private int? _couponnum;
-        private decimal? _freeamount;
-        private string _banktype;
-        private string _partnername;
-        private string _groupweb;
-        private string _unitid;
-        private decimal? _debitamount;
-        private int? _type;
-        private string _wholesingle;
-        private string _sub_type;
 
         public string Color { get; set; }
 
-        public string sub_type
-        {
-            set { _sub_type = value; }
-            get { return _sub_type; }
-        }
+        public string sub_type { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string couponname
-        {
-            set { _couponname = value; }
-            get { return _couponname; }
-        }
+        public string couponname { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string description
-        {
-            set { _description = value; }
-            get { return _description; }
-        }
+        public string description { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public DateTime? begintime
-        {
-            set { _begintime = value; }
-            get { return _begintime; }
-        }
+        public DateTime? begintime { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public DateTime? endtime
-        {
-            set { _endtime = value; }
-            get { return _endtime; }
-        }
+        public DateTime? endtime { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public DateTime? inserttime
-        {
-            set { _inserttime = value; }
-            get { return _inserttime; }
-        }
+        public DateTime? inserttime { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string ruleid
-        {
-            set { _ruleid = value; }
-            get { return _ruleid; }
-        }
+        public string ruleid { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string couponid
-        {
-            set { _couponid = value; }
-            get { return _couponid; }
-        }
+        public string couponid { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string dishid
-        {
-            set { _dishid = value; }
-            get { return _dishid; }
-        }
+        public string dishid { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public int? dishnum
-        {
-            set { _dishnum = value; }
-            get { return _dishnum; }
-        }
+        public int? dishnum { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string freedishid
-        {
-            set { _freedishid = value; }
-            get { return _freedishid; }
-        }
+        public string freedishid { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public int? freedishnum
-        {
-            set { _freedishnum = value; }
-            get { return _freedishnum; }
-        }
+        public int? freedishnum { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public int? couponway
-        {
-            set { _couponway = value; }
-            get { return _couponway; }
-        }
+        public int? couponway { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public int? comsumeway
-        {
-            set { _comsumeway = value; }
-            get { return _comsumeway; }
-        }
+        public int? comsumeway { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public decimal? couponrate
-        {
-            set { _couponrate = value; }
-            get { return _couponrate; }
-        }
+        public decimal? couponrate { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public decimal? couponamount
-        {
-            set { _couponamount = value; }
-            get { return _couponamount; }
-        }
+        public decimal? couponamount { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public decimal? totalamount
-        {
-            set { _totalamount = value; }
-            get { return _totalamount; }
-        }
+        public decimal? totalamount { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public decimal? couponcash
-        {
-            set { _couponcash = value; }
-            get { return _couponcash; }
-        }
+        public decimal? couponcash { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public int? couponnum
-        {
-            set { _couponnum = value; }
-            get { return _couponnum; }
-        }
+        public int? couponnum { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public decimal? freeamount
-        {
-            set { _freeamount = value; }
-            get { return _freeamount; }
-        }
+        public decimal? freeamount { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string banktype
-        {
-            set { _banktype = value; }
-            get { return _banktype; }
-        }
+        public string banktype { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string partnername
-        {
-            set { _partnername = value; }
-            get { return _partnername; }
-        }
+        public string partnername { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string groupweb
-        {
-            set { _groupweb = value; }
-            get { return _groupweb; }
-        }
+        public string groupweb { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string unitid
-        {
-            set { _unitid = value; }
-            get { return _unitid; }
-        }
+        public string unitid { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string wholesingle
-        {
-            set { _wholesingle = value; }
-            get { return _wholesingle; }
-        }
+        public string wholesingle { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public decimal? debitamount
-        {
-            set { _debitamount = value; }
-            get { return _debitamount; }
-        }
+        public decimal? debitamount { set; get; }
+
         /// <summary>
         /// 
         /// </summary>
-        public int? type
-        {
-            set { _type = value; }
-            get { return _type; }
-        }
+        public int? type { set; get; }
 
         /// <summary>
         /// 当是手工优免类型时，这里0：赠菜，1：折扣，2：减免。
         /// </summary>
         public string FreeReason { get; set; }
+
+        /// <summary>
+        /// 是否是不常用优惠券，不常用为true，默认常用为false。
+        /// </summary>
+        public bool IsUncommonlyUsed { get; set; }
 
         #endregion Model
         public static int strtoint(string str)
@@ -298,19 +194,6 @@ namespace Models
 
             vcr.couponname = ja["couponname"].ToString();
             vcr.description = ja["description"].ToString();
-            /*if (ja["begintime"] != null && ja["begintime"].ToString() != "")
-            {
-                vcr.begintime = DateTime.Parse(ja["begintime"].ToString());
-            }
-            if (ja["endtime"] != null && ja["endtime"].ToString() != "")
-            {
-                vcr.endtime = DateTime.Parse(ja["endtime"].ToString());
-            }
-            if (ja["inserttime"] != null && ja["inserttime"].ToString() != "")
-            {
-                vcr.inserttime = DateTime.Parse(ja["inserttime"].ToString());
-            }*/
-
             vcr.ruleid = ja["ruleid"].ToString();
             vcr.couponid = ja["couponid"].ToString();
             vcr.dishid = ja["dishid"].ToString();
@@ -474,6 +357,9 @@ namespace Models
 
             if (vcr.sub_type == null)
                 vcr.sub_type = "";
+
+            var status = ja["status"] != null ? ja["status"].ToString() : "";
+            vcr.IsUncommonlyUsed = status == "2";
             return vcr;
         }
 

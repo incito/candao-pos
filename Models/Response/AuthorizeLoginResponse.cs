@@ -11,11 +11,6 @@
         public string loginTime { get; set; }
 
         /// <summary>
-        /// 登录消息。
-        /// </summary>
-        public string msg { get; set; }
-
-        /// <summary>
         /// 用户名称。非登录账户。
         /// </summary>
         public string fullname { get; set; }
