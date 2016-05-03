@@ -116,7 +116,7 @@ namespace Main
         /// <param name="e"></param>
         private void PressTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            this.Invoke((Action) delegate
+            this.Invoke((Action)delegate
             {
                 _longPressTimer.Stop();
                 _isLongPressModel = true;
@@ -2669,13 +2669,13 @@ namespace Main
                 float amount;
                 if (vcr.FreeReason == "0")
                 {
-                    var giftDishWnd = new SelectGiftDishWindow(Globals.OrderTable);
+                    var giftDishWnd = new SelectGiftDishWindow(Globals.OrderTable, tbyh);
                     if (giftDishWnd.ShowDialog() == true)
                     {
                         foreach (GiftDishInfo giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
                         {
                             vcr.couponname = string.Format("赠菜：{0}", giftDishInfo.DishName);
-                            vcr.freeamount = giftDishInfo.DishPrice * giftDishInfo.SelectGiftNum;
+                            vcr.freeamount = giftDishInfo.DishPrice;
                             addrow(vcr, 6, false, giftDishInfo.SelectGiftNum);
                         }
                     }
@@ -4189,7 +4189,7 @@ namespace Main
                     re = bookorder(seqno_str, ordertype);
                 } while (!re && index++ < 4);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AllLog.Instance.E(ex);
             }
@@ -5025,6 +5025,8 @@ namespace Main
             {
                 // ignored
             }
+
+            CheckGzYm();
             getAmount();
 
             try
@@ -5032,7 +5034,6 @@ namespace Main
                 JArray ja = Globals.GetTableJson(tbyh);
                 string str = ja.ToString();
                 RestClient.saveOrderPreferential(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, str);
-                CheckGzYm();
             }
             catch
             {
