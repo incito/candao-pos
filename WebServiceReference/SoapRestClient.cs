@@ -815,8 +815,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool posrebacksettleorder(string UserID, string OrderID)
         {
-            string ipaddress = GetLocalIp();
-            string address = String.Format("http://" + DataServer + "/datasnap/rest/TServerMethods1/posrebacksettleorder/{0}/{1}/{2}/", OrderID, UserID, ipaddress);
+            string address = String.Format("http://{2}/datasnap/rest/TServerMethods1/posrebacksettleorder/{0}/{1}/{2}/", OrderID, UserID, JavaServer);
             AllLog.Instance.I(string.Format("【posrebacksettleorder】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【posrebacksettleorder】 result：{0}。", jsonResult));
