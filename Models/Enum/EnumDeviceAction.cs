@@ -33,7 +33,7 @@
         DineSettleEnd = 105,
 
         /// <summary>
-        /// 堂食下单开始。
+        /// 堂食下单开始。(在开台确认后开始）
         /// </summary>
         DineOrderBegin = 106,
 

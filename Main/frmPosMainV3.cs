@@ -88,6 +88,11 @@ namespace Main
         /// </summary>
         private DeviceActionInfo _dinnerSettleBeginActionInfo;
 
+        /// <summary>
+        /// 堂食下单开始行为。
+        /// </summary>
+        private DeviceActionInfo _dinnerOrderBeginActionInfo;
+
         //记录每张台下单序列的INI文件
         public frmPosMainV3()
         {
@@ -191,6 +196,15 @@ namespace Main
             pnlNum.Parent = xtraTabControl1.SelectedTabPage;
             pnlSum.Parent = xtraTabControl1.SelectedTabPage;
             //pnlz.Parent = xtraTabControl1.SelectedTabPage;
+            SetPaywayControlFocus(true);
+        }
+
+        /// <summary>
+        /// 设定支付方式控件的焦点。
+        /// </summary>
+        /// <param name="reportDeviceAction">是否上报设备改变。</param>
+        private void SetPaywayControlFocus(bool reportDeviceAction)
+        {
             var action = EnumDeviceAction.None;
             switch (xtraTabControl1.SelectedTabPageIndex)
             {
@@ -226,7 +240,7 @@ namespace Main
                     break;
             }
 
-            if (action != EnumDeviceAction.None)
+            if (action != EnumDeviceAction.None && reportDeviceAction)
                 BigDataHelper.DeviceActionAsync(new DeviceActionInfo(action, Globals.CurrOrderInfo.orderid));
         }
 
@@ -391,6 +405,7 @@ namespace Main
                         if (!string.IsNullOrEmpty(Globals.CurrOrderInfo.orderid))
                         {
                             _dinnerSettleBeginActionInfo = new DeviceActionInfo(EnumDeviceAction.DineSettleBegin, Globals.CurrOrderInfo.orderid, Guid.NewGuid().ToString());
+                            BigDataHelper.DeviceActionAsync(_dinnerSettleBeginActionInfo);
                         }
 
                         try
@@ -761,7 +776,7 @@ namespace Main
             if (ysamount < 0)
                 ysamount = 0;
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
-            getamount = (float) Math.Round(getamount, 2);
+            getamount = (float)Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
             /*if(amountjf>0)
             {
@@ -904,9 +919,6 @@ namespace Main
 
         private void button27_Click_1(object sender, EventArgs e)
         {
-            var actionList = new List<DeviceActionInfo>();
-
-            //
             bool isok = false;
             try
             {
@@ -1050,7 +1062,7 @@ namespace Main
                                         }
                                         bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,
                                             membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1,
-                                            amounthyk, tickstrs, pwd, (float) Math.Round(memberyhqamount, 2));
+                                            amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
                                         if (data)
                                         {
                                             ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
@@ -1100,7 +1112,10 @@ namespace Main
                     if (isok)
                     {
                         if (!iswm)
-                            actionList.Add(new DeviceActionInfo(EnumDeviceAction.DineSettleEnd, Globals.CurrOrderInfo.orderid, _dinnerSettleBeginActionInfo.Key));
+                        {
+                            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.DineSettleEnd, Globals.CurrOrderInfo.orderid, _dinnerSettleBeginActionInfo.Key));
+                        }
+
                         ThreadPool.QueueUserWorkItem(t =>
                         {
                             try
@@ -1156,8 +1171,6 @@ namespace Main
             finally
             {
                 Cursor = Cursors.Default;
-                if (actionList.Any())
-                    BigDataHelper.DeviceActionAsync(actionList);
             }
         }
 
@@ -2307,6 +2320,38 @@ namespace Main
                         btn.Text = "";
                     }
                 }
+
+                EnumDeviceAction action = EnumDeviceAction.None;
+                switch (xtraTabControl2.SelectedTabPageIndex)
+                {
+                    case 0:
+                        action = EnumDeviceAction.GroupBuyClicking;
+                        break;
+                    case 1:
+                        action = EnumDeviceAction.SpecialOfferClicking;
+                        break;
+                    case 2:
+                        action = EnumDeviceAction.DiscountClicking;
+                        break;
+                    case 3:
+                        action = EnumDeviceAction.VouchersClicking;
+                        break;
+                    case 4:
+                        action = EnumDeviceAction.GiftCouponClicking;
+                        break;
+                    case 5:
+                        action = EnumDeviceAction.MemberCouponClicking;
+                        break;
+                    case 6:
+                        action = EnumDeviceAction.OtherCouponClicking;
+                        break;
+                    case 7:
+                        action = EnumDeviceAction.CooperationCompanyClicking;
+                        break;
+                }
+                if (action != EnumDeviceAction.None)
+                    BigDataHelper.DeviceActionAsync(new DeviceActionInfo(action, Globals.CurrOrderInfo.orderid));
+
                 if (xtraTabControl2.SelectedTabPageIndex == 5)
                 {
                     if (edtMemberCard.Text.Length > 0)
@@ -2335,7 +2380,7 @@ namespace Main
                     }
                 }
                 getCoupon_rule();
-                xtraTabControl1_SelectedPageChanged(xtraTabControl1, null);
+                SetPaywayControlFocus(false);
             }
             finally
             {
@@ -2389,37 +2434,6 @@ namespace Main
                     try
                     {
                         var couponTypeString = xtraTabControl2.SelectedTabPage.Tag.ToString();
-                        EnumDeviceAction action = EnumDeviceAction.SpecialOfferClicking;
-                        switch (couponTypeString)
-                        {
-                            case "01":
-                                action = EnumDeviceAction.SpecialOfferClicking;
-                                break;
-                            case "02":
-                                action = EnumDeviceAction.DiscountClicking;
-                                break;
-                            case "03":
-                                action = EnumDeviceAction.VouchersClicking;
-                                break;
-                            case "04":
-                                action = EnumDeviceAction.GiftCouponClicking;
-                                break;
-                            case "05":
-                                action = EnumDeviceAction.GroupBuyClicking;
-                                break;
-                            case "88":
-                                action = EnumDeviceAction.MemberCouponClicking;
-                                break;
-                            case "00":
-                                action = EnumDeviceAction.OtherCouponClicking;
-                                break;
-                            case "08":
-                                action = EnumDeviceAction.CooperationCompanyClicking;
-                                break;
-                        }
-
-                        BigDataHelper.DeviceActionAsync(new DeviceActionInfo(action, Globals.CurrOrderInfo.orderid));
-
                         jarrTables = RestClient.getcoupon_rulev2(couponTypeString, Globals.CurrOrderInfo.orderid);
                     }
                     catch (Exception e) { }
@@ -3576,6 +3590,10 @@ namespace Main
                 btnOpen_Click(serder, e);
             }
             catch { }
+
+            _dinnerOrderBeginActionInfo = new DeviceActionInfo(EnumDeviceAction.DineOrderBegin, Globals.CurrOrderInfo.orderid, Guid.NewGuid().ToString());
+            BigDataHelper.DeviceActionAsync(_dinnerOrderBeginActionInfo);
+
             //开台成功显示点菜界面
             isopened = true;
             IniPos.setPosIniVlaue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, "0");
@@ -3872,16 +3890,14 @@ namespace Main
                 {
                     if (!iswm)
                     {
-                        var actionList = new List<DeviceActionInfo>();
                         var actionKey = Guid.NewGuid().ToString();
-                        actionList.Add(new DeviceActionInfo(EnumDeviceAction.DineOrderBegin, Globals.CurrOrderInfo.orderid, actionKey));
                         //如果不是外卖就直接下单 //显示正在下单
                         btnOpen.Visible = true;
                         if (Globals.ShoppTable.Rows.Count > 0)
                         {
                             if (startorder(ordertype))
                             {
-                                actionList.Add(new DeviceActionInfo(EnumDeviceAction.DineOrderEnd, Globals.CurrOrderInfo.orderid, actionKey));
+                                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.DineOrderEnd, Globals.CurrOrderInfo.orderid, _dinnerOrderBeginActionInfo.Key));
                                 try
                                 {
                                     msgorderid = Globals.CurrOrderInfo.orderid; //广播消息到PAD同步菜单
@@ -3895,9 +3911,6 @@ namespace Main
                         }
                         else
                             btnOpen_Click(serder, e);
-
-                        if (actionList.Any())
-                            BigDataHelper.DeviceActionAsync(actionList);
                     }
                 }
             }
