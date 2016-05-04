@@ -15,12 +15,12 @@
         /// <summary>
         /// 外卖台开始。
         /// </summary>
-        TakeoutBegin = 102,
+        //TakeoutBegin = 102,
 
         /// <summary>
         /// 外卖台结账完成。
         /// </summary>
-        TakeoutEnd = 103,
+        //TakeoutEnd = 103,
 
         /// <summary>
         /// 堂食结账开始。
@@ -123,9 +123,14 @@
         MemberCouponClicking = 306,
 
         /// <summary>
-        /// 内部优免。
+        /// 其他优惠按钮点击时。
         /// </summary>
-        InnerCouponClicking = 307,
+        OtherCouponClicking = 308,
+
+        /// <summary>
+        /// 合作单位按钮就点击时。
+        /// </summary>
+        CooperationCompanyClicking = 309,
 
         /// <summary>
         /// 现金按钮点击时。
@@ -156,5 +161,10 @@
         /// 微信支付按钮点击时。
         /// </summary>
         SettleWechatClicking = 406,
+
+        /// <summary>
+        /// 报表按钮点击时。
+        /// </summary>
+        ReportClicking = 407,
     }
 }

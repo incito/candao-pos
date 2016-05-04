@@ -171,7 +171,7 @@ namespace Main
                     return;
                 }
 
-                TableInfos = result.Item2.Where(t=>t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
+                TableInfos = result.Item2.Where(t => t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
                 CreateTableControls();
 
                 lblState0.Text = string.Format("空闲({0})", TableInfos.Count(t => t.TableStatus == EnumTableStatus.Idle));
@@ -428,6 +428,7 @@ namespace Main
         /// <param name="e"></param>
         private void btnReport_Click(object sender, EventArgs e)
         {
+            BigDataHelper.DeviceActionAsync(EnumDeviceAction.ReportClicking);
             timer2.Stop();
             (new ReportViewWindow()).ShowDialog();
             RefreshAllTableStatus();

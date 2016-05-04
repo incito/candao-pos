@@ -83,6 +83,11 @@ namespace Main
         private string msgorderid = "";
         private bool isopentable2 = false;
 
+        /// <summary>
+        /// 堂食结账开始行为。
+        /// </summary>
+        private DeviceActionInfo _dinnerSettleBeginActionInfo;
+
         //记录每张台下单序列的INI文件
         public frmPosMainV3()
         {
@@ -383,6 +388,11 @@ namespace Main
                     }
                     else
                     {
+                        if (!string.IsNullOrEmpty(Globals.CurrOrderInfo.orderid))
+                        {
+                            _dinnerSettleBeginActionInfo = new DeviceActionInfo(EnumDeviceAction.DineSettleBegin, Globals.CurrOrderInfo.orderid, Guid.NewGuid().ToString());
+                        }
+
                         try
                         {
                             addAutoFavorale();
@@ -894,7 +904,6 @@ namespace Main
         private void button27_Click_1(object sender, EventArgs e)
         {
             var actionList = new List<DeviceActionInfo>();
-            var actionKey = Guid.NewGuid().ToString();
 
             //
             bool isok = false;
@@ -1010,7 +1019,6 @@ namespace Main
                     }
                     else
                     {
-                        actionList.Add(new DeviceActionInfo(EnumDeviceAction.DineSettleBegin, Globals.CurrOrderInfo.orderid, actionKey));
                         if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray()).Equals("0"))
                         {
                             Warning("结算失败...");
@@ -1081,10 +1089,8 @@ namespace Main
                     Opentable2(true);
                     if (isok)
                     {
-                        if (iswm)
-                            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.TakeoutEnd, Globals.CurrOrderInfo.orderid));
-                        else
-                            actionList.Add(new DeviceActionInfo(EnumDeviceAction.DineSettleEnd, Globals.CurrOrderInfo.orderid, actionKey));
+                        if (!iswm)
+                            actionList.Add(new DeviceActionInfo(EnumDeviceAction.DineSettleEnd, Globals.CurrOrderInfo.orderid, _dinnerSettleBeginActionInfo.Key));
                         ThreadPool.QueueUserWorkItem(t =>
                         {
                             try
@@ -1487,7 +1493,6 @@ namespace Main
 
         private void btnRBill_Click(object sender, EventArgs e)
         {
-            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ResettleClicking, Globals.CurrOrderInfo.orderid));
             //经理授权
 
             /*if (!checkCallBill())
@@ -1518,6 +1523,7 @@ namespace Main
                 {
                     return;
                 }
+                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ResettleClicking, Globals.CurrOrderInfo.orderid));
                 this.Cursor = Cursors.WaitCursor;
                 string info = "";
                 if (RestClient.MemberSystem == 1)
@@ -2394,9 +2400,11 @@ namespace Main
                             case "88":
                                 action = EnumDeviceAction.MemberCouponClicking;
                                 break;
-                            case "0602":
-                            case "0601":
-                                action = EnumDeviceAction.InnerCouponClicking;
+                            case "00":
+                                action = EnumDeviceAction.OtherCouponClicking;
+                                break;
+                            case "08":
+                                action = EnumDeviceAction.CooperationCompanyClicking;
                                 break;
                         }
 
@@ -3925,7 +3933,7 @@ namespace Main
         {
             try
             {
-                BigDataHelper.DeviceActionAsync(EnumDeviceAction.TakeoutBegin);
+                //BigDataHelper.DeviceActionAsync(EnumDeviceAction.TakeoutBegin);
                 Globals.CurrTableInfo.amount = 0;
                 lblAmountWm.Text = string.Format("合计金额：{0}", 0);
                 lblAmount.Text = string.Format("合计金额：{0}", 0);
@@ -4054,6 +4062,7 @@ namespace Main
                 Warning("开台失败,1！");
                 return;
             }
+            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.OpenTable, orderid));
             //标记帐单的ordertpe=1为正常外卖
             try
             {

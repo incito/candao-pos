@@ -31,7 +31,7 @@ namespace WebServiceReference
 
         public static void DeviceActionAsync(EnumDeviceAction deviceAction)
         {
-            var actionInfo = new DeviceActionInfo(deviceAction, "");
+            var actionInfo = new DeviceActionInfo(deviceAction);
             DeviceActionAsync(actionInfo);
         }
 
