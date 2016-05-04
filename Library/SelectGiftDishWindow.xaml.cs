@@ -87,12 +87,11 @@ namespace Library
         private void ParseDbTable(DataTable dbTable, DataTable couponDb)
         {
             var dic = GetGiftDishDic(couponDb);
-            var dinnerWareName = Globals.cjFood.Count > 0 ? Globals.cjFood[0]["dishname"].ToString() : "";
             foreach (DataRow row in dbTable.Rows)
             {
                 var dishName = row["title"].ToString();
                 var amount = row["amount"].ToString();
-                if (string.IsNullOrEmpty(amount) || amount.Equals("0") || dishName.Equals(dinnerWareName))
+                if (string.IsNullOrEmpty(amount) || amount.Equals("0"))
                     continue;
 
                 //赠菜可选数量需要减去已经赠菜的优惠数量。
