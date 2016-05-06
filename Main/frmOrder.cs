@@ -925,6 +925,7 @@ namespace Main
             //保存挂帐人信息到数据库
             string settleorderorderid = Globals.CurrOrderInfo.orderid;
         }
+
         private void setOrder(TGzInfo gzinfo)
         {
             //getTakeOutTable
@@ -940,7 +941,7 @@ namespace Main
             }
             catch { }
             Globals.CurrOrderInfo.orderid = orderid;
-            Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
+            Globals.CurrTableInfo.tableid = RestClient.TakeOutTableID;
             if (!bookOrder())
             {
                 return;
@@ -963,20 +964,22 @@ namespace Main
             bool re = false;
             try
             {
-                int index = 1;
-                do
+                int index = 0;
+                while (index < 9 && !re)
                 {
-                    re = bookorder(index++.ToString());
-                } while (!re && index < 9);
+                    re = bookorder((index++).ToString());
+                }
             }
             catch (Exception ex)
             {
-                AllLog.Instance.E(ex);
+                AllLog.Instance.E("下单时异常" + ex.Message);
             }
             if (!re)
             {
+                //把台关掉，帐单删掉,让用户重点
                 RestClient.cancelOrder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo);
                 Warning("下单失败，请检查网络!");
+                //如果会员已经成功，那么只能把雅座中的交易撤销，再重新下单
             }
             return re;
         }

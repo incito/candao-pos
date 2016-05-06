@@ -72,7 +72,7 @@ namespace KYPOS
                 return;
             }
 
-            _dishSaleFullInfo.BranchId = Globals.branch_id;
+            _dishSaleFullInfo.BranchId = Globals.BranchInfo.BranchId;
             _dishSaleFullInfo.CurrentTime = DateTime.Now;
             _dishSaleFullInfo.TotalAmount = _dishSaleFullInfo.DishSaleInfos != null ? _dishSaleFullInfo.DishSaleInfos.Sum(t => t.SalesAmount) : 0;
             ReportPrint.PrintDishSaleDetail(_dishSaleFullInfo);

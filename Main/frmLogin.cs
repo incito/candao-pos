@@ -54,7 +54,7 @@ namespace Main
             txtUser.Focus();
             setBtnFocus();
             lblVer.Text = String.Format("版本:{0}", Globals.ProductVersion);
-            lblbranchid.Text = String.Format("店铺编号：{0}", RestClient.getbranch_id());
+            lblbranchid.Text = String.Format("店铺编号：{0}", Globals.BranchInfo.BranchId);
         }
         
 
@@ -87,7 +87,7 @@ namespace Main
             //this.BindingDataSet();//绑定帐套数据源
             this.ReadLoginInfo(); //读取保存的登录信息
             this.Text = "系统登录 (后台连接:WebService)";
-            lblServer.Text = String.Format("服务器:{0}", RestClient.server);
+            lblServer.Text = String.Format("服务器:{0}", RestClient.JavaServer);
 
 
         }

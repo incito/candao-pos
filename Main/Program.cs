@@ -12,6 +12,7 @@ using DevExpress.UserSkins;
 using DevExpress.Skins;
 using KYPOS;
 using Library;
+using Models;
 using Models.Enum;
 using ReportsFastReport;
 using WebServiceReference.IService;
@@ -45,44 +46,48 @@ namespace Main
                 HandleRunningInstance(instance);
                 return;
             }
+            frmStart.frm.setMsg("读取配置文件...");
 
             SystemConfig.ReadSettings(); //读取用户自定义设置
             BonusSkins.Register();//注册Dev酷皮肤
             //OfficeSkins.Register();////注册Office样式的皮肤
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
-            RestClient.GetSoapRemoteAddress();
+            RestClient.GetSystemConfigSetting();
             ReportPrint.Init();
+            BigDataHelper.DeviceActionAsync(EnumDeviceAction.ApplicationStart);
+
             frmStart.frm.setMsg("获取系统设置...");
             try
             {
                 RestClient.getSystemSetData(out Globals.roundinfo);
             }
-            catch
-            {
-                // ignored
-            }
-
-            frmStart.frm.setMsg("获取营业时间...");
-            IRestaurantService service = new RestaurantServiceImpl();
-            try
-            {
-                var result = service.GetRestaurantTradeTime();
-                if (!string.IsNullOrEmpty(result.Item1))
-                {
-                    Msg.ShowError(result.Item1);
-                    return;
-                }
-
-                Globals.TradeTime = result.Item2;
-            }
             catch (Exception ex)
             {
-                AllLog.Instance.E(ex);
-                Msg.ShowException(ex);
+                AllLog.Instance.E("获取系统设置异常。", ex);
             }
 
+            frmStart.frm.setMsg("获取分店信息...");
+            IRestaurantService service = new RestaurantServiceImpl();
+            var branchResult = service.GetBranchInfo();
+            if (!string.IsNullOrEmpty(branchResult.Item1))
+            {
+                frmBase.Warning(branchResult.Item1);
+                return;
+            }
+            Globals.BranchInfo = branchResult.Item2;
+
+            BigDataHelper.RegisterPosAsync(); //大数据的注册要放在获取分店信息以后。
+
+            frmStart.frm.setMsg("获取营业时间...");
+            var result = service.GetRestaurantTradeTime();
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                frmBase.Warning(result.Item1);
+                return;
+            }
+            Globals.TradeTime = result.Item2;
+
             frmStart.frm.setMsg("检查之前是否结业...");
-            Application.DoEvents();
             var endworkResult = service.CheckWhetherTheLastEndWork();
             if (!string.IsNullOrEmpty(endworkResult.Item1))
             {

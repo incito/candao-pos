@@ -115,7 +115,7 @@ namespace Main
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                TCandaoRetBase ret2 = CanDaoMemberClient.ValidateTbMemberManager(Globals.branch_id, "", edtMobile.Text);
+                TCandaoRetBase ret2 = CanDaoMemberClient.ValidateTbMemberManager(Globals.BranchInfo.BranchId, "", edtMobile.Text);
                 if(!ret2.Retcode.Equals("0"))
                 {
                     Warning(ret2.Retinfo);
@@ -125,7 +125,7 @@ namespace Main
                 }
                 //调用注册接口
                 TCandaoRegMemberInfo memberinfo = new TCandaoRegMemberInfo();
-                memberinfo.Branch_id = Globals.branch_id;
+                memberinfo.Branch_id = Globals.BranchInfo.BranchId;
                 memberinfo.Securitycode = "";
                 memberinfo.Mobile = edtMobile.Text;
                 memberinfo.Cardno = "";
@@ -266,7 +266,7 @@ namespace Main
                 {
                     btnGetIdentCode.Enabled = false;
                     valicode = "";
-                    CanDaoMemberClient.SendAccountByMobile(Globals.branch_id, "", edtMobile.Text, out valicode);
+                    CanDaoMemberClient.SendAccountByMobile(Globals.BranchInfo.BranchId, "", edtMobile.Text, out valicode);
                     if (valicode.Equals(""))
                     {
                         Warning("发送失败，请重试！");

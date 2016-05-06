@@ -93,7 +93,7 @@ namespace Main
                 }
             });
             lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
-            lblbranchid.Text = String.Format("店铺编号：{0}", RestClient.getbranch_id());
+            lblbranchid.Text = String.Format("店铺编号：{0}", Globals.BranchInfo.BranchId);
             timer2.Enabled = true;
             timer2.Interval = 1000;
             lblVer.Text = String.Format("版本:{0}", Globals.ProductVersion);
@@ -112,8 +112,7 @@ namespace Main
                 getCJFood();
             }
             catch { }
-            RestClient.openCashCom();
-            Globals.branch_id = RestClient.getbranch_id();
+            RestClient.OpenCashCom();
         }
 
         private void ucTable1_Click(object sender, EventArgs e)
@@ -408,12 +407,11 @@ namespace Main
                 Warning("您没有收银权限！");
                 return;
             }
-            string tableno = RestClient.getTakeOutTable();
             try
             {
-                this.Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
                 timer2.Enabled = false;
-                frmposwm.showFrmWm(tableno);
+                frmposwm.showFrmWm(RestClient.TakeOutTable);
             }
             finally
             {
@@ -454,6 +452,7 @@ namespace Main
         /// <param name="e"></param>
         private void btnReport_Click(object sender, EventArgs e)
         {
+            BigDataHelper.DeviceActionAsync(EnumDeviceAction.ReportClicking);
             timer2.Stop();
             ReportViewWindow.Instance.ShowDialog();
             RefreshAllTableStatus();

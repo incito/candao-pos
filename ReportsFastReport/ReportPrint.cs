@@ -584,9 +584,9 @@ namespace ReportsFastReport
         }
         private static void setReportSetText(ref Report rtp)
         {
-            AddedtValue(ref rtp, "edtreport_title", WebServiceReference.WebServiceReference.Report_title);
+            AddedtValue(ref rtp, "edtreport_title", Globals.BranchInfo.BranchName);
             AddedtValue(ref rtp, "edtreport_tele", WebServiceReference.WebServiceReference.Report_tele);
-            AddedtValue(ref rtp, "edtreport_address", WebServiceReference.WebServiceReference.Report_address);
+            AddedtValue(ref rtp, "edtreport_address", Globals.BranchInfo.BranchAddress);
             AddedtValue(ref rtp, "edtreport_web", WebServiceReference.WebServiceReference.Report_web);
         }
         public static void PrintRpt(Report rtp, int printcount)
@@ -636,7 +636,7 @@ namespace ReportsFastReport
                 if (tipPaid == 0)
                     visiableObj(ref rtp, "dfTipPaid", false);
 
-                if (RestClient.getShowReport())
+                if (RestClient.ShowReport)
                 {
                     HideReportFrm();
                     try
@@ -648,7 +648,7 @@ namespace ReportsFastReport
                         MessageBox.Show(e.Message);
                     }
                 }
-                else if (RestClient.getPrintDesign())
+                else if (RestClient.ShowAndDesign)
                 {
                     HideReportFrm();
                     try
@@ -663,7 +663,6 @@ namespace ReportsFastReport
 
                 }
                 else
-                {
                     try
                     {
                         rtp.PrintSettings.Copies = printcount;
@@ -679,7 +678,6 @@ namespace ReportsFastReport
                     {
                         MessageBox.Show(e.Message);
                     }
-                }
             }
             catch (Exception ex)
             {

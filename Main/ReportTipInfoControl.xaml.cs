@@ -68,7 +68,7 @@ namespace KYPOS
                 return;
             }
 
-            _tipFullInfo.BranchId = Globals.branch_id;
+            _tipFullInfo.BranchId = Globals.BranchInfo.BranchId;
             _tipFullInfo.CurrentTime = DateTime.Now;
             _tipFullInfo.TotalAmount = _tipFullInfo.TipInfos != null ? _tipFullInfo.TipInfos.Sum(t => t.TipAmount) : 0;
             ReportPrint.PrintTipDetail(_tipFullInfo);

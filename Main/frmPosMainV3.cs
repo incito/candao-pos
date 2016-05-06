@@ -88,6 +88,16 @@ namespace Main
         private string msgorderid = "";
         private bool isopentable2 = false;
 
+        /// <summary>
+        /// 堂食结账开始行为。
+        /// </summary>
+        private DeviceActionInfo _dinnerSettleBeginActionInfo;
+
+        /// <summary>
+        /// 堂食下单开始行为。
+        /// </summary>
+        private DeviceActionInfo _dinnerOrderBeginActionInfo;
+
         //记录每张台下单序列的INI文件
         public frmPosMainV3()
         {
@@ -130,7 +140,6 @@ namespace Main
                         isreback = status == 9;
                         tmrOpen.Enabled = true;
                     }
-                xtraTabControl1.SelectedTabPageIndex = 0;
                 ShowDialog();
             }
             finally
@@ -146,7 +155,6 @@ namespace Main
                 edtRoom.Text = tableno;
                 iswm = true;
                 maling = true;
-                xtraTabControl1.SelectedTabPageIndex = 0;
                 pnlCash.Enabled = true;
                 Globals.CurrOrderInfo.orderid = "";
                 lblMsg.Text = "";
@@ -192,48 +200,59 @@ namespace Main
             pnlNum.Parent = xtraTabControl1.SelectedTabPage;
             pnlSum.Parent = xtraTabControl1.SelectedTabPage;
             //pnlz.Parent = xtraTabControl1.SelectedTabPage;
-            if (xtraTabControl1.SelectedTabPageIndex == 0)
+            SetPaywayControlFocus(true);
+        }
+
+        /// <summary>
+        /// 设定支付方式控件的焦点。
+        /// </summary>
+        /// <param name="reportDeviceAction">是否上报设备改变。</param>
+        private void SetPaywayControlFocus(bool reportDeviceAction)
+        {
+            var action = EnumDeviceAction.None;
+            switch (xtraTabControl1.SelectedTabPageIndex)
             {
-                edtAmount.Focus();
-                edtAmount.SelectAll();
-            }
-            else
-                if (xtraTabControl1.SelectedTabPageIndex == 1)
-                {
+                case 0:
+                    action = EnumDeviceAction.SettleCashClicking;
+                    edtAmount.Focus();
+                    edtAmount.SelectAll();
+                    break;
+                case 1:
+                    action = EnumDeviceAction.SettleBankClicking;
                     edtYHCard.Focus();
                     edtYHCard.SelectAll();
-                }
-                else
-                    if (xtraTabControl1.SelectedTabPageIndex == 2)
-                    {
-                        edtMemberCard.Focus();
-                        edtMemberCard.SelectAll();
-                    }
-                    else
-                        if (xtraTabControl1.SelectedTabPageIndex == 3)
-                        {
-                            edtGzAmount.Focus();
-                            edtGzAmount.SelectAll();
-                        }
-                        else
-                            if (xtraTabControl1.SelectedTabPageIndex == 4)
-                            {
-                                edtZfb.Focus();
-                                edtZfb.SelectAll();
-                            }
-                            else
-                                if (xtraTabControl1.SelectedTabPageIndex == 5)
-                                {
-                                    edtWx.Focus();
-                                    edtWx.SelectAll();
-                                }
+                    break;
+                case 2:
+                    action = EnumDeviceAction.SettleMemberClicking;
+                    edtMemberCard.Focus();
+                    edtMemberCard.SelectAll();
+                    break;
+                case 3:
+                    action = EnumDeviceAction.SettleOnAccountClicking;
+                    edtGzAmount.Focus();
+                    edtGzAmount.SelectAll();
+                    break;
+                case 4:
+                    action = EnumDeviceAction.SettleAlipayClicking;
+                    edtZfb.Focus();
+                    edtZfb.SelectAll();
+                    break;
+                case 5:
+                    action = EnumDeviceAction.SettleWechatClicking;
+                    edtWx.Focus();
+                    edtWx.SelectAll();
+                    break;
+            }
+
+            if (action != EnumDeviceAction.None && reportDeviceAction)
+                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(action, Globals.CurrOrderInfo.orderid));
         }
 
         private void frmPosMain_Load(object sender, EventArgs e)
         {
             Globals.CurrTableInfo.amount = 0;
             lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
-            lblbranchid.Text = String.Format("店铺编号：{0}", RestClient.getbranch_id());
+            lblbranchid.Text = String.Format("店铺编号：{0}", Globals.BranchInfo.BranchId);
             edtRoom.Focus();
             setBtnFocus();
             membercard = "";
@@ -357,8 +376,6 @@ namespace Main
                 lblMember.Text = String.Format("会员：{0}", "");
                 if (jarrTables != null)
                     jarrTables.Clear();
-                if (xtraTabControl2.SelectedTabPageIndex == 5)
-                    xtraTabControl2.SelectedTabPageIndex = 0;
                 Array.Resize(ref pszTicketList, 0);
 
                 //单品部份折扣也要清除掉  启用新优惠后取消这个接口
@@ -387,6 +404,12 @@ namespace Main
                     }
                     else
                     {
+                        if (!string.IsNullOrEmpty(Globals.CurrOrderInfo.orderid))
+                        {
+                            _dinnerSettleBeginActionInfo = new DeviceActionInfo(EnumDeviceAction.DineSettleBegin, Globals.CurrOrderInfo.orderid, Guid.NewGuid().ToString());
+                            BigDataHelper.DeviceActionAsync(_dinnerSettleBeginActionInfo);
+                        }
+
                         try
                         {
                             addAutoFavorale();
@@ -399,7 +422,7 @@ namespace Main
                         edtMemberCard.Text = membercard;
                         getOrderInvoiceTitle();
                         //恢复帐单的优惠列表
-                        if (!RestClient.isClearCoupon())
+                        if (!RestClient.IsClearCoupon)
                         {
                             try
                             {
@@ -416,62 +439,6 @@ namespace Main
                         }
                     }
                 }
-
-                /*string loginReturn = RestClient.GetServerTableInfo(TableName, Globals.UserInfo.UserID);
-                if (loginReturn == "0") //调用
-                {
-                    Warning("未找到帐单,请确认是否已开台!");
-                    this.SetButtonEnable(true);
-                    edtRoom.Focus();
-                    edtRoom.SelectAll();
-                }
-                else
-
-                    if (loginReturn == "")
-                    {
-                        Warning("获取数据失败，请检查网络连接是否正常!");
-                        this.SetButtonEnable(true);
-                        edtRoom.Focus();
-                        edtRoom.SelectAll();
-                    }
-                    else
-                    {
-                        //先取消会员价
-                        try
-                        {
-                            RestClient.setMemberPrice3(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
-                        }
-                        catch { }
-                        //返回成功
-                        RestClient.GetServerTableList(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);
-                        //ShowLeftInfo();
-                        try
-                        {
-                            addAutoFavorale();
-                        }
-                        catch { }
-                        getAmount();
-                        this.SetButtonEnable(true);
-                        btnml_Click(btnml, null);
-
-                        //恢复帐单的优惠列表
-                        if (!RestClient.isClearCoupon())
-                        {
-                            try
-                            {
-                                JArray jrOrder = null;
-                                if (RestClient.getOrderCouponList(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, out jrOrder))
-                                {
-                                    DataTable dtOrder = null;
-                                    dtOrder = Models.Bill_Order.gett_order_rule(jrOrder);
-                                    addOrderCoupon(dtOrder);
-                                    getAmount();
-                                }
-                            }
-                            catch (Exception e) { }
-                        }
-                    }*/
-                xtraTabControl1.SelectedTabPageIndex = 0;//不刷新优惠，加快速度 20151008
             }
             catch (CustomException ex)
             {
@@ -483,7 +450,6 @@ namespace Main
             catch (Exception ex)
             {
                 this.SetButtonEnable(true);
-                //Warning("获取数据失败!");
                 edtRoom.Focus();
                 edtRoom.SelectAll();
             }
@@ -512,6 +478,7 @@ namespace Main
             }
             this.Cursor = Cursors.Default;
         }
+
         private void addOrderCoupon(DataTable dt)
         {
             foreach (DataRow drOrder in dt.Rows)
@@ -655,7 +622,7 @@ namespace Main
             btnRePrintCust.Enabled = true;
             btnOrder2.Enabled = true;
             lblAmount2.ForeColor = Color.Red;
-            //pnlCash.Enabled = true;
+
             //如果订单已结算就不能结算了
             if (CheckCallBill() && (!iswm))
             {
@@ -698,11 +665,6 @@ namespace Main
                 btnDec.Visible = true;
                 btnDelete.Visible = true;
             }
-            //btnDelete.Visible = !RestClient.isClearCoupon();
-            if (Globals.CurrOrderInfo.fulldiscountrate > 0)
-            {
-                //lbldiscount.Visible = true;
-            }
             edtReturn.Text = returnamount.ToString();
 
             try
@@ -718,6 +680,7 @@ namespace Main
                             btnFind.Tag = 1;
                             btnFind.Text = "退出";
 
+                            //调用会员价接口
                             try
                             {
                                 if (!isopentable2)
@@ -938,7 +901,7 @@ namespace Main
                     Warning("还有未称重菜品,不能结帐...");
                     return;
                 }
-                if (membercard.Length > 0 && (RestClient.getMemberSystem() == 1) && (amounthyk > 0 || amountjf > 0))
+                if (membercard.Length > 0 && (RestClient.MemberSystem == 1) && (amounthyk > 0 || amountjf > 0))
                 {
                     var pwd = "";
                     if (edtPwd.Text.Trim().Length > 0)
@@ -1109,7 +1072,7 @@ namespace Main
                                     {
                                         if (!isok)
                                         {
-                                            var memType = RestClient.getMemberSystem() == 0 ? "雅座" : "餐道";
+                                            var memType = RestClient.MemberSystem == 0 ? "雅座" : "餐道";
                                             Warning(string.Format("{0}会员消费结算失败，系统自动反结。", memType));
                                             string msg;
                                             if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, "会员结算失败,系统自动反结", out msg))
@@ -1163,6 +1126,10 @@ namespace Main
                     Opentable2(true);
                     if (isok)
                     {
+                        if (!iswm)
+                        {
+                            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.DineSettleEnd, Globals.CurrOrderInfo.orderid, _dinnerSettleBeginActionInfo.Key));
+                        }
                         try
                         {
                             PrintBill2();
@@ -1234,6 +1201,7 @@ namespace Main
             }
             catch { }
         }
+
         private void broadMsg2201()
         {
             try
@@ -1242,11 +1210,9 @@ namespace Main
             }
             catch { }
         }
+
         private String getTicklistStr()
         {
-            //Coupons_Name 30,Coupon_code 15,Coupon_Amount 12,Coupon_No 4
-            //description,ruleid,freeamount,1
-            //vcr.memo,vcr.ruleid,vcr.freeamount,vcr.num
             String tickListStr = "";
             int i = 5;
             string tickstr = "";
@@ -1288,6 +1254,7 @@ namespace Main
         }
         private void button2_Click(object sender, EventArgs e)
         {
+            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.PresettleClicking, Globals.CurrOrderInfo.orderid));
             //
             try
             {
@@ -1590,10 +1557,10 @@ namespace Main
                 {
                     return;
                 }
+                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ResettleClicking, Globals.CurrOrderInfo.orderid));
                 this.Cursor = Cursors.WaitCursor;
                 string info = "";
-                int membersystem = RestClient.getMemberSystem();
-                if (membersystem == 1)
+                if (RestClient.MemberSystem == 1)
                 {
                     //餐道反结算会员要先从java后台调用接口获取当前帐单会员结算信息，如果有可以反结的会员结算信息才反结+++++++++
                     TCandaoRetBase ret = CanDaoMemberClient.GetOrderMember(Globals.CurrOrderInfo.orderid);
@@ -1613,7 +1580,7 @@ namespace Main
                     //select * from t_order_member where orderid='H20150117001506'
                     try
                     {
-                        Globals.superpwd = RestClient.getManagerPwd();
+                        Globals.superpwd = RestClient.ManagerPwd;
                         if (!RestClient.VoidSale(Globals.CurrOrderInfo.orderid, "0", Globals.superpwd, out info))
                         {
                             Warning(info);
@@ -1636,7 +1603,7 @@ namespace Main
                     if (!string.IsNullOrEmpty(msg))
                         Warning(msg);
 
-                    if (membersystem == 1)
+                    if (RestClient.MemberSystem == 1)
                     {
                         try
                         {
@@ -1650,7 +1617,7 @@ namespace Main
                     HideOpenTable();
                 }
                 catch { }
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
                 opentable();
             }
             finally
@@ -1911,7 +1878,6 @@ namespace Main
                 e.KeyChar = (char)0;
                 if (!CheckCallBill())
                 {
-                    xtraTabControl1.SelectedTabPageIndex = 2;
                     edtMemberCard.Text = "";
                     edtMemberCard.Focus();
                 }
@@ -1931,8 +1897,7 @@ namespace Main
             {
                 //如果会员为空 ，就是取消会员价
                 //调用会员价接口取消会员价
-                int membersystem = RestClient.getMemberSystem();
-                if (membersystem == 1)
+                if (RestClient.MemberSystem == 1)
                 {
                     try
                     {
@@ -2004,21 +1969,12 @@ namespace Main
         }
         private void setlblMsg(string msg)
         {
-            int membersystem = RestClient.getMemberSystem();
-            if (membersystem == 1)
-            {
-                //餐道会员
-                lblMsg.Text = String.Format("餐道：{0}", msg);
-            }
-            else
-                lblMsg.Text = String.Format("雅座：{0}", msg);
-
+            lblMsg.Text = string.Format(RestClient.MemberSystem == 1 ? "餐道：{0}" : "雅座：{0}", msg);
         }
 
         private bool QueryMemberCard2(out string msg)
         {
-            int membersystem = RestClient.getMemberSystem();
-            if (membersystem == 1)
+            if (RestClient.MemberSystem == 1)
             {
                 //餐道会员
                 bool ret = QueryMemberCard2_CanDao(out msg);
@@ -2131,8 +2087,7 @@ namespace Main
         private bool QueryMemberCard3(out string msg)
         {
             //会员查询,
-            int membersystem = RestClient.getMemberSystem();
-            if (membersystem == 1)
+            if (RestClient.MemberSystem == 1)
             {
                 //餐道会员
                 return QueryMemberCard3_CanDao(out msg);
@@ -2375,6 +2330,38 @@ namespace Main
                         btn.Text = "";
                     }
                 }
+
+                EnumDeviceAction action = EnumDeviceAction.None;
+                switch (xtraTabControl2.SelectedTabPageIndex)
+                {
+                    case 0:
+                        action = EnumDeviceAction.GroupBuyClicking;
+                        break;
+                    case 1:
+                        action = EnumDeviceAction.SpecialOfferClicking;
+                        break;
+                    case 2:
+                        action = EnumDeviceAction.DiscountClicking;
+                        break;
+                    case 3:
+                        action = EnumDeviceAction.VouchersClicking;
+                        break;
+                    case 4:
+                        action = EnumDeviceAction.GiftCouponClicking;
+                        break;
+                    case 5:
+                        action = EnumDeviceAction.MemberCouponClicking;
+                        break;
+                    case 6:
+                        action = EnumDeviceAction.OtherCouponClicking;
+                        break;
+                    case 7:
+                        action = EnumDeviceAction.CooperationCompanyClicking;
+                        break;
+                }
+                if (action != EnumDeviceAction.None)
+                    BigDataHelper.DeviceActionAsync(new DeviceActionInfo(action, Globals.CurrOrderInfo.orderid));
+
                 if (xtraTabControl2.SelectedTabPageIndex == 5)
                 {
                     if (edtMemberCard.Text.Length > 0)
@@ -2403,7 +2390,7 @@ namespace Main
                     }
                 }
                 getCoupon_rule();
-                xtraTabControl1_SelectedPageChanged(xtraTabControl1, null);
+                SetPaywayControlFocus(false);
             }
             finally
             {
@@ -2456,7 +2443,8 @@ namespace Main
                     catch { }
                     try
                     {
-                        jarrTables = RestClient.getcoupon_rulev2(xtraTabControl2.SelectedTabPage.Tag.ToString(), Globals.CurrOrderInfo.orderid);
+                        var couponTypeString = xtraTabControl2.SelectedTabPage.Tag.ToString();
+                        jarrTables = RestClient.getcoupon_rulev2(couponTypeString, Globals.CurrOrderInfo.orderid);
                     }
                     catch (Exception e) { }
                 }
@@ -2843,7 +2831,6 @@ namespace Main
                     checkDisCount();
                 }
             }
-            xtraTabControl1_SelectedPageChanged(xtraTabControl1, null);
             //保存优惠内容,以便还原
             JArray ja = Globals.GetTableJson(tbyh);
             string str = ja.ToString();
@@ -3282,6 +3269,7 @@ namespace Main
         {
             try
             {
+                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.RepringMemberBill, Globals.CurrOrderInfo.orderid));
                 this.Cursor = Cursors.WaitCursor;
                 ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
             }
@@ -3295,6 +3283,8 @@ namespace Main
 
         private void button52_Click_1(object sender, EventArgs e)
         {
+            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.OpenCashBoxClicking, Globals.CurrOrderInfo.orderid));
+
             try
             {
                 button52.Enabled = false;
@@ -3400,7 +3390,7 @@ namespace Main
                         {
                             couponname = ja["couponname"].ToString();
                             freeamount = float.Parse(ja["decorderprice"].ToString());
-                            addFavorale(couponname, freeamount, num, RestClient.getYhID());
+                            addFavorale(couponname, freeamount, num, RestClient.YhId);
                         }
                     }
                 }
@@ -3434,7 +3424,7 @@ namespace Main
                                     isaddmember = true;
                                     couponname = ja["couponname"].ToString();
                                     freeamount = float.Parse(ja["decorderprice"].ToString());
-                                    addFavorale(couponname, freeamount, num, RestClient.getDoubleDishTicket());
+                                    addFavorale(couponname, freeamount, num, RestClient.DoubleDishTicket);
                                 }
                             }
                         }
@@ -3519,11 +3509,10 @@ namespace Main
 
         private void CanClose()
         {
-            int autoClose = RestClient.getAutoClose();
-            if (autoClose > 0)
+            if (RestClient.AutoClose > 0)
             {
                 tmrClose.Enabled = false;
-                tmrClose.Interval = autoClose * 1000;
+                tmrClose.Interval = RestClient.AutoClose * 1000;
                 tmrClose.Enabled = true;
             }
         }
@@ -3548,6 +3537,8 @@ namespace Main
                 {
                     return;
                 }
+                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ReprintSettleBill, Globals.CurrOrderInfo.orderid));
+
                 this.Cursor = Cursors.WaitCursor;
                 PrintBill2();
             }
@@ -3562,6 +3553,7 @@ namespace Main
         {
             try
             {
+                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ReprintCustBill, Globals.CurrOrderInfo.orderid));
                 if (!AskQuestion("台号：" + Globals.CurrTableInfo.tableName + "确定要重印客用单吗?"))
                 {
                     return;
@@ -3608,6 +3600,10 @@ namespace Main
                 btnOpen_Click(serder, e);
             }
             catch { }
+
+            _dinnerOrderBeginActionInfo = new DeviceActionInfo(EnumDeviceAction.DineOrderBegin, Globals.CurrOrderInfo.orderid, Guid.NewGuid().ToString());
+            BigDataHelper.DeviceActionAsync(_dinnerOrderBeginActionInfo);
+
             //开台成功显示点菜界面
             isopened = true;
             IniPos.setPosIniVlaue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, "0");
@@ -3883,7 +3879,6 @@ namespace Main
         {
             //ordertype=1赠送
             //btnOrder.Visible = true;
-            xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = true;
             xtraTabControl1.Visible = true;
@@ -3904,18 +3899,19 @@ namespace Main
                 {
                     if (!iswm)
                     {
+                        var actionKey = Guid.NewGuid().ToString();
                         //如果不是外卖就直接下单 //显示正在下单
                         btnOpen.Visible = true;
                         if (Globals.ShoppTable.Rows.Count > 0)
                         {
                             if (startorder(ordertype))
                             {
+                                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.DineOrderEnd, Globals.CurrOrderInfo.orderid, _dinnerOrderBeginActionInfo.Key));
                                 try
                                 {
                                     msgorderid = Globals.CurrOrderInfo.orderid; //广播消息到PAD同步菜单
                                     Thread thread = new Thread(broadMsg2201);
                                     thread.Start();// 
-
                                 }
                                 catch { }
                                 Globals.ShoppTable.Clear();
@@ -3932,7 +3928,6 @@ namespace Main
         public void ShowWm()
         {
             btnOrder.Visible = false;
-            xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = false;
             xtraTabControl1.Visible = false;
@@ -3969,7 +3964,7 @@ namespace Main
         {
             try
             {
-                string TableName = edtRoom.Text;
+                //BigDataHelper.DeviceActionAsync(EnumDeviceAction.TakeoutBegin);
                 Globals.CurrTableInfo.amount = 0;
                 lblAmountWm.Text = string.Format("消费:{0}", 0);
                 lblAmount.Text = string.Format("消费:{0}", 0);
@@ -4017,7 +4012,6 @@ namespace Main
                 isaddmember = false;
                 isaddFavorale = false;
                 lblMember.Text = String.Format("会员：{0}", "");
-                xtraTabControl2.SelectedTabPageIndex = 0;
                 jarrTables.Clear();
                 Array.Resize(ref pszTicketList, 0);
                 //不支持预结单
@@ -4034,7 +4028,6 @@ namespace Main
                     //RestClient.fullDiscount(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, 0, " ", " ");
                 }
                 catch { }
-                xtraTabControl1.SelectedTabPageIndex = 0;
             }
             catch (CustomException ex)
             {
@@ -4099,6 +4092,7 @@ namespace Main
                 Warning("开台失败,1！");
                 return;
             }
+            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.OpenTable, orderid));
             //标记帐单的ordertpe=1为正常外卖
             try
             {
@@ -4106,7 +4100,7 @@ namespace Main
             }
             catch { }
             Globals.CurrOrderInfo.orderid = orderid;
-            Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
+            Globals.CurrTableInfo.tableid = RestClient.TakeOutTableID;
             //
         }
         private bool bookorder(string sequence, int ordertype)
@@ -4387,6 +4381,7 @@ namespace Main
 
         private void btnOrder2_Click(object sender, EventArgs e)
         {
+            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.OrderDishClicking, Globals.CurrOrderInfo.orderid));
 
             if (iswm)
                 ShowWm();
@@ -4421,7 +4416,6 @@ namespace Main
                 frmorder.Parent = pnlCash;
             }
             frmorder.hideGz();
-            xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = false;
             btnOrder.Visible = false;
@@ -4487,6 +4481,7 @@ namespace Main
 
         private void btnOrderML_Click(object sender, EventArgs e)
         {
+            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.KeepSamlChange, Globals.CurrOrderInfo.orderid));
             //暂时只处理本单，
             maling = false;
             try
@@ -4509,6 +4504,7 @@ namespace Main
         private void btnCancelOrder_Click(object sender, EventArgs e)
         {
             //cleantable
+            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.CancelOrder, Globals.CurrOrderInfo.orderid));
             try
             {
                 Opentable2();
@@ -4612,8 +4608,7 @@ namespace Main
         /// </summary>
         private void InitMemberFun()
         {
-            int membersystem = RestClient.getMemberSystem();
-            if (membersystem == 1)
+            if (RestClient.MemberSystem == 1)
             {
                 btnMemberReg.Text = "会员注册";
                 try
@@ -4641,8 +4636,7 @@ namespace Main
         }
         public bool MemberSale(string aUserid, string orderid, string pszInput, string pszSerial, float pszCash, float pszPoint, int psTransType, float pszStore, string pszTicketList, string pszPwd, float memberyhqamount)
         {
-            int membersystem = RestClient.getMemberSystem();
-            if (membersystem == 0)
+            if (RestClient.MemberSystem == 0)
             {
                 JObject json = (JObject)RestClient.MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, pszCash, pszPoint, 1, amounthyk, pszTicketList, pszPwd, (float)Math.Round(memberyhqamount, 2));
                 string data = json["Data"].ToString();
@@ -4673,7 +4667,7 @@ namespace Main
                 return true;
             }
             else
-                if (membersystem == 1)
+                if (RestClient.MemberSystem == 1)
                 {
                     //餐道会员
                     if (cardno.Trim().Equals(""))
@@ -4699,7 +4693,7 @@ namespace Main
                         }
                     }
                     TCandaoMemberSale membersale = new TCandaoMemberSale();
-                    membersale.Branch_id = Globals.branch_id;
+                    membersale.Branch_id = Globals.BranchInfo.BranchId;
                     membersale.Cardno = cardno;
                     membersale.Securitycode = "";
                     membersale.Password = pszPwd;
@@ -4723,10 +4717,10 @@ namespace Main
                         ordermemberinfo.Cardno = cardno;
                         ordermemberinfo.Orderid = Globals.CurrOrderInfo.orderid;
                         ordermemberinfo.Userid = Globals.UserInfo.UserID;
-                        ordermemberinfo.Business = RestClient.getbranch_id();
-                        ordermemberinfo.Terminal = RestClient.getPosID();
+                        ordermemberinfo.Business = Globals.BranchInfo.BranchId;
+                        ordermemberinfo.Terminal = RestClient.PosId;
                         ordermemberinfo.Serial = ret.Tracecode;
-                        ordermemberinfo.Businessname = WebServiceReference.WebServiceReference.Report_title;
+                        ordermemberinfo.Businessname = Globals.BranchInfo.BranchName;
                         ordermemberinfo.Score = (ret.Addintegral - ret.Decintegral);
                         ordermemberinfo.Scorebalance = ret.Integraloverall;
                         ordermemberinfo.Couponsbalance = "0";
@@ -4762,7 +4756,7 @@ namespace Main
             TCandaoMemberInfo ret = null;
             try
             {
-                ret = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", edtMemberCard.Text, "");//edtPwd.Text
+                ret = CanDaoMemberClient.QueryBalance(Globals.BranchInfo.BranchId, "", edtMemberCard.Text, "");//edtPwd.Text
                 if (!ret.Ret)
                 {
                     msg = ret.Retinfo;
@@ -4860,9 +4854,9 @@ namespace Main
             try
             {
                 string info = "";
-                Globals.superpwd = RestClient.getManagerPwd();
+                Globals.superpwd = RestClient.ManagerPwd;
                 TCandaoMemberVoidSale voidsale = new TCandaoMemberVoidSale();
-                voidsale.Branch_id = Globals.branch_id;
+                voidsale.Branch_id = Globals.BranchInfo.BranchId;
                 voidsale.Securitycode = "";
                 voidsale.Cardno = saleInfo.Cardno;
                 voidsale.Password = edtPwd.Text;
@@ -4896,7 +4890,7 @@ namespace Main
             TCandaoMemberInfo ret = null;
             try
             {
-                ret = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", edtMemberCard.Text, edtPwd.Text);
+                ret = CanDaoMemberClient.QueryBalance(Globals.BranchInfo.BranchId, "", edtMemberCard.Text, edtPwd.Text);
             }
             catch (Exception ex) { msg = "餐道会员查询失败，请检查外网是否稳定，并重试!"; return false; }
             string data = ret.Retcode;

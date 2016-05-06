@@ -754,5 +754,15 @@ namespace Common
 
             return DateTime.ParseExact(timeStr, DateTimeFmt, null);
         }
+
+        public static BranchInfo ToBranchInfo(BranchInfoData data)
+        {
+            return new BranchInfo
+            {
+                BranchId = data.branchid.ToString(),
+                BranchAddress = data.branchaddress,
+                BranchName = data.branchname,
+            };
+        } 
     }
 }
