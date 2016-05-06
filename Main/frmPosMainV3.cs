@@ -1096,16 +1096,19 @@ namespace Main
 
                             if (isok)
                             {
-                                var service = new RestaurantServiceImpl();
-                                var result = service.BillingTip(Globals.CurrOrderInfo.orderid, amountTip);
-                                if (!string.IsNullOrEmpty(result))
+                                if (Globals.CurrTableInfo.TipAmount > 0)//当有小费时进行小费结算。
                                 {
-                                    Warning(result);
-                                    isok = false;
-                                }
-                                else
-                                {
-                                    isok = true;
+                                    var service = new RestaurantServiceImpl();
+                                    var result = service.BillingTip(Globals.CurrOrderInfo.orderid, amountTip);
+                                    if (!string.IsNullOrEmpty(result))
+                                    {
+                                        Warning(result);
+                                        isok = false;
+                                    }
+                                    else
+                                    {
+                                        isok = true;
+                                    }
                                 }
                             }
 
@@ -1560,39 +1563,44 @@ namespace Main
                 BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ResettleClicking, Globals.CurrOrderInfo.orderid));
                 this.Cursor = Cursors.WaitCursor;
                 string info = "";
-                if (RestClient.MemberSystem == 1)
+
+                if (!string.IsNullOrEmpty(Globals.CurrOrderInfo.memberno))
                 {
-                    //餐道反结算会员要先从java后台调用接口获取当前帐单会员结算信息，如果有可以反结的会员结算信息才反结+++++++++
-                    TCandaoRetBase ret = CanDaoMemberClient.GetOrderMember(Globals.CurrOrderInfo.orderid);
-                    if (ret.Ret)
+                    if (RestClient.MemberSystem == 1)
                     {
-                        if (!VoidSale_CanDao(out info, ret))
+                        //餐道反结算会员要先从java后台调用接口获取当前帐单会员结算信息，如果有可以反结的会员结算信息才反结+++++++++
+                        TCandaoRetBase ret = CanDaoMemberClient.GetOrderMember(Globals.CurrOrderInfo.orderid);
+                        if (ret.Ret)
                         {
-                            Warning(info);
+                            if (!VoidSale_CanDao(out info, ret))
+                            {
+                                Warning(info);
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //先反结算雅座的，加个标记，是不是反成功
+                        //如果POS反失败，下次再反看标记，如果雅座的已经成功了，就不反了
+                        //select * from t_order_member where orderid='H20150117001506'
+                        try
+                        {
+                            Globals.superpwd = RestClient.ManagerPwd;
+                            if (!RestClient.VoidSale(Globals.CurrOrderInfo.orderid, "0", Globals.superpwd, out info))
+                            {
+                                Warning(info);
+                                return;
+                            }
+                        }
+                        catch
+                        {
+                            Warning("会员消费撤消失败...,请重试");
                             return;
                         }
                     }
                 }
-                else
-                {
-                    //先反结算雅座的，加个标记，是不是反成功
-                    //如果POS反失败，下次再反看标记，如果雅座的已经成功了，就不反了
-                    //select * from t_order_member where orderid='H20150117001506'
-                    try
-                    {
-                        Globals.superpwd = RestClient.ManagerPwd;
-                        if (!RestClient.VoidSale(Globals.CurrOrderInfo.orderid, "0", Globals.superpwd, out info))
-                        {
-                            Warning(info);
-                            return;
-                        }
-                    }
-                    catch
-                    {
-                        Warning("会员消费撤消失败...,请重试");
-                        return;
-                    }
-                }
+
                 string msg;
                 if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, inputMemo, out msg))
                 {
