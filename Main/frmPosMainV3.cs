@@ -3118,11 +3118,11 @@ namespace Main
             movey = e.Y - downy;
             if (movey > 10)
             {
-                button8_Click(button8, e);
+                button8_Click(btnCoupUp, e);
             }
             if (movey < -10)
             {
-                button7_Click(button8, e);
+                button7_Click(btnCoupUp, e);
             }
         }
 

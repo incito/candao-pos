@@ -66,7 +66,6 @@
             this.btnRePrintCust = new System.Windows.Forms.Button();
             this.btnPrintMember1 = new System.Windows.Forms.Button();
             this.lblAmountWm = new System.Windows.Forms.Label();
-            this.button8 = new System.Windows.Forms.Button();
             this.btnOrder = new System.Windows.Forms.Button();
             this.btnDec = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -83,6 +82,7 @@
             this.pnlAmount = new System.Windows.Forms.Panel();
             this.lbTip = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
+            this.btnCoupUp = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.lblAmount2 = new System.Windows.Forms.Label();
@@ -607,7 +607,6 @@
             this.panel6.BackColor = System.Drawing.Color.White;
             this.panel6.Controls.Add(this.pnlMore);
             this.panel6.Controls.Add(this.lblAmountWm);
-            this.panel6.Controls.Add(this.button8);
             this.panel6.Controls.Add(this.btnOrder);
             this.panel6.Controls.Add(this.btnDec);
             this.panel6.Controls.Add(this.btnAdd);
@@ -720,22 +719,6 @@
             this.lblAmountWm.Tag = "171";
             this.lblAmountWm.Text = "消费：";
             this.lblAmountWm.Visible = false;
-            // 
-            // button8
-            // 
-            this.button8.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.button8.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.button8.Image = global::KYPOS.Properties.Resources.up21;
-            this.button8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button8.Location = new System.Drawing.Point(288, 272);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(46, 46);
-            this.button8.TabIndex = 297;
-            this.button8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // btnOrder
             // 
@@ -933,6 +916,7 @@
             // 
             this.pnlAmount.Controls.Add(this.lbTip);
             this.pnlAmount.Controls.Add(this.button3);
+            this.pnlAmount.Controls.Add(this.btnCoupUp);
             this.pnlAmount.Controls.Add(this.btnDelete);
             this.pnlAmount.Controls.Add(this.button7);
             this.pnlAmount.Controls.Add(this.lblAmount2);
@@ -963,14 +947,30 @@
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Tahoma", 15F);
             this.button3.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.button3.Location = new System.Drawing.Point(288, 120);
+            this.button3.Location = new System.Drawing.Point(288, 127);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(46, 46);
+            this.button3.Size = new System.Drawing.Size(46, 39);
             this.button3.TabIndex = 301;
             this.button3.Text = " C";
             this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
+            // btnCoupUp
+            // 
+            this.btnCoupUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.btnCoupUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCoupUp.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.btnCoupUp.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.btnCoupUp.Image = global::KYPOS.Properties.Resources.up21;
+            this.btnCoupUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCoupUp.Location = new System.Drawing.Point(288, 5);
+            this.btnCoupUp.Name = "btnCoupUp";
+            this.btnCoupUp.Size = new System.Drawing.Size(46, 42);
+            this.btnCoupUp.TabIndex = 297;
+            this.btnCoupUp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCoupUp.UseVisualStyleBackColor = true;
+            this.btnCoupUp.Click += new System.EventHandler(this.button8_Click);
             // 
             // btnDelete
             // 
@@ -979,9 +979,9 @@
             this.btnDelete.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnDelete.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnDelete.Image = global::KYPOS.Properties.Resources.dec21;
-            this.btnDelete.Location = new System.Drawing.Point(288, 72);
+            this.btnDelete.Location = new System.Drawing.Point(288, 89);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(46, 46);
+            this.btnDelete.Size = new System.Drawing.Size(46, 39);
             this.btnDelete.TabIndex = 300;
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDelete.UseVisualStyleBackColor = true;
@@ -995,7 +995,7 @@
             this.button7.Font = new System.Drawing.Font("Tahoma", 12F);
             this.button7.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button7.Image = global::KYPOS.Properties.Resources.down21;
-            this.button7.Location = new System.Drawing.Point(288, 25);
+            this.button7.Location = new System.Drawing.Point(288, 44);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(46, 46);
             this.button7.TabIndex = 298;
@@ -3302,7 +3302,7 @@
         private System.Windows.Forms.Button btnSelectGz;
         private System.Windows.Forms.Label lblAmount2;
         private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button btnCoupUp;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label18;
         private DevExpress.XtraEditors.TextEdit edtJf;
