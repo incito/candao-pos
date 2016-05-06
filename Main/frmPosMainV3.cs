@@ -3544,11 +3544,11 @@ namespace Main
         {
             try
             {
+                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ReprintCustBill, Globals.CurrOrderInfo.orderid));
                 if (!AskQuestion("台号：" + Globals.CurrTableInfo.tableName + "确定要重印客用单吗?"))
                 {
                     return;
                 }
-                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ReprintCustBill, Globals.CurrOrderInfo.orderid));
                 this.Cursor = Cursors.WaitCursor;
                 PrintBill3();
             }
@@ -4498,6 +4498,7 @@ namespace Main
         private void btnCancelOrder_Click(object sender, EventArgs e)
         {
             //cleantable
+            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.CancelOrder, Globals.CurrOrderInfo.orderid));
             try
             {
                 Opentable2();
@@ -4509,7 +4510,6 @@ namespace Main
                 {
                     if (!AskQuestion("确定要取消帐单吗?"))
                         return;
-                    BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.CancelOrder, Globals.CurrOrderInfo.orderid));
                     if (RestClient.cleantable(Globals.CurrTableInfo.tableNo))
                     {
                         try
