@@ -134,7 +134,6 @@ namespace Main
                         isreback = status == 9;
                         tmrOpen.Enabled = true;
                     }
-                xtraTabControl1.SelectedTabPageIndex = 0;
                 ShowDialog();
             }
             finally
@@ -150,7 +149,6 @@ namespace Main
                 edtRoom.Text = tableno;
                 iswm = true;
                 maling = true;
-                xtraTabControl1.SelectedTabPageIndex = 0;
                 pnlCash.Enabled = true;
                 Globals.CurrOrderInfo.orderid = "";
                 lblMsg.Text = "";
@@ -248,7 +246,7 @@ namespace Main
         {
             Globals.CurrTableInfo.amount = 0;
             lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
-            lblbranchid.Text = String.Format("店铺编号：{0}", RestClient.BranchId);
+            lblbranchid.Text = String.Format("店铺编号：{0}", Globals.BranchInfo.BranchId);
             edtRoom.Focus();
             setBtnFocus();
             membercard = "";
@@ -372,8 +370,6 @@ namespace Main
                 lblMember.Text = String.Format("会员：{0}", "");
                 if (jarrTables != null)
                     jarrTables.Clear();
-                if (xtraTabControl2.SelectedTabPageIndex == 5)
-                    xtraTabControl2.SelectedTabPageIndex = 0;
                 Array.Resize(ref pszTicketList, 0);
 
                 //单品部份折扣也要清除掉  启用新优惠后取消这个接口
@@ -437,8 +433,6 @@ namespace Main
                         }
                     }
                 }
-
-                xtraTabControl1.SelectedTabPageIndex = 0;//不刷新优惠，加快速度 20151008
             }
             catch (CustomException ex)
             {
@@ -1867,7 +1861,6 @@ namespace Main
                 e.KeyChar = (char)0;
                 if (!CheckCallBill())
                 {
-                    xtraTabControl1.SelectedTabPageIndex = 2;
                     edtMemberCard.Text = "";
                     edtMemberCard.Focus();
                 }
@@ -2821,7 +2814,6 @@ namespace Main
                     checkDisCount();
                 }
             }
-            xtraTabControl1_SelectedPageChanged(xtraTabControl1, null);
             //保存优惠内容,以便还原
             JArray ja = Globals.GetTableJson(tbyh);
             string str = ja.ToString();
@@ -3869,7 +3861,6 @@ namespace Main
         {
             //ordertype=1赠送
             //btnOrder.Visible = true;
-            xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = true;
             xtraTabControl1.Visible = true;
@@ -3919,7 +3910,6 @@ namespace Main
         public void ShowWm()
         {
             btnOrder.Visible = false;
-            xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = false;
             xtraTabControl1.Visible = false;
@@ -4003,7 +3993,6 @@ namespace Main
                 isaddmember = false;
                 isaddFavorale = false;
                 lblMember.Text = String.Format("会员：{0}", "");
-                xtraTabControl2.SelectedTabPageIndex = 0;
                 jarrTables.Clear();
                 Array.Resize(ref pszTicketList, 0);
                 //不支持预结单
@@ -4020,7 +4009,6 @@ namespace Main
                     //RestClient.fullDiscount(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, 0, " ", " ");
                 }
                 catch { }
-                xtraTabControl1.SelectedTabPageIndex = 0;
             }
             catch (CustomException ex)
             {
@@ -4409,7 +4397,6 @@ namespace Main
                 frmorder.Parent = pnlCash;
             }
             frmorder.hideGz();
-            xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = false;
             btnOrder.Visible = false;
@@ -4711,7 +4698,7 @@ namespace Main
                         ordermemberinfo.Cardno = cardno;
                         ordermemberinfo.Orderid = Globals.CurrOrderInfo.orderid;
                         ordermemberinfo.Userid = Globals.UserInfo.UserID;
-                        ordermemberinfo.Business = RestClient.BranchId;
+                        ordermemberinfo.Business = Globals.BranchInfo.BranchId;
                         ordermemberinfo.Terminal = RestClient.PosId;
                         ordermemberinfo.Serial = ret.Tracecode;
                         ordermemberinfo.Businessname = Globals.BranchInfo.BranchName;

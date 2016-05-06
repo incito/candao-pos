@@ -54,7 +54,7 @@ namespace Main
             txtUser.Focus();
             setBtnFocus();
             lblVer.Text = String.Format("版本:{0}", Globals.ProductVersion);
-            lblbranchid.Text = String.Format("店铺编号：{0}", RestClient.BranchId);
+            lblbranchid.Text = String.Format("店铺编号：{0}", Globals.BranchInfo.BranchId);
         }
         
 

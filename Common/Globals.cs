@@ -127,11 +127,6 @@ namespace Common
         public static JArray cjFood;//餐具
 
         /// <summary>
-        /// 分店ID。
-        /// </summary>
-        public static String BranchId { get; set; }
-
-        /// <summary>
         /// 店铺营业时间。
         /// </summary>
         public static RestaurantTradeTime TradeTime { get; set; }

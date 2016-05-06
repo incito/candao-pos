@@ -77,7 +77,7 @@ namespace Main
                 }
             });
             lblUser.Text = String.Format("µÇÂ¼Ô±¹¤:{0}", Globals.UserInfo.UserName);
-            lblbranchid.Text = String.Format("µêÆÌ±àºÅ£º{0}", RestClient.BranchId);
+            lblbranchid.Text = String.Format("µêÆÌ±àºÅ£º{0}", Globals.BranchInfo.BranchId);
             timer2.Enabled = true;
             timer2.Interval = 1000;
             lblVer.Text = String.Format("°æ±¾:{0}", Globals.ProductVersion);
