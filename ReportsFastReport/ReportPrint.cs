@@ -693,6 +693,9 @@ namespace ReportsFastReport
 
         private static void ShowReportFrm()
         {
+            if (frmProgress == null || frmProgress.IsDisposed)
+                return;
+
             if (frmProgress.IsHandleCreated && frmProgress.InvokeRequired)
             {
                 frmProgress.BeginInvoke((Action)delegate
@@ -708,6 +711,9 @@ namespace ReportsFastReport
 
         private static void HideReportFrm()
         {
+            if (frmProgress == null || frmProgress.IsDisposed)
+                return;
+
             if (frmProgress.IsHandleCreated)
             {
                 if (frmProgress.InvokeRequired)
@@ -800,17 +806,6 @@ namespace ReportsFastReport
                 PrintRpt(rptReport, 1);
                 Application.DoEvents();
                 AddedtValue(ref rptReport, "edtbilltype", "------客户联------");
-                PrintRpt(rptReport, 1);
-            }
-            catch { }
-        }
-        public static void PrintPayAmount(decimal amount)
-        {
-            try
-            {
-                string file = Application.StartupPath + @"\Reports\rptPayAmount.frx";
-                rptReport.Load(file);//加载报表模板文件
-                AddedtValue(ref rptReport, "lblamount", amount.ToString());
                 PrintRpt(rptReport, 1);
             }
             catch { }

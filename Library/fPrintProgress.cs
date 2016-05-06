@@ -19,14 +19,6 @@ namespace Library
         private delegate void ThreadWork(int o);
         Thread thread;
 
-
-        public static bool ShowInputNum()
-        {
-            frmPrintProgress frm = new frmPrintProgress();
-            frm.ShowDialog();
-            bool ret=frm.DialogResult == DialogResult.OK ;
-            return ret; 
-        }
         public frmPrintProgress()
         {
             InitializeComponent();

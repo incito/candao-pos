@@ -5,7 +5,8 @@
         xmlns:kypos="clr-namespace:KYPOS"
         Width="820" Height="690" Title="报表查看"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="true"
-        Loaded="ReportViewWindow_OnLoaded">
+        Loaded="ReportViewWindow_OnLoaded"
+        Closing="ReportViewWindow_OnClosing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

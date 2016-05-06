@@ -24,9 +24,25 @@ namespace Main
         public static extern bool LockWindowUpdate(IntPtr hwnd);
 
         private List<UcTable> _tableControls;
-        private const int Rowcount = 8;
+        /// <summary>
+        /// 列个数。
+        /// </summary>
+        private const int Columncount = 8;
+        /// <summary>
+        /// 行个数。
+        /// </summary>
+        private const int RowCount = 6;
+        /// <summary>
+        /// 餐台总页数。
+        /// </summary>
+        private int totalTablePageCount = 1;
+        /// <summary>
+        /// 当前餐台页数。
+        /// </summary>
+        private int curTablePage = 1;
+
         private int btnWidth = 115;
-        private int btnHeight = 90;
+        private int btnHeight = 78;
         private int btnSpace = 9;
 
         private bool _isForcedEndWorkModel;//是否是强制结业模式。
@@ -172,7 +188,10 @@ namespace Main
                     return;
                 }
 
-                TableInfos = result.Item2.Where(t=>t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
+                TableInfos = result.Item2.Where(t => t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
+                totalTablePageCount = (TableInfos.Count + Columncount * RowCount - 1) / (Columncount * RowCount);
+                panelPage.Visible = totalTablePageCount > 1;
+                UpdatePageButtonEnableStatus();
                 CreateTableControls();
 
                 lblState0.Text = string.Format("空闲({0})", TableInfos.Count(t => t.TableStatus == EnumTableStatus.Idle));
@@ -185,6 +204,12 @@ namespace Main
             }
         }
 
+        private void UpdatePageButtonEnableStatus()
+        {
+            btnUp.Enabled = curTablePage > 1;
+            btnDown.Enabled = curTablePage < totalTablePageCount;
+        }
+
         /// <summary>
         /// 创建餐台控件。
         /// </summary>
@@ -192,9 +217,7 @@ namespace Main
         {
             try
             {
-                //frmProgress.ShowProgress("正在加载桌台资料...");
                 LockWindowUpdate(Handle);
-                //frmProgress.frm.SetProgress("正在加载桌台资料...", TableInfos.Count, 0);
 
                 int idx = 0;
                 if (_tableControls != null)
@@ -206,11 +229,12 @@ namespace Main
                     }
                 }
                 _tableControls = new List<UcTable>();
-
-                foreach (var tableInfo in TableInfos)
+                var temp = TableInfos.Skip((curTablePage - 1) * Columncount * RowCount);
+                temp = temp.Take(Columncount * RowCount);
+                foreach (var tableInfo in temp)
                 {
-                    var colindex = (idx % Rowcount);
-                    var rowindex = idx / Rowcount;
+                    var colindex = (idx % Columncount);
+                    var rowindex = idx / Columncount;
                     var table = new UcTable(tableInfo)
                     {
                         Parent = pnlMain,
@@ -239,7 +263,7 @@ namespace Main
         {
             if (_tableControls != null)
             {
-                var idleTableControls = _tableControls.Where(t => ((TableInfo)t.Tag).TableStatus == EnumTableStatus.Idle).ToList();
+                var idleTableControls = _tableControls.Where(t => t.TableInfo.TableStatus == EnumTableStatus.Idle).ToList();
                 idleTableControls.ForEach(t => t.Enabled = false);
             }
             btnShapping.Enabled = false;
@@ -431,9 +455,23 @@ namespace Main
         private void btnReport_Click(object sender, EventArgs e)
         {
             timer2.Stop();
-            (new ReportViewWindow()).ShowDialog();
+            ReportViewWindow.Instance.ShowDialog();
             RefreshAllTableStatus();
             timer2.Start();
+        }
+
+        private void btnUp_Click(object sender, EventArgs e)
+        {
+            curTablePage--;
+            CreateTableControls();
+            UpdatePageButtonEnableStatus();
+        }
+
+        private void btnDown_Click(object sender, EventArgs e)
+        {
+            curTablePage++;
+            CreateTableControls();
+            UpdatePageButtonEnableStatus();
         }
     }
 }

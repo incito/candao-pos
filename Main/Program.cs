@@ -34,21 +34,19 @@ namespace Main
             Application.SetCompatibleTextRenderingDefault(false);
             Globals.ProductVersion = Application.ProductVersion;
             frmStart.ShowStart();
-            frmStart.frm.Update();
-            Thread.Sleep(50);
-            frmStart.frm.setMsg("加载样式...");
-            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);//捕获系统所产生的异常。
-            Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
-            frmStart.frm.setMsg("检测实例...");
+            frmStart.frm.setMsg("程序初始化...");
+            ReportViewWindow.Instance.Init();
+
+            Application.ThreadException += Application_ThreadException;//捕获系统所产生的异常。
+            Application.ApplicationExit += Application_ApplicationExit;
             Process instance = RunningInstance();
             if (instance != null)//已经有一个实例在运行
             {
                 HandleRunningInstance(instance);
                 return;
             }
-            frmStart.frm.setMsg("读取配置文件...");
-            SystemConfig.ReadSettings(); //读取用户自定义设置
 
+            SystemConfig.ReadSettings(); //读取用户自定义设置
             BonusSkins.Register();//注册Dev酷皮肤
             //OfficeSkins.Register();////注册Office样式的皮肤
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
@@ -84,6 +82,7 @@ namespace Main
             }
 
             frmStart.frm.setMsg("检查之前是否结业...");
+            Application.DoEvents();
             var endworkResult = service.CheckWhetherTheLastEndWork();
             if (!string.IsNullOrEmpty(endworkResult.Item1))
             {
@@ -136,9 +135,11 @@ namespace Main
             {
                 if (!RestClient.OpenUp("", "", 0, out reinfo))
                 {
-                    //Thread.Sleep(1000);
                     try
-                    { frmStart.frm.Close(); }
+                    {
+                        //FrmStartFlash.Instance.Close();
+                        frmStart.frm.Close();
+                    }
                     catch { }
                     if (!frmPermission.ShowPermission())
                     {

@@ -159,6 +159,9 @@ namespace WebServiceReference.ServiceImpl
                 var addr = string.Format("http://{0}/{1}/tip/tipList.json", RestClient.server, RestClient.apiPath);
                 var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
                 var response = HttpHelper.HttpGet<GetTipInfoResponse>(addr, request);
+                if (response == null)
+                    return new Tuple<string, TipFullInfo>("获取小费统计信息失败。", null);
+
                 if (!response.IsSuccess)
                 {
                     var msg = !string.IsNullOrEmpty(response.msg) ? response.msg : "获取小费统计信息失败。";

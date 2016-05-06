@@ -22,11 +22,57 @@ namespace KYPOS
     /// </summary>
     public partial class ReportViewWindow
     {
+        #region Fields
+
+        private static ReportViewWindow _instance;
+        private static readonly object LockObj = new object();
+
+        /// <summary>
+        /// 当前选中的周期。
+        /// </summary>
+        private ToggleButton _curSelectTbBtn;
+
+        /// <summary>
+        /// 品项全信息。
+        /// </summary>
+        private DishSaleFullInfo _dishSaleFullInfo;
+
+        /// <summary>
+        /// 当前视图序号。
+        /// </summary>
+        private int _curViewIndex;
+
+        private const int PageSize = 11;
+
+        #endregion
+
         #region Constructor
 
-        public ReportViewWindow()
+        private ReportViewWindow()
         {
             InitializeComponent();
+        }
+
+        #endregion
+
+        #region Properties
+
+        public static ReportViewWindow Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (LockObj)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new ReportViewWindow();
+                        }
+                    }
+                }
+                return _instance;
+            }
         }
 
         #endregion
@@ -35,8 +81,7 @@ namespace KYPOS
 
         private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
-            Close();
+            Hide();
         }
 
         private void ReportViewWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -48,5 +93,16 @@ namespace KYPOS
         }
 
         #endregion
+
+        public void Init()
+        {
+            
+        }
+
+        private void ReportViewWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            Hide();
+            e.Cancel = true;
+        }
     }
 }

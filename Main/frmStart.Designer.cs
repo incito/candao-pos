@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace Main
 {
     partial class frmStart
@@ -28,19 +30,11 @@ namespace Main
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblMsg = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.pbxMain = new System.Windows.Forms.PictureBox();
+            this.LbMsg = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbxMain)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lblMsg
-            // 
-            this.lblMsg.AutoSize = true;
-            this.lblMsg.Location = new System.Drawing.Point(13, 341);
-            this.lblMsg.Name = "lblMsg";
-            this.lblMsg.Size = new System.Drawing.Size(0, 14);
-            this.lblMsg.TabIndex = 17;
             // 
             // label6
             // 
@@ -65,6 +59,18 @@ namespace Main
             this.pbxMain.TabStop = false;
             this.pbxMain.Click += new System.EventHandler(this.pbxMain_Click);
             // 
+            // LbMsg
+            // 
+            this.LbMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LbMsg.AutoSize = true;
+            this.LbMsg.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LbMsg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.LbMsg.Location = new System.Drawing.Point(12, 298);
+            this.LbMsg.Name = "LbMsg";
+            this.LbMsg.Size = new System.Drawing.Size(68, 16);
+            this.LbMsg.TabIndex = 18;
+            this.LbMsg.Text = "提示信息";
+            // 
             // frmStart
             // 
             this.Appearance.BackColor = System.Drawing.SystemColors.Control;
@@ -72,7 +78,7 @@ namespace Main
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(561, 321);
-            this.Controls.Add(this.lblMsg);
+            this.Controls.Add(this.LbMsg);
             this.Controls.Add(this.pbxMain);
             this.Controls.Add(this.label6);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -90,6 +96,6 @@ namespace Main
 
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.PictureBox pbxMain;
-        private System.Windows.Forms.Label lblMsg;
+        private System.Windows.Forms.Label LbMsg;
     }
 }
