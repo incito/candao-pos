@@ -741,6 +741,7 @@ namespace Main
             if (userid == null)
                 userid = Globals.UserInfo.UserID;
             t_shopping dishinfo = new t_shopping();
+            dishinfo.PrimaryKey = Guid.NewGuid().ToString();
             dishinfo.Orderid = Globals.CurrOrderInfo.orderid;
             dishinfo.Userid = userid;// Globals.UserInfo.UserID;
             dishinfo.Ordertime = DateTime.Now;

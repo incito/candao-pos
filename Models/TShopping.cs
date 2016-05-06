@@ -214,83 +214,38 @@ namespace Models
             set { _avoid = value; }
         }
 
+        public string PrimaryKey { get; set; }
 
         #endregion Model
         public static  void createShoppTable(ref DataTable shopptable)
         {
             DataTable tbyh=new DataTable();
             tbyh.Columns.Clear();
-            var column = DataTableHelper.CreateDataColumn(typeof (string), "账单号", "orderid", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "下单员工", "userid", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(DateTime), "下单时间", "ordertime", DateTime.MinValue);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(int), "状态", "orderstatus", 0);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(double), "数量", "dishnum", 0d);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "桌号", "tableid", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "菜品编号", "dishid", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "忌口", "avoid", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(int), "编号", "dishidleft", 1);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "菜品名称", "title", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "单位", "dishunit", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(double), "会员价", "memberprice", 0d);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(double), "单价", "price", 0d);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(double), "单价2", "price2", 0d);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(double), "金额", "amount", 0d);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "source", "source", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "parentdishid", "parentdishid", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "groupid", "groupid", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "ispot", "ispot", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(int), "ordertype", "ordertype", 1);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(string), "Groupid2", "Groupid2", "");
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(int), "weigh", "weigh", 1);
-            tbyh.Columns.Add(column);
-
-            column = DataTableHelper.CreateDataColumn(typeof(int), "primarydishtype", "primarydishtype", 1);
-            tbyh.Columns.Add(column);
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "账单号", "orderid", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "下单员工", "userid", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "标识符", "primarykey", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(DateTime), "下单时间", "ordertime", DateTime.MinValue));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(int), "状态", "orderstatus", 0));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(double), "数量", "dishnum", 0d));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "桌号", "tableid", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "菜品编号", "dishid", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "忌口", "avoid", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(int), "编号", "dishidleft", 1));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "菜品名称", "title", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "单位", "dishunit", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", ""));//中英文国际化的原始单位。
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(double), "会员价", "memberprice", 0d));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(double), "单价", "price", 0d));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(double), "单价2", "price2", 0d));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(double), "金额", "amount", 0d));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "source", "source", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "parentdishid", "parentdishid", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "groupid", "groupid", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "ispot", "ispot", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(int), "ordertype", "ordertype", 1));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "Groupid2", "Groupid2", ""));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(int), "weigh", "weigh", 1));
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(int), "primarydishtype", "primarydishtype", 1));
             
             shopptable = tbyh;
         }
@@ -321,6 +276,7 @@ namespace Models
             }
             DataRow dr = shopptable.NewRow();
             dr["orderid"] = dishrow.Orderid;
+            dr["primarykey"] = dishrow.PrimaryKey;
             dr["userid"] = dishrow.Userid;
             dr["ordertime"] = dishrow.Ordertime;
             dr["orderstatus"] = dishrow.Orderstatus;

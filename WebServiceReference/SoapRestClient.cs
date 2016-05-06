@@ -2150,7 +2150,7 @@ namespace WebServiceReference
             {
                 string Groupid = dr["Groupid"].ToString();
                 string Orderstatus = dr["Orderstatus"].ToString();
-                string primarykey = getGUID();
+                string primarykey = dr["primarykey"].ToString();
                 if (Groupid.Equals("") || Orderstatus.Equals("0"))
                 {
                     writer.WriteStartObject();
