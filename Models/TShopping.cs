@@ -475,6 +475,7 @@ namespace Models
                 return;
             JObject ja =(JObject)jrcj[0];
             t_shopping dishinfo = new t_shopping();
+            dishinfo.PrimaryKey = Guid.NewGuid().ToString();
             dishinfo.Orderid = CurrOrderInfo.orderid;
             dishinfo.Userid = userid;
             dishinfo.Ordertime = DateTime.Now;

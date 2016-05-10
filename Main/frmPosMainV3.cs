@@ -551,14 +551,20 @@ namespace Main
                                 membercard = Globals.CurrOrderInfo.memberno;
                                 edtMemberCard.Text = membercard;
                             }
+
+                            getOrderInvoiceTitle();
+                            amountml = 0;
+                            amountroundtz = 0;
+                            this.SetButtonEnable(true);
+
+                            DataView dv = new DataView(Globals.OrderTable) { AllowNew = false };
+                            this.dgvBill.AutoGenerateColumns = false;
+                            this.dgvBill.DataSource = dv;
+                            this.dgvBill.Tag = 0;
+                            showGridWeight();
                         }
 
-                        //ShowLeftInfo();
-                        getOrderInvoiceTitle();
-                        amountml = 0;
-                        amountroundtz = 0;
                         getAmount();
-                        this.SetButtonEnable(true);
                     }
             }
             catch (CustomException ex)
@@ -575,16 +581,6 @@ namespace Main
                 edtRoom.Focus();
                 edtRoom.SelectAll();
             }
-            try
-            {
-                DataView dv = new DataView(Globals.OrderTable);
-                dv.AllowNew = false;
-                this.dgvBill.AutoGenerateColumns = false;
-                this.dgvBill.DataSource = dv;
-                this.dgvBill.Tag = 0;
-                showGridWeight();
-            }
-            catch { }
             this.Cursor = Cursors.Default;
         }
         private void edtRoom_KeyPress(object sender, KeyPressEventArgs e)
@@ -1261,6 +1257,7 @@ namespace Main
             //
             try
             {
+                Opentable2();
                 ReportAmount ra;
                 ra.orderid = Globals.CurrOrderInfo.orderid;
                 ra.amount = Math.Round(Convert.ToDecimal(Globals.CurrTableInfo.amount), 2);
@@ -4838,7 +4835,6 @@ namespace Main
                 try
                 {
                     RestClient.setMemberPrice(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard);
-                    Opentable2();
                 }
                 catch { }
                 if (iswm)

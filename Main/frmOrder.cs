@@ -823,12 +823,14 @@ namespace Main
                     {
                         potDishInfo.PotInfo.Orderid = Globals.CurrOrderInfo.orderid;
                         potDishInfo.PotInfo.Userid = userid;// Globals.UserInfo.UserID;
+                        potDishInfo.PotInfo.PrimaryKey = Guid.NewGuid().ToString();
                         potDishInfo.PotInfo.Ordertime = DateTime.Now;
                         potDishInfo.PotInfo.Orderstatus = 0;
                         potDishInfo.PotInfo.Tableid = Globals.CurrTableInfo.tableNo;
                         potDishInfo.PotInfo.Primarydishtype = 1;
                         potDishInfo.FishDishInfo1.Orderid = Globals.CurrOrderInfo.orderid;
                         potDishInfo.FishDishInfo1.Userid = userid;// Globals.UserInfo.UserID;
+                        potDishInfo.FishDishInfo1.PrimaryKey = Guid.NewGuid().ToString();
                         potDishInfo.FishDishInfo1.Ordertime = DateTime.Now;
                         potDishInfo.FishDishInfo1.Orderstatus = 0;
                         potDishInfo.FishDishInfo1.Tableid = Globals.CurrTableInfo.tableNo;
@@ -851,6 +853,7 @@ namespace Main
                         {
                             potDishInfo.FishDishInfo2.Orderid = Globals.CurrOrderInfo.orderid;
                             potDishInfo.FishDishInfo2.Userid = userid;// Globals.UserInfo.UserID;
+                            potDishInfo.FishDishInfo2.PrimaryKey = Guid.NewGuid().ToString();
                             potDishInfo.FishDishInfo2.Ordertime = DateTime.Now;
                             potDishInfo.FishDishInfo2.Tableid = Globals.CurrTableInfo.tableNo;
                             potDishInfo.FishDishInfo2.Orderstatus = 3;

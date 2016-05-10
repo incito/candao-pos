@@ -302,8 +302,10 @@ namespace ReportsFastReport
             //dtList = Bill_Order.getOrder_List(jrList);
             dtList = PrintDataHelper.GetOrderListDb(jrList);
             dtJs = Bill_Order.getOrder_Js(jrJS);
-            tipAmount = Convert.ToDecimal(((JObject)jrOrder[0])["tipAmount"].ToString());
-            tipPaid = Convert.ToDecimal(((JObject)jrOrder[0])["tipPaid"].ToString());
+            var tipAmountJK = ((JObject)jrOrder[0])["tipAmount"];
+            tipAmount = tipAmountJK != null ? Convert.ToDecimal(tipAmountJK) : 0m;
+            var tipPaidJK = ((JObject)jrOrder[0])["tipPaid"];
+            tipPaid = tipPaidJK != null ? Convert.ToDecimal(tipPaidJK) : 0m;
             DataTable dtSettlementDetail = Bill_Order.GetSettlementDetailTable(GetSettlementDetailList((JObject)jrOrder[0]));
             rptReport.Clear();
             string file = Application.StartupPath + @"\Reports\rptBill2.frx";
