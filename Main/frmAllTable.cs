@@ -352,40 +352,10 @@ namespace Main
                 Warning("还有未结账的餐台，不能结业。");
                 return;
             }
+            timer2.Enabled = false;
             if (AskQuestion("确定要现在结业吗？"))
                 CommonHelper.EndWork();
-        }
-
-        private object EndWorkSyncDataProcess(object param)
-        {
-            try
-            {
-                return RestClient.jdesyndata();
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private void EndWorkSyncDataComplete(object param)
-        {
-            if (!(bool)param)
-            {
-                if (AskQuestion("发生异常，上传失败，是否重新上传？"))
-                {
-                    TaskService.Start(null, EndWorkSyncDataProcess, EndWorkSyncDataComplete, "数据正在上传...");
-                    return;
-                }
-
-                Warning("结业成功，但数据上传失败。");
-            }
-            else
-            {
-                Warning("结业成功!");
-            }
-            Application.Exit();
-            Close();
+            timer2.Enabled = true;
         }
 
         private void button3_Click_1(object sender, EventArgs e)

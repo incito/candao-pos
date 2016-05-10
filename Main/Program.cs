@@ -211,12 +211,15 @@ namespace Main
             Msg.ShowException(e.Exception);//处理系统异常
         }
 
-        private static frmAllTable _mainForm = null;
+        static Program()
+        {
+            MainForm = null;
+        }
 
         /// <summary>
         /// MDI主窗体
         /// </summary>        
-        public static frmAllTable MainForm { get { return _mainForm; } set { _mainForm = value; } }
+        public static frmAllTable MainForm { get; set; }
 
         /// <summary>
         ///检查程序是否运行多实例

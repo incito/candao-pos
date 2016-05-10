@@ -133,6 +133,18 @@
     <Compile Include="frmBase.Designer.cs">
       <DependentUpon>frmBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="JdeLoadingWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JdeLoadingWindow.Designer.cs">
+      <DependentUpon>JdeLoadingWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JdeReloadSelectWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JdeReloadSelectWindow.Designer.cs">
+      <DependentUpon>JdeReloadSelectWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="OtherMachineNoClearnWarningWindow.xaml.cs">
       <DependentUpon>OtherMachineNoClearnWarningWindow.xaml</DependentUpon>
     </Compile>
@@ -223,6 +235,12 @@
     <EmbeddedResource Include="frmBase.resx">
       <DependentUpon>frmBase.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JdeLoadingWindow.resx">
+      <DependentUpon>JdeLoadingWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JdeReloadSelectWindow.resx">
+      <DependentUpon>JdeReloadSelectWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ResImage.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -329,7 +347,7 @@
     <None Include="Resources\24_ViewContent.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\24_Void.ico" />
+    <Resource Include="Resources\24_Void.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\4546.ico" />
@@ -432,6 +450,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ChangeShift_Dis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\error.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

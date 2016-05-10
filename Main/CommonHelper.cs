@@ -19,6 +19,16 @@ namespace KYPOS
     /// </summary>
     public class CommonHelper
     {
+        private static JdeLoadingWindow loadingWnd;
+
+        private static string errMsg;
+
+        static CommonHelper()
+        {
+            loadingWnd = new JdeLoadingWindow();
+            errMsg = "";
+        }
+
         /// <summary>
         /// 清理所有POS机。都清理成功返回true，否则返回false。
         /// </summary>
@@ -95,17 +105,25 @@ namespace KYPOS
                 {
                     do
                     {
-                        try
+                        ThreadPool.QueueUserWorkItem(t =>
                         {
-                            if (RestClient.jdesyndata())//调用上传回调
-                                break;
-                        }
-                        catch (Exception)
+                            errMsg = RestClient.jdesyndata();
+                            if (loadingWnd != null && !loadingWnd.IsDisposed)
+                                loadingWnd.BeginInvoke((Action) delegate
+                                {
+                                    loadingWnd.Close();
+                                });
+                        });
+                        if (loadingWnd.IsDisposed)
+                            loadingWnd = new JdeLoadingWindow();
+                        loadingWnd.ShowDialog();
+                        if (string.IsNullOrEmpty(errMsg))
                         {
-                            // ignored
+                            Msg.Warning("上传营业数据成功");
+                            break;
                         }
-
-                        if (!frmBase.AskQuestion("发生异常，上传失败，是否重新上传？"))
+                        JdeReloadSelectWindow reloadWnd = new JdeReloadSelectWindow(errMsg);
+                        if (reloadWnd.ShowDialog() != DialogResult.OK)
                             break;
                     } while (true);
 
