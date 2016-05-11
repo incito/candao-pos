@@ -417,7 +417,6 @@ namespace Main
                         catch { }
                         getAmount();
                         this.SetButtonEnable(true);
-                        btnml_Click(btnml, null);
                         membercard = Globals.CurrOrderInfo.memberno;
                         edtMemberCard.Text = membercard;
                         getOrderInvoiceTitle();
@@ -1813,42 +1812,36 @@ namespace Main
                 {
                     try
                     {
-                        /*string[] strs = (ysamount*10).ToString().Split('.');
-                        string tmpstr = strs[1];
-                        amountml = float.Parse("0." + tmpstr)/10;*/
-                        string[] strs = (ysamount * 100).ToString().Split('.');
-                        string tmpstr = strs[1];
-                        amountml = float.Parse("0." + tmpstr) / 100;
-
+                        amountml = ysamount - ((float)Math.Floor(ysamount * 10) / 10);
                     }
-                    catch { }
-                }
-                else
-                    if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
+                    catch (Exception ex)
                     {
-                        try
-                        {
-
-                            string[] strs = (ysamount * 10).ToString().Split('.');
-                            string tmpstr = strs[1];
-                            amountml = float.Parse("0." + tmpstr) / 10;
-                        }
-                        catch { }
+                        AllLog.Instance.E("抹零处理（分）时异常", ex);
                     }
-                    else
-                        if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
-                        {
-                            try
-                            {
-                                /*string[] strs = (ysamount / 10).ToString().Split('.');
-                                string tmpstr = strs[1];
-                                amountml = float.Parse("0." + tmpstr)*10;*/
-                                string[] strs = ysamount.ToString().Split('.');
-                                string tmpstr = strs[1];
-                                amountml = float.Parse("0." + tmpstr);
-                            }
-                            catch { }
-                        }
+                }
+                else if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
+                {
+                    try
+                    {
+                        amountml = ysamount - (float)Math.Floor(ysamount);
+                    }
+                    catch (Exception ex)
+                    {
+                        AllLog.Instance.E("抹零处理（角）时异常", ex);
+                    }
+                }
+                else if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
+                {
+                    try
+                    {
+                        amountml = ysamount - ((float)Math.Floor(ysamount / 10) * 10);
+                    }
+                    catch (Exception ex)
+                    {
+                        AllLog.Instance.E("抹零处理（元）时异常", ex);
+                    }
+                }
+                amountml = (float) Math.Round(amountml, 2);
                 return;
             }
 

@@ -769,7 +769,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static string GetServerTableList(string OrderID, string UserID)
         {
-            string address = String.Format("http://" + DataServer + "/datasnap/rest/TServerMethods1/GetServerTableList/{0}/{1} ", OrderID, UserID);
+            string address = String.Format("http://" + DataServer + "/datasnap/rest/TServerMethods1/GetServerTableList_2/{0}/{1} ", OrderID, UserID);
             AllLog.Instance.I(string.Format("【GetServerTableList】 OrderID：{0}。", OrderID));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【GetServerTableList】 result：{0}。", jsonResult));
