@@ -73,6 +73,7 @@
     <Compile Include="Request\BillingTipRequest.cs" />
     <Compile Include="Request\GetDishSaleRequest.cs" />
     <Compile Include="Request\BigDataDeviceActionRequest.cs" />
+    <Compile Include="Request\SetCouponFavorRequest.cs" />
     <Compile Include="Request\BigDataHeader.cs" />
     <Compile Include="Request\BigDataRegisterRequest.cs" />
     <Compile Include="Request\BigDataRequest.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Response\JavaResponse.cs" />
     <Compile Include="Response\JavaResponse1.cs" />
     <Compile Include="Response\PeriodTimeResponse.cs" />
+    <Compile Include="Response\SetCouponFavorResponse.cs" />
     <Compile Include="Response\TableInfoResponse.cs" />
     <Compile Include="Response\UnclearPosResponse.cs" />
     <Compile Include="RestaurantTradeTime.cs" />

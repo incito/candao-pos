@@ -249,6 +249,7 @@ namespace Models
             
             shopptable = tbyh;
         }
+
         /// <summary>
         /// 往购物车内增加一行数据
         /// </summary>
@@ -275,6 +276,7 @@ namespace Models
                 }
             }
             DataRow dr = shopptable.NewRow();
+            dr["primarykey"] = dishrow.PrimaryKey;
             dr["orderid"] = dishrow.Orderid;
             dr["primarykey"] = dishrow.PrimaryKey;
             dr["userid"] = dishrow.Userid;

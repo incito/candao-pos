@@ -111,7 +111,7 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.pnlCash = new System.Windows.Forms.Panel();
             this.lblInvoice = new System.Windows.Forms.Label();
-            this.xtraTabControl2 = new DevExpress.XtraTab.XtraTabControl();
+            this.xtraCoupon = new DevExpress.XtraTab.XtraTabControl();
             this.xtp1 = new DevExpress.XtraTab.XtraTabPage();
             this.pnlyh = new System.Windows.Forms.Panel();
             this.btndown = new System.Windows.Forms.Button();
@@ -138,9 +138,10 @@
             this.xtp3 = new DevExpress.XtraTab.XtraTabPage();
             this.xtp4 = new DevExpress.XtraTab.XtraTabPage();
             this.xtp5 = new DevExpress.XtraTab.XtraTabPage();
-            this.xtraTabPage5 = new DevExpress.XtraTab.XtraTabPage();
+            this.xtra6 = new DevExpress.XtraTab.XtraTabPage();
             this.xtpOther = new DevExpress.XtraTab.XtraTabPage();
             this.xtpCo = new DevExpress.XtraTab.XtraTabPage();
+            this.xtraUn = new DevExpress.XtraTab.XtraTabPage();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.pnlNum = new System.Windows.Forms.Panel();
@@ -268,8 +269,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             this.panel4.SuspendLayout();
             this.pnlCash.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).BeginInit();
-            this.xtraTabControl2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xtraCoupon)).BeginInit();
+            this.xtraCoupon.SuspendLayout();
             this.xtp1.SuspendLayout();
             this.pnlyh.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -1260,7 +1261,7 @@
             // 
             this.pnlCash.BackColor = System.Drawing.Color.White;
             this.pnlCash.Controls.Add(this.lblInvoice);
-            this.pnlCash.Controls.Add(this.xtraTabControl2);
+            this.pnlCash.Controls.Add(this.xtraCoupon);
             this.pnlCash.Controls.Add(this.xtraTabControl1);
             this.pnlCash.Controls.Add(this.label6);
             this.pnlCash.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1280,37 +1281,38 @@
             this.lblInvoice.TabIndex = 302;
             this.lblInvoice.Tag = "171";
             // 
-            // xtraTabControl2
+            // xtraCoupon
             // 
-            this.xtraTabControl2.Appearance.BackColor = System.Drawing.Color.White;
-            this.xtraTabControl2.Appearance.BackColor2 = System.Drawing.Color.White;
-            this.xtraTabControl2.Appearance.BorderColor = System.Drawing.Color.White;
-            this.xtraTabControl2.Appearance.Options.UseBackColor = true;
-            this.xtraTabControl2.Appearance.Options.UseBorderColor = true;
-            this.xtraTabControl2.AppearancePage.Header.Font = new System.Drawing.Font("幼圆", 16F);
-            this.xtraTabControl2.AppearancePage.Header.Options.UseFont = true;
-            this.xtraTabControl2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            this.xtraTabControl2.BorderStylePage = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            this.xtraTabControl2.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.xtraTabControl2.HeaderButtons = DevExpress.XtraTab.TabButtons.None;
-            this.xtraTabControl2.Location = new System.Drawing.Point(9, 10);
-            this.xtraTabControl2.MultiLine = DevExpress.Utils.DefaultBoolean.False;
-            this.xtraTabControl2.Name = "xtraTabControl2";
-            this.xtraTabControl2.PaintStyleName = "Flat";
-            this.xtraTabControl2.SelectedTabPage = this.xtp1;
-            this.xtraTabControl2.Size = new System.Drawing.Size(659, 199);
-            this.xtraTabControl2.TabIndex = 277;
-            this.xtraTabControl2.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
+            this.xtraCoupon.Appearance.BackColor = System.Drawing.Color.White;
+            this.xtraCoupon.Appearance.BackColor2 = System.Drawing.Color.White;
+            this.xtraCoupon.Appearance.BorderColor = System.Drawing.Color.White;
+            this.xtraCoupon.Appearance.Options.UseBackColor = true;
+            this.xtraCoupon.Appearance.Options.UseBorderColor = true;
+            this.xtraCoupon.AppearancePage.Header.Font = new System.Drawing.Font("幼圆", 16F);
+            this.xtraCoupon.AppearancePage.Header.Options.UseFont = true;
+            this.xtraCoupon.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.xtraCoupon.BorderStylePage = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.xtraCoupon.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.xtraCoupon.HeaderButtons = DevExpress.XtraTab.TabButtons.None;
+            this.xtraCoupon.Location = new System.Drawing.Point(0, 5);
+            this.xtraCoupon.MultiLine = DevExpress.Utils.DefaultBoolean.False;
+            this.xtraCoupon.Name = "xtraCoupon";
+            this.xtraCoupon.PaintStyleName = "Flat";
+            this.xtraCoupon.SelectedTabPage = this.xtp1;
+            this.xtraCoupon.Size = new System.Drawing.Size(671, 203);
+            this.xtraCoupon.TabIndex = 277;
+            this.xtraCoupon.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtp1,
             this.xtp2,
             this.xtp3,
             this.xtp4,
             this.xtp5,
-            this.xtraTabPage5,
+            this.xtra6,
             this.xtpOther,
-            this.xtpCo});
-            this.xtraTabControl2.Tag = "0";
-            this.xtraTabControl2.SelectedPageChanged += new DevExpress.XtraTab.TabPageChangedEventHandler(this.xtraTabControl2_SelectedPageChanged);
+            this.xtpCo,
+            this.xtraUn});
+            this.xtraCoupon.Tag = "0";
+            this.xtraCoupon.SelectedPageChanged += new DevExpress.XtraTab.TabPageChangedEventHandler(this.xtraTabControl2_SelectedPageChanged);
             // 
             // xtp1
             // 
@@ -1325,7 +1327,7 @@
             this.xtp1.Controls.Add(this.pnlyh);
             this.xtp1.Font = new System.Drawing.Font("Tahoma", 16F);
             this.xtp1.Name = "xtp1";
-            this.xtp1.Size = new System.Drawing.Size(659, 168);
+            this.xtp1.Size = new System.Drawing.Size(671, 172);
             this.xtp1.Tag = "05";
             this.xtp1.Text = "团购";
             this.xtp1.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
@@ -1394,7 +1396,7 @@
             this.btnyh18.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh18.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh18.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh18.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh18.ForeColor = System.Drawing.Color.Black;
             this.btnyh18.Location = new System.Drawing.Point(487, 104);
             this.btnyh18.Name = "btnyh18";
             this.btnyh18.Size = new System.Drawing.Size(93, 46);
@@ -1402,13 +1404,14 @@
             this.btnyh18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh18.UseVisualStyleBackColor = true;
             this.btnyh18.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh18.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh12
             // 
             this.btnyh12.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh12.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh12.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh12.ForeColor = System.Drawing.Color.Black;
             this.btnyh12.Location = new System.Drawing.Point(487, 53);
             this.btnyh12.Name = "btnyh12";
             this.btnyh12.Size = new System.Drawing.Size(93, 46);
@@ -1416,13 +1419,14 @@
             this.btnyh12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh12.UseVisualStyleBackColor = true;
             this.btnyh12.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh12.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh6
             // 
             this.btnyh6.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh6.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh6.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh6.ForeColor = System.Drawing.Color.Black;
             this.btnyh6.Location = new System.Drawing.Point(487, 3);
             this.btnyh6.Name = "btnyh6";
             this.btnyh6.Size = new System.Drawing.Size(93, 46);
@@ -1430,13 +1434,14 @@
             this.btnyh6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh6.UseVisualStyleBackColor = true;
             this.btnyh6.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh6.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh17
             // 
             this.btnyh17.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh17.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh17.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh17.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh17.ForeColor = System.Drawing.Color.Black;
             this.btnyh17.Location = new System.Drawing.Point(390, 104);
             this.btnyh17.Name = "btnyh17";
             this.btnyh17.Size = new System.Drawing.Size(93, 46);
@@ -1444,13 +1449,14 @@
             this.btnyh17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh17.UseVisualStyleBackColor = true;
             this.btnyh17.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh17.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh16
             // 
             this.btnyh16.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh16.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh16.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh16.ForeColor = System.Drawing.Color.Black;
             this.btnyh16.Location = new System.Drawing.Point(293, 104);
             this.btnyh16.Name = "btnyh16";
             this.btnyh16.Size = new System.Drawing.Size(93, 46);
@@ -1458,13 +1464,14 @@
             this.btnyh16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh16.UseVisualStyleBackColor = true;
             this.btnyh16.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh16.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh15
             // 
             this.btnyh15.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh15.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh15.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh15.ForeColor = System.Drawing.Color.Black;
             this.btnyh15.Location = new System.Drawing.Point(196, 104);
             this.btnyh15.Name = "btnyh15";
             this.btnyh15.Size = new System.Drawing.Size(93, 46);
@@ -1472,13 +1479,14 @@
             this.btnyh15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh15.UseVisualStyleBackColor = true;
             this.btnyh15.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh15.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh14
             // 
             this.btnyh14.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh14.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh14.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh14.ForeColor = System.Drawing.Color.Black;
             this.btnyh14.Location = new System.Drawing.Point(99, 104);
             this.btnyh14.Name = "btnyh14";
             this.btnyh14.Size = new System.Drawing.Size(93, 46);
@@ -1486,13 +1494,14 @@
             this.btnyh14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh14.UseVisualStyleBackColor = true;
             this.btnyh14.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh14.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh13
             // 
             this.btnyh13.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh13.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh13.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh13.ForeColor = System.Drawing.Color.Black;
             this.btnyh13.Location = new System.Drawing.Point(3, 104);
             this.btnyh13.Name = "btnyh13";
             this.btnyh13.Size = new System.Drawing.Size(93, 46);
@@ -1500,13 +1509,14 @@
             this.btnyh13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh13.UseVisualStyleBackColor = true;
             this.btnyh13.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh13.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh11
             // 
             this.btnyh11.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh11.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh11.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh11.ForeColor = System.Drawing.Color.Black;
             this.btnyh11.Location = new System.Drawing.Point(390, 53);
             this.btnyh11.Name = "btnyh11";
             this.btnyh11.Size = new System.Drawing.Size(93, 46);
@@ -1514,13 +1524,14 @@
             this.btnyh11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh11.UseVisualStyleBackColor = true;
             this.btnyh11.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh11.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh10
             // 
             this.btnyh10.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh10.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh10.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh10.ForeColor = System.Drawing.Color.Black;
             this.btnyh10.Location = new System.Drawing.Point(293, 53);
             this.btnyh10.Name = "btnyh10";
             this.btnyh10.Size = new System.Drawing.Size(93, 46);
@@ -1528,13 +1539,14 @@
             this.btnyh10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh10.UseVisualStyleBackColor = true;
             this.btnyh10.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh10.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh9
             // 
             this.btnyh9.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh9.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh9.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh9.ForeColor = System.Drawing.Color.Black;
             this.btnyh9.Location = new System.Drawing.Point(196, 53);
             this.btnyh9.Name = "btnyh9";
             this.btnyh9.Size = new System.Drawing.Size(93, 46);
@@ -1542,13 +1554,14 @@
             this.btnyh9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh9.UseVisualStyleBackColor = true;
             this.btnyh9.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh9.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh8
             // 
             this.btnyh8.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh8.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh8.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh8.ForeColor = System.Drawing.Color.Black;
             this.btnyh8.Location = new System.Drawing.Point(99, 53);
             this.btnyh8.Name = "btnyh8";
             this.btnyh8.Size = new System.Drawing.Size(93, 46);
@@ -1556,13 +1569,14 @@
             this.btnyh8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh8.UseVisualStyleBackColor = true;
             this.btnyh8.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh8.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh5
             // 
             this.btnyh5.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh5.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh5.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh5.ForeColor = System.Drawing.Color.Black;
             this.btnyh5.Location = new System.Drawing.Point(390, 3);
             this.btnyh5.Name = "btnyh5";
             this.btnyh5.Size = new System.Drawing.Size(93, 46);
@@ -1570,13 +1584,14 @@
             this.btnyh5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh5.UseVisualStyleBackColor = true;
             this.btnyh5.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh5.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh4
             // 
             this.btnyh4.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh4.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh4.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh4.ForeColor = System.Drawing.Color.Black;
             this.btnyh4.Location = new System.Drawing.Point(293, 3);
             this.btnyh4.Name = "btnyh4";
             this.btnyh4.Size = new System.Drawing.Size(93, 46);
@@ -1584,6 +1599,7 @@
             this.btnyh4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh4.UseVisualStyleBackColor = true;
             this.btnyh4.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh3
             // 
@@ -1591,7 +1607,7 @@
             this.btnyh3.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh3.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh3.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh3.ForeColor = System.Drawing.Color.Black;
             this.btnyh3.Location = new System.Drawing.Point(196, 3);
             this.btnyh3.Name = "btnyh3";
             this.btnyh3.Size = new System.Drawing.Size(93, 46);
@@ -1599,13 +1615,14 @@
             this.btnyh3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh3.UseVisualStyleBackColor = false;
             this.btnyh3.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh2
             // 
             this.btnyh2.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh2.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh2.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh2.ForeColor = System.Drawing.Color.Black;
             this.btnyh2.Location = new System.Drawing.Point(99, 3);
             this.btnyh2.Name = "btnyh2";
             this.btnyh2.Size = new System.Drawing.Size(93, 46);
@@ -1613,13 +1630,14 @@
             this.btnyh2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh2.UseVisualStyleBackColor = true;
             this.btnyh2.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh7
             // 
             this.btnyh7.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh7.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh7.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh7.ForeColor = System.Drawing.Color.Black;
             this.btnyh7.Location = new System.Drawing.Point(3, 53);
             this.btnyh7.Name = "btnyh7";
             this.btnyh7.Size = new System.Drawing.Size(93, 46);
@@ -1627,19 +1645,21 @@
             this.btnyh7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnyh7.UseVisualStyleBackColor = true;
             this.btnyh7.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // btnyh1
             // 
             this.btnyh1.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.btnyh1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnyh1.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.btnyh1.ForeColor = System.Drawing.Color.SlateGray;
+            this.btnyh1.ForeColor = System.Drawing.Color.Black;
             this.btnyh1.Location = new System.Drawing.Point(3, 3);
             this.btnyh1.Name = "btnyh1";
             this.btnyh1.Size = new System.Drawing.Size(93, 46);
             this.btnyh1.TabIndex = 275;
             this.btnyh1.UseVisualStyleBackColor = true;
             this.btnyh1.Click += new System.EventHandler(this.btnyh1_Click);
+            this.btnyh1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnyh_MouseDown);
             // 
             // xtp2
             // 
@@ -1651,7 +1671,7 @@
             this.xtp2.Appearance.PageClient.BackColor = System.Drawing.Color.White;
             this.xtp2.Appearance.PageClient.Options.UseBackColor = true;
             this.xtp2.Name = "xtp2";
-            this.xtp2.Size = new System.Drawing.Size(659, 168);
+            this.xtp2.Size = new System.Drawing.Size(671, 172);
             this.xtp2.Tag = "01";
             this.xtp2.Text = "特价";
             this.xtp2.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
@@ -1666,7 +1686,7 @@
             this.xtp3.Appearance.PageClient.BackColor = System.Drawing.Color.White;
             this.xtp3.Appearance.PageClient.Options.UseBackColor = true;
             this.xtp3.Name = "xtp3";
-            this.xtp3.Size = new System.Drawing.Size(659, 168);
+            this.xtp3.Size = new System.Drawing.Size(671, 172);
             this.xtp3.Tag = "02";
             this.xtp3.Text = "折扣";
             this.xtp3.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
@@ -1681,7 +1701,7 @@
             this.xtp4.Appearance.PageClient.BackColor = System.Drawing.Color.White;
             this.xtp4.Appearance.PageClient.Options.UseBackColor = true;
             this.xtp4.Name = "xtp4";
-            this.xtp4.Size = new System.Drawing.Size(659, 168);
+            this.xtp4.Size = new System.Drawing.Size(671, 172);
             this.xtp4.Tag = "03";
             this.xtp4.Text = "代金券";
             this.xtp4.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
@@ -1696,39 +1716,46 @@
             this.xtp5.Appearance.PageClient.BackColor = System.Drawing.Color.White;
             this.xtp5.Appearance.PageClient.Options.UseBackColor = true;
             this.xtp5.Name = "xtp5";
-            this.xtp5.Size = new System.Drawing.Size(659, 168);
+            this.xtp5.Size = new System.Drawing.Size(671, 172);
             this.xtp5.Tag = "04";
             this.xtp5.Text = "礼品券";
             this.xtp5.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
             // 
-            // xtraTabPage5
+            // xtra6
             // 
-            this.xtraTabPage5.Appearance.Header.BackColor = System.Drawing.Color.White;
-            this.xtraTabPage5.Appearance.Header.BackColor2 = System.Drawing.Color.DeepSkyBlue;
-            this.xtraTabPage5.Appearance.Header.BorderColor = System.Drawing.Color.White;
-            this.xtraTabPage5.Appearance.Header.Options.UseBackColor = true;
-            this.xtraTabPage5.Appearance.Header.Options.UseBorderColor = true;
-            this.xtraTabPage5.Appearance.PageClient.BackColor = System.Drawing.Color.White;
-            this.xtraTabPage5.Appearance.PageClient.Options.UseBackColor = true;
-            this.xtraTabPage5.Name = "xtraTabPage5";
-            this.xtraTabPage5.Size = new System.Drawing.Size(659, 168);
-            this.xtraTabPage5.Tag = "88";
-            this.xtraTabPage5.Text = "会员";
-            this.xtraTabPage5.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
+            this.xtra6.Appearance.Header.BackColor = System.Drawing.Color.White;
+            this.xtra6.Appearance.Header.BackColor2 = System.Drawing.Color.DeepSkyBlue;
+            this.xtra6.Appearance.Header.BorderColor = System.Drawing.Color.White;
+            this.xtra6.Appearance.Header.Options.UseBackColor = true;
+            this.xtra6.Appearance.Header.Options.UseBorderColor = true;
+            this.xtra6.Appearance.PageClient.BackColor = System.Drawing.Color.White;
+            this.xtra6.Appearance.PageClient.Options.UseBackColor = true;
+            this.xtra6.Name = "xtra6";
+            this.xtra6.Size = new System.Drawing.Size(671, 172);
+            this.xtra6.Tag = "88";
+            this.xtra6.Text = "会员";
+            this.xtra6.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
             // 
             // xtpOther
             // 
             this.xtpOther.Name = "xtpOther";
-            this.xtpOther.Size = new System.Drawing.Size(659, 168);
+            this.xtpOther.Size = new System.Drawing.Size(671, 172);
             this.xtpOther.Tag = "00";
             this.xtpOther.Text = "其他优惠";
             // 
             // xtpCo
             // 
             this.xtpCo.Name = "xtpCo";
-            this.xtpCo.Size = new System.Drawing.Size(659, 168);
+            this.xtpCo.Size = new System.Drawing.Size(671, 172);
             this.xtpCo.Tag = "08";
             this.xtpCo.Text = "合作单位";
+            // 
+            // xtraUn
+            // 
+            this.xtraUn.Name = "xtraUn";
+            this.xtraUn.Size = new System.Drawing.Size(671, 172);
+            this.xtraUn.Tag = "-1";
+            this.xtraUn.Text = "不常用";
             // 
             // xtraTabControl1
             // 
@@ -3176,8 +3203,8 @@
             this.panel4.ResumeLayout(false);
             this.pnlCash.ResumeLayout(false);
             this.pnlCash.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).EndInit();
-            this.xtraTabControl2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.xtraCoupon)).EndInit();
+            this.xtraCoupon.ResumeLayout(false);
             this.xtp1.ResumeLayout(false);
             this.pnlyh.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
@@ -3359,7 +3386,7 @@
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnOrder;
         private System.Windows.Forms.PictureBox pbxWm;
-        private DevExpress.XtraTab.XtraTabControl xtraTabControl2;
+        private DevExpress.XtraTab.XtraTabControl xtraCoupon;
         private DevExpress.XtraTab.XtraTabPage xtp1;
         private System.Windows.Forms.Panel pnlyh;
         private System.Windows.Forms.Button btnyh18;
@@ -3384,7 +3411,7 @@
         private DevExpress.XtraTab.XtraTabPage xtp3;
         private DevExpress.XtraTab.XtraTabPage xtp4;
         private DevExpress.XtraTab.XtraTabPage xtp5;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPage5;
+        private DevExpress.XtraTab.XtraTabPage xtra6;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Timer tmrOpenTable;
         private System.Windows.Forms.Button btnOrder2;
@@ -3435,6 +3462,7 @@
         private DevExpress.XtraEditors.TextEdit edtYHCard;
         private DevExpress.XtraTab.XtraTabPage xtpOther;
         private DevExpress.XtraTab.XtraTabPage xtpCo;
+        private DevExpress.XtraTab.XtraTabPage xtraUn;
         private System.Windows.Forms.Label lbTip;
     }
 }
