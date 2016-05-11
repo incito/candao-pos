@@ -1841,7 +1841,7 @@ namespace Main
                         AllLog.Instance.E("抹零处理（元）时异常", ex);
                     }
                 }
-                amountml = (float) Math.Round(amountml, 2);
+                amountml = (float)Math.Round(amountml, 2);
                 return;
             }
 
@@ -4278,19 +4278,25 @@ namespace Main
         {
             try
             {
-                if (dgvjs.RowCount <= 0)
+                if (dgvjs.RowCount <= 0 || dgvjs.SelectedRows.Count <= 0)
                     return;
-                DataRow dr = (this.dgvjs.SelectedRows[0].DataBoundItem as DataRowView).Row;
-                int num = int.Parse(dr["num"].ToString());
-                amountgz2 = (float)Math.Round(amountgz2 - (float)(float.Parse(dr["debitamount"].ToString())), 2);// * num
-                amountym = (float)Math.Round(amountym - (float)(float.Parse(dr["freeamount"].ToString())), 2);// * num
+
+                DataRow dr = ((DataRowView)dgvjs.SelectedRows[0].DataBoundItem).Row;
+                var index = tbyh.Rows.IndexOf(dr);
+                amountgz2 = (float)Math.Round(amountgz2 - float.Parse(dr["debitamount"].ToString()), 2);
+                amountym = (float)Math.Round(amountym - float.Parse(dr["freeamount"].ToString()), 2);
                 tbyh.Rows.Remove(dr);
+                if (--index >= 0)
+                    dgvjs.Rows[index].Selected = true;
                 JArray ja = Globals.GetTableJson(tbyh);
                 string str = ja.ToString();
                 RestClient.saveOrderPreferential(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, str);
                 CheckGzYm();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("删除优惠券时异常：", ex);
+            }
             getAmount();
         }
 
