@@ -199,6 +199,7 @@ namespace Models
             set { _avoid = value; }
         }
 
+        public string PrimaryKey { get; set; }
 
         #endregion Model
         public static  void createShoppTable(ref DataTable shopptable)
