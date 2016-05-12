@@ -1335,6 +1335,7 @@ namespace Main
             //
             try
             {
+                Opentable2();
                 ReportAmount ra;
                 ra.orderid = Globals.CurrOrderInfo.orderid;
                 ra.amount = Math.Round(Convert.ToDecimal(Globals.CurrTableInfo.amount), 2);
