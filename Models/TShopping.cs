@@ -223,6 +223,14 @@ namespace Models
             tbyh.Columns.Add(column);
 
             column = new DataColumn();
+            column.DataType = System.Type.GetType("System.String");
+            column.AllowDBNull = false;
+            column.Caption = "标示符";
+            column.ColumnName = "primarykey";
+            column.DefaultValue = "";
+            tbyh.Columns.Add(column);
+
+            column = new DataColumn();
             column.DataType = System.Type.GetType("System.DateTime");
             column.AllowDBNull = false;
             column.Caption = "下单时间";
@@ -411,6 +419,7 @@ namespace Models
             }
             DataRow dr = shopptable.NewRow();
             dr["orderid"] = dishrow.Orderid;
+            dr["primarykey"] = dishrow.PrimaryKey;
             dr["userid"] = dishrow.Userid;
             dr["ordertime"] = dishrow.Ordertime;
             dr["orderstatus"] = dishrow.Orderstatus;
