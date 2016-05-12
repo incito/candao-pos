@@ -268,7 +268,7 @@ namespace Main
             {
                 string reinfo = "";
 
-                if (!RestClient.InputTellerCash("0", 0, 0, out reinfo))
+                if (!RestClient.InputTellerCash(Globals.UserInfo.UserID, 0, 0, out reinfo))
                 {
                     if (!frmPettyCash.ShowPettyCash())
                     {
@@ -573,26 +573,22 @@ namespace Main
                     }
                     else
                     {
-                        if (onlyGetTableInfo)
+                        if (!onlyGetTableInfo)
                         {
-                            getAmount();
-                            Cursor = Cursors.Default;
-                            return;
+                            RestClient.GetServerTableList(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);
+                            if (!Globals.CurrOrderInfo.memberno.Equals(""))
+                            {
+                                membercard = Globals.CurrOrderInfo.memberno;
+                                edtMemberCard.Text = membercard;
+                            }
                         }
 
-                        RestClient.GetServerTableList(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);
-                        if (!Globals.CurrOrderInfo.memberno.Equals(""))
-                        {
-                            membercard = Globals.CurrOrderInfo.memberno;
-                            edtMemberCard.Text = membercard;
-                        }
                         //ShowLeftInfo();
                         getOrderInvoiceTitle();
                         amountml = 0;
                         amountroundtz = 0;
                         getAmount();
                         this.SetButtonEnable(true);
-                        btnml_Click(btnml, null);
                     }
             }
             catch (CustomException ex)
@@ -810,6 +806,7 @@ namespace Main
             if (ysamount < 0)
                 ysamount = 0;
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
+            getamount = (float)Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
             /*if(amountjf>0)
             {
@@ -996,22 +993,22 @@ namespace Main
                 }
                 if (amountrmb <= 0)
                 {
-                    if (amountyhk > payamount)
+                    if (amountyhk > ysamount)
                     {
                         Warning("请输入正确的刷卡金额...");
                         return;
                     }
-                    if (amounthyk > payamount)
+                    if (amounthyk > ysamount)
                     {
                         Warning("请输入正确的会员卡金额...");
                         return;
                     }
-                    if (amountzfb > payamount)
+                    if (amountzfb > ysamount)
                     {
                         Warning("请输入正确的支付宝金额...");
                         return;
                     }
-                    if (amountwx > payamount)
+                    if (amountwx > ysamount)
                     {
                         Warning("请输入正确的微信金额...");
                         return;
@@ -1947,18 +1944,13 @@ namespace Main
             string msg = "";
             //重试3次
             lblMsg.Text = "";
-            bool ret = QueryMemberCard2(out msg);
-            if (!ret)
+            var ret = false;
+            int index = 1;
+            do
             {
-                setlblMsg(msg);
-                Thread.Sleep(1000);
                 ret = QueryMemberCard2(out msg);
-            }
-            if (!ret)
-            {
-                Thread.Sleep(1000);
-                ret = QueryMemberCard2(out msg);
-            }
+            } while (!ret && index++ < 3);
+
             if (!ret)
             {
                 Warning(msg);
@@ -2353,7 +2345,7 @@ namespace Main
                     Button btn = getbtn(btnname);
                     if (btn != null)
                     {
-                        btn.Tag = 0;
+                        btn.Tag = null;
                         btn.Text = "";
                     }
                 }
@@ -2856,7 +2848,7 @@ namespace Main
             //description,ruleid,freeamount,1
             //vcr.memo,vcr.ruleid,vcr.freeamount,vcr.num
             string Coupons_Name = vcr.couponname; //优惠券名称 消费券1名称（不足30位时后面的补空格）
-            if (Coupons_Name.IndexOf(":") > 0)
+            if (Coupons_Name.IndexOf(":") > 0 && Coupons_Name.IndexOf("[") > 1)
             {
                 Coupons_Name = Coupons_Name.Replace("会:", "");
                 Coupons_Name = Coupons_Name.Substring(0, Coupons_Name.IndexOf("["));
@@ -3975,8 +3967,8 @@ namespace Main
                 Globals.CurrTableInfo.amount = 0;
                 lblAmountWm.Text = string.Format("合计金额：{0}", 0);
                 lblAmount.Text = string.Format("合计金额：{0}", 0);
-                Globals.CurrOrderInfo.orderid = "";
-                Globals.CurrOrderInfo.orderstatus = 0;
+                //Globals.CurrOrderInfo.orderid = "";
+                //Globals.CurrOrderInfo.orderstatus = 0;
                 lblZd.Text = "帐单：";
                 pnlCash.Enabled = true;
                 edtRoom.Enabled = false;
@@ -5008,6 +5000,7 @@ namespace Main
                 JArray ja = Globals.GetTableJson(tbyh);
                 string str = ja.ToString();
                 RestClient.saveOrderPreferential(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, str);
+                CheckGzYm();
             }
             catch
             {
