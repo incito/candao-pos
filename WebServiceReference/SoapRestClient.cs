@@ -1379,7 +1379,6 @@ namespace WebServiceReference
         {
             try
             {
-                System.Threading.Thread.Sleep(5000);
                 string address = "http://" + server + "/" + apiPath + "/padinterface/jdesyndata.json";
                 AllLog.Instance.I("【jdesyndata】 begin。");
                 StringWriter sw = new StringWriter();
