@@ -5033,7 +5033,6 @@ namespace Main
             {
                 // ignored
             }
-            getAmount();
 
             try
             {
@@ -5041,6 +5040,7 @@ namespace Main
                 string str = ja.ToString();
                 RestClient.saveOrderPreferential(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, str);
                 CheckGzYm();
+                getAmount();
             }
             catch
             {
