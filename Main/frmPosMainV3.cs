@@ -1170,9 +1170,13 @@ namespace Main
                                     {
                                         if (!isok)
                                         {
-                                            RestClient.posrebacksettleorder(Globals.UserInfo.UserID,
-                                                Globals.CurrOrderInfo.orderid);
-                                            Warning("会员积分，结算失败!");
+                                            var memType = RestClient.getMemberSystem() == 0 ? "雅座" : "餐道";
+                                            Warning(string.Format("{0}会员消费结算失败，系统自动反结。", memType));
+                                            string msg;
+                                            if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, "会员结算失败,系统自动反结", out msg))
+                                            {
+                                                Warning(!string.IsNullOrEmpty(msg) ? msg : "帐单反结算失败...");
+                                            }
                                         }
                                     }
                                 }
@@ -5023,7 +5027,6 @@ namespace Main
             {
                 // ignored
             }
-            getAmount();
 
             try
             {
@@ -5031,6 +5034,7 @@ namespace Main
                 string str = ja.ToString();
                 RestClient.saveOrderPreferential(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, str);
                 CheckGzYm();
+                getAmount();
             }
             catch
             {
