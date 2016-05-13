@@ -199,6 +199,7 @@ namespace Models
             set { _avoid = value; }
         }
 
+        public string PrimaryKey { get; set; }
 
         #endregion Model
         public static  void createShoppTable(ref DataTable shopptable)
@@ -218,6 +219,14 @@ namespace Models
             column.AllowDBNull = false;
             column.Caption = "下单员工";
             column.ColumnName = "userid";
+            column.DefaultValue = "";
+            tbyh.Columns.Add(column);
+
+            column = new DataColumn();
+            column.DataType = System.Type.GetType("System.String");
+            column.AllowDBNull = false;
+            column.Caption = "标示符";
+            column.ColumnName = "primarykey";
             column.DefaultValue = "";
             tbyh.Columns.Add(column);
 
@@ -410,6 +419,7 @@ namespace Models
             }
             DataRow dr = shopptable.NewRow();
             dr["orderid"] = dishrow.Orderid;
+            dr["primarykey"] = dishrow.PrimaryKey;
             dr["userid"] = dishrow.Userid;
             dr["ordertime"] = dishrow.Ordertime;
             dr["orderstatus"] = dishrow.Orderstatus;
