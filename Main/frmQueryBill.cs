@@ -129,15 +129,15 @@ namespace Main
             {
                 DataRowView mydrv = dv[i];
                 string orderstatus = Convert.ToString(mydrv["orderstatus"]);//要判断的字段
-                if (!orderstatus.Equals("3"))
+                if (orderstatus.Equals("3") || orderstatus.Equals("2"))
+                {
+                    mydrv["orderstatus"] = "已结";
+                }
+                else
                 {
                     dgvBill.Rows[i].DefaultCellStyle.BackColor = Color.Red;
                     dgvBill.Rows[i].DefaultCellStyle.ForeColor = Color.White;
                     mydrv["orderstatus"] = "未结";
-                }
-                else
-                {
-                    mydrv["orderstatus"] = "已结";
                 }
             }
         }
@@ -434,7 +434,7 @@ namespace Main
             {
                 DataRowView mydrv = dv[i];
                 string orderstatus = Convert.ToString(mydrv["orderstatus"]);//要判断的字段
-                if ((orderstatus.Equals("3")) || (orderstatus.Equals("已结")))
+                if ((orderstatus.Equals("3")) || (orderstatus.Equals("2")))
                 {
                     mydrv["orderstatus"] = "已结";
                 }

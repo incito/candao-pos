@@ -13,8 +13,6 @@ namespace Models.Response
     {
         public int id { get; set; }
 
-        public int sort { get; set; }
-
         public int status { get; set; }
 
         public string name { get; set; }

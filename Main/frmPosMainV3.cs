@@ -187,8 +187,6 @@ namespace Main
         {
             pnlz.Parent = xtraTabControl1.SelectedTabPage;
             pnlNum.Parent = xtraTabControl1.SelectedTabPage;
-            pnlSum.Parent = xtraTabControl1.SelectedTabPage;
-            //pnlz.Parent = xtraTabControl1.SelectedTabPage;
             if (xtraTabControl1.SelectedTabPageIndex == 0)
             {
                 edtAmount.Focus();
@@ -644,6 +642,9 @@ namespace Main
             btnRePrint.Enabled = false;
             btnCancelOrder.Enabled = false;
             btnOrderML.Enabled = true;
+            btnAdd.Visible = true;
+            btnDec.Visible = true;
+            btnDelete.Visible = true;
             if (!iswm)
             {
                 btnCancelOrder.Enabled = true;
@@ -662,7 +663,7 @@ namespace Main
             {
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
-                btnRBill.Enabled = true;
+                //btnRBill.Enabled = true; 咖啡模式这里不反结，反结走账单查询里面
                 btnPrintMember1.Enabled = true;
                 btnPrintBill.Enabled = false;
                 btnOrder2.Enabled = false;
@@ -681,21 +682,6 @@ namespace Main
             //edtAmount.Text = Globals.CurrTableInfo.amount.ToString();
             edtAmount.Focus();
             edtReturn.Text = "0";
-            //getAmount();
-            if (CheckCallBill())
-            {
-                btnDelete.Visible = false;
-                lblSum.Text = "已结算";
-                btnAdd.Visible = false;
-                btnDec.Visible = false;
-            }
-            else
-            {
-                btnAdd.Visible = true;
-                btnDec.Visible = true;
-                btnDelete.Visible = true;
-            }
-            //btnDelete.Visible = !RestClient.isClearCoupon();
             if (Globals.CurrOrderInfo.fulldiscountrate > 0)
             {
                 //lbldiscount.Visible = true;
@@ -3889,6 +3875,10 @@ namespace Main
             if (!iswm)
             {
                 btnOpen.Visible = true;
+            }
+            else
+            {
+                btnClearnTable.Visible = false;
             }
             //
             edtAmount.Focus();
