@@ -5291,8 +5291,6 @@ namespace Main
             try
             {
                 RestClient.broadcastmsg(1005, Globals.CurrOrderInfo.orderid); //这里是发清帐单指令1005
-                var msg = String.Format("{0}|{1}|{2}", Globals.CurrOrderInfo.userid, Globals.CurrTableInfo.tableNo, msgorderid);
-                RestClient.broadcastmsg(2002, msg); //广播消息给手环。
             }
             catch (Exception ex)
             {
