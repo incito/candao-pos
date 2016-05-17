@@ -1192,10 +1192,6 @@ namespace Main
             var msg = string.Format("{0}|{1}|{2}", Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid,
                     ysamount);
             RestClient.broadcastmsg(2501, msg);//广播消息给PAD
-
-            //发   服务员|台号|帐单号
-            msg = String.Format("{0}|{1}|{2}", Globals.CurrOrderInfo.userid, Globals.CurrTableInfo.tableNo, msgorderid);
-            RestClient.broadcastmsg(2002, msg); //广播消息给手环。
         }
 
         private void broadMsg2201()
@@ -5295,6 +5291,8 @@ namespace Main
             try
             {
                 RestClient.broadcastmsg(1005, Globals.CurrOrderInfo.orderid); //这里是发清帐单指令1005
+                var msg = String.Format("{0}|{1}|{2}", Globals.CurrOrderInfo.userid, Globals.CurrTableInfo.tableNo, msgorderid);
+                RestClient.broadcastmsg(2002, msg); //广播消息给手环。
             }
             catch (Exception ex)
             {
