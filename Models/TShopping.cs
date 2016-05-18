@@ -214,6 +214,7 @@ namespace Models
             set { _avoid = value; }
         }
 
+        public string PrimaryKey { get; set; }
 
         #endregion Model
         public static  void createShoppTable(ref DataTable shopptable)
@@ -221,6 +222,9 @@ namespace Models
             DataTable tbyh=new DataTable();
             tbyh.Columns.Clear();
             var column = DataTableHelper.CreateDataColumn(typeof (string), "账单号", "orderid", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "标示符", "primarykey", "");
             tbyh.Columns.Add(column);
 
             column = DataTableHelper.CreateDataColumn(typeof(string), "下单员工", "userid", "");

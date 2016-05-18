@@ -535,7 +535,7 @@ namespace WebServiceReference
             return "0";
         }
 
-        public static String Post_Rest(string url, StringWriter sw)
+        public static String Post_Rest(string url, StringWriter sw, int timeoutSecond = 30)
         {
             HttpWebRequest request;
             HttpWebResponse response = null;
@@ -550,9 +550,8 @@ namespace WebServiceReference
                 request.UserAgent = ".NET POS";
                 request.Method = "POST";
                 request.KeepAlive = false;
-                //webReq.ContentType = "application/x-www-form-urlencoded";
                 request.ContentType = "application/json; charset=utf-8";
-                //request.Timeout = 15 * 1000;
+                request.Timeout = timeoutSecond * 1000;
                 if (sw != null)
                 {
                     string jsonText = sw.GetStringBuilder().ToString();
@@ -1355,24 +1354,34 @@ namespace WebServiceReference
         /// <summary>
         /// jde同步资料回调
         /// </summary>
-        public static bool jdesyndata()
+        /// <returns>执行结果。执行成功返回null，当有错误时返回错误信息。</returns>
+        public static string jdesyndata()
         {
-            string address = "http://" + server + "/" + apiPath + "/padinterface/jdesyndata.json";
-            AllLog.Instance.I("【jdesyndata】 begin。");
-            StringWriter sw = new StringWriter();
-            JsonWriter writer = new JsonTextWriter(sw);
-            writer.WriteStartObject();
-            writer.WritePropertyName("synkey");
-            writer.WriteValue("candaosynkey");
-            writer.WriteEndObject();
-            writer.Flush();
-            string jsonResult = Post_Rest(address, sw);
-            AllLog.Instance.I(string.Format("【jdesyndata】 result：{0}。", jsonResult));
-            if (jsonResult == "0")
-                return false;
+            try
+            {
+                string address = "http://" + server + "/" + apiPath + "/padinterface/jdesyndata.json";
+                AllLog.Instance.I("【jdesyndata】 begin。");
+                StringWriter sw = new StringWriter();
+                JsonWriter writer = new JsonTextWriter(sw);
+                writer.WriteStartObject();
+                writer.WritePropertyName("synkey");
+                writer.WriteValue("candaosynkey");
+                writer.WriteEndObject();
+                writer.Flush();
+                string jsonResult = Post_Rest(address, sw, 500);
+                AllLog.Instance.I(string.Format("【jdesyndata】 result：{0}。", jsonResult));
+                if (jsonResult == "0")
+                    return "结业数据上传超时。";
 
-            var jr = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            return jr["result"].ToString().Equals("0");
+                var jr = (JObject)JsonConvert.DeserializeObject(jsonResult);
+                var result = jr["code"].ToString().Equals("0000");
+                var info = jr["message"] != null ? jr["message"].ToString() : null;
+                return result ? null : (string.IsNullOrEmpty(info) ? "结业数据上传失败。" : info);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
         /// <summary>
@@ -2323,7 +2332,7 @@ namespace WebServiceReference
             {
                 string Groupid = dr["Groupid"].ToString();
                 string Orderstatus = dr["Orderstatus"].ToString();
-                string primarykey = getGUID();
+                string primarykey = dr["primarykey"].ToString();;
                 if (Groupid.Equals("") || Orderstatus.Equals("0"))
                 {
                     writer.WriteStartObject();
@@ -2502,7 +2511,7 @@ namespace WebServiceReference
                         writer.WritePropertyName("sperequire"); //忌口
                         writer.WriteValue("");
                         writer.WritePropertyName("primarykey"); ////
-                        writer.WriteValue(getGUID());
+                        writer.WriteValue(primarykey);
                         string dishstatus = "0";
                         if (dr["weigh"].ToString().Equals("1"))
                         {
