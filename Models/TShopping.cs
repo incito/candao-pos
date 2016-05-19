@@ -276,7 +276,6 @@ namespace Models
                 }
             }
             DataRow dr = shopptable.NewRow();
-            dr["primarykey"] = dishrow.PrimaryKey;
             dr["orderid"] = dishrow.Orderid;
             dr["primarykey"] = dishrow.PrimaryKey;
             dr["userid"] = dishrow.Userid;

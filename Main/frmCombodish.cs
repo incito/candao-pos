@@ -221,6 +221,7 @@ namespace Main
             //Óã¹ø
             string guid = getGUID();
             pot.PotDish.Orderstatus = 6;
+            pot.PotDish.PrimaryKey = getGUID();
             pot.PotDish.Orderid = Globals.CurrOrderInfo.orderid;
             pot.PotDish.Userid = userid;// Globals.UserInfo.UserID;
             pot.PotDish.Ordertime = DateTime.Now;
@@ -243,6 +244,7 @@ namespace Main
             pot.PotInfo.Primarydishtype = 2;
 
             pot.FishDishInfo1.Orderstatus = 5;
+            pot.FishDishInfo1.PrimaryKey = getGUID();
             pot.FishDishInfo1.Orderid = Globals.CurrOrderInfo.orderid;
             pot.FishDishInfo1.Userid = userid;// Globals.UserInfo.UserID;
             pot.FishDishInfo1.Ordertime = DateTime.Now;
@@ -260,6 +262,7 @@ namespace Main
             if (pot.FishDishInfo2 != null)
             {
                 pot.FishDishInfo2.Orderid = Globals.CurrOrderInfo.orderid;
+                pot.FishDishInfo2.PrimaryKey = getGUID();
                 pot.FishDishInfo2.Userid = userid;// Globals.UserInfo.UserID;
                 pot.FishDishInfo2.Ordertime = DateTime.Now;
                 pot.FishDishInfo2.Tableid = Globals.CurrTableInfo.tableNo;
@@ -280,6 +283,7 @@ namespace Main
             //ÆÕÍ¨²Ë
             dishinfo.Groupid = FGuid;
             dishinfo.Orderid = Globals.CurrOrderInfo.orderid;
+            dishinfo.PrimaryKey = getGUID();
             dishinfo.Userid = userid;
             if (dishinfo.Orderstatus == 3)
                 dishinfo.Price = 0;
