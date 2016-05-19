@@ -55,7 +55,6 @@ namespace Main
             RestClient.GetSystemConfigSetting();
             ReportPrint.Init();
             BigDataHelper.DeviceActionAsync(EnumDeviceAction.ApplicationStart);
-
             frmStart.frm.setMsg("获取系统设置...");
             try
             {
@@ -212,6 +211,7 @@ namespace Main
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
+            AllLog.Instance.E(e.Exception.Message + Environment.NewLine + e.Exception.StackTrace);
             Msg.ShowException(e.Exception);//处理系统异常
         }
 

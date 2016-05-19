@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Common;
 using Models;
 
 namespace Library
@@ -14,13 +15,13 @@ namespace Library
     /// </summary>
     public partial class SelectGiftDishWindow
     {
-        public SelectGiftDishWindow(DataTable dbTable, List<string> giftReasons = null)
+        public SelectGiftDishWindow(DataTable dbTable, DataTable couponTb, List<string> giftReasons = null)
         {
             InitializeComponent();
             GiftDishes = new ObservableCollection<GiftDishInfo>();
             GiftReasons = new ObservableCollection<string>();
 
-            ParseDbTable(dbTable);
+            ParseDbTable(dbTable, couponTb);
 
             if (giftReasons != null)
             {
@@ -80,27 +81,62 @@ namespace Library
 
         private void Bd_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ((GiftDishInfo) ((System.Windows.Controls.Border) sender).DataContext).SelectGiftNum++;
+            ((GiftDishInfo)((System.Windows.Controls.Border)sender).DataContext).SelectGiftNum++;
         }
 
-        private void ParseDbTable(DataTable dbTable)
+        private void ParseDbTable(DataTable dbTable, DataTable couponDb)
         {
+            var dic = GetGiftDishDic(couponDb);
             foreach (DataRow row in dbTable.Rows)
             {
+                var dishName = row["title"].ToString();
                 var amount = row["amount"].ToString();
                 if (string.IsNullOrEmpty(amount) || amount.Equals("0"))
                     continue;
 
+                //赠菜可选数量需要减去已经赠菜的优惠数量。
+                var dishNum = Convert.ToDecimal(row["dishnum"].ToString());
+                if (dic.ContainsKey(dishName))
+                {
+                    dishNum -= dic[dishName];
+                    if (dishNum == 0)
+                        continue;
+                }
+
                 var item = new GiftDishInfo
                 {
-                    DishName = row["title"].ToString(),
+                    DishName = dishName,
                     DishPrice = Convert.ToDecimal(row["orderprice"].ToString()),
-                    DishNum = Convert.ToDecimal(row["dishnum"].ToString()),
+                    DishNum = dishNum,
                     Amount = Convert.ToDecimal(row["amount"].ToString())
                 };
                 GiftDishes.Add(item);
             }
         }
 
+        private Dictionary<string, decimal> GetGiftDishDic(DataTable couponDb)
+        {
+            var dic = new Dictionary<string, decimal>();
+
+            foreach (DataRow row in couponDb.Rows)
+            {
+                var couponName = row["yhname"].ToString();
+                if (!couponName.StartsWith("赠菜"))
+                    continue;
+
+                var array = couponName.Split('：');
+                if (array.Count() < 2)
+                    continue;
+
+                var dishName = array[1];
+                var count = Convert.ToDecimal(row["num"]);
+                if (dic.ContainsKey(dishName))
+                    dic[dishName] += count;
+                else
+                    dic.Add(dishName, count);
+            }
+
+            return dic;
+        }
     }
 }

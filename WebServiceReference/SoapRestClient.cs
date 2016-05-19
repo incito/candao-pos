@@ -35,9 +35,6 @@ namespace WebServiceReference
         /// </summary>
         public static string DataServer { get; set; }
 
-        ///DataServer地址雅座
-        public static string DataServerYazuo { get; set; }
-
         /// <summary>
         /// 大数据地址。
         /// </summary>
@@ -208,7 +205,6 @@ namespace WebServiceReference
             var client = XDocument.Load(ConfigFile).Root.Element("client");
             JavaServer = GetXmlAttrValueString(client, "Server", "address");
             DataServer = GetXmlAttrValueString(client, "DataServer", "address");
-            DataServerYazuo = GetXmlAttrValueString(client, "DataServerYazuo", "address");
             BigDataServer = GetXmlAttrValueString(client, "BigData", "address");
 
             ApiPath = GetXmlAttrValueString(client, "ApiPath") ?? "newspicyway";
@@ -666,6 +662,7 @@ namespace WebServiceReference
                     dt.TableName = "tb_data";
                     dt.Clear();
                     dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
+                    Globals.OrderTable.Clear();
 
                     //国际化处理品项名称和单位
                     var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
@@ -987,7 +984,7 @@ namespace WebServiceReference
         //查询
         public static JObject QueryBalance(string memberinfo)
         {
-            string address = String.Format("http://" + DataServerYazuo + "/datasnap/rest/TServerMethods1/QueryBalance/{0}/", memberinfo);
+            string address = String.Format("http://" + DataServer + "/datasnap/rest/TServerMethods1/QueryBalance/{0}/", memberinfo);
             AllLog.Instance.I(string.Format("【QueryBalance】 memberinfo：{0}。", memberinfo));
             String jsonResult = Request_Rest60(address);
             AllLog.Instance.I(string.Format("【QueryBalance】 result：{0}。", jsonResult));
@@ -1009,7 +1006,7 @@ namespace WebServiceReference
         public static bool VoidSale(string orderid, string pszPwd, string pszGPwd, out string info)
         {
             //orderid,pszPwd,pszGPwd
-            string address = String.Format("http://" + DataServerYazuo + "/datasnap/rest/TServerMethods1/VoidSale/{0}/{1}/{2}/", orderid, pszPwd, pszGPwd);
+            string address = String.Format("http://" + DataServer + "/datasnap/rest/TServerMethods1/VoidSale/{0}/{1}/{2}/", orderid, pszPwd, pszGPwd);
             AllLog.Instance.I(string.Format("【VoidSale】 orderid：{0}。", orderid));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【VoidSale】 result：{0}。", jsonResult));
@@ -1026,7 +1023,7 @@ namespace WebServiceReference
         public static JObject StoreCardDeposit(string memberinfo, double pszAmount, string pszSerial, int paytype)
         {
             int psTransType = 0;
-            string address = String.Format("http://" + DataServerYazuo + "/datasnap/rest/TServerMethods1/StoreCardDeposit/{0}/{1}/{2}/{3}/{4}/{5}/", Globals.UserInfo.UserID, memberinfo, pszAmount, pszSerial, psTransType, paytype);
+            string address = String.Format("http://" + DataServer + "/datasnap/rest/TServerMethods1/StoreCardDeposit/{0}/{1}/{2}/{3}/{4}/{5}/", Globals.UserInfo.UserID, memberinfo, pszAmount, pszSerial, psTransType, paytype);
             AllLog.Instance.I(string.Format("【StoreCardDeposit】 memberinfo：{0}，pszAmount：{1}，pszSerial：{2}。", memberinfo, pszAmount, pszSerial));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【StoreCardDeposit】 result：{0}。", jsonResult));
@@ -1041,7 +1038,7 @@ namespace WebServiceReference
         {
             if (pszPwd.Trim().ToArray().Length <= 0)
                 pszPwd = " ";
-            string address = String.Format("http://" + DataServerYazuo + "/datasnap/rest/TServerMethods1/CardActive/{0}/{1}/{2}/", pszTrack2, pszPwd, pszMobile);
+            string address = String.Format("http://" + DataServer + "/datasnap/rest/TServerMethods1/CardActive/{0}/{1}/{2}/", pszTrack2, pszPwd, pszMobile);
             AllLog.Instance.I(string.Format("【CardActive】 pszTrack2：{0}，pszMobile：{1}。", pszTrack2, pszMobile));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【CardActive】 result：{0}。", jsonResult));
@@ -1057,7 +1054,7 @@ namespace WebServiceReference
             if (pszTicketList.Length <= 0)
                 pszTicketList = "  ";
 
-            string address = String.Format("http://" + DataServerYazuo + "/datasnap/rest/TServerMethods1/Sale/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}/{9}/{10}/{11}/", aUserid, orderid, pszInput, pszSerial, pszCash, pszPoint, psTransType, pszStore, pszTicketList, pszPwd, memberyhqamount, JavaServer);
+            string address = String.Format("http://" + DataServer + "/datasnap/rest/TServerMethods1/Sale/{0}/{1}/{2}/{3}/{4}/{5}/{6}/{7}/{8}/{9}/{10}/{11}/", aUserid, orderid, pszInput, pszSerial, pszCash, pszPoint, psTransType, pszStore, pszTicketList, pszPwd, memberyhqamount, JavaServer);
             AllLog.Instance.I(string.Format("【Sale】 orderid：{0}，pszCash：{1}，memberyhqamount：{2}。", orderid, pszCash, memberyhqamount));
             String jsonResult = Request_Rest60(address);//会员结算的超时时间要多给点
             AllLog.Instance.I(string.Format("【Sale】 result：{0}。", jsonResult));
