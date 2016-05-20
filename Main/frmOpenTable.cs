@@ -188,9 +188,9 @@ namespace Main
                 ageperiod = ageperiod + "3";
             if (bthCheck4.Checked)
                 ageperiod = ageperiod + "4";
-            if (!RestClient.setorder(edtRoom.Text.ToString(), edtUserid.Text, manNum, womanNum, ageperiod, ref orderid))
+            if (!RestClient.setorder(edtRoom.Text, edtUserid.Text, ref orderid, manNum, womanNum, ageperiod))
             {
-                Warning("开台失败,1！");
+                Warning("开台失败！");
                 return;
             }
             Globals.CurrOrderInfo.orderid = orderid;

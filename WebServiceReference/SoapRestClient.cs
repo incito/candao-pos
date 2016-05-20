@@ -2178,55 +2178,17 @@ namespace WebServiceReference
             return ret;
         }
 
-        ///以下为外卖接口  外卖开台
-        ///1、开台
-        ///2、下单
-        ///3、
-        ///
-        //public static String founding = HTTP + URL_HOST + "/newspicyway/padinterface/setorder.json";
-        public static bool setorder(string tableNo, string UserID, ref string orderid)
-        {
-            string address = String.Format("http://{0}/" + apiPath + "/padinterface/setorder.json", server2);
-            AllLog.Instance.I(string.Format("【setorder】 tableNo：{0}，UserID：{1}。", tableNo, UserID));
-            StringWriter sw = new StringWriter();
-            JsonWriter writer = new JsonTextWriter(sw);
-            writer.WriteStartObject();
-            writer.WritePropertyName("tableNo");
-            writer.WriteValue(tableNo);
-            writer.WritePropertyName("username");
-            writer.WriteValue(UserID);
-            writer.WritePropertyName("childNum");
-            writer.WriteValue(0);
-            writer.WritePropertyName("manNum");
-            writer.WriteValue(0);
-            writer.WritePropertyName("womanNum");
-            writer.WriteValue(1);
-            writer.WriteEndObject();
-            writer.Flush();
-            String jsonResult = Post_Rest(address, sw);
-            AllLog.Instance.I(string.Format("【setorder】 result：{0}。", jsonResult));
-            bool result = false;
-            try
-            {
-                JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-                string javaresult = ja["result"].ToString();
-                result = ja["result"].ToString().Equals("0");
-                orderid = ja["orderid"].ToString();
-            }
-            catch { return false; }
-            return result;
-        }
-
         /// <summary>
         /// 堂食开台接口
         /// </summary>
         /// <param name="tableNo"></param>
         /// <param name="UserID"></param>
+        /// <param name="orderid"></param>
         /// <param name="manNum"></param>
         /// <param name="womanNum"></param>
-        /// <param name="orderid"></param>
+        /// <param name="ageperiod"></param>
         /// <returns></returns>
-        public static bool setorder(string tableNo, string UserID, int manNum, int womanNum, string ageperiod, ref string orderid)
+        public static bool setorder(string tableNo, string UserID, ref string orderid, int manNum = 0, int womanNum = 0, string ageperiod = "")
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/setorder.json", server2);
             AllLog.Instance.I(string.Format("【setorder】 tableNo：{0}，ageperiod：{1}。", tableNo, ageperiod));
@@ -2397,7 +2359,7 @@ namespace WebServiceReference
                             //鱼锅
                             dishtype = 1;
                             writer.WritePropertyName("dishes");
-                            writer.WriteStartArray();writeDishes(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, primarykey, sperequire);
+                            writer.WriteStartArray(); writeDishes(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, primarykey, sperequire);
                             writer.WriteEndArray();
                         }
 

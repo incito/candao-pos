@@ -3626,7 +3626,6 @@ namespace Main
         }
         public void StartWm()
         {
-            ///
             if (frmorder != null)
             {
                 ShowWm();
@@ -3909,7 +3908,6 @@ namespace Main
         }
         public void ShowWm()
         {
-            btnOrder.Visible = false;
             xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = false;
@@ -3922,10 +3920,7 @@ namespace Main
             SetShowOrderFrm(true);
             frmorder.Show();
         }
-        private void btnOrder_Click(object sender, EventArgs e)
-        {
-            ShowWm();
-        }
+
         private void RefreshAmount()
         {
             tbyh.Clear();
@@ -4075,7 +4070,7 @@ namespace Main
             string orderid = "";
             if (!RestClient.setorder(currtableno, Globals.UserInfo.UserID, ref orderid))
             {
-                Warning("开台失败,1！");
+                Warning("开台失败！");
                 return;
             }
             //标记帐单的ordertpe=1为正常外卖
@@ -4340,7 +4335,6 @@ namespace Main
 
         private void btnOrder2_Click(object sender, EventArgs e)
         {
-
             if (iswm)
                 ShowWm();
             else
@@ -4377,7 +4371,6 @@ namespace Main
             xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = false;
-            btnOrder.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
             pnlSum.Visible = false;
@@ -4429,15 +4422,6 @@ namespace Main
         private void pnlAmount_Paint(object sender, PaintEventArgs e)
         {
 
-        }
-
-        private void btnZd_Click(object sender, EventArgs e)
-        {
-            //赠送下单
-            if (iswm)
-                ShowWm();
-            else
-                ShowOrder();
         }
 
         private void btnOrderML_Click(object sender, EventArgs e)

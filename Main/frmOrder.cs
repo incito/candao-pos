@@ -950,7 +950,12 @@ namespace Main
                 return;
             }
 
-            Thread.Sleep(50);
+            //标记帐单的ordertpe=1为正常外卖
+            try
+            {
+                RestClient.wmOrder(orderid);
+            }
+            catch { }
 
             Globals.CurrOrderInfo.orderid = orderid;
             Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
@@ -970,9 +975,6 @@ namespace Main
                 AllLog.Instance.E(ex);
             }
             Warning("挂单成功,单号：" + orderid);
-
-            //挂完单，把台关掉，再清掉购物车开新单
-            //
         }
 
         private bool BookOrder(string sperequire)

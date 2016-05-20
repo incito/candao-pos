@@ -46,9 +46,9 @@ namespace Main
             if (ret)
             {
                 gzname = frm.dgvBill.SelectedRows[0].Cells["gzName"].Value.ToString();
-                id = frm.dgvBill.SelectedRows[0].Cells["code"].Value.ToString();
-                telephone = frm.dgvBill.SelectedRows[0].Cells["telephone"].Value.ToString();
-                relaperson = frm.dgvBill.SelectedRows[0].Cells["relaperson"].Value.ToString();
+                id = frm.dgvBill.SelectedRows[0].Cells["parternerid"].Value.ToString();
+                //telephone = frm.dgvBill.SelectedRows[0].Cells["telephone"].Value.ToString();
+                //relaperson = frm.dgvBill.SelectedRows[0].Cells["relaperson"].Value.ToString();
             }
             return ret;
         }
