@@ -488,7 +488,7 @@ namespace Main
             }
             try
             {
-                DataView dv = new DataView(Globals.OrderTable);
+                DataView dv = iswm ? new DataView(Globals.ShoppTable) : new DataView(Globals.OrderTable);
                 dv.AllowNew = false;
                 this.dgvBill.AutoGenerateColumns = false;
                 this.dgvBill.Tag = 0;
@@ -1049,6 +1049,7 @@ namespace Main
 
                         //如果是外卖先结算会员，如果会员结算失败就不再结算帐单
                         isok = WmAccount(0);
+                        ismember = !string.IsNullOrEmpty(membercard);
                         if (isok)
                         {
                             ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
@@ -1126,30 +1127,27 @@ namespace Main
                     Opentable2(true);
                     if (isok)
                     {
-                        ThreadPool.QueueUserWorkItem(t =>
+                        try
+                        {
+                            PrintBill2();
+                        }
+                        catch (Exception ex)
+                        {
+                            AllLog.Instance.E("打印结账单异常。" + ex.Message);
+                        }
+
+                        Application.DoEvents();
+                        if (ismember)
                         {
                             try
                             {
-                                PrintBill2();
+                                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
                             }
                             catch (Exception ex)
                             {
-                                AllLog.Instance.E("打印结账单异常。" + ex.Message);
+                                AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
                             }
-
-                            Application.DoEvents();
-                            if (ismember)
-                            {
-                                try
-                                {
-                                    ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
-                                }
-                                catch (Exception ex)
-                                {
-                                    AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
-                                }
-                            }
-                        });
+                        }
 
                         if (!iswm)
                         {
@@ -3948,8 +3946,8 @@ namespace Main
                 Globals.CurrTableInfo.amount = 0;
                 lblAmountWm.Text = string.Format("合计金额：{0}", 0);
                 lblAmount.Text = string.Format("合计金额：{0}", 0);
-                //Globals.CurrOrderInfo.orderid = "";
-                //Globals.CurrOrderInfo.orderstatus = 0;
+                Globals.CurrOrderInfo.orderid = "";
+                Globals.CurrOrderInfo.orderstatus = 0;
                 lblZd.Text = "帐单：";
                 pnlCash.Enabled = true;
                 edtRoom.Enabled = false;
@@ -3991,6 +3989,8 @@ namespace Main
                 isaddmember = false;
                 isaddFavorale = false;
                 lblMember.Text = String.Format("会员：{0}", "");
+                btnFind.Tag = 0;
+                btnFind.Text = "登录";
                 xtraTabControl2.SelectedTabPageIndex = 0;
                 jarrTables.Clear();
                 Array.Resize(ref pszTicketList, 0);
@@ -4896,6 +4896,11 @@ namespace Main
         {
             if (btnFind.Tag.ToString().Equals("0"))
             {
+                if (string.IsNullOrEmpty(edtMemberCard.Text))
+                {
+                    Warning("请输入会员号。");
+                    return;
+                }
                 querymember();
             }
             else

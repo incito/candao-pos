@@ -150,9 +150,7 @@ namespace Main
                 else
                 {
 
-                    lblAmount.Text = "卡余额:" + ret.StoreCardbalance.ToString();
-                    edtAmount.Text = "";
-                    edtAmount.Focus();
+                    lblAmount.Text = "卡余额:" + ret.StoreCardbalance;
                     //打印交易凭条
                     try
                     {
@@ -170,6 +168,9 @@ namespace Main
                         memberstoreinfo.Point = "0";// ret.Integral.ToString();//ret.Giftamount.ToString();
                         memberstoreinfo.Amount = edtAmount.Text;
                         ReportsFastReport.ReportPrint.PrintMemberStore(memberstoreinfo);
+
+                        edtAmount.Text = "";
+                        edtAmount.Focus();
                     }
                     catch { }
                     Warning("储值成功,交易流水号:" + ret.Tracecode);
