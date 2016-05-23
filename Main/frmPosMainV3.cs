@@ -547,7 +547,10 @@ namespace Main
             try
             {
                 if (iswm)
+                {
+                    RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。
                     return;
+                }
                 this.Cursor = Cursors.WaitCursor;
                 isopentable2 = true;
                 Globals.CurrOrderInfo.Invoicetitle = "";
