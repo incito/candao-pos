@@ -256,7 +256,7 @@ namespace Main
 
             if (iswm)
             {
-                InitWm();
+                InitWm(true);
                 StartWm();
             }
         }
@@ -1039,70 +1039,46 @@ namespace Main
                 var tableNo = iswm ? Globals.AvoidCertainFood : Globals.CurrTableInfo.tableNo;
                 if (AskQuestion("台号：" + tableNo + "确定现在结算吗?"))
                 {
-                    //如果是外卖，先开台,再上传菜品，再结算（外卖单品类优惠怎么用呢?,1、下单后循环优惠ID，使用一遍单品类的优惠，或者外卖我打包上传一下所有菜品的JSON数组，服务器端再返回优惠金额）
-                    if (iswm)
+                    if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray()).Equals("0"))
                     {
-                        Globals.CurrOrderInfo.userid = Globals.UserInfo.UserID;
-                        settleorderorderid = Globals.CurrOrderInfo.orderid;
-                        if (string.IsNullOrEmpty(settleorderorderid))
-                            return;
-
-                        //如果是外卖先结算会员，如果会员结算失败就不再结算帐单
-                        isok = WmAccount(0);
-                        ismember = !string.IsNullOrEmpty(membercard);
-                        if (isok)
-                        {
-                            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-                        }
+                        Warning("结算失败...");
                     }
                     else
                     {
-                        if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray()).Equals("0"))
-                        {
-                            Warning("结算失败...");
-                        }
-                        else
-                        {
-                            //如果有会员卡那么会员结算，如果会员结算失败，那就反结算 
+                        //如果有会员卡那么会员结算，如果会员结算失败，那就反结算 
 
-                            //现金金额，用于积分
-                            if (membercard.Length > 0)
+                        //现金金额，用于积分
+                        if (membercard.Length > 0)
+                        {
+                            float psccash = amountrmb + amountyhk + amountgz + amountzfb + amountwx;//现金 用于会员积分
+                            float pscpoint = amountjf; //使用积分付款
+                            float pszStore = amounthyk;//使用储值余额付款
+                            float tmppsccash = Math.Max(0, psccash - returnamount);
+
+                            //使用优惠券
+                            String tickstrs = getTicklistStr();
+                            if (tmppsccash > 0 || pscpoint > 0 || tickstrs.Length > 0 || amounthyk > 0)
                             {
-                                float psccash = amountrmb + amountyhk + amountgz + amountzfb + amountwx;//现金 用于会员积分
-                                float pscpoint = amountjf; //使用积分付款
-                                float pszStore = amounthyk;//使用储值余额付款
-                                float tmppsccash = Math.Max(0, psccash - returnamount);
-
-                                //使用优惠券
-                                String tickstrs = getTicklistStr();
-                                if (tmppsccash > 0 || pscpoint > 0 || tickstrs.Length > 0 || amounthyk > 0)
+                                ismember = true;
+                                try
                                 {
-                                    ismember = true;
-                                    try
+                                    string pwd = "0";
+                                    if (edtPwd.Text.Trim().Length > 0)
                                     {
-                                        string pwd = "0";
-                                        if (edtPwd.Text.Trim().Length > 0)
-                                        {
-                                            pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
-                                        }
-                                        bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
-                                        if (data)
-                                        {
-                                            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-                                            isok = true;
-                                        }
+                                        pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
                                     }
-                                    catch (Exception ex)
+                                    bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
+                                    if (data)
                                     {
-                                        AllLog.Instance.E("会员消费异常。" + ex.Message);
-                                        RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
-                                        Warning("会员积分，结算失败!");
+                                        ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
+                                        isok = true;
                                     }
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-                                    isok = true;
+                                    AllLog.Instance.E("会员消费异常。" + ex.Message);
+                                    RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
+                                    Warning("会员积分，结算失败!");
                                 }
                             }
                             else
@@ -1110,16 +1086,21 @@ namespace Main
                                 ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                 isok = true;
                             }
-                            if (isok)
+                        }
+                        else
+                        {
+                            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
+                            isok = true;
+                        }
+                        if (isok)
+                        {
+                            try
                             {
-                                try
-                                {
-                                    RestClient.debitamout(Globals.CurrOrderInfo.orderid);
-                                }
-                                catch (Exception ex)
-                                {
-                                    AllLog.Instance.E("计算实收接口异常。" + ex.Message);
-                                }
+                                RestClient.debitamout(Globals.CurrOrderInfo.orderid);
+                            }
+                            catch (Exception ex)
+                            {
+                                AllLog.Instance.E("计算实收接口异常。" + ex.Message);
                             }
                         }
                     }
@@ -1159,7 +1140,7 @@ namespace Main
                         //如果是外卖 需要使用优惠券 ，并初始化外卖台，可以开始下一单
                         if (iswm)
                         {
-                            InitWm();
+                            InitWm(false);
                             Globals.ShoppTable.Clear();
                             ShowWm();
                         }
@@ -3666,6 +3647,7 @@ namespace Main
             this.dgvBill.Tag = 1;
             ShowTotal();
         }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             bool tmpwm = false;
@@ -3955,14 +3937,17 @@ namespace Main
         /// <summary>
         /// 初始化外卖台
         /// </summary>
-        private void InitWm()
+        /// <paramref name="needSetOrder">是否需要开台（只有当第一次进入的时候需要开台，结账以后不需要开台。）</paramref>
+        private void InitWm(bool needSetOrder)
         {
             try
             {
                 Globals.CurrTableInfo.amount = 0;
                 lblAmountWm.Text = string.Format("合计金额：{0}", 0);
                 lblAmount.Text = string.Format("合计金额：{0}", 0);
-                setOrder();
+                Globals.CurrOrderInfo.orderid = "";
+                if (needSetOrder)
+                    setOrder();
                 lblDesk.Text = String.Format("桌号：{0}", Globals.CurrTableInfo.tableNo);
                 lblZd.Text = string.Format("帐单：{0}", Globals.CurrOrderInfo.orderid);
                 pnlCash.Enabled = true;
@@ -4049,11 +4034,30 @@ namespace Main
             //
         }
 
+        /// <summary>
+        /// 下单。
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <param name="ordertype"></param>
+        /// <param name="sperequire"></param>
+        /// <returns></returns>
         private bool bookorder(string sequence, int ordertype, string sperequire)
         {
-            //下单
-            //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";//tableid //Globals.UserInfo.UserID
-            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, int.Parse(sequence), ordertype, sperequire);
+            var curOrderId = Globals.CurrOrderInfo.orderid;
+            var result = RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, curOrderId, int.Parse(sequence), ordertype, sperequire);
+            if (string.IsNullOrEmpty(curOrderId))//当初始订单id为空时，说明是外卖点餐。
+            {
+                lblZd.Text = string.Format("帐单：{0}", Globals.CurrOrderInfo.orderid);
+                try
+                {
+                    RestClient.wmOrder(Globals.CurrOrderInfo.orderid);
+                }
+                catch (Exception ex)
+                {
+                    AllLog.Instance.E("设置账单未外卖异常。", ex);
+                }
+            }
+            return result;
         }
 
         private bool startorder(int ordertype, string sperequire)
@@ -4158,7 +4162,7 @@ namespace Main
                     do
                     {
                         re = bookorder(index.ToString(), ordertype, Globals.AvoidCertainFood);
-                    } while (index++ < 9 && !re);//下单失败多尝试几次。
+                    } while (index++ < 3 && !re);//下单失败多尝试几次。
                 }
                 catch (Exception ex)
                 {

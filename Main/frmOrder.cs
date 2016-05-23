@@ -924,57 +924,25 @@ namespace Main
             if (!frmWMInfo.ShowWMInfo(out gzinfo))
             {
                 return;
-
-                //if (!AskQuestion("确定要挂帐吗?"))
-                //{
-                //    return;
-                // }
             }
 
-            //挂帐 开台/下单/（关台，不结账）
             var wnd = new SelectAnimalWindow();
             wnd.ShowDialog();
 
             SetOrder(gzinfo, wnd.SelectedAnimal);
-            //保存挂帐人信息到数据库
-            string settleorderorderid = Globals.CurrOrderInfo.orderid;
         }
 
         private void SetOrder(TGzInfo gzinfo, string sperequire)
         {
-            //getTakeOutTable
-            string orderid = "";
-            if (!RestClient.setorder(Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, ref orderid))
-            {
-                Warning("开外卖台失败！");
-                return;
-            }
-
-            //标记帐单的ordertpe=1为正常外卖
-            try
-            {
-                RestClient.wmOrder(orderid);
-            }
-            catch { }
-
-            Globals.CurrOrderInfo.orderid = orderid;
             Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
             if (!BookOrder(sperequire))
             {
                 return;
             }
 
-            RestClient.putOrder(Globals.CurrTableInfo.tableNo, orderid, gzinfo);
+            RestClient.putOrder(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid, gzinfo);
             Globals.ShoppTable.Clear();
-            try
-            {
-                RestClient.caleTableAmount(Globals.UserInfo.UserID, orderid);
-            }
-            catch (Exception ex)
-            {
-                AllLog.Instance.E(ex);
-            }
-            Warning("挂单成功,单号：" + orderid);
+            Warning("挂单单号：" + Globals.CurrOrderInfo.orderid);
         }
 
         private bool BookOrder(string sperequire)

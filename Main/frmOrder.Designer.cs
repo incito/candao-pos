@@ -752,6 +752,7 @@ namespace Main
             this.btnGd.Text = "  挂单";
             this.btnGd.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnGd.UseVisualStyleBackColor = true;
+            this.btnGd.Visible = false;
             this.btnGd.Click += new System.EventHandler(this.btnGd_Click);
             // 
             // button17

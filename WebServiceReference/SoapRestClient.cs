@@ -2635,8 +2635,13 @@ namespace WebServiceReference
                     //RestClient.GetTableInfo()
                 }
                 result = ja["result"].ToString().Equals("0");
+                if (string.IsNullOrEmpty(orderid))//当外卖结账一个单子以后，再次下单，传入的订单为空，这时接口会返回一个订单号。
+                    Globals.CurrOrderInfo.orderid = ja["orderId"].ToString();
             }
-            catch { return false; }
+            catch
+            {
+                return false;
+            }
             return result;
         }
 
