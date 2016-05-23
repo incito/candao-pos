@@ -489,7 +489,7 @@ namespace Main
             }
             try
             {
-                DataView dv = iswm ? new DataView(Globals.ShoppTable) : new DataView(Globals.OrderTable);
+                DataView dv = new DataView(Globals.OrderTable);
                 dv.AllowNew = false;
                 this.dgvBill.AutoGenerateColumns = false;
                 this.dgvBill.Tag = 0;
@@ -3896,6 +3896,7 @@ namespace Main
                             {
                                 re = bookorder(index.ToString(), ordertype, Globals.AvoidCertainFood);
                             } while (index++ < 3 && !re);//下单失败多尝试几次。
+                            opentable();
                         }
                         catch (Exception ex)
                         {
@@ -3918,7 +3919,8 @@ namespace Main
             panel7.Visible = false;
             //btnOpen.Visible = false; 
             SetShowOrderFrm(true);
-            frmorder.Show();
+            //frmorder.Show();
+            ShowOrder();
         }
 
         private void RefreshAmount()
