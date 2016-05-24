@@ -546,11 +546,6 @@ namespace Main
         {
             try
             {
-                if (iswm)
-                {
-                    RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。
-                    return;
-                }
                 this.Cursor = Cursors.WaitCursor;
                 isopentable2 = true;
                 Globals.CurrOrderInfo.Invoicetitle = "";
@@ -1107,6 +1102,9 @@ namespace Main
                             }
                         }
                     }
+
+                    if (iswm)
+                        RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。
 
                     Opentable2(true);
                     if (isok)
@@ -3920,7 +3918,7 @@ namespace Main
             //btnOpen.Visible = false; 
             SetShowOrderFrm(true);
             //frmorder.Show();
-            ShowOrder();
+            ShowOrder(true);
         }
 
         private void RefreshAmount()
@@ -4330,7 +4328,12 @@ namespace Main
                 ShowOrder();
             }
         }
-        private void ShowOrder()
+
+        /// <summary>
+        /// 显示点菜窗口。
+        /// </summary>
+        /// <param name="isWm">是否是外卖。</param>
+        private void ShowOrder(bool isWm = false)
         {
             if (frmorder == null)
             {
@@ -4341,7 +4344,7 @@ namespace Main
                 frmorder.MdiParent = this;
                 frmorder.Parent = pnlCash;
             }
-            frmorder.hideGz();
+            frmorder.iswm = isWm;
             xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             xtraTabControl2.Visible = false;
@@ -4370,6 +4373,7 @@ namespace Main
             frmorder.showbtnOrderText();
             frmorder.Show();
         }
+
         private void SetShowOrderFrm(bool isshow)
         {
             if (isshow)
@@ -5256,7 +5260,7 @@ namespace Main
         /// <returns></returns>
         private object BackAllTakeOutDishProcess(object arg)
         {
-            if (Globals.ShoppTable != null && Globals.ShoppTable.Rows.Count > 0)//外卖购物车不为空时先退菜。
+            if (Globals.OrderTable != null && Globals.OrderTable.Rows.Count > 0)//外卖购物车不为空时先退菜。
             {
                 var service = new RestaurantServiceImpl();
                 var result = service.BackAllDish(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid);

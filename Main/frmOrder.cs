@@ -41,7 +41,7 @@ namespace Main
         public event ShoppingChange shoppingChange;
         public event Accounts accounts;
         private Library.UserControls.ucTable selectbtn = null;
-        private bool iswm = true;
+        public bool iswm = true;
         private string menuid = "";
         private int dishcount_type = 0;//分类中的菜品数量
         private int pagecount_type = 0;//一个分类中的菜品有多少页
@@ -367,6 +367,7 @@ namespace Main
                 }
             }
 
+            Globals.AvoidCertainFood = null;
             if (iswm)
             {
                 var wnd = new SelectAnimalWindow();
@@ -1015,12 +1016,6 @@ namespace Main
             //btnDishPageDown.Enabled = false;
         }
 
-        public void hideGz()
-        {
-            //堂食开台下单，如果有已点把按钮显示为下单
-            iswm = false;
-            btnGd.Visible = false;
-        }
 
         private void setSelectTypeColor()
         {
