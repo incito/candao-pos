@@ -5260,7 +5260,7 @@ namespace Main
         /// <returns></returns>
         private object BackAllTakeOutDishProcess(object arg)
         {
-            if (Globals.OrderTable != null && Globals.OrderTable.Rows.Count > 0)//外卖购物车不为空时先退菜。
+            if (!CheckCallBill() && Globals.OrderTable != null && Globals.OrderTable.Rows.Count > 0)//外卖购物车不为空时先退菜。
             {
                 var service = new RestaurantServiceImpl();
                 var result = service.BackAllDish(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid);
