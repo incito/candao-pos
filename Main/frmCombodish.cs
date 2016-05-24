@@ -235,6 +235,7 @@ namespace Main
             pot.PotInfo.Orderstatus = 2;
             pot.PotInfo.Orderid = Globals.CurrOrderInfo.orderid;
             pot.PotInfo.Userid = userid;// Globals.UserInfo.UserID;
+            pot.PotInfo.PrimaryKey = getGUID();
             pot.PotInfo.Ordertime = DateTime.Now;
             pot.PotInfo.Tableid = Globals.CurrTableInfo.tableNo;
             pot.PotInfo.Price = 0;

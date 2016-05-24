@@ -2352,7 +2352,6 @@ namespace WebServiceReference
             {
                 string Groupid = dr["Groupid"].ToString();
                 string Orderstatus = dr["Orderstatus"].ToString();
-                string primarykey = dr["primarykey"].ToString();;
                 if (Groupid.Equals("") || Orderstatus.Equals("0"))
                 {
                     writer.WriteStartObject();
@@ -2389,8 +2388,8 @@ namespace WebServiceReference
                             dishtype = 2;
                             writer.WritePropertyName("dishes");
                             writer.WriteStartArray();
-                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, true, primarykey);
-                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, false, primarykey);
+                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, true);
+                            writeCombos(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, false);
                             writer.WriteEndArray();
                         }
                         else
@@ -2399,7 +2398,7 @@ namespace WebServiceReference
                             dishtype = 1;
                             writer.WritePropertyName("dishes");
                             writer.WriteStartArray();
-                            writeDishes(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype, primarykey);
+                            writeDishes(orderid, ref writer, dt, dr["Groupid"].ToString(), ordertype);
                             writer.WriteEndArray();
                         }
 
@@ -2428,8 +2427,8 @@ namespace WebServiceReference
                     writer.WriteValue(double.Parse(dishnum));
                     writer.WritePropertyName("sperequire"); //忌口
                     writer.WriteValue("");
-                    writer.WritePropertyName("primarykey"); ////
-                    writer.WriteValue(primarykey);
+                    writer.WritePropertyName("primarykey"); 
+                    writer.WriteValue(dr["primarykey"].ToString());
                     string dishstatus = "0";
                     if (dr["weigh"].ToString().Equals("1"))
                     {
@@ -2447,7 +2446,7 @@ namespace WebServiceReference
             return "";
         }
 
-        private static void writeCombos(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype, bool isfish, string primarykey)
+        private static void writeCombos(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype, bool isfish)
         {
             string str0 = "0";
             string str1 = "1";
@@ -2502,8 +2501,7 @@ namespace WebServiceReference
                             string groupid2 = dr["Groupid2"].ToString();
                             dr["Groupid2"] = groupid;
                             writer.WriteStartArray();
-                            string primarykey2 = "";
-                            writeDishes(orderid, ref writer, dt, groupid2, ordertype, primarykey2);
+                            writeDishes(orderid, ref writer, dt, groupid2, ordertype);
                             writer.WriteEndArray();
                         }
                         else
@@ -2531,7 +2529,7 @@ namespace WebServiceReference
                         writer.WritePropertyName("sperequire"); //忌口
                         writer.WriteValue("");
                         writer.WritePropertyName("primarykey"); ////
-                        writer.WriteValue(primarykey);
+                        writer.WriteValue(dr["primarykey"].ToString());
                         string dishstatus = "0";
                         if (dr["weigh"].ToString().Equals("1"))
                         {
@@ -2550,23 +2548,17 @@ namespace WebServiceReference
             }
         }
 
-        private static void writeDishes(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype, string primarykey)
+        private static void writeDishes(string orderid, ref JsonWriter writer, DataTable dt, string groupid, int ordertype)
         {
             string str0 = "0";
             string str1 = "1";
             int i = 0;
-            string primarykeydish = "";
             foreach (DataRow dr in dt.Rows)
             {
                 if (dr["Groupid2"].ToString().Equals(groupid))
                 {
                     if (!dr["Orderstatus"].ToString().Equals("0"))
                     {
-                        //单品
-                        if (primarykey.Equals(""))
-                            primarykeydish = getGUID();
-                        else
-                            primarykeydish = primarykey + "-" + i.ToString();
                         writer.WriteStartObject();
                         writer.WritePropertyName("printtype");
                         writer.WriteValue(str0);
@@ -2613,7 +2605,7 @@ namespace WebServiceReference
                         writer.WritePropertyName("sperequire"); //忌口
                         writer.WriteValue("");
                         writer.WritePropertyName("primarykey"); ////
-                        writer.WriteValue(primarykeydish);
+                        writer.WriteValue(dr["primarykey"].ToString());
                         string dishstatus = "0";
                         if (dr["weigh"].ToString().Equals("1"))
                         {
