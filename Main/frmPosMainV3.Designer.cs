@@ -140,8 +140,8 @@
             this.xtp4 = new DevExpress.XtraTab.XtraTabPage();
             this.xtp5 = new DevExpress.XtraTab.XtraTabPage();
             this.xtraTabPage5 = new DevExpress.XtraTab.XtraTabPage();
-            this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
-            this.xtraTabPage7 = new DevExpress.XtraTab.XtraTabPage();
+            this.xtpOther = new DevExpress.XtraTab.XtraTabPage();
+            this.xtpCo = new DevExpress.XtraTab.XtraTabPage();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.pnlNum = new System.Windows.Forms.Panel();
@@ -1308,8 +1308,8 @@
             this.xtp4,
             this.xtp5,
             this.xtraTabPage5,
-            this.xtraTabPage6,
-            this.xtraTabPage7});
+            this.xtpOther,
+            this.xtpCo});
             this.xtraTabControl2.Tag = "0";
             this.xtraTabControl2.SelectedPageChanged += new DevExpress.XtraTab.TabPageChangedEventHandler(this.xtraTabControl2_SelectedPageChanged);
             // 
@@ -1717,35 +1717,19 @@
             this.xtraTabPage5.Text = "会员";
             this.xtraTabPage5.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
             // 
-            // xtraTabPage6
+            // xtpOther
             // 
-            this.xtraTabPage6.Appearance.Header.BackColor = System.Drawing.Color.White;
-            this.xtraTabPage6.Appearance.Header.BackColor2 = System.Drawing.Color.DeepSkyBlue;
-            this.xtraTabPage6.Appearance.Header.BorderColor = System.Drawing.Color.White;
-            this.xtraTabPage6.Appearance.Header.Options.UseBackColor = true;
-            this.xtraTabPage6.Appearance.Header.Options.UseBorderColor = true;
-            this.xtraTabPage6.Appearance.PageClient.BackColor = System.Drawing.Color.White;
-            this.xtraTabPage6.Appearance.PageClient.Options.UseBackColor = true;
-            this.xtraTabPage6.Name = "xtraTabPage6";
-            this.xtraTabPage6.Size = new System.Drawing.Size(659, 168);
-            this.xtraTabPage6.Tag = "0602";
-            this.xtraTabPage6.Text = "内部优免";
-            this.xtraTabPage6.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
+            this.xtpOther.Name = "xtpOther";
+            this.xtpOther.Size = new System.Drawing.Size(659, 168);
+            this.xtpOther.Tag = "00";
+            this.xtpOther.Text = "其他优惠";
             // 
-            // xtraTabPage7
+            // xtpCo
             // 
-            this.xtraTabPage7.Appearance.Header.BackColor = System.Drawing.Color.White;
-            this.xtraTabPage7.Appearance.Header.BackColor2 = System.Drawing.Color.DeepSkyBlue;
-            this.xtraTabPage7.Appearance.Header.BorderColor = System.Drawing.Color.White;
-            this.xtraTabPage7.Appearance.Header.Options.UseBackColor = true;
-            this.xtraTabPage7.Appearance.Header.Options.UseBorderColor = true;
-            this.xtraTabPage7.Appearance.PageClient.BackColor = System.Drawing.Color.White;
-            this.xtraTabPage7.Appearance.PageClient.Options.UseBackColor = true;
-            this.xtraTabPage7.Name = "xtraTabPage7";
-            this.xtraTabPage7.Size = new System.Drawing.Size(659, 168);
-            this.xtraTabPage7.Tag = "0601";
-            this.xtraTabPage7.Text = "手工优免";
-            this.xtraTabPage7.Paint += new System.Windows.Forms.PaintEventHandler(this.xtp1_Paint);
+            this.xtpCo.Name = "xtpCo";
+            this.xtpCo.Size = new System.Drawing.Size(659, 168);
+            this.xtpCo.Tag = "08";
+            this.xtpCo.Text = "合作单位";
             // 
             // xtraTabControl1
             // 
@@ -3381,8 +3365,8 @@
         private DevExpress.XtraTab.XtraTabPage xtp4;
         private DevExpress.XtraTab.XtraTabPage xtp5;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage5;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPage6;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPage7;
+        private DevExpress.XtraTab.XtraTabPage xtpOther;
+        private DevExpress.XtraTab.XtraTabPage xtpCo;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Timer tmrOpenTable;
         private System.Windows.Forms.Button btnOrder2;
