@@ -400,7 +400,10 @@ namespace Main
                 membercard = "";
                 edtMember.Text = "";
                 edtJf.Text = "";
-                edtAmount.Text = "";
+                if(ysamount==0)
+                {
+                    edtAmount.Text = "";
+                }
                 edtWx.Text = "";
                 edtWxAmount.Text = "";
                 edtZfb.Text = "";
