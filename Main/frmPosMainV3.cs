@@ -20,6 +20,7 @@ using Models.CandaoMember;
 using Models.Enum;
 using WebServiceReference.ServiceImpl;
 using Timer = System.Timers.Timer;
+using System.Text.RegularExpressions;
 
 namespace Main
 {
@@ -41,6 +42,7 @@ namespace Main
         private float amountroundtz = 0;//四舍五入调整
         private string currtableno = "";
         private float ysamount = 0;//应收
+
         private float amountjf = 0;//会员积分 //如果使用积分 不能找零
 
         //优惠的挂帐和优免
@@ -100,6 +102,7 @@ namespace Main
         /// </summary>
         private VCouponRule _curCoupon;
 
+       
         //记录每张台下单序列的INI文件
         public frmPosMainV3()
         {
@@ -307,11 +310,26 @@ namespace Main
             lblRs.Text = String.Format("人数：{0}", "");
             lblZd.Text = String.Format("帐单：{0}", "");
             lblMember.Text = String.Format("会员：{0}", "");
+            lblMember.TextChanged += lblMember_TextChanged;
             //btnDelete.Visible = !RestClient.isClearCoupon();
             dgvjs.Width = 330;
             InitMemberFun();
             //pnlMore.Top = 200;
             setFormToPayType1();
+        }
+
+        /// <summary>
+        /// 会员卡号变化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void lblMember_TextChanged(object sender, EventArgs e)
+        {
+            var tag = btnFind.Tag.ToString();
+            if (!lblMember.Text.Equals("会员：") & !string.IsNullOrEmpty(Globals.CurrOrderInfo.memberno) & tag.Equals("0"))
+           {
+               LoginVIP();
+           }
         }
 
         public static bool checkInputTellerCash()
@@ -727,6 +745,9 @@ namespace Main
             }
 
             lblAmount2.Text = String.Format("应收金额：{0}元", ysamount);
+            
+         
+
             lblAmount.Text = String.Format("合计金额：{0}元", Globals.CurrTableInfo.amount);
             focusedt = edtAmount;
             //edtAmount.Text = Globals.CurrTableInfo.amount.ToString();
@@ -780,6 +801,23 @@ namespace Main
                 }
             }
             catch { }
+        }
+
+        /// <summary>
+        /// 应收金额变化时，现金金额同步更新
+        /// </summary>
+        private void SyncCashPay()
+        {
+            string val =string.Format("应收金额：{0}元",ysamount);
+
+            if (!lblAmount2.Text.Equals(val))
+            {
+                edtAmount.EditValueChanging -= edtAmount_EditValueChanging;
+                edtAmount.Text = ysamount.ToString();
+                edtAmount.EditValueChanging += edtAmount_EditValueChanging;
+            }
+            
+           
         }
 
         /// <summary>
@@ -845,7 +883,7 @@ namespace Main
         private void getAmount()
         {
             payamount = Globals.CurrTableInfo.amount;//应付
-            amountrmb = string2float(edtAmount.Text);//实收rmb
+          
             amountyhk = string2float(edtCard.Text); //实收yhk
             amounthyk = string2float(edtMember.Text); ;//实收hyk
             amountgz = string2float(edtGzAmount.Text);//挂帐
@@ -861,6 +899,12 @@ namespace Main
             ysamount = ysamount - amountml;
             if (ysamount < 0)
                 ysamount = 0;
+
+            //应收金额同步更新现金付款
+            SyncCashPay();
+
+            amountrmb = string2float(edtAmount.Text);//实收rmb
+
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
             getamount = (float)Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
@@ -968,6 +1012,7 @@ namespace Main
                     }
                 }
             }
+          
             lblSum.Text = String.Format("收款：{0}", tmpstr);
             if (Math.Round(getamount - amountroundtz, 2) >= payamount)
             {
@@ -993,7 +1038,9 @@ namespace Main
         }
         private void edtAmount_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
+         
             getAmount();
+          
         }
 
         private void edtCard_EditValueChanged(object sender, EventArgs e)
@@ -4991,6 +5038,14 @@ namespace Main
         }
 
         private void btnFind_Click(object sender, EventArgs e)
+        {
+            LoginVIP();
+        }
+
+        /// <summary>
+        /// 登录会员
+        /// </summary>
+        private void LoginVIP()
         {
             if (btnFind.Tag.ToString().Equals("0"))
             {
