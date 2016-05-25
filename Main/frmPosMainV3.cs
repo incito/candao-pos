@@ -732,25 +732,7 @@ namespace Main
             //edtAmount.Text = Globals.CurrTableInfo.amount.ToString();
             edtAmount.Focus();
             edtReturn.Text = "0";
-            //getAmount();
-            if (CheckCallBill())
-            {
-                btnDelete.Visible = false;
-                lblSum.Text = "已结算";
-                btnAdd.Visible = false;
-                btnDec.Visible = false;
-            }
-            else
-            {
-                btnAdd.Visible = true;
-                btnDec.Visible = true;
-                btnDelete.Visible = true;
-            }
-            //btnDelete.Visible = !RestClient.isClearCoupon();
-            if (Globals.CurrOrderInfo.fulldiscountrate > 0)
-            {
-                //lbldiscount.Visible = true;
-            }
+
             edtReturn.Text = returnamount.ToString();
 
             try
