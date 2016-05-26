@@ -37,5 +37,15 @@
         public string orderid { get; set; }
 
         public string restaurantId { get; set; }
+
+        /// <summary>
+        /// 开台时间，未开台为null。
+        /// </summary>
+        public string begintime { get; set; }
+
+        /// <summary>
+        /// 应收金额。
+        /// </summary>
+        public decimal? amount { get; set; }
     }
 }

@@ -27,8 +27,8 @@ namespace Main
         private int downx = 0;
         private int downy = 0;
         private DataView dv = null;
-        private Library.UserControls.ucTable[] btntables;
-        private Library.UserControls.ucTable[] btnTypetables;
+        private Library.UserControls.ucDish[] btntables;
+        private Library.UserControls.ucDish[] btnTypetables;
 
         private const int rowcount = 4;
         private int btnWidth = 126;
@@ -40,7 +40,7 @@ namespace Main
         private int btncount = 32;//jarrTables.Count 36
         public event ShoppingChange shoppingChange;
         public event Accounts accounts;
-        private Library.UserControls.ucTable selectbtn = null;
+        private Library.UserControls.ucDish selectbtn = null;
         private bool iswm = true;
         private string menuid = "";
         private int dishcount_type = 0;//分类中的菜品数量
@@ -389,7 +389,7 @@ namespace Main
         }
         private void getTypeBtns()
         {
-            btnTypetables = new Library.UserControls.ucTable[10];
+            btnTypetables = new Library.UserControls.ucDish[10];
             btnTypetables[0] = btnType1;
             btnTypetables[1] = btnType2;
             btnTypetables[2] = btnType3;
@@ -649,7 +649,7 @@ namespace Main
         }
         private void CreateBtnArr()
         {
-            btntables = new Library.UserControls.ucTable[btncount];
+            btntables = new Library.UserControls.ucDish[btncount];
             JObject ja = null;
             string tableid = "";
             string tableName = "";
@@ -663,7 +663,7 @@ namespace Main
             int personnum = 0;
             for (int i = 0; i <= btntables.Length - 1; i++)
             {
-                btntables[i] = new Library.UserControls.ucTable();
+                btntables[i] = new Library.UserControls.ucDish();
                 btntables[i].lblNo.Click += new EventHandler(ucTable1_Click);
                 btntables[i].lbl2.Click += new EventHandler(ucTable1_Click);
                 //btntables[i].MouseDown += ucTable1_MouseDown;
@@ -728,8 +728,8 @@ namespace Main
 
         private void ucTable1_Load(object sender, EventArgs e)
         {
-            ((Library.UserControls.ucTable)sender).lblNo.Click += new EventHandler(ucTable1_Click);
-            ((Library.UserControls.ucTable)sender).lbl2.Click += new EventHandler(ucTable1_Click);
+            ((Library.UserControls.ucDish)sender).lblNo.Click += new EventHandler(ucTable1_Click);
+            ((Library.UserControls.ucDish)sender).lbl2.Click += new EventHandler(ucTable1_Click);
         }
         private void addDish(JObject ja)
         {
@@ -899,17 +899,17 @@ namespace Main
 
         private void ucTable1_MouseDown(object sender, MouseEventArgs e)
         {
-            ((Library.UserControls.ucTable)((Label)sender).Parent).BorderStyle = BorderStyle.Fixed3D;
+            ((Library.UserControls.ucDish)((Label)sender).Parent).BorderStyle = BorderStyle.Fixed3D;
         }
 
         private void ucTable1_MouseUp(object sender, MouseEventArgs e)
         {
-            ((Library.UserControls.ucTable)((Label)sender).Parent).BorderStyle = BorderStyle.FixedSingle;
+            ((Library.UserControls.ucDish)((Label)sender).Parent).BorderStyle = BorderStyle.FixedSingle;
         }
 
         private void ucTable1_MouseLeave(object sender, EventArgs e)
         {
-            ((Library.UserControls.ucTable)((Label)sender).Parent).BorderStyle = BorderStyle.FixedSingle;
+            ((Library.UserControls.ucDish)((Label)sender).Parent).BorderStyle = BorderStyle.FixedSingle;
         }
 
         private void btnGd_Click(object sender, EventArgs e)
@@ -1000,7 +1000,7 @@ namespace Main
         }
         private void btnType1_Click(object sender, EventArgs e)
         {
-            selectbtn = (Library.UserControls.ucTable)((Label)sender).Parent;
+            selectbtn = (Library.UserControls.ucDish)((Label)sender).Parent;
             selectSource = ((JObject)selectbtn.lbl2.Tag)["itemid"].ToString();
             setSelectTypeColor();
             pagecount_type = 0;

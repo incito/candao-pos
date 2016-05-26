@@ -1335,22 +1335,6 @@ namespace WebServiceReference
             return ja["Data"].ToString().Equals("1");
         }
 
-        public static JArray querytables()
-        {
-            JArray jr = null;
-            string address = "http://" + server + "/" + apiPath + "/padinterface/querytables.json";
-            if (!alreadLogAllTableInfo)
-                AllLog.Instance.I("【querytables】 begin。");
-            String jsonResult = Post_Rest(address, null);
-            if (!alreadLogAllTableInfo)
-                AllLog.Instance.I(string.Format("【querytables】 result：{0}。", jsonResult));
-            alreadLogAllTableInfo = true;
-            if (jsonResult == "0")
-                return null;
-
-            return (JArray)JsonConvert.DeserializeObject(jsonResult);
-        }
-
         /// <summary>
         /// jde同步资料回调
         /// </summary>

@@ -28,14 +28,18 @@ namespace Main
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAllTable));
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer();
+            this.timer2 = new System.Windows.Forms.Timer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.btnShapping = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.pnlState5 = new System.Windows.Forms.Panel();
             this.lblState5 = new System.Windows.Forms.Label();
+            this.btnend = new System.Windows.Forms.Button();
             this.pnlState3 = new System.Windows.Forms.Panel();
             this.lblState3 = new System.Windows.Forms.Label();
             this.pnlState4 = new System.Windows.Forms.Panel();
@@ -43,9 +47,10 @@ namespace Main
             this.pnlState1 = new System.Windows.Forms.Panel();
             this.lblState1 = new System.Windows.Forms.Label();
             this.pnlState0 = new System.Windows.Forms.Panel();
+            this.btnReport = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.lblState0 = new System.Windows.Forms.Label();
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.ucTable1 = new Library.UserControls.ucTable();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblUser = new System.Windows.Forms.Label();
             this.lblTime = new System.Windows.Forms.Label();
@@ -53,24 +58,16 @@ namespace Main
             this.btnRBill = new System.Windows.Forms.Button();
             this.lblVer = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btnShapping = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.btnend = new System.Windows.Forms.Button();
-            this.btnReport = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
             this.pnlState5.SuspendLayout();
             this.pnlState3.SuspendLayout();
             this.pnlState4.SuspendLayout();
             this.pnlState1.SuspendLayout();
             this.pnlState0.SuspendLayout();
-            this.pnlMain.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
@@ -218,23 +215,11 @@ namespace Main
             // 
             this.pnlMain.BackColor = System.Drawing.Color.Gainsboro;
             this.pnlMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pnlMain.Controls.Add(this.ucTable1);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(0, 0);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(1008, 708);
             this.pnlMain.TabIndex = 233;
-            // 
-            // ucTable1
-            // 
-            this.ucTable1.BackColor = System.Drawing.Color.LightSalmon;
-            this.ucTable1.Location = new System.Drawing.Point(10, 81);
-            this.ucTable1.Name = "ucTable1";
-            this.ucTable1.Size = new System.Drawing.Size(87, 57);
-            this.ucTable1.TabIndex = 0;
-            this.ucTable1.Visible = false;
-            this.ucTable1.Load += new System.EventHandler(this.ucTable1_Load);
-            this.ucTable1.Click += new System.EventHandler(this.ucTable1_Click);
             // 
             // panel2
             // 
@@ -431,7 +416,6 @@ namespace Main
             this.pnlState4.ResumeLayout(false);
             this.pnlState1.ResumeLayout(false);
             this.pnlState0.ResumeLayout(false);
-            this.pnlMain.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
@@ -453,7 +437,6 @@ namespace Main
         private System.Windows.Forms.Button btnReport;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
-        private Library.UserControls.ucTable ucTable1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox3;
