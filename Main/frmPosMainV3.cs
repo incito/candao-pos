@@ -1048,6 +1048,19 @@ namespace Main
                         return;
                     }
                 }
+                if (amountgz > 0)
+                {
+                    if (string.IsNullOrEmpty(edtGz.Text))
+                    {
+                        Warning("请选择一个挂账单位。");
+                        return;
+                    }
+                    if (amountgz > ysamount)
+                    {
+                        Warning("挂账金额大于应收金额。");
+                        return;
+                    }
+                }
                 if ((getamountsy > 0) && (ysamount > 0) && (amountrmb <= 0))
                 {
                     if (getamountsy > (ysamount))
@@ -3577,13 +3590,13 @@ namespace Main
 
         private void btnRePrint_Click_1(object sender, EventArgs e)
         {
+            BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ReprintSettleBill, Globals.CurrOrderInfo.orderid));
             try
             {
                 if (!AskQuestion("台号：" + Globals.CurrTableInfo.tableName + "确定要重印结帐单吗?"))
                 {
                     return;
                 }
-                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.ReprintSettleBill, Globals.CurrOrderInfo.orderid));
 
                 this.Cursor = Cursors.WaitCursor;
                 PrintBill2();
@@ -3946,7 +3959,12 @@ namespace Main
                         {
                             if (startorder(ordertype))
                             {
-                                BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.DineOrderEnd, Globals.CurrOrderInfo.orderid, _dinnerOrderBeginActionInfo.Key));
+                                if (_dinnerOrderBeginActionInfo != null)
+                                {
+                                    BigDataHelper.DeviceActionAsync(new DeviceActionInfo(EnumDeviceAction.DineOrderEnd, Globals.CurrOrderInfo.orderid, _dinnerOrderBeginActionInfo.Key));
+                                    _dinnerOrderBeginActionInfo = null;//清空堂食下单行为。
+                                }
+                                    
                                 try
                                 {
                                     msgorderid = Globals.CurrOrderInfo.orderid; //广播消息到PAD同步菜单
