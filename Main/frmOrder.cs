@@ -741,10 +741,9 @@ namespace Main
             if (userid == null)
                 userid = Globals.UserInfo.UserID;
 
-            var primaryKey = Guid.NewGuid().ToString();
             t_shopping dishinfo = new t_shopping();
             dishinfo.Orderid = Globals.CurrOrderInfo.orderid;
-            dishinfo.PrimaryKey = primaryKey;
+            dishinfo.PrimaryKey = Guid.NewGuid().ToString();
             dishinfo.Userid = userid;// Globals.UserInfo.UserID;
             dishinfo.Ordertime = DateTime.Now;
             dishinfo.Orderstatus = 0;
@@ -824,14 +823,14 @@ namespace Main
                     if (frmFish.ShowFish(dishinfo, out potDishInfo))
                     {
                         potDishInfo.PotInfo.Orderid = Globals.CurrOrderInfo.orderid;
-                        potDishInfo.PotInfo.PrimaryKey = primaryKey;
+                        potDishInfo.PotInfo.PrimaryKey = Guid.NewGuid().ToString();
                         potDishInfo.PotInfo.Userid = userid;// Globals.UserInfo.UserID;
                         potDishInfo.PotInfo.Ordertime = DateTime.Now;
                         potDishInfo.PotInfo.Orderstatus = 0;
                         potDishInfo.PotInfo.Tableid = Globals.CurrTableInfo.tableNo;
                         potDishInfo.PotInfo.Primarydishtype = 1;
                         potDishInfo.FishDishInfo1.Orderid = Globals.CurrOrderInfo.orderid;
-                        potDishInfo.FishDishInfo1.PrimaryKey = primaryKey;
+                        potDishInfo.FishDishInfo1.PrimaryKey = Guid.NewGuid().ToString();
                         potDishInfo.FishDishInfo1.Userid = userid;// Globals.UserInfo.UserID;
                         potDishInfo.FishDishInfo1.Ordertime = DateTime.Now;
                         potDishInfo.FishDishInfo1.Orderstatus = 0;
@@ -854,7 +853,7 @@ namespace Main
                         if (potDishInfo.FishDishInfo2 != null)
                         {
                             potDishInfo.FishDishInfo2.Orderid = Globals.CurrOrderInfo.orderid;
-                            potDishInfo.FishDishInfo2.PrimaryKey = primaryKey;
+                            potDishInfo.FishDishInfo2.PrimaryKey = Guid.NewGuid().ToString();
                             potDishInfo.FishDishInfo2.Userid = userid;// Globals.UserInfo.UserID;
                             potDishInfo.FishDishInfo2.Ordertime = DateTime.Now;
                             potDishInfo.FishDishInfo2.Tableid = Globals.CurrTableInfo.tableNo;
