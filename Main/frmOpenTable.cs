@@ -195,7 +195,6 @@ namespace Main
             }
             Globals.CurrOrderInfo.orderid = orderid;
             Globals.CurrOrderInfo.userid = edtUserid.Text;
-            IniPos.setPosIniVlaue(Application.StartupPath, "ORDERCJ", orderid,edtCj.Text);
             openRm(sender, e);
             Close();
             //开台成功

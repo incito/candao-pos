@@ -4141,19 +4141,16 @@ namespace Main
             DateTime dt = DateTime.Now;
             //下单序号
             string seqnostr = IniPos.getPosIniValue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, "0");
-            //string seqnostr = dt.ToLongTimeString().ToString().Replace(":","");
-            if (seqnostr.Equals("0"))
+            if (Globals.OrderTable.Rows.Count == 0 && (Globals.cjSetting == null || Globals.cjSetting.Status == "1" ))
             {
                 //如果是第一次下单，如果餐具要收费，那么把餐具加入已点,一起下单
                 try
                 {
-                    string cj = IniPos.getPosIniValue(Application.StartupPath, "ORDERCJ", Globals.CurrOrderInfo.orderid, "0");
-                    if (int.Parse(cj) > 0)
+                    int cusNum = Globals.CurrOrderInfo.custnum != null ? Globals.CurrOrderInfo.custnum.Value : 0;
+                    if (cusNum > 0)
                     {
-                        string userid = Globals.CurrOrderInfo.userid;
-                        if (userid == null)
-                            userid = Globals.UserInfo.UserID;
-                        t_shopping.addCJ(Globals.cjFood, Globals.CurrTableInfo, Globals.CurrOrderInfo, userid, Globals.cjSetting, ref Globals.ShoppTable, int.Parse(cj));
+                        string userid = !string.IsNullOrEmpty(Globals.CurrOrderInfo.userid) ? Globals.CurrOrderInfo.userid : Globals.UserInfo.UserID;
+                        t_shopping.addCJ(Globals.cjFood, Globals.CurrTableInfo, Globals.CurrOrderInfo, userid, Globals.cjSetting, ref Globals.ShoppTable, cusNum);
                     }
                 }
                 catch { }
