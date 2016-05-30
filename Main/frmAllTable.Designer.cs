@@ -37,37 +37,30 @@ namespace Main
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnShapping = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.pnlState5 = new System.Windows.Forms.Panel();
-            this.lblState5 = new System.Windows.Forms.Label();
             this.btnend = new System.Windows.Forms.Button();
-            this.pnlState3 = new System.Windows.Forms.Panel();
-            this.lblState3 = new System.Windows.Forms.Label();
-            this.pnlState4 = new System.Windows.Forms.Panel();
-            this.lblState4 = new System.Windows.Forms.Label();
             this.pnlState1 = new System.Windows.Forms.Panel();
             this.lblState1 = new System.Windows.Forms.Label();
             this.pnlState0 = new System.Windows.Forms.Panel();
+            this.lblState0 = new System.Windows.Forms.Label();
             this.btnReport = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.lblState0 = new System.Windows.Forms.Label();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblUser = new System.Windows.Forms.Label();
             this.lblTime = new System.Windows.Forms.Label();
             this.lblbranchid = new System.Windows.Forms.Label();
-            this.btnRBill = new System.Windows.Forms.Button();
             this.lblVer = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.panelPage = new System.Windows.Forms.Panel();
+            this.btnDown = new System.Windows.Forms.Button();
+            this.btnUp = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
-            this.pnlState5.SuspendLayout();
-            this.pnlState3.SuspendLayout();
-            this.pnlState4.SuspendLayout();
             this.pnlState1.SuspendLayout();
             this.pnlState0.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panelPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
@@ -96,10 +89,7 @@ namespace Main
             // 
             this.panel4.Controls.Add(this.btnShapping);
             this.panel4.Controls.Add(this.button3);
-            this.panel4.Controls.Add(this.pnlState5);
             this.panel4.Controls.Add(this.btnend);
-            this.panel4.Controls.Add(this.pnlState3);
-            this.panel4.Controls.Add(this.pnlState4);
             this.panel4.Controls.Add(this.pnlState1);
             this.panel4.Controls.Add(this.pnlState0);
             this.panel4.Controls.Add(this.btnReport);
@@ -109,67 +99,6 @@ namespace Main
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(1008, 58);
             this.panel4.TabIndex = 234;
-            // 
-            // pnlState5
-            // 
-            this.pnlState5.BackColor = System.Drawing.Color.Tomato;
-            this.pnlState5.Controls.Add(this.lblState5);
-            this.pnlState5.Location = new System.Drawing.Point(335, 32);
-            this.pnlState5.Name = "pnlState5";
-            this.pnlState5.Size = new System.Drawing.Size(75, 38);
-            this.pnlState5.TabIndex = 237;
-            this.pnlState5.Visible = false;
-            // 
-            // lblState5
-            // 
-            this.lblState5.BackColor = System.Drawing.Color.SlateGray;
-            this.lblState5.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.lblState5.Location = new System.Drawing.Point(32, 0);
-            this.lblState5.Name = "lblState5";
-            this.lblState5.Size = new System.Drawing.Size(75, 38);
-            this.lblState5.TabIndex = 0;
-            this.lblState5.Text = "撤销(0)";
-            this.lblState5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // pnlState3
-            // 
-            this.pnlState3.BackColor = System.Drawing.Color.Turquoise;
-            this.pnlState3.Controls.Add(this.lblState3);
-            this.pnlState3.Location = new System.Drawing.Point(305, 35);
-            this.pnlState3.Name = "pnlState3";
-            this.pnlState3.Size = new System.Drawing.Size(75, 38);
-            this.pnlState3.TabIndex = 237;
-            this.pnlState3.Visible = false;
-            // 
-            // lblState3
-            // 
-            this.lblState3.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.lblState3.Location = new System.Drawing.Point(15, 4);
-            this.lblState3.Name = "lblState3";
-            this.lblState3.Size = new System.Drawing.Size(75, 38);
-            this.lblState3.TabIndex = 0;
-            this.lblState3.Text = "结帐(0)";
-            this.lblState3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // pnlState4
-            // 
-            this.pnlState4.BackColor = System.Drawing.Color.SkyBlue;
-            this.pnlState4.Controls.Add(this.lblState4);
-            this.pnlState4.Location = new System.Drawing.Point(168, 7);
-            this.pnlState4.Name = "pnlState4";
-            this.pnlState4.Size = new System.Drawing.Size(75, 38);
-            this.pnlState4.TabIndex = 237;
-            // 
-            // lblState4
-            // 
-            this.lblState4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblState4.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.lblState4.Location = new System.Drawing.Point(0, 0);
-            this.lblState4.Name = "lblState4";
-            this.lblState4.Size = new System.Drawing.Size(75, 38);
-            this.lblState4.TabIndex = 0;
-            this.lblState4.Text = "预定(0)";
-            this.lblState4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pnlState1
             // 
@@ -227,9 +156,7 @@ namespace Main
             this.panel2.Controls.Add(this.lblUser);
             this.panel2.Controls.Add(this.lblTime);
             this.panel2.Controls.Add(this.lblbranchid);
-            this.panel2.Controls.Add(this.btnRBill);
             this.panel2.Controls.Add(this.lblVer);
-            this.panel2.Controls.Add(this.button2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 708);
             this.panel2.Name = "panel2";
@@ -263,19 +190,6 @@ namespace Main
             this.lblbranchid.TabIndex = 1;
             this.lblbranchid.Text = "店铺编号：0013";
             // 
-            // btnRBill
-            // 
-            this.btnRBill.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnRBill.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnRBill.Location = new System.Drawing.Point(490, -19);
-            this.btnRBill.Name = "btnRBill";
-            this.btnRBill.Size = new System.Drawing.Size(105, 53);
-            this.btnRBill.TabIndex = 232;
-            this.btnRBill.Text = "结帐";
-            this.btnRBill.UseVisualStyleBackColor = true;
-            this.btnRBill.Visible = false;
-            this.btnRBill.Click += new System.EventHandler(this.btnRBill_Click);
-            // 
             // lblVer
             // 
             this.lblVer.AutoSize = true;
@@ -285,17 +199,25 @@ namespace Main
             this.lblVer.TabIndex = 0;
             this.lblVer.Text = "版本：v1.0.0.0";
             // 
-            // button2
+            // btnDown
             // 
-            this.button2.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.button2.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.button2.Location = new System.Drawing.Point(566, -19);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(105, 53);
-            this.button2.TabIndex = 234;
-            this.button2.Text = "反结算";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Visible = false;
+            this.btnDown.Image = global::KYPOS.Properties.Resources.down21;
+            this.btnDown.Location = new System.Drawing.Point(515, 0);
+            this.btnDown.Name = "btnDown";
+            this.btnDown.Size = new System.Drawing.Size(42, 39);
+            this.btnDown.TabIndex = 1;
+            this.btnDown.UseVisualStyleBackColor = true;
+            this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
+            // 
+            // btnUp
+            // 
+            this.btnUp.Image = global::KYPOS.Properties.Resources.up21;
+            this.btnUp.Location = new System.Drawing.Point(456, 1);
+            this.btnUp.Name = "btnUp";
+            this.btnUp.Size = new System.Drawing.Size(42, 39);
+            this.btnUp.TabIndex = 0;
+            this.btnUp.UseVisualStyleBackColor = true;
+            this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
             // 
             // pictureBox3
             // 
@@ -389,7 +311,17 @@ namespace Main
             this.button1.TabIndex = 233;
             this.button1.Text = "        清机";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.button1_Click);// 
+            // panelPage
+            // 
+            this.panelPage.Controls.Add(this.btnDown);
+            this.panelPage.Controls.Add(this.btnUp);
+            this.panelPage.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelPage.Location = new System.Drawing.Point(0, 610);
+            this.panelPage.Name = "panelPage";
+            this.panelPage.Size = new System.Drawing.Size(1008, 40);
+            this.panelPage.TabIndex = 236;
+            this.panelPage.Visible = false;
             // 
             // frmAllTable
             // 
@@ -398,6 +330,7 @@ namespace Main
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.panelPage);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.pnlMain);
@@ -411,13 +344,11 @@ namespace Main
             this.Load += new System.EventHandler(this.frmAllTable_Load);
             this.panel1.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
-            this.pnlState5.ResumeLayout(false);
-            this.pnlState3.ResumeLayout(false);
-            this.pnlState4.ResumeLayout(false);
             this.pnlState1.ResumeLayout(false);
             this.pnlState0.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panelPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -433,9 +364,7 @@ namespace Main
         private System.Windows.Forms.Label lblVer;
         private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Button btnRBill;
         private System.Windows.Forms.Button btnReport;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panel1;
@@ -443,19 +372,15 @@ namespace Main
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel pnlState0;
         private System.Windows.Forms.Label lblState0;
-        private System.Windows.Forms.Panel pnlState5;
-        private System.Windows.Forms.Label lblState5;
-        private System.Windows.Forms.Panel pnlState3;
-        private System.Windows.Forms.Label lblState3;
-        private System.Windows.Forms.Panel pnlState4;
-        private System.Windows.Forms.Label lblState4;
         private System.Windows.Forms.Panel pnlState1;
         private System.Windows.Forms.Label lblState1;
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Button btnend;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnShapping;
-
+        private System.Windows.Forms.Panel panelPage;
+        private System.Windows.Forms.Button btnDown;
+        private System.Windows.Forms.Button btnUp;
 
     }
 }

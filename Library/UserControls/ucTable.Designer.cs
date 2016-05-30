@@ -43,7 +43,7 @@
             this.lbTableName.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbTableName.Location = new System.Drawing.Point(0, 0);
             this.lbTableName.Name = "lbTableName";
-            this.lbTableName.Size = new System.Drawing.Size(100, 31);
+            this.lbTableName.Size = new System.Drawing.Size(98, 22);
             this.lbTableName.TabIndex = 0;
             this.lbTableName.Text = "餐台名";
             this.lbTableName.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -53,9 +53,9 @@
             // 
             this.lbCusNum.Dock = System.Windows.Forms.DockStyle.Top;
             this.lbCusNum.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbCusNum.Location = new System.Drawing.Point(0, 31);
+            this.lbCusNum.Location = new System.Drawing.Point(0, 22);
             this.lbCusNum.Name = "lbCusNum";
-            this.lbCusNum.Size = new System.Drawing.Size(100, 28);
+            this.lbCusNum.Size = new System.Drawing.Size(98, 25);
             this.lbCusNum.TabIndex = 1;
             this.lbCusNum.Text = "5人桌";
             this.lbCusNum.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -67,7 +67,7 @@
             this.lbTime.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbTime.Location = new System.Drawing.Point(0, 0);
             this.lbTime.Name = "lbTime";
-            this.lbTime.Size = new System.Drawing.Size(44, 21);
+            this.lbTime.Size = new System.Drawing.Size(44, 17);
             this.lbTime.TabIndex = 2;
             this.lbTime.Text = "00:00";
             this.lbTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -77,9 +77,9 @@
             // 
             this.lbAmount.Dock = System.Windows.Forms.DockStyle.Right;
             this.lbAmount.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbAmount.Location = new System.Drawing.Point(56, 0);
+            this.lbAmount.Location = new System.Drawing.Point(54, 0);
             this.lbAmount.Name = "lbAmount";
-            this.lbAmount.Size = new System.Drawing.Size(44, 21);
+            this.lbAmount.Size = new System.Drawing.Size(44, 17);
             this.lbAmount.TabIndex = 3;
             this.lbAmount.Text = "1234";
             this.lbAmount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -91,7 +91,7 @@
             this.lbSep.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbSep.Location = new System.Drawing.Point(44, 0);
             this.lbSep.Name = "lbSep";
-            this.lbSep.Size = new System.Drawing.Size(12, 21);
+            this.lbSep.Size = new System.Drawing.Size(10, 17);
             this.lbSep.TabIndex = 4;
             this.lbSep.Text = "|";
             this.lbSep.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -103,9 +103,9 @@
             this.plInfo.Controls.Add(this.lbTime);
             this.plInfo.Controls.Add(this.lbAmount);
             this.plInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plInfo.Location = new System.Drawing.Point(0, 59);
+            this.plInfo.Location = new System.Drawing.Point(0, 47);
             this.plInfo.Name = "plInfo";
-            this.plInfo.Size = new System.Drawing.Size(100, 21);
+            this.plInfo.Size = new System.Drawing.Size(98, 17);
             this.plInfo.TabIndex = 5;
             // 
             // UcTable
@@ -116,7 +116,7 @@
             this.Controls.Add(this.lbCusNum);
             this.Controls.Add(this.lbTableName);
             this.Name = "UcTable";
-            this.Size = new System.Drawing.Size(100, 80);
+            this.Size = new System.Drawing.Size(98, 64);
             this.plInfo.ResumeLayout(false);
             this.ResumeLayout(false);
 
