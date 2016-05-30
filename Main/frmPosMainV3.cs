@@ -947,6 +947,14 @@ namespace Main
             {
                 tmpstr = tmpstr + String.Format("抹零{0} ", amountml);
             }
+            if (amountroundtz > 0)
+            {
+                tmpstr = tmpstr + String.Format("舍入{0} ", amountroundtz);
+            }
+            if (amountroundtz < 0)
+            {
+                tmpstr = tmpstr + String.Format("舍去{0} ", amountroundtz);
+            }
             if (returnamount > 0)
             {
                 tmpstr = tmpstr + String.Format("找零{0} ", returnamount);
@@ -1361,7 +1369,7 @@ namespace Main
         }
         private JArray getPayTypeJsonArray()
         {
-            PayType[] obj = new PayType[8];
+            var obj = new List<PayType>();
             memberyhqamount = 0;
             var pay1 = new PayType
             {
@@ -1373,7 +1381,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[0] = pay1;
+            obj.Add(pay1);
             var pay2 = new PayType
             {
                 payAmount = amountyhk,
@@ -1384,7 +1392,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[1] = pay2;
+            obj.Add(pay2);
             var pay3 = new PayType
             {
                 payAmount = amounthyk,
@@ -1395,7 +1403,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[2] = pay3;
+            obj.Add(pay3);
             string gztag = "";
             try
             { gztag = edtGz.Tag.ToString(); }
@@ -1410,7 +1418,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = gztag, //保存券编号   
             };
-            obj[3] = pay5;
+            obj.Add(pay5);
             var pay6 = new PayType
             {
                 payAmount = amountjf,
@@ -1421,18 +1429,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[4] = pay6;
-            var pay7 = new PayType
-            {
-                payAmount = amountml,
-                payWay = "7",//抹零
-                memerberCardNo = "",
-                bankCardNo = "",//
-                couponnum = "0",
-                couponid = "",
-                coupondetailid = "",
-            };
-            obj[5] = pay7;
+            obj.Add(pay6);
             var pay8 = new PayType
             {
                 payAmount = amountwx,
@@ -1443,7 +1440,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[6] = pay8;
+            obj.Add(pay8);
             var pay9 = new PayType
             {
                 payAmount = amountzfb,
@@ -1454,7 +1451,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[7] = pay9;
+            obj.Add(pay9);
             //增加优惠的挂帐和优免 
             //Array.Resize(ref obj, obj.Length + tbyh.Rows.Count);
             int i = 8;
@@ -1489,8 +1486,7 @@ namespace Main
                         coupondetailid = dr["ruleid"].ToString(),
 
                     };
-                    Array.Resize(ref obj, obj.Length + 1);
-                    obj[i] = pay;
+                    obj.Add(pay);
                     i = i + 1;
                 }
                 else
@@ -1507,8 +1503,7 @@ namespace Main
                             couponid = couponid2,
                             coupondetailid = coupondetailid2,
                         };
-                        Array.Resize(ref obj, obj.Length + 1);
-                        obj[i] = pay;
+                        obj.Add(pay);
                         i = i + 1;
                     }
                     if (debitamount > 0)
@@ -1523,12 +1518,12 @@ namespace Main
                             couponid = couponid2,
                             coupondetailid = coupondetailid2,
                         };
-                        Array.Resize(ref obj, obj.Length + 1);
-                        obj[i] = pay;
+                        obj.Add(pay);
                         i = i + 1;
                     }
                 }
             }
+
             if (decgz2 < 0)
             {
                 //挂帐调整 多收挂帐的钱
@@ -1542,9 +1537,7 @@ namespace Main
                     couponid = "",
                     coupondetailid = "",
                 };
-                Array.Resize(ref obj, obj.Length + 1);
-                obj[i] = pay;
-                i = i + 1;
+                obj.Add(pay);
             }
             if (decym < 0)
             {
@@ -1559,44 +1552,45 @@ namespace Main
                     couponid = "",
                     coupondetailid = "",
                 };
-                Array.Resize(ref obj, obj.Length + 1);
-                obj[i] = pay;
-                i = i + 1;
+                obj.Add(pay);
             }
-            if (amountroundtz != 0)
+            if (Globals.roundinfo.Itemid.Equals("1")) //四舍五入
             {
-                //四舍五入调整
-                var pay = new PayType
+                if (amountroundtz != 0)
                 {
-                    payAmount = amountroundtz,
-                    payWay = "20",
-                    memerberCardNo = "",
-                    bankCardNo = "四舍五入调整",
-                    couponnum = "0",
-                    couponid = "",
-                    coupondetailid = "",
-                };
-                Array.Resize(ref obj, obj.Length + 1);
-                obj[i] = pay;
-                i = i + 1;
-            }
-            try
-            {
-                for (int j = obj.Count(); j >= 0; j--)
-                {
-                    if (obj[j] == null)
+                    //四舍五入调整
+                    var pay = new PayType
                     {
-                        Array.Resize(ref obj, obj.Length - 1);
-                    }
-                    else
-                    {
-                        break;
-                    }
+                        payAmount = amountroundtz,
+                        payWay = "20",
+                        memerberCardNo = "",
+                        bankCardNo = "四舍五入调整",
+                        couponnum = "0",
+                        couponid = "",
+                        coupondetailid = "",
+                    };
+                    obj.Add(pay);
                 }
             }
-            catch { }
-            var json = JsonConvert.SerializeObject(obj);//new[] { pay1,pay2, pay3,pay5 }
-            var persons = JsonConvert.DeserializeObject<List<PayType>>(json);
+            else
+            {
+                if (amountml > 0)
+                {
+                    var payMl = new PayType
+                    {
+                        payAmount = amountml,
+                        payWay = "7",//抹零
+                        memerberCardNo = "",
+                        bankCardNo = "",//
+                        couponnum = "0",
+                        couponid = "",
+                        coupondetailid = "",
+                    };
+                    obj.Add(payMl);
+                }
+            }
+
+            var json = JsonConvert.SerializeObject(obj);
             JArray ja = JArray.Parse(json.ToString());
             return ja;
         }
@@ -1863,72 +1857,43 @@ namespace Main
                 amountml = 0;
                 return;
             }
-            if (Globals.roundinfo.Itemid.Equals("1"))//四舍五入
+            if (Globals.roundinfo.Itemid.Equals("1")) //四舍五入
             {
                 amountml = 0;
                 float tmpysamount = ysamount;
-                if (Globals.roundinfo.Roundtype.Equals("0"))//0 分
+                if (Globals.roundinfo.Roundtype.Equals("0")) //0 分
                 {
-                    ysamount = (float)Math.Round(ysamount + 0.0000001, 2);
+                    ysamount = (float)Math.Round(ysamount, 1, MidpointRounding.AwayFromZero);
                 }
-                else
-                    if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
-                    {
-                        ysamount = (float)Math.Round(ysamount + 0.0000001, 1);
-                    }
-                    else
-                        if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
-                        {
-                            ysamount = (float)Math.Round(ysamount + 0.0000001, 0);
-                        }
+                else if (Globals.roundinfo.Roundtype.Equals("1")) //1  角
+                {
+                    ysamount = (float)Math.Round(ysamount, 0, MidpointRounding.AwayFromZero);
+                }
+                else if (Globals.roundinfo.Roundtype.Equals("2")) //2  元
+                {
+                    ysamount = (float)Math.Round(ysamount / 10, 0, MidpointRounding.AwayFromZero) * 10;
+                }
                 amountroundtz = (float)Math.Round(ysamount - tmpysamount, 2);
-                return;
             }
-            if (Globals.roundinfo.Itemid.Equals("2"))//抹零
+            else//抹零。
             {
-                if (Globals.roundinfo.Roundtype.Equals("0"))//0 分
+                if (Globals.roundinfo.Itemid.Equals("2"))//抹零
                 {
-                    try
+                    if (Globals.roundinfo.Roundtype.Equals("0"))//0 分
                     {
-                        /*string[] strs = (ysamount*10).ToString().Split('.');
-                        string tmpstr = strs[1];
-                        amountml = float.Parse("0." + tmpstr)/10;*/
-                        string[] strs = (ysamount * 100).ToString().Split('.');
-                        string tmpstr = strs[1];
-                        amountml = float.Parse("0." + tmpstr) / 100;
-
+                        amountml = (float)Math.Round(ysamount - Math.Floor(ysamount * 10) / 10, 2);
                     }
-                    catch { }
-                }
-                else
-                    if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
+                    else if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
                     {
-                        try
-                        {
-
-                            string[] strs = (ysamount * 10).ToString().Split('.');
-                            string tmpstr = strs[1];
-                            amountml = float.Parse("0." + tmpstr) / 10;
-                        }
-                        catch { }
+                        amountml = (float)Math.Round(ysamount - Math.Floor(ysamount), 2);
                     }
                     else
                         if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
                         {
-                            try
-                            {
-                                /*string[] strs = (ysamount / 10).ToString().Split('.');
-                                string tmpstr = strs[1];
-                                amountml = float.Parse("0." + tmpstr)*10;*/
-                                string[] strs = ysamount.ToString().Split('.');
-                                string tmpstr = strs[1];
-                                amountml = float.Parse("0." + tmpstr);
-                            }
-                            catch { }
+                            amountml = (float)Math.Round(ysamount - Math.Floor(ysamount / 10) * 10, 2);
                         }
-                return;
+                }
             }
-
         }
         private void edtAmount_EditValueChanging(object sender, EventArgs e)
         {
