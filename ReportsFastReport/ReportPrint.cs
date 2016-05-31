@@ -460,7 +460,7 @@ namespace ReportsFastReport
             //初始化创建打印模板
             DataSet ds = new DataSet();
             string fileName = Application.StartupPath + @"\Reports\rptClea.frx";
-            Report printReport = InitReport(fileName, ds, jrOrder, null, jrJS);
+            Report printReport = InitReport(fileName, ds, jrOrder, jrJS);
 
             PrintRpt(printReport, 1);
         }
@@ -746,7 +746,8 @@ namespace ReportsFastReport
             string tableName = string.Empty;
             try
             {
-
+                //dtOrder = Models.Bill_Order.getClearMachineData(jrOrder);
+                //dtJs = Models.Bill_Order.getClearMachine_Js(jrJS);
                 if (jrOrder != null)
                 {
                     DataTable dtOrder = null;
@@ -783,6 +784,48 @@ namespace ReportsFastReport
             return report;
         }
 
+        /// <summary>
+        /// 清机打印初始化
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="ds"></param>
+        /// <param name="jrOrder"></param>
+        /// <param name="jrJS"></param>
+        /// <returns></returns>
+        private static Report InitReport(string fileName, DataSet ds, JArray jrOrder, JArray jrJS)
+        {
+            var report = new FastReport.Report();
+            string tableName = string.Empty;
+            try
+            {
+               
+                if (jrOrder != null)
+                {
+                    DataTable dtOrder = null;
+                    dtOrder = Models.Bill_Order.getClearMachineData(jrOrder);
+                    ds.Tables.Add(dtOrder);
+                }
+                if (jrJS != null)
+                {
+                    DataTable dtJs = null;
+                    dtJs = Models.Bill_Order.getClearMachine_Js(jrJS);
+                    ds.Tables.Add(dtJs);
+
+
+                    //打印清机报表时
+                    tableName = dtJs.TableName;
+
+                }
+                report.Load(fileName);//加载报表模板文件
+
+                InitializeReport(ds, ref report, tableName);
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.D("InitReport:" + ex.Message);
+            }
+            return report;
+        }
         #endregion
     }
 }
