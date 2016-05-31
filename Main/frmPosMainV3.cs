@@ -4236,13 +4236,14 @@ namespace Main
 
             try
             {
-                int index = 0;
-                do
-                {
-                    if (index != 0)
-                        Thread.Sleep(500);
-                    re = bookorder(seqno_str, ordertype);
-                } while (!re && index++ < 4);
+                //int index = 0;
+                //do
+                //{
+                //    if (index != 0)
+                //        Thread.Sleep(500);
+                //    re = bookorder(seqno_str, ordertype);
+                //} while (!re && index++ < 4);
+                re = bookorder(seqno_str, ordertype);//取消循环4次和停顿500毫秒-20160531TC
             }
             catch (Exception ex)
             {
