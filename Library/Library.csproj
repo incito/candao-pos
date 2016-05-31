@@ -177,6 +177,12 @@
     <Compile Include="UserControls\ucCheckedListBoxEditor.Designer.cs">
       <DependentUpon>ucCheckedListBoxEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ucDish.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ucDish.Designer.cs">
+      <DependentUpon>ucDish.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ucPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -186,7 +192,7 @@
     <Compile Include="UserControls\ucTable.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ucTable.Designer.cs">
+    <Compile Include="UserControls\UcTable.Designer.cs">
       <DependentUpon>ucTable.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ucValueEdit.cs">

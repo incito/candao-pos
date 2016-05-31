@@ -1,25 +1,8 @@
-﻿///*************************************************************************/
-///*
-///* 文件名    ：DataConverter.cs                                     
-///* 程序说明  : DataTable-Object 互转换工具
-///* 原创作者  ： 
-///* 
-///* Copyright 2010-2011 
-///**************************************************************************/
-
-using System;
-using System.Windows.Forms;
-using System.Reflection;
+﻿using System;
 using System.Collections;
 using System.Data;
-using System.Collections.Generic;
-using System.Text;
-
-using System.CodeDom.Compiler;
-using Microsoft.CSharp;
-using System.ComponentModel;
 using System.Linq;
-using System.Xml;
+using System.Reflection;
 using CanDao.Pos.Model.Response;
 using Models;
 using Models.Enum;
@@ -32,6 +15,7 @@ namespace Common
     /// </summary>
     public class DataConverter
     {
+        private const string DateTimeFmt = "yyyy-MM-dd HH:mm:ss";
 
         /// <summary>
         /// 根据类型创建表结构
@@ -291,23 +275,23 @@ namespace Common
         public static IList CSharpDataTypes()
         {
             ArrayList list = new ArrayList();
-            list.Add(typeof(System.DateTime));
-            list.Add(typeof(System.Byte));
-            list.Add(typeof(System.SByte));
-            list.Add(typeof(System.Int16));
-            list.Add(typeof(System.Int32));
-            list.Add(typeof(System.Int64));
-            list.Add(typeof(System.IntPtr));
-            list.Add(typeof(System.UInt16));
-            list.Add(typeof(System.UInt32));
-            list.Add(typeof(System.UInt64));
-            list.Add(typeof(System.UIntPtr));
-            list.Add(typeof(System.Single));
-            list.Add(typeof(System.Double));
-            list.Add(typeof(System.Decimal));
-            list.Add(typeof(System.Boolean));
-            list.Add(typeof(System.Char));
-            list.Add(typeof(System.String));
+            list.Add(typeof(DateTime));
+            list.Add(typeof(Byte));
+            list.Add(typeof(SByte));
+            list.Add(typeof(Int16));
+            list.Add(typeof(Int32));
+            list.Add(typeof(Int64));
+            list.Add(typeof(IntPtr));
+            list.Add(typeof(UInt16));
+            list.Add(typeof(UInt32));
+            list.Add(typeof(UInt64));
+            list.Add(typeof(UIntPtr));
+            list.Add(typeof(Single));
+            list.Add(typeof(Double));
+            list.Add(typeof(Decimal));
+            list.Add(typeof(Boolean));
+            list.Add(typeof(Char));
+            list.Add(typeof(String));
             return list;
         }
         
@@ -694,6 +678,8 @@ namespace Common
                 TableType = (EnumTableType)response.tabletype,
                 MinPrice = Math.Round(response.minprice, 2),
                 FixPrice = Math.Round(response.fixprice, 2),
+                BeginTime = ParseString2DateTime(response.begintime),
+                Amount = response.amount,
             };
         }
 
@@ -716,6 +702,13 @@ namespace Common
                 SalesCount =  response.dishCount,
                 SalesAmount = response.totlePrice ?? 0m,
             };
+        }
+        private static DateTime? ParseString2DateTime(string timeStr)
+        {
+            if (string.IsNullOrEmpty(timeStr))
+                return null;
+
+            return DateTime.ParseExact(timeStr, DateTimeFmt, null);
         }
     }
 }

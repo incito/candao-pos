@@ -24,11 +24,25 @@ namespace Main
         [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool LockWindowUpdate(IntPtr hwnd);
 
-        private List<ucTable> _tableControls;
-        private const int Rowcount = 10;
-        private int btnWidth = 88;
-        private int btnHeight = 58;
-        private int btnSpace = 10;
+        private List<UcTable> _tableControls;        /// <summary>
+        /// 列个数。
+        /// </summary>
+        private const int Columncount = 8;
+        /// <summary>
+        /// 行个数。
+        /// </summary>
+        private const int RowCount = 6;
+        /// <summary>
+        /// 餐台总页数。
+        /// </summary>
+        private int totalTablePageCount = 1;
+        /// <summary>
+        /// 当前餐台页数。
+        /// </summary>
+        private int curTablePage = 1;
+        private int btnWidth = 115;
+        private int btnHeight = 78;
+        private int btnSpace = 9;
 
         private bool _isForcedEndWorkModel;//是否是强制结业模式。
 
@@ -59,12 +73,6 @@ namespace Main
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             if (AskQuestion("确定要退出系统吗？")) Application.Exit();
-        }
-
-        private void ucTable1_Load(object sender, EventArgs e)
-        {
-            ((ucTable)sender).lblNo.Click += new EventHandler(ucTable1_Click);
-            ((ucTable)sender).lbl2.Click += new EventHandler(ucTable1_Click);
         }
 
         private void frmAllTable_Load(object sender, EventArgs e)
@@ -141,14 +149,14 @@ namespace Main
                     // ignored
                 }
             }
-            ucTable uctable = ((ucTable)((Label)sender).Tag);
-            string tableno = uctable.lblNo.Text;
+            var tableInfo = ((UcTable)sender).TableInfo;
+            string tableno = tableInfo.TableNo;
             try
             {
                 this.Cursor = Cursors.WaitCursor;
                 timer2.Enabled = false;
                 //frmPosMain.ShowPosMain(tableno, uctable.status);
-                frmpos.ShowFrm(tableno, uctable.status);
+                frmpos.ShowFrm(tableno, (int)tableInfo.TableStatus);
 
                 if (_isForcedEndWorkModel)//如果已经是强制结业模式，就继续设定成强制结业（结算是在另外的弹出窗口）
                     SetInForcedEndWorkModel();
@@ -179,7 +187,10 @@ namespace Main
                     return;
                 }
 
-                TableInfos = result.Item2.Where(t=>t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
+                TableInfos = result.Item2.Where(t => t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
+                totalTablePageCount = (TableInfos.Count + Columncount * RowCount - 1) / (Columncount * RowCount);
+                panelPage.Visible = totalTablePageCount > 1;
+                UpdatePageButtonEnableStatus();
                 CreateTableControls();
 
                 lblState0.Text = string.Format("空闲({0})", TableInfos.Count(t => t.TableStatus == EnumTableStatus.Idle));
@@ -192,6 +203,12 @@ namespace Main
             }
         }
 
+        private void UpdatePageButtonEnableStatus()
+        {
+            btnUp.Enabled = curTablePage > 1;
+            btnDown.Enabled = curTablePage < totalTablePageCount;
+        }
+
         /// <summary>
         /// 创建餐台控件。
         /// </summary>
@@ -199,36 +216,35 @@ namespace Main
         {
             try
             {
-                //frmProgress.ShowProgress("正在加载桌台资料...");
                 LockWindowUpdate(Handle);
-                //frmProgress.frm.SetProgress("正在加载桌台资料...", TableInfos.Count, 0);
 
                 int idx = 0;
                 if (_tableControls != null)
                 {
                     foreach (var tableControl in _tableControls)
                     {
-                        tableControl.lblNo.Click -= ucTable1_Click;
-                        tableControl.lbl2.Click -= ucTable1_Click;
+                        tableControl.Click -= ucTable1_Click;
+                        tableControl.Parent = null;
                         tableControl.Parent = null;
                     }
                 }
-                _tableControls = new List<ucTable>();
+                _tableControls = new List<UcTable>();
 
-                foreach (var tableInfo in TableInfos)
+                var temp = TableInfos.Skip((curTablePage - 1) * Columncount * RowCount);
+                temp = temp.Take(Columncount * RowCount);
+                foreach (var tableInfo in temp)
                 {
-                    var colindex = (idx % Rowcount);
-                    var rowindex = idx / Rowcount;
-                    ucTable table = new ucTable(tableInfo)
+                    var colindex = (idx % Columncount);
+                    var rowindex = idx / Columncount;
+                    var table = new UcTable(tableInfo)
                     {
                         Parent = pnlMain,
                         Width = btnWidth,
                         Height = btnHeight,
-                        Left = colindex * btnWidth + ucTable1.Left + (colindex * btnSpace),
-                        Top = btnHeight * rowindex + ucTable1.Top + (rowindex * btnSpace),
+                        Left = colindex * btnWidth + btnSpace + (colindex * btnSpace),
+                        Top = btnHeight * rowindex + 75 + btnSpace + (rowindex * btnSpace),
                     };
-                    table.lblNo.Click += ucTable1_Click;
-                    table.lbl2.Click += ucTable1_Click;
+                    table.Click += ucTable1_Click;
                     _tableControls.Add(table);
                     if (_isForcedEndWorkModel)//如果是强制结业模式，则只允许操作就餐餐台。
                         table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
@@ -250,7 +266,7 @@ namespace Main
         {
             if (_tableControls != null)
             {
-                var idleTableControls = _tableControls.Where(t => ((TableInfo)t.Tag).TableStatus == EnumTableStatus.Idle).ToList();
+                var idleTableControls = _tableControls.Where(t => t.TableInfo.TableStatus == EnumTableStatus.Idle).ToList();
                 idleTableControls.ForEach(t => t.Enabled = false);
             }
             btnShapping.Enabled = false;
@@ -277,7 +293,11 @@ namespace Main
 
                 int inttime = int.Parse(btnReport.Tag.ToString());
                 if (inttime > 0)
+                {
                     btnReport.Tag = --inttime;
+                    if (_tableControls != null)
+                        _tableControls.ForEach(t => t.UpdateTimeView());
+                }
                 else
                     RefreshAllTableStatus();
             }
@@ -411,6 +431,20 @@ namespace Main
             (new ReportViewWindow()).ShowDialog();
             RefreshAllTableStatus();
             timer2.Start();
+        }
+
+        private void btnUp_Click(object sender, EventArgs e)
+        {
+            curTablePage--;
+            CreateTableControls();
+            UpdatePageButtonEnableStatus();
+        }
+
+        private void btnDown_Click(object sender, EventArgs e)
+        {
+            curTablePage++;
+            CreateTableControls();
+            UpdatePageButtonEnableStatus();
         }
     }
 }
