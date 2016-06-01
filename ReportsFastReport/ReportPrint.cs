@@ -223,33 +223,28 @@ namespace ReportsFastReport
             {
                 if (!RestClient.getOrderInfo(Globals.UserInfo.UserName, Globals.CurrOrderInfo.orderid, 1, out jrOrder, out jrList, out jrJS))
                 {
+                    AllLog.Instance.D("PrintPayBill:" + string.Format("{0}", billno));
                     return;
                 }
             }
-            catch { }
-            DataTable dtOrder = null;
-            DataTable dtList = null;
-            DataTable dtJs = null;
+            catch (Exception ex)
+            {
+                AllLog.Instance.D("PrintPayBill:" + string.Format("{0}", billno) + "----" + ex.Message);
+            }
+            
+
+            DataSet ds = new DataSet();
             DataTable yh = new DataTable();
             yh = yhList.Copy();
-            dtOrder = Bill_Order.getOrder(jrOrder);
             tipAmount = Convert.ToDecimal(((JObject)jrOrder[0])["tipAmount"].ToString());
             tipPaid = Convert.ToDecimal(((JObject)jrOrder[0])["tipPaid"].ToString());
-            //dtList = Bill_Order.getOrder_List(jrList);
-            dtList = PrintDataHelper.GetOrderListDb(jrList);
-            dtJs = Bill_Order.getOrder_Js(jrJS);
             DataTable dtSettlementDetail = Bill_Order.GetSettlementDetailTable(GetPresettlementDetailList((JObject)jrOrder[0], ra));
-            rptReport.Clear();
-            string file = Application.StartupPath + @"\Reports\rptBill.frx";
-            rptReport.Load(file);//加载报表模板文件
-            DataSet ds = new DataSet();
-            ds.Tables.Add(dtOrder);
-            ds.Tables.Add(dtList);
-            ds.Tables.Add(dtJs);
             ds.Tables.Add(yh);
             ds.Tables.Add(dtSettlementDetail);
-            InitializeReport(ds, ref rptReport, dtList.TableName);
-            PrintRpt(rptReport, 1);
+            string fileName = Application.StartupPath + @"\Reports\rptBill.frx";
+            var printReport = InitReport(fileName, ds, jrOrder, jrList, jrJS);
+
+            PrintRpt(printReport, 1);
         }
 
         private static Dictionary<string, string> GetPresettlementDetailList(JObject jObj, ReportAmount ra)
@@ -299,33 +294,26 @@ namespace ReportsFastReport
             {
                 if (!RestClient.getOrderInfo(printuser, billno, 2, out jrOrder, out jrList, out jrJS))
                 {
+                    AllLog.Instance.D("PrintPayBill2:" + string.Format("{0}", billno));
                     return;
                 }
             }
-            catch { }
-            DataTable dtOrder = null;
-            DataTable dtList = null;
-            DataTable dtJs = null;
+            catch (Exception ex)
+            {
+                AllLog.Instance.D("PrintPayBill2:" + string.Format("{0}", billno) + "----" + ex.Message);
+            }
 
-            dtOrder = Bill_Order.getOrder(jrOrder);
-            //dtList = Bill_Order.getOrder_List(jrList);
-            dtList = PrintDataHelper.GetOrderListDb(jrList);
-            dtJs = Bill_Order.getOrder_Js(jrJS);
+            //初始化创建打印模板
             var tipAmountJK = ((JObject)jrOrder[0])["tipAmount"];
+            DataSet ds = new DataSet();
             tipAmount = tipAmountJK != null ? Convert.ToDecimal(tipAmountJK) : 0m;
             var tipPaidJK = ((JObject)jrOrder[0])["tipPaid"];
             tipPaid = tipPaidJK != null ? Convert.ToDecimal(tipPaidJK) : 0m;
             DataTable dtSettlementDetail = Bill_Order.GetSettlementDetailTable(GetSettlementDetailList((JObject)jrOrder[0]));
-            rptReport.Clear();
-            string file = Application.StartupPath + @"\Reports\rptBill2.frx";
-            rptReport.Load(file);//加载报表模板文件
-            DataSet ds = new DataSet();
-            ds.Tables.Add(dtOrder);
-            ds.Tables.Add(dtList);
-            ds.Tables.Add(dtJs);
             ds.Tables.Add(dtSettlementDetail);
-            InitializeReport(ds, ref rptReport, dtList.TableName);
-            PrintRpt(rptReport, 1);
+            string fileName = Application.StartupPath + @"\Reports\rptBill2.frx";
+            Report printReport = InitReport(fileName, ds, jrOrder, jrList, jrJS);
+            PrintRpt(printReport, 1);
         }
 
         /// <summary>
@@ -431,27 +419,21 @@ namespace ReportsFastReport
             {
                 if (!RestClient.getOrderInfo(printuser, billno, 3, out jrOrder, out jrList, out jrJS))
                 {
+                    AllLog.Instance.D("PrintPayBill3:" + string.Format("{0}", billno));
                     return;
                 }
             }
-            catch { }
-            DataTable dtOrder = null;
-            DataTable dtList = null;
-            DataTable dtJs = null;
+            catch (Exception ex)
+            {
+                AllLog.Instance.D("PrintPayBill3:" + string.Format("{0}", billno) + "----" + ex.Message);
+            }
 
-            dtOrder = Models.Bill_Order.getOrder(jrOrder);
-            //dtList = Models.Bill_Order.getOrder_List(jrList);
-            dtList = PrintDataHelper.GetOrderListDb(jrList);
-            dtJs = Models.Bill_Order.getOrder_Js(jrJS);
-            rptReport.Clear();
-            string file = Application.StartupPath + @"\Reports\rptBill3.frx";
-            rptReport.Load(file);//加载报表模板文件
+            //初始化创建打印模板
             DataSet ds = new DataSet();
-            ds.Tables.Add(dtOrder);
-            ds.Tables.Add(dtList);
-            ds.Tables.Add(dtJs);
-            InitializeReport(ds, ref rptReport, dtList.TableName);
-            PrintRpt(rptReport, 1);
+            string fileName = Application.StartupPath + @"\Reports\rptBill3.frx";
+            Report printReport = InitReport(fileName, ds, jrOrder, jrList, jrJS);
+
+            PrintRpt(printReport, 1);
         }
         /// <summary>
         /// 会员交易凭条
@@ -537,22 +519,21 @@ namespace ReportsFastReport
             {
                 if (!RestClient.getClearMachineData(printuser, jsorder, out jrOrder, out jrJS))
                 {
+                    AllLog.Instance.D("PrintClearMachine:" + string.Format("{0}-{1}-{2}-{3}", printuser, jsorder, jrOrder, jrJS));
                     return;
                 }
             }
-            catch { }
-            DataTable dtOrder = null;
-            DataTable dtJs = null;
-            dtOrder = Models.Bill_Order.getClearMachineData(jrOrder);
-            dtJs = Models.Bill_Order.getClearMachine_Js(jrJS);
-            rptReport.Clear();
-            string file = Application.StartupPath + @"\Reports\rptClea.frx";
-            rptReport.Load(file);//加载报表模板文件
+            catch (Exception ex)
+            {
+                AllLog.Instance.D("PrintClearMachine:" + string.Format("{0}-{1}-{2}-{3}", printuser, jsorder, jrOrder, jrJS)+"----"+ex.Message);
+            }
+
+            //初始化创建打印模板
             DataSet ds = new DataSet();
-            ds.Tables.Add(dtOrder);
-            ds.Tables.Add(dtJs);
-            InitializeReport(ds, ref rptReport, dtJs.TableName);
-            PrintRpt(rptReport, 1);
+            string fileName = Application.StartupPath + @"\Reports\rptClea.frx";
+            Report printReport = InitReport(fileName, ds, jrOrder, jrJS);
+
+            PrintRpt(printReport, 1);
         }
         public static void printProgress(object sender, ProgressEventArgs e)
         {
@@ -831,5 +812,104 @@ namespace ReportsFastReport
             }
             catch { }
         }
+
+
+        #region 新增代码
+        /// <summary>
+        /// 初始化创建一个报表模板
+        /// </summary>
+        /// <param name="fileName">模板地址</param>
+        /// <param name="ds">列表</param>
+        /// <param name="jrOrder">单头</param>
+        /// <param name="jrList">菜品</param>
+        /// <param name="jrJS">结算</param>
+        /// <returns></returns>
+        private static Report InitReport(string fileName, DataSet ds, JArray jrOrder, JArray jrList, JArray jrJS)
+        {
+            var report = new FastReport.Report();
+            string tableName = string.Empty;
+            try
+            {
+                //dtOrder = Models.Bill_Order.getClearMachineData(jrOrder);
+                //dtJs = Models.Bill_Order.getClearMachine_Js(jrJS);
+                if (jrOrder != null)
+                {
+                    DataTable dtOrder = null;
+                    dtOrder = Models.Bill_Order.getOrder(jrOrder);
+                    ds.Tables.Add(dtOrder);
+                }
+                if (jrList != null)
+                {
+                    DataTable dtList = null;
+                    dtList = PrintDataHelper.GetOrderListDb(jrList);
+                    ds.Tables.Add(dtList);
+                    tableName = dtList.TableName;
+                }
+                if (jrJS != null)
+                {
+                    DataTable dtJs = null;
+                    dtJs = Models.Bill_Order.getOrder_Js(jrJS);
+                    ds.Tables.Add(dtJs);
+
+                    if (jrList == null)
+                    {
+                        //打印清机报表时
+                        tableName = dtJs.TableName;
+                    }
+                }
+                report.Load(fileName);//加载报表模板文件
+
+                InitializeReport(ds, ref report, tableName);
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.D("InitReport:" + ex.Message);
+            }
+            return report;
+        }
+
+        /// <summary>
+        /// 清机打印初始化
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="ds"></param>
+        /// <param name="jrOrder"></param>
+        /// <param name="jrJS"></param>
+        /// <returns></returns>
+        private static Report InitReport(string fileName, DataSet ds, JArray jrOrder, JArray jrJS)
+        {
+            var report = new FastReport.Report();
+            string tableName = string.Empty;
+            try
+            {
+               
+                if (jrOrder != null)
+                {
+                    DataTable dtOrder = null;
+                    dtOrder = Models.Bill_Order.getClearMachineData(jrOrder);
+                    ds.Tables.Add(dtOrder);
+                }
+                if (jrJS != null)
+                {
+                    DataTable dtJs = null;
+                    dtJs = Models.Bill_Order.getClearMachine_Js(jrJS);
+                    ds.Tables.Add(dtJs);
+
+
+                    //打印清机报表时
+                    tableName = dtJs.TableName;
+
+                }
+                report.Load(fileName);//加载报表模板文件
+
+                InitializeReport(ds, ref report, tableName);
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.D("InitReport:" + ex.Message);
+            }
+            return report;
+        }
+        #endregion
     }
 }

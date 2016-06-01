@@ -20,6 +20,7 @@ using Models.CandaoMember;
 using Models.Enum;
 using WebServiceReference.ServiceImpl;
 using Timer = System.Timers.Timer;
+using System.Text.RegularExpressions;
 
 namespace Main
 {
@@ -45,6 +46,7 @@ namespace Main
         private float amountroundtz = 0;//四舍五入调整
         private string currtableno = "";
         private float ysamount = 0;//应收
+
         private float amountjf = 0;//会员积分 //如果使用积分 不能找零
 
         //优惠的挂帐和优免
@@ -331,11 +333,26 @@ namespace Main
             lblRs.Text = String.Format("人数：{0}", "");
             lblZd.Text = String.Format("帐单：{0}", "");
             lblMember.Text = String.Format("会员：{0}", "");
+            lblMember.TextChanged += lblMember_TextChanged;
             //btnDelete.Visible = !RestClient.isClearCoupon();
             dgvjs.Width = 330;
             InitMemberFun();
             //pnlMore.Top = 200;
             setFormToPayType1();
+        }
+
+        /// <summary>
+        /// 会员卡号变化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void lblMember_TextChanged(object sender, EventArgs e)
+        {
+            var tag = btnFind.Tag.ToString();
+            if (!lblMember.Text.Equals("会员：") & !string.IsNullOrEmpty(Globals.CurrOrderInfo.memberno) & tag.Equals("0"))
+           {
+               LoginVIP();
+           }
         }
 
         public static bool checkInputTellerCash()
@@ -406,7 +423,10 @@ namespace Main
                 membercard = "";
                 edtMember.Text = "";
                 edtJf.Text = "";
-                edtAmount.Text = "";
+                if(ysamount==0)
+                {
+                    edtAmount.Text = "";
+                }
                 edtWx.Text = "";
                 edtWxAmount.Text = "";
                 edtZfb.Text = "";
@@ -700,20 +720,7 @@ namespace Main
             //edtAmount.Text = Globals.CurrTableInfo.amount.ToString();
             edtAmount.Focus();
             edtReturn.Text = "0";
-            //getAmount();
-            if (CheckCallBill())
-            {
-                btnDelete.Visible = false;
-                lblSum.Text = "已结算";
-                btnAdd.Visible = false;
-                btnDec.Visible = false;
-            }
-            else
-            {
-                btnAdd.Visible = true;
-                btnDec.Visible = true;
-                btnDelete.Visible = true;
-            }
+
             edtReturn.Text = returnamount.ToString();
 
             try
@@ -744,6 +751,23 @@ namespace Main
                 }
             }
             catch { }
+        }
+
+        /// <summary>
+        /// 应收金额变化时，现金金额同步更新
+        /// </summary>
+        private void SyncCashPay()
+        {
+            string val =string.Format("应收金额：{0}元",ysamount);
+
+            if (!lblAmount2.Text.Equals(val))
+            {
+                edtAmount.EditValueChanging -= edtAmount_EditValueChanging;
+                edtAmount.Text = ysamount.ToString();
+                edtAmount.EditValueChanging += edtAmount_EditValueChanging;
+            }
+            
+           
         }
 
         /// <summary>
@@ -809,7 +833,7 @@ namespace Main
         private void getAmount()
         {
             payamount = Globals.CurrTableInfo.amount;//应付
-            amountrmb = string2float(edtAmount.Text);//实收rmb
+          
             amountyhk = string2float(edtCard.Text); //实收yhk
             amounthyk = string2float(edtMember.Text); ;//实收hyk
             amountgz = string2float(edtGzAmount.Text);//挂帐
@@ -823,6 +847,12 @@ namespace Main
 
             ysamount = Math.Max(0, ysamount - amountml);
             ysamount += Globals.CurrTableInfo.TipAmount;//应收+小费
+
+            //应收金额同步更新现金付款
+            SyncCashPay();
+
+            amountrmb = string2float(edtAmount.Text);//实收rmb
+
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
             getamount = (float)Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
@@ -865,6 +895,14 @@ namespace Main
 
             if (amountml > 0)
                 tmpstr += string.Format("抹零{0} ", amountml);
+            if (amountroundtz > 0)
+            {
+                tmpstr = tmpstr + String.Format("舍入{0} ", amountroundtz);
+            }
+            if (amountroundtz < 0)
+            {
+                tmpstr = tmpstr + String.Format("舍去{0} ", amountroundtz);
+            }
             if (returnamount > 0)
                 tmpstr += string.Format("找零{0} ", returnamount);
             else
@@ -882,6 +920,7 @@ namespace Main
                         tmpstr += string.Format("还需再收{0} ", needMoreAmount);
                 }
             }
+          
             lblSum.Text = String.Format("收款：{0}", tmpstr);
             if (Math.Round(getamount - amountroundtz, 2) >= payamount)
             {
@@ -907,7 +946,9 @@ namespace Main
         }
         private void edtAmount_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
+         
             getAmount();
+          
         }
 
         private void edtCard_EditValueChanged(object sender, EventArgs e)
@@ -1345,7 +1386,7 @@ namespace Main
         }
         private JArray getPayTypeJsonArray()
         {
-            PayType[] obj = new PayType[8];
+            var obj = new List<PayType>();
             memberyhqamount = 0;
             var pay1 = new PayType
             {
@@ -1357,7 +1398,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[0] = pay1;
+            obj.Add(pay1);
             var pay2 = new PayType
             {
                 payAmount = amountyhk,
@@ -1368,7 +1409,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[1] = pay2;
+            obj.Add(pay2);
             var pay3 = new PayType
             {
                 payAmount = amounthyk,
@@ -1379,7 +1420,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[2] = pay3;
+            obj.Add(pay3);
             string gztag = "";
             try
             { gztag = edtGz.Tag.ToString(); }
@@ -1394,7 +1435,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = gztag, //保存券编号   
             };
-            obj[3] = pay5;
+            obj.Add(pay5);
             var pay6 = new PayType
             {
                 payAmount = amountjf,
@@ -1405,18 +1446,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[4] = pay6;
-            var pay7 = new PayType
-            {
-                payAmount = amountml,
-                payWay = "7",//抹零
-                memerberCardNo = "",
-                bankCardNo = "",//
-                couponnum = "0",
-                couponid = "",
-                coupondetailid = "",
-            };
-            obj[5] = pay7;
+            obj.Add(pay6);
             var pay8 = new PayType
             {
                 payAmount = amountwx,
@@ -1427,7 +1457,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[6] = pay8;
+            obj.Add(pay8);
             var pay9 = new PayType
             {
                 payAmount = amountzfb,
@@ -1438,7 +1468,7 @@ namespace Main
                 couponid = "",
                 coupondetailid = "",
             };
-            obj[7] = pay9;
+            obj.Add(pay9);
             //增加优惠的挂帐和优免 
             //Array.Resize(ref obj, obj.Length + tbyh.Rows.Count);
             int i = 8;
@@ -1473,8 +1503,7 @@ namespace Main
                         coupondetailid = dr["ruleid"].ToString(),
 
                     };
-                    Array.Resize(ref obj, obj.Length + 1);
-                    obj[i] = pay;
+                    obj.Add(pay);
                     i = i + 1;
                 }
                 else
@@ -1491,8 +1520,7 @@ namespace Main
                             couponid = couponid2,
                             coupondetailid = coupondetailid2,
                         };
-                        Array.Resize(ref obj, obj.Length + 1);
-                        obj[i] = pay;
+                        obj.Add(pay);
                         i = i + 1;
                     }
                     if (debitamount > 0)
@@ -1507,12 +1535,12 @@ namespace Main
                             couponid = couponid2,
                             coupondetailid = coupondetailid2,
                         };
-                        Array.Resize(ref obj, obj.Length + 1);
-                        obj[i] = pay;
+                        obj.Add(pay);
                         i = i + 1;
                     }
                 }
             }
+
             if (decgz2 < 0)
             {
                 //挂帐调整 多收挂帐的钱
@@ -1526,9 +1554,7 @@ namespace Main
                     couponid = "",
                     coupondetailid = "",
                 };
-                Array.Resize(ref obj, obj.Length + 1);
-                obj[i] = pay;
-                i = i + 1;
+                obj.Add(pay);
             }
             if (decym < 0)
             {
@@ -1543,44 +1569,45 @@ namespace Main
                     couponid = "",
                     coupondetailid = "",
                 };
-                Array.Resize(ref obj, obj.Length + 1);
-                obj[i] = pay;
-                i = i + 1;
+                obj.Add(pay);
             }
-            if (amountroundtz != 0)
+            if (Globals.roundinfo.Itemid.Equals("1")) //四舍五入
             {
-                //四舍五入调整
-                var pay = new PayType
+                if (amountroundtz != 0)
                 {
-                    payAmount = amountroundtz,
-                    payWay = "20",
-                    memerberCardNo = "",
-                    bankCardNo = "四舍五入调整",
-                    couponnum = "0",
-                    couponid = "",
-                    coupondetailid = "",
-                };
-                Array.Resize(ref obj, obj.Length + 1);
-                obj[i] = pay;
-                i = i + 1;
-            }
-            try
-            {
-                for (int j = obj.Count(); j >= 0; j--)
-                {
-                    if (obj[j] == null)
+                    //四舍五入调整
+                    var pay = new PayType
                     {
-                        Array.Resize(ref obj, obj.Length - 1);
-                    }
-                    else
-                    {
-                        break;
-                    }
+                        payAmount = amountroundtz,
+                        payWay = "20",
+                        memerberCardNo = "",
+                        bankCardNo = "四舍五入调整",
+                        couponnum = "0",
+                        couponid = "",
+                        coupondetailid = "",
+                    };
+                    obj.Add(pay);
                 }
             }
-            catch { }
-            var json = JsonConvert.SerializeObject(obj);//new[] { pay1,pay2, pay3,pay5 }
-            var persons = JsonConvert.DeserializeObject<List<PayType>>(json);
+            else
+            {
+                if (amountml > 0)
+                {
+                    var payMl = new PayType
+                    {
+                        payAmount = amountml,
+                        payWay = "7",//抹零
+                        memerberCardNo = "",
+                        bankCardNo = "",//
+                        couponnum = "0",
+                        couponid = "",
+                        coupondetailid = "",
+                    };
+                    obj.Add(payMl);
+                }
+            }
+
+            var json = JsonConvert.SerializeObject(obj);
             JArray ja = JArray.Parse(json.ToString());
             return ja;
         }
@@ -1852,66 +1879,43 @@ namespace Main
                 amountml = 0;
                 return;
             }
-            if (Globals.roundinfo.Itemid.Equals("1"))//四舍五入
+            if (Globals.roundinfo.Itemid.Equals("1")) //四舍五入
             {
                 amountml = 0;
                 float tmpysamount = ysamount;
-                if (Globals.roundinfo.Roundtype.Equals("0"))//0 分
+                if (Globals.roundinfo.Roundtype.Equals("0")) //0 分
                 {
-                    ysamount = (float)Math.Round(ysamount + 0.0000001, 2);
+                    ysamount = (float)Math.Round(ysamount, 1, MidpointRounding.AwayFromZero);
                 }
-                else
-                    if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
+                else if (Globals.roundinfo.Roundtype.Equals("1")) //1  角
+                {
+                    ysamount = (float)Math.Round(ysamount, 0, MidpointRounding.AwayFromZero);
+                }
+                else if (Globals.roundinfo.Roundtype.Equals("2")) //2  元
+                {
+                    ysamount = (float)Math.Round(ysamount / 10, 0, MidpointRounding.AwayFromZero) * 10;
+                }
+                amountroundtz = (float)Math.Round(ysamount - tmpysamount, 2);
+            }
+            else//抹零。
+            {
+                if (Globals.roundinfo.Itemid.Equals("2"))//抹零
+                {
+                    if (Globals.roundinfo.Roundtype.Equals("0"))//0 分
                     {
-                        ysamount = (float)Math.Round(ysamount + 0.0000001, 1);
+                        amountml = (float)Math.Round(ysamount - Math.Floor(ysamount * 10) / 10, 2);
+                    }
+                    else if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
+                    {
+                        amountml = (float)Math.Round(ysamount - Math.Floor(ysamount), 2);
                     }
                     else
                         if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
                         {
-                            ysamount = (float)Math.Round(ysamount + 0.0000001, 0);
+                            amountml = (float)Math.Round(ysamount - Math.Floor(ysamount / 10) * 10, 2);
                         }
-                amountroundtz = (float)Math.Round(ysamount - tmpysamount, 2);
-                return;
+                }
             }
-            if (Globals.roundinfo.Itemid.Equals("2"))//抹零
-            {
-                if (Globals.roundinfo.Roundtype.Equals("0"))//0 分
-                {
-                    try
-                    {
-                        amountml = ysamount - ((float)Math.Floor(ysamount * 10) / 10);
-                    }
-                    catch (Exception ex)
-                    {
-                        AllLog.Instance.E("抹零处理（分）时异常", ex);
-                    }
-                }
-                else if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
-                {
-                    try
-                    {
-                        amountml = ysamount - (float)Math.Floor(ysamount);
-                    }
-                    catch (Exception ex)
-                    {
-                        AllLog.Instance.E("抹零处理（角）时异常", ex);
-                    }
-                }
-                else if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
-                {
-                    try
-                    {
-                        amountml = ysamount - ((float)Math.Floor(ysamount / 10) * 10);
-                    }
-                    catch (Exception ex)
-                    {
-                        AllLog.Instance.E("抹零处理（元）时异常", ex);
-                    }
-                }
-                amountml = (float)Math.Round(amountml, 2);
-                return;
-            }
-
         }
         private void edtAmount_EditValueChanging(object sender, EventArgs e)
         {
@@ -4163,19 +4167,16 @@ namespace Main
             DateTime dt = DateTime.Now;
             //下单序号
             string seqnostr = IniPos.getPosIniValue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, "0");
-            //string seqnostr = dt.ToLongTimeString().ToString().Replace(":","");
-            if (seqnostr.Equals("0"))
+            if (Globals.OrderTable.Rows.Count == 0 && (Globals.cjSetting == null || Globals.cjSetting.Status == "1"))
             {
                 //如果是第一次下单，如果餐具要收费，那么把餐具加入已点,一起下单
                 try
                 {
-                    string cj = IniPos.getPosIniValue(Application.StartupPath, "ORDERCJ", Globals.CurrOrderInfo.orderid, "0");
-                    if (int.Parse(cj) > 0)
+                    int cusNum = Globals.CurrOrderInfo.custnum != null ? Globals.CurrOrderInfo.custnum.Value : 0;
+                    if (cusNum > 0)
                     {
-                        string userid = Globals.CurrOrderInfo.userid;
-                        if (userid == null)
-                            userid = Globals.UserInfo.UserID;
-                        t_shopping.addCJ(Globals.cjFood, Globals.CurrTableInfo, Globals.CurrOrderInfo, userid, Globals.cjSetting, ref Globals.ShoppTable, int.Parse(cj));
+                        string userid = !string.IsNullOrEmpty(Globals.CurrOrderInfo.userid) ? Globals.CurrOrderInfo.userid : Globals.UserInfo.UserID;
+                        t_shopping.addCJ(Globals.cjFood, Globals.CurrTableInfo, Globals.CurrOrderInfo, userid, Globals.cjSetting, ref Globals.ShoppTable, cusNum);
                     }
                 }
                 catch { }
@@ -4190,13 +4191,14 @@ namespace Main
 
             try
             {
-                int index = 0;
-                do
-                {
-                    if (index != 0)
-                        Thread.Sleep(500);
-                    re = bookorder(seqno_str, ordertype);
-                } while (!re && index++ < 4);
+                //int index = 0;
+                //do
+                //{
+                //    if (index != 0)
+                //        Thread.Sleep(500);
+                //    re = bookorder(seqno_str, ordertype);
+                //} while (!re && index++ < 4);
+                re = bookorder(seqno_str, ordertype);//取消循环4次和停顿500毫秒-20160531TC
             }
             catch (Exception ex)
             {
@@ -5000,6 +5002,14 @@ namespace Main
         }
 
         private void btnFind_Click(object sender, EventArgs e)
+        {
+            LoginVIP();
+        }
+
+        /// <summary>
+        /// 登录会员
+        /// </summary>
+        private void LoginVIP()
         {
             if (btnFind.Tag.ToString().Equals("0"))
             {
