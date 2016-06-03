@@ -102,7 +102,7 @@ namespace Main
         /// </summary>
         private VCouponRule _curCoupon;
 
-       
+
         //记录每张台下单序列的INI文件
         public frmPosMainV3()
         {
@@ -327,9 +327,9 @@ namespace Main
         {
             var tag = btnFind.Tag.ToString();
             if (!lblMember.Text.Equals("会员：") & !string.IsNullOrEmpty(Globals.CurrOrderInfo.memberno) & tag.Equals("0"))
-           {
-               LoginVIP();
-           }
+            {
+                LoginVIP();
+            }
         }
 
         public static bool checkInputTellerCash()
@@ -400,7 +400,7 @@ namespace Main
                 membercard = "";
                 edtMember.Text = "";
                 edtJf.Text = "";
-                if(ysamount==0)
+                if (ysamount == 0)
                 {
                     edtAmount.Text = "";
                 }
@@ -748,8 +748,8 @@ namespace Main
             }
 
             lblAmount2.Text = String.Format("应收金额：{0}元", ysamount);
-            
-         
+
+
 
             lblAmount.Text = String.Format("合计金额：{0}元", Globals.CurrTableInfo.amount);
             focusedt = edtAmount;
@@ -793,7 +793,7 @@ namespace Main
         /// </summary>
         private void SyncCashPay()
         {
-            string val =string.Format("应收金额：{0}元",ysamount);
+            string val = string.Format("应收金额：{0}元", ysamount);
 
             if (!lblAmount2.Text.Equals(val))
             {
@@ -801,8 +801,8 @@ namespace Main
                 edtAmount.Text = ysamount.ToString();
                 edtAmount.EditValueChanging += edtAmount_EditValueChanging;
             }
-            
-           
+
+
         }
 
         /// <summary>
@@ -868,7 +868,7 @@ namespace Main
         private void getAmount()
         {
             payamount = Globals.CurrTableInfo.amount;//应付
-          
+
             amountyhk = string2float(edtCard.Text); //实收yhk
             amounthyk = string2float(edtMember.Text); ;//实收hyk
             amountgz = string2float(edtGzAmount.Text);//挂帐
@@ -1005,7 +1005,7 @@ namespace Main
                     }
                 }
             }
-          
+
             lblSum.Text = String.Format("收款：{0}", tmpstr);
             if (Math.Round(getamount - amountroundtz, 2) >= payamount)
             {
@@ -1031,9 +1031,9 @@ namespace Main
         }
         private void edtAmount_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
-         
+
             getAmount();
-          
+
         }
 
         private void edtCard_EditValueChanged(object sender, EventArgs e)
@@ -1128,7 +1128,7 @@ namespace Main
                         Warning("会员卡余额不足...");
                         return;
                     }
-                    if (amounthyk > payamount)
+                    if (amounthyk > ysamount)
                     {
                         Warning("会员卡使用金额不能大于应付额...");
                         return;
