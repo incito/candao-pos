@@ -53,6 +53,14 @@ namespace Main
             //OfficeSkins.Register();////注册Office样式的皮肤
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
             RestClient.GetSoapRemoteAddress();
+
+            var netResult = CheckServerConnection();
+            if (!string.IsNullOrEmpty(netResult))
+            {
+                Msg.ShowError(netResult);
+                return;
+            }
+
             ReportPrint.Init();
             frmStart.frm.setMsg("获取系统设置...");
             try
@@ -254,6 +262,17 @@ namespace Main
         [DllImport("User32.dll")]
         private static extern bool SetForegroundWindow(System.IntPtr hWnd);
 
-
+        /// <summary>
+        /// 检测服务的连接状况。
+        /// </summary>
+        /// <returns>连接成功返回null，否则返回错误信息。</returns>
+        private static string CheckServerConnection()
+        {
+            if (!NetwrokHelper.DetectNetworkConnection(RestClient.server))
+                return "后台服务连接失败，请检查网络连接或联系系统管理员重启后台服务然后重试！";
+            if (!NetwrokHelper.DetectNetworkConnection(RestClient.Server3) || !NetwrokHelper.DetectNetworkConnection(RestClient.dataServer))
+                return "DataServer服务连接失败，请检查网络连接或联系系统管理员重启DataServer服务然后重试！";
+            return null;
+        }
     }
 }

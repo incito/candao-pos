@@ -448,7 +448,7 @@ namespace WebServiceReference
             }
             return strResult.ToString();
         }
-        private static string Request_Rest(string url)
+        private static string Request_Rest(string url, int timeoutSecond = 15)
         {
             HttpWebRequest request;
             HttpWebResponse response = null;
@@ -462,7 +462,7 @@ namespace WebServiceReference
                 request.UserAgent = ".NET Sample";
                 request.Method = "GET";
                 request.KeepAlive = false;
-                request.Timeout = 15 * 1000;
+                request.Timeout = timeoutSecond * 1000;
                 response = request.GetResponse() as HttpWebResponse;
                 if (request.HaveResponse == true && response != null)
                 {
@@ -477,6 +477,14 @@ namespace WebServiceReference
             }
             catch (WebException wex)
             {
+                if (wex.Status == WebExceptionStatus.ConnectFailure)
+                {
+                    AllLog.Instance.I("DataServer连接失败，尝试重启...");
+                    //调用重启DataServer接口；
+
+                    AllLog.Instance.I("重试调用DataServer的接口...");
+                    return Request_Rest(url, timeoutSecond);//重启以后重试一次。
+                }
                 if (wex.Response != null)
                 {
                     using (HttpWebResponse errorResponse = (HttpWebResponse)wex.Response)
@@ -493,46 +501,7 @@ namespace WebServiceReference
         }
         private static string Request_Rest60(string url)
         {
-            HttpWebRequest request;
-            HttpWebResponse response = null;
-            StreamReader reader;
-            StringBuilder sbSource;
-            string address = url;
-            if (address == null) { throw new ArgumentNullException("address"); }
-            try
-            {
-                request = WebRequest.Create(address) as HttpWebRequest;
-                request.UserAgent = ".NET Sample";
-                request.Method = "GET";
-                request.KeepAlive = false;
-                request.Timeout = 60 * 1000;
-                response = request.GetResponse() as HttpWebResponse;
-                if (request.HaveResponse == true && response != null)
-                {
-                    reader = new StreamReader(response.GetResponseStream());
-                    sbSource = new StringBuilder(reader.ReadToEnd());
-                    string returnStr = FromUnicodeString(sbSource.ToString());
-                    returnStr = returnStr.Replace("{\"result\":[\"", "");
-                    returnStr = returnStr.Replace("\"]}", "");
-                    return returnStr;
-                    //return sbSource.ToString();
-                }
-            }
-            catch (WebException wex)
-            {
-                if (wex.Response != null)
-                {
-                    using (HttpWebResponse errorResponse = (HttpWebResponse)wex.Response)
-                    {
-                        return errorResponse.StatusDescription;
-                    }
-                }
-            }
-            finally
-            {
-                if (response != null) { response.Close(); }
-            }
-            return "0";
+            return Request_Rest(url, 60);
         }
 
         public static String Post_Rest(string url, StringWriter sw, int timeoutSecond = 30)
