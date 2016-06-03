@@ -3730,24 +3730,25 @@ namespace Main
         }
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            bool tmpwm = false;
-            if (int.Parse(this.dgvBill.Tag.ToString()) == 1)
-                tmpwm = true;
+            bool tmpwm = int.Parse(this.dgvBill.Tag.ToString()) == 1;
             if (tmpwm)
             {
                 try
                 {
-                    DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
-                    string dishid = dr["dishid"].ToString();
-                    string dishunit = dr["dishunit"].ToString();
-                    int dishStatus = RestClient.getFoodStatus(dishid, dishunit);
-                    if (dishStatus == 1)
+                    if (dgvBill.SelectedRows.Count > 0)
                     {
-                        Warning("选择的菜品已沽清！");
-                        return;
+                        DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
+                        string dishid = dr["dishid"].ToString();
+                        string dishunit = dr["dishunit"].ToString();
+                        int dishStatus = RestClient.getFoodStatus(dishid, dishunit);
+                        if (dishStatus == 1)
+                        {
+                            Warning("选择的菜品已沽清！");
+                            return;
+                        }
+                        string primarydishtype = dr["primarydishtype"].ToString();
+                        t_shopping.adddish(ref Globals.ShoppTable, dr);
                     }
-                    string primarydishtype = dr["primarydishtype"].ToString();
-                    t_shopping.adddish(ref Globals.ShoppTable, dr);
                 }
                 catch { }
                 ShowTotal();
@@ -3756,64 +3757,61 @@ namespace Main
                     frmorder.shoppingchange();
                 }
                 catch { }
-
             }
             else
             {
-                //
-                DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
-                int num = 1;
-                //如果选择的菜品是待称重，输入称重后数量
-                string dishstatus = dr["dishstatus"].ToString();
-                if (dishstatus.Equals("1"))
+                if (dgvBill.SelectedRows.Count > 0)
                 {
-                    //修改称重数量
-                    //修改称重数量
-                    double maxnum2 = 100;
-                    double num2 = 1;
-                    if (ShowInputNum("请输入称重数量!", "称重数量：", out num2, maxnum2))
+                    DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
+                    int num = 1;
+                    //如果选择的菜品是待称重，输入称重后数量
+                    string dishstatus = dr["dishstatus"].ToString();
+                    if (dishstatus.Equals("1"))
                     {
-                        string dishid = dr["dishid"].ToString();
-                        string primarykey = dr["primarykey"].ToString();
-                        RestClient.updateDishWeight(Globals.CurrTableInfo.tableNo, dishid, primarykey, num2.ToString());
-                        Opentable2();
+                        //修改称重数量
+                        //修改称重数量
+                        double maxnum2 = 100;
+                        double num2 = 1;
+                        if (ShowInputNum("请输入称重数量!", "称重数量：", out num2, maxnum2))
+                        {
+                            string dishid = dr["dishid"].ToString();
+                            string primarykey = dr["primarykey"].ToString();
+                            RestClient.updateDishWeight(Globals.CurrTableInfo.tableNo, dishid, primarykey, num2.ToString());
+                            Opentable2();
+                        }
+                        return;
                     }
-                    return;
+                    btnOrder2_Click(btnOrder2, e); //把刚加的菜加到购物车
                 }
-                btnOrder2_Click(btnOrder2, e); //把刚加的菜加到购物车
-                //if (ShowInputNum("请输入加菜数量!", "加菜数量：", out num, 20))
-                //{
-                //调用接口增加餐具
-
-                //}
             }
-
         }
 
         private void btnDec_Click(object sender, EventArgs e)
         {
-            bool tmpwm = false;
-            if (int.Parse(this.dgvBill.Tag.ToString()) == 1)
-                tmpwm = true;
+            bool tmpwm = int.Parse(this.dgvBill.Tag.ToString()) == 1;
             if (tmpwm)
             {
-                try
+                if (dgvBill.SelectedRows.Count > 0)
                 {
-                    DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
-                    t_shopping.decdish(ref Globals.ShoppTable, dr);
+                    try
+                    {
+                        DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
+                        t_shopping.decdish(ref Globals.ShoppTable, dr);
+                    }
+                    catch { }
+                    ShowTotal();
+                    try
+                    {
+                        frmorder.shoppingchange();
+                    }
+                    catch { }
                 }
-                catch { }
-                ShowTotal();
-                try
-                {
-                    frmorder.shoppingchange();
-                }
-                catch { }
-
             }
             else
             {
-                //
+                if (dgvBill.SelectedRows.Count == 0)
+                    return;
+
                 DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
                 double num = double.Parse(dr["dishnum"].ToString());
                 string dishid = dr["dishid"].ToString();
