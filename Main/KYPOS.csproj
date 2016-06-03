@@ -276,6 +276,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportDishInfoControl.xaml.cs">
+      <DependentUpon>ReportDishInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReportTipInfoControl.xaml.cs">
+      <DependentUpon>ReportTipInfoControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ReportViewWindow.xaml.cs">
       <DependentUpon>ReportViewWindow.xaml</DependentUpon>
     </Compile>
@@ -1252,6 +1258,14 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ReportDishInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReportTipInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ReportViewWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

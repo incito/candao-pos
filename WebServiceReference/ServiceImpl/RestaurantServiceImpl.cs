@@ -118,13 +118,12 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
-        public Tuple<string, DishSaleFullInfo> GetDishSaleInfo(EnumDishSalePeriodsType periodsType)
+        public Tuple<string, DishSaleFullInfo> GetDishSaleInfo(EnumStatisticsPeriodsType periodsType)
         {
             try
             {
                 var addr = string.Format("http://{0}/{1}/padinterface/getItemSellDetail.json", RestClient.server, RestClient.apiPath);
-                var request = new Dictionary<string, string>();
-                request.Add("flag", ((int)periodsType).ToString());
+                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
                 var response = HttpHelper.HttpGet<GetDishSaleInfoResponse>(addr, request);
                 if (!response.IsSuccess)
                     return new Tuple<string, DishSaleFullInfo>(response.msg ?? "获取品项销售明细失败。", null);
@@ -150,6 +149,45 @@ namespace WebServiceReference.ServiceImpl
             catch (Exception ex)
             {
                 return ex.Message;
+            }
+        }
+
+        public string BillingTip(string orderId, float tipAmount)
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/tip/tipBilling.json", RestClient.server, RestClient.apiPath);
+                var request = new BillingTipRequest { orderid = orderId, paid = tipAmount };
+                var response = HttpHelper.HttpPost<JavaResponse1>(addr, request);
+                if (!response.IsSuccess)
+                    return string.IsNullOrEmpty(response.msg) ? "小费结算失败。" : response.msg;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public Tuple<string, TipFullInfo> GetTipInfos(EnumStatisticsPeriodsType periodsType)
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/tip/tipList.json", RestClient.server, RestClient.apiPath);
+                var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
+                var response = HttpHelper.HttpGet<GetTipInfoResponse>(addr, request);
+                if (!response.IsSuccess)
+                {
+                    var msg = !string.IsNullOrEmpty(response.msg) ? response.msg : "获取小费统计信息失败。";
+                    AllLog.Instance.E(msg);
+                    return new Tuple<string, TipFullInfo>(msg, null);
+                }
+
+                return new Tuple<string, TipFullInfo>(null, DataConverter.ToTipFullInfo(response));
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, TipFullInfo>(ex.Message, null);
             }
         }
     }

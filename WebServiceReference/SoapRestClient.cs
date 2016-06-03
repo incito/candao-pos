@@ -825,6 +825,13 @@ namespace WebServiceReference
                 }
                 catch
                 { }
+                try
+                {
+                    Globals.CurrTableInfo.TipAmount = float.Parse(ja["tipAmount"].ToString());
+                }
+                catch (Exception)
+                {
+                }
                 //tablelist
                 string tablelistjson = jaAll["JSJson"].ToString();
                 //JObject jaList = (JObject)JsonConvert.DeserializeObject(tablelistjson);
