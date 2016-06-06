@@ -503,11 +503,8 @@ namespace WebServiceReference
                         {
                             return Request_Rest(url, timeoutSecond, --restartDataServerTimes);
                         }
-                        else
-                        {
-                            Msg.ShowError("DataServer服务或网络出现问题，请联系管理人员。");
-                        }
                     }
+                    Msg.ShowError("DataServer服务或网络出现问题，请联系管理人员。");
                 }
             }
             finally
@@ -2891,7 +2888,7 @@ namespace WebServiceReference
         /// <returns></returns>
         public static bool RestartDataserver()
         {
-            var addr = string.Format("http://{0}/" + apiPath + "/controller/restartDataserver.json", server);
+            var addr = string.Format("http://{0}/" + apiPath + "/controller/restartDataserver", server);
             try
             {
                 AllLog.Instance.I("【 restartDataserver 】 start。");
