@@ -53,10 +53,23 @@ namespace Main
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
             RestClient.GetSoapRemoteAddress();
 
-            var netResult = CheckServerConnection();
+            var netResult = RestClient.CheckServerConnection();
             if (!string.IsNullOrEmpty(netResult))
             {
                 Msg.ShowError(netResult);
+                return;
+            }
+
+            if (!RestClient.RestartDataserver()) //直接重启DataServer
+            {
+                Msg.ShowError("DataServer服务或网络出现问题，请联系管理人员。");
+                return;
+            }
+
+            var msg = RestClient.CheckDataServerConnection();
+            if (!string.IsNullOrEmpty(msg))
+            {
+                Msg.ShowError(msg);
                 return;
             }
 
@@ -281,6 +294,11 @@ namespace Main
             if (!NetworkHelper.DetectNetworkConnection(serverIp, serverPort))
             {
                 return "后台服务未启动，请联系管理人员启动后台服务。";
+            }
+
+            if (!RestClient.RestartDataserver())//直接重启DataServer
+            {
+                return "DataServer服务或网络出现问题，请联系管理人员。";
             }
 
             return null;
