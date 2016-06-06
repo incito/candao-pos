@@ -20,6 +20,7 @@ using Models.CandaoMember;
 using Models.Enum;
 using WebServiceReference.ServiceImpl;
 using Timer = System.Timers.Timer;
+using System.Text.RegularExpressions;
 
 namespace Main
 {
@@ -41,6 +42,7 @@ namespace Main
         private float amountroundtz = 0;//四舍五入调整
         private string currtableno = "";
         private float ysamount = 0;//应收
+
         private float amountjf = 0;//会员积分 //如果使用积分 不能找零
 
         //优惠的挂帐和优免
@@ -99,6 +101,7 @@ namespace Main
         /// 当前选择的优惠。
         /// </summary>
         private VCouponRule _curCoupon;
+
 
         //记录每张台下单序列的INI文件
         public frmPosMainV3()
@@ -307,11 +310,26 @@ namespace Main
             lblRs.Text = String.Format("人数：{0}", "");
             lblZd.Text = String.Format("帐单：{0}", "");
             lblMember.Text = String.Format("会员：{0}", "");
+            lblMember.TextChanged += lblMember_TextChanged;
             //btnDelete.Visible = !RestClient.isClearCoupon();
             dgvjs.Width = 330;
             InitMemberFun();
             //pnlMore.Top = 200;
             setFormToPayType1();
+        }
+
+        /// <summary>
+        /// 会员卡号变化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void lblMember_TextChanged(object sender, EventArgs e)
+        {
+            var tag = btnFind.Tag.ToString();
+            if (!lblMember.Text.Equals("会员：") & !string.IsNullOrEmpty(Globals.CurrOrderInfo.memberno) & tag.Equals("0"))
+            {
+                LoginVIP();
+            }
         }
 
         public static bool checkInputTellerCash()
@@ -382,7 +400,10 @@ namespace Main
                 membercard = "";
                 edtMember.Text = "";
                 edtJf.Text = "";
-                edtAmount.Text = "";
+                if (ysamount == 0)
+                {
+                    edtAmount.Text = "";
+                }
                 edtWx.Text = "";
                 edtWxAmount.Text = "";
                 edtZfb.Text = "";
@@ -727,6 +748,9 @@ namespace Main
             }
 
             lblAmount2.Text = String.Format("应收金额：{0}元", ysamount);
+
+
+
             lblAmount.Text = String.Format("合计金额：{0}元", Globals.CurrTableInfo.amount);
             focusedt = edtAmount;
             //edtAmount.Text = Globals.CurrTableInfo.amount.ToString();
@@ -762,6 +786,23 @@ namespace Main
                 }
             }
             catch { }
+        }
+
+        /// <summary>
+        /// 应收金额变化时，现金金额同步更新
+        /// </summary>
+        private void SyncCashPay()
+        {
+            string val = string.Format("应收金额：{0}元", ysamount);
+
+            if (!lblAmount2.Text.Equals(val))
+            {
+                edtAmount.EditValueChanging -= edtAmount_EditValueChanging;
+                edtAmount.Text = ysamount.ToString();
+                edtAmount.EditValueChanging += edtAmount_EditValueChanging;
+            }
+
+
         }
 
         /// <summary>
@@ -827,7 +868,7 @@ namespace Main
         private void getAmount()
         {
             payamount = Globals.CurrTableInfo.amount;//应付
-            amountrmb = string2float(edtAmount.Text);//实收rmb
+
             amountyhk = string2float(edtCard.Text); //实收yhk
             amounthyk = string2float(edtMember.Text); ;//实收hyk
             amountgz = string2float(edtGzAmount.Text);//挂帐
@@ -843,6 +884,12 @@ namespace Main
             ysamount = ysamount - amountml;
             if (ysamount < 0)
                 ysamount = 0;
+
+            //应收金额同步更新现金付款
+            SyncCashPay();
+
+            amountrmb = string2float(edtAmount.Text);//实收rmb
+
             getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
             getamount = (float)Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
@@ -958,6 +1005,7 @@ namespace Main
                     }
                 }
             }
+
             lblSum.Text = String.Format("收款：{0}", tmpstr);
             if (Math.Round(getamount - amountroundtz, 2) >= payamount)
             {
@@ -983,7 +1031,9 @@ namespace Main
         }
         private void edtAmount_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
+
             getAmount();
+
         }
 
         private void edtCard_EditValueChanged(object sender, EventArgs e)
@@ -1078,7 +1128,7 @@ namespace Main
                         Warning("会员卡余额不足...");
                         return;
                     }
-                    if (amounthyk > payamount)
+                    if (amounthyk > ysamount)
                     {
                         Warning("会员卡使用金额不能大于应付额...");
                         return;
@@ -3680,24 +3730,25 @@ namespace Main
         }
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            bool tmpwm = false;
-            if (int.Parse(this.dgvBill.Tag.ToString()) == 1)
-                tmpwm = true;
+            bool tmpwm = int.Parse(this.dgvBill.Tag.ToString()) == 1;
             if (tmpwm)
             {
                 try
                 {
-                    DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
-                    string dishid = dr["dishid"].ToString();
-                    string dishunit = dr["dishunit"].ToString();
-                    int dishStatus = RestClient.getFoodStatus(dishid, dishunit);
-                    if (dishStatus == 1)
+                    if (dgvBill.SelectedRows.Count > 0)
                     {
-                        Warning("选择的菜品已沽清！");
-                        return;
+                        DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
+                        string dishid = dr["dishid"].ToString();
+                        string dishunit = dr["dishunit"].ToString();
+                        int dishStatus = RestClient.getFoodStatus(dishid, dishunit);
+                        if (dishStatus == 1)
+                        {
+                            Warning("选择的菜品已沽清！");
+                            return;
+                        }
+                        string primarydishtype = dr["primarydishtype"].ToString();
+                        t_shopping.adddish(ref Globals.ShoppTable, dr);
                     }
-                    string primarydishtype = dr["primarydishtype"].ToString();
-                    t_shopping.adddish(ref Globals.ShoppTable, dr);
                 }
                 catch { }
                 ShowTotal();
@@ -3706,64 +3757,61 @@ namespace Main
                     frmorder.shoppingchange();
                 }
                 catch { }
-
             }
             else
             {
-                //
-                DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
-                int num = 1;
-                //如果选择的菜品是待称重，输入称重后数量
-                string dishstatus = dr["dishstatus"].ToString();
-                if (dishstatus.Equals("1"))
+                if (dgvBill.SelectedRows.Count > 0)
                 {
-                    //修改称重数量
-                    //修改称重数量
-                    double maxnum2 = 100;
-                    double num2 = 1;
-                    if (ShowInputNum("请输入称重数量!", "称重数量：", out num2, maxnum2))
+                    DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
+                    int num = 1;
+                    //如果选择的菜品是待称重，输入称重后数量
+                    string dishstatus = dr["dishstatus"].ToString();
+                    if (dishstatus.Equals("1"))
                     {
-                        string dishid = dr["dishid"].ToString();
-                        string primarykey = dr["primarykey"].ToString();
-                        RestClient.updateDishWeight(Globals.CurrTableInfo.tableNo, dishid, primarykey, num2.ToString());
-                        Opentable2();
+                        //修改称重数量
+                        //修改称重数量
+                        double maxnum2 = 100;
+                        double num2 = 1;
+                        if (ShowInputNum("请输入称重数量!", "称重数量：", out num2, maxnum2))
+                        {
+                            string dishid = dr["dishid"].ToString();
+                            string primarykey = dr["primarykey"].ToString();
+                            RestClient.updateDishWeight(Globals.CurrTableInfo.tableNo, dishid, primarykey, num2.ToString());
+                            Opentable2();
+                        }
+                        return;
                     }
-                    return;
+                    btnOrder2_Click(btnOrder2, e); //把刚加的菜加到购物车
                 }
-                btnOrder2_Click(btnOrder2, e); //把刚加的菜加到购物车
-                //if (ShowInputNum("请输入加菜数量!", "加菜数量：", out num, 20))
-                //{
-                //调用接口增加餐具
-
-                //}
             }
-
         }
 
         private void btnDec_Click(object sender, EventArgs e)
         {
-            bool tmpwm = false;
-            if (int.Parse(this.dgvBill.Tag.ToString()) == 1)
-                tmpwm = true;
+            bool tmpwm = int.Parse(this.dgvBill.Tag.ToString()) == 1;
             if (tmpwm)
             {
-                try
+                if (dgvBill.SelectedRows.Count > 0)
                 {
-                    DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
-                    t_shopping.decdish(ref Globals.ShoppTable, dr);
+                    try
+                    {
+                        DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
+                        t_shopping.decdish(ref Globals.ShoppTable, dr);
+                    }
+                    catch { }
+                    ShowTotal();
+                    try
+                    {
+                        frmorder.shoppingchange();
+                    }
+                    catch { }
                 }
-                catch { }
-                ShowTotal();
-                try
-                {
-                    frmorder.shoppingchange();
-                }
-                catch { }
-
             }
             else
             {
-                //
+                if (dgvBill.SelectedRows.Count == 0)
+                    return;
+
                 DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
                 double num = double.Parse(dr["dishnum"].ToString());
                 string dishid = dr["dishid"].ToString();
@@ -4106,19 +4154,16 @@ namespace Main
             DateTime dt = DateTime.Now;
             //下单序号
             string seqnostr = IniPos.getPosIniValue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, "0");
-            //string seqnostr = dt.ToLongTimeString().ToString().Replace(":","");
-            if (seqnostr.Equals("0"))
+            if (Globals.OrderTable.Rows.Count == 0 && (Globals.cjSetting == null || Globals.cjSetting.Status == "1"))
             {
                 //如果是第一次下单，如果餐具要收费，那么把餐具加入已点,一起下单
                 try
                 {
-                    string cj = IniPos.getPosIniValue(Application.StartupPath, "ORDERCJ", Globals.CurrOrderInfo.orderid, "0");
-                    if (int.Parse(cj) > 0)
+                    int cusNum = Globals.CurrOrderInfo.custnum != null ? Globals.CurrOrderInfo.custnum.Value : 0;
+                    if (cusNum > 0)
                     {
-                        string userid = Globals.CurrOrderInfo.userid;
-                        if (userid == null)
-                            userid = Globals.UserInfo.UserID;
-                        t_shopping.addCJ(Globals.cjFood, Globals.CurrTableInfo, Globals.CurrOrderInfo, userid, Globals.cjSetting, ref Globals.ShoppTable, int.Parse(cj));
+                        string userid = !string.IsNullOrEmpty(Globals.CurrOrderInfo.userid) ? Globals.CurrOrderInfo.userid : Globals.UserInfo.UserID;
+                        t_shopping.addCJ(Globals.cjFood, Globals.CurrTableInfo, Globals.CurrOrderInfo, userid, Globals.cjSetting, ref Globals.ShoppTable, cusNum);
                     }
                 }
                 catch { }
@@ -4133,13 +4178,14 @@ namespace Main
 
             try
             {
-                int index = 0;
-                do
-                {
-                    if (index != 0)
-                        Thread.Sleep(500);
-                    re = bookorder(seqno_str, ordertype);
-                } while (!re && index++ < 4);
+                //int index = 0;
+                //do
+                //{
+                //    if (index != 0)
+                //        Thread.Sleep(500);
+                //    re = bookorder(seqno_str, ordertype);
+                //} while (!re && index++ < 4);
+                re = bookorder(seqno_str, ordertype);//取消循环4次和停顿500毫秒-20160531TC
             }
             catch (Exception ex)
             {
@@ -4938,6 +4984,14 @@ namespace Main
         }
 
         private void btnFind_Click(object sender, EventArgs e)
+        {
+            LoginVIP();
+        }
+
+        /// <summary>
+        /// 登录会员
+        /// </summary>
+        private void LoginVIP()
         {
             if (btnFind.Tag.ToString().Equals("0"))
             {
