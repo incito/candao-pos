@@ -350,9 +350,9 @@ namespace Main
         {
             var tag = btnFind.Tag.ToString();
             if (!lblMember.Text.Equals("会员：") & !string.IsNullOrEmpty(Globals.CurrOrderInfo.memberno) & tag.Equals("0"))
-           {
-               LoginVIP();
-           }
+            {
+                LoginVIP();
+            }
         }
 
         public static bool checkInputTellerCash()
@@ -423,7 +423,7 @@ namespace Main
                 membercard = "";
                 edtMember.Text = "";
                 edtJf.Text = "";
-                if(ysamount==0)
+                if (ysamount == 0)
                 {
                     edtAmount.Text = "";
                 }
@@ -758,7 +758,7 @@ namespace Main
         /// </summary>
         private void SyncCashPay()
         {
-            string val =string.Format("应收金额：{0}元",ysamount);
+            string val = string.Format("应收金额：{0}元", ysamount);
 
             if (!lblAmount2.Text.Equals(val))
             {
@@ -766,8 +766,8 @@ namespace Main
                 edtAmount.Text = ysamount.ToString();
                 edtAmount.EditValueChanging += edtAmount_EditValueChanging;
             }
-            
-           
+
+
         }
 
         /// <summary>
@@ -833,7 +833,7 @@ namespace Main
         private void getAmount()
         {
             payamount = Globals.CurrTableInfo.amount;//应付
-          
+
             amountyhk = string2float(edtCard.Text); //实收yhk
             amounthyk = string2float(edtMember.Text); ;//实收hyk
             amountgz = string2float(edtGzAmount.Text);//挂帐
@@ -920,7 +920,7 @@ namespace Main
                         tmpstr += string.Format("还需再收{0} ", needMoreAmount);
                 }
             }
-          
+
             lblSum.Text = String.Format("收款：{0}", tmpstr);
             if (Math.Round(getamount - amountroundtz, 2) >= payamount)
             {
@@ -946,9 +946,9 @@ namespace Main
         }
         private void edtAmount_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
         {
-         
+
             getAmount();
-          
+
         }
 
         private void edtCard_EditValueChanged(object sender, EventArgs e)
@@ -1083,7 +1083,7 @@ namespace Main
                         Warning("会员卡积分不足...");
                         return;
                     }
-                    if (amountjf > payamount)
+                    if (amountjf > ysamount)
                     {
                         Warning("会员卡使用积分不能大于应付额...");
                         return;
@@ -1897,24 +1897,21 @@ namespace Main
                 }
                 amountroundtz = (float)Math.Round(ysamount - tmpysamount, 2);
             }
-            else//抹零。
+            else if (Globals.roundinfo.Itemid.Equals("2"))//抹零
             {
-                if (Globals.roundinfo.Itemid.Equals("2"))//抹零
+                if (Globals.roundinfo.Roundtype.Equals("0"))//0 分
                 {
-                    if (Globals.roundinfo.Roundtype.Equals("0"))//0 分
-                    {
-                        amountml = (float)Math.Round(ysamount - Math.Floor(ysamount * 10) / 10, 2);
-                    }
-                    else if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
-                    {
-                        amountml = (float)Math.Round(ysamount - Math.Floor(ysamount), 2);
-                    }
-                    else
-                        if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
-                        {
-                            amountml = (float)Math.Round(ysamount - Math.Floor(ysamount / 10) * 10, 2);
-                        }
+                    amountml = (float)Math.Round(ysamount - Math.Floor(ysamount * 10) / 10, 2);
                 }
+                else if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
+                {
+                    amountml = (float)Math.Round(ysamount - Math.Floor(ysamount), 2);
+                }
+                else
+                    if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
+                    {
+                        amountml = (float)Math.Round(ysamount - Math.Floor(ysamount / 10) * 10, 2);
+                    }
             }
         }
         private void edtAmount_EditValueChanging(object sender, EventArgs e)
