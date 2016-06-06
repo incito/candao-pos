@@ -14,26 +14,32 @@ namespace Common
         /// 检测与某个网络地址是否连通。
         /// </summary>
         /// <param name="ipAddr">IP地址。如192.168.1.1，或者是网站地址如：www.baidu.com。</param>
+        /// <param name="timeoutSecond">超时时间（秒），默认2秒。</param>
         /// <returns>如果连通返回true，否则返回false。</returns>
-        public static bool DetectNetworkConnection(string ipAddr)
+        public static bool DetectIpConnection(string ipAddr, int timeoutSecond = 2)
         {
-            try
+            int index = 3;
+            do
             {
-                Ping pingSender = new Ping();
-                PingOptions options = new PingOptions { DontFragment = true };
-                byte[] buffer = Encoding.UTF8.GetBytes("");
-                var reply = pingSender.Send(ipAddr, 2000, buffer, options);//2000是响应时间（毫秒）。
-                if (reply != null)
+                try
                 {
-                    var info = reply.Status.ToString();
-                    return info.Equals("Success");
+                    Ping pingSender = new Ping();
+                    PingOptions options = new PingOptions { DontFragment = true };
+                    byte[] buffer = Encoding.UTF8.GetBytes("");
+                    var reply = pingSender.Send(ipAddr, timeoutSecond * 1000, buffer, options);//2000是响应时间（毫秒）。
+                    if (reply != null)
+                    {
+                        if (reply.Status == IPStatus.Success)
+                            return true;
+                    }
                 }
-                return false;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            } while (index-- > 0);
+
+            return false;
         }
 
         public static bool DetectNetworkConnection(string ipAddr, int port)

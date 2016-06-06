@@ -56,8 +56,9 @@ namespace Main
             var netResult = RestClient.CheckServerConnection();
             if (!string.IsNullOrEmpty(netResult))
             {
-                Msg.ShowError(netResult);
-                return;
+                var frm = new FrmRetry(netResult);
+                if (frm.ShowDialog() == DialogResult.Cancel)
+                    return;
             }
 
             if (!RestClient.RestartDataserver()) //直接重启DataServer
@@ -66,10 +67,10 @@ namespace Main
                 return;
             }
 
-            var msg = RestClient.CheckDataServerConnection();
-            if (!string.IsNullOrEmpty(msg))
+            netResult = RestClient.CheckDataServerConnection();
+            if (!string.IsNullOrEmpty(netResult))
             {
-                Msg.ShowError(msg);
+                Msg.ShowError(netResult);
                 return;
             }
 
@@ -274,34 +275,5 @@ namespace Main
         [DllImport("User32.dll")]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        /// <summary>
-        /// 检测服务的连接状况。
-        /// </summary>
-        /// <returns>连接成功返回null，否则返回错误信息。</returns>
-        private static string CheckServerConnection()
-        {
-            var temp = RestClient.server.Split(':');
-            int serverPort = 80;
-            var serverIp = temp[0];
-            if (temp.Count() > 1)
-                serverPort = Convert.ToInt32(temp[1]);
-
-            //先检测门店后台网络连接
-            if (!NetworkHelper.DetectNetworkConnection(serverIp))
-            {
-                return "后台服务器连接失败，请检查网络连接或后台服务器已经开机。";
-            }
-            if (!NetworkHelper.DetectNetworkConnection(serverIp, serverPort))
-            {
-                return "后台服务未启动，请联系管理人员启动后台服务。";
-            }
-
-            if (!RestClient.RestartDataserver())//直接重启DataServer
-            {
-                return "DataServer服务或网络出现问题，请联系管理人员。";
-            }
-
-            return null;
-        }
     }
 }

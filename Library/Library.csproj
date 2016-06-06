@@ -109,6 +109,12 @@
     <Compile Include="frmInputNum.Designer.cs">
       <DependentUpon>frmInputNum.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmRetry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRetry.Designer.cs">
+      <DependentUpon>FrmRetry.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmWarning.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -226,6 +232,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmInputNum.resx">
       <DependentUpon>frmInputNum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRetry.resx">
+      <DependentUpon>FrmRetry.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmWarning.resx">
       <DependentUpon>frmWarning.cs</DependentUpon>

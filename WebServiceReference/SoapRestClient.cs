@@ -22,6 +22,7 @@ namespace WebServiceReference
 {
     public class RestClient
     {
+        private const string AccessErrorFlag = "Access violation";
         private static bool alreadLogAllTableInfo;//是否已经记录了所有餐台信息。防止每次获取餐台信息时都打印接口返回数据。
         private static bool alreadLogAllFood;
 
@@ -477,7 +478,7 @@ namespace WebServiceReference
                     reader = new StreamReader(response.GetResponseStream());
                     sbSource = new StringBuilder(reader.ReadToEnd());
                     string returnStr = FromUnicodeString(sbSource.ToString());
-                    if (returnStr.StartsWith("Access violation"))
+                    if (returnStr.StartsWith(AccessErrorFlag))
                         throw new Exception("DataServer访问越界，返回数据错误。");
 
                     returnStr = returnStr.Replace("{\"result\":[\"", "");
@@ -2918,13 +2919,13 @@ namespace WebServiceReference
                 serverPort = Convert.ToInt32(temp[1]);
 
             //先检测门店后台网络连接
-            if (!NetworkHelper.DetectNetworkConnection(serverIp))
+            if (!NetworkHelper.DetectIpConnection(serverIp))
             {
                 return "后台服务器连接失败，请检查网络连接或后台服务器已经开机。";
             }
             if (!NetworkHelper.DetectNetworkConnection(serverIp, serverPort))
             {
-                return "后台服务未启动，请联系管理人员启动后台服务。";
+                return "后台服务未启动，请联系管理人员。";
             }
 
             return null;
@@ -2943,7 +2944,7 @@ namespace WebServiceReference
                 serverPort = Convert.ToInt32(temp[1]);
 
             //先检测门店后台网络连接
-            if (!NetworkHelper.DetectNetworkConnection(serverIp))
+            if (!NetworkHelper.DetectIpConnection(serverIp))
             {
                 return "后台服务器连接失败，请检查网络连接或后台服务器已经开机。";
             }
