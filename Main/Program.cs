@@ -1,19 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Threading;
-using System.Runtime.InteropServices;
-using System.Reflection;
-using Common;
-using WebServiceReference;
 using System.Diagnostics;
 using System.Linq;
-using DevExpress.UserSkins;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
+using Common;
 using DevExpress.Skins;
+using DevExpress.UserSkins;
 using KYPOS;
 using Library;
 using Models.Enum;
 using ReportsFastReport;
+using WebServiceReference;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
 
@@ -183,7 +182,7 @@ namespace Main
                         return;
                     }
                 }
-                Program.MainForm.Show();
+                MainForm.Show();
                 Application.Run();
             }
             else//登录失败,退出程序
@@ -258,9 +257,9 @@ namespace Main
             SetForegroundWindow(instance.MainWindowHandle); //将窗口放置最前端
         }
         [DllImport("User32.dll")]
-        private static extern bool ShowWindowAsync(System.IntPtr hWnd, int cmdShow);
+        private static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);
         [DllImport("User32.dll")]
-        private static extern bool SetForegroundWindow(System.IntPtr hWnd);
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         /// <summary>
         /// 检测服务的连接状况。
@@ -268,10 +267,22 @@ namespace Main
         /// <returns>连接成功返回null，否则返回错误信息。</returns>
         private static string CheckServerConnection()
         {
-            if (!NetwrokHelper.DetectNetworkConnection(RestClient.server))
-                return "后台服务连接失败，请检查网络连接或联系系统管理员重启后台服务然后重试！";
-            if (!NetwrokHelper.DetectNetworkConnection(RestClient.Server3) || !NetwrokHelper.DetectNetworkConnection(RestClient.dataServer))
-                return "DataServer服务连接失败，请检查网络连接或联系系统管理员重启DataServer服务然后重试！";
+            var temp = RestClient.server.Split(':');
+            int serverPort = 80;
+            var serverIp = temp[0];
+            if (temp.Count() > 1)
+                serverPort = Convert.ToInt32(temp[1]);
+
+            //先检测门店后台网络连接
+            if (!NetworkHelper.DetectNetworkConnection(serverIp))
+            {
+                return "后台服务器连接失败，请检查网络连接或后台服务器已经开机。";
+            }
+            if (!NetworkHelper.DetectNetworkConnection(serverIp, serverPort))
+            {
+                return "后台服务未启动，请联系管理人员启动后台服务。";
+            }
+
             return null;
         }
     }
