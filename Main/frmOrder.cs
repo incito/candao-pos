@@ -965,32 +965,21 @@ namespace Main
         private bool bookOrder()
         {
             //下单
-            bool re = false;
-            try
-            {
-                int index = 1;
-                do
-                {
-                    re = bookorder(index++.ToString());
-                } while (!re && index < 9);
-            }
-            catch (Exception ex)
-            {
-                AllLog.Instance.E(ex);
-            }
-            if (!re)
+            var result = bookorder();
+            if (!string.IsNullOrEmpty(result))
             {
                 RestClient.cancelOrder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo);
-                Warning("下单失败，请检查网络!");
+                Warning(result);
+                return false;
             }
-            return re;
+            return true;
         }
 
-        private bool bookorder(string sequence)
+        private string bookorder()
         {
             //下单
             //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";
-            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, int.Parse(sequence), 0);
+            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, 1, 0);
         }
 
         private void btnType1_Load(object sender, EventArgs e)

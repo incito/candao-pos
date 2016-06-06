@@ -59,6 +59,7 @@
     <Compile Include="DishSaleFullInfo.cs" />
     <Compile Include="DishSaleInfo.cs" />
     <Compile Include="DataTableHelper.cs" />
+    <Compile Include="Enum\EnumBookOrderResult.cs" />
     <Compile Include="Enum\EnumDishSalePeriodsType.cs" />
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumTableStatus.cs" />
