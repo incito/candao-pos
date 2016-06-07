@@ -878,12 +878,11 @@ namespace Main
             amountjf = string2float(edtJf.Text);//会员积分 会员积分不找零
             amountzfb = string2float(edtZfbAmount.Text); //实收
             amountwx = string2float(edtWxAmount.Text); //实收
-            ysamount = (float)Math.Round(Globals.CurrTableInfo.amount - amountgz2 - amountym, 2);
             amountml = 0;
             amountroundtz = 0;
+
             setamountml();//获取自动抹零金额
 
-            ysamount = Math.Max(0, ysamount - amountml);
             ysamount += Globals.CurrTableInfo.TipAmount;//应收+小费
 
             //应收金额同步更新现金付款
@@ -891,16 +890,14 @@ namespace Main
 
             amountrmb = string2float(edtAmount.Text);//实收rmb
 
-            getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountjf + amountzfb + amountwx;//实收
+            getamount = amountrmb + amountyhk + amounthyk + amountgz + amountgz2 + amountym + amountml + amountroundtz + amountjf + amountzfb + amountwx;//实收
             getamount = (float)Math.Round(getamount, 2);
             getamountsy = amountrmb + amountyhk + amounthyk + amountgz + amountjf + amountzfb + amountwx;//实收2
 
-            float getamount2 = amountrmb + amountyhk + amountml + amounthyk + amountgz2 + amountzfb + amountwx;//人民币，会员卡，银行卡，挂帐2 抹零
-            float getamount3 = getamount - getamount2;//其他所有优免
-            amountTip = Math.Min(Globals.CurrTableInfo.TipAmount, Math.Max(0, (float)Math.Round(getamountsy - payamount + amountym, 2))); //小费等于付款金额-应收金额，必须大于0且小于设定的值。
+            amountTip = Math.Min(Globals.CurrTableInfo.TipAmount, Math.Max(0, (float)Math.Round(getamountsy - (ysamount - Globals.CurrTableInfo.TipAmount), 2))); //小费等于付款金额-应收金额，必须大于0且小于设定的值。
             amountTip = Math.Min(amountTip, amountrmb);//小费的来源只是现金，不能超过现金金额。
-            returnamount = Math.Max(0, (float)Math.Round(getamount2 - (payamount - getamount3) - amountTip - amountroundtz, 2));
-            returnamount = Math.Min(returnamount, amountrmb - amountTip);//找零的来源只是现金，不能超过现金金额。
+            returnamount = Math.Max(0, (float)Math.Round(getamountsy - ysamount, 2));
+            returnamount = Math.Min(returnamount, (float)Math.Round(amountrmb - amountTip, 2));//找零的来源只是现金，不能超过现金金额。
             edtReturn.Text = returnamount.ToString(CultureInfo.InvariantCulture);
             String tmpstr = "";
             if (amountrmb > 0)
@@ -927,33 +924,28 @@ namespace Main
 
             if (amountml > 0)
                 tmpstr += string.Format("抹零{0} ", amountml);
+            if (amountroundtz > 0)
+                tmpstr += string.Format("舍去{0}", amountroundtz);
+            else if (amountroundtz < 0)
+                tmpstr += string.Format("舍入{0}", Math.Abs(amountroundtz));
             if (returnamount > 0)
                 tmpstr += string.Format("找零{0} ", returnamount);
             else
             {
                 if (getamount <= 0)
                 {
-                    var needAmount = Math.Round(payamount - getamount + amountroundtz + Globals.CurrTableInfo.TipAmount, 2);
-                    if (needAmount > 0)
-                        tmpstr += string.Format("需收款{0} ", needAmount);
+                    tmpstr += string.Format("需收款{0} ", ysamount);
                 }
                 else
                 {
-                    var needMoreAmount = Math.Round(payamount + Globals.CurrTableInfo.TipAmount - getamount + amountroundtz, 2);
+                    var needMoreAmount = Math.Round(ysamount - getamountsy, 2);
                     if (needMoreAmount > 0)
                         tmpstr += string.Format("还需再收{0} ", needMoreAmount);
                 }
             }
 
             lblSum.Text = String.Format("收款：{0}", tmpstr);
-            if (Math.Round(getamount - amountroundtz, 2) >= payamount)
-            {
-                pnlSum.BackColor = Color.DarkSeaGreen;
-            }
-            else
-            {
-                pnlSum.BackColor = Color.Bisque;
-            }
+            pnlSum.BackColor = getamountsy >= ysamount ? Color.DarkSeaGreen : Color.Bisque;
             ShowLeftInfo();
 
         }
@@ -1018,7 +1010,7 @@ namespace Main
                     return;
                 }
 
-                if (Math.Round(payamount - getamount + amountroundtz, 2) > 0)
+                if (Math.Round(ysamount - Globals.CurrTableInfo.TipAmount - getamountsy, 2) > 0)
                 {
                     Warning("还有未收金额...");
                     return;
@@ -1030,7 +1022,7 @@ namespace Main
                 }
                 if (amountTip < Globals.CurrTableInfo.TipAmount)
                 {
-                    if (!AskQuestion(string.Format("还有{0}元小费未结算。", Globals.CurrTableInfo.TipAmount - amountTip)))
+                    if (!AskQuestion(string.Format("还有{0}元小费未结算，点击确定继续结算，点击取消取消结算", Globals.CurrTableInfo.TipAmount - amountTip)))
                         return;
                 }
                 if (returnamount >= 100)
@@ -1062,11 +1054,7 @@ namespace Main
                     }
 
                 }
-                if (amountrmb < returnamount)
-                {
-                    Warning("找零金额错误...");
-                    return;
-                }
+
                 if (amounthyk > 0)
                 {
                     if (membercard.Length <= 0)
@@ -1085,12 +1073,9 @@ namespace Main
                         return;
                     }
                 }
-                if ((getamountsy > 0) && (ysamount > 0) && (amountrmb <= 0))
+                if (getamountsy > ysamount)
                 {
-                    if (getamountsy > (ysamount))
-                    {
-                        Warning("实际输入金额大于应收,请确认...");
-                    }
+                    Warning("实际输入金额大于应收,请确认...");
                 }
 
                 var invoiceAmount = (decimal)Globals.CurrTableInfo.amount;
@@ -1840,55 +1825,40 @@ namespace Main
         }
         private void setamountml()
         {
-            //根据Globals.roundinfo 计算抹零
-            if (!maling)
+            var temp = (float)Math.Round(Globals.CurrTableInfo.amount - amountgz2 - amountym, 2);
+            if (!maling || Globals.roundinfo.Itemid.Equals("0"))
             {
+                ysamount = temp;
                 amountml = 0;
                 amountroundtz = 0;
                 return;
             }
-            if (Globals.roundinfo.Itemid.Equals("0"))//不处理
-            {
-                amountml = 0;
-                return;
-            }
+
             if (Globals.roundinfo.Itemid.Equals("1")) //四舍五入
             {
                 amountml = 0;
-                float tmpysamount = ysamount;
                 if (Globals.roundinfo.Roundtype.Equals("0")) //0 分
-                {
-                    ysamount = (float)Math.Round(ysamount, 1, MidpointRounding.AwayFromZero);
-                }
+                    ysamount = (float)Math.Round(temp, 1, MidpointRounding.AwayFromZero);
                 else if (Globals.roundinfo.Roundtype.Equals("1")) //1  角
-                {
-                    ysamount = (float)Math.Round(ysamount, 0, MidpointRounding.AwayFromZero);
-                }
+                    ysamount = (float)Math.Round(temp, 0, MidpointRounding.AwayFromZero);
                 else if (Globals.roundinfo.Roundtype.Equals("2")) //2  元
-                {
-                    ysamount = (float)Math.Round(ysamount / 10, 0, MidpointRounding.AwayFromZero) * 10;
-                }
-                amountroundtz = (float)Math.Round(ysamount - tmpysamount, 2);
+                    ysamount = (float)Math.Round(temp / 10, 0, MidpointRounding.AwayFromZero) * 10;
+                amountroundtz = (float)Math.Round(temp - ysamount, 2);
             }
             else//抹零。
             {
                 if (Globals.roundinfo.Itemid.Equals("2"))//抹零
                 {
                     if (Globals.roundinfo.Roundtype.Equals("0"))//0 分
-                    {
-                        amountml = (float)Math.Round(ysamount - Math.Floor(ysamount * 10) / 10, 2);
-                    }
+                        ysamount = (float)Math.Round(Math.Floor(temp * 10) / 10, 2);
                     else if (Globals.roundinfo.Roundtype.Equals("1"))//1  角
-                    {
-                        amountml = (float)Math.Round(ysamount - Math.Floor(ysamount), 2);
-                    }
-                    else
-                        if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
-                        {
-                            amountml = (float)Math.Round(ysamount - Math.Floor(ysamount / 10) * 10, 2);
-                        }
+                        ysamount = (float)Math.Round(Math.Floor(temp), 2);
+                    else if (Globals.roundinfo.Roundtype.Equals("2"))//2  元
+                        ysamount = (float)Math.Round(Math.Floor(temp / 10) * 10, 2);
+                    amountml = (float)Math.Round(temp - ysamount, 2);
                 }
             }
+            ysamount = Math.Max(0, (float)Math.Round(ysamount, 2));
         }
         private void edtAmount_EditValueChanging(object sender, EventArgs e)
         {
