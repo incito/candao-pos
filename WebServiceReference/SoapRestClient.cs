@@ -478,7 +478,7 @@ namespace WebServiceReference
                     reader = new StreamReader(response.GetResponseStream());
                     sbSource = new StringBuilder(reader.ReadToEnd());
                     string returnStr = FromUnicodeString(sbSource.ToString());
-                    if (returnStr.StartsWith(AccessErrorFlag))
+                    if (returnStr.TrimStart().StartsWith(AccessErrorFlag))
                         throw new Exception("DataServer访问越界，返回数据错误。");
 
                     returnStr = returnStr.Replace("{\"result\":[\"", "");
@@ -499,11 +499,14 @@ namespace WebServiceReference
                 {
                     if (restartDataServerTimes > 0)
                     {
+                        AllLog.Instance.I("尝试重启DataServer...");
                         if (RestartDataserver())
                         {
+                            AllLog.Instance.I("重启DataServer成功，用户失败操作再次执行...");
                             return Request_Rest(url, timeoutSecond, --restartDataServerTimes);
                         }
                     }
+                    AllLog.Instance.I("重启DataServer失败。");
                     Msg.ShowError("DataServer服务或网络出现问题，请联系管理人员。");
                 }
             }
@@ -513,6 +516,7 @@ namespace WebServiceReference
             }
             return "0";
         }
+
         private static string Request_Rest60(string url)
         {
             return Request_Rest(url, 60);
@@ -2916,15 +2920,21 @@ namespace WebServiceReference
                 serverPort = Convert.ToInt32(temp[1]);
 
             //先检测门店后台网络连接
+            AllLog.Instance.I("开始检测与后台服务器连接状况...");
             if (!NetworkHelper.DetectIpConnection(serverIp))
             {
+                AllLog.Instance.E("后台服务器连接失败。");
                 return "后台服务器连接失败，请检查网络连接或后台服务器已经开机。";
             }
+
+            AllLog.Instance.I("与后台服务器连接正常，检测后台服务是否启动...");
             if (!NetworkHelper.DetectNetworkConnection(serverIp, serverPort))
             {
+                AllLog.Instance.E("后台服务未启动。");
                 return "后台服务未启动，请联系管理人员。";
             }
 
+            AllLog.Instance.I("后台服务器已启动。");
             return null;
         }
 
@@ -2941,15 +2951,20 @@ namespace WebServiceReference
                 serverPort = Convert.ToInt32(temp[1]);
 
             //先检测门店后台网络连接
+            AllLog.Instance.I("开始检测后台服务器连接状况...");
             if (!NetworkHelper.DetectIpConnection(serverIp))
             {
+                AllLog.Instance.E("后台服务器连接失败。");
                 return "后台服务器连接失败，请检查网络连接或后台服务器已经开机。";
             }
+            AllLog.Instance.I("后台服务器连接正常，检测DataServer是否启动...");
             if (!NetworkHelper.DetectNetworkConnection(serverIp, serverPort))
             {
+                AllLog.Instance.E("DataServer服务未启动。");
                 return "DataServer服务未启动，请联系管理人员启动后台服务。";
             }
 
+            AllLog.Instance.I("DataServer服务正常。");
             return null;
         }
     }

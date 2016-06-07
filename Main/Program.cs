@@ -61,12 +61,6 @@ namespace Main
                     return;
             }
 
-            if (!RestClient.RestartDataserver()) //直接重启DataServer
-            {
-                Msg.ShowError("DataServer服务或网络出现问题，请联系管理人员。");
-                return;
-            }
-
             netResult = RestClient.CheckDataServerConnection();
             if (!string.IsNullOrEmpty(netResult))
             {
