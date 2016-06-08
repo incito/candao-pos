@@ -64,7 +64,7 @@ namespace Main
             netResult = RestClient.CheckDataServerConnection();
             if (!string.IsNullOrEmpty(netResult))
             {
-                if (RestClient.RestartDataserver())
+                if (!RestClient.RestartDataserver())
                 {
                     AllLog.Instance.E("DataServer启动失败。");
                     Msg.ShowError("DataServer启动失败，请联系管理人员。");
