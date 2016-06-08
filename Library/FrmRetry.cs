@@ -14,7 +14,9 @@ namespace Library
 
         private void btnRetry_Click(object sender, EventArgs e)
         {
+            btnRetry.Enabled = false;
             var result = RestClient.CheckServerConnection();
+            btnRetry.Enabled = true;
             if (string.IsNullOrEmpty(result))
             {
                 DialogResult = DialogResult.OK;
