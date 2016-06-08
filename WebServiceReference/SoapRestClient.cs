@@ -478,16 +478,17 @@ namespace WebServiceReference
                     reader = new StreamReader(response.GetResponseStream());
                     sbSource = new StringBuilder(reader.ReadToEnd());
                     string returnStr = FromUnicodeString(sbSource.ToString());
-                    if (returnStr.TrimStart().StartsWith(AccessErrorFlag))
-                        throw new Exception("DataServer访问越界，返回数据错误。");
+                    if (returnStr.TrimStart().Contains(AccessErrorFlag))
+                        throw new Exception("DataServer访问越界，返回数据错误。");//抛出异常，触发异常处理里的重启DataServer机制。
 
                     returnStr = returnStr.Replace("{\"result\":[\"", "");
                     returnStr = returnStr.Replace("\"]}", "");
                     return returnStr;
                 }
             }
-            catch (WebException wex)
+            catch (Exception wex)
             {
+                Msg.ShowError("发生异常了...");
                 AllLog.Instance.E(wex);
                 var serverConnect = CheckServerConnection();
                 if (!string.IsNullOrEmpty(serverConnect))
