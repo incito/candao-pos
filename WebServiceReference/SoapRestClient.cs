@@ -2950,14 +2950,7 @@ namespace WebServiceReference
             if (temp.Count() > 1)
                 serverPort = Convert.ToInt32(temp[1]);
 
-            //先检测门店后台网络连接
-            AllLog.Instance.I("开始检测后台服务器连接状况...");
-            if (!NetworkHelper.DetectIpConnection(serverIp))
-            {
-                AllLog.Instance.E("后台服务器连接失败。");
-                return "后台服务器连接失败，请检查网络连接或后台服务器已经开机。";
-            }
-            AllLog.Instance.I("后台服务器连接正常，检测DataServer是否启动...");
+            AllLog.Instance.I("检测DataServer是否启动...");
             if (!NetworkHelper.DetectNetworkConnection(serverIp, serverPort))
             {
                 AllLog.Instance.E("DataServer服务未启动。");
