@@ -3,7 +3,7 @@
     /// <summary>
     /// 品项销售周期类型。
     /// </summary>
-    public enum EnumDishSalePeriodsType
+    public enum EnumStatisticsPeriodsType
     {
         None,
 

@@ -15,6 +15,9 @@ namespace Common
     /// </summary>
     public class DataConverter
     {
+        /// <summary>
+        /// 时间格式化类型。
+        /// </summary>
         private const string DateTimeFmt = "yyyy-MM-dd HH:mm:ss";
 
         /// <summary>
@@ -686,15 +689,15 @@ namespace Common
         public static DishSaleFullInfo ToDishSaleFullInfo(GetDishSaleInfoResponse response)
         {
             var item = new DishSaleFullInfo();
-            item.StartTime = DateTime.ParseExact(response.time.startTime, "yyyy-MM-dd HH:mm:ss", null);
-            item.EndTime = DateTime.ParseExact(response.time.endTime, "yyyy-MM-dd HH:mm:ss", null);
+            item.StartTime = DateTime.ParseExact(response.time.startTime, DateTimeFmt, null);
+            item.EndTime = DateTime.ParseExact(response.time.endTime, DateTimeFmt, null);
             if (response.data != null)
                 item.DishSaleInfos = response.data.Select(ToDishSaleInfo).ToList();
 
             return item;
         }
 
-        public static DishSaleInfo ToDishSaleInfo(DishSaleInfoDataResponse response)
+        private static DishSaleInfo ToDishSaleInfo(DishSaleInfoDataResponse response)
         {
             return new DishSaleInfo
             {
@@ -709,6 +712,29 @@ namespace Common
                 return null;
 
             return DateTime.ParseExact(timeStr, DateTimeFmt, null);
+        }
+
+        public static TipFullInfo ToTipFullInfo(GetTipInfoResponse response)
+        {
+            var item = new TipFullInfo
+            {
+                StartTime = DateTime.ParseExact(response.time.startTime, DateTimeFmt, null),
+                EndTime = DateTime.ParseExact(response.time.endTime, DateTimeFmt, null)
+            };
+            if (response.data != null)
+                item.TipInfos = response.data.Select(ToTipInfo).ToList();
+
+            return item;
+        }
+
+        private static TipInfo ToTipInfo(TipInfoDataResponse response)
+        {
+            return new TipInfo
+            {
+                WaiterName = response.waiterName,
+                TipCount = response.serviceCount,
+                TipAmount = response.tipMoney,
+            };
         }
     }
 }

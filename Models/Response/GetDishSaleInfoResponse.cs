@@ -25,11 +25,4 @@ namespace Models.Response
 
         public decimal? totlePrice { get; set; }
     }
-
-    public class PeriodTimeResponse
-    {
-        public string startTime { get; set; }
-
-        public string endTime { get; set; }
-    }
 }

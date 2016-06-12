@@ -90,15 +90,16 @@ namespace Main
                 var result = service.GetRestaurantTradeTime();
                 if (!string.IsNullOrEmpty(result.Item1))
                 {
-                    frmBase.Warning(result.Item1);
+                    Msg.ShowError(result.Item1);
                     return;
                 }
 
                 Globals.TradeTime = result.Item2;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+                AllLog.Instance.E(ex);
+                Msg.ShowException(ex);
             }
 
             frmStart.frm.setMsg("检查之前是否结业...");

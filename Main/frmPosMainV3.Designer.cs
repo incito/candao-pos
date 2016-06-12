@@ -81,6 +81,7 @@
             this.amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dishstatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlAmount = new System.Windows.Forms.Panel();
+            this.lbTip = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
@@ -628,7 +629,7 @@
             this.pnlMore.Controls.Add(this.btnCancelOrder);
             this.pnlMore.Controls.Add(this.btnRePrintCust);
             this.pnlMore.Controls.Add(this.btnPrintMember1);
-            this.pnlMore.Location = new System.Drawing.Point(156, 192);
+            this.pnlMore.Location = new System.Drawing.Point(162, 200);
             this.pnlMore.Name = "pnlMore";
             this.pnlMore.Size = new System.Drawing.Size(120, 257);
             this.pnlMore.TabIndex = 280;
@@ -715,10 +716,10 @@
             this.lblAmountWm.ForeColor = System.Drawing.Color.Gray;
             this.lblAmountWm.Location = new System.Drawing.Point(-1, 254);
             this.lblAmountWm.Name = "lblAmountWm";
-            this.lblAmountWm.Size = new System.Drawing.Size(135, 24);
+            this.lblAmountWm.Size = new System.Drawing.Size(85, 24);
             this.lblAmountWm.TabIndex = 301;
             this.lblAmountWm.Tag = "171";
-            this.lblAmountWm.Text = "合计金额：";
+            this.lblAmountWm.Text = "消费：";
             this.lblAmountWm.Visible = false;
             // 
             // button8
@@ -931,6 +932,7 @@
             // 
             // pnlAmount
             // 
+            this.pnlAmount.Controls.Add(this.lbTip);
             this.pnlAmount.Controls.Add(this.button3);
             this.pnlAmount.Controls.Add(this.btnDelete);
             this.pnlAmount.Controls.Add(this.button7);
@@ -944,6 +946,17 @@
             this.pnlAmount.Size = new System.Drawing.Size(334, 220);
             this.pnlAmount.TabIndex = 1;
             this.pnlAmount.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlAmount_Paint);
+            // 
+            // lbTip
+            // 
+            this.lbTip.AutoSize = true;
+            this.lbTip.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbTip.ForeColor = System.Drawing.Color.Gray;
+            this.lbTip.Location = new System.Drawing.Point(180, 8);
+            this.lbTip.Name = "lbTip";
+            this.lbTip.Size = new System.Drawing.Size(73, 24);
+            this.lbTip.TabIndex = 302;
+            this.lbTip.Text = "小费:";
             // 
             // button3
             // 
@@ -997,10 +1010,10 @@
             this.lblAmount2.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblAmount2.Location = new System.Drawing.Point(-2, 127);
             this.lblAmount2.Name = "lblAmount2";
-            this.lblAmount2.Size = new System.Drawing.Size(135, 24);
+            this.lblAmount2.Size = new System.Drawing.Size(85, 24);
             this.lblAmount2.TabIndex = 281;
             this.lblAmount2.Tag = "171";
-            this.lblAmount2.Text = "应收金额：";
+            this.lblAmount2.Text = "应收：";
             // 
             // label5
             // 
@@ -1020,10 +1033,10 @@
             this.lblAmount.ForeColor = System.Drawing.Color.Gray;
             this.lblAmount.Location = new System.Drawing.Point(-3, 6);
             this.lblAmount.Name = "lblAmount";
-            this.lblAmount.Size = new System.Drawing.Size(135, 24);
+            this.lblAmount.Size = new System.Drawing.Size(85, 24);
             this.lblAmount.TabIndex = 278;
             this.lblAmount.Tag = "171";
-            this.lblAmount.Text = "合计金额：";
+            this.lblAmount.Text = "消费：";
             this.lblAmount.Click += new System.EventHandler(this.lblAmount_Click);
             // 
             // dgvjs
@@ -3450,5 +3463,6 @@
         private DevExpress.XtraTab.XtraTabPage xtpOther;
         private DevExpress.XtraTab.XtraTabPage xtpCo;
         private DevExpress.XtraTab.XtraTabPage xtraUn;
+        private System.Windows.Forms.Label lbTip;
     }
 }
