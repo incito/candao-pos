@@ -488,7 +488,6 @@ namespace WebServiceReference
             }
             catch (Exception wex)
             {
-                Msg.ShowError("发生异常了...");
                 AllLog.Instance.E(wex);
                 var serverConnect = CheckServerConnection();
                 if (!string.IsNullOrEmpty(serverConnect))
