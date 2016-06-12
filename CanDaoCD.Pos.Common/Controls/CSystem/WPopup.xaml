@@ -1,0 +1,25 @@
+﻿<Window x:Class="CanDaoCD.Pos.Common.Controls.CSystem.WPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:CanDaoCD.Pos.ResourceService.Controls;assembly=CanDaoCD.Pos.ResourceService"
+        Title="WPopup" Height="590" Width="780" Background="{x:Null}" WindowStyle="None" AllowsTransparency="True">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/CanDaoCD.Pos.ResourceService;component/DictionaryServer.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Background="#FFC080">
+            <Image Source="{DynamicResource Logo}" HorizontalAlignment="Left"></Image>
+            <controls:CtlImageButton x:Name="BtnClose" Style="{DynamicResource ImgButton}" HorizontalAlignment="Right" Margin="0,0,20,0" Click="BtnClose_Click" DefaultImage="{DynamicResource ReturnFm}"></controls:CtlImageButton>
+        </Grid>
+
+        <ContentControl Background="#F0F0F0" Grid.Row="1" x:Name="CtlShowFm"></ContentControl>
+    </Grid>
+</Window>

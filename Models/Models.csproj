@@ -66,6 +66,7 @@
     <Compile Include="GiftDishInfo.cs" />
     <Compile Include="InternationaHelper.cs" />
     <Compile Include="NoClearMachineInfo.cs" />
+    <Compile Include="PrintStatusInfo.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
     <Compile Include="Request\BillingTipRequest.cs" />
     <Compile Include="Request\GetDishSaleRequest.cs" />
