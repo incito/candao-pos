@@ -2906,7 +2906,11 @@ namespace WebServiceReference
                 AllLog.Instance.I("【 restartDataserver 】 start。");
                 string jsonResult = Post_Rest(addr, null);
                 AllLog.Instance.I(string.Format("【 restartDataserver 】 result：{0}。", jsonResult));
-                return jsonResult.Equals("0");//返回0表示成功，其他失败。
+                if (jsonResult.Equals("0"))
+                    return false;
+
+                var jobj = (JObject) JsonConvert.DeserializeObject(jsonResult);
+                return jobj["result"].ToString().Equals("0");//返回0表示成功，其他失败。
             }
             catch (Exception ex)
             {
