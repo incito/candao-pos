@@ -22,6 +22,7 @@ namespace WebServiceReference
 {
     public class RestClient
     {
+        private const string AccessErrorFlag = "Access violation";
         private static bool alreadLogAllTableInfo;//是否已经记录了所有餐台信息。防止每次获取餐台信息时都打印接口返回数据。
         private static bool alreadLogAllFood;
 
@@ -448,7 +449,15 @@ namespace WebServiceReference
             }
             return strResult.ToString();
         }
-        private static string Request_Rest(string url)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url">访问URL</param>
+        /// <param name="timeoutSecond">接口超时时间，默认15秒。</param>
+        /// <param name="restartDataServerTimes">重启DataServer次数，默认1次。</param>
+        /// <returns></returns>
+        private static string Request_Rest(string url, int timeoutSecond = 15, int restartDataServerTimes = 1)
         {
             HttpWebRequest request;
             HttpWebResponse response = null;
@@ -462,27 +471,43 @@ namespace WebServiceReference
                 request.UserAgent = ".NET Sample";
                 request.Method = "GET";
                 request.KeepAlive = false;
-                request.Timeout = 15 * 1000;
+                request.Timeout = timeoutSecond * 1000;
                 response = request.GetResponse() as HttpWebResponse;
                 if (request.HaveResponse == true && response != null)
                 {
                     reader = new StreamReader(response.GetResponseStream());
                     sbSource = new StringBuilder(reader.ReadToEnd());
                     string returnStr = FromUnicodeString(sbSource.ToString());
+                    if (returnStr.TrimStart().Contains(AccessErrorFlag))
+                        throw new Exception("DataServer访问越界，返回数据错误。");//抛出异常，触发异常处理里的重启DataServer机制。
+
                     returnStr = returnStr.Replace("{\"result\":[\"", "");
                     returnStr = returnStr.Replace("\"]}", "");
                     return returnStr;
-                    //return sbSource.ToString();
                 }
             }
-            catch (WebException wex)
+            catch (Exception wex)
             {
-                if (wex.Response != null)
+                AllLog.Instance.E(wex);
+                var serverConnect = CheckServerConnection();
+                if (!string.IsNullOrEmpty(serverConnect))
                 {
-                    using (HttpWebResponse errorResponse = (HttpWebResponse)wex.Response)
+                    AllLog.Instance.E(serverConnect);
+                    Msg.ShowError(serverConnect);
+                }
+                else
+                {
+                    if (restartDataServerTimes > 0)
                     {
-                        return errorResponse.StatusDescription;
+                        AllLog.Instance.I("尝试重启DataServer...");
+                        if (RestartDataserver())
+                        {
+                            AllLog.Instance.I("重启DataServer成功，用户失败操作再次执行...");
+                            return Request_Rest(url, timeoutSecond, --restartDataServerTimes);
+                        }
                     }
+                    AllLog.Instance.I("重启DataServer失败。");
+                    Msg.ShowError("DataServer服务或网络出现问题，请联系管理人员。");
                 }
             }
             finally
@@ -491,48 +516,10 @@ namespace WebServiceReference
             }
             return "0";
         }
+
         private static string Request_Rest60(string url)
         {
-            HttpWebRequest request;
-            HttpWebResponse response = null;
-            StreamReader reader;
-            StringBuilder sbSource;
-            string address = url;
-            if (address == null) { throw new ArgumentNullException("address"); }
-            try
-            {
-                request = WebRequest.Create(address) as HttpWebRequest;
-                request.UserAgent = ".NET Sample";
-                request.Method = "GET";
-                request.KeepAlive = false;
-                request.Timeout = 60 * 1000;
-                response = request.GetResponse() as HttpWebResponse;
-                if (request.HaveResponse == true && response != null)
-                {
-                    reader = new StreamReader(response.GetResponseStream());
-                    sbSource = new StringBuilder(reader.ReadToEnd());
-                    string returnStr = FromUnicodeString(sbSource.ToString());
-                    returnStr = returnStr.Replace("{\"result\":[\"", "");
-                    returnStr = returnStr.Replace("\"]}", "");
-                    return returnStr;
-                    //return sbSource.ToString();
-                }
-            }
-            catch (WebException wex)
-            {
-                if (wex.Response != null)
-                {
-                    using (HttpWebResponse errorResponse = (HttpWebResponse)wex.Response)
-                    {
-                        return errorResponse.StatusDescription;
-                    }
-                }
-            }
-            finally
-            {
-                if (response != null) { response.Close(); }
-            }
-            return "0";
+            return Request_Rest(url, 60);
         }
 
         public static String Post_Rest(string url, StringWriter sw, int timeoutSecond = 30)
@@ -2904,6 +2891,85 @@ namespace WebServiceReference
             {
                 return new Tuple<string, JArray>(ex.Message, null);
             }
+        }
+
+        /// <summary>
+        /// 重启DataServer接口。
+        /// </summary>
+        /// <returns></returns>
+        public static bool RestartDataserver()
+        {
+            var addr = string.Format("http://{0}/" + apiPath + "/controller/restartDataserver", server);
+            try
+            {
+                AllLog.Instance.I("【 restartDataserver 】 start。");
+                string jsonResult = Post_Rest(addr, null);
+                AllLog.Instance.I(string.Format("【 restartDataserver 】 result：{0}。", jsonResult));
+                if (jsonResult.Equals("0"))
+                    return false;
+
+                var jobj = (JObject) JsonConvert.DeserializeObject(jsonResult);
+                return jobj["result"].ToString().Equals("0");//返回0表示成功，其他失败。
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("重启DataServer时异常。", ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 检测服务的连接状况。
+        /// </summary>
+        /// <returns>连接成功返回null，否则返回错误信息。</returns>
+        public static string CheckServerConnection()
+        {
+            var temp = server.Split(':');
+            int serverPort = 80;
+            var serverIp = temp[0];
+            if (temp.Count() > 1)
+                serverPort = Convert.ToInt32(temp[1]);
+
+            //先检测门店后台网络连接
+            AllLog.Instance.I("开始检测与后台服务器连接状况...");
+            if (!NetworkHelper.DetectIpConnection(serverIp))
+            {
+                AllLog.Instance.E("后台服务器连接失败。");
+                return "后台服务器连接失败，请检查网络连接或后台服务器已经开机。";
+            }
+
+            AllLog.Instance.I("与后台服务器连接正常，检测后台服务是否启动...");
+            if (!NetworkHelper.DetectNetworkConnection(serverIp, serverPort))
+            {
+                AllLog.Instance.E("后台服务未启动。");
+                return "后台服务未启动，请联系管理人员。";
+            }
+
+            AllLog.Instance.I("后台服务器已启动。");
+            return null;
+        }
+
+        /// <summary>
+        /// 检测DataServer服务连接情况。
+        /// </summary>
+        /// <returns>正常返回null，否则返回错误信息。</returns>
+        public static string CheckDataServerConnection()
+        {
+            var temp = Server3.Split(':');
+            int serverPort = 80;
+            var serverIp = temp[0];
+            if (temp.Count() > 1)
+                serverPort = Convert.ToInt32(temp[1]);
+
+            AllLog.Instance.I("检测DataServer是否启动...");
+            if (!NetworkHelper.DetectNetworkConnection(serverIp, serverPort))
+            {
+                AllLog.Instance.E("DataServer服务未启动。");
+                return "DataServer服务未启动，请联系管理人员启动后台服务。";
+            }
+
+            AllLog.Instance.I("DataServer服务正常。");
+            return null;
         }
     }
 }

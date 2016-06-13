@@ -83,6 +83,7 @@
     <Compile Include="Loginer.cs" />
     <Compile Include="MenuType.cs" />
     <Compile Include="Msg.cs" />
+    <Compile Include="NetworkHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RMBConverter.cs" />
     <Compile Include="SaveResult.cs" />

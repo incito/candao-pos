@@ -1,19 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Threading;
-using System.Runtime.InteropServices;
-using System.Reflection;
-using Common;
-using WebServiceReference;
 using System.Diagnostics;
 using System.Linq;
-using DevExpress.UserSkins;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
+using Common;
 using DevExpress.Skins;
+using DevExpress.UserSkins;
 using KYPOS;
 using Library;
 using Models.Enum;
 using ReportsFastReport;
+using WebServiceReference;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
 
@@ -53,6 +52,26 @@ namespace Main
             //OfficeSkins.Register();////注册Office样式的皮肤
             SkinManager.EnableFormSkins();//启用窗体支持换肤特性
             RestClient.GetSoapRemoteAddress();
+
+            var netResult = RestClient.CheckServerConnection();
+            if (!string.IsNullOrEmpty(netResult))
+            {
+                var frm = new FrmRetry(netResult);
+                if (frm.ShowDialog() == DialogResult.Cancel)
+                    return;
+            }
+
+            netResult = RestClient.CheckDataServerConnection();
+            if (!string.IsNullOrEmpty(netResult))
+            {
+                if (!RestClient.RestartDataserver())
+                {
+                    AllLog.Instance.E("DataServer启动失败。");
+                    Msg.ShowError("DataServer启动失败，请联系管理人员。");
+                    return;
+                }
+            }
+
             ReportPrint.Init();
             frmStart.frm.setMsg("获取系统设置...");
             try
@@ -176,7 +195,7 @@ namespace Main
                         return;
                     }
                 }
-                Program.MainForm.Show();
+                MainForm.Show();
                 Application.Run();
             }
             else//登录失败,退出程序
@@ -251,10 +270,9 @@ namespace Main
             SetForegroundWindow(instance.MainWindowHandle); //将窗口放置最前端
         }
         [DllImport("User32.dll")]
-        private static extern bool ShowWindowAsync(System.IntPtr hWnd, int cmdShow);
+        private static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);
         [DllImport("User32.dll")]
-        private static extern bool SetForegroundWindow(System.IntPtr hWnd);
-
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
 
     }
 }
