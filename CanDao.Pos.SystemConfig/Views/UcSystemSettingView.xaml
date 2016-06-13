@@ -4,14 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-             xmlns:views="clr-namespace:CanDao.Pos.SystemConfig.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             xmlns:views="clr-namespace:CanDao.Pos.SystemConfig.Views">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <dx:DXTabControl Grid.Row="1" Margin="5">
@@ -26,10 +23,17 @@
 
             <dx:DXTabItem>
                 <dx:DXTabItem.Header>
-                    <TextBlock Text="打印机列表" FontSize="20" FontWeight="Bold" Height="40"/>
+                    <Grid HorizontalAlignment="Right">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="打印机列表" FontSize="20" FontWeight="Bold" Height="40"/>
+                        <TextBlock Grid.Column="1" Text="{Binding DataContext.ErrorPrintCount, ElementName=PrinterListView}" FontSize="20" Foreground="Red" Margin="25,0,0,0"/>
+                    </Grid>
                 </dx:DXTabItem.Header>
                 <dx:DXTabItem.Content>
-                    <views:UcPrinterListView/>
+                    <views:UcPrinterListView x:Name="PrinterListView"/>
                 </dx:DXTabItem.Content>
             </dx:DXTabItem>
             <dx:DXTabControl.View>

@@ -72,6 +72,7 @@
     <Compile Include="BindConverter\BoolToVisibilityConverter.cs" />
     <Compile Include="BindConverter\IndexCountConverter.cs" />
     <Compile Include="BindConverter\PasswordBoxHelper.cs" />
+    <Compile Include="BindConverter\PrinterStatusToColorConverter.cs" />
     <Compile Include="Controls\CtlBulletCheckBox.cs" />
     <Compile Include="Controls\CtlDigitalKeyboard.xaml.cs">
       <DependentUpon>CtlDigitalKeyboard.xaml</DependentUpon>
@@ -132,6 +133,13 @@
   <ItemGroup>
     <Resource Include="Images\System\TurnDown.png" />
     <Resource Include="Images\System\TurnUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{2cf256b2-f5e0-4670-8644-08ddf65b0009}</Project>
+      <Name>Models</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

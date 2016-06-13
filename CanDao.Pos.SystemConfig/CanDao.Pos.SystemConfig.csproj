@@ -52,6 +52,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Lib\System.Windows.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -109,6 +114,21 @@
     <ProjectReference Include="..\CanDaoCD.Pos.ResourceService\CanDaoCD.Pos.ResourceService.csproj">
       <Project>{8b73af41-0061-4213-9ec0-318986d1c408}</Project>
       <Name>CanDaoCD.Pos.ResourceService</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{269eceff-b6c2-4708-86ba-afbb1a2b045c}</Project>
+      <Name>Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{2cf256b2-f5e0-4670-8644-08ddf65b0009}</Project>
+      <Name>Models</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\WebServiceReference\WebServiceReference.csproj">
+      <Project>{830d9756-d0f4-4140-8afc-500e8eca03c4}</Project>
+      <Name>WebServiceReference</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

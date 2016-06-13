@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using CanDao.Pos.SystemConfig.ViewModels;
 
 namespace CanDao.Pos.SystemConfig.Views
 {
@@ -10,6 +11,7 @@ namespace CanDao.Pos.SystemConfig.Views
         public UcPrinterListView()
         {
             InitializeComponent();
+            ((UcPrinterListViewModel) DataContext).OwnerCtrl = this;
         }
     }
 }

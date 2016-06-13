@@ -8,6 +8,13 @@
              x:Class="CanDao.Pos.SystemConfig.Views.UcCopyPrintView" 
              mc:Ignorable="d" 
              d:DesignHeight="570" d:DesignWidth="520" Background="#F0F0F0">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDaoCD.Pos.ResourceService;component/DictionaryServer.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"/>

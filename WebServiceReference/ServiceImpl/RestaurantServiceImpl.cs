@@ -123,7 +123,7 @@ namespace WebServiceReference.ServiceImpl
             try
             {
                 var addr = string.Format("http://{0}/{1}/padinterface/getItemSellDetail.json", RestClient.server, RestClient.apiPath);
-                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
+                var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
                 var response = HttpHelper.HttpGet<GetDishSaleInfoResponse>(addr, request);
                 if (!response.IsSuccess)
                     return new Tuple<string, DishSaleFullInfo>(response.msg ?? "获取品项销售明细失败。", null);
@@ -188,6 +188,36 @@ namespace WebServiceReference.ServiceImpl
             catch (Exception ex)
             {
                 return new Tuple<string, TipFullInfo>(ex.Message, null);
+            }
+        }
+
+        public Tuple<string, List<PrintStatusInfo>> GetPrinterStatusInfo()
+        {
+            try
+            {
+                var temp = new List<PrintStatusInfo>();
+                temp.Add(new PrintStatusInfo() { PrintIp = "192.168.1.1", PrintName = "测试1", PrintStatus = EnumPrintStatus.Success, PrintStatusDes = "连接正常" });
+                temp.Add(new PrintStatusInfo() { PrintIp = "192.168.1.2", PrintName = "测试2", PrintStatus = EnumPrintStatus.Error, PrintStatusDes = "网络连接不通" });
+                temp.Add(new PrintStatusInfo() { PrintIp = "192.168.1.3", PrintName = "测试3", PrintStatus = EnumPrintStatus.None, PrintStatusDes = "未知" });
+                return new Tuple<string, List<PrintStatusInfo>>(null, temp);
+
+                var addr = string.Format("http://{0}/{1}/pos/printerlist.json", RestClient.server, RestClient.apiPath);
+                var response = HttpHelper.HttpGet<GetPrinterStatusResponse>(addr);
+                if (!response.isSuccess)
+                {
+                    var msg = !string.IsNullOrEmpty(response.errorMsg) ? response.errorMsg : "获取打印机状态信息失败。";
+                    AllLog.Instance.E(msg);
+                    return new Tuple<string, List<PrintStatusInfo>>(msg, null);
+                }
+
+                var list = new List<PrintStatusInfo>();
+                if (response.data != null && response.data.Any())
+                    list = response.data.Select(DataConverter.ToPrintStatusInfo).ToList();
+                return new Tuple<string, List<PrintStatusInfo>>(null, list);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, List<PrintStatusInfo>>(ex.Message, null);
             }
         }
     }

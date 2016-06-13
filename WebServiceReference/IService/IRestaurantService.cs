@@ -69,6 +69,11 @@ namespace WebServiceReference.IService
         /// <param name="periodsType">统计周期。</param>
         /// <returns></returns>
         Tuple<string, TipFullInfo> GetTipInfos(EnumStatisticsPeriodsType periodsType);
-    
+
+        /// <summary>
+        /// 获取打印机状态集合。
+        /// </summary>
+        /// <returns></returns>
+        Tuple<string, List<PrintStatusInfo>> GetPrinterStatusInfo();
     }
 }

@@ -28,9 +28,10 @@ namespace Main
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAllTable));
-            this.timer1 = new System.Windows.Forms.Timer();
-            this.timer2 = new System.Windows.Forms.Timer();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -42,6 +43,7 @@ namespace Main
             this.lblState1 = new System.Windows.Forms.Label();
             this.pnlState0 = new System.Windows.Forms.Panel();
             this.lblState0 = new System.Windows.Forms.Label();
+            this.BtnSysCfg = new System.Windows.Forms.Button();
             this.btnReport = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.pnlMain = new System.Windows.Forms.Panel();
@@ -53,6 +55,7 @@ namespace Main
             this.panelPage = new System.Windows.Forms.Panel();
             this.btnDown = new System.Windows.Forms.Button();
             this.btnUp = new System.Windows.Forms.Button();
+            this.timerPrint = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -85,6 +88,29 @@ namespace Main
             this.panel1.Size = new System.Drawing.Size(1008, 78);
             this.panel1.TabIndex = 235;
             // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = global::KYPOS.Properties.Resources._return;
+            this.pictureBox3.Location = new System.Drawing.Point(926, 0);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(77, 77);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox3.TabIndex = 29;
+            this.pictureBox3.TabStop = false;
+            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox1.ErrorImage = global::KYPOS.Properties.Resources.logintop;
+            this.pictureBox1.Image = global::KYPOS.Properties.Resources._0111__31_cd21;
+            this.pictureBox1.InitialImage = global::KYPOS.Properties.Resources.logintop;
+            this.pictureBox1.Location = new System.Drawing.Point(2, 1);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(330, 76);
+            this.pictureBox1.TabIndex = 26;
+            this.pictureBox1.TabStop = false;
+            // 
             // panel4
             // 
             this.panel4.Controls.Add(this.btnShapping);
@@ -92,6 +118,7 @@ namespace Main
             this.panel4.Controls.Add(this.btnend);
             this.panel4.Controls.Add(this.pnlState1);
             this.panel4.Controls.Add(this.pnlState0);
+            this.panel4.Controls.Add(this.BtnSysCfg);
             this.panel4.Controls.Add(this.btnReport);
             this.panel4.Controls.Add(this.button1);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -99,6 +126,48 @@ namespace Main
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(1008, 58);
             this.panel4.TabIndex = 234;
+            // 
+            // btnShapping
+            // 
+            this.btnShapping.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.btnShapping.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.btnShapping.Image = global::KYPOS.Properties.Resources.打包;
+            this.btnShapping.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShapping.Location = new System.Drawing.Point(276, 2);
+            this.btnShapping.Name = "btnShapping";
+            this.btnShapping.Size = new System.Drawing.Size(131, 53);
+            this.btnShapping.TabIndex = 240;
+            this.btnShapping.Text = "      外卖";
+            this.btnShapping.UseVisualStyleBackColor = true;
+            this.btnShapping.Click += new System.EventHandler(this.btnShapping_Click);
+            // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.button3.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.button3.Image = global::KYPOS.Properties.Resources.receipt;
+            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button3.Location = new System.Drawing.Point(411, 2);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(131, 53);
+            this.button3.TabIndex = 239;
+            this.button3.Text = "         帐单查询";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
+            // btnend
+            // 
+            this.btnend.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.btnend.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.btnend.Image = global::KYPOS.Properties.Resources.files2;
+            this.btnend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnend.Location = new System.Drawing.Point(657, 2);
+            this.btnend.Name = "btnend";
+            this.btnend.Size = new System.Drawing.Size(115, 53);
+            this.btnend.TabIndex = 238;
+            this.btnend.Text = "        结业";
+            this.btnend.UseVisualStyleBackColor = true;
+            this.btnend.Click += new System.EventHandler(this.btnend_Click);
             // 
             // pnlState1
             // 
@@ -139,6 +208,50 @@ namespace Main
             this.lblState0.TabIndex = 0;
             this.lblState0.Text = "空闲(0)";
             this.lblState0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // BtnSysCfg
+            // 
+            this.BtnSysCfg.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.BtnSysCfg.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.BtnSysCfg.Image = global::KYPOS.Properties.Resources.Report48;
+            this.BtnSysCfg.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnSysCfg.Location = new System.Drawing.Point(890, 3);
+            this.BtnSysCfg.Name = "BtnSysCfg";
+            this.BtnSysCfg.Size = new System.Drawing.Size(115, 53);
+            this.BtnSysCfg.TabIndex = 235;
+            this.BtnSysCfg.Tag = "0";
+            this.BtnSysCfg.Text = "        系统";
+            this.BtnSysCfg.UseVisualStyleBackColor = true;
+            this.BtnSysCfg.Click += new System.EventHandler(this.BtnSysCfg_Click);
+            // 
+            // btnReport
+            // 
+            this.btnReport.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.btnReport.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.btnReport.Image = global::KYPOS.Properties.Resources.Report48;
+            this.btnReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnReport.Location = new System.Drawing.Point(773, 2);
+            this.btnReport.Name = "btnReport";
+            this.btnReport.Size = new System.Drawing.Size(115, 53);
+            this.btnReport.TabIndex = 235;
+            this.btnReport.Tag = "0";
+            this.btnReport.Text = "        报表";
+            this.btnReport.UseVisualStyleBackColor = true;
+            this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.button1.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.button1.Image = global::KYPOS.Properties.Resources.clear2;
+            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button1.Location = new System.Drawing.Point(542, 2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(115, 53);
+            this.button1.TabIndex = 233;
+            this.button1.Text = "        清机";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pnlMain
             // 
@@ -199,6 +312,17 @@ namespace Main
             this.lblVer.TabIndex = 0;
             this.lblVer.Text = "版本：v1.0.0.0";
             // 
+            // panelPage
+            // 
+            this.panelPage.Controls.Add(this.btnDown);
+            this.panelPage.Controls.Add(this.btnUp);
+            this.panelPage.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelPage.Location = new System.Drawing.Point(0, 610);
+            this.panelPage.Name = "panelPage";
+            this.panelPage.Size = new System.Drawing.Size(1008, 40);
+            this.panelPage.TabIndex = 236;
+            this.panelPage.Visible = false;
+            // 
             // btnDown
             // 
             this.btnDown.Image = global::KYPOS.Properties.Resources.down21;
@@ -219,109 +343,11 @@ namespace Main
             this.btnUp.UseVisualStyleBackColor = true;
             this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
             // 
-            // pictureBox3
+            // timerPrint
             // 
-            this.pictureBox3.Image = global::KYPOS.Properties.Resources._return;
-            this.pictureBox3.Location = new System.Drawing.Point(926, 0);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(77, 77);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox3.TabIndex = 29;
-            this.pictureBox3.TabStop = false;
-            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pictureBox1.ErrorImage = global::KYPOS.Properties.Resources.logintop;
-            this.pictureBox1.Image = global::KYPOS.Properties.Resources._0111__31_cd21;
-            this.pictureBox1.InitialImage = global::KYPOS.Properties.Resources.logintop;
-            this.pictureBox1.Location = new System.Drawing.Point(2, 1);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(330, 76);
-            this.pictureBox1.TabIndex = 26;
-            this.pictureBox1.TabStop = false;
-            // 
-            // btnShapping
-            // 
-            this.btnShapping.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnShapping.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnShapping.Image = global::KYPOS.Properties.Resources.打包;
-            this.btnShapping.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnShapping.Location = new System.Drawing.Point(390, 2);
-            this.btnShapping.Name = "btnShapping";
-            this.btnShapping.Size = new System.Drawing.Size(131, 53);
-            this.btnShapping.TabIndex = 240;
-            this.btnShapping.Text = "      外卖";
-            this.btnShapping.UseVisualStyleBackColor = true;
-            this.btnShapping.Click += new System.EventHandler(this.btnShapping_Click);
-            // 
-            // button3
-            // 
-            this.button3.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.button3.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.button3.Image = global::KYPOS.Properties.Resources.receipt;
-            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button3.Location = new System.Drawing.Point(525, 2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(131, 53);
-            this.button3.TabIndex = 239;
-            this.button3.Text = "         帐单查询";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click_1);
-            // 
-            // btnend
-            // 
-            this.btnend.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnend.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnend.Image = global::KYPOS.Properties.Resources.files2;
-            this.btnend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnend.Location = new System.Drawing.Point(771, 2);
-            this.btnend.Name = "btnend";
-            this.btnend.Size = new System.Drawing.Size(115, 53);
-            this.btnend.TabIndex = 238;
-            this.btnend.Text = "        结业";
-            this.btnend.UseVisualStyleBackColor = true;
-            this.btnend.Click += new System.EventHandler(this.btnend_Click);
-            // 
-            // btnReport
-            // 
-            this.btnReport.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnReport.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnReport.Image = global::KYPOS.Properties.Resources.Report48;
-            this.btnReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReport.Location = new System.Drawing.Point(887, 2);
-            this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(115, 53);
-            this.btnReport.TabIndex = 235;
-            this.btnReport.Tag = "0";
-            this.btnReport.Text = "        报表";
-            this.btnReport.UseVisualStyleBackColor = true;
-            this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
-            // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.button1.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.button1.Image = global::KYPOS.Properties.Resources.clear2;
-            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(656, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(115, 53);
-            this.button1.TabIndex = 233;
-            this.button1.Text = "        清机";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);// 
-            // panelPage
-            // 
-            this.panelPage.Controls.Add(this.btnDown);
-            this.panelPage.Controls.Add(this.btnUp);
-            this.panelPage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelPage.Location = new System.Drawing.Point(0, 610);
-            this.panelPage.Name = "panelPage";
-            this.panelPage.Size = new System.Drawing.Size(1008, 40);
-            this.panelPage.TabIndex = 236;
-            this.panelPage.Visible = false;
+            this.timerPrint.Enabled = true;
+            this.timerPrint.Interval = 10000;
+            this.timerPrint.Tick += new System.EventHandler(this.timerPrint_Tick);
             // 
             // frmAllTable
             // 
@@ -343,14 +369,14 @@ namespace Main
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmAllTable_FormClosed);
             this.Load += new System.EventHandler(this.frmAllTable_Load);
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel4.ResumeLayout(false);
             this.pnlState1.ResumeLayout(false);
             this.pnlState0.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panelPage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -381,6 +407,8 @@ namespace Main
         private System.Windows.Forms.Panel panelPage;
         private System.Windows.Forms.Button btnDown;
         private System.Windows.Forms.Button btnUp;
+        private System.Windows.Forms.Button BtnSysCfg;
+        private System.Windows.Forms.Timer timerPrint;
 
     }
 }

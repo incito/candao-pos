@@ -736,5 +736,16 @@ namespace Common
                 TipAmount = response.tipMoney,
             };
         }
+
+        public static PrintStatusInfo ToPrintStatusInfo(PrinterStatusInfoResponse response)
+        {
+            return new PrintStatusInfo
+            {
+                PrintIp = response.ip,
+                PrintName = response.name,
+                PrintStatus = (EnumPrintStatus)response.status,
+                PrintStatusDes = response.statusTitle,
+            };
+        }
     }
 }

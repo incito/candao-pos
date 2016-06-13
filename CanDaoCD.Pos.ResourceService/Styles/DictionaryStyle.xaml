@@ -3,6 +3,8 @@
                     xmlns:local="clr-namespace:CanDaoCD.Pos.ResourceService.Controls"
                     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
                     xmlns:bindConverter="clr-namespace:CanDaoCD.Pos.ResourceService.BindConverter">
+    <bindConverter:PrinterStatusToColorConverter x:Key="PrinterStatus2ColorCvt"/>
+    
     <!--文本框-->
     <Style x:Key="VisualTextBox" TargetType="{x:Type TextBox}">
         <Style.Resources>

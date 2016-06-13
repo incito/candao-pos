@@ -5,6 +5,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Media;
+using CanDao.Pos.SystemConfig.Views;
+using CanDaoCD.Pos.Common.Operates;
 using Common;
 using KYPOS;
 using Library;
@@ -445,6 +448,40 @@ namespace Main
             curTablePage++;
             CreateTableControls();
             UpdatePageButtonEnableStatus();
+        }
+
+        private void BtnSysCfg_Click(object sender, EventArgs e)
+        {
+            timerPrint.Stop();
+            OWindowManage.ShowPopupWindow(new UcSystemSettingView(), Brushes.AntiqueWhite);
+            timerPrint.Start();
+        }
+
+        /// <summary>
+        /// 检测打印机状态。
+        /// </summary>
+        private void CheckPrinterStatus()
+        {
+            var service = new RestaurantServiceImpl();
+            var result = service.GetPrinterStatusInfo();
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                Invoke((Action)delegate { Msg.ShowError(result.Item1); });
+                return;
+            }
+
+            var errPrintCount = result.Item2.Count(t => t.PrintStatus != EnumPrintStatus.Success);
+            if (errPrintCount > 0)
+            {
+                Invoke((Action)delegate { Msg.ShowError(string.Format("检测到{0}个打印机异常，请到\"系统\">\"打印机列表\"查看并修复。", errPrintCount)); });
+            }
+        }
+
+        private void timerPrint_Tick(object sender, EventArgs e)
+        {
+            timerPrint.Stop();
+            CheckPrinterStatus();
+            timerPrint.Start();
         }
     }
 }

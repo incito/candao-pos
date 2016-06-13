@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:CanDao.Pos.SystemConfig.ViewModels"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding RefreshCmd}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,20 +21,33 @@
     <UserControl.DataContext>
         <viewModels:UcPrinterListViewModel/>
     </UserControl.DataContext>
-    <StackPanel>
-        <TextBlock Text="打印机列表" FontSize="24" Margin="10"/>
-        <Border BorderBrush="Black" BorderThickness="0,2,0,0">
-            <dxg:GridControl ItemsSource="{Binding PrinterStatus}">
-                <dxg:GridControl.Columns>
-                    <dxg:GridColumn Header="打印机IP" VisibleIndex="1" FieldName="PrintIp">
-                    </dxg:GridColumn>
-                    <dxg:GridColumn Header="打印机名称" VisibleIndex="2" FieldName="PrintName"/>
-                    <dxg:GridColumn Header="打印机状态" VisibleIndex="3" FieldName="PrintStatusDes"/>
-                </dxg:GridControl.Columns>
-                <dxg:GridControl.View>
-                    <dxg:TableView Style="{StaticResource TableViewNavRowStyle}" AutoWidth="True"/>
-                </dxg:GridControl.View>
-            </dxg:GridControl>
-        </Border>
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <Button Command="{Binding RefreshCmd}" DockPanel.Dock="Right" Width="80" FontSize="24">
+                <TextBlock Text="{Binding RemainingTimes, StringFormat=刷新({0})}"/>
+            </Button>
+            <TextBlock Text="打印机列表" FontSize="24" Margin="10"/>
+        </DockPanel>
+        <dxg:GridControl Grid.Row="1" ItemsSource="{Binding PrinterStatusInfos}">
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn Header="打印机IP" VisibleIndex="1" FieldName="PrintIp">
+                </dxg:GridColumn>
+                <dxg:GridColumn Header="打印机名称" VisibleIndex="2" FieldName="PrintName"/>
+                <dxg:GridColumn Header="打印机状态" VisibleIndex="3" FieldName="PrintStatusDes">
+                    <dxg:GridColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RowData.Row.PrintStatusDes}" Foreground="{Binding RowData.Row.PrintStatus, Converter={StaticResource PrinterStatus2ColorCvt}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </dxg:GridColumn.CellTemplate>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.View>
+                <dxg:TableView Style="{StaticResource TableViewNavRowStyle}"/>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+    </Grid>
 </UserControl>
