@@ -4075,17 +4075,19 @@ namespace Main
             Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
             //
         }
-        private bool bookorder(string sequence, int ordertype)
+
+        /// <summary>
+        /// 下单。
+        /// </summary>
+        /// <param name="ordertype"></param>
+        /// <returns></returns>
+        private string bookorder(int ordertype)
         {
-            //下单
-            //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";//tableid //Globals.UserInfo.UserID
-            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, int.Parse(sequence), ordertype);
+            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, 1, ordertype);
         }
 
         private bool startorder(int ordertype)
         {
-            //下单
-            bool re = false;
             DateTime dt = DateTime.Now;
             //下单序号
             string seqnostr = IniPos.getPosIniValue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, "0");
@@ -4111,32 +4113,17 @@ namespace Main
             }
             catch { seqno_str = RestClient.getGUID(); }
 
-            try
-            {
-                //int index = 0;
-                //do
-                //{
-                //    if (index != 0)
-                //        Thread.Sleep(500);
-                //    re = bookorder(seqno_str, ordertype);
-                //} while (!re && index++ < 4);
-                re = bookorder(seqno_str, ordertype);//取消循环4次和停顿500毫秒-20160531TC
-            }
-            catch (Exception ex)
-            {
-                AllLog.Instance.E(ex);
-            }
-            if (!re)
+            var result = bookorder(ordertype);
+            if (!string.IsNullOrEmpty(result))
             {
                 ShowOrder();
-                Warning("下单失败，请检查网络!");
+                Warning(result);
+                return false;
             }
-            else
-            {
-                IniPos.setPosIniVlaue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, seqno_str.ToString());
-                Warning("下单完成");
-            }
-            return re;
+
+            IniPos.setPosIniVlaue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, seqno_str);
+            Warning("下单完成");
+            return true;
         }
 
         /// <summary>
@@ -4206,33 +4193,18 @@ namespace Main
             if (isok)
             {
                 //下单
-                bool re = false;
-                try
+                var result = bookorder(ordertype);
+                if (!string.IsNullOrEmpty(result))
                 {
-                    int index = 1;
-                    do
-                    {
-                        re = bookorder(index.ToString(), ordertype);
-                    } while (index++ < 9 && !re);//下单失败多尝试几次。
-                }
-                catch (Exception ex)
-                {
-                    AllLog.Instance.E(ex);
-                }
-
-                if (!re)
-                {
-                    //把台关掉，帐单删掉,让用户重点
-                    isok = false;
                     RestClient.cancelOrder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, currtableno);
-                    Warning("下单失败，请检查网络!");
-                    ////如果会员已经成功，那么只能把雅座中的交易撤销，再重新下单
+                    Warning(result);
+                    return false;
                 }
 
                 if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray()).Equals("0"))
                 {
-                    isok = false;
                     Warning("结算失败...");
+                    return false;
                 }
 
                 RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。

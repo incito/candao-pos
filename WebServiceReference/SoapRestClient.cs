@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Xml;
 using Common;
 using Models;
+using Models.Enum;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -2591,7 +2592,7 @@ namespace WebServiceReference
             return str;
         }
 
-        public static bool bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype)
+        public static string bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);
             AllLog.Instance.I(string.Format("【bookorderList】 tableid：{0}，orderid：{1}，sequence：{2}。", tableid, orderid, sequence));
@@ -2614,20 +2615,31 @@ namespace WebServiceReference
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
             AllLog.Instance.I(string.Format("【bookorderList】 result：{0}。", jsonResult));
-            bool result = false;
             try
             {
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-                string javaresult = ja["result"].ToString();
-                if (javaresult.Equals("1"))
+                if (ja["result"] == null)
+                    return "服务器接口返回错误。";
+
+                var result = (EnumBookOrderResult)Convert.ToInt32(ja["result"].ToString());
+                switch (result)
                 {
-                    //返回现有的帐单号，用现有的帐单号结算
-                    //RestClient.GetTableInfo()
+                    case EnumBookOrderResult.Success:
+                        return null;
+                    case EnumBookOrderResult.MenuUpdating:
+                        return "菜谱正在更新，请重启POS后再试。";
+                    case EnumBookOrderResult.DishUpdating:
+                        return "菜品正在更新，请重启POS后再试。";
+                    default:
+                        return "下单发生错误，请联系技术人员。";
                 }
-                result = ja["result"].ToString().Equals("0");
             }
-            catch { return false; }
-            return result;
+            catch (Exception ex)
+            {
+                var msg = string.Format("下单时发生错误：{0}", ex.Message);
+                AllLog.Instance.E(msg);
+                return msg;
+            }
         }
 
         public static bool getSystemSetData(string settingname, out TSetting setting)
