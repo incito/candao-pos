@@ -65,6 +65,7 @@
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumTableStatus.cs" />
     <Compile Include="Enum\EnumTableType.cs" />
+    <Compile Include="Enum\EnumTradeTimeType.cs" />
     <Compile Include="GiftDishInfo.cs" />
     <Compile Include="InternationaHelper.cs" />
     <Compile Include="NoClearMachineInfo.cs" />

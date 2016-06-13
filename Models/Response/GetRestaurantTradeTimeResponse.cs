@@ -22,5 +22,7 @@
         /// 结业时间。
         /// </summary>
         public string endtime { get; set; }
+
+        public string datetype { get; set; }
     }
 }

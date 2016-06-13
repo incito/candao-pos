@@ -109,7 +109,7 @@ namespace WebServiceReference.ServiceImpl
                 if (!response.IsSuccess)
                     return new Tuple<string, RestaurantTradeTime>(response.info ?? "获取店铺营业时间失败。", null);
 
-                var result = new RestaurantTradeTime(response.detail.begintime, response.detail.endtime);
+                var result = new RestaurantTradeTime(response.detail.begintime, response.detail.endtime, response.detail.datetype);
                 return new Tuple<string, RestaurantTradeTime>(null, result);
             }
             catch (Exception ex)

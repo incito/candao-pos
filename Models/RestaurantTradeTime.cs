@@ -1,4 +1,5 @@
 ﻿using System;
+using Models.Enum;
 
 namespace Models
 {
@@ -7,11 +8,12 @@ namespace Models
     /// </summary>
     public class RestaurantTradeTime
     {
-        public RestaurantTradeTime(string beginTime, string endTime)
+        public RestaurantTradeTime(string beginTime, string endTime, string dateType)
         {
             BeginTime = DateTime.ParseExact(beginTime, "HH:mm", null).AddDays(1);
             EndTime = DateTime.ParseExact(endTime, "HH:mm", null);
-            if (endTime == "00:00")
+            TradeTimeType = (EnumTradeTimeType)System.Enum.Parse(typeof(EnumTradeTimeType), dateType);
+            if (TradeTimeType == EnumTradeTimeType.N)
                 EndTime = EndTime.AddDays(1);
         }
 
@@ -20,6 +22,14 @@ namespace Models
         /// </summary>
         public DateTime BeginTime { get; set; }
 
+        /// <summary>
+        /// 结业时间。
+        /// </summary>
         public DateTime EndTime { get; set; }
+
+        /// <summary>
+        /// 结业时间类型。
+        /// </summary>
+        public EnumTradeTimeType TradeTimeType { get; set; }
     }
 }
