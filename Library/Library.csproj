@@ -115,6 +115,12 @@
     <Compile Include="FrmRetry.Designer.cs">
       <DependentUpon>FrmRetry.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmWarningPrintError.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmWarningPrintError.Designer.cs">
+      <DependentUpon>FrmWarningPrintError.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmWarning.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -235,6 +241,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmRetry.resx">
       <DependentUpon>FrmRetry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmWarningPrintError.resx">
+      <DependentUpon>FrmWarningPrintError.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmWarning.resx">
       <DependentUpon>frmWarning.cs</DependentUpon>

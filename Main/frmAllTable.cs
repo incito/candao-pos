@@ -19,6 +19,7 @@ using ReportsFastReport;
 using WebServiceReference;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
+using Color = System.Drawing.Color;
 
 namespace Main
 {
@@ -48,6 +49,21 @@ namespace Main
         private int btnSpace = 9;
 
         private bool _isForcedEndWorkModel;//是否是强制结业模式。
+
+        /// <summary>
+        /// 不再警告间隔时间（秒），默认10分钟。
+        /// </summary>
+        private const int _noWarningIntervalTime = 600;
+
+        /// <summary>
+        /// 是否启用了不再警告时间。
+        /// </summary>
+        private bool _isEnableNoWarning;
+
+        /// <summary>
+        /// 打印机错误警告时间。
+        /// </summary>
+        private DateTime _printErrorWarningTime;
 
         public frmPosMainV3 frmpos = new frmPosMainV3();
         public frmPosMainV3 frmposwm = new frmPosMainV3();
@@ -96,8 +112,8 @@ namespace Main
             });
             lblUser.Text = String.Format("登录员工:{0}", Globals.UserInfo.UserName);
             lblbranchid.Text = String.Format("店铺编号：{0}", RestClient.getbranch_id());
-            timer2.Enabled = true;
-            timer2.Interval = 1000;
+            timer2.Start();
+            timerPrint.Start();
             lblVer.Text = String.Format("版本:{0}", Globals.ProductVersion);
             try
             {
@@ -466,14 +482,35 @@ namespace Main
             var result = service.GetPrinterStatusInfo();
             if (!string.IsNullOrEmpty(result.Item1))
             {
-                Invoke((Action)delegate { Msg.ShowError(result.Item1); });
+                Invoke((Action)delegate { Warning(result.Item1); });
                 return;
             }
 
-            var errPrintCount = result.Item2.Count(t => t.PrintStatus != EnumPrintStatus.Success);
+            var errPrintCount = result.Item2.Count(t => t.PrintStatus != EnumPrintStatus.Good);
             if (errPrintCount > 0)
             {
-                Invoke((Action)delegate { Msg.ShowError(string.Format("检测到{0}个打印机异常，请到\"系统\">\"打印机列表\"查看并修复。", errPrintCount)); });
+                Invoke((Action)delegate
+                {
+                    BtnSysCfg.FlatAppearance.BorderColor = Color.Red;
+                    BtnSysCfg.FlatAppearance.BorderSize = 2;
+                    if (!_isEnableNoWarning || (DateTime.Now - _printErrorWarningTime).TotalSeconds > _noWarningIntervalTime)
+                    {
+                        var errMsg = string.Format("检测到{0}个打印机异常，请到\"系统\">\"打印机列表\"查看并修复。", errPrintCount);
+                        var warningDialog = new FrmWarningPrintError(errMsg) { Owner = this };
+                        warningDialog.ShowDialog();//这种提示窗口不考虑取消状态。
+                        _isEnableNoWarning = warningDialog.IsCheckedNoWarning;
+                        if (_isEnableNoWarning)
+                            _printErrorWarningTime = DateTime.Now;
+                    }
+                });
+            }
+            else
+            {
+                Invoke((Action)delegate
+                {
+                    BtnSysCfg.FlatAppearance.BorderColor = Color.Empty;
+                    BtnSysCfg.FlatAppearance.BorderSize = 1;
+                });
             }
         }
 

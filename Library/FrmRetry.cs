@@ -4,7 +4,7 @@ using WebServiceReference;
 
 namespace Library
 {
-    public partial class FrmRetry : Form
+    public partial class FrmRetry : frmBase
     {
         public FrmRetry(string errMsg)
         {

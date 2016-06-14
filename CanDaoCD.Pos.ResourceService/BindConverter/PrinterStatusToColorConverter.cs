@@ -15,10 +15,10 @@ namespace CanDaoCD.Pos.ResourceService.BindConverter
             {
                 case EnumPrintStatus.None:
                     break;
-                case EnumPrintStatus.Success:
+                case EnumPrintStatus.Good:
                     color = Brushes.Green;
                     break;
-                case EnumPrintStatus.Error:
+                case EnumPrintStatus.NotReachable:
                     color = Brushes.Red;
                     break;
             }

@@ -608,7 +608,6 @@
             this.panel6.BackColor = System.Drawing.Color.White;
             this.panel6.Controls.Add(this.pnlMore);
             this.panel6.Controls.Add(this.lblAmountWm);
-            this.panel6.Controls.Add(this.button8);
             this.panel6.Controls.Add(this.btnOrder);
             this.panel6.Controls.Add(this.btnDec);
             this.panel6.Controls.Add(this.btnAdd);
@@ -730,9 +729,9 @@
             this.button8.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button8.Image = global::KYPOS.Properties.Resources.up21;
             this.button8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button8.Location = new System.Drawing.Point(288, 272);
+            this.button8.Location = new System.Drawing.Point(288, 3);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(46, 46);
+            this.button8.Size = new System.Drawing.Size(46, 48);
             this.button8.TabIndex = 297;
             this.button8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button8.UseVisualStyleBackColor = true;
@@ -762,9 +761,9 @@
             this.btnDec.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnDec.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnDec.Image = global::KYPOS.Properties.Resources.dec21;
-            this.btnDec.Location = new System.Drawing.Point(288, 83);
+            this.btnDec.Location = new System.Drawing.Point(287, 58);
             this.btnDec.Name = "btnDec";
-            this.btnDec.Size = new System.Drawing.Size(46, 49);
+            this.btnDec.Size = new System.Drawing.Size(46, 42);
             this.btnDec.TabIndex = 298;
             this.btnDec.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDec.UseVisualStyleBackColor = true;
@@ -778,9 +777,9 @@
             this.btnAdd.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnAdd.Image = global::KYPOS.Properties.Resources.add2;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(288, 33);
+            this.btnAdd.Location = new System.Drawing.Point(287, 17);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(46, 49);
+            this.btnAdd.Size = new System.Drawing.Size(46, 42);
             this.btnAdd.TabIndex = 297;
             this.btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -793,9 +792,9 @@
             this.button1.Font = new System.Drawing.Font("Tahoma", 12F);
             this.button1.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button1.Image = global::KYPOS.Properties.Resources.down21;
-            this.button1.Location = new System.Drawing.Point(288, 183);
+            this.button1.Location = new System.Drawing.Point(287, 140);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(46, 49);
+            this.button1.Size = new System.Drawing.Size(46, 44);
             this.button1.TabIndex = 296;
             this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.UseVisualStyleBackColor = true;
@@ -809,9 +808,9 @@
             this.button2.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button2.Image = global::KYPOS.Properties.Resources.up21;
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button2.Location = new System.Drawing.Point(288, 133);
+            this.button2.Location = new System.Drawing.Point(287, 99);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(46, 49);
+            this.button2.Size = new System.Drawing.Size(46, 42);
             this.button2.TabIndex = 295;
             this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button2.UseVisualStyleBackColor = true;
@@ -856,7 +855,7 @@
             this.dgvBill.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvBill.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dgvBill.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvBill.Size = new System.Drawing.Size(334, 300);
+            this.dgvBill.Size = new System.Drawing.Size(334, 278);
             this.dgvBill.TabIndex = 0;
             this.dgvBill.Tag = "0";
             this.dgvBill.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBill_CellClick);
@@ -934,6 +933,7 @@
             // 
             this.pnlAmount.Controls.Add(this.lbTip);
             this.pnlAmount.Controls.Add(this.button3);
+            this.pnlAmount.Controls.Add(this.button8);
             this.pnlAmount.Controls.Add(this.btnDelete);
             this.pnlAmount.Controls.Add(this.button7);
             this.pnlAmount.Controls.Add(this.lblAmount2);
@@ -941,9 +941,9 @@
             this.pnlAmount.Controls.Add(this.lblAmount);
             this.pnlAmount.Controls.Add(this.dgvjs);
             this.pnlAmount.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlAmount.Location = new System.Drawing.Point(0, 295);
+            this.pnlAmount.Location = new System.Drawing.Point(0, 281);
             this.pnlAmount.Name = "pnlAmount";
-            this.pnlAmount.Size = new System.Drawing.Size(334, 220);
+            this.pnlAmount.Size = new System.Drawing.Size(334, 234);
             this.pnlAmount.TabIndex = 1;
             this.pnlAmount.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlAmount_Paint);
             // 
@@ -964,9 +964,9 @@
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Tahoma", 15F);
             this.button3.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.button3.Location = new System.Drawing.Point(288, 120);
+            this.button3.Location = new System.Drawing.Point(288, 140);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(46, 46);
+            this.button3.Size = new System.Drawing.Size(46, 39);
             this.button3.TabIndex = 301;
             this.button3.Text = " C";
             this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -980,13 +980,12 @@
             this.btnDelete.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnDelete.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnDelete.Image = global::KYPOS.Properties.Resources.dec21;
-            this.btnDelete.Location = new System.Drawing.Point(288, 72);
+            this.btnDelete.Location = new System.Drawing.Point(288, 94);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(46, 46);
+            this.btnDelete.Size = new System.Drawing.Size(46, 47);
             this.btnDelete.TabIndex = 300;
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Visible = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // button7
@@ -996,7 +995,7 @@
             this.button7.Font = new System.Drawing.Font("Tahoma", 12F);
             this.button7.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button7.Image = global::KYPOS.Properties.Resources.down21;
-            this.button7.Location = new System.Drawing.Point(288, 25);
+            this.button7.Location = new System.Drawing.Point(288, 49);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(46, 46);
             this.button7.TabIndex = 298;

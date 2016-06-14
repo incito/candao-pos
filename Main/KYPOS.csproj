@@ -430,11 +430,10 @@
   <ItemGroup>
     <Content Include="icon64.ico" />
     <Content Include="logo.ico" />
+    <None Include="Resources\SysCfg48.png" />
     <None Include="Resources\Report48.png" />
     <None Include="Resources\Report48.bmp" />
-    <None Include="Resources\0111-_31_cd280.png" />
     <None Include="Resources\0111-_31_cd21.png" />
-    <None Include="Resources\0111-_31_cd2.png" />
     <None Include="Resources\VIP8.bmp" />
     <None Include="Resources\VIP2.jpg" />
     <None Include="Resources\down3.png" />
@@ -446,7 +445,6 @@
     <None Include="Resources\freeamount.png" />
     <None Include="Resources\account.png" />
     <None Include="Resources\posstart2.png" />
-    <None Include="Resources\posstart3.png" />
     <None Include="Resources\posstart1.png" />
     <None Include="Resources\posstart.png" />
     <None Include="Resources\backimg.png" />

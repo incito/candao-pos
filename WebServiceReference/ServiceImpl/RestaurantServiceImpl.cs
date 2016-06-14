@@ -195,11 +195,11 @@ namespace WebServiceReference.ServiceImpl
         {
             try
             {
-                var temp = new List<PrintStatusInfo>();
-                temp.Add(new PrintStatusInfo() { PrintIp = "192.168.1.1", PrintName = "测试1", PrintStatus = EnumPrintStatus.Success, PrintStatusDes = "连接正常" });
-                temp.Add(new PrintStatusInfo() { PrintIp = "192.168.1.2", PrintName = "测试2", PrintStatus = EnumPrintStatus.Error, PrintStatusDes = "网络连接不通" });
-                temp.Add(new PrintStatusInfo() { PrintIp = "192.168.1.3", PrintName = "测试3", PrintStatus = EnumPrintStatus.None, PrintStatusDes = "未知" });
-                return new Tuple<string, List<PrintStatusInfo>>(null, temp);
+                //var temp = new List<PrintStatusInfo>();
+                //temp.Add(new PrintStatusInfo() { PrintIp = "192.168.1.1", PrintName = "测试1", PrintStatus = EnumPrintStatus.Good, PrintStatusDes = "连接正常" });
+                //temp.Add(new PrintStatusInfo() { PrintIp = "192.168.1.2", PrintName = "测试2", PrintStatus = EnumPrintStatus.NotReachable, PrintStatusDes = "网络连接不通" });
+                //temp.Add(new PrintStatusInfo() { PrintIp = "192.168.1.3", PrintName = "测试3", PrintStatus = EnumPrintStatus.None, PrintStatusDes = "未知" });
+                //return new Tuple<string, List<PrintStatusInfo>>(null, temp);
 
                 var addr = string.Format("http://{0}/{1}/pos/printerlist.json", RestClient.server, RestClient.apiPath);
                 var response = HttpHelper.HttpGet<GetPrinterStatusResponse>(addr);

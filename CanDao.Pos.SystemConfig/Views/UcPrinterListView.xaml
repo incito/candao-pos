@@ -1,11 +1,11 @@
 ﻿<UserControl x:Class="CanDao.Pos.SystemConfig.Views.UcPrinterListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:CanDao.Pos.SystemConfig.ViewModels"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding RefreshCmd}"/>
@@ -25,6 +25,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <DockPanel>
             <Button Command="{Binding RefreshCmd}" DockPanel.Dock="Right" Width="80" FontSize="24">
@@ -32,7 +33,7 @@
             </Button>
             <TextBlock Text="打印机列表" FontSize="24" Margin="10"/>
         </DockPanel>
-        <dxg:GridControl Grid.Row="1" ItemsSource="{Binding PrinterStatusInfos}">
+        <dxg:GridControl x:Name="GcPrinterList" Grid.Row="1" ItemsSource="{Binding PrinterStatusInfos}">
             <dxg:GridControl.Columns>
                 <dxg:GridColumn Header="打印机IP" VisibleIndex="1" FieldName="PrintIp">
                 </dxg:GridColumn>
@@ -49,5 +50,10 @@
                 <dxg:TableView Style="{StaticResource TableViewNavRowStyle}"/>
             </dxg:GridControl.View>
         </dxg:GridControl>
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Content="上翻" Command="{Binding PageUpCmd}" FontSize="20" Margin="3" Width="80" Height="40"/>
+            <Button Content="下翻" Command="{Binding PageDownCmd}" FontSize="20" Margin="3" Width="80" Height="40"/>
+        </StackPanel>
     </Grid>
 </UserControl>

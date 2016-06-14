@@ -5,8 +5,24 @@
     /// </summary>
     public enum EnumPrintStatus
     {
+        /// <summary>
+        /// 未知。
+        /// </summary>
         None,
-        Success,
-        Error,
+
+        /// <summary>
+        /// 较差。
+        /// </summary>
+        Bad,
+
+        /// <summary>
+        /// 良好
+        /// </summary>
+        Good,
+
+        /// <summary>
+        /// 连接断开。
+        /// </summary>
+        NotReachable,
     }
 }

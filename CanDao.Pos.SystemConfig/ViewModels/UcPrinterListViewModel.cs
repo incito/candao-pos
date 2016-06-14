@@ -3,11 +3,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
 using System.Windows.Controls;
+using System.Windows.Input;
+using CanDao.Pos.SystemConfig.Views;
 using CanDaoCD.Pos.Common.Classes.Mvvms;
 using Common;
 using Models;
 using Models.Enum;
 using WebServiceReference.ServiceImpl;
+using Keyboard = CanDaoCD.Pos.Common.Operates.Keyboard;
 
 namespace CanDao.Pos.SystemConfig.ViewModels
 {
@@ -21,7 +24,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         /// <summary>
         /// 刷新间隔时间。
         /// </summary>
-        private const int RefreshIntervalsSecond = 5;
+        private const int RefreshIntervalsSecond = 10;
 
         /// <summary>
         /// 刷新定时器。
@@ -34,10 +37,15 @@ namespace CanDao.Pos.SystemConfig.ViewModels
 
         public UcPrinterListViewModel()
         {
-            InitRefreshTimer();
-            PrinterStatusInfos = new ObservableCollection<PrintStatusInfo>();
-            RefreshCmd = new RelayCommand(Refresh);
-            _refreshTimer.Start();
+            if (!IsInDesignMode)
+            {
+                InitRefreshTimer();
+                PrinterStatusInfos = new ObservableCollection<PrintStatusInfo>();
+                RefreshCmd = new RelayCommand(Refresh);
+                PageUpCmd = new RelayCommand(PageUp);
+                PageDownCmd = new RelayCommand(PageDown);
+                _refreshTimer.Start();
+            }
         }
 
         #endregion
@@ -87,7 +95,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         /// <summary>
         /// 所属控件。
         /// </summary>
-        public UserControl OwnerCtrl { get; set; }
+        public UcPrinterListView OwnerCtrl { get; set; }
 
         #endregion
 
@@ -98,6 +106,16 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         /// </summary>
         public RelayCommand RefreshCmd { get; private set; }
 
+        /// <summary>
+        /// 上翻按钮。
+        /// </summary>
+        public RelayCommand PageUpCmd { get; private set; }
+
+        /// <summary>
+        /// 下翻按钮。
+        /// </summary>
+        public RelayCommand PageDownCmd { get; private set; }
+
         #endregion
 
         #region Command Methods
@@ -107,6 +125,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         /// </summary>
         private void Refresh()
         {
+            _refreshTimer.Stop();
             var service = new RestaurantServiceImpl();
             var result = service.GetPrinterStatusInfo();
             if (!string.IsNullOrEmpty(result.Item1))
@@ -121,12 +140,25 @@ namespace CanDao.Pos.SystemConfig.ViewModels
                 PrinterStatusInfos.Clear();
                 if (result.Item2 != null)
                     result.Item2.ForEach(PrinterStatusInfos.Add);
-                ErrorPrintCount = PrinterStatusInfos.Count(t => t.PrintStatus != EnumPrintStatus.Success);
+                ErrorPrintCount = PrinterStatusInfos.Count(t => t.PrintStatus != EnumPrintStatus.Good);
                 if (ErrorPrintCount == 0)
                     AllLog.Instance.I("打印机全部状态正常。");
                 else
                     AllLog.Instance.E("打印机错误状态的个数：{0}", ErrorPrintCount);
             });
+            _refreshTimer.Start();
+        }
+
+        private void PageUp()
+        {
+            OwnerCtrl.GcPrinterList.Focus();
+            Keyboard.Press(Key.PageUp);
+        }
+
+        private void PageDown()
+        {
+            OwnerCtrl.GcPrinterList.Focus();
+            Keyboard.Press(Key.PageDown);
         }
 
         #endregion

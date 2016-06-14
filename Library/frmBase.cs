@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -27,7 +28,7 @@ namespace Library
     {
 
         public DevExpress.LookAndFeel.DefaultLookAndFeel DefaultLookAndFeel;
-        private int maxnum=0;
+        private int maxnum = 0;
         public frmBase()
         {
             InitializeComponent();
@@ -68,16 +69,16 @@ namespace Library
         public static bool AskQuestion(string msg)
         {
             return frmAskQuestion.ShowAskQuestion(msg);
- 
+
         }
-        public static bool ShowInputNum(string msg,out int inputNum,int maxnum)
+        public static bool ShowInputNum(string msg, out int inputNum, int maxnum)
         {
             return frmInputNum.ShowInputNum(msg, out inputNum, maxnum);
 
         }
-        public static bool ShowInputNum(string msg,string lbltext, out int inputNum, int maxnum)
+        public static bool ShowInputNum(string msg, string lbltext, out int inputNum, int maxnum)
         {
-            return frmInputNum.ShowInputNum(msg,lbltext, out inputNum, maxnum);
+            return frmInputNum.ShowInputNum(msg, lbltext, out inputNum, maxnum);
 
         }
         public static bool ShowInputNum(string msg, string lbltext, out int inputNum, double maxnum)
@@ -93,8 +94,7 @@ namespace Library
         public static bool Warning(string msg)
         {
             return frmWarning.ShowWarning(msg);
- 
+
         }
-        
     }
 }

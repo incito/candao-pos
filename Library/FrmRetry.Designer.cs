@@ -47,14 +47,14 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(599, 67);
+            this.panel1.Size = new System.Drawing.Size(577, 67);
             this.panel1.TabIndex = 303;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(957, 1);
+            this.pictureBox1.Location = new System.Drawing.Point(1116, 1);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(66, 66);
+            this.pictureBox1.Size = new System.Drawing.Size(77, 77);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 29;
             this.pictureBox1.TabStop = false;
@@ -63,7 +63,7 @@
             // 
             this.pictureBox2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox2.Image = global::Library.ResImage._0111__31_cd;
-            this.pictureBox2.Location = new System.Drawing.Point(41, 1);
+            this.pictureBox2.Location = new System.Drawing.Point(-12, 1);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(211, 65);
             this.pictureBox2.TabIndex = 26;
@@ -72,21 +72,22 @@
             // RtbMsg
             // 
             this.RtbMsg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.RtbMsg.Dock = System.Windows.Forms.DockStyle.Top;
             this.RtbMsg.Enabled = false;
             this.RtbMsg.Font = new System.Drawing.Font("Tahoma", 21F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RtbMsg.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.RtbMsg.Location = new System.Drawing.Point(0, 72);
+            this.RtbMsg.Location = new System.Drawing.Point(0, 67);
             this.RtbMsg.Name = "RtbMsg";
-            this.RtbMsg.Size = new System.Drawing.Size(599, 108);
+            this.RtbMsg.Size = new System.Drawing.Size(577, 126);
             this.RtbMsg.TabIndex = 305;
             this.RtbMsg.Text = "";
             // 
             // btnRetry
             // 
             this.btnRetry.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnRetry.Location = new System.Drawing.Point(363, 207);
+            this.btnRetry.Location = new System.Drawing.Point(328, 201);
             this.btnRetry.Name = "btnRetry";
-            this.btnRetry.Size = new System.Drawing.Size(89, 45);
+            this.btnRetry.Size = new System.Drawing.Size(104, 52);
             this.btnRetry.TabIndex = 306;
             this.btnRetry.Text = "重试";
             this.btnRetry.UseVisualStyleBackColor = true;
@@ -95,9 +96,9 @@
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnCancel.Location = new System.Drawing.Point(498, 207);
+            this.btnCancel.Location = new System.Drawing.Point(461, 201);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(89, 45);
+            this.btnCancel.Size = new System.Drawing.Size(104, 52);
             this.btnCancel.TabIndex = 306;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -105,15 +106,18 @@
             // 
             // FrmRetry
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(599, 264);
+            this.ClientSize = new System.Drawing.Size(577, 260);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnRetry);
             this.Controls.Add(this.RtbMsg);
             this.Controls.Add(this.panel1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmRetry";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "";
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
