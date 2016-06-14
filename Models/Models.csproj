@@ -47,6 +47,8 @@
     <Compile Include="BackDishInfo.cs" />
     <Compile Include="BankInfo.cs" />
     <Compile Include="Bill_Order.cs" />
+    <Compile Include="CandaoMember\TCandaoCoupon.cs" />
+    <Compile Include="CandaoMember\TCandaoCouponList.cs" />
     <Compile Include="CandaoMember\TCandaoMemberCardInfo.cs" />
     <Compile Include="CandaoMember\TCandaoMemberInfo.cs" />
     <Compile Include="CandaoMember\TCandaoRegMemberInfo.cs" />

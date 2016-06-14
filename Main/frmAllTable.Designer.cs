@@ -36,6 +36,7 @@ namespace Main
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.BtnSystem = new System.Windows.Forms.Button();
             this.btnShapping = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.pnlState5 = new System.Windows.Forms.Panel();
@@ -60,6 +61,9 @@ namespace Main
             this.btnRBill = new System.Windows.Forms.Button();
             this.lblVer = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
+            this.BtnVipSelect = new System.Windows.Forms.Button();
+            this.BtnVipRecharge = new System.Windows.Forms.Button();
+            this.BtnVipReg = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -87,6 +91,9 @@ namespace Main
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.panel1.Controls.Add(this.BtnVipReg);
+            this.panel1.Controls.Add(this.BtnVipRecharge);
+            this.panel1.Controls.Add(this.BtnVipSelect);
             this.panel1.Controls.Add(this.pictureBox3);
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -120,6 +127,7 @@ namespace Main
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.BtnSystem);
             this.panel4.Controls.Add(this.btnShapping);
             this.panel4.Controls.Add(this.button3);
             this.panel4.Controls.Add(this.pnlState5);
@@ -136,13 +144,29 @@ namespace Main
             this.panel4.Size = new System.Drawing.Size(1008, 58);
             this.panel4.TabIndex = 234;
             // 
+            // BtnSystem
+            // 
+            this.BtnSystem.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.BtnSystem.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.BtnSystem.Image = global::KYPOS.Properties.Resources.rep2;
+            this.BtnSystem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnSystem.Location = new System.Drawing.Point(890, 2);
+            this.BtnSystem.Name = "BtnSystem";
+            this.BtnSystem.Size = new System.Drawing.Size(115, 53);
+            this.BtnSystem.TabIndex = 236;
+            this.BtnSystem.Tag = "0";
+            this.BtnSystem.Text = "系统";
+            this.BtnSystem.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.BtnSystem.UseVisualStyleBackColor = true;
+            this.BtnSystem.Click += new System.EventHandler(this.BtnSystem_Click);
+            // 
             // btnShapping
             // 
             this.btnShapping.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnShapping.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnShapping.Image = global::KYPOS.Properties.Resources.打包;
             this.btnShapping.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnShapping.Location = new System.Drawing.Point(390, 2);
+            this.btnShapping.Location = new System.Drawing.Point(280, 2);
             this.btnShapping.Name = "btnShapping";
             this.btnShapping.Size = new System.Drawing.Size(131, 53);
             this.btnShapping.TabIndex = 240;
@@ -156,7 +180,7 @@ namespace Main
             this.button3.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button3.Image = global::KYPOS.Properties.Resources.receipt;
             this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button3.Location = new System.Drawing.Point(525, 2);
+            this.button3.Location = new System.Drawing.Point(412, 2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(131, 53);
             this.button3.TabIndex = 239;
@@ -191,7 +215,7 @@ namespace Main
             this.btnend.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnend.Image = global::KYPOS.Properties.Resources.files2;
             this.btnend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnend.Location = new System.Drawing.Point(771, 2);
+            this.btnend.Location = new System.Drawing.Point(658, 2);
             this.btnend.Name = "btnend";
             this.btnend.Size = new System.Drawing.Size(115, 53);
             this.btnend.TabIndex = 238;
@@ -285,7 +309,7 @@ namespace Main
             this.btnRefresh.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnRefresh.Image = global::KYPOS.Properties.Resources.refresh2;
             this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefresh.Location = new System.Drawing.Point(887, 2);
+            this.btnRefresh.Location = new System.Drawing.Point(774, 2);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(115, 53);
             this.btnRefresh.TabIndex = 235;
@@ -301,7 +325,7 @@ namespace Main
             this.button1.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button1.Image = global::KYPOS.Properties.Resources.clear2;
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(656, 2);
+            this.button1.Location = new System.Drawing.Point(543, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(115, 53);
             this.button1.TabIndex = 233;
@@ -407,6 +431,36 @@ namespace Main
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Visible = false;
             // 
+            // BtnVipSelect
+            // 
+            this.BtnVipSelect.Location = new System.Drawing.Point(335, 5);
+            this.BtnVipSelect.Name = "BtnVipSelect";
+            this.BtnVipSelect.Size = new System.Drawing.Size(123, 69);
+            this.BtnVipSelect.TabIndex = 30;
+            this.BtnVipSelect.Text = "会员查询";
+            this.BtnVipSelect.UseVisualStyleBackColor = true;
+            this.BtnVipSelect.Click += new System.EventHandler(this.BtnVipSelect_Click);
+            // 
+            // BtnVipRecharge
+            // 
+            this.BtnVipRecharge.Location = new System.Drawing.Point(464, 5);
+            this.BtnVipRecharge.Name = "BtnVipRecharge";
+            this.BtnVipRecharge.Size = new System.Drawing.Size(123, 69);
+            this.BtnVipRecharge.TabIndex = 31;
+            this.BtnVipRecharge.Text = "会员充值";
+            this.BtnVipRecharge.UseVisualStyleBackColor = true;
+            this.BtnVipRecharge.Click += new System.EventHandler(this.BtnVipRecharge_Click);
+            // 
+            // BtnVipReg
+            // 
+            this.BtnVipReg.Location = new System.Drawing.Point(593, 5);
+            this.BtnVipReg.Name = "BtnVipReg";
+            this.BtnVipReg.Size = new System.Drawing.Size(123, 69);
+            this.BtnVipReg.TabIndex = 32;
+            this.BtnVipReg.Text = "会员注册";
+            this.BtnVipReg.UseVisualStyleBackColor = true;
+            this.BtnVipReg.Click += new System.EventHandler(this.BtnVipReg_Click);
+            // 
             // frmAllTable
             // 
             this.Appearance.BackColor = System.Drawing.SystemColors.Control;
@@ -473,6 +527,10 @@ namespace Main
         private System.Windows.Forms.Button btnend;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnShapping;
+        private System.Windows.Forms.Button BtnSystem;
+        private System.Windows.Forms.Button BtnVipReg;
+        private System.Windows.Forms.Button BtnVipRecharge;
+        private System.Windows.Forms.Button BtnVipSelect;
 
 
     }

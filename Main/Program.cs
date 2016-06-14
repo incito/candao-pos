@@ -8,6 +8,8 @@ using Common;
 using WebServiceReference;
 using System.Diagnostics;
 using System.Linq;
+using CanDaoCD.Pos.Common.Models;
+using CanDaoCD.Pos.Common.Operates.FileOperate;
 using DevExpress.UserSkins;
 using DevExpress.Skins;
 using KYPOS;
@@ -16,6 +18,7 @@ using Models.Enum;
 using ReportsFastReport;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
+using CanDaoCD.Pos.Common.PublicValues;
 
 /************************************************************************* 
  * 程序说明: 程序入口
@@ -50,6 +53,14 @@ namespace Main
             }
             frmStart.frm.setMsg("读取配置文件...");
             SystemConfig.ReadSettings(); //读取用户自定义设置
+
+            //读取复写卡配置
+            PvSystemConfig.VSystemConfig = OXmlOperate.DeserializeFile<MSystemConfig>(PvSystemConfig.VSystemConfigFile);
+            if (PvSystemConfig.VSystemConfig == null)
+            {
+                PvSystemConfig.VSystemConfig=new MSystemConfig();
+            }
+          
 
             BonusSkins.Register();//注册Dev酷皮肤
             //OfficeSkins.Register();////注册Office样式的皮肤

@@ -13,6 +13,7 @@ using WebServiceReference;
 using Library;
 using Models;
 using System.Threading;
+using CanDaoCD.Pos.PrintManage;
 
 namespace ReportsFastReport
 {
@@ -299,6 +300,10 @@ namespace ReportsFastReport
                     Library.frmWarning.ShowWarning("该单没有会员消费记录!");
                     return;
                 }
+
+                //打印复写卡
+                PrintCopyCard(dtOrder);
+
                 string file = Application.StartupPath + @"\Reports\rptyz1.frx";
                 rptReport.Load(file);//加载报表模板文件
                 DataSet ds = new DataSet();
@@ -639,6 +644,44 @@ namespace ReportsFastReport
                 PrintRpt(rptReport, 1);
             }
             catch { }
+        }
+
+        public static void PrintCopyCard(DataTable dt)
+        {
+          
+            if (dt.Rows.Count > 0)
+            {
+                double temdouble = 0;
+                double jfzjDecimal = 0;
+                double czzjDecimal = 0;
+                double jfDecimal = 0;
+                double czDecimal = 0;
+                string cardno = "";
+
+                if (double.TryParse(dt.Rows[0]["score"].ToString(), out temdouble))
+                {
+                    jfzjDecimal = temdouble;
+                }
+
+                if (double.TryParse(dt.Rows[0]["stored"].ToString(), out temdouble))
+                {
+                    czzjDecimal = temdouble;
+                }
+
+                if (double.TryParse(dt.Rows[0]["scorebalance"].ToString(), out temdouble))
+                {
+                    jfDecimal = temdouble;
+                }
+
+                if (double.TryParse(dt.Rows[0]["storedbalance"].ToString(), out temdouble))
+                {
+                    czDecimal = temdouble;
+                }
+                cardno = dt.Rows[0]["cardno"].ToString();
+                PrintService.PayPrint("", cardno, (jfDecimal - jfzjDecimal).ToString(),jfzjDecimal.ToString(),jfDecimal.ToString(),(czDecimal-czzjDecimal).ToString()
+                    ,czzjDecimal.ToString(),czDecimal.ToString());
+                
+            }
         }
     }
 }

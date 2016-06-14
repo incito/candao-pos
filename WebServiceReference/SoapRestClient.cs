@@ -546,10 +546,13 @@ namespace WebServiceReference
             if (address == null) { throw new ArgumentNullException("address"); }
             try
             {
+                GC.Collect();
+                ServicePointManager.DefaultConnectionLimit = 50;
                 request = WebRequest.Create(address) as HttpWebRequest;
                 request.UserAgent = ".NET POS";
                 request.Method = "POST";
                 request.KeepAlive = false;
+
                 //webReq.ContentType = "application/x-www-form-urlencoded";
                 request.ContentType = "application/json; charset=utf-8";
                 //request.Timeout = 15 * 1000;

@@ -333,6 +333,7 @@ namespace WebServiceReference
             }
             catch { }
             JArray jr = (JArray)JsonConvert.DeserializeObject(ret.Cardlist);
+        
             JObject jaCard = (JObject)jr[0];
             ret.Mcard = jaCard["cardno"].ToString();
             ret.Mobile = ja["mobile"].ToString();
@@ -380,6 +381,69 @@ namespace WebServiceReference
             writer.WriteValue(transtype.ToString());
             writer.WritePropertyName("ChargeType");
             writer.WriteValue(chargetype.ToString());
+            writer.WriteEndObject();
+            writer.Flush();
+            AllLog.Instance.I(string.Format("【StoreCardDeposit】 reqeust：{0}。", sw));
+            String jsonResult = RestClient.Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【StoreCardDeposit】 result：{0}。", jsonResult));
+            JObject ja = null;
+            ret.Ret = true;
+            try
+            {
+                ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+
+            }
+            catch { ret.Ret = false; return ret; }
+            ret.Retcode = ja["Retcode"].ToString();
+            ret.Ret = ret.Retcode.Equals("0");
+            ret.Retinfo = ja["RetInfo"].ToString();
+            if (!ret.Retcode.Equals("0"))
+            {
+                return ret;
+            }
+            ret.Tracecode = ja["TraceCode"].ToString();
+            ret.StoreCardbalance = decimal.Parse(ja["StoreCardBalance"].ToString());
+            ret.Giftamount = decimal.Parse(ja["GiftAmount"].ToString());
+            ret.Integral = 0;// decimal.Parse();//ja["Integral"].ToString()
+            return ret;
+        }
+
+        /// <summary>
+        /// 会员储值(加入实体卡)
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="securitycode"></param>
+        /// <param name="cardno"></param>
+        /// <param name="serial"></param>
+        /// <param name="Amount"></param>
+        /// <param name="transtype"></param>
+        /// <param name="chargetype"></param>
+        /// <returns></returns>
+        public static TCandaoRet_StoreCardDeposit StoreCardDepositAddCard(string branch_id, string securitycode, string cardno, string serial, decimal Amount, int transtype, int chargetype, string preferential_id, string giveValue)
+        {
+            TCandaoRet_StoreCardDeposit ret = new TCandaoRet_StoreCardDeposit();
+            string address = String.Format("http://{0}/member/deal/StoreCardToNewPos.json", WebServiceReference.Candaomemberserver);
+            StringWriter sw = new StringWriter();
+            JsonWriter writer = new JsonTextWriter(sw);
+            writer.WriteStartObject();
+            writer.WritePropertyName("SecurityCode");
+            writer.WriteValue(securitycode);
+            writer.WritePropertyName("Serial");
+            writer.WriteValue(serial);
+            writer.WritePropertyName("branch_id");
+            writer.WriteValue(branch_id);
+            writer.WritePropertyName("cardno");
+            writer.WriteValue(cardno);
+            writer.WritePropertyName("Amount");
+            writer.WriteValue(Amount);
+            writer.WritePropertyName("TransType");
+            writer.WriteValue(transtype.ToString());
+            writer.WritePropertyName("ChargeType");
+            writer.WriteValue(chargetype.ToString());
+            writer.WritePropertyName("t_preferential_id");
+            writer.WriteValue(preferential_id);
+            writer.WritePropertyName("giveValue");
+            writer.WriteValue(giveValue);
             writer.WriteEndObject();
             writer.Flush();
             AllLog.Instance.I(string.Format("【StoreCardDeposit】 reqeust：{0}。", sw));
@@ -985,6 +1049,97 @@ namespace WebServiceReference
                 value = "";
             writer.WritePropertyName(propertyName);
             writer.WriteValue(value);
+        }
+
+        /// <summary>
+        /// 获取优惠列表
+        /// </summary>
+        public static TCandaoCouponList GetCouponList(string branch_id ,string currentPage = "", string pageSize = "")
+        {
+
+            var ret = new TCandaoCouponList();
+          
+            try
+            {
+                string address = String.Format("http://{0}/member/preferential/posPreferentialList",
+                    WebServiceReference.Candaomemberserver);
+                StringWriter sw = new StringWriter();
+                JsonWriter writer = new JsonTextWriter(sw);
+                writer.WriteStartObject();
+                writer.WritePropertyName("branch_id");
+                writer.WriteValue(branch_id);
+                writer.WritePropertyName("current");
+                writer.WriteValue(currentPage);
+                writer.WritePropertyName("pageSize");
+                writer.WriteValue(pageSize);
+                writer.WriteEndObject();
+                writer.Flush();
+
+                AllLog.Instance.I(string.Format("【GetCouponList】 reqeust：{0}。", sw));
+                String jsonResult = RestClient.Post_Rest(address, sw);
+                AllLog.Instance.I(string.Format("【GetCouponList】 result：{0}。", jsonResult));
+                JObject ja = null;
+               
+
+                ja = (JObject) JsonConvert.DeserializeObject(jsonResult);
+                string datas = ja["datas"].ToString();
+                JArray jList = (JArray) JsonConvert.DeserializeObject(datas);
+                foreach (var couponTem in jList)
+                {
+                    var coupon = new TCandaoCoupon();
+                    coupon.Id = couponTem["id"].ToString();
+                    coupon.CouponType = couponTem["type"].ToString();
+                    coupon.DealValue = couponTem["dealValue"].ToString();
+                    coupon.PresentValu = couponTem["presentValue"].ToString();
+                    ret.Coupons.Add(coupon);
+                }
+
+                ret.Ret = true;
+                return ret;
+            }
+            catch
+            {
+                ret.Ret = false;
+                return ret;
+            }
+        }
+
+        public static TCandaoRetBase VipChangePsw(string branch_id, string cardno, string password)
+        {
+            TCandaoRetBase ret = new TCandaoRetBase();
+            try
+            {
+                ret.Ret = true;
+                string address = String.Format("http://{0}/member/memberManager/MemberEdit.json",
+                    WebServiceReference.Candaomemberserver);
+                StringWriter sw = new StringWriter();
+                JsonWriter writer = new JsonTextWriter(sw);
+                writer.WriteStartObject();
+                writer.WritePropertyName("branch_id");
+                writer.WriteValue(branch_id);
+                writer.WritePropertyName("securitycode");
+                writer.WriteValue("");
+                writer.WritePropertyName("mobile");
+                writer.WriteValue(cardno);
+                writer.WritePropertyName("password");
+                writer.WriteValue(password);
+                writer.WriteEndObject();
+                writer.Flush();
+                AllLog.Instance.I(string.Format("【MemberEdit】 reqeust：{0}。", sw));
+                String jsonResult = RestClient.Post_Rest(address, sw);
+                AllLog.Instance.I(string.Format("【MemberEdit】 result：{0}。", jsonResult));
+                JObject ja = null;
+              
+                ja = (JObject) JsonConvert.DeserializeObject(jsonResult);
+                return ret;
+            }
+            catch
+            {
+                ret.Ret = false;
+                return ret;
+            }
+         
+          
         }
     }
 }

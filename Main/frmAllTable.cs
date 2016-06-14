@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using CanDao.Pos.SystemConfig.ViewModels;
+using CanDaoCD.Pos.Common.Operates;
 using Common;
 using KYPOS;
 using Library;
@@ -16,6 +18,7 @@ using ReportsFastReport;
 using WebServiceReference;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
+using CanDaoCD.Pos.VIPManage.ViewModels;
 
 namespace Main
 {
@@ -30,7 +33,7 @@ namespace Main
         private int btnHeight = 58;
         private int btnSpace = 10;
 
-        private bool _isForcedEndWorkModel;//是否是强制结业模式。
+        private bool _isForcedEndWorkModel; //是否是强制结业模式。
 
         public frmPosMainV3 frmpos = new frmPosMainV3();
         public frmPosMainV3 frmposwm = new frmPosMainV3();
@@ -48,7 +51,7 @@ namespace Main
         private void timer1_Tick(object sender, EventArgs e)
         {
             DateTime dt = DateTime.Now;
-            lblTime.Text = "当前时间：" + dt.ToLocalTime().ToString();//2005-11-5 21:21:25
+            lblTime.Text = "当前时间：" + dt.ToLocalTime().ToString(); //2005-11-5 21:21:25
         }
 
         private void btnRBill_Click(object sender, EventArgs e)
@@ -63,8 +66,8 @@ namespace Main
 
         private void ucTable1_Load(object sender, EventArgs e)
         {
-            ((ucTable)sender).lblNo.Click += new EventHandler(ucTable1_Click);
-            ((ucTable)sender).lbl2.Click += new EventHandler(ucTable1_Click);
+            ((ucTable) sender).lblNo.Click += new EventHandler(ucTable1_Click);
+            ((ucTable) sender).lbl2.Click += new EventHandler(ucTable1_Click);
         }
 
         private void frmAllTable_Load(object sender, EventArgs e)
@@ -78,7 +81,8 @@ namespace Main
                 {
                     foreach (var bankInfo in Globals.BankInfos)
                     {
-                        var imgTempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", bankInfo.Id.ToString() + ".png");
+                        var imgTempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images",
+                            bankInfo.Id.ToString() + ".png");
                         bankInfo.ImageSource = imgTempPath;
                     }
                 }
@@ -92,17 +96,23 @@ namespace Main
             {
                 RestClient.getSystemSetData(out Globals.roundinfo);
             }
-            catch { }
+            catch
+            {
+            }
             try
             {
                 RestClient.getSystemSetData("DISHES", out Globals.cjSetting);
             }
-            catch { }
+            catch
+            {
+            }
             try
             {
                 getCJFood();
             }
-            catch { }
+            catch
+            {
+            }
             RestClient.openCashCom();
             Globals.branch_id = RestClient.getbranch_id();
         }
@@ -120,7 +130,9 @@ namespace Main
                 {
                     RestClient.getSystemSetData(out Globals.roundinfo);
                 }
-                catch { }
+                catch
+                {
+                }
             }
             if (Globals.cjSetting.Type.Equals(""))
             {
@@ -128,7 +140,9 @@ namespace Main
                 {
                     RestClient.getSystemSetData("DISHES", out Globals.cjSetting);
                 }
-                catch { }
+                catch
+                {
+                }
             }
             if (Globals.cjFood == null)
             {
@@ -141,7 +155,7 @@ namespace Main
                     // ignored
                 }
             }
-            ucTable uctable = ((ucTable)((Label)sender).Tag);
+            ucTable uctable = ((ucTable) ((Label) sender).Tag);
             string tableno = uctable.lblNo.Text;
             try
             {
@@ -150,7 +164,7 @@ namespace Main
                 //frmPosMain.ShowPosMain(tableno, uctable.status);
                 frmpos.ShowFrm(tableno, uctable.status);
 
-                if (_isForcedEndWorkModel)//如果已经是强制结业模式，就继续设定成强制结业（结算是在另外的弹出窗口）
+                if (_isForcedEndWorkModel) //如果已经是强制结业模式，就继续设定成强制结业（结算是在另外的弹出窗口）
                     SetInForcedEndWorkModel();
             }
             finally
@@ -170,7 +184,7 @@ namespace Main
                 this.Cursor = Cursors.WaitCursor;
                 btnRefresh.Enabled = false;
                 timer2.Stop();
-                this.Update();//必须
+                this.Update(); //必须
 
                 IRestaurantService service = new RestaurantServiceImpl();
                 var result = service.GetAllTableInfoes();
@@ -219,15 +233,15 @@ namespace Main
 
                 foreach (var tableInfo in TableInfos)
                 {
-                    var colindex = (idx % Rowcount);
-                    var rowindex = idx / Rowcount;
+                    var colindex = (idx%Rowcount);
+                    var rowindex = idx/Rowcount;
                     ucTable table = new ucTable(tableInfo)
                     {
                         Parent = pnlMain,
                         Width = btnWidth,
                         Height = btnHeight,
-                        Left = colindex * btnWidth + ucTable1.Left + (colindex * btnSpace),
-                        Top = btnHeight * rowindex + ucTable1.Top + (rowindex * btnSpace),
+                        Left = colindex*btnWidth + ucTable1.Left + (colindex*btnSpace),
+                        Top = btnHeight*rowindex + ucTable1.Top + (rowindex*btnSpace),
                     };
                     table.lblNo.Click += ucTable1_Click;
                     table.lbl2.Click += ucTable1_Click;
@@ -252,7 +266,8 @@ namespace Main
         {
             if (_tableControls != null)
             {
-                var idleTableControls = _tableControls.Where(t => ((TableInfo)t.Tag).TableStatus == EnumTableStatus.Idle).ToList();
+                var idleTableControls =
+                    _tableControls.Where(t => ((TableInfo) t.Tag).TableStatus == EnumTableStatus.Idle).ToList();
                 idleTableControls.ForEach(t => t.Enabled = false);
             }
             btnShapping.Enabled = false;
@@ -271,9 +286,10 @@ namespace Main
                     Warning("昨天还未结业，请先结业。");
                     SetInForcedEndWorkModel();
                 }
-                else if (DateTime.Now > Globals.TradeTime.EndTime.AddSeconds(10))//当前时间大于结业时间，提示结业，与真实的时间提前10秒。
+                else if (DateTime.Now > Globals.TradeTime.EndTime.AddSeconds(10)) //当前时间大于结业时间，提示结业，与真实的时间提前10秒。
                 {
-                    Globals.TradeTime.EndTime = Globals.TradeTime.EndTime.AddDays(1);//提示一次以后就要把结业时间计算成下一次结业，不然每一秒都会提示该信息。
+                    Globals.TradeTime.EndTime = Globals.TradeTime.EndTime.AddDays(1);
+                        //提示一次以后就要把结业时间计算成下一次结业，不然每一秒都会提示该信息。
                     Warning("结业时间到了，请及时结业。");
                 }
 
@@ -370,7 +386,7 @@ namespace Main
 
         private void EndWorkSyncDataComplete(object param)
         {
-            if (!(bool)param)
+            if (!(bool) param)
             {
                 if (AskQuestion("发生异常，上传失败，是否重新上传？"))
                 {
@@ -435,8 +451,59 @@ namespace Main
             {
                 RestClient.sc.closePort();
             }
-            catch { }
+            catch
+            {
+            }
             Application.Exit();
         }
+
+        /// <summary>
+        /// 系统
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnSystem_Click(object sender, EventArgs e)
+        {
+            var veModel = new UcCopyPrintViewModel();
+            OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
+            veModel.CloseThis();
+        }
+
+        #region 会员管理
+
+        /// <summary>
+        /// 会员查询
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnVipSelect_Click(object sender, EventArgs e)
+        {
+            var veModel = new UcVipSelectViewModel();
+            OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
+        }
+
+        /// <summary>
+        /// 会员充值
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnVipRecharge_Click(object sender, EventArgs e)
+        {
+            var veModel = new UcVipRechargeViewModel();
+            OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
+        }
+
+        /// <summary>
+        /// 会员注册
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnVipReg_Click(object sender, EventArgs e)
+        {
+            var veModel = new UcVipRegViewModel();
+            OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
+        }
+
+        #endregion
     }
 }

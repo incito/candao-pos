@@ -44,7 +44,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -546,6 +546,26 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CanDao.Pos.SystemConfig\CanDao.Pos.SystemConfig.csproj">
+      <Project>{fc4def0b-50e2-4f55-a183-c0959b61b50a}</Project>
+      <Name>CanDao.Pos.SystemConfig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDaoCD.Pos.Common\CanDaoCD.Pos.Common.csproj">
+      <Project>{7ddd5dce-b2cd-429d-80ae-6ff2f66d15d8}</Project>
+      <Name>CanDaoCD.Pos.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDaoCD.Pos.PrintManage\CanDaoCD.Pos.PrintManage.csproj">
+      <Project>{2aa08d85-71ba-4988-9116-be1bf3e736f1}</Project>
+      <Name>CanDaoCD.Pos.PrintManage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDaoCD.Pos.ResourceService\CanDaoCD.Pos.ResourceService.csproj">
+      <Project>{8b73af41-0061-4213-9ec0-318986d1c408}</Project>
+      <Name>CanDaoCD.Pos.ResourceService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDaoCD.Pos.VIPManage\CanDaoCD.Pos.VIPManage.csproj">
+      <Project>{98f33740-d8b6-44fd-bf0b-73928f26fe72}</Project>
+      <Name>CanDaoCD.Pos.VIPManage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{269ECEFF-B6C2-4708-86BA-AFBB1A2B045C}</Project>
       <Name>Common</Name>
