@@ -12,8 +12,13 @@ namespace Models
         {
             BeginTime = DateTime.ParseExact(beginTime, "HH:mm", null).AddDays(1);
             EndTime = DateTime.ParseExact(endTime, "HH:mm", null);
-            TradeTimeType = (EnumTradeTimeType)System.Enum.Parse(typeof(EnumTradeTimeType), dateType);
-            if (TradeTimeType == EnumTradeTimeType.N)
+
+            if (string.IsNullOrEmpty(dateType))//考虑兼容以前版本没有传这个字段。
+                TradeTimeType = EnumTradeTimeType.T;
+            else
+                TradeTimeType = (EnumTradeTimeType)System.Enum.Parse(typeof(EnumTradeTimeType), dateType);
+
+            if (TradeTimeType == EnumTradeTimeType.N)//当标记为次日的话，结业时间加一天。
                 EndTime = EndTime.AddDays(1);
         }
 
