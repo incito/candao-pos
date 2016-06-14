@@ -506,6 +506,7 @@ namespace Main
             }
             else
             {
+                _isEnableNoWarning = false;//当全部成功的话，就重置不警告的字段。
                 Invoke((Action)delegate
                 {
                     BtnSysCfg.FlatAppearance.BorderColor = Color.Empty;

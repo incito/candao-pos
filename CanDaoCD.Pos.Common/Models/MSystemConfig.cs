@@ -8,7 +8,7 @@ namespace CanDaoCD.Pos.Common.Models
     [Serializable]
     public class MSystemConfig
     {
-        private int _serialNum;
+        private int _serialNum=1;
 
         private bool _isEnabledPrint;
 

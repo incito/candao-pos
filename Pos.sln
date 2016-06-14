@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanDaoCD.Pos.ResourceServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanDao.Pos.SystemConfig", "CanDao.Pos.SystemConfig\CanDao.Pos.SystemConfig.csproj", "{FC4DEF0B-50E2-4F55-A183-C0959B61B50A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanDaoCD.Pos.PrintManage", "CanDaoCD.Pos.PrintManage\CanDaoCD.Pos.PrintManage.csproj", "{2AA08D85-71BA-4988-9116-BE1BF3E736F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanDaoCD.Pos.VIPManage", "CanDaoCD.Pos.VIPManage\CanDaoCD.Pos.VIPManage.csproj", "{98F33740-D8B6-44FD-BF0B-73928F26FE72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +79,14 @@ Global
 		{FC4DEF0B-50E2-4F55-A183-C0959B61B50A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC4DEF0B-50E2-4F55-A183-C0959B61B50A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC4DEF0B-50E2-4F55-A183-C0959B61B50A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AA08D85-71BA-4988-9116-BE1BF3E736F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AA08D85-71BA-4988-9116-BE1BF3E736F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AA08D85-71BA-4988-9116-BE1BF3E736F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AA08D85-71BA-4988-9116-BE1BF3E736F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98F33740-D8B6-44FD-BF0B-73928F26FE72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98F33740-D8B6-44FD-BF0B-73928F26FE72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98F33740-D8B6-44FD-BF0B-73928F26FE72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98F33740-D8B6-44FD-BF0B-73928F26FE72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

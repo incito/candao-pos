@@ -1,10 +1,11 @@
-﻿<UserControl x:Class="CanDao.Pos.SystemConfig.Views.UcSystemSettingView"
+﻿<cSystem:UserControlBase x:Class="CanDao.Pos.SystemConfig.Views.UcSystemSettingView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-             xmlns:views="clr-namespace:CanDao.Pos.SystemConfig.Views">
+             xmlns:views="clr-namespace:CanDao.Pos.SystemConfig.Views"
+             xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -41,4 +42,4 @@
             </dx:DXTabControl.View>
         </dx:DXTabControl>
     </Grid>
-</UserControl>
+</cSystem:UserControlBase>

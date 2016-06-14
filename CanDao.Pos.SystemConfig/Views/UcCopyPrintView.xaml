@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="启用打印复写卡" FontSize="24" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBlock Text="打开此功能后，注册会员、会员结账、充值时可以打印会员信息到复写卡上。" TextWrapping="Wrap" FontSize="14" Margin="10,0,0,23" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="44" Width="265"/>
-        <Controls:BulletCheckBox x:Name="CkBullet" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding Model.IsEnabledPrint}"/>
+        <Controls:BulletCheckBox x:Name="CkBullet" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding Model.IsEnabledPrint}" Unchecked="CkBullet_OnUnchecked" Checked="CkBullet_OnChecked"/>
         <Grid Grid.Row="1" Visibility="{Binding Path=IsChecked,ElementName=CkBullet, Converter={StaticResource BoolToVisibilityConverter},ConverterParameter={x:Static Visibility.Collapsed}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20*"></RowDefinition>

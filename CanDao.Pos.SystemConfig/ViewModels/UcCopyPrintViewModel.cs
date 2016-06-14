@@ -11,6 +11,7 @@ using CanDaoCD.Pos.Common.Operates.FileOperate;
 using CanDaoCD.Pos.Common.Controls.CSystem;
 using CanDaoCD.Pos.Common.Models;
 using CanDaoCD.Pos.Common.PublicValues;
+using CanDaoCD.Pos.Common.Operates;
 
 namespace CanDao.Pos.SystemConfig.ViewModels
 {
@@ -32,12 +33,13 @@ namespace CanDao.Pos.SystemConfig.ViewModels
 
 
         #region 构造函数
-
+        
         public UcCopyPrintViewModel()
         {
             Init();
         }
 
+       
         #endregion
 
         #region 公共方法
@@ -49,18 +51,54 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         {
             _userControl = new UcCopyPrintView();
             _userControl.DataContext = this;
+          
             return _userControl;
         }
         #endregion
 
         #region 私有方法
-
+        /// <summary>
+        /// 关闭检查配置保存
+        /// </summary>
+        public void CloseThis()
+        {
+            if (PvSystemConfig.VSystemConfig.IsEnabledPrint != Model.IsEnabledPrint)
+            {
+                if (OWindowManage.ShowMessageWindow("配置已修改，是否进行保存？", true))
+                {
+                    PvSystemConfig.VSystemConfig.IsEnabledPrint = Model.IsEnabledPrint;
+                    PvSystemConfig.VSystemConfig.SerialNum = Model.SerialNum;
+                    OXmlOperate.SerializerFile<MSystemConfig>(PvSystemConfig.VSystemConfig, PvSystemConfig.VSystemConfigFile);
+                }
+               
+            }
+        }
+        /// <summary>
+        /// 初始化
+        /// </summary>
         private void Init()
         {
             Model = new UcCopyPrintModel();
+          
             //PvSystemConfig.VSystemConfig = OXmlOperate.DeserializeFile<MSystemConfig>(_fileName);
-            Model.IsEnabledPrint = PvSystemConfig.VSystemConfig.IsEnabledPrint;
-            Model.SerialNum = PvSystemConfig.VSystemConfig.SerialNum;
+            if (PvSystemConfig.VSystemConfig != null)
+            {
+                Model.IsEnabledPrint = PvSystemConfig.VSystemConfig.IsEnabledPrint;
+                if (!Model.IsEnabledPrint)
+                {
+                    Model.SerialNum = 1;
+                }
+                else
+                {
+                    Model.SerialNum = PvSystemConfig.VSystemConfig.SerialNum;
+                }
+               
+            }
+            else
+            {
+                PvSystemConfig.VSystemConfig = new MSystemConfig();
+              
+            }
             Model.SaveAction = new Action(SaveConfig);
         }
 
@@ -75,12 +113,11 @@ namespace CanDao.Pos.SystemConfig.ViewModels
                 PvSystemConfig.VSystemConfig.IsEnabledPrint = Model.IsEnabledPrint;
                 PvSystemConfig.VSystemConfig.SerialNum = Model.SerialNum;
                 OXmlOperate.SerializerFile<MSystemConfig>(PvSystemConfig.VSystemConfig, PvSystemConfig.VSystemConfigFile);
-                MessageBox.Show("配置成功！", "成功提示");
+                OWindowManage.ShowMessageWindow("配置成功！", false);
             }
             catch (Exception ex)
             {
-
-                MessageBox.Show(ex.Message, "保存异常");
+                OWindowManage.ShowMessageWindow("配置异常："+ex.Message, false);
             }
            
 

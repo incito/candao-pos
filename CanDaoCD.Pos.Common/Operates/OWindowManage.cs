@@ -18,7 +18,7 @@ namespace CanDaoCD.Pos.Common.Operates
         /// 模态方式打开弹出窗口
         /// </summary>
         /// <param name="showUc">显示的用户控件</param>
-        public static void ShowPopupWindow(UserControl showUc, Brush bgColor = null)
+        public static void ShowPopupWindow(UserControlBase showUc, Brush bgColor = null)
         {
             var wPopup = new WPopup();
             wPopup.Background = bgColor;

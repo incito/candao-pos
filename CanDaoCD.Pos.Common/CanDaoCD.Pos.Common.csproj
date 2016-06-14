@@ -74,6 +74,9 @@
     <Compile Include="Controls\CSystem\WPopup.xaml.cs">
       <DependentUpon>WPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CSystem\WUserCheck.xaml.cs">
+      <DependentUpon>WUserCheck.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NewControl\UcPageList.xaml.cs">
       <DependentUpon>UcPageList.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\CSystem\WPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CSystem\WUserCheck.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

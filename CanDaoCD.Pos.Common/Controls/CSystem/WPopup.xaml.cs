@@ -32,6 +32,8 @@ namespace CanDaoCD.Pos.Common.Controls.CSystem
             set;
             get;
         }
+
+        private UserControlBase _showUc;
         #endregion
 
         #region 公共方法
@@ -39,19 +41,19 @@ namespace CanDaoCD.Pos.Common.Controls.CSystem
         /// 显示窗体
         /// </summary>
         /// <param name="showUc"></param>
-        public void SetShowUc(UserControl showUc)
+        public void SetShowUc(UserControlBase showUc)
         {
-            CtlShowFm.Content = showUc;
+            _showUc = showUc;
+            CtlShowFm.Content = _showUc;
+            showUc.UcClose = new Action(CloseWindow);
         }
         #endregion
 
         #region 私有方法
         /// <summary>
-        /// 窗体关闭
+        /// 关闭窗体
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        private void CloseWindow()
         {
             if (IsDialog)
             {
@@ -61,6 +63,23 @@ namespace CanDaoCD.Pos.Common.Controls.CSystem
             {
                 this.Close();
             }
+        }
+        /// <summary>
+        /// 窗体关闭
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            if (_showUc.UcClose != null)
+            {
+                _showUc.UcClose();
+            }
+            else
+            {
+                CloseWindow();
+            }
+           
         }
         #endregion
     }

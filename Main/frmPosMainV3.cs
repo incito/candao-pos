@@ -12,6 +12,8 @@ using Common;
 using Library;
 using Models;
 using Business;
+using CanDaoCD.Pos.Common.Operates;
+using CanDaoCD.Pos.VIPManage.ViewModels;
 using WebServiceReference;
 using ReportsFastReport;
 using Newtonsoft.Json;
@@ -19,6 +21,7 @@ using Newtonsoft.Json.Linq;
 using Models.CandaoMember;
 using Models.Enum;
 using WebServiceReference.ServiceImpl;
+using CanDaoCD.Pos.PrintManage;
 using Timer = System.Timers.Timer;
 using System.Text.RegularExpressions;
 
@@ -1577,7 +1580,6 @@ namespace Main
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //
             frmQueryMember.ShowQueryMember();
         }
 
@@ -1736,6 +1738,11 @@ namespace Main
             Common.Globals.SetButton(button9);
             Common.Globals.SetButton(button10);
         }
+        /// <summary>
+        /// 会员储值
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
             frmMemberStoredValue.ShowMemberStoredValue();
@@ -4561,19 +4568,46 @@ namespace Main
                 catch { }
                 btnMemberReg.Click -= new EventHandler(MemberReg_Candao);
                 btnMemberQuery.Click -= new EventHandler(MemberQuery_Candao);
-                btnMemberStore.Click -= new EventHandler(MemberQuery_Candao);
+                btnMemberStore.Click -= new EventHandler(MemberStore_Candao);
                 btnMemberReg.Click += new EventHandler(MemberReg_Candao);
                 btnMemberQuery.Click += new EventHandler(MemberQuery_Candao);
-                btnMemberStore.Click += new EventHandler(MemberQuery_Candao);
+                btnMemberStore.Click += new EventHandler(MemberStore_Candao);
             }
         }
+        /// <summary>
+        /// 会员注册
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MemberReg_Candao(object sender, EventArgs e)
         {
-            frmMemberReg.ShowMemberReg();
+            //frmMemberReg.ShowMemberReg();
+
+            var veModel = new UcVipRegViewModel();
+            OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
         }
+        /// <summary>
+        /// 充值
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MemberStore_Candao(object sender, EventArgs e)
+        {
+            //frmMemberQuery.ShowMemberQuery();
+            var veModel = new UcVipRechargeViewModel();
+            OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
+        }
+        /// <summary>
+        ///  会员查询
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MemberQuery_Candao(object sender, EventArgs e)
         {
-            frmMemberQuery.ShowMemberQuery();
+            //frmMemberQuery.ShowMemberQuery();
+
+            var veModel = new UcVipSelectViewModel();
+            OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
         }
         public bool MemberSale(string aUserid, string orderid, string pszInput, string pszSerial, float pszCash, float pszPoint, int psTransType, float pszStore, string pszTicketList, string pszPwd, float memberyhqamount)
         {
@@ -4584,7 +4618,6 @@ namespace Main
                 string data = json["Data"].ToString();
                 if (data == "0")
                 {
-                    Thread.Sleep(1000);
                     //检查调用接口有没有成功
                     try
                     {
@@ -4672,7 +4705,12 @@ namespace Main
                         ordermemberinfo.Inflated1 = 0;
                         ordermemberinfo.Coupons = 0;
                         ordermemberinfo.Stored = (decimal)amounthyk;
-                        CanDaoMemberClient.AddOrderMember(ordermemberinfo);
+
+                        if (PrintService.CardCheck()) //判断复写卡是否在位
+                        {
+                            CanDaoMemberClient.AddOrderMember(ordermemberinfo);
+                         
+                        }
                     }
                     return true;
                 }

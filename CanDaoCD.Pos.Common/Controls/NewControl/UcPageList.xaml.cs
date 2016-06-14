@@ -28,16 +28,13 @@ namespace CanDaoCD.Pos.Common.Controls
         private int _page = 1;
         private int Total;
         private int _pageSize = 1;
-
         private bool _isLoad=false;
         #endregion
 
         #region 构造函数
-        
         public UcPageList()
         {
             InitializeComponent();
-            ListData=new List<MListBoxInfo>();
             ListShow = new ObservableCollection<MListBoxInfo>();
             this.Loaded+=UcPageList_Loaded;
             this.DataContext = this;
@@ -68,22 +65,32 @@ namespace CanDaoCD.Pos.Common.Controls
 
         public List<MListBoxInfo> ListData
         {
-            get { return (List<MListBoxInfo>) GetValue(ListDataProperty); }
+            get { return (List<MListBoxInfo>)GetValue(ListDataProperty); }
             set
             {
                 SetValue(ListDataProperty, value);
-                if (ListData.Count > 0)
-                {
-                    SetPageInfo();
-                }
-              
             }
         }
 
         public static readonly DependencyProperty ListDataProperty =
-            DependencyProperty.Register("ListData", typeof(List<MListBoxInfo>), typeof(UcPageList),
-                new PropertyMetadata(new List<MListBoxInfo>()));
+            DependencyProperty.Register("ListData", typeof(List<MListBoxInfo>), typeof(UcPageList), new PropertyMetadata(ListValueChanged));
 
+        public static void ListValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var pageList = d as UcPageList;
+            if (pageList == null)
+            {
+                return;
+            }
+            if (pageList.ListData != null)
+            {
+                if (pageList.ListData.Count > 0)
+                {
+                    pageList.SetPageInfo();
+                }
+
+            }
+        }
         /// <summary>
         /// 当前选择优惠变化事件
         /// </summary>
@@ -139,7 +146,7 @@ namespace CanDaoCD.Pos.Common.Controls
         /// </summary>
         private void SetPageInfo()
         {
-            if (_isLoad)
+            if (_isLoad && ListData!=null)
             {
                 int rowNum = (int)LbData.ActualWidth / 70;
                 rowNum = rowNum > 0 ? rowNum : 1;
@@ -147,6 +154,7 @@ namespace CanDaoCD.Pos.Common.Controls
                 colNum = colNum > 0 ? colNum : 1;
                 _page = 1;
                 _pageSize = ListData.Count / (rowNum * colNum);
+                _pageSize = _pageSize > 0 ? _pageSize : 1;
                 ContentShow();
             }
           

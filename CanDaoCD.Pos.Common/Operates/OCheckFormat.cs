@@ -17,7 +17,10 @@ namespace CanDaoCD.Pos.Common.Operates
        /// <returns></returns>
        public static bool IsMobilePhone(string phoneNum)
        {
-
+           if (phoneNum == null)
+           {
+               return false;
+           }
            return System.Text.RegularExpressions.Regex.IsMatch(phoneNum, @"^[1]+[3,5]+\d{9}");
 
        }
