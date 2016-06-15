@@ -69,6 +69,10 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
 
         #region 私有方法
 
+        private void SelectHandel(string text)
+        {
+            SelectModel(text, Model.Psw);
+        }
         /// <summary>
         /// 查询事件
         /// </summary>
@@ -189,6 +193,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         {
             _userControl = new UcVipSelectView();
             _userControl.DataContext = this;
+            _userControl.EntAction=new Action<string>(SelectHandel);
             return _userControl;
         }
 

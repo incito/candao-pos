@@ -17,9 +17,9 @@ namespace CanDaoCD.Pos.Common.Controls.CSystem
     /// <summary>
     /// DigitalInputKeyboard2.xaml 的交互逻辑
     /// </summary>
-    public partial class DigitalInputKeyboard2 : UserControl
+    public partial class CtlDigitalKeyboard : UserControl
     {
-        public DigitalInputKeyboard2()
+        public CtlDigitalKeyboard()
         {
             InitializeComponent();
         }

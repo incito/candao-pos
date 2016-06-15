@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CanDaoCD.Pos.Common.Controls.CSystem.DigitalInputKeyboard2"
+﻿<UserControl x:Class="CanDaoCD.Pos.Common.Controls.CSystem.CtlDigitalKeyboard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem">

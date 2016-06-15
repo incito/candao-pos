@@ -11,20 +11,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CanDaoCD.Pos.Common.Controls.CSystem;
 
-namespace CanDaoCD.Pos.VIPManage.Views
+namespace CanDaoCD.Pos.Common.Controls.NewControl
 {
     /// <summary>
-    /// UcVipReg.xaml 的交互逻辑
+    /// DigitalInputKeyboard2.xaml 的交互逻辑
     /// </summary>
-    public partial class UcVipRegView : UserControlBase
+    public partial class CtlDigitalKeyboardaa : UserControl
     {
-        public UcVipRegView()
+        public CtlDigitalKeyboardaa()
         {
             InitializeComponent();
         }
-
-   
     }
 }

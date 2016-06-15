@@ -313,7 +313,6 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
 
                                 PrintVipStore(ret.Tracecode, ret.StoreCardbalance.ToString());//纸质打印
 
-                                Model.RechargeValue = "";
 
                                 decimal recharge = 0;
                               

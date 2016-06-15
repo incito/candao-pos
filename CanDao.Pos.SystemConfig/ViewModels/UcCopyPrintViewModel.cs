@@ -109,7 +109,6 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         {
             try
             {
-               
                 PvSystemConfig.VSystemConfig.IsEnabledPrint = Model.IsEnabledPrint;
                 PvSystemConfig.VSystemConfig.SerialNum = Model.SerialNum;
                 OXmlOperate.SerializerFile<MSystemConfig>(PvSystemConfig.VSystemConfig, PvSystemConfig.VSystemConfigFile);

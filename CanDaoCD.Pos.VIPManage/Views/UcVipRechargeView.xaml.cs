@@ -56,25 +56,6 @@ namespace CanDaoCD.Pos.VIPManage.Views
         }
 
         #region 虚拟键盘绑定
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TexNum_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexNum;
-            //PageList.ListData=null;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TexRecharge_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexRecharge;
-        }
 
         #endregion
 

@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:CanDaoCD.Pos.Common.Controls;assembly=CanDaoCD.Pos.Common"
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
              xmlns:controls1="clr-namespace:CanDaoCD.Pos.ResourceService.Controls;assembly=CanDaoCD.Pos.ResourceService"
+             xmlns:newControl="clr-namespace:CanDaoCD.Pos.Common.Controls.NewControl;assembly=CanDaoCD.Pos.Common"
              mc:Ignorable="d" 
              d:DesignHeight="510" d:DesignWidth="758" Background="White">
     <UserControl.Resources>
@@ -124,16 +125,16 @@
                 <TextBlock Text="赠送：" Grid.Column="0" Grid.Row="3"/>
                 <TextBlock Text="{Binding Model.CardBalance}" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="4"/>
 
-                <TextBox x:Name="TexNum" Grid.Column="1" Grid.Row="0" Text="{Binding Model.TelNum}" IsEnabled="{Binding Model.IsEnabledNum}" GotFocus="TexNum_OnGotFocus"></TextBox>
+                <TextBox x:Name="TexNum" Grid.Column="1" Grid.Row="0" Text="{Binding Model.TelNum}" IsEnabled="{Binding Model.IsEnabledNum}" ></TextBox>
                 <RadioButton HorizontalAlignment="Left" VerticalAlignment="Center" Content="现金" Grid.Column="1" Grid.Row="1" Margin="10" IsChecked="{Binding Model.IsCash}" GroupName="PayType"/>
                 <RadioButton HorizontalAlignment="Right" VerticalAlignment="Center" Content="银行卡" Grid.Column="1" Grid.Row="1" Margin="10" IsChecked="{Binding Model.IsBankCard}" GroupName="PayType"/>
-                <TextBox x:Name="TexRecharge" Grid.Column="1" Grid.Row="2" Text="{Binding Model.RechargeValue}" GotFocus="TexRecharge_OnGotFocus" TextChanged="TexRecharge_OnTextChanged" MaxLength="7"></TextBox>
+                <TextBox x:Name="TexRecharge" Grid.Column="1" Grid.Row="2" Text="{Binding Model.RechargeValue}" TextChanged="TexRecharge_OnTextChanged" MaxLength="7"></TextBox>
                 <TextBlock Grid.Column="1" Grid.Row="3" IsEnabled="False" Text="{Binding Model.GiveValue}" HorizontalAlignment="Left"></TextBlock>
 
                 <Button x:Name="BtnReg" Style="{DynamicResource ColBtn}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="133" Height="50" Grid.Column="0" Grid.Row="5" Content="确定充值" Command="{Binding SureCommand}"/>
                 <Button x:Name="BtnCancel" Style="{DynamicResource ColBtn}" Margin="0,0,20,0" HorizontalAlignment="Right" Width="133" Height="50" Grid.Column="1" Grid.Row="5" Content="取消" Command="{Binding CloseCommand}"/>
             </Grid>
-            <controls1:CtlDigitalKeyboard x:Name="Keyboard" Grid.Column="1"  Height="250" VerticalAlignment="Top" Width="310" TextEnterAction="{Binding TextEnterAction}"/>
+            <cSystem:CtlDigitalKeyboard x:Name="Keyboard" Grid.Column="1"  Height="250" VerticalAlignment="Top" Width="310" />
         </Grid>
     </Grid>
 </cSystem:UserControlBase>
