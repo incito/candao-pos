@@ -16,7 +16,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -40,10 +40,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Bin\Lib\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -150,10 +146,6 @@
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{2cf256b2-f5e0-4670-8644-08ddf65b0009}</Project>
       <Name>Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ReportsFastReport\ReportsFastReport.csproj">
-      <Project>{f925f022-363f-49ec-868b-c51b72a81cc7}</Project>
-      <Name>ReportsFastReport</Name>
     </ProjectReference>
     <ProjectReference Include="..\WebServiceReference\WebServiceReference.csproj">
       <Project>{830d9756-d0f4-4140-8afc-500e8eca03c4}</Project>

@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Busine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServiceReference", "WebServiceReference\WebServiceReference.csproj", "{830D9756-D0F4-4140-8AFC-500E8ECA03C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportsFastReport", "ReportsFastReport\ReportsFastReport.csproj", "{F925F022-363F-49EC-868B-C51B72A81CC7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtonsoft.Json.Net40", "NewtonsoftJson\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj", "{A9AE40FF-1A21-414A-9FE7-3BE13644CC6D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewDevelop", "NewDevelop", "{3596FE70-E621-4E06-AFA9-34DE6B19BEEE}"
@@ -32,6 +30,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTest", "WpfTest\WpfTest.csproj", "{6C2DF60E-5D18-4457-8947-EBB5E7753259}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanDao.Pos.SystemConfig", "CanDao.Pos.SystemConfig\CanDao.Pos.SystemConfig.csproj", "{FC4DEF0B-50E2-4F55-A183-C0959B61B50A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportsFastReport", "ReportsFastReport\ReportsFastReport.csproj", "{F925F022-363F-49EC-868B-C51B72A81CC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,10 +63,6 @@ Global
 		{830D9756-D0F4-4140-8AFC-500E8ECA03C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{830D9756-D0F4-4140-8AFC-500E8ECA03C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{830D9756-D0F4-4140-8AFC-500E8ECA03C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F925F022-363F-49EC-868B-C51B72A81CC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F925F022-363F-49EC-868B-C51B72A81CC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F925F022-363F-49EC-868B-C51B72A81CC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F925F022-363F-49EC-868B-C51B72A81CC7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A9AE40FF-1A21-414A-9FE7-3BE13644CC6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A9AE40FF-1A21-414A-9FE7-3BE13644CC6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9AE40FF-1A21-414A-9FE7-3BE13644CC6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -95,6 +91,10 @@ Global
 		{FC4DEF0B-50E2-4F55-A183-C0959B61B50A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC4DEF0B-50E2-4F55-A183-C0959B61B50A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC4DEF0B-50E2-4F55-A183-C0959B61B50A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F925F022-363F-49EC-868B-C51B72A81CC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F925F022-363F-49EC-868B-C51B72A81CC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F925F022-363F-49EC-868B-C51B72A81CC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F925F022-363F-49EC-868B-C51B72A81CC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
