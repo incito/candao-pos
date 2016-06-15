@@ -3,6 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:CanDaoCD.Pos.ResourceService.Controls;assembly=CanDaoCD.Pos.ResourceService"
         Title="WMessage" Height="280" Width="550" Background="#F0F0F0" WindowStyle="None" AllowsTransparency="True">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/CanDaoCD.Pos.ResourceService;component/DictionaryServer.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"></RowDefinition>

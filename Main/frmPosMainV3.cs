@@ -3860,7 +3860,8 @@ namespace Main
             pnlCash.Enabled = true;
             xtraCoupon.Visible = true;
             xtraTabControl1.Visible = true;
-            BtnNum.Visible = false;pnlAmount.Visible = true;
+            BtnNum.Visible = false;
+            pnlAmount.Visible = true;
             panel7.Visible = true;
             SetShowOrderFrm(false);
             if (!iswm)

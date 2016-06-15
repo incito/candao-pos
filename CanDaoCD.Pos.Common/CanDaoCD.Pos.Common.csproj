@@ -67,6 +67,9 @@
     <Compile Include="Classes\Mvvms\WeakFunc.cs" />
     <Compile Include="Classes\Mvvms\WeakAction.cs" />
     <Compile Include="Classes\Mvvms\RelayCommand.cs" />
+    <Compile Include="Controls\CSystem\DigitalInputKeyboard2.xaml.cs">
+      <DependentUpon>DigitalInputKeyboard2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CSystem\DigitalInputKeyboardVm.cs" />
     <Compile Include="Controls\CSystem\UserControlBase.cs" />
     <Compile Include="Controls\CSystem\WMessage.xaml.cs">
@@ -116,6 +119,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\CSystem\DigitalInputKeyboard2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CSystem\WMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
