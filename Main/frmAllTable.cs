@@ -486,7 +486,7 @@ namespace Main
                 return;
             }
 
-            var errPrintCount = result.Item2.Count(t => t.PrintStatus != EnumPrintStatus.Good);
+            var errPrintCount = result.Item2.Count(t => t.PrintStatus != EnumPrintStatus.Normal);
             if (errPrintCount > 0)
             {
                 Invoke((Action)delegate

@@ -140,7 +140,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
                 PrinterStatusInfos.Clear();
                 if (result.Item2 != null)
                     result.Item2.ForEach(PrinterStatusInfos.Add);
-                ErrorPrintCount = PrinterStatusInfos.Count(t => t.PrintStatus != EnumPrintStatus.Good);
+                ErrorPrintCount = PrinterStatusInfos.Count(t => t.PrintStatus != EnumPrintStatus.Normal);
                 if (ErrorPrintCount == 0)
                     AllLog.Instance.I("打印机全部状态正常。");
                 else
@@ -180,7 +180,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
             _refreshTimer.Stop();
             if (--RemainingTimes < 0)
             {
-                RemainingTimes = RefreshIntervalsSecond;
+                RemainingTimes = RefreshIntervalsSecond - 1;
                 Refresh();
             }
             _refreshTimer.Start();

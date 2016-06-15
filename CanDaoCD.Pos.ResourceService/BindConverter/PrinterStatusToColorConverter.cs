@@ -9,20 +9,7 @@ namespace CanDaoCD.Pos.ResourceService.BindConverter
 
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var status = (EnumPrintStatus)value;
-            var color = Brushes.DarkOrange;
-            switch (status)
-            {
-                case EnumPrintStatus.None:
-                    break;
-                case EnumPrintStatus.Good:
-                    color = Brushes.Green;
-                    break;
-                case EnumPrintStatus.NotReachable:
-                    color = Brushes.Red;
-                    break;
-            }
-            return color;
+            return (EnumPrintStatus)value == EnumPrintStatus.Normal ? Brushes.Green : Brushes.Red;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)

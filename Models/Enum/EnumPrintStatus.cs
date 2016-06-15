@@ -6,20 +6,21 @@
     public enum EnumPrintStatus
     {
         /// <summary>
-        /// 未知。
+        /// 正常。
         /// </summary>
-        None,
-
+        Normal = 1,
         /// <summary>
-        /// 较差。
+        /// 打印纸用尽。
         /// </summary>
-        Bad,
-
+        NoPaper,
         /// <summary>
-        /// 良好
+        /// 上盖打开。
         /// </summary>
-        Good,
-
+        CoverOpen,
+        /// <summary>
+        /// 切刀异常。
+        /// </summary>
+        CutterError,
         /// <summary>
         /// 连接断开。
         /// </summary>
