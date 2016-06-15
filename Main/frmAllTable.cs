@@ -482,7 +482,7 @@ namespace Main
             var result = service.GetPrinterStatusInfo();
             if (!string.IsNullOrEmpty(result.Item1))
             {
-                Invoke((Action)delegate { Warning(result.Item1); });
+                Invoke((Action)delegate { Warning(string.Format("获取打印机状态列表错误：{0}", result.Item1)); });
                 return;
             }
 

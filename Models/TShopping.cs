@@ -424,6 +424,14 @@ namespace Models
             dr["dishnum"] = dishnum;
             dr["amount"] = amount;
         }
+
+        public static void AddDishWithNum(DataRow dr, decimal dishNum)
+        {
+            decimal price = decimal.Parse(dr["price"].ToString());
+            dr["dishnum"] = dishNum;
+            dr["amount"] = dishNum*price;
+        }
+
         public static void decdish(ref DataTable shopptable, DataRow dr)
         {
             //DataRow dr = shopptable.Rows[index];

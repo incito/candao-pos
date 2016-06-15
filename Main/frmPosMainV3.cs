@@ -3860,7 +3860,7 @@ namespace Main
             pnlCash.Enabled = true;
             xtraCoupon.Visible = true;
             xtraTabControl1.Visible = true;
-            pnlAmount.Visible = true;
+            BtnNum.Visible = false;pnlAmount.Visible = true;
             panel7.Visible = true;
             SetShowOrderFrm(false);
             if (!iswm)
@@ -4366,6 +4366,7 @@ namespace Main
             frmorder.hideGz();
             xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
+            BtnNum.Visible = true;
             xtraCoupon.Visible = false;
             btnOrder.Visible = false;
             xtraTabControl1.Visible = false;
@@ -4709,7 +4710,7 @@ namespace Main
                         if (PrintService.CardCheck()) //判断复写卡是否在位
                         {
                             CanDaoMemberClient.AddOrderMember(ordermemberinfo);
-                         
+
                         }
                     }
                     return true;
@@ -5262,6 +5263,50 @@ namespace Main
                 return;
 
             _longPressTimer.Start();
+        }
+
+        private void BtnNum_Click(object sender, EventArgs e)
+        {
+            if (dgvBill.SelectedRows.Count < 1)
+            {
+                Warning("请先选择一个菜品。");
+                return;
+            }
+
+            DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
+
+            string Groupid = dr["Groupid"].ToString();
+            string Orderstatus = dr["Orderstatus"].ToString();
+            string primarydishtype = dr["primarydishtype"].ToString();
+            if (!Groupid.Equals(""))
+            {
+                if (primarydishtype.Equals("2"))
+                {
+                    Warning("套餐不允许直接输入数量。");
+                    return;
+                }
+                if (!Orderstatus.Equals("3"))
+                {
+                    Warning("锅和鱼锅不能直接输入数量。"); return;
+                }
+            }
+
+            string dishid = dr["dishid"].ToString();
+            string dishunit = dr["dishunit"].ToString();
+            int dishStatus = RestClient.getFoodStatus(dishid, dishunit);
+            if (dishStatus == 1)
+            {
+                Warning("选择的菜品已沽清！");
+                return;
+            }
+
+            var dishName = dr["title"].ToString();
+            decimal price = decimal.Parse(dr["price"].ToString());
+            var wnd = new DishInfoEditWindow(dishName, price);
+            if (wnd.ShowDialog() == true)
+            {
+                t_shopping.AddDishWithNum(dr, wnd.DishNum);
+            }
         }
     }
 }

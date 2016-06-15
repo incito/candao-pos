@@ -67,6 +67,7 @@
     <Compile Include="Classes\Mvvms\WeakFunc.cs" />
     <Compile Include="Classes\Mvvms\WeakAction.cs" />
     <Compile Include="Classes\Mvvms\RelayCommand.cs" />
+    <Compile Include="Controls\CSystem\DigitalInputKeyboardVm.cs" />
     <Compile Include="Controls\CSystem\UserControlBase.cs" />
     <Compile Include="Controls\CSystem\WMessage.xaml.cs">
       <DependentUpon>WMessage.xaml</DependentUpon>
@@ -76,6 +77,9 @@
     </Compile>
     <Compile Include="Controls\CSystem\WUserCheck.xaml.cs">
       <DependentUpon>WUserCheck.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\DigitalInputKeyboard.xaml.cs">
+      <DependentUpon>DigitalInputKeyboard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NewControl\UcPageList.xaml.cs">
       <DependentUpon>UcPageList.xaml</DependentUpon>
@@ -123,6 +127,10 @@
     <Page Include="Controls\CSystem\WUserCheck.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CSystem\DigitalInputKeyboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\NewControl\UcPageList.xaml">
       <Generator>MSBuild:Compile</Generator>

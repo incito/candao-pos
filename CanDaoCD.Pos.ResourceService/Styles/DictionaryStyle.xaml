@@ -76,7 +76,8 @@
 
     <!--点击颜色变化按钮-->
     <Style x:Key="ColBtn" TargetType="{x:Type Button}">
-        <Setter Property="Margin" Value="1"></Setter>
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="FontSize" Value="18"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
