@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace CanDaoCD.Pos.Common.Operates
 {
@@ -17,9 +18,10 @@ namespace CanDaoCD.Pos.Common.Operates
         /// 模态方式打开弹出窗口
         /// </summary>
         /// <param name="showUc">显示的用户控件</param>
-        public static void ShowPopupWindow(UserControlBase showUc)
+        public static void ShowPopupWindow(UserControlBase showUc, Brush bgColor = null)
         {
             var wPopup = new WPopup();
+            wPopup.Background = bgColor;
             wPopup.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
             wPopup.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             wPopup.WindowStartupLocation= WindowStartupLocation.CenterScreen;
