@@ -128,6 +128,7 @@
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{CC733F2A-65DE-411F-9093-71CD3A5D9B27}</Project>
       <Name>Library</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{2CF256B2-F5E0-4670-8644-08DDF65B0009}</Project>
@@ -137,10 +138,12 @@
     <ProjectReference Include="..\NewtonsoftJson\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj">
       <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
       <Name>Newtonsoft.Json.Net40</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\WebServiceReference\WebServiceReference.csproj">
       <Project>{830d9756-d0f4-4140-8afc-500e8eca03c4}</Project>
       <Name>WebServiceReference</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

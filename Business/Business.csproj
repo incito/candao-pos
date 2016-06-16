@@ -41,13 +41,6 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.DirectoryServices.Protocols" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.ServiceModel">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -55,14 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{269ECEFF-B6C2-4708-86BA-AFBB1A2B045C}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Models\Models.csproj">
-      <Project>{2CF256B2-F5E0-4670-8644-08DDF65B0009}</Project>
-      <Name>Models</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NewtonsoftJson\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj">
       <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
       <Name>Newtonsoft.Json.Net40</Name>
@@ -70,6 +55,7 @@
     <ProjectReference Include="..\WebServiceReference\WebServiceReference.csproj">
       <Project>{830D9756-D0F4-4140-8AFC-500E8ECA03C4}</Project>
       <Name>WebServiceReference</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

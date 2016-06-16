@@ -76,10 +76,12 @@
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{2cf256b2-f5e0-4670-8644-08ddf65b0009}</Project>
       <Name>Models</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\NewtonsoftJson\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj">
       <Project>{a9ae40ff-1a21-414a-9fe7-3be13644cc6d}</Project>
       <Name>Newtonsoft.Json.Net40</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
