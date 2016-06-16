@@ -40,7 +40,7 @@
             // lbTableName
             // 
             this.lbTableName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbTableName.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbTableName.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbTableName.Location = new System.Drawing.Point(0, 0);
             this.lbTableName.Name = "lbTableName";
             this.lbTableName.Size = new System.Drawing.Size(98, 22);
