@@ -160,7 +160,7 @@ namespace WebServiceReference.ServiceImpl
                 var request = new BillingTipRequest { orderid = orderId, paid = tipAmount };
                 var response = HttpHelper.HttpPost<JavaResponse1>(addr, request);
                 if (!response.IsSuccess)
-                    return string.IsNullOrEmpty(response.msg) ? "小费结算失败。" : response.msg;
+                    return string.IsNullOrEmpty(response.msg) ? "小费结算失败。" : String.Format("小费结算失败：{0}", response.msg);
                 return null;
             }
             catch (Exception ex)

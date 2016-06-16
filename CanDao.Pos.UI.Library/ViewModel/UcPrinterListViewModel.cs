@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Timers;
 using System.Windows.Input;
 using CanDao.Pos.Common;
@@ -11,6 +12,7 @@ using Models.Enum;
 using WebServiceReference.ServiceImpl;
 using AllLog = Common.AllLog;
 using Keyboard = CanDao.Pos.Common.Keyboard;
+using Timer = System.Timers.Timer;
 
 namespace CanDao.Pos.UI.Library.ViewModel
 {
@@ -125,29 +127,33 @@ namespace CanDao.Pos.UI.Library.ViewModel
         /// </summary>
         private void Refresh(object arg)
         {
+            RemainingTimes = RefreshIntervalsSecond - 1;
             _refreshTimer.Stop();
-            var service = new RestaurantServiceImpl();
-            var result = service.GetPrinterStatusInfo();
-            if (!string.IsNullOrEmpty(result.Item1))
+            ThreadPool.QueueUserWorkItem(y =>
             {
-                MessageDialog.Warning(result.Item1);
-                return;
-            }
+                var service = new RestaurantServiceImpl();
+                var result = service.GetPrinterStatusInfo();
+                if (!string.IsNullOrEmpty(result.Item1))
+                {
+                    OwnerCtrl.Dispatcher.BeginInvoke((Action)delegate { MessageDialog.Warning(result.Item1); });
+                    return;
+                }
 
-            AllLog.Instance.I("获取打印机状态列表成功。");
-            OwnerCtrl.Dispatcher.BeginInvoke((Action)delegate
-            {
-                PrinterStatusInfos.Clear();
-                if (result.Item2 != null)
-                    result.Item2.ForEach(PrinterStatusInfos.Add);
+                AllLog.Instance.I("获取打印机状态列表成功。");
+                OwnerCtrl.Dispatcher.BeginInvoke((Action)delegate
+                {
+                    PrinterStatusInfos.Clear();
+                    if (result.Item2 != null)
+                        result.Item2.ForEach(PrinterStatusInfos.Add);
 
-                HasErrorPrinter = PrinterStatusInfos.Any(t => t.PrintStatus != EnumPrintStatus.Normal);
-                if (!HasErrorPrinter)
-                    AllLog.Instance.I("打印机全部状态正常。");
-                else
-                    AllLog.Instance.E("有打印机状态异常。");
+                    HasErrorPrinter = PrinterStatusInfos.Any(t => t.PrintStatus != EnumPrintStatus.Normal);
+                    if (!HasErrorPrinter)
+                        AllLog.Instance.I("打印机全部状态正常。");
+                    else
+                        AllLog.Instance.E("有打印机状态异常。");
+                });
+                _refreshTimer.Start();
             });
-            _refreshTimer.Start();
         }
 
         private void PageUp(object arg)
@@ -180,11 +186,9 @@ namespace CanDao.Pos.UI.Library.ViewModel
         {
             _refreshTimer.Stop();
             if (--RemainingTimes < 0)
-            {
-                RemainingTimes = RefreshIntervalsSecond - 1;
                 Refresh(null);
-            }
-            _refreshTimer.Start();
+            else
+                _refreshTimer.Start();
         }
 
         #endregion

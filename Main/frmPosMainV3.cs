@@ -1171,7 +1171,7 @@ namespace Main
                                 isok = true;
                             }
 
-                            if (isok)
+                            if (isok && Globals.CurrTableInfo.TipAmount > 0)
                             {
                                 var service = new RestaurantServiceImpl();
                                 var result = service.BillingTip(Globals.CurrOrderInfo.orderid, amountTip);
