@@ -15,7 +15,10 @@ namespace CanDaoCD.Pos.PrintManage
        static PrintService()
        {
            _printManage=new OPrintManage();
-           _printManage.Init(PvSystemConfig.VSystemConfig.SerialNum);
+           if (PvSystemConfig.VSystemConfig.IsEnabledPrint)
+           {
+               _printManage.Init(PvSystemConfig.VSystemConfig.SerialNum);
+           }
        }
        /// <summary>
        /// 卡状态检查

@@ -425,6 +425,11 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                 OWindowManage.ShowMessageWindow("充值金额为空或格式不正确！", false);
                 return false;
             }
+            if (int.Parse(Model.RechargeValue) == 0)
+            {
+                OWindowManage.ShowMessageWindow("充值金额不能为零！", false);
+                return false;
+            }
             return true;
         }
         /// <summary>

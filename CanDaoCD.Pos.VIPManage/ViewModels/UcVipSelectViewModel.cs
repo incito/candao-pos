@@ -193,6 +193,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     Model.CardNum = info.Mcard;
 
                     Model.IsShowCardBut = true;
+                    Model.IsShowCardNum = false;
                     Model.IsOper = true;//启用操作区域
                 }
                 else

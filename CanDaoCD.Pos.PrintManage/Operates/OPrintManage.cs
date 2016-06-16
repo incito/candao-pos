@@ -67,6 +67,7 @@ namespace CanDaoCD.Pos.PrintManage.Operates
         {
             try
             {
+              
                 if (!_isInit)
                 {
                     _port = port;

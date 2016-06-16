@@ -2704,6 +2704,7 @@
             this.edtPwd.Size = new System.Drawing.Size(180, 40);
             this.edtPwd.TabIndex = 307;
             this.edtPwd.Enter += new System.EventHandler(this.edtPwd_Enter);
+            this.edtPwd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edtPwd_KeyPress);
             // 
             // label20
             // 

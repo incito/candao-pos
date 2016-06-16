@@ -5330,6 +5330,21 @@ namespace Main
             if (!string.IsNullOrEmpty(result))
                 Warning(result);
         }
+        /// <summary>
+        /// 输入完成密码按回车进行结算
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void edtPwd_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                if (getamount >= payamount)
+                {
+                    button27_Click_1(btnPay, e);
+                }
+            }
+        }
 
     }
 }
