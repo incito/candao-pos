@@ -64,13 +64,16 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         /// </summary>
         private void OkHandel()
         {
-
-            TCandaoRetBase ret2 = CanDaoMemberClient.VipChangeCard(Globals.branch_id, Model.CardNum, _insideId);
-            if (!ret2.Ret)
+            if (!string.IsNullOrEmpty(_insideId))
             {
-                Model.ShowInfo = string.Format("会员卡绑定失败：{0}", ret2.Retinfo);
-                return;
+                TCandaoRetBase ret2 = CanDaoMemberClient.VipChangeCard(Globals.branch_id, Model.CardNum, _insideId);
+                if (!ret2.Ret)
+                {
+                    Model.ShowInfo = string.Format("会员卡绑定失败：{0}", ret2.Retinfo);
+                    return;
+                }
             }
+           
             if (OkReturn != null)
             {
                 OkReturn(Model.CardNum);
@@ -104,6 +107,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     Model.ShowInfo = string.Format("该会员卡[{0}]{1}，请重新刷卡!", Model.CardNum,ret.Retinfo);
                     StartReadCardNum();
                 }
+             
             }
         }
 
@@ -124,6 +128,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         public void StartReadCardNum()
         {
             Model.CardNum = "";
+          
             _window.SetTextFocus();
         }
     }

@@ -224,30 +224,44 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             }
             else
             {
+            
                 //设置选择金额
                 var data = listBoxInfo.ListData as TCandaoCoupon;
-                float recharge = 0;
-                float deal = 0;
-                float present = 0;
                 float giveValue = 0;
+                  float present = 0;
 
-                if (float.TryParse(Model.RechargeValue, out recharge) & float.TryParse(data.DealValue, out deal) &
-                    float.TryParse(data.PresentValu, out present))
+                if (string.IsNullOrEmpty(data.DealValue))//充值为空代表不论充值多少都送赠送金额
                 {
-                    if (data.CouponType.Equals("1"))
+                    if (float.TryParse(data.PresentValu, out present))
                     {
-
-                        giveValue = ((int)(recharge/deal))*present;
+                        giveValue = present;
                     }
-                    else
-                    {
-                        if (recharge > deal)
-                        {
-                            giveValue = deal;
-                        }
-                    }
-
                 }
+                else
+                {
+                    float recharge = 0;
+                    float deal = 0;
+
+                    if (float.TryParse(Model.RechargeValue, out recharge) & float.TryParse(data.DealValue, out deal) &
+                        float.TryParse(data.PresentValu, out present))
+                    {
+
+                        if (data.CouponType.Equals("1"))
+                        {
+
+                            giveValue = ((int)(recharge / deal)) * present;
+                        }
+                        else
+                        {
+                            if (recharge > deal)
+                            {
+                                giveValue = deal;
+                            }
+                        }
+
+                    }
+                }
+               
                 Model.GiveValue = giveValue.ToString();
             }
         }

@@ -116,6 +116,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         private void BindingCardHandel()
         {
             _winShowInfo = new WinShowInfoViewModel();
+            _winShowInfo.InsideId = Model.CardNum;
             _winShowInfo.OkReturn = new Action<string>(ReceiveCarNum);
             var window = _winShowInfo.GetShoWindow();
             window.Topmost = true;

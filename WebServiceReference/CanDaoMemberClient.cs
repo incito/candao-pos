@@ -1137,6 +1137,10 @@ namespace WebServiceReference
                 JObject ja = null;
               
                 ja = (JObject) JsonConvert.DeserializeObject(jsonResult);
+
+                ret.Retcode = ja["Retcode"].ToString();
+                ret.Ret = ret.Retcode.Equals("0");
+                ret.Retinfo = ja["RetInfo"].ToString();
                 return ret;
             }
             catch
@@ -1176,6 +1180,10 @@ namespace WebServiceReference
                 JObject ja = null;
 
                 ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+
+                ret.Retcode = ja["code"].ToString();
+                ret.Ret = ret.Retcode.Equals("0");
+                ret.Retinfo = ja["msg"].ToString();
                 return ret;
             }
             catch
@@ -1219,6 +1227,10 @@ namespace WebServiceReference
                 JObject ja = null;
 
                 ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+
+                ret.Retcode = ja["code"].ToString();
+                ret.Ret = ret.Retcode.Equals("0");
+                ret.Retinfo = ja["msg"].ToString();
                 return ret;
             }
             catch

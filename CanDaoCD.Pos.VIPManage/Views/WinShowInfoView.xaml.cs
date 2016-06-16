@@ -31,6 +31,7 @@ namespace CanDaoCD.Pos.VIPManage.Views
 
         public void SetTextFocus()
         {
+            TexCardNum.IsEnabled = true;
             TexCardNum.Focus();
         }
 
@@ -43,8 +44,8 @@ namespace CanDaoCD.Pos.VIPManage.Views
             {
                 if (TexCardChange != null)
                 {
-                    TexCardChange();
                     TexCardNum.IsEnabled = false;
+                    TexCardChange();
                 }
             }
         }

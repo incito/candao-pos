@@ -368,18 +368,22 @@
     <ProjectReference Include="..\Business\Business.csproj">
       <Project>{A674DB78-C6CB-409B-893D-728ABF88EC84}</Project>
       <Name>Business</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{269eceff-b6c2-4708-86ba-afbb1a2b045c}</Project>
       <Name>Common</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{2CF256B2-F5E0-4670-8644-08DDF65B0009}</Project>
       <Name>Models</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\WebServiceReference\WebServiceReference.csproj">
       <Project>{830d9756-d0f4-4140-8afc-500e8eca03c4}</Project>
       <Name>WebServiceReference</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
