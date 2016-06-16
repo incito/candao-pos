@@ -25,19 +25,5 @@ namespace CanDaoCD.Pos.VIPManage.Views
             InitializeComponent();
         }
 
-        private void TexCode_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexTelNum;
-        }
-
-        private void TexPsw_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexPsw;
-        }
-
-        private void TexPswConfirm_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexPswConfirm;
-        }
     }
 }

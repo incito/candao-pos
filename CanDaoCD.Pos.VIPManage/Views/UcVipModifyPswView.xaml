@@ -7,6 +7,7 @@
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
              xmlns:bindConverter="clr-namespace:CanDaoCD.Pos.ResourceService.BindConverter;assembly=CanDaoCD.Pos.ResourceService"
              xmlns:operates="clr-namespace:CanDaoCD.Pos.VIPManage.Operates"
+             xmlns:newControl="clr-namespace:CanDaoCD.Pos.Common.Controls.NewControl;assembly=CanDaoCD.Pos.Common"
              mc:Ignorable="d" 
              d:DesignHeight="510" d:DesignWidth="758" Background="White">
     <UserControl.Resources>
@@ -54,14 +55,14 @@
 
 
             <TextBox x:Name="TexTelNum" Grid.Column="1" Grid.Row="0" IsEnabled="False" Text="{Binding Model.TelNum}"></TextBox>
-            <TextBox x:Name="TexCode" Grid.Column="1" Grid.Row="1" Text="{Binding Model.Code}" Margin="5,5,75,5" GotFocus="TexCode_OnGotFocus"></TextBox>
-            <PasswordBox x:Name="TexPsw" Grid.Column="1" Grid.Row="2" PasswordChar="*" bindConverter:PasswordBoxHelper.Attach="True" bindConverter:PasswordBoxHelper.Password="{Binding Model.Psw,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" GotFocus="TexPsw_OnGotFocus"/>
-            <PasswordBox x:Name="TexPswConfirm" Grid.Column="1" Grid.Row="3" PasswordChar="*" bindConverter:PasswordBoxHelper.Attach="True" bindConverter:PasswordBoxHelper.Password="{Binding Model.PswConfirm,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" GotFocus="TexPswConfirm_OnGotFocus"/>
+            <TextBox x:Name="TexCode" Grid.Column="1" Grid.Row="1" Text="{Binding Model.Code}" Margin="5,5,75,5" ></TextBox>
+            <PasswordBox x:Name="TexPsw" Grid.Column="1" Grid.Row="2" PasswordChar="*" bindConverter:PasswordBoxHelper.Attach="True" bindConverter:PasswordBoxHelper.Password="{Binding Model.Psw,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            <PasswordBox x:Name="TexPswConfirm" Grid.Column="1" Grid.Row="3" PasswordChar="*" bindConverter:PasswordBoxHelper.Attach="True" bindConverter:PasswordBoxHelper.Password="{Binding Model.PswConfirm,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             <Button x:Name="BtnReg" Style="{DynamicResource ColBtn}" Margin="16,5,0,5" HorizontalAlignment="Left" Width="133" Height="50" Grid.Column="0" Grid.Row="5" Content="确定" Command="{Binding SureCommand}"/>
             <Button x:Name="BtnCancel" Style="{DynamicResource ColBtn}" Margin="0,0,20,0" HorizontalAlignment="Right" Width="133" Height="50" Grid.Column="1" Grid.Row="5" Content="取消" Command="{Binding CloseCommand}"/>
             <operates:ButtonSend x:Name="BtnSendCode" Grid.Column="1" Grid.Row="1" Style="{DynamicResource ColBtn}" IsStartTime="{Binding IsStartTime}" HorizontalAlignment="Right" Width="55" Height="45" Content="发送" Command="{Binding SendCodeCommand}" Margin="0,0,5,0"/>
         </Grid>
-        <controls:CtlDigitalKeyboard x:Name="Keyboard" Grid.Column="1"  Height="250" VerticalAlignment="Top" Width="310" />
+        <cSystem:CtlDigitalKeyboard x:Name="Keyboard" Grid.Column="1"  Height="250" VerticalAlignment="Top" Width="310" />
     </Grid>
 </cSystem:UserControlBase>
 

@@ -116,6 +116,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             if (model != null)
             {
                 SelectModel = model;
+                Model.TelNum = model.TelNum;
                 Model.IsEnabledNum = false;
             }
             else
@@ -312,8 +313,6 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                                 Model.CardBalance = string.Format("卡余额:{0}", ret.StoreCardbalance);
 
                                 PrintVipStore(ret.Tracecode, ret.StoreCardbalance.ToString());//纸质打印
-
-                                Model.RechargeValue = "";
 
                                 decimal recharge = 0;
                               

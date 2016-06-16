@@ -1103,7 +1103,13 @@ namespace WebServiceReference
                 return ret;
             }
         }
-
+        /// <summary>
+        /// 会员密码修改
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="cardno"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public static TCandaoRetBase VipChangePsw(string branch_id, string cardno, string password)
         {
             TCandaoRetBase ret = new TCandaoRetBase();
@@ -1125,9 +1131,9 @@ namespace WebServiceReference
                 writer.WriteValue(password);
                 writer.WriteEndObject();
                 writer.Flush();
-                AllLog.Instance.I(string.Format("【MemberEdit】 reqeust：{0}。", sw));
+                AllLog.Instance.I(string.Format("【VipChangePsw】 reqeust：{0}。", sw));
                 String jsonResult = RestClient.Post_Rest(address, sw);
-                AllLog.Instance.I(string.Format("【MemberEdit】 result：{0}。", jsonResult));
+                AllLog.Instance.I(string.Format("【VipChangePsw】 result：{0}。", jsonResult));
                 JObject ja = null;
               
                 ja = (JObject) JsonConvert.DeserializeObject(jsonResult);
@@ -1140,6 +1146,86 @@ namespace WebServiceReference
             }
          
           
+        }
+        /// <summary>
+        /// 判断会员实体卡
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="cardno"></param>
+        /// <returns></returns>
+        public static TCandaoRetBase VipCheckCard(string branch_id, string cardno)
+        {
+            TCandaoRetBase ret = new TCandaoRetBase();
+            try
+            {
+                ret.Ret = true;
+                string address = String.Format("http://{0}/member/memberManager/byUserTouse.json",
+                    WebServiceReference.Candaomemberserver);
+                StringWriter sw = new StringWriter();
+                JsonWriter writer = new JsonTextWriter(sw);
+                writer.WriteStartObject();
+                writer.WritePropertyName("branch_id");
+                writer.WriteValue(branch_id);
+                writer.WritePropertyName("cardno");
+                writer.WriteValue(cardno);
+                writer.WriteEndObject();
+                writer.Flush();
+                AllLog.Instance.I(string.Format("【VipCheckCard】 reqeust：{0}。", sw));
+                String jsonResult = RestClient.Post_Rest(address, sw);
+                AllLog.Instance.I(string.Format("【VipCheckCard】 result：{0}。", jsonResult));
+                JObject ja = null;
+
+                ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+                return ret;
+            }
+            catch
+            {
+                ret.Ret = false;
+                return ret;
+            }
+        }
+
+        /// <summary>
+        /// 修改会员实体卡号
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="cardno">实体卡</param>
+        /// <param name="insideId">虚拟卡Id</param>
+        /// <returns></returns>
+        public static TCandaoRetBase VipChangeCard(string branch_id, string cardno, string insideId)
+        {
+            TCandaoRetBase ret = new TCandaoRetBase();
+            try
+            {
+                ret.Ret = true;
+                string address = String.Format("http://{0}/member/memberManager/bindingCard.json",
+                    WebServiceReference.Candaomemberserver);
+                StringWriter sw = new StringWriter();
+                JsonWriter writer = new JsonTextWriter(sw);
+                writer.WriteStartObject();
+                writer.WritePropertyName("tenant_id");
+                writer.WriteValue("");
+                writer.WritePropertyName("entity_cardNo");
+                writer.WriteValue(cardno);
+                writer.WritePropertyName("cardno");
+                writer.WriteValue(insideId);
+                writer.WritePropertyName("branch_id");
+                writer.WriteValue(branch_id);
+                writer.WriteEndObject();
+                writer.Flush();
+                AllLog.Instance.I(string.Format("【VipChangeCard】 reqeust：{0}。", sw));
+                String jsonResult = RestClient.Post_Rest(address, sw);
+                AllLog.Instance.I(string.Format("【VipChangeCard】 result：{0}。", jsonResult));
+                JObject ja = null;
+
+                ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+                return ret;
+            }
+            catch
+            {
+                ret.Ret = false;
+                return ret;
+            }
         }
     }
 }

@@ -20,7 +20,10 @@ namespace CanDaoCD.Pos.VIPManage.Models
         private string _birthday;
         private string _balance;
 
-        private bool _isEnabledPsw = false;
+        //private bool _isEnabledPsw = false;
+        private bool _isShowCardNum = false;
+        private bool _isShowCardBut = false;
+
         private bool _isOper = false;
 
         private Action _sureAction;
@@ -29,6 +32,24 @@ namespace CanDaoCD.Pos.VIPManage.Models
         #endregion
 
         #region 属性
+        public bool IsShowCardBut
+        {
+            get { return _isShowCardBut; }
+            set
+            {
+                _isShowCardBut = value;
+                RaisePropertyChanged(() => IsShowCardBut);
+            }
+        }
+        public bool IsShowCardNum
+        {
+            get { return _isShowCardNum; }
+            set
+            {
+                _isShowCardNum = value;
+                RaisePropertyChanged(() => IsShowCardNum);
+            }
+        }
         public Action<TextBox> TextEnterAction
         {
             get { return _textEnterAction; }
@@ -78,15 +99,15 @@ namespace CanDaoCD.Pos.VIPManage.Models
             }
         }
 
-        public bool IsEnabledPsw
-        {
-            get { return _isEnabledPsw; }
-            set
-            {
-                _isEnabledPsw = value;
-                RaisePropertyChanged(() => IsEnabledPsw);
-            }
-        }
+        //public bool IsEnabledPsw
+        //{
+        //    get { return _isEnabledPsw; }
+        //    set
+        //    {
+        //        _isEnabledPsw = value;
+        //        RaisePropertyChanged(() => IsEnabledPsw);
+        //    }
+        //}
       
         public string TelNum
         {

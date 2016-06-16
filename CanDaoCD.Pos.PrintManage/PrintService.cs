@@ -83,13 +83,13 @@ namespace CanDaoCD.Pos.PrintManage
                model.Add(vipNum);
                model.Add(vipName);
 
-               model.Add("0.00");
+               model.Add(string.Format("{0}", oldIntegral));
                model.Add(string.Format("{0}元", lastRecharge));
 
-               model.Add("0.00");
+               model.Add(string.Format("{0}", integral));
                model.Add(string.Format("{0}元", recharge));
 
-               model.Add("0.00");
+               model.Add(string.Format("{0}", nowIntegral));
                model.Add(string.Format("{0}元", nowRecharge));
 
                if (!_printManage.Print(CreadModel(model)))
@@ -136,7 +136,7 @@ namespace CanDaoCD.Pos.PrintManage
            var cModel = new List<string>();
            cModel.Add(string.Format("开卡门店：{0}", WebServiceReference.WebServiceReference.Report_title));
            cModel.Add(string.Format("卡片类型：{0}", "储值卡"));
-           cModel.Add(string.Format("会员卡号：{0}", model[0]));
+           cModel.Add(string.Format("手机号码：{0}", model[0]));
            cModel.Add(string.Format("会员姓名：{0}", model[1]));
            if (true)
            {
@@ -155,6 +155,9 @@ namespace CanDaoCD.Pos.PrintManage
            cModel.Add(string.Format("当前储值余额：{0}", model[7]));
 
            cModel.Add(string.Format("当前时间：{0}", DateTime.Today.ToString("yyyy-MM-dd")));
+           cModel.Add(string.Format(""));
+           cModel.Add(string.Format("温馨提示"));
+           cModel.Add(string.Format("消费时必须出示本卡"));
            return cModel;
        }
    }

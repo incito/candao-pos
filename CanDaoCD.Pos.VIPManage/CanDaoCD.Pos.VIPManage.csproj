@@ -147,6 +147,10 @@
       <Project>{2cf256b2-f5e0-4670-8644-08ddf65b0009}</Project>
       <Name>Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ReportsFastReport\ReportsFastReport.csproj">
+      <Project>{f925f022-363f-49ec-868b-c51b72a81cc7}</Project>
+      <Name>ReportsFastReport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebServiceReference\WebServiceReference.csproj">
       <Project>{830d9756-d0f4-4140-8afc-500e8eca03c4}</Project>
       <Name>WebServiceReference</Name>

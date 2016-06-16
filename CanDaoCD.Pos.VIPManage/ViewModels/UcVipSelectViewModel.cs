@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using CanDaoCD.Pos.Common.Classes.Mvvms;
 using CanDaoCD.Pos.Common.Controls.CSystem;
@@ -48,6 +49,10 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         /// </summary>
         public RelayCommand LogOffCommand { set; get; }
 
+        /// <summary>
+        /// 绑定卡事件
+        /// </summary>
+        public RelayCommand BindingCardCommand { set; get; }
         #endregion
 
         #region 构造函数
@@ -63,12 +68,17 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             StoredValueCommand=new RelayCommand(StoredValueHandel);
             LogOffCommand=new RelayCommand(LogOffHandel);
             ModifyPswCommand=new RelayCommand(ModifyPswHandel);
+            BindingCardCommand = new RelayCommand(BindingCardHandel);
         }
 
         #endregion
 
         #region 私有方法
 
+        private void SelectHandel(string text)
+        {
+            SelectModel(text, Model.Psw);
+        }
         /// <summary>
         /// 查询事件
         /// </summary>
@@ -98,6 +108,29 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             var veModel = new UcVipRechargeViewModel(Model);
    
             OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
+        }
+
+        /// <summary>
+        /// 绑定卡
+        /// </summary>
+        private void BindingCardHandel()
+        {
+            _winShowInfo = new WinShowInfoViewModel();
+            _winShowInfo.OkReturn = new Action<string>(ReceiveCarNum);
+            var window = _winShowInfo.GetShoWindow();
+            window.Topmost = true;
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            window.Show();
+        }
+        /// <summary>
+        /// 接收实体卡号
+        /// </summary>
+        /// <param name="carNum"></param>
+        private void ReceiveCarNum(string carNum)
+        {
+            Model.CardNum = carNum;
+            Model.IsShowCardBut = false;
+            Model.IsShowCardNum = true;
         }
 
         /// <summary>
@@ -158,6 +191,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     Model.Balance = info.Storecardbalance.ToString();
                     Model.CardNum = info.Mcard;
 
+                    Model.IsShowCardBut = true;
                     Model.IsOper = true;//启用操作区域
                 }
                 else
@@ -165,6 +199,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     OWindowManage.ShowMessageWindow(
                      string.Format("会员查询错误：{0}", info.Retinfo), true);
                     Model.IsOper = false;//禁用操作区域
+                    Model.IsShowCardBut = false;
                 }
 
                
@@ -189,6 +224,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         {
             _userControl = new UcVipSelectView();
             _userControl.DataContext = this;
+            _userControl.EntAction=new Action<string>(SelectHandel);
             return _userControl;
         }
 

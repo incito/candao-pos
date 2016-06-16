@@ -17,30 +17,33 @@ namespace CanDaoCD.Pos.ResourceService.Controls
     /// <summary>
     /// CtlDigitalKeyboard.xaml 的交互逻辑
     /// </summary>
-    public partial class CtlDigitalKeyboard : UserControl
+    public partial class CtlDigitalKeyboard_old : UserControl
     {
 
-#region 字段
+        #region 字段
 
         private Dictionary<string, TextBox> _dictionary;
-#endregion
 
-#region 构造函数
-        public CtlDigitalKeyboard()
+        #endregion
+
+        #region 构造函数
+
+        public CtlDigitalKeyboard_old()
         {
             InitializeComponent();
             _dictionary = new Dictionary<string, TextBox>();
         }
-#endregion
+
+        #endregion
+
         #region 属性
+
         /// <summary>
         /// 当前关联控件
         /// </summary>
-        public UIElement CurrentElement {
-            get
-            {
-                return (UIElement)GetValue(CurrentElementProperty);
-            }
+        public UIElement CurrentElement
+        {
+            get { return (UIElement) GetValue(CurrentElementProperty); }
             set
             {
                 SetValue(CurrentElementProperty, value);
@@ -58,61 +61,54 @@ namespace CanDaoCD.Pos.ResourceService.Controls
         }
 
         public static readonly DependencyProperty CurrentElementProperty = DependencyProperty.Register(
-           "CurrentElement", typeof(UIElement), typeof(CtlDigitalKeyboard));
+            "CurrentElement", typeof(UIElement), typeof(CtlDigitalKeyboard_old));
 
-      
+
 
         public static readonly DependencyProperty MaxNumProperty = DependencyProperty.Register(
-        "MaxNum", typeof(int), typeof(CtlDigitalKeyboard), new PropertyMetadata(0));
+            "MaxNum", typeof(int), typeof(CtlDigitalKeyboard_old), new PropertyMetadata(0));
+
         public int MaxNum
         {
-            get { return (int)GetValue(MaxNumProperty); }
+            get { return (int) GetValue(MaxNumProperty); }
             set { SetValue(MaxNumProperty, value); }
         }
 
         public static readonly DependencyProperty MinNumProperty = DependencyProperty.Register(
-        "MinNum", typeof(int), typeof(CtlDigitalKeyboard), new PropertyMetadata(0));
+            "MinNum", typeof(int), typeof(CtlDigitalKeyboard_old), new PropertyMetadata(0));
+
         public int MinNum
         {
-            get { return (int)GetValue(MinNumProperty); }
+            get { return (int) GetValue(MinNumProperty); }
             set { SetValue(MinNumProperty, value); }
         }
+
         #endregion
 
         #region 事件
+
         public Action SureAction
         {
-            get
-            {
-                return (Action)GetValue(SureActionProperty);
-            }
-            set
-            {
-                SetValue(SureActionProperty, value);
-            }
+            get { return (Action) GetValue(SureActionProperty); }
+            set { SetValue(SureActionProperty, value); }
         }
 
         public static readonly DependencyProperty SureActionProperty = DependencyProperty.Register(
-            "SureAction", typeof(Action), typeof(CtlDigitalKeyboard));
+            "SureAction", typeof(Action), typeof(CtlDigitalKeyboard_old));
 
         public Action<TextBox> TextEnterAction
         {
-            get
-            {
-                return (Action<TextBox>)GetValue(TextEnterProperty);
-            }
-            set
-            {
-                SetValue(TextEnterProperty, value);
-            }
+            get { return (Action<TextBox>) GetValue(TextEnterProperty); }
+            set { SetValue(TextEnterProperty, value); }
         }
 
         public static readonly DependencyProperty TextEnterProperty = DependencyProperty.Register(
-            "TextEnterAction", typeof(Action<TextBox>), typeof(CtlDigitalKeyboard));
-   
+            "TextEnterAction", typeof(Action<TextBox>), typeof(CtlDigitalKeyboard_old));
+
         #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 输入Enter键
         /// </summary>
@@ -140,7 +136,7 @@ namespace CanDaoCD.Pos.ResourceService.Controls
             {
                 if (CurrentElement != null)
                 {
-                  
+
                     string appText = (sender as Button).Content.ToString();
                     var curText = (TextBox) CurrentElement;
                     curText.AppendText(appText);
@@ -151,6 +147,7 @@ namespace CanDaoCD.Pos.ResourceService.Controls
             {
             }
         }
+
         /// <summary>
         /// 退格操作
         /// </summary>
@@ -162,7 +159,7 @@ namespace CanDaoCD.Pos.ResourceService.Controls
             {
                 if (CurrentElement != null)
                 {
-                    var curText = (TextBox)CurrentElement;
+                    var curText = (TextBox) CurrentElement;
                     if (curText.Text.Length > 0)
                     {
                         curText.Text = curText.Text.Remove(curText.Text.Length - 1);
@@ -178,6 +175,7 @@ namespace CanDaoCD.Pos.ResourceService.Controls
             {
             }
         }
+
         /// <summary>
         /// 小数点
         /// </summary>
@@ -189,7 +187,7 @@ namespace CanDaoCD.Pos.ResourceService.Controls
             {
                 if (CurrentElement != null)
                 {
-                    var curText = (TextBox)CurrentElement;
+                    var curText = (TextBox) CurrentElement;
                     if (!curText.Text.Contains("."))
                     {
                         curText.AppendText(".");
@@ -211,19 +209,20 @@ namespace CanDaoCD.Pos.ResourceService.Controls
         {
             try
             {
-                if (SureAction!= null)
+                if (SureAction != null)
                 {
                     SureAction();
                 }
-       
+
             }
             catch
             {
-                
-              
+
+
             }
-           
+
         }
+
         /// <summary>
         /// 输入文本框焦点
         /// </summary>
@@ -235,8 +234,9 @@ namespace CanDaoCD.Pos.ResourceService.Controls
 
             textBox.Select(textBox.Text.Length, 0);
             textBox.Focus();
-           
+
         }
+
         /// <summary>
         /// 检查文字范围
         /// </summary>
@@ -248,7 +248,7 @@ namespace CanDaoCD.Pos.ResourceService.Controls
                 float textNum;
                 if (float.TryParse(textBox.Text, out textNum))
                 {
-                    if (textNum < MinNum || textNum > MaxNum)//输入信息小于最小值或大于最大值
+                    if (textNum < MinNum || textNum > MaxNum) //输入信息小于最小值或大于最大值
                     {
                         textBox.Text = "";
                     }
@@ -259,6 +259,7 @@ namespace CanDaoCD.Pos.ResourceService.Controls
                 }
             }
         }
+
         #endregion
 
     }

@@ -6,15 +6,24 @@ using System.Text;
 using System.Windows;
 using CanDaoCD.Pos.VIPManage.Models;
 using CanDaoCD.Pos.VIPManage.Views;
+using Common;
+using Models;
+using WebServiceReference;
 
 namespace CanDaoCD.Pos.VIPManage.ViewModels
 {
     public class WinShowInfoViewModel : ViewModelBase
     {
         private WinShowInfoView _window;
-
+        private string _insideId=string.Empty;
         #region 属性
-
+        /// <summary>
+        /// 内部虚拟Id
+        /// </summary>
+        public string InsideId
+        {
+            set { _insideId = value; }
+            get { return _insideId; } }
         public WinShowInfoModel Model
         {
             set; get; }
@@ -49,10 +58,19 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
 
         }
 
-       
 
+        /// <summary>
+        /// 确定绑定
+        /// </summary>
         private void OkHandel()
         {
+
+            TCandaoRetBase ret2 = CanDaoMemberClient.VipChangeCard(Globals.branch_id, Model.CardNum, _insideId);
+            if (!ret2.Ret)
+            {
+                Model.ShowInfo = string.Format("会员卡绑定失败：{0}", ret2.Retinfo);
+                return;
+            }
             if (OkReturn != null)
             {
                 OkReturn(Model.CardNum);
@@ -60,6 +78,9 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             _window.Close();
         }
 
+        /// <summary>
+        /// 取消绑定
+        /// </summary>
         private void CancelHandel()
         {
             _window.Close();
@@ -72,14 +93,15 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         {
             if (!string.IsNullOrEmpty(Model.CardNum))
             {
-                if (true)//会员卡判断
+                TCandaoRetBase ret = CanDaoMemberClient.VipCheckCard(Globals.branch_id, Model.CardNum);
+                if (ret.Ret)//会员卡判断
                 {
                     Model.ShowInfo = string.Format("会员卡序列号：{0}，确认绑定该实体会员卡吗？", Model.CardNum);
                     Model.IsEnableBtn = true;
                 }
                 else
                 {
-                    Model.ShowInfo = string.Format("该会员卡[{0}]已绑定，请重新刷卡!", Model.CardNum);
+                    Model.ShowInfo = string.Format("该会员卡[{0}]{1}，请重新刷卡!", Model.CardNum,ret.Retinfo);
                     StartReadCardNum();
                 }
             }

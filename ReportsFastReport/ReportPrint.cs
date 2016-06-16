@@ -33,12 +33,13 @@ namespace ReportsFastReport
     public class ReportPrint
     {
         private static ReportAmount ramount;
-        private static Report rptReport = new Report();
+        private static Report rptReport;
         private static frmPrintProgress frmProgress;// = new frmPrintProgress();
 
         public static void Init()
         {
             frmProgress = new frmPrintProgress();
+            rptReport = new Report();
         }
 
         /// <summary>
@@ -648,7 +649,7 @@ namespace ReportsFastReport
 
         public static void PrintCopyCard(DataTable dt)
         {
-          
+
             if (dt.Rows.Count > 0)
             {
                 double temdouble = 0;
@@ -660,12 +661,12 @@ namespace ReportsFastReport
 
                 if (double.TryParse(dt.Rows[0]["score"].ToString(), out temdouble))
                 {
-                    jfzjDecimal = temdouble;
+                    jfzjDecimal = -temdouble;
                 }
 
                 if (double.TryParse(dt.Rows[0]["stored"].ToString(), out temdouble))
                 {
-                    czzjDecimal = temdouble;
+                    czzjDecimal = -temdouble;
                 }
 
                 if (double.TryParse(dt.Rows[0]["scorebalance"].ToString(), out temdouble))
@@ -678,9 +679,24 @@ namespace ReportsFastReport
                     czDecimal = temdouble;
                 }
                 cardno = dt.Rows[0]["cardno"].ToString();
-                PrintService.PayPrint("", cardno, (jfDecimal - jfzjDecimal).ToString(),jfzjDecimal.ToString(),jfDecimal.ToString(),(czDecimal-czzjDecimal).ToString()
-                    ,czzjDecimal.ToString(),czDecimal.ToString());
-                
+                string name = string.Empty;
+                string telnum = string.Empty;
+                try
+                {
+                    var info = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", Globals.CurrOrderInfo.memberno, "");
+                    name = info.Name;
+                    telnum = info.Mobile;
+                }
+                catch 
+                {
+                    
+                    throw;
+                }
+
+                PrintService.PayPrint(name, telnum, (czDecimal - czzjDecimal).ToString()
+                    , czzjDecimal.ToString(), czDecimal.ToString(), (jfDecimal - jfzjDecimal).ToString(),
+                    jfzjDecimal.ToString(), jfDecimal.ToString());
+
             }
         }
     }

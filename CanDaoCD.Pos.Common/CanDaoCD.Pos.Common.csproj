@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -66,6 +67,16 @@
     <Compile Include="Classes\Mvvms\WeakFunc.cs" />
     <Compile Include="Classes\Mvvms\WeakAction.cs" />
     <Compile Include="Classes\Mvvms\RelayCommand.cs" />
+    <Compile Include="Controls\CSystem\DigitalInputKeyboard.xaml.cs">
+      <DependentUpon>DigitalInputKeyboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\CtlDigitalKeyboardaa.xaml.cs">
+      <DependentUpon>CtlDigitalKeyboardaa.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\CtlDigitalKeyboard.xaml.cs">
+      <DependentUpon>CtlDigitalKeyboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\DigitalInputKeyboardVm.cs" />
     <Compile Include="Controls\CSystem\UserControlBase.cs" />
     <Compile Include="Controls\CSystem\WMessage.xaml.cs">
       <DependentUpon>WMessage.xaml</DependentUpon>
@@ -85,6 +96,7 @@
     <Compile Include="Operates\OCheckFormat.cs" />
     <Compile Include="Operates\OKeyBoardPre.cs" />
     <Compile Include="Operates\OWindowManage.cs" />
+    <Compile Include="Operates\Simulation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -110,6 +122,18 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\CSystem\DigitalInputKeyboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\CtlDigitalKeyboardaa.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\CtlDigitalKeyboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\CSystem\WMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

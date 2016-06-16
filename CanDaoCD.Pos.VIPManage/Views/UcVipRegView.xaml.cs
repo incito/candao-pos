@@ -25,33 +25,6 @@ namespace CanDaoCD.Pos.VIPManage.Views
             InitializeComponent();
         }
 
-        #region 虚拟键盘
-
-        private void TexTelNum_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexTelNum;
-        }
-
-        private void TexCode_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexCode;
-        }
-
-        private void TexUserName_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexUserName;
-        }
-
-        private void TexPsw_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexPsw;
-        }
-
-        private void TexPswConfirm_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            Keyboard.CurrentElement = TexPswConfirm;
-        }
-
-        #endregion
+   
     }
 }

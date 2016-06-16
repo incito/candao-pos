@@ -21,7 +21,7 @@ namespace CanDaoCD.Pos.Common.Operates
            {
                return false;
            }
-           return System.Text.RegularExpressions.Regex.IsMatch(phoneNum, @"^[1]+[3,5]+\d{9}");
+           return System.Text.RegularExpressions.Regex.IsMatch(phoneNum, @"^[1]+[1,2,3,4,5,6,7,8,9,0]+\d{9}");
 
        }
     }

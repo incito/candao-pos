@@ -80,7 +80,7 @@ namespace CanDaoCD.Pos.PrintManage.Operates
                     }
                     else
                     {
-                        ErrorString = "打印机初始化错误，请检查打印机是否连接正常！";
+                        ErrorString = "打印机连接错误，请检查打印机是否连接正常！";
                         OWindowManage.ShowMessageWindow(
                                   string.Format("{0}", ErrorString), false);
                         return false;
@@ -204,7 +204,7 @@ namespace CanDaoCD.Pos.PrintManage.Operates
                     else
                     {
                         var cardInfo = Encoding.Default.GetString(statuRes.ResBytes);
-                        if (cardInfo.Remove(cardInfo.Length - 2).Contains("1"))
+                        if (cardInfo.Remove(cardInfo.Length - 2).Contains("1") || cardInfo.Remove(cardInfo.Length - 2).Contains("2"))
                         {
                             return true;
                         }

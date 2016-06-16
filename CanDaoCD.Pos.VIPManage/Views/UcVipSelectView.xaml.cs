@@ -23,11 +23,14 @@ namespace CanDaoCD.Pos.VIPManage.Views
 #region 属性
 
         public int SelectModel { set; get; }
+
+        public Action<string> EntAction { set; get; }
 #endregion
         public UcVipSelectView()
         {
             InitializeComponent();
             SelectModel = 0;
+
         }
 
         #region UI键盘事件
@@ -38,7 +41,8 @@ namespace CanDaoCD.Pos.VIPManage.Views
         /// <param name="e"></param>
         private void TexTelNum_OnGotFocus(object sender, RoutedEventArgs e)
         {
-            Keyboard.CurrentElement = TexTelNum;
+            //Keyboard.CurrentElement = TexTelNum;
+
             SelectModel = 1;
         }
         /// <summary>
@@ -48,10 +52,32 @@ namespace CanDaoCD.Pos.VIPManage.Views
         /// <param name="e"></param>
         private void TexCardNum_OnGotFocus(object sender, RoutedEventArgs e)
         {
-            Keyboard.CurrentElement = TexCardNum;
+          
             SelectModel = 2;
         }
 
         #endregion
+
+        private void TexTelNum_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (EntAction != null)
+            {
+                if (e.Key == Key.Enter)
+                {
+                    EntAction(TexTelNum.Text);
+                }
+            }
+        }
+
+        private void TexCardNum_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (EntAction != null)
+            {
+                if (e.Key == Key.Enter)
+                {
+                    EntAction(TexCardNum.Text);
+                }
+            }
+        }
     }
 }
