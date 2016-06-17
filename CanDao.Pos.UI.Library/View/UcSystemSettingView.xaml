@@ -40,7 +40,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="打印机列表" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
-                        <Image Grid.Column="1" Width="32" Height="32" Source="{StaticResource AlertImgSource }" Visibility="{Binding DataContext.HasErrorPrinter, ElementName=PrinterListView}" Margin="25,0,0,0" VerticalAlignment="Center"/>
+                        <Image Grid.Column="1" Width="32" Height="32" Source="{StaticResource AlertImgSource }" Visibility="{Binding DataContext.HasErrorPrinter, ElementName=PrinterListView, Converter={StaticResource BoolToVisibilityConverter}}" Margin="25,0,0,0" VerticalAlignment="Center"/>
                     </Grid>
                 </dx:DXTabItem.Header>
                 <dx:DXTabItem.Content>
