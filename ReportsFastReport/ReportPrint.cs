@@ -14,6 +14,7 @@ using WebServiceReference;
 using Library;
 using Models;
 using System.Threading;
+using CanDaoCD.Pos.PrintManage;
 
 namespace ReportsFastReport
 {
@@ -221,7 +222,7 @@ namespace ReportsFastReport
             {
                 AllLog.Instance.D("PrintPayBill:" + string.Format("{0}", billno) + "----" + ex.Message);
             }
-            
+
 
             DataSet ds = new DataSet();
             DataTable yh = new DataTable();
@@ -427,7 +428,8 @@ namespace ReportsFastReport
         /// </summary>
         /// <param name="billno"></param>
         /// <param name="printuser"></param>
-        public static void PrintMemberPay1(String billno, String printuser)
+        /// <param name="oldIntegral"></param>
+        public static void PrintMemberPay1(String billno, String printuser, float oldIntegral)
         {
             //
             JArray jrOrder = null;
@@ -446,6 +448,10 @@ namespace ReportsFastReport
                     Library.frmWarning.ShowWarning("该单没有会员消费记录!");
                     return;
                 }
+
+                //打印复写卡
+                PrintCopyCard(dtOrder, oldIntegral);
+
                 string file = Application.StartupPath + @"\Reports\rptyz1.frx";
                 rptReport.Load(file);//加载报表模板文件
                 DataSet ds = new DataSet();
@@ -512,7 +518,7 @@ namespace ReportsFastReport
             }
             catch (Exception ex)
             {
-                AllLog.Instance.D("PrintClearMachine:" + string.Format("{0}-{1}-{2}-{3}", printuser, jsorder, jrOrder, jrJS)+"----"+ex.Message);
+                AllLog.Instance.D("PrintClearMachine:" + string.Format("{0}-{1}-{2}-{3}", printuser, jsorder, jrOrder, jrJS) + "----" + ex.Message);
             }
 
             //初始化创建打印模板
@@ -862,7 +868,7 @@ namespace ReportsFastReport
             string tableName = string.Empty;
             try
             {
-               
+
                 if (jrOrder != null)
                 {
                     DataTable dtOrder = null;
@@ -890,6 +896,60 @@ namespace ReportsFastReport
             }
             return report;
         }
+
+        public static void PrintCopyCard(DataTable dt, float oldIntegral)
+        {
+
+            if (dt.Rows.Count > 0)
+            {
+                double temdouble = 0;
+                //double jfzjDecimal = 0;
+                double czzjDecimal = 0;
+                double jfDecimal = 0;
+                double czDecimal = 0;
+                string cardno = "";
+
+                //if (double.TryParse(dt.Rows[0]["score"].ToString(), out temdouble))
+                //{
+                //    jfzjDecimal = -temdouble;
+                //}
+
+                if (double.TryParse(dt.Rows[0]["stored"].ToString(), out temdouble))
+                {
+                    czzjDecimal = -temdouble;
+                }
+
+                if (double.TryParse(dt.Rows[0]["scorebalance"].ToString(), out temdouble))
+                {
+                    jfDecimal = temdouble;
+                }
+
+                if (double.TryParse(dt.Rows[0]["storedbalance"].ToString(), out temdouble))
+                {
+                    czDecimal = temdouble;
+                }
+                cardno = dt.Rows[0]["cardno"].ToString();
+                string name = string.Empty;
+                string telnum = string.Empty;
+                try
+                {
+                    var info = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", Globals.CurrOrderInfo.memberno, "");
+                    name = info.Name;
+                    telnum = info.Mobile;
+                }
+                catch
+                {
+
+                    throw;
+                }
+
+                PrintService.PayPrint(name, telnum, (czDecimal - czzjDecimal).ToString()
+                    , czzjDecimal.ToString(), czDecimal.ToString(), oldIntegral.ToString(),
+                    (jfDecimal - oldIntegral).ToString(), jfDecimal.ToString());
+
+            }
+        }
+
         #endregion
     }
 }

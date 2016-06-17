@@ -1215,7 +1215,7 @@ namespace Main
                             {
                                 try
                                 {
-                                    ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
+                                    ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, psIntegralOverall);
                                 }
                                 catch (Exception ex)
                                 {
@@ -3258,7 +3258,7 @@ namespace Main
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
+                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, psIntegralOverall);
             }
             finally
             {
@@ -5219,7 +5219,7 @@ namespace Main
                     {
                         try
                         {
-                            ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
+                            ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, psIntegralOverall);
                         }
                         catch { }
                     }

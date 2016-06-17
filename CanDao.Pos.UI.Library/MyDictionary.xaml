@@ -5,8 +5,10 @@
                     xmlns:cvt="clr-namespace:CanDao.Pos.UI.Library.Converter">
     <converter:IndexCountConverter x:Key="IndexCountCvt"/>
     <cvt:PrinterStatusToColorConverter x:Key="PrinterStatus2ColorCvt"/>
-    
+
     <BitmapImage x:Key="AlertImgSource" UriSource="Images/Alert.png"/>
+    <BitmapImage x:Key="LogoImgSource" UriSource="Images/Logo.png"/>
+    <BitmapImage x:Key="ReturnImgSource" UriSource="Images/return.png"/>
 
     <DataTemplate x:Key="RowIndexDataTemplate">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">

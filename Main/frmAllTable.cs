@@ -469,7 +469,8 @@ namespace Main
         private void BtnSysCfg_Click(object sender, EventArgs e)
         {
             timerPrint.Stop();
-            OWindowManage.ShowPopupWindow(new UcSystemSettingView(), Brushes.AntiqueWhite);
+            UcSystemSettingView wnd = new UcSystemSettingView();
+            wnd.ShowDialog();
             timerPrint.Start();
         }
 
