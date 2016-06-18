@@ -2617,6 +2617,9 @@ namespace WebServiceReference
             AllLog.Instance.I(string.Format("【bookorderList】 result：{0}。", jsonResult));
             try
             {
+                if (jsonResult == "0")
+                    return "下单失败，请重试。";
+
                 JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 if (ja["result"] == null)
                     return "服务器接口返回错误。";
@@ -2920,7 +2923,7 @@ namespace WebServiceReference
                 if (jsonResult.Equals("0"))
                     return false;
 
-                var jobj = (JObject) JsonConvert.DeserializeObject(jsonResult);
+                var jobj = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 return jobj["result"].ToString().Equals("0");//返回0表示成功，其他失败。
             }
             catch (Exception ex)
