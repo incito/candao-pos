@@ -4142,7 +4142,6 @@ namespace Main
             bool isok = true;
             if (membercard.Length > 0)
             {
-                isok = false;
                 float psccash = amountrmb + amountyhk + amountgz;//现金 用于会员积分
                 float pscpoint = amountjf; //使用积分付款
                 float pszStore = amounthyk;//使用储值余额付款
@@ -4152,49 +4151,20 @@ namespace Main
                 String tickstrs = getTicklistStr();
                 if (tmppsccash > 0 || pscpoint > 0 || tickstrs.Length > 0 || amounthyk > 0)
                 {
+                    isok = false;
                     try
                     {
                         string pwd = "0";
                         if (edtPwd.Text.Trim().Length > 0)
                             pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
 
-                        JObject json = RestClient.MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
-                        string data = json["Data"].ToString();
-                        if (data == "0")
-                        {
-                            try
-                            {
-                                string err = json["Info"].ToString();
-                                if (err.IndexOf("密码不正确") > 0)
-                                {
-                                    Warning("卡号:" + cardno + err);
-                                    edtPwd.Focus();
-                                    edtPwd.SelectAll();
-                                }
-                                else
-                                {
-                                    Warning(err);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                AllLog.Instance.E(ex);
-                            }
-                        }
-                        else
-                        {
-                            isok = true;
-                        }
+                        isok = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
                     }
                     catch (Exception ex)
                     {
                         AllLog.Instance.E(ex);
                         Warning("会员积分，结算失败!");
                     }
-                }
-                else
-                {
-                    isok = true;
                 }
             }
 
