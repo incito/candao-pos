@@ -5276,7 +5276,16 @@ namespace Main
             var wnd = new DishInfoEditWindow(dishName, price);
             if (wnd.ShowDialog() == true)
             {
-                t_shopping.AddDishWithNum(dr, wnd.DishNum);
+                try
+                {
+                    t_shopping.AddDishWithNum(dr, wnd.DishNum);
+                    ShowTotal();
+                    frmorder.shoppingchange();
+                }
+                catch (Exception ex)
+                {
+                    AllLog.Instance.E(ex.Message);
+                }
             }
         }
     }
