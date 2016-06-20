@@ -7,7 +7,6 @@
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
              xmlns:bindConverter="clr-namespace:CanDaoCD.Pos.ResourceService.BindConverter;assembly=CanDaoCD.Pos.ResourceService"
              xmlns:operates="clr-namespace:CanDaoCD.Pos.VIPManage.Operates"
-             xmlns:newControl="clr-namespace:CanDaoCD.Pos.Common.Controls.NewControl;assembly=CanDaoCD.Pos.Common"
              mc:Ignorable="d" 
              d:DesignHeight="510" d:DesignWidth="758" Background="White">
     <UserControl.Resources>

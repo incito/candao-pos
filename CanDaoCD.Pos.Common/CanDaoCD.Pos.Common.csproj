@@ -70,11 +70,11 @@
     <Compile Include="Controls\CSystem\AsynWindow.xaml.cs">
       <DependentUpon>AsynWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CSystem\CtlDigitalKeyboardAcross.xaml.cs">
+      <DependentUpon>CtlDigitalKeyboardAcross.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CSystem\DigitalInputKeyboard.xaml.cs">
       <DependentUpon>DigitalInputKeyboard.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\CSystem\CtlDigitalKeyboardaa.xaml.cs">
-      <DependentUpon>CtlDigitalKeyboardaa.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CSystem\CtlDigitalKeyboard.xaml.cs">
       <DependentUpon>CtlDigitalKeyboard.xaml</DependentUpon>
@@ -133,11 +133,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\CSystem\DigitalInputKeyboard.xaml">
+    <Page Include="Controls\CSystem\CtlDigitalKeyboardAcross.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\CSystem\CtlDigitalKeyboardaa.xaml">
+    <Page Include="Controls\CSystem\DigitalInputKeyboard.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

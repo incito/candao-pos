@@ -12,14 +12,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CanDaoCD.Pos.Common.Controls.NewControl
+namespace CanDaoCD.Pos.Common.Controls.CSystem
 {
     /// <summary>
     /// DigitalInputKeyboard2.xaml 的交互逻辑
     /// </summary>
-    public partial class CtlDigitalKeyboardaa : UserControl
+    public partial class CtlDigitalKeyboardAcross : UserControl
     {
-        public CtlDigitalKeyboardaa()
+        public CtlDigitalKeyboardAcross()
         {
             InitializeComponent();
         }

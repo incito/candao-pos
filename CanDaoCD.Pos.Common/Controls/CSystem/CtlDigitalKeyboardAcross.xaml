@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="CanDaoCD.Pos.Common.Controls.CSystem.CtlDigitalKeyboardAcross"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDaoCD.Pos.ResourceService;component/DictionaryServer.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <cSystem:DigitalInputKeyboardVm/>
+    </UserControl.DataContext>
+    <StackPanel Orientation="Horizontal" Margin="10">
+        <StackPanel.Resources>
+            <Style TargetType="Button" BasedOn="{StaticResource ColBtn}">
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="0"></Setter>
+            </Style>
+        </StackPanel.Resources>
+        <Button Content="1"  Command="{Binding InputCmd}" CommandParameter="1"/>
+        <Button Content="2"  Command="{Binding InputCmd}" CommandParameter="2" />
+        <Button Content="3"  Command="{Binding InputCmd}" CommandParameter="3" />
+        <Button Content="4"  Command="{Binding InputCmd}" CommandParameter="4"/>
+        <Button Content="5"  Command="{Binding InputCmd}" CommandParameter="5"/>
+        <Button Content="6"  Command="{Binding InputCmd}" CommandParameter="6"/>
+        <Button Content="7"  Command="{Binding InputCmd}" CommandParameter="7"/>
+        <Button Content="8"  Command="{Binding InputCmd}" CommandParameter="8"/>
+        <Button Content="9"  Command="{Binding InputCmd}" CommandParameter="9"/>
+        <Button Content="0"  Command="{Binding InputCmd}" CommandParameter="0"/>
+        <Button Content="."  Command="{Binding InputCmd}" CommandParameter="."/>
+        <Button Content="C"  Command="{Binding InputCmd}" CommandParameter="Back"/>
+    </StackPanel>
+</UserControl>
