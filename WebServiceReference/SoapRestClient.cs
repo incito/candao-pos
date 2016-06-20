@@ -2384,8 +2384,10 @@ namespace WebServiceReference
                     string dishnum = dr["dishnum"].ToString();
                     writer.WritePropertyName("dishnum");
                     writer.WriteValue(double.Parse(dishnum));
-                    writer.WritePropertyName("sperequire"); //忌口
-                    writer.WriteValue("");
+
+                    string sperequire = dr["avoid"].ToString(); //忌口
+                    writer.WritePropertyName("sperequire");
+                    writer.WriteValue(sperequire);
                     writer.WritePropertyName("primarykey"); ////
                     writer.WriteValue(dr["primarykey"].ToString());
                     string dishstatus = "0";

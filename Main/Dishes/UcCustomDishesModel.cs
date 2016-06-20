@@ -10,7 +10,7 @@ namespace KYPOS.Dishes
    {
        private string _dishesName;
        private string _price;
-       private string _amount;
+       private string _dishesCount;
 
        /// <summary>
        /// 菜名
@@ -41,14 +41,14 @@ namespace KYPOS.Dishes
        /// <summary>
        /// 数量
        /// </summary>
-       public string Amount
+       public string DishesCount
        {
            set
            {
-               _amount = value;
-               RaisePropertyChanged(() => Amount);
+               _dishesCount = value;
+               RaisePropertyChanged(() => DishesCount);
            }
-           get { return _amount; }
+           get { return _dishesCount; }
        }
    }
 }

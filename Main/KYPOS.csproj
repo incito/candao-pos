@@ -151,7 +151,6 @@
     </Compile>
     <Compile Include="CommonHelper.cs" />
     <Compile Include="Converter\IndexCountConverter.cs" />
-    <Compile Include="Dishes\DishesManage.cs" />
     <Compile Include="Dishes\UcCustomDishesModel.cs" />
     <Compile Include="Dishes\UcCustomDishesView.xaml.cs">
       <DependentUpon>UcCustomDishesView.xaml</DependentUpon>

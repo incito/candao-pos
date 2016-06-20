@@ -325,10 +325,30 @@ namespace Main
             lblMember.TextChanged += lblMember_TextChanged;
             //btnDelete.Visible = !RestClient.isClearCoupon();
             dgvjs.Width = 330;
+            dgvBill.DataBindingComplete += dgvBill_DataBindingComplete;
             InitMemberFun();
             //pnlMore.Top = 200;
             setFormToPayType1();
         }
+        /// <summary>
+        /// 列表绑定完成事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void dgvBill_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            foreach (DataGridViewRow dgvr in dgvBill.Rows)
+            {
+                var avoid = dgvr.Cells["avoid"].Value.ToString();
+                if (!string.IsNullOrEmpty(avoid))//判断口味有设置的统一进行转换
+                {
+                    var title = dgvr.Cells["title"].Value.ToString();
+                    dgvr.Cells["title"].Value = string.Format("({0}){1}", avoid, title);
+                }
+            }
+        }
+
+     
 
         /// <summary>
         /// 会员卡号变化

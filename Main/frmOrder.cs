@@ -15,6 +15,8 @@ using ReportsFastReport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.InteropServices;
+using KYPOS.Dishes;
+
 namespace Main
 {
     public partial class frmOrder : frmBase
@@ -758,6 +760,8 @@ namespace Main
             dishinfo.Weigh = int.Parse(ja["weigh"].ToString());
             dishinfo.Memberprice = 0;
             dishinfo.Level = "0";
+
+             
             try
             {
                 dishinfo.Level = ja["level"].ToString();
@@ -793,6 +797,10 @@ namespace Main
             dishinfo.Amount = 0;
             dishinfo.Source = ja["source"].ToString();
             int dishStatus = RestClient.getFoodStatus(dishinfo.Dishid, dishinfo.Dishunit);
+
+            //临时菜获取口味名称
+            string tasteName = ja["imagetitle"].ToString();
+
             if (dishStatus == 1)
             {
                 Warning("选择的菜品已沽清！");
@@ -862,6 +870,28 @@ namespace Main
                             potDishInfo.FishDishInfo2.Primarydishtype = 1;
                             t_shopping.add(ref Globals.ShoppTable, potDishInfo.FishDishInfo2, true);
                         }
+                    }
+                }
+          
+                else if (dishinfo.DishType.Equals("0") & tasteName.Contains("临时菜"))//临时菜判断 单品且口味字段包含“临时菜”
+                {
+                   var customDishes=new UcCustomDishesViewModel();
+                   var wind= customDishes.GetWindow();
+                    if (wind.ShowDialog() == true)
+                    {
+                        //dishinfo.Title = string.Format("({0})临时菜", customDishes.Model.DishesName);
+                        dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount);
+                        dishinfo.Avoid = customDishes.Model.DishesName;
+                        dishinfo.Price = decimal.Parse(customDishes.Model.Price);
+                        dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString()) * dishinfo.Price;
+
+                        dishinfo.Ordertype = 0;
+                        dishinfo.Primarydishtype = 0;
+                        t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
+                    }
+                    else
+                    {
+                        return;
                     }
                 }
                 else

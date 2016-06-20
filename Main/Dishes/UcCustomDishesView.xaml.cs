@@ -17,7 +17,7 @@ namespace KYPOS.Dishes
     /// <summary>
     /// UcCustomDishes.xaml 的交互逻辑
     /// </summary>
-    public partial class UcCustomDishesView : UserControl
+    public partial class UcCustomDishesView : Window
     {
         public UcCustomDishesView()
         {
