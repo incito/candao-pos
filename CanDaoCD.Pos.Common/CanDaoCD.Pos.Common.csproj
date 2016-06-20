@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\Bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -67,6 +67,9 @@
     <Compile Include="Classes\Mvvms\WeakFunc.cs" />
     <Compile Include="Classes\Mvvms\WeakAction.cs" />
     <Compile Include="Classes\Mvvms\RelayCommand.cs" />
+    <Compile Include="Controls\CSystem\AsynWindow.xaml.cs">
+      <DependentUpon>AsynWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CSystem\DigitalInputKeyboard.xaml.cs">
       <DependentUpon>DigitalInputKeyboard.xaml</DependentUpon>
     </Compile>
@@ -77,6 +80,9 @@
       <DependentUpon>CtlDigitalKeyboard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CSystem\DigitalInputKeyboardVm.cs" />
+    <Compile Include="Controls\CSystem\LoadingWait.xaml.cs">
+      <DependentUpon>LoadingWait.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CSystem\UserControlBase.cs" />
     <Compile Include="Controls\CSystem\WMessage.xaml.cs">
       <DependentUpon>WMessage.xaml</DependentUpon>
@@ -92,6 +98,7 @@
     </Compile>
     <Compile Include="Models\MListBoxInfo.cs" />
     <Compile Include="Models\MSystemConfig.cs" />
+    <Compile Include="Operates\AsyncLoadServer.cs" />
     <Compile Include="Operates\FileOperate\OXmlOperate.cs" />
     <Compile Include="Operates\OCheckFormat.cs" />
     <Compile Include="Operates\OKeyBoardPre.cs" />
@@ -122,6 +129,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\CSystem\AsynWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\CSystem\DigitalInputKeyboard.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -131,6 +142,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\CSystem\CtlDigitalKeyboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\LoadingWait.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -29,6 +29,10 @@ namespace CanDao.Pos.SystemConfig.Views
            
         }
 
+#region 事件
+
+        public Action EnterAction;
+#endregion
   
         private void CkBullet_OnUnchecked(object sender, RoutedEventArgs e)
         {
@@ -47,6 +51,36 @@ namespace CanDao.Pos.SystemConfig.Views
         private void CkBullet_OnChecked(object sender, RoutedEventArgs e)
         {
             TexNum.Focus();
+        }
+
+        private void TexNum_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (EnterAction != null)
+                {
+                    EnterAction();
+                }
+            }
+            else
+            {
+                var num = 1;
+                if (int.TryParse(TexNum.Text, out num))
+                {
+                    if (num > 0 & num < 257)
+                    {
+                        
+                    }
+                    else
+                    {
+                        TexNum.Text = "1";
+                    }
+                }
+                else
+                {
+                    TexNum.Text = "1";
+                }
+            }
         }
     }
 }

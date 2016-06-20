@@ -73,31 +73,35 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="80"/>
             </Grid.RowDefinitions>
             <TextBlock Text="手机号码：" Grid.Row="0"/>
             <TextBlock Text="验证码：" Grid.Row="1"/>
             <TextBlock Text="姓名：" Grid.Row="2"/>
-            <TextBlock Text="生日：" Grid.Row="3"/>
-            <TextBlock Text="密码：" Grid.Row="4"/>
-            <TextBlock Text="确认密码：" Grid.Row="5"/>
-            <TextBlock Text="实体会员卡：" Grid.Row="6"/>
+            <TextBlock Text="性别：" Grid.Row="3"/>
+            <TextBlock Text="生日：" Grid.Row="4"/>
+            <TextBlock Text="密码：" Grid.Row="5"/>
+            <TextBlock Text="确认密码：" Grid.Row="6"/>
+            <TextBlock Text="实体会员卡：" Grid.Row="7"/>
 
             <TextBox x:Name="TexTelNum" Grid.Column="1" Grid.Row="0" Text="{Binding Model.TelNum}" />
             <TextBox x:Name="TexCode" Grid.Column="1" Grid.Row="1"  Text="{Binding Model.Code}" Margin="5,5,88,5" />
             <operates:ButtonSend x:Name="BtnSendCode" Grid.Column="1" Grid.Row="1" IsStartTime="{Binding IsStartTime}" Style="{DynamicResource ColBtn}" HorizontalAlignment="Right" Width="55" Height="45" Content="发送" Command="{Binding SendCodeCommand}" Margin="0,3,4,2"/>
             <TextBox x:Name="TexUserName" Grid.Column="1" Grid.Row="2" Text="{Binding Model.UserName}" />
-            <DatePicker x:Name="DpBirthday" Grid.Column="1" Grid.Row="3" SelectedDateFormat="Long" VerticalAlignment="Center" SelectedDate="{Binding Model.Birthday}"></DatePicker>
-            <PasswordBox x:Name="TexPsw" Grid.Column="1" Grid.Row="4" PasswordChar="*" bindConverter:PasswordBoxHelper.Attach="True" bindConverter:PasswordBoxHelper.Password="{Binding Model.Psw,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-            <PasswordBox x:Name="TexPswConfirm" Grid.Column="1" Grid.Row="5" PasswordChar="*" bindConverter:PasswordBoxHelper.Attach="True" bindConverter:PasswordBoxHelper.Password="{Binding Model.PswConfirm,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox x:Name="TexCardNum" Grid.Column="1" Grid.Row="6"  IsEnabled="False" Visibility="{Binding Model.IsShowCardNum, Converter={StaticResource BoolToVisibilityConverter},ConverterParameter={x:Static Visibility.Collapsed}}" Text="{Binding Model.CardNum}"/>
-            <Grid Grid.Column="1" Grid.Row="6" Visibility="{Binding Model.IsShowCardBut, Converter={StaticResource BoolToVisibilityConverter},ConverterParameter={x:Static Visibility.Visible}}">
+            <RadioButton Content="男" HorizontalAlignment="Left" GroupName="Xb" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding Model.SexNan}"></RadioButton>
+            <RadioButton Content="女" HorizontalAlignment="Center" GroupName="Xb" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding Model.SexNv}"></RadioButton>
+            <DatePicker x:Name="DpBirthday" Grid.Column="1" Grid.Row="4" SelectedDateFormat="Long" VerticalAlignment="Center" SelectedDate="{Binding Model.Birthday}"></DatePicker>
+            <PasswordBox x:Name="TexPsw" Grid.Column="1" Grid.Row="5" PasswordChar="*" bindConverter:PasswordBoxHelper.Attach="True" bindConverter:PasswordBoxHelper.Password="{Binding Model.Psw,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            <PasswordBox x:Name="TexPswConfirm" Grid.Column="1" Grid.Row="6" PasswordChar="*" bindConverter:PasswordBoxHelper.Attach="True" bindConverter:PasswordBoxHelper.Password="{Binding Model.PswConfirm,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox x:Name="TexCardNum" Grid.Column="1" Grid.Row="7"  IsEnabled="False" Visibility="{Binding Model.IsShowCardNum, Converter={StaticResource BoolToVisibilityConverter},ConverterParameter={x:Static Visibility.Collapsed}}" Text="{Binding Model.CardNum}"/>
+            <Grid Grid.Column="1" Grid.Row="7" Visibility="{Binding Model.IsShowCardBut, Converter={StaticResource BoolToVisibilityConverter},ConverterParameter={x:Static Visibility.Visible}}">
                 <Button Style="{DynamicResource ColBtn}" Margin="2" HorizontalAlignment="Left" Width="133" Height="45" Content="绑定实体卡" Command="{Binding BindingCardCommand}"/>
                 <TextBlock Text="可绑定IC卡、ID卡、磁条卡 "/>
             </Grid>
           
-            <Button x:Name="BtnReg" Style="{DynamicResource ColBtn}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="133" Height="50" Grid.Column="1" Grid.Row="7" Content="注册" Command="{Binding RegCommand}"/>
-            <Button x:Name="BtnCancel" Style="{DynamicResource ColBtn}" Margin="0,0,20,0" HorizontalAlignment="Right" Width="133" Height="50" Grid.Column="1" Grid.Row="7" Content="取消" Command="{Binding CloseCommand}"/>
+            <Button x:Name="BtnReg" Style="{DynamicResource ColBtn}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="133" Height="50" Grid.Column="1" Grid.Row="8" Content="注册" Command="{Binding RegCommand}"/>
+            <Button x:Name="BtnCancel" Style="{DynamicResource ColBtn}" Margin="0,0,20,0" HorizontalAlignment="Right" Width="133" Height="50" Grid.Column="1" Grid.Row="8" Content="取消" Command="{Binding CloseCommand}"/>
           
         </Grid>
 

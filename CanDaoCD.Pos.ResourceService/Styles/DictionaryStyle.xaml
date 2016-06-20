@@ -91,8 +91,8 @@
     </Style>
 
     <Style TargetType="{x:Type local:BulletCheckBox}">
-        <Setter Property="Background" Value="#FF4A9E4A"></Setter>
-        <Setter Property="Foreground" Value="#DDE8E1"></Setter>
+        <Setter Property="Background" Value="#999999"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
         <Setter Property="CheckedForeground" Value="White"></Setter>
         <Setter Property="CheckedBackground" Value="#FF0CC50C"></Setter>
         <Setter Property="FontSize" Value="20"></Setter>
@@ -106,11 +106,11 @@
                 <ControlTemplate TargetType="{x:Type local:BulletCheckBox}">
                     <Viewbox Stretch="Uniform"  VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Border x:Name="border" Width="150" Height="50" Background="{TemplateBinding Background}" SnapsToDevicePixels="True"
-                                Margin="{TemplateBinding Margin}" CornerRadius="14">
+                                Margin="{TemplateBinding Margin}" CornerRadius="14" BorderThickness="1" BorderBrush="Black">
                             <StackPanel Orientation="Horizontal">
                                 <!--状态球-->
                                 <Border x:Name="state" Width="44" Height="44" Margin="3,2,1,2" CornerRadius="12" SnapsToDevicePixels="True"
-                                    Background="{TemplateBinding Foreground}">
+                                    Background="{TemplateBinding Foreground}" BorderThickness="1" BorderBrush="Black">
                                     <Border.RenderTransform>
                                         <TranslateTransform x:Name="transState" X="0"></TranslateTransform>
                                     </Border.RenderTransform>
@@ -155,5 +155,51 @@
         </Setter>
     </Style>
 
-
+    <Style TargetType="{x:Type local:BusyBox}">
+        <Setter Property="Foreground" Value="{StaticResource TextForeground}"></Setter>
+        <Setter Property="Width" Value="32"></Setter>
+        <Setter Property="Height" Value="32"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:BusyBox}">
+                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" >
+                        <Viewbox Stretch="Uniform"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="&#xe65f;" x:Name="FIcon" FontSize="36" Style="{StaticResource FIcon}"  RenderTransformOrigin="0.5,0.5"
+                       Foreground="{TemplateBinding Foreground}">
+                                <TextBlock.RenderTransform>
+                                    <RotateTransform x:Name="TransFIcon" Angle="0"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </Viewbox>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!--激活状态-->
+                        <Trigger Property="IsActive" Value="true">
+                            <Setter Property="Visibility" Value="Visible" TargetName="FIcon"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard >
+                                    <Storyboard >
+                                        <DoubleAnimation RepeatBehavior="Forever" Storyboard.TargetName="TransFIcon" 
+                                     Storyboard.TargetProperty="Angle" To="360" Duration="0:0:2.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard >
+                                    <Storyboard >
+                                        <DoubleAnimation RepeatBehavior="Forever" Storyboard.TargetName="TransFIcon" 
+                                     Storyboard.TargetProperty="Angle" To="0" Duration="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <!--非激活状态-->
+                        <Trigger Property="IsActive" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed" TargetName="FIcon"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

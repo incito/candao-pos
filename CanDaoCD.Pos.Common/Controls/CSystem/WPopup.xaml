@@ -10,16 +10,19 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="70"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid Background="#FFC080">
-            <Image Source="{DynamicResource Logo}" HorizontalAlignment="Left"></Image>
-            <controls:CtlImageButton x:Name="BtnClose" Style="{DynamicResource ImgButton}" HorizontalAlignment="Right" Margin="0,0,20,0" Click="BtnClose_Click" DefaultImage="{DynamicResource ReturnFm}"></controls:CtlImageButton>
-        </Grid>
+    <Border BorderThickness="1" BorderBrush="#0072c6">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Background="#FFC080">
+                <Image Source="{DynamicResource Logo}" HorizontalAlignment="Left"></Image>
+                <controls:CtlImageButton x:Name="BtnClose" Style="{DynamicResource ImgButton}" HorizontalAlignment="Right" Margin="0,0,20,0" Click="BtnClose_Click" DefaultImage="{DynamicResource ReturnFm}"></controls:CtlImageButton>
+            </Grid>
 
-        <ContentControl Background="#F0F0F0" Grid.Row="1" x:Name="CtlShowFm"></ContentControl>
-    </Grid>
+            <ContentControl Background="#F0F0F0" Grid.Row="1" x:Name="CtlShowFm"></ContentControl>
+        </Grid>
+    </Border>
+   
 </Window>

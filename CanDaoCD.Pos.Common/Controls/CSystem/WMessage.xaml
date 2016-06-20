@@ -10,6 +10,7 @@
             </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
     </Window.Resources>
+    <Border BorderBrush="#0072c6" BorderThickness="1">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"></RowDefinition>
@@ -26,4 +27,5 @@
         </StackPanel>
      
     </Grid>
+    </Border>
 </Window>

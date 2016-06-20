@@ -165,6 +165,15 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                         memberinfo.Password = Model.Psw.Trim();
                         memberinfo.Name = Model.UserName.ToString();
 
+                        if (Model.SexNan)
+                        {
+                            memberinfo.Gender = "0";
+                        }
+                        else
+                        {
+                            memberinfo.Gender = "1";
+                        }
+
                         memberinfo.Birthday = Model.Birthday.ToString("yyyy-MM-dd");
                         memberinfo.Tenant_id = 0;
                         memberinfo.Regtype = 0;
@@ -177,12 +186,15 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                         }
                         else
                         {
-                            //复写卡打印
-                            PrintService.RegPrint(Model.UserName, Model.TelNum);
+                            AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
+                            asyncLoadServer.Init();
+                            asyncLoadServer.ActionWorkerState = new Action<int>(WorkOk);
+                            asyncLoadServer.Start(Print);
+                            asyncLoadServer.SetMessage("正在打印复写卡，请稍等... ...");
 
-                            OWindowManage.ShowMessageWindow(string.Format("会员注册成功!"), false);
-                            Model = new UcVipRegModel();
-                            CloseHandel();
+                            //OWindowManage.ShowMessageWindow(string.Format("会员注册成功!"), false);
+                    
+                            //CloseHandel();
                         }
                     }
                 }
@@ -193,6 +205,22 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             }
 
         }
+        #region 异步
+       
+        private void Print()
+        {
+            //复写卡打印
+            PrintService.RegPrint(Model.UserName, Model.TelNum);
+        }
+
+        private void WorkOk(int res)
+        {
+            OWindowManage.ShowMessageWindow(string.Format("会员注册成功!"), false);
+
+            CloseHandel();
+        }
+
+        #endregion
 
         /// <summary>
         /// 取消

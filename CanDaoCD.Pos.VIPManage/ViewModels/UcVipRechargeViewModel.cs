@@ -16,6 +16,7 @@ using Common;
 using Models;
 using WebServiceReference;
 using Models.CandaoMember;
+using System.ComponentModel;
 
 namespace CanDaoCD.Pos.VIPManage.ViewModels
 {
@@ -37,6 +38,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         private List<MListBoxInfo> ListData;
         private ObservableCollection<MListBoxInfo> _listBoxInfos;
         private MListBoxInfo _selectInfo;
+
         #endregion
 
         #region 属性
@@ -53,11 +55,12 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             get { return _listBoxInfos; }
         }
 
-        public UcVipSelectModel SelectModel=null;
-      
+        public UcVipSelectModel SelectModel = null;
+
         #endregion
 
         #region 事件
+
         /// <summary>
         /// 输入框回车事件
         /// </summary>
@@ -70,6 +73,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                 RaisePropertyChanged(() => TextEnterAction);
             }
         }
+
         /// <summary>
         /// 优惠方式选择变化事件
         /// </summary>
@@ -107,12 +111,12 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
 
         #region 构造函数
 
-        public UcVipRechargeViewModel(UcVipSelectModel model=null)
+        public UcVipRechargeViewModel(UcVipSelectModel model = null)
         {
             Model = new UcVipRechargeModel();
-            ListBoxInfos=new ObservableCollection<MListBoxInfo>();
+            ListBoxInfos = new ObservableCollection<MListBoxInfo>();
             //ItemChangeAction = new Action<MListBoxInfo>(ItemChangeHandel);
-           
+
             if (model != null)
             {
                 SelectModel = model;
@@ -121,15 +125,15 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             }
             else
             {
-                SelectModel=new UcVipSelectModel();
+                SelectModel = new UcVipSelectModel();
             }
 
             TextEnterAction = new Action<TextBox>(TextEnterHandel);
-            SureCommand=new RelayCommand(SureHandel);
+            SureCommand = new RelayCommand(SureHandel);
             CloseCommand = new RelayCommand(CloseHandel);
 
             TrunUpCommand = new RelayCommand(TrunUpHandel);
-            TrunDownCommand=new RelayCommand(TrunDownHandel);
+            TrunDownCommand = new RelayCommand(TrunDownHandel);
 
             Init();
         }
@@ -157,6 +161,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 充值金额变化
         /// </summary>
@@ -178,8 +183,8 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                 {
                     Model.RechargeValue = textBox.Text;
                     ItemChangeHandel(_selectInfo);
-                        break;
-                    }
+                    break;
+                }
             }
         }
 
@@ -224,13 +229,13 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             }
             else
             {
-            
+
                 //设置选择金额
                 var data = listBoxInfo.ListData as TCandaoCoupon;
                 float giveValue = 0;
-                  float present = 0;
+                float present = 0;
 
-                if (string.IsNullOrEmpty(data.DealValue))//充值为空代表不论充值多少都送赠送金额
+                if (string.IsNullOrEmpty(data.DealValue)) //充值为空代表不论充值多少都送赠送金额
                 {
                     if (float.TryParse(data.PresentValu, out present))
                     {
@@ -249,7 +254,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                         if (data.CouponType.Equals("1"))
                         {
 
-                            giveValue = ((int)(recharge / deal)) * present;
+                            giveValue = ((int) (recharge/deal))*present;
                         }
                         else
                         {
@@ -261,14 +266,14 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
 
                     }
                 }
-               
+
                 Model.GiveValue = giveValue.ToString();
             }
         }
 
-       /// <summary>
-       ///充值
-       /// </summary>
+        /// <summary>
+        ///充值
+        /// </summary>
         private void SureHandel()
         {
             if (IsCheckInput())
@@ -277,8 +282,10 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     OWindowManage.ShowMessageWindow(
                         string.Format("确定为用户{0}充值{1}，赠送{2}吗？", Model.TelNum, Model.RechargeValue, Model.GiveValue), true))
                 {
+
                     try
                     {
+                        _userControl.Start();
                         if (Model.IsEnabledNum)
                         {
                             var info = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", Model.TelNum, "");
@@ -303,7 +310,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                             else
                             {
                                 OWindowManage.ShowMessageWindow(
-                                 string.Format("会员查询错误：{0}", info.Retinfo), true);
+                                    string.Format("会员查询错误：{0}", info.Retinfo), true);
 
                                 return;
                             }
@@ -320,33 +327,19 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                                 id = _selectInfo.Id;
                             }
 
-                            TCandaoRet_StoreCardDeposit ret = CanDaoMemberClient.StoreCardDepositAddCard(Globals.branch_id, "", Model.TelNum, Globals.branch_id, amount, 0, typeRecharge, id, Model.GiveValue);
+                            TCandaoRet_StoreCardDeposit ret =
+                                CanDaoMemberClient.StoreCardDepositAddCard(Globals.branch_id, "", Model.TelNum,
+                                    Globals.branch_id, amount, 0, typeRecharge, id, Model.GiveValue);
 
                             if (ret.Ret)
                             {
-                                Model.CardBalance = string.Format("卡余额:{0}", ret.StoreCardbalance);
+                                _ret = ret;
 
-                                PrintVipStore(ret.Tracecode, ret.StoreCardbalance.ToString());//纸质打印
-
-                                decimal recharge = 0;
-                              
-                                decimal temp = 0;
-                                if (decimal.TryParse(Model.RechargeValue, out temp))
-                                {
-                                    recharge = temp;
-                                }
-
-                                if (decimal.TryParse(Model.GiveValue, out temp))
-                                {
-                                    recharge += temp;
-                                }
-                                decimal oldRecharge = ret.StoreCardbalance - recharge;
-                                //复写卡打印
-                                PrintService.RechargePrint(SelectModel.UserName, Model.TelNum, oldRecharge.ToString(), recharge.ToString(), ret.StoreCardbalance.ToString());
-
-                                OWindowManage.ShowMessageWindow(
-                                    string.Format("储值成功,交易流水号:{0}", ret.Tracecode), false);
-                                CloseHandel();
+                                AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
+                                asyncLoadServer.Init();
+                                asyncLoadServer.ActionWorkerState = new Action<int>(WorkOk);
+                                asyncLoadServer.Start(Print);
+                                asyncLoadServer.SetMessage("正在打印复写卡，请稍等... ...");
 
                             }
                             else
@@ -355,18 +348,60 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                                     string.Format("注册失败：{0}", ret.Retinfo), false);
 
                             }
-                          
+
                         }
                     }
                     catch (Exception ex)
                     {
                         OWindowManage.ShowMessageWindow(
-                                       string.Format("注册失败：{0}", ex.Message), false);
+                            string.Format("注册失败：{0}", ex.Message), false);
                     }
-                   
+                    finally
+                    {
+                        _userControl.stop();
+                    }
                 }
             }
         }
+
+        #region 异步
+        private TCandaoRet_StoreCardDeposit _ret;
+
+        private void Print()
+        {
+            Model.CardBalance = string.Format("卡余额:{0}", _ret.StoreCardbalance);
+
+            PrintVipStore(_ret.Tracecode, _ret.StoreCardbalance.ToString()); //纸质打印
+
+            decimal recharge = 0;
+
+            decimal temp = 0;
+            if (decimal.TryParse(Model.RechargeValue, out temp))
+            {
+                recharge = temp;
+            }
+
+            if (decimal.TryParse(Model.GiveValue, out temp))
+            {
+                recharge += temp;
+            }
+            decimal oldRecharge = _ret.StoreCardbalance - recharge;
+
+
+            //复写卡打印
+            PrintService.RechargePrint(SelectModel.UserName, Model.TelNum, oldRecharge.ToString(),
+                recharge.ToString(), _ret.StoreCardbalance.ToString(),SelectModel.Integral);
+
+        }
+
+        private void WorkOk(int res)
+        {
+            OWindowManage.ShowMessageWindow(
+                string.Format("储值成功,交易流水号:{0}", _ret.Tracecode), false);
+            CloseHandel();
+        }
+
+        #endregion
 
         /// <summary>
         /// 取消
@@ -408,6 +443,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             memberstoreinfo.Amount = Model.RechargeValue;
             ReportsFastReport.ReportPrint.PrintMemberStore(memberstoreinfo);
         }
+
         /// <summary>
         /// 检查输入项
         /// </summary>
@@ -432,6 +468,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             }
             return true;
         }
+
         /// <summary>
         /// 向上翻页
         /// </summary>
@@ -440,6 +477,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             _page--;
             ContentShow();
         }
+
         /// <summary>
         /// 向下翻页
         /// </summary>
@@ -448,6 +486,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             _page++;
             ContentShow();
         }
+
         /// <summary>
         /// 设置翻页控件属性
         /// </summary>
@@ -460,7 +499,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             int colNum = (int) height/70;
             colNum = colNum > 0 ? colNum : 1;
             _page = 1;
-            _pageSize =rowNum-1;
+            _pageSize = rowNum - 1;
             _pageSize = _pageSize > 0 ? _pageSize : 1;
             ContentShow();
 
@@ -473,14 +512,15 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         {
             try
             {
-                ListBoxInfos = new ObservableCollection<MListBoxInfo>(ListData.Take(_pageSize * _page).Skip(_pageSize * (_page - 1)));
-                if (ListData.Count % _pageSize == 0)
+                ListBoxInfos =
+                    new ObservableCollection<MListBoxInfo>(ListData.Take(_pageSize*_page).Skip(_pageSize*(_page - 1)));
+                if (ListData.Count%_pageSize == 0)
                 {
-                    Total = ListData.Count / _pageSize;
+                    Total = ListData.Count/_pageSize;
                 }
                 else
                 {
-                    Total = ListData.Count / _pageSize + 1;
+                    Total = ListData.Count/_pageSize + 1;
                 }
                 Model.IsUp = _page > 1 ? true : false;
                 Model.IsDown = _page < Total ? true : false;
@@ -491,6 +531,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             }
 
         }
+
         #endregion
     }
 }

@@ -15,6 +15,23 @@ namespace CanDao.Pos.SystemConfig.Models
        [NonSerialized]
        private Action _saveAction;
 
+
+       public string _printState;
+
+       public string PrintState
+       {
+           set
+           {
+               _printState = value;
+
+               RaisePropertyChanged(() => PrintState);
+           }
+           get
+           {
+               return _printState;
+
+           }
+       }
        /// <summary>
        /// 串口号
        /// </summary>

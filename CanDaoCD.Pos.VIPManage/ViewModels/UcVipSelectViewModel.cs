@@ -200,11 +200,18 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                 {
                     OWindowManage.ShowMessageWindow(
                      string.Format("会员查询错误：{0}", info.Retinfo), true);
+
+                    Model.UserName = "";
+                    Model.Sex = "";
+                    Model.TelNum = "";
+                    Model.Birthday = "";
+                    Model.Integral = "";
+                    Model.Balance ="";
+                    Model.CardNum = "";
+
                     Model.IsOper = false;//禁用操作区域
                     Model.IsShowCardBut = false;
                 }
-
-               
             }
             catch (Exception ex)
             {

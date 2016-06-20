@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using CanDaoCD.Pos.Common.Operates;
 using CanDaoCD.Pos.Common.PublicValues;
@@ -19,6 +20,11 @@ namespace CanDaoCD.Pos.PrintManage
            {
                _printManage.Init(PvSystemConfig.VSystemConfig.SerialNum);
            }
+       }
+
+       public static bool CheckPrintSate()
+       {
+           return _printManage.TestConnect(PvSystemConfig.VSystemConfig.SerialNum);
        }
        /// <summary>
        /// 卡状态检查
@@ -80,9 +86,11 @@ namespace CanDaoCD.Pos.PrintManage
        /// </summary>
        public static void PayPrint(string vipName, string vipNum, string lastRecharge, string recharge, string nowRecharge, string oldIntegral, string integral, string nowIntegral)
        {
+
+
            if (PvSystemConfig.VSystemConfig.IsEnabledPrint)
            {
-               var model = new List<string>();
+               model = new List<string>();
                model.Add(vipNum);
                model.Add(vipName);
 
@@ -95,17 +103,29 @@ namespace CanDaoCD.Pos.PrintManage
                model.Add(string.Format("{0}", nowIntegral));
                model.Add(string.Format("{0}元", nowRecharge));
 
-               if (!_printManage.Print(CreadModel(model)))
-               {
-                   //OWindowManage.ShowMessageWindow("打印失败:" + _printManage.ErrorString, false);
-               }
+
+               AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
+               asyncLoadServer.Init();
+               asyncLoadServer.Start(PatPrintR);
+               asyncLoadServer.SetMessage("正在打印复写卡，请稍等... ...");
+            
            }
        }
+
+       public static List<string> model;
+       public static void PatPrintR()
+       {
+           if (!_printManage.Print(CreadModel(model)))
+           {
+               //OWindowManage.ShowMessageWindow("打印失败:" + _printManage.ErrorString, false);
+           }
+       }
+
 
        /// <summary>
        /// 充值打印
        /// </summary>
-       public static void RechargePrint(string vipName, string vipNum, string lastRecharge, string recharge, string nowRecharge)
+       public static void RechargePrint(string vipName, string vipNum, string lastRecharge, string recharge, string nowRecharge, string oldIntegral)
        {
            if (PvSystemConfig.VSystemConfig.IsEnabledPrint)
            {
@@ -113,13 +133,13 @@ namespace CanDaoCD.Pos.PrintManage
                model.Add(vipNum);
                model.Add(vipName);
 
-               model.Add("0.00");
+               model.Add(string.Format("{0}", oldIntegral));
                model.Add(string.Format("{0}元", lastRecharge));
 
-               model.Add("0.00");
+               model.Add("0");
                model.Add(string.Format("{0}元", recharge));
 
-               model.Add("0.00");
+               model.Add(string.Format("{0}", oldIntegral));
                model.Add(string.Format("{0}元", nowRecharge));
 
                if (!_printManage.Print(CreadModel(model)))

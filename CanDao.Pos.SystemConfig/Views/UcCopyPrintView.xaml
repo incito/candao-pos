@@ -27,14 +27,16 @@
         <Grid Grid.Row="1" Visibility="{Binding Path=IsChecked,ElementName=CkBullet, Converter={StaticResource BoolToVisibilityConverter},ConverterParameter={x:Static Visibility.Collapsed}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20*"></RowDefinition>
-                <RowDefinition Height="80*"></RowDefinition>
+                <RowDefinition Height="10*"></RowDefinition>
+                <RowDefinition Height="70*"></RowDefinition>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="请设置串口号：" FontSize="24" Margin="10" VerticalAlignment="Center"></TextBlock>
-                <TextBox x:Name="TexNum" Text="{Binding Model.SerialNum}" FontSize="14" VerticalAlignment="Center" Width="300" Height="28"></TextBox>
+                <TextBox x:Name="TexNum" Text="{Binding Model.SerialNum}" FontSize="14" VerticalAlignment="Center" Width="300" Height="28" PreviewKeyDown="TexNum_OnPreviewKeyDown"></TextBox>
             </StackPanel>
             <!--<newControl:CtlDigitalKeyboard Grid.Row="1" MaxNum="256" MinNum="1"  Width="300" Height="310"/>-->
-            <cSystem:CtlDigitalKeyboard Grid.Row="1"  Width="300" Height="310"/>
+            <TextBlock Text="{Binding Model.PrintState}" FontSize="16" Margin="10" VerticalAlignment="Center" Grid.Row="1" Foreground="Green" HorizontalAlignment="Center"></TextBlock>
+            <cSystem:CtlDigitalKeyboard Grid.Row="2"  Width="300" Height="310"/>
         </Grid>
     </Grid>
 </cSystem:UserControlBase>

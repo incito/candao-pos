@@ -76,10 +76,11 @@
             </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-          <Grid.RowDefinitions>
+        <Grid.RowDefinitions>
               <RowDefinition Height="30*"></RowDefinition>
             <RowDefinition Height="70*"></RowDefinition>
         </Grid.RowDefinitions>
+        <cSystem:LoadingWait x:Name="_loading"  Visibility="Collapsed"/>
         <GroupBox x:Name="GbOperate" BorderBrush="#F0F0F0" Foreground="Black" FontSize="20" Header="优惠方式">
             <Grid>
                 <Grid.ColumnDefinitions>

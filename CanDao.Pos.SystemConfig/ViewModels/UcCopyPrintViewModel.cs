@@ -12,6 +12,7 @@ using CanDaoCD.Pos.Common.Controls.CSystem;
 using CanDaoCD.Pos.Common.Models;
 using CanDaoCD.Pos.Common.PublicValues;
 using CanDaoCD.Pos.Common.Operates;
+using CanDaoCD.Pos.PrintManage;
 
 namespace CanDao.Pos.SystemConfig.ViewModels
 {
@@ -22,7 +23,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
     {
         #region 字段
 
-        private UserControlBase _userControl;
+        private UcCopyPrintView _userControl;
         #endregion
 
         #region 属性
@@ -51,7 +52,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         {
             _userControl = new UcCopyPrintView();
             _userControl.DataContext = this;
-          
+            _userControl.EnterAction = new Action(SaveConfig);
             return _userControl;
         }
         #endregion
@@ -64,13 +65,10 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         {
             if (PvSystemConfig.VSystemConfig.IsEnabledPrint != Model.IsEnabledPrint)
             {
-                if (OWindowManage.ShowMessageWindow("配置已修改，是否进行保存？", true))
-                {
+               
                     PvSystemConfig.VSystemConfig.IsEnabledPrint = Model.IsEnabledPrint;
                     PvSystemConfig.VSystemConfig.SerialNum = Model.SerialNum;
                     OXmlOperate.SerializerFile<MSystemConfig>(PvSystemConfig.VSystemConfig, PvSystemConfig.VSystemConfigFile);
-                }
-               
             }
         }
         /// <summary>
@@ -113,6 +111,15 @@ namespace CanDao.Pos.SystemConfig.ViewModels
                 PvSystemConfig.VSystemConfig.SerialNum = Model.SerialNum;
                 OXmlOperate.SerializerFile<MSystemConfig>(PvSystemConfig.VSystemConfig, PvSystemConfig.VSystemConfigFile);
                 OWindowManage.ShowMessageWindow("配置成功！", false);
+
+                if (PrintService.CheckPrintSate())
+                {
+                    Model.PrintState = "热敏打印机连接成功";
+                }
+                else
+                {
+                    Model.PrintState = "热敏打印机连接失败";
+                }
             }
             catch (Exception ex)
             {

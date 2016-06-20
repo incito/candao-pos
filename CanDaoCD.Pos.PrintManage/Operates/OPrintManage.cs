@@ -56,6 +56,38 @@ namespace CanDaoCD.Pos.PrintManage.Operates
 
         #region 公共方法
         /// <summary>
+        /// 测试连接
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        public bool TestConnect(int port)
+        {
+            int res = 0;
+            _bandRate = 9600;
+            _port = port;
+            try
+            {
+                res = PrintKs.OpenCom(_port, 8, 1, 0, _bandRate);
+                if (res == 0)
+                {
+                    Release();
+                    return true;
+                }
+                else
+                {
+                    ErrorString = OInfoManage.GetErrorInfo(res);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorString = "打印组件错误，请联系管理员："+ex.Message;
+                return false;
+            }
+          
+        }
+
+        /// <summary>
         /// 初始化
         /// </summary>
         /// <param name="port"></param>

@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\Bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -85,6 +85,11 @@
     <ProjectReference Include="..\CanDaoCD.Pos.Common\CanDaoCD.Pos.Common.csproj">
       <Project>{7ddd5dce-b2cd-429d-80ae-6ff2f66d15d8}</Project>
       <Name>CanDaoCD.Pos.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDaoCD.Pos.PrintManage\CanDaoCD.Pos.PrintManage.csproj">
+      <Project>{2aa08d85-71ba-4988-9116-be1bf3e736f1}</Project>
+      <Name>CanDaoCD.Pos.PrintManage</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\CanDaoCD.Pos.ResourceService\CanDaoCD.Pos.ResourceService.csproj">
       <Project>{8b73af41-0061-4213-9ec0-318986d1c408}</Project>

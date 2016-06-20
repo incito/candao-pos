@@ -282,7 +282,7 @@ namespace ReportsFastReport
         /// </summary>
         /// <param name="billno"></param>
         /// <param name="printuser"></param>
-        public static void PrintMemberPay1(String billno, String printuser)
+        public static void PrintMemberPay1(String billno, String printuser, float oldIntegral)
         {
             //
             JArray jrOrder = null;
@@ -303,7 +303,7 @@ namespace ReportsFastReport
                 }
 
                 //打印复写卡
-                PrintCopyCard(dtOrder);
+                PrintCopyCard(dtOrder, oldIntegral);
 
                 string file = Application.StartupPath + @"\Reports\rptyz1.frx";
                 rptReport.Load(file);//加载报表模板文件
@@ -647,22 +647,22 @@ namespace ReportsFastReport
             catch { }
         }
 
-        public static void PrintCopyCard(DataTable dt)
+        public static void PrintCopyCard(DataTable dt, float oldIntegral)
         {
 
             if (dt.Rows.Count > 0)
             {
                 double temdouble = 0;
-                double jfzjDecimal = 0;
+                //double jfzjDecimal = 0;
                 double czzjDecimal = 0;
                 double jfDecimal = 0;
                 double czDecimal = 0;
                 string cardno = "";
 
-                if (double.TryParse(dt.Rows[0]["score"].ToString(), out temdouble))
-                {
-                    jfzjDecimal = -temdouble;
-                }
+                //if (double.TryParse(dt.Rows[0]["score"].ToString(), out temdouble))
+                //{
+                //    jfzjDecimal = -temdouble;
+                //}
 
                 if (double.TryParse(dt.Rows[0]["stored"].ToString(), out temdouble))
                 {
@@ -694,8 +694,8 @@ namespace ReportsFastReport
                 }
 
                 PrintService.PayPrint(name, telnum, (czDecimal - czzjDecimal).ToString()
-                    , czzjDecimal.ToString(), czDecimal.ToString(), (jfDecimal - jfzjDecimal).ToString(),
-                    jfzjDecimal.ToString(), jfDecimal.ToString());
+                    , czzjDecimal.ToString(), czDecimal.ToString(), oldIntegral.ToString(),
+                    (jfDecimal - oldIntegral).ToString(), jfDecimal.ToString());
 
             }
         }

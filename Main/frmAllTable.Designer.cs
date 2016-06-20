@@ -33,15 +33,12 @@ namespace Main
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.BtnVipReg = new System.Windows.Forms.Button();
+            this.BtnVipRecharge = new System.Windows.Forms.Button();
+            this.BtnVipSelect = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.BtnSystem = new System.Windows.Forms.Button();
-            this.btnShapping = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.pnlState5 = new System.Windows.Forms.Panel();
             this.lblState5 = new System.Windows.Forms.Label();
-            this.btnend = new System.Windows.Forms.Button();
             this.pnlState3 = new System.Windows.Forms.Panel();
             this.lblState3 = new System.Windows.Forms.Label();
             this.pnlState4 = new System.Windows.Forms.Panel();
@@ -50,8 +47,6 @@ namespace Main
             this.lblState1 = new System.Windows.Forms.Label();
             this.pnlState0 = new System.Windows.Forms.Panel();
             this.lblState0 = new System.Windows.Forms.Label();
-            this.btnRefresh = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.ucTable1 = new Library.UserControls.ucTable();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -61,12 +56,15 @@ namespace Main
             this.btnRBill = new System.Windows.Forms.Button();
             this.lblVer = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.BtnVipSelect = new System.Windows.Forms.Button();
-            this.BtnVipRecharge = new System.Windows.Forms.Button();
-            this.BtnVipReg = new System.Windows.Forms.Button();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.BtnSystem = new System.Windows.Forms.Button();
+            this.btnShapping = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.btnend = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
             this.pnlState5.SuspendLayout();
             this.pnlState3.SuspendLayout();
@@ -75,6 +73,8 @@ namespace Main
             this.pnlState0.SuspendLayout();
             this.pnlMain.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
@@ -102,28 +102,35 @@ namespace Main
             this.panel1.Size = new System.Drawing.Size(1008, 78);
             this.panel1.TabIndex = 235;
             // 
-            // pictureBox3
+            // BtnVipReg
             // 
-            this.pictureBox3.Image = global::KYPOS.Properties.Resources._return;
-            this.pictureBox3.Location = new System.Drawing.Point(926, 0);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(77, 77);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox3.TabIndex = 29;
-            this.pictureBox3.TabStop = false;
-            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
+            this.BtnVipReg.Location = new System.Drawing.Point(593, 5);
+            this.BtnVipReg.Name = "BtnVipReg";
+            this.BtnVipReg.Size = new System.Drawing.Size(123, 69);
+            this.BtnVipReg.TabIndex = 32;
+            this.BtnVipReg.Text = "会员注册";
+            this.BtnVipReg.UseVisualStyleBackColor = true;
+            this.BtnVipReg.Click += new System.EventHandler(this.BtnVipReg_Click);
             // 
-            // pictureBox1
+            // BtnVipRecharge
             // 
-            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pictureBox1.ErrorImage = global::KYPOS.Properties.Resources.logintop;
-            this.pictureBox1.Image = global::KYPOS.Properties.Resources._0111__31_cd21;
-            this.pictureBox1.InitialImage = global::KYPOS.Properties.Resources.logintop;
-            this.pictureBox1.Location = new System.Drawing.Point(2, 1);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(330, 76);
-            this.pictureBox1.TabIndex = 26;
-            this.pictureBox1.TabStop = false;
+            this.BtnVipRecharge.Location = new System.Drawing.Point(464, 5);
+            this.BtnVipRecharge.Name = "BtnVipRecharge";
+            this.BtnVipRecharge.Size = new System.Drawing.Size(123, 69);
+            this.BtnVipRecharge.TabIndex = 31;
+            this.BtnVipRecharge.Text = "会员充值";
+            this.BtnVipRecharge.UseVisualStyleBackColor = true;
+            this.BtnVipRecharge.Click += new System.EventHandler(this.BtnVipRecharge_Click);
+            // 
+            // BtnVipSelect
+            // 
+            this.BtnVipSelect.Location = new System.Drawing.Point(335, 5);
+            this.BtnVipSelect.Name = "BtnVipSelect";
+            this.BtnVipSelect.Size = new System.Drawing.Size(123, 69);
+            this.BtnVipSelect.TabIndex = 30;
+            this.BtnVipSelect.Text = "会员查询";
+            this.BtnVipSelect.UseVisualStyleBackColor = true;
+            this.BtnVipSelect.Click += new System.EventHandler(this.BtnVipSelect_Click);
             // 
             // panel4
             // 
@@ -143,50 +150,6 @@ namespace Main
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(1008, 58);
             this.panel4.TabIndex = 234;
-            // 
-            // BtnSystem
-            // 
-            this.BtnSystem.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.BtnSystem.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.BtnSystem.Image = global::KYPOS.Properties.Resources.rep2;
-            this.BtnSystem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnSystem.Location = new System.Drawing.Point(890, 2);
-            this.BtnSystem.Name = "BtnSystem";
-            this.BtnSystem.Size = new System.Drawing.Size(115, 53);
-            this.BtnSystem.TabIndex = 236;
-            this.BtnSystem.Tag = "0";
-            this.BtnSystem.Text = "系统";
-            this.BtnSystem.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.BtnSystem.UseVisualStyleBackColor = true;
-            this.BtnSystem.Click += new System.EventHandler(this.BtnSystem_Click);
-            // 
-            // btnShapping
-            // 
-            this.btnShapping.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnShapping.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnShapping.Image = global::KYPOS.Properties.Resources.打包;
-            this.btnShapping.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnShapping.Location = new System.Drawing.Point(280, 2);
-            this.btnShapping.Name = "btnShapping";
-            this.btnShapping.Size = new System.Drawing.Size(131, 53);
-            this.btnShapping.TabIndex = 240;
-            this.btnShapping.Text = "      外卖";
-            this.btnShapping.UseVisualStyleBackColor = true;
-            this.btnShapping.Click += new System.EventHandler(this.btnShapping_Click);
-            // 
-            // button3
-            // 
-            this.button3.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.button3.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.button3.Image = global::KYPOS.Properties.Resources.receipt;
-            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button3.Location = new System.Drawing.Point(412, 2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(131, 53);
-            this.button3.TabIndex = 239;
-            this.button3.Text = "         帐单查询";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // pnlState5
             // 
@@ -208,20 +171,6 @@ namespace Main
             this.lblState5.TabIndex = 0;
             this.lblState5.Text = "撤销(0)";
             this.lblState5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btnend
-            // 
-            this.btnend.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnend.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnend.Image = global::KYPOS.Properties.Resources.files2;
-            this.btnend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnend.Location = new System.Drawing.Point(658, 2);
-            this.btnend.Name = "btnend";
-            this.btnend.Size = new System.Drawing.Size(115, 53);
-            this.btnend.TabIndex = 238;
-            this.btnend.Text = "        结业";
-            this.btnend.UseVisualStyleBackColor = true;
-            this.btnend.Click += new System.EventHandler(this.btnend_Click);
             // 
             // pnlState3
             // 
@@ -302,36 +251,6 @@ namespace Main
             this.lblState0.TabIndex = 0;
             this.lblState0.Text = "空闲(0)";
             this.lblState0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnRefresh.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnRefresh.Image = global::KYPOS.Properties.Resources.refresh2;
-            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefresh.Location = new System.Drawing.Point(774, 2);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(115, 53);
-            this.btnRefresh.TabIndex = 235;
-            this.btnRefresh.Tag = "0";
-            this.btnRefresh.Text = " 刷新[5]";
-            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.button1.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.button1.Image = global::KYPOS.Properties.Resources.clear2;
-            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(543, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(115, 53);
-            this.button1.TabIndex = 233;
-            this.button1.Text = "        清机";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pnlMain
             // 
@@ -431,35 +350,116 @@ namespace Main
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Visible = false;
             // 
-            // BtnVipSelect
+            // pictureBox3
             // 
-            this.BtnVipSelect.Location = new System.Drawing.Point(335, 5);
-            this.BtnVipSelect.Name = "BtnVipSelect";
-            this.BtnVipSelect.Size = new System.Drawing.Size(123, 69);
-            this.BtnVipSelect.TabIndex = 30;
-            this.BtnVipSelect.Text = "会员查询";
-            this.BtnVipSelect.UseVisualStyleBackColor = true;
-            this.BtnVipSelect.Click += new System.EventHandler(this.BtnVipSelect_Click);
+            this.pictureBox3.Image = global::KYPOS.Properties.Resources._return;
+            this.pictureBox3.Location = new System.Drawing.Point(926, 0);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(77, 77);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox3.TabIndex = 29;
+            this.pictureBox3.TabStop = false;
+            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
             // 
-            // BtnVipRecharge
+            // pictureBox1
             // 
-            this.BtnVipRecharge.Location = new System.Drawing.Point(464, 5);
-            this.BtnVipRecharge.Name = "BtnVipRecharge";
-            this.BtnVipRecharge.Size = new System.Drawing.Size(123, 69);
-            this.BtnVipRecharge.TabIndex = 31;
-            this.BtnVipRecharge.Text = "会员充值";
-            this.BtnVipRecharge.UseVisualStyleBackColor = true;
-            this.BtnVipRecharge.Click += new System.EventHandler(this.BtnVipRecharge_Click);
+            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox1.ErrorImage = global::KYPOS.Properties.Resources.logintop;
+            this.pictureBox1.Image = global::KYPOS.Properties.Resources._0111__31_cd21;
+            this.pictureBox1.InitialImage = global::KYPOS.Properties.Resources.logintop;
+            this.pictureBox1.Location = new System.Drawing.Point(2, 1);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(330, 76);
+            this.pictureBox1.TabIndex = 26;
+            this.pictureBox1.TabStop = false;
             // 
-            // BtnVipReg
+            // BtnSystem
             // 
-            this.BtnVipReg.Location = new System.Drawing.Point(593, 5);
-            this.BtnVipReg.Name = "BtnVipReg";
-            this.BtnVipReg.Size = new System.Drawing.Size(123, 69);
-            this.BtnVipReg.TabIndex = 32;
-            this.BtnVipReg.Text = "会员注册";
-            this.BtnVipReg.UseVisualStyleBackColor = true;
-            this.BtnVipReg.Click += new System.EventHandler(this.BtnVipReg_Click);
+            this.BtnSystem.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.BtnSystem.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.BtnSystem.Image = global::KYPOS.Properties.Resources.SysCfg48;
+            this.BtnSystem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnSystem.Location = new System.Drawing.Point(890, 2);
+            this.BtnSystem.Name = "BtnSystem";
+            this.BtnSystem.Size = new System.Drawing.Size(115, 53);
+            this.BtnSystem.TabIndex = 236;
+            this.BtnSystem.Tag = "0";
+            this.BtnSystem.Text = "系统";
+            this.BtnSystem.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.BtnSystem.UseVisualStyleBackColor = true;
+            this.BtnSystem.Click += new System.EventHandler(this.BtnSystem_Click);
+            // 
+            // btnShapping
+            // 
+            this.btnShapping.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.btnShapping.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.btnShapping.Image = global::KYPOS.Properties.Resources.打包;
+            this.btnShapping.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShapping.Location = new System.Drawing.Point(280, 2);
+            this.btnShapping.Name = "btnShapping";
+            this.btnShapping.Size = new System.Drawing.Size(131, 53);
+            this.btnShapping.TabIndex = 240;
+            this.btnShapping.Text = "      外卖";
+            this.btnShapping.UseVisualStyleBackColor = true;
+            this.btnShapping.Click += new System.EventHandler(this.btnShapping_Click);
+            // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.button3.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.button3.Image = global::KYPOS.Properties.Resources.receipt;
+            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button3.Location = new System.Drawing.Point(412, 2);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(131, 53);
+            this.button3.TabIndex = 239;
+            this.button3.Text = "         帐单查询";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
+            // btnend
+            // 
+            this.btnend.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.btnend.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.btnend.Image = global::KYPOS.Properties.Resources.files2;
+            this.btnend.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnend.Location = new System.Drawing.Point(658, 2);
+            this.btnend.Name = "btnend";
+            this.btnend.Size = new System.Drawing.Size(115, 53);
+            this.btnend.TabIndex = 238;
+            this.btnend.Text = "        结业";
+            this.btnend.UseVisualStyleBackColor = true;
+            this.btnend.Click += new System.EventHandler(this.btnend_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.btnRefresh.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.btnRefresh.Image = global::KYPOS.Properties.Resources.refresh2;
+            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefresh.Location = new System.Drawing.Point(774, 2);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(115, 53);
+            this.btnRefresh.TabIndex = 235;
+            this.btnRefresh.Tag = "0";
+            this.btnRefresh.Text = " 刷新[5]";
+            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.button1.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.button1.Image = global::KYPOS.Properties.Resources.clear2;
+            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button1.Location = new System.Drawing.Point(543, 2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(115, 53);
+            this.button1.TabIndex = 233;
+            this.button1.Text = "        清机";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmAllTable
             // 
@@ -480,8 +480,6 @@ namespace Main
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmAllTable_FormClosed);
             this.Load += new System.EventHandler(this.frmAllTable_Load);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel4.ResumeLayout(false);
             this.pnlState5.ResumeLayout(false);
             this.pnlState3.ResumeLayout(false);
@@ -491,6 +489,8 @@ namespace Main
             this.pnlMain.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }

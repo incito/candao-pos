@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\Bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="BindConverter\BoolToVisibilityConverter.cs" />
     <Compile Include="BindConverter\PasswordBoxHelper.cs" />
+    <Compile Include="Controls\BusyBox.cs" />
     <Compile Include="Controls\CtlBulletCheckBox.cs" />
     <Compile Include="Controls\CtlDigitalKeyboard.xaml.cs">
       <DependentUpon>CtlDigitalKeyboard.xaml</DependentUpon>

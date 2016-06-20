@@ -21,9 +21,30 @@ namespace CanDaoCD.Pos.VIPManage.Models
 
         private bool _isShowCardNum=false;
         private bool _isShowCardBut = true;
+
+        private bool _sexNan = true;
+        private bool _sexNv = false;
         #endregion
 
         #region 属性
+        public bool SexNan
+        {
+            get { return _sexNan; }
+            set
+            {
+                _sexNan = value;
+                RaisePropertyChanged(() => SexNan);
+            }
+        }
+        public bool SexNv
+        {
+            get { return _sexNv; }
+            set
+            {
+                _sexNv = value;
+                RaisePropertyChanged(() => SexNv);
+            }
+        }
         public bool IsShowCardNum
         {
             get { return _isShowCardNum; }

@@ -28,7 +28,7 @@ namespace CanDaoCD.Pos.VIPManage.Views
         {
             InitializeComponent();
             LbData.SelectionChanged += LbData_SelectionChanged;
-            LbData.SelectedIndex = 0;
+            //LbData.SelectedIndex = 0;
         }
 
         void LbData_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -57,6 +57,15 @@ namespace CanDaoCD.Pos.VIPManage.Views
 
         #region 虚拟键盘绑定
 
+        public void Start()
+        {
+            this._loading.Visibility = Visibility.Visible;
+        }
+
+        public void stop()
+        {
+            this._loading.Visibility = Visibility.Collapsed;
+        }
         #endregion
 
         private void TexRecharge_OnTextChanged(object sender, TextChangedEventArgs e)

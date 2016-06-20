@@ -37,7 +37,7 @@ namespace CanDaoCD.Pos.Common.Operates
         /// <param name="isShowClose"></param>
         public static bool ShowMessageWindow(string message, bool isShowClose)
         {
-            var wMessage=new WMessage();
+            var wMessage = new WMessage();
             wMessage.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             wMessage.Init(message,isShowClose);
             if (wMessage.ShowDialog() == false)
@@ -49,5 +49,6 @@ namespace CanDaoCD.Pos.Common.Operates
                 return true;
             }
         }
+
     }
 }

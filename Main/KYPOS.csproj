@@ -443,6 +443,7 @@
   <ItemGroup>
     <Content Include="icon64.ico" />
     <Content Include="logo.ico" />
+    <None Include="Resources\SysCfg48.png" />
     <None Include="Resources\0111-_31_cd280.png" />
     <None Include="Resources\0111-_31_cd21.png" />
     <None Include="Resources\0111-_31_cd2.png" />
