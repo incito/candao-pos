@@ -151,6 +151,12 @@
     </Compile>
     <Compile Include="CommonHelper.cs" />
     <Compile Include="Converter\IndexCountConverter.cs" />
+    <Compile Include="Dishes\DishesManage.cs" />
+    <Compile Include="Dishes\UcCustomDishesModel.cs" />
+    <Compile Include="Dishes\UcCustomDishesView.xaml.cs">
+      <DependentUpon>UcCustomDishesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dishes\UcCustomDishesViewModel.cs" />
     <Compile Include="frmCombodish.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1282,6 +1288,10 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Dishes\UcCustomDishesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ReportDishInfoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
