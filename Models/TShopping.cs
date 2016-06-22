@@ -295,6 +295,18 @@ namespace Models
 
             column = DataTableHelper.CreateDataColumn(typeof(int), "primarydishtype", "primarydishtype", 1);
             tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "口味", "taste", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "赠菜人", "freeuser", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "赠菜授权人", "freeauthorize", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "赠菜原因", "freereason", "");
+            tbyh.Columns.Add(column);
             
             shopptable = tbyh;
         }
@@ -313,12 +325,35 @@ namespace Models
                     string dishid = dr2["dishid"].ToString();
                     string dishunit = dr2["dishunit"].ToString();
                     string primarydishtype = dr2["primarydishtype"].ToString();
+                    string dishName = dr2["title"].ToString();
 
                     if ((dishid.Equals(dishrow.Dishid)) && (dishunit.Equals(dishrow.Dishunit)) && (primarydishtype.Equals(dishrow.Primarydishtype.ToString())))
                     {
-                        //如果已经有一条相同的
-                        adddish(ref shopptable, i);
-                        return;
+                        if (dishrow.Title.Contains("临时菜"))//临时菜
+                        {
+                            if (dishName.Equals(dishrow.Title))//临时菜名称一样
+                            {
+                                float dishnum = float.Parse(dr2["dishnum"].ToString());
+                                var countNum = dishnum + dishrow.Dishnum;
+                                decimal oldAmount = decimal.Parse(dr2["amount"].ToString());
+
+
+                                dr2["dishnum"] = countNum;
+                                dr2["amount"] = oldAmount + dishrow.Amount;//本次+上次金额
+                                return;
+                            }
+                            else
+                            {
+                                //名称不一样时，当成新的菜新加入一列
+                            }
+                        }
+                        else//如果已经有一条相同的
+                        {
+                            adddish(ref shopptable, i);
+                            return;
+                        }
+                      
+                      
                     }
                     i++;
                 }

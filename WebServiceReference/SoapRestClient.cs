@@ -2384,8 +2384,10 @@ namespace WebServiceReference
                     string dishnum = dr["dishnum"].ToString();
                     writer.WritePropertyName("dishnum");
                     writer.WriteValue(double.Parse(dishnum));
-                    writer.WritePropertyName("sperequire"); //忌口
-                    writer.WriteValue("");
+
+                    string sperequire = dr["avoid"].ToString(); //忌口
+                    writer.WritePropertyName("sperequire");
+                    writer.WriteValue(sperequire);
                     writer.WritePropertyName("primarykey"); ////
                     writer.WriteValue(dr["primarykey"].ToString());
                     string dishstatus = "0";
@@ -2397,6 +2399,19 @@ namespace WebServiceReference
                     writer.WriteValue(dishstatus);
                     writer.WritePropertyName("ispot");
                     writer.WriteValue("0");
+
+                    string taste = dr["taste"].ToString();
+                    writer.WritePropertyName("taste");
+                    writer.WriteValue(taste);
+                    string freeuser = dr["freeuser"].ToString();
+                    writer.WritePropertyName("freeuser");
+                    writer.WriteValue(freeuser);
+                    string freeauthorize = dr["freeauthorize"].ToString();
+                    writer.WritePropertyName("freeauthorize");
+                    writer.WriteValue(freeauthorize);
+                    string freereason = dr["freereason"].ToString();
+                    writer.WritePropertyName("freereason");
+                    writer.WriteValue(freereason);
                     writer.WriteEndObject();
                 }
 
@@ -2592,7 +2607,7 @@ namespace WebServiceReference
             return str;
         }
 
-        public static string bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype)
+        public static string bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype, string globalsperequire="")
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);
             AllLog.Instance.I(string.Format("【bookorderList】 tableid：{0}，orderid：{1}，sequence：{2}。", tableid, orderid, sequence));
@@ -2602,7 +2617,7 @@ namespace WebServiceReference
             writer.WritePropertyName("currenttableid");
             writer.WriteValue(tableid);
             writer.WritePropertyName("globalsperequire");
-            writer.WriteValue("");
+            writer.WriteValue(globalsperequire);
             writer.WritePropertyName("orderid");
             writer.WriteValue(orderid);
             writer.WritePropertyName("operationType");
