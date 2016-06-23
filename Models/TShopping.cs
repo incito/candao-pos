@@ -60,7 +60,7 @@ namespace Models
             set
             {
                 _taste = value;
-                Title = GenerateDishName(Title, value, Avoid);
+                Title = GenerateDishName(DishName, value, Avoid);
             }
         }
         /// <summary>
@@ -258,7 +258,7 @@ namespace Models
             set
             {
                 _avoid = value;
-                Title = GenerateDishName(Title, Taste, value);
+                Title = GenerateDishName(DishName, Taste, value);
             }
         }
 

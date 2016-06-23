@@ -5273,7 +5273,7 @@ namespace Main
                 return;
             }
 
-            var dishName = dr["title"].ToString();
+            var dishName = dr["dishName"].ToString();
             decimal price = decimal.Parse(dr["price"].ToString());
             var dishSimpleInfo = new DishSimpleInfo()
             {

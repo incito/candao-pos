@@ -33,20 +33,7 @@
             </dxlc:LayoutGroup>
 
             <dxlc:LayoutGroup Orientation="Vertical" Margin="10,0" Visibility="{Binding HasTasteInfos, Converter={StaticResource Bool2VisibilityCvt}}">
-                <TextBlock Text="选择口味" FontSize="18" FontWeight="Bold" VerticalAlignment="Top"/>
-                <Border Height="2" Background="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-                <ListBox ItemsSource="{Binding DishTasteInfos}" Width="720">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <RadioButton Content="{Binding TasteTitle}" FontSize="18" IsChecked="{Binding IsSelected, Mode=TwoWay}" GroupName="TasteGroup"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <view:TasteSetControl x:Name="TasteSetCtrl"/>
             </dxlc:LayoutGroup>
 
             <dxlc:LayoutGroup Orientation="Vertical" Margin="10,0">

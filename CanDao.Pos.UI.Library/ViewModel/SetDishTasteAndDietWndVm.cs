@@ -15,13 +15,8 @@ namespace CanDao.Pos.UI.Library.ViewModel
     {
         #region Constructor
 
-        public SetDishTasteAndDietWndVm(List<string> tasteList, DishSimpleInfo dishSimpleInfo)
+        public SetDishTasteAndDietWndVm(DishSimpleInfo dishSimpleInfo)
         {
-            if (tasteList != null)
-            {
-                HasTasteInfos = tasteList.Any();
-                DishTasteInfos = tasteList.Select(t => new TasteInfo { TasteTitle = t }).ToList();
-            }
             DishInfo = dishSimpleInfo;
             DishNum = 1;
         }
@@ -29,11 +24,6 @@ namespace CanDao.Pos.UI.Library.ViewModel
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// 菜品口味集合。
-        /// </summary>
-        public List<TasteInfo> DishTasteInfos { get; private set; }
 
         /// <summary>
         /// 菜品基本信息。
@@ -54,18 +44,6 @@ namespace CanDao.Pos.UI.Library.ViewModel
             {
                 _dishNum = value;
                 RaisePropertyChanged("DishNum");
-            }
-        }
-
-        /// <summary>
-        /// 选择的口味。
-        /// </summary>
-        public string SelectedTaste
-        {
-            get
-            {
-                var item = DishTasteInfos.FirstOrDefault(t => t.IsSelected);
-                return item != null ? item.TasteTitle : null;
             }
         }
 
@@ -151,7 +129,7 @@ namespace CanDao.Pos.UI.Library.ViewModel
 
         protected override bool CanConfirm(object param)
         {
-            return DishTasteInfos == null || DishTasteInfos.Any(t => t.IsSelected);//当有口味时必须选择一个口味。
+            return !HasTasteInfos || ((SetDishTasteAndDietWindow)OwnerWindow).TasteSetCtrl.SelectedTaste != null;//当有口味时必须选择一个口味。
         }
 
         #endregion

@@ -116,6 +116,7 @@
     <Compile Include="ViewModel\DishInfoEditWndVm.cs" />
     <Compile Include="ViewModel\InputMoreInfoWndVm.cs" />
     <Compile Include="ViewModel\SetDishTasteAndDietWndVm.cs" />
+    <Compile Include="ViewModel\TasteSetControlVm.cs" />
     <Compile Include="ViewModel\UcPrinterListViewModel.cs" />
     <Compile Include="View\DietSetControl.xaml.cs">
       <DependentUpon>DietSetControl.xaml</DependentUpon>
@@ -131,6 +132,9 @@
     </Compile>
     <Compile Include="View\SetDishTasteAndDietWindow.xaml.cs">
       <DependentUpon>SetDishTasteAndDietWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TasteSetControl.xaml.cs">
+      <DependentUpon>TasteSetControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UcPrinterListView.xaml.cs">
       <DependentUpon>UcPrinterListView.xaml</DependentUpon>
@@ -170,6 +174,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SetDishTasteAndDietWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TasteSetControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

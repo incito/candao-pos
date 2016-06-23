@@ -899,7 +899,7 @@ namespace Main
         {
             return new DishSimpleInfo
             {
-                DishName = dishInfo.Title,
+                DishName = dishInfo.DishName,
                 DishPrice = dishInfo.Price,
                 DishUnit = dishInfo.Dishunit
             };
