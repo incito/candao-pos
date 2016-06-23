@@ -8,6 +8,9 @@ using System.Windows.Forms;
 using Library;
 using Common;
 using System.IO;
+using System.Linq;
+using System.Windows;
+using CanDao.Pos.UI.Library.Model;
 using Models;
 using WebServiceReference;
 using Newtonsoft.Json;
@@ -17,6 +20,7 @@ namespace Main
 {
     public partial class frmFish : frmBase
     {
+        private const float ChargeFlag = 0.000001f;
         public delegate void FrmClose(object serder, EventArgs e);
         public delegate void OpenRm(object serder, EventArgs e);
         public event FrmClose frmClose;
@@ -24,7 +28,7 @@ namespace Main
         private t_shopping dishinfo;
         private TPotDishInfo potDishInfo;
         private DevExpress.XtraEditors.TextEdit focusEdt;
-        public static bool ShowFish(t_shopping dishinfo,out TPotDishInfo potDishInfo)
+        public static bool ShowFish(t_shopping dishinfo, out TPotDishInfo potDishInfo)
         {
             frmFish frm = new frmFish();
             frm.dishinfo = dishinfo;
@@ -134,22 +138,38 @@ namespace Main
 
         private void button27_Click(object sender, EventArgs e)
         {
-            /*if(strtointdef0(edtNum1.Text)+strtointdef0(edtNum2.Text)<=0)
+            var dishNum1 = strtofloatdef0(edtNum1.Text);
+            if (dishNum1 - 0 < ChargeFlag)
             {
-                Warning("请输入正确的数量！");
-                edtNum1.Focus();
+                Warning("请输入数量。");
                 return;
-            }*/
-            //if (!AskQuestion("确定下单吗?"))
-            //    return;
-            potDishInfo.FishDishInfo1.Dishnum = strtofloatdef0(edtNum1.Text);
+            }
+
+            potDishInfo.FishDishInfo1.Dishnum = dishNum1;
+            SetDishTasteAndDiet(potDishInfo.FishDishInfo1, tasteSetControl.SelectedTaste, dietSetControl1.Diet);
+
             if (potDishInfo.FishDishInfo2 != null)
             {
-                potDishInfo.FishDishInfo2.Dishnum = strtofloatdef0(edtNum2.Text);
+                var dishNum2 = strtofloatdef0(edtNum2.Text);
+                if (dishNum2 - 0 < ChargeFlag)
+                {
+                    Warning("请输入第二种鱼的数量。");
+                    return;
+                }
+                potDishInfo.FishDishInfo2.Dishnum = dishNum2;
+                SetDishTasteAndDiet(potDishInfo.FishDishInfo2, tasteSetControl.SelectedTaste, dietSetControl1.Diet);
             }
-            this.DialogResult = DialogResult.OK;
+
+            DialogResult = DialogResult.OK;
             Close();
         }
+
+        private void SetDishTasteAndDiet(t_shopping dish, string taste, string diet)
+        {
+            dish.Avoid = diet;
+            dish.Taste = taste;
+        }
+
         private float strtofloatdef0(string str)
         {
             float tmpret = 0;
@@ -157,7 +177,7 @@ namespace Main
                 return tmpret;
             try
             {
-                tmpret =(float)Math.Round(float.Parse(str),2);
+                tmpret = (float)Math.Round(float.Parse(str), 2);
             }
             catch { return 0; }
             return tmpret;
@@ -175,19 +195,26 @@ namespace Main
         }
         private bool getGroupDetail()
         {
-            bool ret=false;
-            JArray groupData=null;
-            ret=RestClient.getGroupDetail(this.dishinfo.Dishid, out groupData);
+            bool ret = false;
+            JArray groupData = null;
+            ret = RestClient.getGroupDetail(this.dishinfo.Dishid, out groupData);
             if (!ret)
             {
                 Warning("获取鱼锅信息失败!");
-                return  false;
+                return false;
             }
-            potDishInfo = TPotDishInfo.getPotDishInfo(Globals.CurrOrderInfo.memberno,dishinfo.Dishid,groupData);
-            potDishInfo.PotInfo.Dishnum=1;//strtointdef0(edtnum1)
+
+            var dishTasteInfos = GetDishTasteInfos(groupData);
+            if (dishTasteInfos.Any())
+                tasteSetControl.TasteInfos = dishTasteInfos;
+            else
+                tasteSetControl.Visibility = Visibility.Collapsed;
+
+            potDishInfo = TPotDishInfo.getPotDishInfo(Globals.CurrOrderInfo.memberno, dishinfo.Dishid, groupData);
+            potDishInfo.PotInfo.Dishnum = 1;//strtointdef0(edtnum1)
 
             string guid = getGUID();
-            if (potDishInfo.FishDishInfo2!=null)
+            if (potDishInfo.FishDishInfo2 != null)
             {
                 potDishInfo.FishDishInfo2.Dishnum = strtofloatdef0(edtNum2.Text);
                 potDishInfo.FishDishInfo2.Parentdishid = dishinfo.Dishid;
@@ -196,13 +223,26 @@ namespace Main
             }
             potDishInfo.PotInfo.Parentdishid = this.dishinfo.Dishid;
             potDishInfo.FishDishInfo1.Parentdishid = dishinfo.Dishid;
-            potDishInfo.PotInfo.Groupid =guid;  
-            potDishInfo.FishDishInfo1.Groupid =guid;
+            potDishInfo.PotInfo.Groupid = guid;
+            potDishInfo.FishDishInfo1.Groupid = guid;
             potDishInfo.PotInfo.Groupid2 = guid;
             potDishInfo.FishDishInfo1.Groupid2 = guid;
             ret = true;
             return ret;
         }
+
+        private List<TasteInfo> GetDishTasteInfos(JArray dishJArray)
+        {
+            var list = new List<TasteInfo>();
+            foreach (var jobj in dishJArray)
+            {
+                var tasteStr = jobj["imagetitle"].ToString();
+                if (!string.IsNullOrEmpty(tasteStr))
+                    list.AddRange(tasteStr.Split(',').Select(t => new TasteInfo { TasteTitle = t }));
+            }
+            return list;
+        }
+
         private void initView()
         {
             try
@@ -225,7 +265,7 @@ namespace Main
                 {
                     if (Globals.OrderTable.Rows.Count > 0)
                     {
-                        if(existsDishid(potDishInfo))
+                        if (existsDishid(potDishInfo))
                         {
                             btnFish.Visible = true;
                             btnCancel.Left = 249;
@@ -241,7 +281,7 @@ namespace Main
             bool isin = false;
             foreach (DataRow dr in Globals.OrderTable.Rows)
             {
-                if(dr["dishid"].ToString().Equals(potInfo.PotInfo.Dishid))
+                if (dr["dishid"].ToString().Equals(potInfo.PotInfo.Dishid))
                 {
                     isin = true;
                     break;
@@ -259,19 +299,20 @@ namespace Main
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-            if (focusEdt==edtNum1)
+            if (focusEdt == edtNum1)
             {
                 if (edtNum2.Visible)
                 {
                     edtNum2.Focus();
                     return;
-                }else
+                }
+                else
                 {
                     button27_Click(btnOK, e);
                 }
             }
             else
-              button27_Click(btnOK, e);
+                button27_Click(btnOK, e);
         }
 
         private void edtNum1_Enter(object sender, EventArgs e)

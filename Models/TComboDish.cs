@@ -181,6 +181,7 @@ namespace Models
             dishinfo.Avoid = "";
             dishinfo.Dishidleft = 1;
             dishinfo.Title = ja["contactdishname"].ToString();
+            dishinfo.DishName = dishinfo.Title;
             dishinfo.DishType = ja["dishtype"].ToString();
             dishinfo.DishUnitSrc = ja["dishunitid"].ToString();
             //dishinfo.Dishunit = ja["dishunitid"].ToString();

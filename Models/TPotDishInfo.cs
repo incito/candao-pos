@@ -65,6 +65,7 @@ namespace Models
             dishinfo.Avoid = "";
             dishinfo.Dishidleft = 1;
             dishinfo.Title = ja["title"].ToString();
+            dishinfo.DishName = ja["title"].ToString();
             dishinfo.DishType = ja["dishtype"].ToString();
             dishinfo.DishUnitSrc = ja["unit"].ToString();
             dishinfo.Memberprice = 0;

@@ -19,7 +19,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ToggleButton Content="{Binding DietName}" IsChecked="{Binding IsSelected}" Margin="5" FontSize="20"/>
+                    <ToggleButton Content="{Binding DietName}" IsChecked="{Binding IsSelected}" Margin="5" FontSize="20" MinWidth="70" MinHeight="35"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

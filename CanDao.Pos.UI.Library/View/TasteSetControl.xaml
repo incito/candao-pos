@@ -5,14 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:CanDao.Pos.UI.Library.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="Ctrl">
     <UserControl.DataContext>
         <viewModel:TasteSetControlVm/>
     </UserControl.DataContext>
     <StackPanel>
         <TextBlock Text="选择口味" FontSize="18" FontWeight="Bold" VerticalAlignment="Top"/>
         <Border Height="2" Background="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-        <ListBox ItemsSource="{Binding DishTasteInfos}" Width="720">
+        <ListBox ItemsSource="{Binding DishTasteInfos}" MaxWidth="{Binding ActualWidth, ElementName=Ctrl}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"/>

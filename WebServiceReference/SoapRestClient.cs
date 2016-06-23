@@ -838,17 +838,17 @@ namespace WebServiceReference
                     dt.Columns.Add(column);
                     foreach (DataRow dr in dt.Rows)
                     {
-                        var title =InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
-                        var avoid = dr["avoid"].ToString();
-                        if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
-                        {
-                            dr["title"] = string.Format("({0}){1}", avoid.Replace("|", ""), title);
-                        }
-                        else
-                        {
-                            dr["title"] = title;
-                        }
-
+                        //var title =InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                        //var avoid = dr["avoid"].ToString();
+                        //if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
+                        //{
+                        //    dr["title"] = string.Format("({0}){1}", avoid.Replace("|", ""), title);
+                        //}
+                        //else
+                        //{
+                        //    dr["title"] = title;
+                        //}
+                        dr["title"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
                         dr["dishunitSrc"] = dr["dishunit"];
                         dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
                     }

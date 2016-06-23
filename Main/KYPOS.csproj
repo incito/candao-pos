@@ -78,6 +78,10 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CanDao.Pos.Common">
+      <HintPath>..\Bin\Lib\CanDao.Pos.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="CanDaoCD.Pos.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\Lib\CanDaoCD.Pos.Common.dll</HintPath>
@@ -123,6 +127,7 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanDaoMember\frmMemberStored.cs">

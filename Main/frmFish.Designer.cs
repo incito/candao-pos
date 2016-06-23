@@ -60,6 +60,11 @@ namespace Main
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblDishName = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
+            this.dietSetControl1 = new CanDao.Pos.UI.Library.View.DietSetControl();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.tasteSetControl = new CanDao.Pos.UI.Library.View.TasteSetControl();
             ((System.ComponentModel.ISupportInitialize)(this.edtNum2.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtNum1.Properties)).BeginInit();
             this.panel1.SuspendLayout();
@@ -67,6 +72,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlNum.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblNum2
@@ -117,7 +123,7 @@ namespace Main
             // 
             this.btnFish.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnFish.ForeColor = System.Drawing.Color.Blue;
-            this.btnFish.Location = new System.Drawing.Point(153, 324);
+            this.btnFish.Location = new System.Drawing.Point(168, 558);
             this.btnFish.Name = "btnFish";
             this.btnFish.Size = new System.Drawing.Size(85, 52);
             this.btnFish.TabIndex = 299;
@@ -248,7 +254,7 @@ namespace Main
             this.pnlNum.Controls.Add(this.button26);
             this.pnlNum.Location = new System.Drawing.Point(347, 91);
             this.pnlNum.Name = "pnlNum";
-            this.pnlNum.Size = new System.Drawing.Size(305, 283);
+            this.pnlNum.Size = new System.Drawing.Size(305, 232);
             this.pnlNum.TabIndex = 292;
             // 
             // button28
@@ -423,7 +429,7 @@ namespace Main
             // 
             this.btnCancel.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnCancel.ForeColor = System.Drawing.Color.Blue;
-            this.btnCancel.Location = new System.Drawing.Point(153, 324);
+            this.btnCancel.Location = new System.Drawing.Point(168, 558);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(90, 52);
             this.btnCancel.TabIndex = 290;
@@ -445,7 +451,7 @@ namespace Main
             // 
             this.btnOK.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnOK.ForeColor = System.Drawing.Color.Blue;
-            this.btnOK.Location = new System.Drawing.Point(39, 324);
+            this.btnOK.Location = new System.Drawing.Point(54, 558);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(108, 52);
             this.btnOK.TabIndex = 288;
@@ -453,13 +459,41 @@ namespace Main
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.button27_Click);
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.elementHost2);
+            this.panel2.Controls.Add(this.elementHost1);
+            this.panel2.Location = new System.Drawing.Point(1, 327);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(651, 225);
+            this.panel2.TabIndex = 304;
+            // 
+            // elementHost2
+            // 
+            this.elementHost2.Location = new System.Drawing.Point(3, 108);
+            this.elementHost2.Name = "elementHost2";
+            this.elementHost2.Size = new System.Drawing.Size(645, 114);
+            this.elementHost2.TabIndex = 1;
+            this.elementHost2.Text = "elementHost2";
+            this.elementHost2.Child = this.dietSetControl1;
+            // 
+            // elementHost1
+            // 
+            this.elementHost1.Location = new System.Drawing.Point(3, 4);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(645, 98);
+            this.elementHost1.TabIndex = 0;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = this.tasteSetControl;
+            // 
             // frmFish
             // 
             this.Appearance.BackColor = System.Drawing.SystemColors.Window;
             this.Appearance.Options.UseBackColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(658, 409);
+            this.ClientSize = new System.Drawing.Size(658, 613);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.lblNum2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblDishNameYg);
@@ -490,6 +524,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlNum.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -529,6 +564,11 @@ namespace Main
         private System.Windows.Forms.Label lblDishNameFish2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblNum2;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Integration.ElementHost elementHost2;
+        private CanDao.Pos.UI.Library.View.DietSetControl dietSetControl1;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private CanDao.Pos.UI.Library.View.TasteSetControl tasteSetControl;
 
     }
 }
