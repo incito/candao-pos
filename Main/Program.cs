@@ -26,6 +26,8 @@ namespace Main
 {
     static class Program
     {
+        private static readonly object _syncObj = new object();
+
         [STAThread]
         static void Main()
         {
@@ -73,6 +75,10 @@ namespace Main
             }
 
             ReportPrint.Init();
+
+            GetOddSettingAsync();
+            GetDietSettingAsync();
+
             frmStart.frm.setMsg("获取系统设置...");
             try
             {
@@ -274,5 +280,49 @@ namespace Main
         [DllImport("User32.dll")]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
+        /// <summary>
+        /// 异步获取抹零设置。
+        /// </summary>
+        private static void GetOddSettingAsync()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                AllLog.Instance.I("异步获取抹零设置...");
+                var service = new RestaurantServiceImpl();
+
+                var result = service.GetSystemSetData(EnumSystemDataType.ROUNDING);
+                AllLog.Instance.I("异步获取抹零设置完成。");
+                if (!string.IsNullOrEmpty(result.Item1))
+                    AllLog.Instance.E("异步获取抹零设置信息时错误：{0}", result.Item1);
+                else
+                {
+                    lock (_syncObj)
+                    {
+                        Globals.SystemSetDatas.AddRange(result.Item2);
+                    }
+                }
+            });
+        }
+
+        private static void GetDietSettingAsync()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                AllLog.Instance.I("异步获取忌口设置...");
+                var service = new RestaurantServiceImpl();
+
+                var result = service.GetSystemSetData(EnumSystemDataType.SPECIAL);
+                AllLog.Instance.I("异步获取忌口设置完成。");
+                if (!string.IsNullOrEmpty(result.Item1))
+                    AllLog.Instance.E("异步获取忌口设置信息时错误：{0}", result.Item1);
+                else
+                {
+                    lock (_syncObj)
+                    {
+                        Globals.SystemSetDatas.AddRange(result.Item2);
+                    }
+                }
+            });
+        }
     }
 }

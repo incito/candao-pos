@@ -46,6 +46,48 @@ namespace Models
         private string _level;
         private string _dishUnitSrc;
 
+        private string _taste=string.Empty;//口味
+        private string _freeuser = string.Empty;//赠菜人
+        private string _freeauthorize = string.Empty;//赠菜授权人
+        private string _freereason = string.Empty;//赠菜原因
+
+        /// <summary>
+        /// 口味
+        /// </summary>
+        public string Taste
+        {
+            get { return _taste; }
+            set
+            {
+                _taste = value;
+                Title = GenerateDishName(Title, value, Avoid);
+            }
+        }
+        /// <summary>
+        /// 赠菜人
+        /// </summary>
+        public string Freeuser
+        {
+            get { return _freeuser; }
+            set { _freeuser = value; }
+        }
+        /// <summary>
+        /// 赠菜授权人
+        /// </summary>
+        public string Freeauthorize
+        {
+            get { return _freeauthorize; }
+            set { _freeauthorize = value; }
+        }
+        /// <summary>
+        /// 赠菜原因
+        /// </summary>
+        public string Freereason
+        {
+            get { return _freereason; }
+            set { _freereason = value; }
+        }
+
         public int Primarydishtype
         {
             get { return _primarydishtype; }
@@ -81,6 +123,7 @@ namespace Models
             get { return _menuid; }
             set { _menuid = value; }
         }
+
         public string Groupid
         {
             get { return _groupid; }
@@ -141,6 +184,7 @@ namespace Models
             get { return _title; }
             set { _title = value; }
         }
+
         public int Dishidleft
         {
             get { return _dishidleft; }
@@ -192,7 +236,7 @@ namespace Models
             get { return _dishid; }
             set { _dishid = value; }
         }
- 
+
 
         public decimal Price
         {
@@ -211,17 +255,41 @@ namespace Models
         public string Avoid
         {
             get { return _avoid; }
-            set { _avoid = value; }
+            set
+            {
+                _avoid = value;
+                Title = GenerateDishName(Title, Taste, value);
+            }
         }
 
         public string PrimaryKey { get; set; }
 
+        /// <summary>
+        /// 菜品+口味+忌口。
+        /// </summary>
+        public string DishName { get; set; }
+
         #endregion Model
-        public static  void createShoppTable(ref DataTable shopptable)
+
+        /// <summary>
+        /// 生成菜名。
+        /// </summary>
+        /// <returns></returns>
+        private static string GenerateDishName(string name, string taste, string diet)
         {
-            DataTable tbyh=new DataTable();
+            if (!string.IsNullOrEmpty(taste))
+                name += string.Format("({0})", taste);
+            if (!string.IsNullOrEmpty(diet))
+                name += string.Format("({0})", diet);
+
+            return name;
+        }
+
+        public static void createShoppTable(ref DataTable shopptable)
+        {
+            DataTable tbyh = new DataTable();
             tbyh.Columns.Clear();
-            var column = DataTableHelper.CreateDataColumn(typeof (string), "账单号", "orderid", "");
+            var column = DataTableHelper.CreateDataColumn(typeof(string), "账单号", "orderid", "");
             tbyh.Columns.Add(column);
 
             column = DataTableHelper.CreateDataColumn(typeof(string), "标示符", "primarykey", "");
@@ -253,6 +321,8 @@ namespace Models
 
             column = DataTableHelper.CreateDataColumn(typeof(string), "菜品名称", "title", "");
             tbyh.Columns.Add(column);
+
+            tbyh.Columns.Add(DataTableHelper.CreateDataColumn(typeof(string), "菜品原名", "dishName", ""));
 
             column = DataTableHelper.CreateDataColumn(typeof(string), "单位", "dishunit", "");
             tbyh.Columns.Add(column);
@@ -307,14 +377,26 @@ namespace Models
 
             column = DataTableHelper.CreateDataColumn(typeof(string), "赠菜原因", "freereason", "");
             tbyh.Columns.Add(column);
-            
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "parentkey", "parentkey", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "relatedishid", "relatedishid", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "ismaster", "ismaster", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "childdishtype", "childdishtype", "");
+            tbyh.Columns.Add(column);
+
             shopptable = tbyh;
         }
         /// <summary>
         /// 往购物车内增加一行数据
         /// </summary>
         /// <param name="dishrow"></param>
-        public static void add(ref DataTable shopptable, t_shopping dishrow,bool isdish)
+        public static void add(ref DataTable shopptable, t_shopping dishrow, bool isdish)
         {
             //如果dishid和单位相同就相加
             int i = 0;
@@ -337,7 +419,7 @@ namespace Models
                                 var countNum = dishnum + dishrow.Dishnum;
                                 decimal oldAmount = decimal.Parse(dr2["amount"].ToString());
 
-
+                                dr2["price"] = dishrow.Price;
                                 dr2["dishnum"] = countNum;
                                 dr2["amount"] = oldAmount + dishrow.Amount;//本次+上次金额
                                 return;
@@ -352,8 +434,6 @@ namespace Models
                             adddish(ref shopptable, i);
                             return;
                         }
-                      
-                      
                     }
                     i++;
                 }
@@ -370,49 +450,44 @@ namespace Models
             dr["avoid"] = dishrow.Avoid;
             dr["dishidleft"] = dishrow.Dishidleft;
             dr["title"] = dishrow.Title;
+            dr["dishName"] = dishrow.DishName;
             dr["dishunit"] = dishrow.Dishunit;
             dr["dishunitSrc"] = dishrow.DishUnitSrc;
             dr["memberprice"] = dishrow.Memberprice;
-            dr["price"] = dishrow.Price ;
+            dr["price"] = dishrow.Price;
             dr["price2"] = dishrow.Price2;
             dr["ordertype"] = dishrow.Ordertype;
             dr["amount"] = dishrow.Price * (decimal)dishrow.Dishnum;
             dr["source"] = dishrow.Source;
             dr["weigh"] = dishrow.Weigh;//dishstatus 如果是称重下单为1
             dr["primarydishtype"] = dishrow.Primarydishtype;
-            if (dishrow.IsPot == null)
-                dr["ispot"] = "";
-            else
-                dr["ispot"] = dishrow.IsPot.ToString();
-            if (dishrow.Parentdishid == null)
-                dr["Parentdishid"] = "";
-            else
-                dr["Parentdishid"] = dishrow.Parentdishid;
 
-            if (dishrow.Groupid == null)
-                dr["groupid"] = "";
-            else
-                dr["groupid"] = dishrow.Groupid;
-
-            if (dishrow.Groupid2 == null)
-                dr["Groupid2"] = "";
-            else
-                dr["Groupid2"] = dishrow.Groupid2;
+            dr["ispot"] = dishrow.IsPot.ToString();
+            dr["Parentdishid"] = dishrow.Parentdishid ?? "";
+            dr["groupid"] = dishrow.Groupid ?? "";
+            dr["Groupid2"] = dishrow.Groupid2 ?? "";
+            dr["taste"] = dishrow.Taste ?? "";
+            dr["avoid"] = dishrow.Avoid ?? "";
+            dr["freeuser"] = dishrow.Freeuser ?? "";
+            dr["freeauthorize"] = dishrow.Freeauthorize ?? "";
+            dr["freereason"] = dishrow.Freereason ?? "";
 
             shopptable.Rows.Add(dr);
 
         }
+
         public static void del(ref DataTable shopptable, int index)
         {
             shopptable.Rows.RemoveAt(index);
         }
+
         public static void decdish(ref DataTable shopptable, int index)
         {
             DataRow dr = shopptable.Rows[index];
             decimal dishnum = decimal.Parse(dr["dishnum"].ToString());
             dishnum--;
             //计算金额
-            if(dishnum<=0)
+            if (dishnum <= 0)
             {
                 shopptable.Rows.Remove(dr);
                 return;
@@ -433,6 +508,7 @@ namespace Models
             dr["dishnum"] = dishnum;
             dr["amount"] = amount;
         }
+
         public static void adddish(ref DataTable shopptable, DataRow dr)
         {
             //DataRow dr = shopptable.Rows[index];
@@ -460,11 +536,15 @@ namespace Models
             dr["amount"] = amount;
         }
 
-        public static void AddDishWithNum(DataRow dr, decimal dishNum)
+        public static void EditDishDietAndNum(DataRow dr, decimal dishNum, string dishDiet)
         {
             decimal price = decimal.Parse(dr["price"].ToString());
             dr["dishnum"] = dishNum;
-            dr["amount"] = dishNum*price;
+            dr["amount"] = dishNum * price;
+            dr["avoid"] = dishDiet;
+            var name = dr["dishName"].ToString();
+            var taste = dr["taste"].ToString();
+            dr["title"] = GenerateDishName(name, taste, dishDiet);
         }
 
         public static void decdish(ref DataTable shopptable, DataRow dr)
@@ -493,21 +573,21 @@ namespace Models
                     delAllGroup(ref shopptable, Groupid);
                     return;
                 }
-                if(dishnum<=0)
-                {
-                    dishnum = 0;
-                }
-            }
-            else
-            if (dishnum <= 0)
-            {
-                if (!Orderstatus.Equals("3"))
-                  shopptable.Rows.Remove(dr);
                 if (dishnum <= 0)
                 {
                     dishnum = 0;
                 }
             }
+            else
+                if (dishnum <= 0)
+                {
+                    if (!Orderstatus.Equals("3"))
+                        shopptable.Rows.Remove(dr);
+                    if (dishnum <= 0)
+                    {
+                        dishnum = 0;
+                    }
+                }
             ////计算金额
             decimal price = decimal.Parse(dr["price"].ToString());
             decimal amount = dishnum * price;
@@ -517,7 +597,7 @@ namespace Models
         private static void delAllGroup(ref DataTable dt, string groupid)
         {
             DataRow dr;
-            for (int i = dt.Rows.Count - 1; i >= 0;i-- )
+            for (int i = dt.Rows.Count - 1; i >= 0; i--)
             {
                 dr = dt.Rows[i];
                 if (dr["Groupid"].ToString().Equals(groupid))
@@ -548,7 +628,7 @@ namespace Models
                 decimal amount = dishnum * price;
                 dr["amount"] = amount;
             }
-  
+
         }
         public static void setPrice2(ref DataTable shopptable)
         {
@@ -561,11 +641,11 @@ namespace Models
                 dr["amount"] = amount;
             }
         }
-        public static void addCJ(JArray jrcj, t_table CurrTableInfo, t_order CurrOrderInfo, string userid, TSetting cjSetting, ref DataTable ShoppTable,int cjnum)
+        public static void addCJ(JArray jrcj, t_table CurrTableInfo, t_order CurrOrderInfo, string userid, TSetting cjSetting, ref DataTable ShoppTable, int cjnum)
         {
             if (jrcj == null)
                 return;
-            JObject ja =(JObject)jrcj[0];
+            JObject ja = (JObject)jrcj[0];
             t_shopping dishinfo = new t_shopping();
             dishinfo.Orderid = CurrOrderInfo.orderid;
             dishinfo.PrimaryKey = Guid.NewGuid().ToString();
@@ -589,7 +669,7 @@ namespace Models
             string pricestr = "";
             pricestr = ja["price"].ToString();
             string vipprice = ja["vipprice"].ToString();
-            dishinfo.Memberprice =0 ;
+            dishinfo.Memberprice = 0;
             try
             {
                 dishinfo.Memberprice = (decimal)float.Parse(vipprice);
@@ -612,7 +692,7 @@ namespace Models
 
             dishinfo.Amount = 0;
             dishinfo.Source = ja["source"].ToString();
-            t_shopping.add(ref ShoppTable, dishinfo,false);
+            t_shopping.add(ref ShoppTable, dishinfo, false);
         }
         public string Level
         {

@@ -838,7 +838,17 @@ namespace WebServiceReference
                     dt.Columns.Add(column);
                     foreach (DataRow dr in dt.Rows)
                     {
-                        dr["title"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                        var title =InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                        var avoid = dr["avoid"].ToString();
+                        if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
+                        {
+                            dr["title"] = string.Format("({0}){1}", avoid.Replace("|", ""), title);
+                        }
+                        else
+                        {
+                            dr["title"] = title;
+                        }
+
                         dr["dishunitSrc"] = dr["dishunit"];
                         dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
                     }
@@ -849,6 +859,64 @@ namespace WebServiceReference
             return result;
 
 
+        }
+
+        /// <summary>
+        /// 获取订单明细
+        /// </summary>
+        /// <param name="OrderID"></param>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public static DataTable GetOrderTable(string OrderID, string UserID)
+        {
+            var dt = new DataTable();
+            dt.TableName = "tb_data";
+            dt.Clear();
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetServerTableList/{0}/{1} ", OrderID, UserID);
+            AllLog.Instance.I(string.Format("【GetOrderTable】 OrderID：{0}。", OrderID));
+            String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetOrderTable】 result：{0}。", jsonResult));
+            if (jsonResult == "0")
+                return dt;
+
+            JObject jaAll = (JObject)JsonConvert.DeserializeObject(jsonResult);
+            string result = jaAll["Data"].ToString();
+          
+            if (!result.Equals("0"))
+            {
+                string tablelistjson = jaAll["JSJson"].ToString();
+                if (tablelistjson.Length > 30)
+                {
+                    DataTableConverter dtc = new DataTableConverter();
+                    JsonReader jread = new JsonTextReader(new StringReader(tablelistjson));
+                   
+                    dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
+                    Globals.OrderTable.Clear();
+
+                    //国际化处理品项名称和单位
+                    var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
+                    dt.Columns.Add(column);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                        var avoid = dr["avoid"].ToString();
+                        if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
+                        {
+                            dr["title"] = string.Format("({0}){1}", avoid, title);
+                        }
+                        else
+                        {
+                            dr["title"] = title;
+                        }
+
+                        dr["dishunitSrc"] = dr["dishunit"];
+                        dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
+
+                    }
+                  
+                }
+            }
+            return dt;
         }
 
         public static bool setMemberPrice(string UserID, string OrderID, string memberno)
@@ -968,8 +1036,18 @@ namespace WebServiceReference
                 var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
                 dt.Columns.Add(column);
                 foreach (DataRow dr in dt.Rows)
-                {
-                    dr["title"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                {               
+                    var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                    var avoid = dr["avoid"].ToString();
+                    if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
+                    {
+                        dr["title"] = string.Format("({0}){1}", avoid.Replace("|",""), title);
+                    }
+                    else
+                    {
+                        dr["title"] = title;
+                    }
+
                     dr["dishunitSrc"] = dr["dishunit"];
                     dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
                 }

@@ -83,6 +83,7 @@
     <Compile Include="SaveResult.cs" />
     <Compile Include="SerialClass.cs" />
     <Compile Include="ShellPathNameConvert.cs" />
+    <Compile Include="SoftKeyboardHelper.cs" />
     <Compile Include="SystemConfig.cs" />
     <Compile Include="TaskBase.cs" />
     <Compile Include="UpdateType.cs" />

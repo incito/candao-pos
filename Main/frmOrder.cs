@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Library;
 using Common;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Models;
 using WebServiceReference;
@@ -15,6 +16,8 @@ using ReportsFastReport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.InteropServices;
+using CanDao.Pos.UI.Library.View;
+
 namespace Main
 {
     public partial class frmOrder : frmBase
@@ -753,6 +756,7 @@ namespace Main
             dishinfo.Avoid = "";
             dishinfo.Dishidleft = 1;
             dishinfo.Title = InternationaHelper.GetBeforeSeparatorFlagData(ja["title"].ToString());
+            dishinfo.DishName = InternationaHelper.GetBeforeSeparatorFlagData(ja["title"].ToString());
             dishinfo.DishType = ja["dishtype"].ToString();
             dishinfo.DishUnitSrc = ja["unit"].ToString();
             dishinfo.Weigh = int.Parse(ja["weigh"].ToString());
@@ -864,16 +868,43 @@ namespace Main
                         }
                     }
                 }
-                else
+                else//单品
                 {
-                    dishinfo.Ordertype = 0;
-                    dishinfo.Primarydishtype = 0;
+                    var tasteString = ja["imagetitle"].ToString();//口味
+                    if (!string.IsNullOrEmpty(tasteString))
+                    {
+                        var list = tasteString.Split(',').ToList();
+                        var wnd = new SetDishTasteAndDietWindow(list, GenerateDishSimpleInfo(dishinfo));
+                        if (wnd.ShowDialog() == true)
+                        {
+                            dishinfo.Taste = wnd.Taste;
+                            dishinfo.Avoid = wnd.Diet;
+                            dishinfo.Dishnum = wnd.DishNum;
+                            dishinfo.Ordertype = 0;
+                            dishinfo.Primarydishtype = 0;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
                     t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
                 }
             //通知调用页更新页面
             OnShoppingChange();
 
         }
+
+        private DishSimpleInfo GenerateDishSimpleInfo(t_shopping dishInfo)
+        {
+            return new DishSimpleInfo
+            {
+                DishName = dishInfo.Title,
+                DishPrice = dishInfo.Price,
+                DishUnit = dishInfo.Dishunit
+            };
+        }
+
         private void ucTable1_Click(object sender, EventArgs e)
         {
             JObject ja = null;
@@ -881,7 +912,11 @@ namespace Main
             {
                 ja = (JObject)((Label)sender).Tag;
             }
-            catch { }
+            catch
+            {
+                return;
+            }
+
             addDish(ja);
         }
 
@@ -979,7 +1014,7 @@ namespace Main
         {
             //下单
             //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";
-            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, 1, 0);
+            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, 1, 0, Globals.OrderRemark);
         }
 
         private void btnType1_Load(object sender, EventArgs e)
@@ -1147,6 +1182,15 @@ namespace Main
             {
                 currpage_type = currpage_type + 1;
                 refreshBtn();
+            }
+        }
+
+        private void BtnRemarkOrder_Click(object sender, EventArgs e)
+        {
+            var wnd = new RemarkOrderWindow();
+            if (wnd.ShowDialog() == true)
+            {
+                Globals.OrderRemark = wnd.Diet;
             }
         }
     }

@@ -17,12 +17,14 @@ using System.Globalization;
 using System.IO;
 using System.Collections;
 using System.Data;
+using System.Linq;
 using Models;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using System.Text.RegularExpressions;
+using Models.Enum;
 
 namespace Common
 {
@@ -80,6 +82,11 @@ namespace Common
 
     public class Globals
     {
+        static Globals()
+        {
+            SystemSetDatas = new List<SystemSetData>();
+        }
+
         [DllImport("kernel32.dll")]
         public static extern uint GetTickCount();
         public const string DEF_PROGRAM_NAME = "";
@@ -89,7 +96,7 @@ namespace Common
         public const string DEF_YYYYMMDD_LONG = "yyyy-MM-dd";//"yyyy/MM/dd";
         public const string DEF_DATE_LONG_FORMAT = "yyyy-MM-dd hh:mm:ss";//"yyyy/MM/dd hh:mm:ss";                
         public const string DEF_NULL_DATETIME = "1900-1-1";
-        public const string DEF_NULL_VALUE = "NULL";          
+        public const string DEF_NULL_VALUE = "NULL";
         public const string DEF_CURRENCY = "RMB";//预设货币
         public const string DEF_DECIMAL_FORMAT = "0.00"; //输出格式        
         public const string DEF_NO_TEXT = "*自动生成*";
@@ -104,10 +111,10 @@ namespace Common
 
         public const int DEF_DECIMAL_ROUND = 2;//四舍五入小数位
 
-        public static  sUserInfo UserInfo;//当前登录用户
-        public static  t_table CurrTableInfo=new t_table();//当前选择桌台信息
-        public static t_order CurrOrderInfo=new t_order();//当前帐单信息
-        public static DataTable OrderTable=new DataTable();//帐单转换为C# datatable格式数据
+        public static sUserInfo UserInfo;//当前登录用户
+        public static t_table CurrTableInfo = new t_table();//当前选择桌台信息
+        public static t_order CurrOrderInfo = new t_order();//当前帐单信息
+        public static DataTable OrderTable = new DataTable();//帐单转换为C# datatable格式数据
         public static string workdate = "";
         public static string authorizer = "";
         /// <summary>
@@ -124,6 +131,81 @@ namespace Common
         public static string ProductVersion = "";
         public static TRoundInfo roundinfo;//零头处理方式
         public static TSetting cjSetting;//餐具设置
+
+        /// <summary>
+        /// 全单备注。
+        /// </summary>
+        public static string OrderRemark { get; set; }
+
+        private static List<string> _dietSetting;
+        /// <summary>
+        /// 忌口设置。
+        /// </summary>
+        public static List<string> DietSetting
+        {
+            get
+            {
+                if (_dietSetting != null && _dietSetting.Any())
+                    return _dietSetting;
+
+                if (!SystemSetDatas.Any())
+                    return new List<string>();
+
+                _dietSetting = SystemSetDatas.Where(t => t.Type == EnumSystemDataType.SPECIAL).Select(t => t.ItemDesc).ToList();
+                return _dietSetting;
+            }
+        }
+
+        /// <summary>
+        /// 零头处理方式。
+        /// </summary>
+        private static EnumOddModel? _oddModel;
+        /// <summary>
+        /// 获取零头处理方式。
+        /// </summary>
+        public static EnumOddModel OddModel
+        {
+            get
+            {
+                if (_oddModel.HasValue)
+                    return _oddModel.Value;
+
+                if (!SystemSetDatas.Any())
+                    return EnumOddModel.None;
+
+                var oddSetting = SystemSetDatas.FirstOrDefault(t => t.Type == EnumSystemDataType.ROUNDING);
+                _oddModel = oddSetting == null ? EnumOddModel.None : (EnumOddModel)oddSetting.ItemId;
+                return _oddModel.Value;
+            }
+            set { _oddModel = value; }
+        }
+
+        /// <summary>
+        /// 零头处理精度。
+        /// </summary>
+        private static EnumOddAccuracy? _oddAccuracy;
+
+        public static EnumOddAccuracy OddAccuracy
+        {
+            get
+            {
+                if (_oddAccuracy.HasValue)
+                    return _oddAccuracy.Value;
+
+                if (!SystemSetDatas.Any())
+                    return EnumOddAccuracy.Jiao;
+
+                var oddAccSetting = SystemSetDatas.FirstOrDefault(t => t.Type == EnumSystemDataType.ACCURACY);
+                _oddAccuracy = oddAccSetting == null ? EnumOddAccuracy.Fen : (EnumOddAccuracy)oddAccSetting.ItemId;
+                return _oddAccuracy.Value;
+            }
+        }
+
+        /// <summary>
+        /// 系统设置集合。
+        /// </summary>
+        public static List<SystemSetData> SystemSetDatas { get; private set; }
+
         public static JArray cjFood;//餐具
         public static String branch_id = "";//分店ID号
 

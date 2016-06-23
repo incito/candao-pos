@@ -1,0 +1,33 @@
+﻿<dx:DXWindow x:Class="CanDao.Pos.UI.Library.View.InputMoreInfoWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:utility="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             Width="650" Height="320"
+             WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+    <dx:DXWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </dx:DXWindow.Resources>
+    <dxlc:LayoutControl Orientation="Vertical">
+        <dxlc:LayoutGroup VerticalAlignment="Top" Margin="10">
+            <TextBlock FontSize="20" Text="{Binding Title}" HorizontalAlignment="Left"/>
+            <TextBlock Text="{Binding RemainLetterNum,StringFormat=还可以输入{0}字}" HorizontalAlignment="Right"/>
+        </dxlc:LayoutGroup>
+
+        <TextBox Text="{Binding InputInfo, UpdateSourceTrigger=PropertyChanged}" FontSize="20" MaxLength="{Binding MaxInputLetterCount}"/>
+        
+        <dxlc:LayoutGroup VerticalAlignment="Bottom">
+            <dxe:ButtonEdit Width="150" Height="45" HorizontalAlignment="Left" FontSize="20" >
+                <dxe:ButtonInfo Content="清空" Command="{Binding ClearCmd}"/>
+            </dxe:ButtonEdit>
+
+            <utility:WindowButtonOperControl HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</dx:DXWindow>

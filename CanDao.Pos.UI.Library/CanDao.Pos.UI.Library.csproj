@@ -41,6 +41,9 @@
       <HintPath>..\Bin\Lib\CanDao.Pos.SystemConfig.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="CanDao.Pos.UI.Utility">
+      <HintPath>..\Bin\Lib\CanDao.Pos.UI.Utility.dll</HintPath>
+    </Reference>
     <Reference Include="CanDaoCD.Pos.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\Lib\CanDaoCD.Pos.Common.dll</HintPath>
@@ -69,6 +72,10 @@
       <HintPath>..\Bin\Lib\DevExpress.Xpf.Grid.v13.1.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Lib\DevExpress.Xpf.LayoutControl.v13.1.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Bin\Lib\DevExpress.Xpf.Mvvm.v13.1.dll</HintPath>
@@ -91,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter\PrinterStatusToColorConverter.cs" />
+    <Compile Include="Model\TasteInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -104,7 +112,26 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModel\DietSetControlVm.cs" />
+    <Compile Include="ViewModel\DishInfoEditWndVm.cs" />
+    <Compile Include="ViewModel\InputMoreInfoWndVm.cs" />
+    <Compile Include="ViewModel\SetDishTasteAndDietWndVm.cs" />
     <Compile Include="ViewModel\UcPrinterListViewModel.cs" />
+    <Compile Include="View\DietSetControl.xaml.cs">
+      <DependentUpon>DietSetControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DishInfoEditWindow.xaml.cs">
+      <DependentUpon>DishInfoEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InputMoreInfoWindow.xaml.cs">
+      <DependentUpon>InputMoreInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RemarkOrderWindow.xaml.cs">
+      <DependentUpon>RemarkOrderWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SetDishTasteAndDietWindow.xaml.cs">
+      <DependentUpon>SetDishTasteAndDietWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UcPrinterListView.xaml.cs">
       <DependentUpon>UcPrinterListView.xaml</DependentUpon>
     </Compile>
@@ -123,6 +150,26 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="MyDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DietSetControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DishInfoEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InputMoreInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RemarkOrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SetDishTasteAndDietWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

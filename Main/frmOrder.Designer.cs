@@ -83,6 +83,7 @@ namespace Main
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnOrder = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.BtnRemarkOrder = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
             this.pnlType.SuspendLayout();
             this.pnlFood.SuspendLayout();
@@ -675,9 +676,10 @@ namespace Main
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panel2.Controls.Add(this.BtnRemarkOrder);
             this.panel2.Controls.Add(this.btnDishPageDown);
-            this.panel2.Controls.Add(this.btnDishPageUp);
             this.panel2.Controls.Add(this.btnZD);
+            this.panel2.Controls.Add(this.btnDishPageUp);
             this.panel2.Controls.Add(this.btnGd);
             this.panel2.Controls.Add(this.button17);
             this.panel2.Controls.Add(this.edtPy);
@@ -728,12 +730,12 @@ namespace Main
             this.btnZD.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnZD.Image = global::KYPOS.Properties.Resources.freeamount;
             this.btnZD.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnZD.Location = new System.Drawing.Point(234, 0);
+            this.btnZD.Location = new System.Drawing.Point(223, 0);
             this.btnZD.Name = "btnZD";
-            this.btnZD.Size = new System.Drawing.Size(105, 53);
+            this.btnZD.Size = new System.Drawing.Size(99, 53);
             this.btnZD.TabIndex = 364;
             this.btnZD.Tag = "0";
-            this.btnZD.Text = "   赠菜  ";
+            this.btnZD.Text = "赠菜";
             this.btnZD.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnZD.UseVisualStyleBackColor = true;
             this.btnZD.Click += new System.EventHandler(this.btnZD_Click);
@@ -744,12 +746,12 @@ namespace Main
             this.btnGd.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnGd.Image = global::KYPOS.Properties.Resources.account;
             this.btnGd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGd.Location = new System.Drawing.Point(345, 0);
+            this.btnGd.Location = new System.Drawing.Point(223, 0);
             this.btnGd.Name = "btnGd";
-            this.btnGd.Size = new System.Drawing.Size(105, 53);
+            this.btnGd.Size = new System.Drawing.Size(99, 53);
             this.btnGd.TabIndex = 363;
             this.btnGd.Tag = "0";
-            this.btnGd.Text = "  挂单";
+            this.btnGd.Text = "挂单";
             this.btnGd.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnGd.UseVisualStyleBackColor = true;
             this.btnGd.Click += new System.EventHandler(this.btnGd_Click);
@@ -803,9 +805,9 @@ namespace Main
             this.btnOrder.ForeColor = System.Drawing.Color.White;
             this.btnOrder.Image = global::KYPOS.Properties.Resources.orderok;
             this.btnOrder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnOrder.Location = new System.Drawing.Point(475, 0);
+            this.btnOrder.Location = new System.Drawing.Point(503, 0);
             this.btnOrder.Name = "btnOrder";
-            this.btnOrder.Size = new System.Drawing.Size(111, 53);
+            this.btnOrder.Size = new System.Drawing.Size(92, 53);
             this.btnOrder.TabIndex = 288;
             this.btnOrder.Text = "        结帐";
             this.btnOrder.UseVisualStyleBackColor = false;
@@ -816,13 +818,29 @@ namespace Main
             this.button1.BackColor = System.Drawing.Color.White;
             this.button1.Font = new System.Drawing.Font("Tahoma", 12F);
             this.button1.ForeColor = System.Drawing.Color.Blue;
-            this.button1.Location = new System.Drawing.Point(585, 0);
+            this.button1.Location = new System.Drawing.Point(594, 1);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(88, 53);
             this.button1.TabIndex = 290;
             this.button1.Text = "清空";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // BtnRemarkOrder
+            // 
+            this.BtnRemarkOrder.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.BtnRemarkOrder.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.BtnRemarkOrder.Image = global::KYPOS.Properties.Resources.freeamount;
+            this.BtnRemarkOrder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnRemarkOrder.Location = new System.Drawing.Point(324, 1);
+            this.BtnRemarkOrder.Name = "BtnRemarkOrder";
+            this.BtnRemarkOrder.Size = new System.Drawing.Size(122, 53);
+            this.BtnRemarkOrder.TabIndex = 365;
+            this.BtnRemarkOrder.Tag = "0";
+            this.BtnRemarkOrder.Text = "全单备注";
+            this.BtnRemarkOrder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.BtnRemarkOrder.UseVisualStyleBackColor = true;
+            this.BtnRemarkOrder.Click += new System.EventHandler(this.BtnRemarkOrder_Click);
             // 
             // frmOrder
             // 
@@ -907,6 +925,7 @@ namespace Main
         public System.Windows.Forms.Button btnZD;
         private System.Windows.Forms.Button btnDishPageDown;
         private System.Windows.Forms.Button btnDishPageUp;
+        public System.Windows.Forms.Button BtnRemarkOrder;
 
     }
 }

@@ -747,5 +747,35 @@ namespace Common
                 PrintStatusDes = response.statusTitle,
             };
         }
+        public static SystemSetData ToSystemSetData(SystemSetDataResponse response)
+        {
+            return new SystemSetData
+            {
+                Id = response.id,
+                IsEnable = response.status.Equals("1"),
+                ItemDesc = response.itemDesc,
+                ItemId = Parse2Int(response.itemid),
+                ItemSort = response.itemSort,
+                Type = (EnumSystemDataType)Enum.Parse(typeof(EnumSystemDataType), response.type),
+                TypeName = response.typename,
+                Value = response.item_value,
+            };
+        }
+
+        /// <summary>
+        /// 把字符串转换成Int。
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static int Parse2Int(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return 0;
+
+            int retValue;
+            int.TryParse(value, out retValue);
+            return retValue;
+        }
+
     }
 }

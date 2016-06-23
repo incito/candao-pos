@@ -24,6 +24,7 @@ using WebServiceReference.ServiceImpl;
 using CanDaoCD.Pos.PrintManage;
 using Timer = System.Timers.Timer;
 using System.Text.RegularExpressions;
+using CanDao.Pos.UI.Library.View;
 
 namespace Main
 {
@@ -3860,7 +3861,7 @@ namespace Main
             pnlCash.Enabled = true;
             xtraCoupon.Visible = true;
             xtraTabControl1.Visible = true;
-            BtnNum.Visible = false;
+            BtnMark.Visible = false;
             pnlAmount.Visible = true;
             panel7.Visible = true;
             SetShowOrderFrm(false);
@@ -4091,7 +4092,7 @@ namespace Main
         /// <returns></returns>
         private string bookorder(int ordertype)
         {
-            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, 1, ordertype);
+            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, 1, ordertype, Globals.OrderRemark);
         }
 
         private bool startorder(int ordertype)
@@ -4337,7 +4338,7 @@ namespace Main
             frmorder.hideGz();
             xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
-            BtnNum.Visible = true;
+            BtnMark.Visible = true;
             xtraCoupon.Visible = false;
             btnOrder.Visible = false;
             xtraTabControl1.Visible = false;
@@ -4361,6 +4362,7 @@ namespace Main
             this.dgvBill.Tag = 1;
             ShowTotal();
             frmorder.showbtnOrderText();
+            Globals.OrderRemark = "";
             frmorder.Show();
         }
         private void SetShowOrderFrm(bool isshow)
@@ -5236,7 +5238,7 @@ namespace Main
             _longPressTimer.Start();
         }
 
-        private void BtnNum_Click(object sender, EventArgs e)
+        private void BtnRemark_Click(object sender, EventArgs e)
         {
             if (dgvBill.SelectedRows.Count < 1)
             {
@@ -5273,12 +5275,20 @@ namespace Main
 
             var dishName = dr["title"].ToString();
             decimal price = decimal.Parse(dr["price"].ToString());
-            var wnd = new DishInfoEditWindow(dishName, price);
+            var dishSimpleInfo = new DishSimpleInfo()
+            {
+                DishName = dishName,
+                DishPrice = price,
+                DishUnit = dishunit
+            };
+
+
+            var wnd = new SetDishTasteAndDietWindow(null, dishSimpleInfo);
             if (wnd.ShowDialog() == true)
             {
                 try
                 {
-                    t_shopping.AddDishWithNum(dr, wnd.DishNum);
+                    t_shopping.EditDishDietAndNum(dr, wnd.DishNum, wnd.Diet);
                     ShowTotal();
                     frmorder.shoppingchange();
                 }

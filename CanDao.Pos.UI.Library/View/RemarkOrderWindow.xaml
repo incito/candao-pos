@@ -1,0 +1,15 @@
+﻿<dx:DXWindow x:Class="CanDao.Pos.UI.Library.View.RemarkOrderWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:view="clr-namespace:CanDao.Pos.UI.Library.View"
+             xmlns:view1="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
+             Width="480" Height="240" Title="全单备注"
+             WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+    <dxlc:LayoutControl Orientation="Vertical">
+        <view:DietSetControl x:Name="DietSetCtrl"/>
+
+        <view1:WindowButtonOperControl HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+    </dxlc:LayoutControl>
+</dx:DXWindow>

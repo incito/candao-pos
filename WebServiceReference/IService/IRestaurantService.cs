@@ -75,5 +75,13 @@ namespace WebServiceReference.IService
         /// </summary>
         /// <returns></returns>
         Tuple<string, List<PrintStatusInfo>> GetPrinterStatusInfo();
+
+        /// <summary>
+        /// 获取系统设置。
+        /// </summary>
+        /// <param name="type">系统设置类型。</param>
+        /// <returns>Item1全部正常则为null，否则为错误信息，Item2为系统设置值。</returns>
+        Tuple<string, List<SystemSetData>> GetSystemSetData(EnumSystemDataType type);
+
     }
 }

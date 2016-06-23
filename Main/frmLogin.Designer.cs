@@ -447,7 +447,7 @@ namespace Main
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(238, 25);
             this.label6.TabIndex = 10;
-            this.label6.Text = "用户登陆(User Login)";
+            this.label6.Text = "用户登录(User Login)";
             // 
             // label5
             // 

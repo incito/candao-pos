@@ -220,5 +220,28 @@ namespace WebServiceReference.ServiceImpl
                 return new Tuple<string, List<PrintStatusInfo>>(ex.Message, null);
             }
         }
+
+        public Tuple<string, List<SystemSetData>> GetSystemSetData(EnumSystemDataType type)
+        {
+            var addr = string.Format("http://{0}/{1}/padinterface/getSystemSetData.Json", RestClient.server, RestClient.apiPath);
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, List<SystemSetData>>("获取系统设置接口地址为空。", null);
+
+            try
+            {
+                var request = new GetSystemSetDataRequest { type = type.ToString("G") };
+                var result = HttpHelper.HttpPost<GetSystemSetDataResponse>(addr, request);
+                if (result == null || !result.rows.Any())
+                    return new Tuple<string, List<SystemSetData>>("返回系统设置值为空。", null);
+
+                var dataList = result.rows.Select(DataConverter.ToSystemSetData).ToList();
+                return new Tuple<string, List<SystemSetData>>(null, dataList);
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E(ex);
+                return new Tuple<string, List<SystemSetData>>(ex.Message, null);
+            }
+        }
     }
 }
