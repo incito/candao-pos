@@ -116,7 +116,12 @@ namespace Common
         public static t_order CurrOrderInfo = new t_order();//当前帐单信息
         public static DataTable OrderTable = new DataTable();//帐单转换为C# datatable格式数据
         public static string workdate = "";
-        public static string authorizer = "";
+
+        /// <summary>
+        /// 授权人信息。
+        /// </summary>
+        public static sUserInfo AuthorizerInfo;
+
         /// <summary>
         /// 外卖购物车表
         /// </summary>
@@ -136,6 +141,11 @@ namespace Common
         /// 全单备注。
         /// </summary>
         public static string OrderRemark { get; set; }
+
+        /// <summary>
+        /// 赠菜原因。
+        /// </summary>
+        public static string DishGiftReason { get; set; }
 
         private static List<string> _dietSetting;
         /// <summary>

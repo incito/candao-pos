@@ -1653,7 +1653,7 @@ namespace Main
                     }
                 }
                 string msg;
-                if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, inputMemo, out msg))
+                if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.AuthorizerInfo.UserName, inputMemo, out msg))
                 {
                     Warning("帐单反结算失败...");
                 }
@@ -4628,7 +4628,7 @@ namespace Main
                         if (!qret)
                         {
                             string weChatMsg;
-                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结", out weChatMsg);
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, "会员结算失败,系统自动反结", out weChatMsg);
                             Warning("获取会员卡号失败:" + msg);
                             return false;
                         }
@@ -4636,7 +4636,7 @@ namespace Main
                         {
                             //RestClient.posrebacksettleorder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
                             string weChatMsg;
-                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结", out weChatMsg);
+                            RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, "会员结算失败,系统自动反结", out weChatMsg);
                             Warning("获取会员卡号失败:" + msg);
                             return false;
                         }
@@ -4655,7 +4655,7 @@ namespace Main
                     if (!ret.Ret)
                     {
                         string weChatMsg;
-                        RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.authorizer, "会员结算失败,系统自动反结", out weChatMsg);
+                        RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, "会员结算失败,系统自动反结", out weChatMsg);
                         Warning(ret.Retinfo);
                         return false;
                     }

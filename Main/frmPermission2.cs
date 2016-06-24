@@ -125,7 +125,9 @@ namespace Main
                         Globals.UserInfo.UserID = txtUser.Text;
                         break;
                     case EnumRightType.OpenUp:
-                        Globals.authorizer = response.Item2;
+                        Globals.AuthorizerInfo.UserName = response.Item2;
+                        Globals.AuthorizerInfo.PassWord = txtPwd.Text;
+                        Globals.AuthorizerInfo.UserID = txtUser.Text;
                         string reinfo;
                         if (!RestClient.OpenUp(txtUser.Text, txtPwd.Text, 1, out reinfo))
                         {
@@ -143,7 +145,10 @@ namespace Main
                         }
                         break;
                     default:
-                        Globals.authorizer = response.Item2;
+                        Globals.AuthorizerInfo.UserName = response.Item2;
+                        Globals.AuthorizerInfo.PassWord = txtPwd.Text;
+                        Globals.AuthorizerInfo.UserID = txtUser.Text;
+
                         break;
                 }
 

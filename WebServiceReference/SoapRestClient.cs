@@ -34,6 +34,34 @@ namespace WebServiceReference
         public static string apiPath = "";
         public static SerialClass sc;
         public static string portname = "";
+
+        /// <summary>
+        /// 赠菜原因集合。
+        /// </summary>
+        private static List<string> _dishGiftReasonList;
+        /// <summary>
+        /// 赠菜原因集合。
+        /// </summary>
+        public static List<string> DishGiftReasonList
+        {
+            get
+            {
+                if (_dishGiftReasonList != null)
+                    return _dishGiftReasonList;
+
+                XmlDocument xml = new XmlDocument();
+                xml.Load(ConfigFile);
+                string xpath = "configuration/client/DishGiftReasons";
+                XmlNode node = xml.SelectSingleNode(xpath);
+                if (node != null)
+                {
+                    var reasons = node.Attributes["value"].Value;
+                    _dishGiftReasonList = reasons.Split(';').ToList();
+                }
+                return _dishGiftReasonList;
+            }
+        }
+
         public enum ShowWindowCommands : int
         {
 
@@ -629,7 +657,9 @@ namespace WebServiceReference
             }
             else
             {
-                Globals.authorizer = username;
+                Globals.AuthorizerInfo.UserName = username;
+                Globals.AuthorizerInfo.PassWord = password;
+                Globals.AuthorizerInfo.UserID = userid;
             }
 
             if (ja["msg"] != null)
@@ -881,7 +911,7 @@ namespace WebServiceReference
 
             JObject jaAll = (JObject)JsonConvert.DeserializeObject(jsonResult);
             string result = jaAll["Data"].ToString();
-          
+
             if (!result.Equals("0"))
             {
                 string tablelistjson = jaAll["JSJson"].ToString();
@@ -889,7 +919,7 @@ namespace WebServiceReference
                 {
                     DataTableConverter dtc = new DataTableConverter();
                     JsonReader jread = new JsonTextReader(new StringReader(tablelistjson));
-                   
+
                     dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
                     Globals.OrderTable.Clear();
 
@@ -913,7 +943,7 @@ namespace WebServiceReference
                         dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
 
                     }
-                  
+
                 }
             }
             return dt;
@@ -1036,12 +1066,12 @@ namespace WebServiceReference
                 var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
                 dt.Columns.Add(column);
                 foreach (DataRow dr in dt.Rows)
-                {               
+                {
                     var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
                     var avoid = dr["avoid"].ToString();
                     if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
                     {
-                        dr["title"] = string.Format("({0}){1}", avoid.Replace("|",""), title);
+                        dr["title"] = string.Format("({0}){1}", avoid.Replace("|", ""), title);
                     }
                     else
                     {
@@ -2525,7 +2555,16 @@ namespace WebServiceReference
                         writer.WriteValue(str0);
                         string orderprice = dr["price"].ToString();
                         if (ordertype == 1)
+                        {
                             orderprice = "0";//赠送
+                            writer.WritePropertyName("freeuser");
+                            writer.WriteValue(Globals.AuthorizerInfo.UserID);
+                            writer.WritePropertyName("freeauthorize");
+                            writer.WriteValue(Globals.AuthorizerInfo.UserName);
+                            writer.WritePropertyName("freereason");
+                            writer.WriteValue(Globals.DishGiftReason);
+                        }
+
                         string dishid = dr["dishid"].ToString();
                         string pricetype = ordertype.ToString();
                         if (dishid.Equals(Globals.cjSetting.Id))
@@ -2616,7 +2655,16 @@ namespace WebServiceReference
                         writer.WriteValue(str0);
                         string orderprice = dr["price"].ToString();
                         if (ordertype == 1)
+                        {
                             orderprice = "0";//赠送
+                            writer.WritePropertyName("freeuser");
+                            writer.WriteValue(Globals.AuthorizerInfo.UserID);
+                            writer.WritePropertyName("freeauthorize");
+                            writer.WriteValue(Globals.AuthorizerInfo.UserName);
+                            writer.WritePropertyName("freereason");
+                            writer.WriteValue(Globals.DishGiftReason);
+                        }
+
                         string dishid = dr["dishid"].ToString();
                         string pricetype = ordertype.ToString();
                         if (dishid.Equals(Globals.cjSetting.Id))
@@ -2685,7 +2733,7 @@ namespace WebServiceReference
             return str;
         }
 
-        public static string bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype, string globalsperequire="")
+        public static string bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype, string globalsperequire = "")
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);
             AllLog.Instance.I(string.Format("【bookorderList】 tableid：{0}，orderid：{1}，sequence：{2}。", tableid, orderid, sequence));

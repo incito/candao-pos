@@ -1,0 +1,27 @@
+﻿<dx:DXWindow x:Class="CanDao.Pos.UI.Library.View.DishGiftReasonSelectWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:view1="clr-namespace:CanDao.Pos.UI.Library.View"
+             Width="480" SizeToContent="Height" Title="选择赠菜原因" MinHeight="320"
+             WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False"
+             x:Name="Ctrl">
+    <dx:DXWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </dx:DXWindow.Resources>
+    <dxlc:LayoutControl Orientation="Vertical" Padding="0" ScrollBars="None">
+        <view:WindowTitleOperControl VerticalAlignment="Top"/>
+
+        <view1:AllowMultSelectorControl x:Name="SelectorCtrl" Title="赠菜原因"/>
+
+        <view:WindowButtonOperControl HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+    </dxlc:LayoutControl>
+</dx:DXWindow>

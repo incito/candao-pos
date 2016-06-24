@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter\PrinterStatusToColorConverter.cs" />
+    <Compile Include="Model\AllowSelectInfo.cs" />
     <Compile Include="Model\TasteInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -113,14 +114,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ViewModel\DietSetControlVm.cs" />
+    <Compile Include="ViewModel\AllowMultSelectorCtrlVm.cs" />
     <Compile Include="ViewModel\DishInfoEditWndVm.cs" />
     <Compile Include="ViewModel\InputMoreInfoWndVm.cs" />
     <Compile Include="ViewModel\SetDishTasteAndDietWndVm.cs" />
     <Compile Include="ViewModel\TasteSetControlVm.cs" />
     <Compile Include="ViewModel\UcPrinterListViewModel.cs" />
-    <Compile Include="View\DietSetControl.xaml.cs">
-      <DependentUpon>DietSetControl.xaml</DependentUpon>
+    <Compile Include="View\AllowMultSelectorControl.xaml.cs">
+      <DependentUpon>AllowMultSelectorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DietSetControl.cs" />
+    <Compile Include="View\DishGiftReasonSelectWindow.xaml.cs">
+      <DependentUpon>DishGiftReasonSelectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DishInfoEditWindow.xaml.cs">
       <DependentUpon>DishInfoEditWindow.xaml</DependentUpon>
@@ -158,9 +163,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DietSetControl.xaml">
+    <Page Include="View\AllowMultSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DishGiftReasonSelectWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\DishInfoEditWindow.xaml">
       <SubType>Designer</SubType>

@@ -1157,12 +1157,18 @@ namespace Main
                 Warning("请先选择菜品...");
                 return;
             }
-            string zdUserId = "";                                                   //030102
-            if (!frmAuthorize.ShowAuthorize("赠送权限验证", Globals.UserInfo.UserID, "030207", out zdUserId))
+
+            var wnd = new DishGiftReasonSelectWindow();
+            if (wnd.ShowDialog() == true)
             {
-                return;
+                Globals.DishGiftReason = wnd.SelectedReason;
+                string zdUserId = "";                                                   //030102
+                if (!frmAuthorize.ShowAuthorize("赠送权限验证", Globals.UserInfo.UserID, "030207", out zdUserId))
+                {
+                    return;
+                }
+                OnAccounts(1);
             }
-            OnAccounts(1);
         }
 
         private void btnDishPageUp_Click(object sender, EventArgs e)

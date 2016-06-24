@@ -24,7 +24,7 @@ namespace WebServiceReference.ServiceImpl
                 userName,
                 RestClient.GetMacAddr(),
                 RestClient.getPosID(),
-                Globals.authorizer
+                Globals.AuthorizerInfo.UserName
             };
             var addr = string.Format("http://{0}/datasnap/rest/TServerMethods1/clearMachine/{1}", RestClient.Server3, string.Join("//", paramList));
 
