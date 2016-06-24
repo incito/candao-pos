@@ -798,8 +798,8 @@ namespace Main
             dishinfo.Source = ja["source"].ToString();
             int dishStatus = RestClient.getFoodStatus(dishinfo.Dishid, dishinfo.Dishunit);
 
-            //临时菜获取口味名称
-            string tasteName = ja["imagetitle"].ToString();
+            ////临时菜获取口味名称
+            //string tasteName = ja["imagetitle"].ToString();
 
             if (dishStatus == 1)
             {
@@ -872,38 +872,52 @@ namespace Main
                         }
                     }
                 }
-          
-                else if (dishinfo.DishType.Equals("0") & tasteName.Contains("临时菜"))//临时菜判断 单品且口味字段包含“临时菜”
-                {
-                   var customDishes=new UcCustomDishesViewModel();
-                   var wind= customDishes.GetWindow();
-                    if (wind.ShowDialog() == true)
-                    {
-                        //dishinfo.Title = string.Format("({0})临时菜", customDishes.Model.DishesName);
-                        dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount);
-                        dishinfo.Avoid = customDishes.Model.DishesName;
-                        dishinfo.Price = decimal.Parse(customDishes.Model.Price);
-                        dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString()) * dishinfo.Price;
-
-                        dishinfo.Ordertype = 0;
-                        dishinfo.Primarydishtype = 0;
-                        t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
                 else
                 {
                     dishinfo.Ordertype = 0;
                     dishinfo.Primarydishtype = 0;
-                    t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
+                    AddShopping(dishinfo, false);
                 }
             //通知调用页更新页面
             OnShoppingChange();
 
         }
+
+        /// <summary>
+        /// 加入购物车(分支检查是否是临时菜)
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="dishInfo"></param>
+        /// <param name="isdish"></param>
+        private void AddShopping(t_shopping dishinfo, bool isdish)
+        {
+            if (dishinfo.DishType.Equals("0") & dishinfo.Title.Contains("临时菜"))//临时菜判断 单品且菜品名称字段包含“临时菜”
+            {
+                var customDishes = new UcCustomDishesViewModel();
+                var wind = customDishes.GetWindow();
+                if (wind.ShowDialog() == true)
+                {
+                    dishinfo.Title = string.Format("({0}){1}", customDishes.Model.DishesName, dishinfo.Title);
+                    dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount);
+                    dishinfo.Taste = customDishes.Model.DishesName;
+                    dishinfo.Price = decimal.Parse(customDishes.Model.Price);
+                    dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString()) * dishinfo.Price;
+
+                    dishinfo.Ordertype = 0;
+                    dishinfo.Primarydishtype = 0;
+                    t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
+            }
+        }
+
         private void ucTable1_Click(object sender, EventArgs e)
         {
             JObject ja = null;

@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
              mc:Ignorable="d" 
-             Height="330" Width="420" Background="White" BorderThickness="1" BorderBrush="Blue" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize">
+             Height="360" Width="450" Background="White" BorderThickness="1" BorderBrush="Blue" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize">
     <Grid>
           <Grid.RowDefinitions>
               <RowDefinition Height="35"></RowDefinition>
               <RowDefinition></RowDefinition>
-              <RowDefinition Height="50"></RowDefinition>
+              <RowDefinition Height="80"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBox Text="  临时菜" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Background="#E5E5E5" FontSize="16"></TextBox>

@@ -46,6 +46,44 @@ namespace Models
         private string _level;
         private string _dishUnitSrc;
 
+        private string _taste=string.Empty;//口味
+        private string _freeuser = string.Empty;//赠菜人
+        private string _freeauthorize = string.Empty;//赠菜授权人
+        private string _freereason = string.Empty;//赠菜原因
+
+        /// <summary>
+        /// 口味
+        /// </summary>
+        public string Taste
+        {
+            get { return _taste; }
+            set { _taste = value; }
+        }
+        /// <summary>
+        /// 赠菜人
+        /// </summary>
+        public string Freeuser
+        {
+            get { return _freeuser; }
+            set { _freeuser = value; }
+        }
+        /// <summary>
+        /// 赠菜授权人
+        /// </summary>
+        public string Freeauthorize
+        {
+            get { return _freeauthorize; }
+            set { _freeauthorize = value; }
+        }
+        /// <summary>
+        /// 赠菜原因
+        /// </summary>
+        public string Freereason
+        {
+            get { return _freereason; }
+            set { _freereason = value; }
+        }
+
         public int Primarydishtype
         {
             get { return _primarydishtype; }
@@ -295,19 +333,45 @@ namespace Models
 
             column = DataTableHelper.CreateDataColumn(typeof(int), "primarydishtype", "primarydishtype", 1);
             tbyh.Columns.Add(column);
-            
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "口味", "taste", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "赠菜人", "freeuser", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "赠菜授权人", "freeauthorize", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "赠菜原因", "freereason", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "parentkey", "parentkey", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "relatedishid", "relatedishid", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "ismaster", "ismaster", "");
+            tbyh.Columns.Add(column);
+
+            column = DataTableHelper.CreateDataColumn(typeof(string), "childdishtype", "childdishtype", "");
+            tbyh.Columns.Add(column);
+
             shopptable = tbyh;
         }
+
         /// <summary>
         /// 往购物车内增加一行数据
         /// </summary>
         /// <param name="dishrow"></param>
-        public static void add(ref DataTable shopptable, t_shopping dishrow,bool isdish)
+        public static void add(ref DataTable shopptable, t_shopping dishrow, bool isdish)
         {
             //如果dishid和单位相同就相加
             int i = 0;
             if (!isdish)
-            {                    //如果是鱼锅不能加一起 套餐
+            {
+                //如果是鱼锅不能加一起 套餐
                 foreach (DataRow dr2 in shopptable.Rows)
                 {
                     string dishid = dr2["dishid"].ToString();
@@ -315,19 +379,20 @@ namespace Models
                     string primarydishtype = dr2["primarydishtype"].ToString();
                     string dishName = dr2["title"].ToString();
 
-                    if ((dishid.Equals(dishrow.Dishid)) && (dishunit.Equals(dishrow.Dishunit)) && (primarydishtype.Equals(dishrow.Primarydishtype.ToString())))
+                    if ((dishid.Equals(dishrow.Dishid)) && (dishunit.Equals(dishrow.Dishunit)) &&
+                        (primarydishtype.Equals(dishrow.Primarydishtype.ToString())))
                     {
-                        if (dishrow.Title.Contains("临时菜"))//临时菜
+                        if (dishrow.Title.Contains("临时菜")) //临时菜
                         {
-                            if (dishName.Equals(dishrow.Title))//临时菜名称一样
+                            if (dishName.Equals(dishrow.Title)) //临时菜名称一样
                             {
                                 float dishnum = float.Parse(dr2["dishnum"].ToString());
                                 var countNum = dishnum + dishrow.Dishnum;
                                 decimal oldAmount = decimal.Parse(dr2["amount"].ToString());
 
-
+                                dr2["price"] = dishrow.Price;
                                 dr2["dishnum"] = countNum;
-                                dr2["amount"] = oldAmount + dishrow.Amount;//本次+上次金额
+                                dr2["amount"] = oldAmount + dishrow.Amount; //本次+上次金额
                                 return;
                             }
                             else
@@ -335,13 +400,13 @@ namespace Models
                                 //名称不一样时，当成新的菜新加入一列
                             }
                         }
-                        else//如果已经有一条相同的
+                        else //如果已经有一条相同的
                         {
                             adddish(ref shopptable, i);
                             return;
                         }
-                      
-                      
+
+
                     }
                     i++;
                 }
@@ -352,7 +417,7 @@ namespace Models
             dr["userid"] = dishrow.Userid;
             dr["ordertime"] = dishrow.Ordertime;
             dr["orderstatus"] = dishrow.Orderstatus;
-            dr["dishnum"] = (decimal)Math.Round(dishrow.Dishnum, 2);
+            dr["dishnum"] = (decimal) Math.Round(dishrow.Dishnum, 2);
             dr["tableid"] = dishrow.Tableid;
             dr["dishid"] = dishrow.Dishid;
             dr["avoid"] = dishrow.Avoid;
@@ -361,12 +426,12 @@ namespace Models
             dr["dishunit"] = dishrow.Dishunit;
             dr["dishunitSrc"] = dishrow.DishUnitSrc;
             dr["memberprice"] = dishrow.Memberprice;
-            dr["price"] = dishrow.Price ;
+            dr["price"] = dishrow.Price;
             dr["price2"] = dishrow.Price2;
             dr["ordertype"] = dishrow.Ordertype;
-            dr["amount"] = dishrow.Price * (decimal)dishrow.Dishnum;
+            dr["amount"] = dishrow.Price*(decimal) dishrow.Dishnum;
             dr["source"] = dishrow.Source;
-            dr["weigh"] = dishrow.Weigh;//dishstatus 如果是称重下单为1
+            dr["weigh"] = dishrow.Weigh; //dishstatus 如果是称重下单为1
             dr["primarydishtype"] = dishrow.Primarydishtype;
             if (dishrow.IsPot == null)
                 dr["ispot"] = "";
@@ -387,9 +452,16 @@ namespace Models
             else
                 dr["Groupid2"] = dishrow.Groupid2;
 
+            dr["taste"] = dishrow.Taste;
+            dr["freeuser"] = dishrow.Freeuser;
+            dr["freeauthorize"] = dishrow.Freeauthorize;
+            dr["freereason"] = dishrow.Freereason;
+
+
             shopptable.Rows.Add(dr);
 
         }
+
         public static void del(ref DataTable shopptable, int index)
         {
             shopptable.Rows.RemoveAt(index);

@@ -72,6 +72,12 @@ namespace KYPOS.Dishes
                 OWindowManage.ShowMessageWindow("数量（份）不能为空，请检查！", false);
                 return false;
             }
+            decimal outDecimal = 0;
+            if (!decimal.TryParse(this.Model.Price, out outDecimal))
+            {
+                OWindowManage.ShowMessageWindow("价格（元）输入格式不正确，请检查！", false);
+                return false; 
+            }
             int outTem = 0;
             if (int.TryParse(this.Model.DishesCount, out outTem))
             {
