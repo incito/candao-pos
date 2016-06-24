@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="CanDao.Pos.UI.Utility">
       <HintPath>..\Bin\Lib\CanDao.Pos.UI.Utility.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="CanDaoCD.Pos.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

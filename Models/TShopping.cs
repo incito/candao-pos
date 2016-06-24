@@ -429,11 +429,6 @@ namespace Models
                                 //名称不一样时，当成新的菜新加入一列
                             }
                         }
-                        else//如果已经有一条相同的
-                        {
-                            adddish(ref shopptable, i);
-                            return;
-                        }
                     }
                     i++;
                 }
@@ -492,17 +487,6 @@ namespace Models
                 shopptable.Rows.Remove(dr);
                 return;
             }
-            decimal price = decimal.Parse(dr["price"].ToString());
-            decimal amount = dishnum * price;
-            dr["dishnum"] = dishnum;
-            dr["amount"] = amount;
-        }
-        public static void adddish(ref DataTable shopptable, int index)
-        {
-            DataRow dr = shopptable.Rows[index];
-            decimal dishnum = decimal.Parse(dr["dishnum"].ToString());
-            dishnum++;
-            //计算金额
             decimal price = decimal.Parse(dr["price"].ToString());
             decimal amount = dishnum * price;
             dr["dishnum"] = dishnum;
