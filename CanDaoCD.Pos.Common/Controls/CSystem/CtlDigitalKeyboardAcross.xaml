@@ -14,11 +14,22 @@
     </UserControl.DataContext>
     <StackPanel Orientation="Horizontal" Margin="10">
         <StackPanel.Resources>
-            <Style TargetType="Button" BasedOn="{StaticResource ColBtn}">
-                <Setter Property="Width" Value="30"/>
+            <Style TargetType="Button">
+                <Setter Property="Width" Value="46"/>
                 <Setter Property="Focusable" Value="False"/>
-                <Setter Property="Height" Value="30"/>
-                <Setter Property="Margin" Value="0"></Setter>
+                <Setter Property="Height" Value="42"/>
+                <Setter Property="Margin" Value="1"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="Border" Background="White" BorderBrush="#0072c6" BorderThickness="1" >
+                                <Grid>
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"></TextBlock>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </StackPanel.Resources>
         <Button Content="1"  Command="{Binding InputCmd}" CommandParameter="1"/>
@@ -32,6 +43,6 @@
         <Button Content="9"  Command="{Binding InputCmd}" CommandParameter="9"/>
         <Button Content="0"  Command="{Binding InputCmd}" CommandParameter="0"/>
         <Button Content="."  Command="{Binding InputCmd}" CommandParameter="."/>
-        <Button Content="C"  Command="{Binding InputCmd}" CommandParameter="Back"/>
+        <Button Content="&lt;-"  Command="{Binding InputCmd}" CommandParameter="Back"/>
     </StackPanel>
 </UserControl>
