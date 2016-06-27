@@ -4341,6 +4341,7 @@ namespace Main
                 frmorder = new frmOrder();
                 frmorder.shoppingChange += new frmOrder.ShoppingChange(ShoppingChange);
                 frmorder.accounts += new frmOrder.Accounts(ShowAccounts);
+                frmorder.OrderRemarkChanged += FrmorderOnOrderRemarkChanged;
                 this.IsMdiContainer = true;
                 frmorder.MdiParent = this;
                 frmorder.Parent = pnlCash;
