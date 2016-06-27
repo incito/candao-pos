@@ -73,6 +73,13 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.dgvBill = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dishidleft = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dishnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dishunit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dishstatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlAmount = new System.Windows.Forms.Panel();
             this.lbTip = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
@@ -243,13 +250,7 @@
             this.tmrClose = new System.Windows.Forms.Timer(this.components);
             this.tmrOpenTable = new System.Windows.Forms.Timer(this.components);
             this.iltDbgBill = new System.Windows.Forms.ImageList(this.components);
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dishidleft = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dishnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dishunit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dishstatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LbOrderMark = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgWidgh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -607,6 +608,7 @@
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.Color.White;
+            this.panel6.Controls.Add(this.LbOrderMark);
             this.panel6.Controls.Add(this.BtnMark);
             this.panel6.Controls.Add(this.pnlMore);
             this.panel6.Controls.Add(this.lblAmountWm);
@@ -629,7 +631,7 @@
             this.BtnMark.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnMark.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnMark.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.BtnMark.Location = new System.Drawing.Point(287, 181);
+            this.BtnMark.Location = new System.Drawing.Point(287, 6);
             this.BtnMark.Name = "BtnMark";
             this.BtnMark.Size = new System.Drawing.Size(46, 42);
             this.BtnMark.TabIndex = 302;
@@ -762,7 +764,7 @@
             this.btnDec.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnDec.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnDec.Image = global::KYPOS.Properties.Resources.dec21;
-            this.btnDec.Location = new System.Drawing.Point(287, 58);
+            this.btnDec.Location = new System.Drawing.Point(287, 87);
             this.btnDec.Name = "btnDec";
             this.btnDec.Size = new System.Drawing.Size(46, 42);
             this.btnDec.TabIndex = 298;
@@ -778,7 +780,7 @@
             this.btnAdd.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnAdd.Image = global::KYPOS.Properties.Resources.add2;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(287, 17);
+            this.btnAdd.Location = new System.Drawing.Point(287, 46);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(46, 42);
             this.btnAdd.TabIndex = 297;
@@ -793,7 +795,7 @@
             this.button1.Font = new System.Drawing.Font("Tahoma", 12F);
             this.button1.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button1.Image = global::KYPOS.Properties.Resources.down21;
-            this.button1.Location = new System.Drawing.Point(287, 140);
+            this.button1.Location = new System.Drawing.Point(287, 169);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(46, 42);
             this.button1.TabIndex = 296;
@@ -809,7 +811,7 @@
             this.button2.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button2.Image = global::KYPOS.Properties.Resources.up21;
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button2.Location = new System.Drawing.Point(287, 99);
+            this.button2.Location = new System.Drawing.Point(287, 128);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(46, 42);
             this.button2.TabIndex = 295;
@@ -869,6 +871,66 @@
             this.dgvBill.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvBill_MouseDown);
             this.dgvBill.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dgvBill_MouseMove);
             this.dgvBill.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dgvBill_MouseUp);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "序";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Width = 30;
+            // 
+            // dishidleft
+            // 
+            this.dishidleft.DataPropertyName = "dishidleft";
+            this.dishidleft.FillWeight = 30F;
+            this.dishidleft.HeaderText = "ID";
+            this.dishidleft.Name = "dishidleft";
+            this.dishidleft.ReadOnly = true;
+            this.dishidleft.Visible = false;
+            this.dishidleft.Width = 30;
+            // 
+            // title
+            // 
+            this.title.DataPropertyName = "title";
+            this.title.FillWeight = 135F;
+            this.title.HeaderText = "菜品名称";
+            this.title.Name = "title";
+            this.title.ReadOnly = true;
+            this.title.Width = 110;
+            // 
+            // dishnum
+            // 
+            this.dishnum.DataPropertyName = "dishnum";
+            this.dishnum.FillWeight = 40F;
+            this.dishnum.HeaderText = "数量";
+            this.dishnum.Name = "dishnum";
+            this.dishnum.ReadOnly = true;
+            this.dishnum.Width = 58;
+            // 
+            // dishunit
+            // 
+            this.dishunit.DataPropertyName = "dishunit";
+            this.dishunit.HeaderText = "单位";
+            this.dishunit.Name = "dishunit";
+            this.dishunit.ReadOnly = true;
+            this.dishunit.Width = 46;
+            // 
+            // amount
+            // 
+            this.amount.DataPropertyName = "amount";
+            this.amount.FillWeight = 80F;
+            this.amount.HeaderText = "小计";
+            this.amount.Name = "amount";
+            this.amount.ReadOnly = true;
+            this.amount.Width = 90;
+            // 
+            // dishstatus
+            // 
+            this.dishstatus.DataPropertyName = "dishstatus";
+            this.dishstatus.HeaderText = "dishstatus";
+            this.dishstatus.Name = "dishstatus";
+            this.dishstatus.ReadOnly = true;
+            this.dishstatus.Visible = false;
             // 
             // pnlAmount
             // 
@@ -3111,65 +3173,17 @@
             this.iltDbgBill.Images.SetKeyName(0, "weigh_icon.png");
             this.iltDbgBill.Images.SetKeyName(1, "weigh_blue.png");
             // 
-            // Column1
+            // LbOrderMark
             // 
-            this.Column1.HeaderText = "序";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Width = 30;
-            // 
-            // dishidleft
-            // 
-            this.dishidleft.DataPropertyName = "dishidleft";
-            this.dishidleft.FillWeight = 30F;
-            this.dishidleft.HeaderText = "ID";
-            this.dishidleft.Name = "dishidleft";
-            this.dishidleft.ReadOnly = true;
-            this.dishidleft.Visible = false;
-            this.dishidleft.Width = 30;
-            // 
-            // title
-            // 
-            this.title.DataPropertyName = "title";
-            this.title.FillWeight = 135F;
-            this.title.HeaderText = "菜品名称";
-            this.title.Name = "title";
-            this.title.ReadOnly = true;
-            this.title.Width = 110;
-            // 
-            // dishnum
-            // 
-            this.dishnum.DataPropertyName = "dishnum";
-            this.dishnum.FillWeight = 40F;
-            this.dishnum.HeaderText = "数量";
-            this.dishnum.Name = "dishnum";
-            this.dishnum.ReadOnly = true;
-            this.dishnum.Width = 58;
-            // 
-            // dishunit
-            // 
-            this.dishunit.DataPropertyName = "dishunit";
-            this.dishunit.HeaderText = "单位";
-            this.dishunit.Name = "dishunit";
-            this.dishunit.ReadOnly = true;
-            this.dishunit.Width = 46;
-            // 
-            // amount
-            // 
-            this.amount.DataPropertyName = "amount";
-            this.amount.FillWeight = 80F;
-            this.amount.HeaderText = "小计";
-            this.amount.Name = "amount";
-            this.amount.ReadOnly = true;
-            this.amount.Width = 90;
-            // 
-            // dishstatus
-            // 
-            this.dishstatus.DataPropertyName = "dishstatus";
-            this.dishstatus.HeaderText = "dishstatus";
-            this.dishstatus.Name = "dishstatus";
-            this.dishstatus.ReadOnly = true;
-            this.dishstatus.Visible = false;
+            this.LbOrderMark.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.LbOrderMark.ForeColor = System.Drawing.Color.Gray;
+            this.LbOrderMark.Location = new System.Drawing.Point(0, 400);
+            this.LbOrderMark.Name = "LbOrderMark";
+            this.LbOrderMark.Size = new System.Drawing.Size(279, 61);
+            this.LbOrderMark.TabIndex = 303;
+            this.LbOrderMark.Tag = "171";
+            this.LbOrderMark.Text = "全单备注：";
+            this.LbOrderMark.Visible = false;
             // 
             // frmPosMainV3
             // 
@@ -3481,5 +3495,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dishunit;
         private System.Windows.Forms.DataGridViewTextBoxColumn amount;
         private System.Windows.Forms.DataGridViewTextBoxColumn dishstatus;
+        private System.Windows.Forms.Label LbOrderMark;
     }
 }
