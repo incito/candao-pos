@@ -31,9 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPosMainV3));
             this.panel1 = new System.Windows.Forms.Panel();
             this.imgWidgh = new System.Windows.Forms.PictureBox();
@@ -864,9 +863,8 @@
             this.dgvBill.Name = "dgvBill";
             this.dgvBill.ReadOnly = true;
             this.dgvBill.RowHeadersVisible = false;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvBill.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgvBill.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvBill.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvBill.RowTemplate.Height = 23;
             this.dgvBill.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -1069,9 +1067,9 @@
             // yhamount
             // 
             this.yhamount.DataPropertyName = "amount";
-            dataGridViewCellStyle5.Format = "N2";
-            dataGridViewCellStyle5.NullValue = "0.00";
-            this.yhamount.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle4.Format = "N2";
+            dataGridViewCellStyle4.NullValue = "0.00";
+            this.yhamount.DefaultCellStyle = dataGridViewCellStyle4;
             this.yhamount.HeaderText = "金额";
             this.yhamount.Name = "yhamount";
             this.yhamount.ReadOnly = true;
@@ -3147,8 +3145,6 @@
             // title
             // 
             this.title.DataPropertyName = "title";
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.title.DefaultCellStyle = dataGridViewCellStyle3;
             this.title.FillWeight = 135F;
             this.title.HeaderText = "菜品名称";
             this.title.Name = "title";
