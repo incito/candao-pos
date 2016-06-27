@@ -24,7 +24,7 @@
             <dxlc:LayoutGroup Orientation="Horizontal" VerticalAlignment="Top" Margin="10,0">
                 <TextBlock Text="{Binding DishInfo.DishName}" FontSize="18" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding DishInfo.DishPrice, StringFormat={}{0}元}" FontSize="18" VerticalAlignment="Center"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,40,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,30,0">
                     <Button Command="{Binding SetDishNumCmd}" Margin="3" Style="{StaticResource SelectNumBtnStyle}"/>
                     <Button Command="{Binding DishNumSubCmd}" Margin="3" Style="{StaticResource ReduceBtnStyle}"/>
                     <TextBox IsEnabled="False" Text="{Binding DishNum}" Width="60" FontSize="18" TextAlignment="Center"/>

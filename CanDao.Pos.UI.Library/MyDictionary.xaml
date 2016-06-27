@@ -14,36 +14,30 @@
     <BitmapImage x:Key="AddImgSource" UriSource="Images/Add.png"/>
     
     <Style TargetType="Button" x:Key="AddBtnStyle">
-        <Setter Property="Width" Value="29"/>
-        <Setter Property="Height" Value="29"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Image Source="{StaticResource AddImgSource}"/>
+                    <Image Source="{StaticResource AddImgSource}" UseLayoutRounding="True"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <Style TargetType="Button" x:Key="ReduceBtnStyle">
-        <Setter Property="Width" Value="29"/>
-        <Setter Property="Height" Value="29"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Image Source="{StaticResource ReduceImgSource}"/>
+                    <Image Source="{StaticResource ReduceImgSource}" UseLayoutRounding="True"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <Style TargetType="Button" x:Key="SelectNumBtnStyle">
-        <Setter Property="Width" Value="36"/>
-        <Setter Property="Height" Value="36"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Image Source="{StaticResource SelectNumImgSource}"/>
+                    <Image Source="{StaticResource SelectNumImgSource}" UseLayoutRounding="True"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
