@@ -3680,7 +3680,12 @@ namespace Main
 
         private void FrmorderOnOrderRemarkChanged()
         {
-            LbOrderMark.Text = string.Format("全单备注:{0}", Globals.OrderRemark);
+            SetRemarkOrder(Globals.OrderRemark);
+        }
+
+        private void SetRemarkOrder(string remark)
+        {
+            LbOrderMark.Text = string.Format("全单备注:{0}", remark);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -3932,6 +3937,7 @@ namespace Main
             pnlAmount.Visible = false;
             LbOrderMark.Visible = true;
             Globals.OrderRemark = "";//重置全单备注。
+            SetRemarkOrder("");
             panel7.Visible = false;
             //btnOpen.Visible = false; 
             SetShowOrderFrm(true);
@@ -4366,6 +4372,7 @@ namespace Main
             pnlAmount.Visible = false;
             LbOrderMark.Visible = true;
             Globals.OrderRemark = "";//重置全单备注。
+            SetRemarkOrder("");
             panel7.Visible = false;
             btnOpen.Visible = false;
             SetShowOrderFrm(true);
