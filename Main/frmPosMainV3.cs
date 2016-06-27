@@ -3922,6 +3922,7 @@ namespace Main
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
             LbOrderMark.Visible = true;
+            Globals.OrderRemark = "";//重置全单备注。
             panel7.Visible = false;
             //btnOpen.Visible = false; 
             SetShowOrderFrm(true);
@@ -4354,7 +4355,9 @@ namespace Main
             btnOrder.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
-            LbOrderMark.Visible = true;panel7.Visible = false;
+            LbOrderMark.Visible = true;
+            Globals.OrderRemark = "";//重置全单备注。
+            panel7.Visible = false;
             btnOpen.Visible = false;
             SetShowOrderFrm(true);
             if (Globals.ShoppTable == null)

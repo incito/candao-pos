@@ -13,6 +13,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+                <ResourceDictionary Source="/CanDao.Pos.UI.Library;component/MyDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </dx:DXWindow.Resources>
@@ -24,11 +25,11 @@
                 <TextBlock Text="{Binding DishInfo.DishName}" FontSize="18" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding DishInfo.DishPrice, StringFormat={}{0}元}" FontSize="18" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,40,0">
-                    <Button Content="数" Command="{Binding SetDishNumCmd}"/>
-                    <Button Content="减" Command="{Binding DishNumSubCmd}"/>
-                    <dxe:TextEdit EditValue="{Binding DishNum}" Width="60"/>
+                    <Button Command="{Binding SetDishNumCmd}" Margin="3" Style="{StaticResource SelectNumBtnStyle}"/>
+                    <Button Command="{Binding DishNumSubCmd}" Margin="3" Style="{StaticResource ReduceBtnStyle}"/>
+                    <TextBox IsEnabled="False" Text="{Binding DishNum}" Width="60" FontSize="18" TextAlignment="Center"/>
                     <TextBlock Text="{Binding DishInfo.DishUnit}" VerticalAlignment="Center"/>
-                    <Button Content="加" Command="{Binding DishNumAddCmd}"/>
+                    <Button Command="{Binding DishNumAddCmd}" Margin="3" Style="{StaticResource AddBtnStyle}"/>
                 </StackPanel>
             </dxlc:LayoutGroup>
 
