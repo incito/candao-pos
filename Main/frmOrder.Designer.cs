@@ -74,16 +74,16 @@ namespace Main
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.BtnRemarkOrder = new System.Windows.Forms.Button();
             this.btnDishPageDown = new System.Windows.Forms.Button();
-            this.btnDishPageUp = new System.Windows.Forms.Button();
             this.btnZD = new System.Windows.Forms.Button();
+            this.btnDishPageUp = new System.Windows.Forms.Button();
             this.btnGd = new System.Windows.Forms.Button();
             this.button17 = new System.Windows.Forms.Button();
             this.edtPy = new DevExpress.XtraEditors.TextEdit();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnOrder = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.BtnRemarkOrder = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
             this.pnlType.SuspendLayout();
             this.pnlFood.SuspendLayout();
@@ -693,6 +693,21 @@ namespace Main
             this.panel2.Size = new System.Drawing.Size(682, 71);
             this.panel2.TabIndex = 294;
             // 
+            // BtnRemarkOrder
+            // 
+            this.BtnRemarkOrder.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.BtnRemarkOrder.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.BtnRemarkOrder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BtnRemarkOrder.Location = new System.Drawing.Point(324, 1);
+            this.BtnRemarkOrder.Name = "BtnRemarkOrder";
+            this.BtnRemarkOrder.Size = new System.Drawing.Size(82, 53);
+            this.BtnRemarkOrder.TabIndex = 365;
+            this.BtnRemarkOrder.Tag = "0";
+            this.BtnRemarkOrder.Text = "全单备注";
+            this.BtnRemarkOrder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.BtnRemarkOrder.UseVisualStyleBackColor = true;
+            this.BtnRemarkOrder.Click += new System.EventHandler(this.BtnRemarkOrder_Click);
+            // 
             // btnDishPageDown
             // 
             this.btnDishPageDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
@@ -707,22 +722,6 @@ namespace Main
             this.btnDishPageDown.TabIndex = 302;
             this.btnDishPageDown.UseVisualStyleBackColor = false;
             this.btnDishPageDown.Click += new System.EventHandler(this.btnDishPageDown_Click);
-            // 
-            // btnDishPageUp
-            // 
-            this.btnDishPageUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.btnDishPageUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.btnDishPageUp.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnDishPageUp.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnDishPageUp.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnDishPageUp.Image = global::KYPOS.Properties.Resources.up21;
-            this.btnDishPageUp.Location = new System.Drawing.Point(132, 1);
-            this.btnDishPageUp.Name = "btnDishPageUp";
-            this.btnDishPageUp.Size = new System.Drawing.Size(43, 41);
-            this.btnDishPageUp.TabIndex = 301;
-            this.btnDishPageUp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDishPageUp.UseVisualStyleBackColor = false;
-            this.btnDishPageUp.Click += new System.EventHandler(this.btnDishPageUp_Click);
             // 
             // btnZD
             // 
@@ -739,6 +738,22 @@ namespace Main
             this.btnZD.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnZD.UseVisualStyleBackColor = true;
             this.btnZD.Click += new System.EventHandler(this.btnZD_Click);
+            // 
+            // btnDishPageUp
+            // 
+            this.btnDishPageUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnDishPageUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.btnDishPageUp.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnDishPageUp.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.btnDishPageUp.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.btnDishPageUp.Image = global::KYPOS.Properties.Resources.up21;
+            this.btnDishPageUp.Location = new System.Drawing.Point(132, 1);
+            this.btnDishPageUp.Name = "btnDishPageUp";
+            this.btnDishPageUp.Size = new System.Drawing.Size(43, 41);
+            this.btnDishPageUp.TabIndex = 301;
+            this.btnDishPageUp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDishPageUp.UseVisualStyleBackColor = false;
+            this.btnDishPageUp.Click += new System.EventHandler(this.btnDishPageUp_Click);
             // 
             // btnGd
             // 
@@ -825,22 +840,6 @@ namespace Main
             this.button1.Text = "清空";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // BtnRemarkOrder
-            // 
-            this.BtnRemarkOrder.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.BtnRemarkOrder.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.BtnRemarkOrder.Image = global::KYPOS.Properties.Resources.freeamount;
-            this.BtnRemarkOrder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnRemarkOrder.Location = new System.Drawing.Point(324, 1);
-            this.BtnRemarkOrder.Name = "BtnRemarkOrder";
-            this.BtnRemarkOrder.Size = new System.Drawing.Size(122, 53);
-            this.BtnRemarkOrder.TabIndex = 365;
-            this.BtnRemarkOrder.Tag = "0";
-            this.BtnRemarkOrder.Text = "全单备注";
-            this.BtnRemarkOrder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.BtnRemarkOrder.UseVisualStyleBackColor = true;
-            this.BtnRemarkOrder.Click += new System.EventHandler(this.BtnRemarkOrder_Click);
             // 
             // frmOrder
             // 

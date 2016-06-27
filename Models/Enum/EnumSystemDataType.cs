@@ -20,6 +20,6 @@
         /// <summary>
         /// 忌口。
         /// </summary>
-        SPECIAL,
+        JI_KOU_SPECIAL,
     }
 }
