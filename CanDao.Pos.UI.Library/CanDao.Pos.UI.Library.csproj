@@ -226,6 +226,11 @@
   <ItemGroup>
     <Resource Include="Images\return.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Reduce.png" />
+    <Resource Include="Images\Add.png" />
+    <Resource Include="Images\SelectNum.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

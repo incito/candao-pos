@@ -31,8 +31,9 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPosMainV3));
             this.panel1 = new System.Windows.Forms.Panel();
             this.imgWidgh = new System.Windows.Forms.PictureBox();
@@ -59,6 +60,7 @@
             this.btnPrintBill = new System.Windows.Forms.Button();
             this.btnRBill = new System.Windows.Forms.Button();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.LbOrderMark = new System.Windows.Forms.Label();
             this.BtnMark = new System.Windows.Forms.Button();
             this.pnlMore = new System.Windows.Forms.Panel();
             this.btnOrderML = new System.Windows.Forms.Button();
@@ -607,6 +609,7 @@
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.Color.White;
+            this.panel6.Controls.Add(this.LbOrderMark);
             this.panel6.Controls.Add(this.BtnMark);
             this.panel6.Controls.Add(this.pnlMore);
             this.panel6.Controls.Add(this.lblAmountWm);
@@ -623,13 +626,25 @@
             this.panel6.Size = new System.Drawing.Size(334, 515);
             this.panel6.TabIndex = 24;
             // 
+            // LbOrderMark
+            // 
+            this.LbOrderMark.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.LbOrderMark.ForeColor = System.Drawing.Color.Gray;
+            this.LbOrderMark.Location = new System.Drawing.Point(0, 400);
+            this.LbOrderMark.Name = "LbOrderMark";
+            this.LbOrderMark.Size = new System.Drawing.Size(279, 61);
+            this.LbOrderMark.TabIndex = 303;
+            this.LbOrderMark.Tag = "171";
+            this.LbOrderMark.Text = "全单备注：";
+            this.LbOrderMark.Visible = false;
+            // 
             // BtnMark
             // 
             this.BtnMark.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.BtnMark.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnMark.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnMark.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.BtnMark.Location = new System.Drawing.Point(287, 181);
+            this.BtnMark.Location = new System.Drawing.Point(287, 6);
             this.BtnMark.Name = "BtnMark";
             this.BtnMark.Size = new System.Drawing.Size(46, 42);
             this.BtnMark.TabIndex = 302;
@@ -762,7 +777,7 @@
             this.btnDec.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnDec.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnDec.Image = global::KYPOS.Properties.Resources.dec21;
-            this.btnDec.Location = new System.Drawing.Point(287, 58);
+            this.btnDec.Location = new System.Drawing.Point(287, 87);
             this.btnDec.Name = "btnDec";
             this.btnDec.Size = new System.Drawing.Size(46, 42);
             this.btnDec.TabIndex = 298;
@@ -778,7 +793,7 @@
             this.btnAdd.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnAdd.Image = global::KYPOS.Properties.Resources.add2;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(287, 17);
+            this.btnAdd.Location = new System.Drawing.Point(287, 46);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(46, 42);
             this.btnAdd.TabIndex = 297;
@@ -793,7 +808,7 @@
             this.button1.Font = new System.Drawing.Font("Tahoma", 12F);
             this.button1.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button1.Image = global::KYPOS.Properties.Resources.down21;
-            this.button1.Location = new System.Drawing.Point(287, 140);
+            this.button1.Location = new System.Drawing.Point(287, 169);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(46, 42);
             this.button1.TabIndex = 296;
@@ -809,7 +824,7 @@
             this.button2.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.button2.Image = global::KYPOS.Properties.Resources.up21;
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button2.Location = new System.Drawing.Point(287, 99);
+            this.button2.Location = new System.Drawing.Point(287, 128);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(46, 42);
             this.button2.TabIndex = 295;
@@ -849,8 +864,9 @@
             this.dgvBill.Name = "dgvBill";
             this.dgvBill.ReadOnly = true;
             this.dgvBill.RowHeadersVisible = false;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dgvBill.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvBill.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvBill.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvBill.RowTemplate.Height = 23;
             this.dgvBill.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -1053,9 +1069,9 @@
             // yhamount
             // 
             this.yhamount.DataPropertyName = "amount";
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = "0.00";
-            this.yhamount.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Format = "N2";
+            dataGridViewCellStyle5.NullValue = "0.00";
+            this.yhamount.DefaultCellStyle = dataGridViewCellStyle5;
             this.yhamount.HeaderText = "金额";
             this.yhamount.Name = "yhamount";
             this.yhamount.ReadOnly = true;
@@ -3131,11 +3147,13 @@
             // title
             // 
             this.title.DataPropertyName = "title";
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.title.DefaultCellStyle = dataGridViewCellStyle3;
             this.title.FillWeight = 135F;
             this.title.HeaderText = "菜品名称";
             this.title.Name = "title";
             this.title.ReadOnly = true;
-            this.title.Width = 110;
+            this.title.Width = 80;
             // 
             // dishnum
             // 
@@ -3474,6 +3492,7 @@
         private DevExpress.XtraTab.XtraTabPage xtraUn;
         private System.Windows.Forms.Label lbTip;
         private System.Windows.Forms.Button BtnMark;
+        private System.Windows.Forms.Label LbOrderMark;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dishidleft;
         private System.Windows.Forms.DataGridViewTextBoxColumn title;

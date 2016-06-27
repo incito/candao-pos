@@ -43,6 +43,7 @@ namespace Main
         private int btncount = 32;//jarrTables.Count 36
         public event ShoppingChange shoppingChange;
         public event Accounts accounts;
+        public event Action OrderRemarkChanged;
         private Library.UserControls.ucDish selectbtn = null;
         private bool iswm = true;
         private string menuid = "";
@@ -1197,6 +1198,10 @@ namespace Main
             if (wnd.ShowDialog() == true)
             {
                 Globals.OrderRemark = wnd.Diet;
+                if (OrderRemarkChanged != null)
+                {
+                    OrderRemarkChanged();
+                }
             }
         }
     }

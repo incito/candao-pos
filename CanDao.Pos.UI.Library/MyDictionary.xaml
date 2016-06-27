@@ -9,7 +9,40 @@
     <BitmapImage x:Key="AlertImgSource" UriSource="Images/Alert.png"/>
     <BitmapImage x:Key="LogoImgSource" UriSource="Images/Logo.png"/>
     <BitmapImage x:Key="ReturnImgSource" UriSource="Images/return.png"/>
+    <BitmapImage x:Key="ReduceImgSource" UriSource="Images/Reduce.png"/>
+    <BitmapImage x:Key="SelectNumImgSource" UriSource="Images/SelectNum.png"/>
+    <BitmapImage x:Key="AddImgSource" UriSource="Images/Add.png"/>
+    
+    <Style TargetType="Button" x:Key="AddBtnStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Image Source="{StaticResource AddImgSource}" UseLayoutRounding="True"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
+    <Style TargetType="Button" x:Key="ReduceBtnStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Image Source="{StaticResource ReduceImgSource}" UseLayoutRounding="True"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="SelectNumBtnStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Image Source="{StaticResource SelectNumImgSource}" UseLayoutRounding="True"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <DataTemplate x:Key="RowIndexDataTemplate">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
             <TextBlock FontSize="10" Text="{Binding Path=RowHandle.Value, Converter={StaticResource IndexCountCvt}}" TextAlignment="Center" VerticalAlignment="Center" />

@@ -3639,6 +3639,7 @@ namespace Main
             frmorder = new frmOrder();
             frmorder.shoppingChange += new frmOrder.ShoppingChange(ShoppingChange);
             frmorder.accounts += new frmOrder.Accounts(ShowAccounts);
+            frmorder.OrderRemarkChanged += FrmorderOnOrderRemarkChanged;
             this.IsMdiContainer = true;
             frmorder.MdiParent = this;
             frmorder.Parent = pnlCash;
@@ -3647,6 +3648,7 @@ namespace Main
             xtraCoupon.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
+            LbOrderMark.Visible = true;
             panel7.Visible = false;
             //btnOpen.Visible = false;
             //edtRoom.Enabled = false;
@@ -3670,6 +3672,12 @@ namespace Main
             this.dgvBill.Tag = 1;
             ShowTotal();
         }
+
+        private void FrmorderOnOrderRemarkChanged()
+        {
+            LbOrderMark.Text = string.Format("全单备注:{0}", Globals.OrderRemark);
+        }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             bool tmpwm = int.Parse(this.dgvBill.Tag.ToString()) == 1;
@@ -3863,6 +3871,7 @@ namespace Main
             xtraTabControl1.Visible = true;
             BtnMark.Visible = false;
             pnlAmount.Visible = true;
+            LbOrderMark.Visible = false;
             panel7.Visible = true;
             SetShowOrderFrm(false);
             if (!iswm)
@@ -3912,6 +3921,8 @@ namespace Main
             xtraCoupon.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
+            LbOrderMark.Visible = true;
+            Globals.OrderRemark = "";//重置全单备注。
             panel7.Visible = false;
             //btnOpen.Visible = false; 
             SetShowOrderFrm(true);
@@ -4331,6 +4342,7 @@ namespace Main
                 frmorder = new frmOrder();
                 frmorder.shoppingChange += new frmOrder.ShoppingChange(ShoppingChange);
                 frmorder.accounts += new frmOrder.Accounts(ShowAccounts);
+                frmorder.OrderRemarkChanged += FrmorderOnOrderRemarkChanged;
                 this.IsMdiContainer = true;
                 frmorder.MdiParent = this;
                 frmorder.Parent = pnlCash;
@@ -4343,6 +4355,8 @@ namespace Main
             btnOrder.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
+            LbOrderMark.Visible = true;
+            Globals.OrderRemark = "";//重置全单备注。
             panel7.Visible = false;
             btnOpen.Visible = false;
             SetShowOrderFrm(true);
@@ -4370,10 +4384,7 @@ namespace Main
             if (isshow)
             {
                 lblAmountWm.Visible = true;
-                pnlAmount.Height = 128;
-                pnlAmount.Top = 397;
-                dgvBill.Height = 400;
-                lblAmountWm.Top = 410;
+                lblAmountWm.Top = 370;
                 try
                 {
                     frmorder.showTypeNum();
@@ -4383,9 +4394,6 @@ namespace Main
             else
             {
                 lblAmountWm.Visible = false;
-                pnlAmount.Height = 220;
-                pnlAmount.Top = 297;
-                dgvBill.Height = 300;
             }
         }
         private void pnlAmount_Paint(object sender, PaintEventArgs e)

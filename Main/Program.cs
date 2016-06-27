@@ -311,7 +311,7 @@ namespace Main
                 AllLog.Instance.I("异步获取忌口设置...");
                 var service = new RestaurantServiceImpl();
 
-                var result = service.GetSystemSetData(EnumSystemDataType.SPECIAL);
+                var result = service.GetSystemSetData(EnumSystemDataType.JI_KOU_SPECIAL);
                 AllLog.Instance.I("异步获取忌口设置完成。");
                 if (!string.IsNullOrEmpty(result.Item1))
                     AllLog.Instance.E("异步获取忌口设置信息时错误：{0}", result.Item1);

@@ -161,7 +161,7 @@ namespace Common
                 if (!SystemSetDatas.Any())
                     return new List<string>();
 
-                _dietSetting = SystemSetDatas.Where(t => t.Type == EnumSystemDataType.SPECIAL).Select(t => t.ItemDesc).ToList();
+                _dietSetting = SystemSetDatas.Where(t => t.Type == EnumSystemDataType.JI_KOU_SPECIAL).Select(t => t.ItemDesc).ToList();
                 return _dietSetting;
             }
         }
