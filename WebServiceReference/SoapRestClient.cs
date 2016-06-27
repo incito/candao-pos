@@ -2511,15 +2511,12 @@ namespace WebServiceReference
                     string taste = dr["taste"].ToString();
                     writer.WritePropertyName("taste");
                     writer.WriteValue(taste);
-                    string freeuser = dr["freeuser"].ToString();
                     writer.WritePropertyName("freeuser");
-                    writer.WriteValue(freeuser);
-                    string freeauthorize = dr["freeauthorize"].ToString();
+                    writer.WriteValue(Globals.AuthorizerInfo.UserID);
                     writer.WritePropertyName("freeauthorize");
-                    writer.WriteValue(freeauthorize);
-                    string freereason = dr["freereason"].ToString();
+                    writer.WriteValue(Globals.AuthorizerInfo.UserName);
                     writer.WritePropertyName("freereason");
-                    writer.WriteValue(freereason);
+                    writer.WriteValue(Globals.DishGiftReason);
                     writer.WriteEndObject();
                 }
 
@@ -2621,6 +2618,17 @@ namespace WebServiceReference
                         writer.WriteValue("");
                         writer.WritePropertyName("primarykey"); ////
                         writer.WriteValue(dr["primarykey"].ToString());
+
+                        string taste = dr["taste"].ToString();
+                        writer.WritePropertyName("taste");
+                        writer.WriteValue(taste);
+                        writer.WritePropertyName("freeuser");
+                        writer.WriteValue(Globals.AuthorizerInfo.UserID);
+                        writer.WritePropertyName("freeauthorize");
+                        writer.WriteValue(Globals.AuthorizerInfo.UserName);
+                        writer.WritePropertyName("freereason");
+                        writer.WriteValue(Globals.DishGiftReason);
+
                         string dishstatus = "0";
                         if (dr["weigh"].ToString().Equals("1"))
                         {
@@ -2706,6 +2714,17 @@ namespace WebServiceReference
                         writer.WriteValue("");
                         writer.WritePropertyName("primarykey"); ////
                         writer.WriteValue(dr["primarykey"].ToString());
+
+                        string taste = dr["taste"].ToString();
+                        writer.WritePropertyName("taste");
+                        writer.WriteValue(taste);
+                        writer.WritePropertyName("freeuser");
+                        writer.WriteValue(Globals.AuthorizerInfo.UserID);
+                        writer.WritePropertyName("freeauthorize");
+                        writer.WriteValue(Globals.AuthorizerInfo.UserName);
+                        writer.WritePropertyName("freereason");
+                        writer.WriteValue(Globals.DishGiftReason);
+
                         string dishstatus = "0";
                         if (dr["weigh"].ToString().Equals("1"))
                         {
