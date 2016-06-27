@@ -62,6 +62,33 @@ namespace WebServiceReference
             }
         }
 
+        /// <summary>
+        /// 退菜原因集合。
+        /// </summary>
+        private static List<string> _backDishReasonList;
+        /// <summary>
+        /// 退菜原因集合。
+        /// </summary>
+        public static List<string> BackDishReasonList
+        {
+            get
+            {
+                if (_backDishReasonList != null)
+                    return _backDishReasonList;
+
+                XmlDocument xml = new XmlDocument();
+                xml.Load(ConfigFile);
+                string xpath = "configuration/client/BackDishReasons";
+                XmlNode node = xml.SelectSingleNode(xpath);
+                if (node != null)
+                {
+                    var reasons = node.Attributes["value"].Value;
+                    _backDishReasonList = reasons.Split(';').ToList();
+                }
+                return _backDishReasonList;
+            }
+        }
+
         public enum ShowWindowCommands : int
         {
 

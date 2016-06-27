@@ -244,12 +244,12 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
-        public string BackAllDish(string tableNo, string orderId)
+        public string BackAllDish(string tableNo, string orderId, string reason)
         {
             try
             {
                 var addr = string.Format("http://{0}/{1}/padinterface/discarddish.json", RestClient.server, RestClient.apiPath);
-                var request = GenerateBackAllDishRequest(orderId, tableNo, Globals.UserInfo.UserID);
+                var request = GenerateBackAllDishRequest(orderId, tableNo, Globals.UserInfo.UserID, reason);
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
                 return response.IsSuccess ? null : "退菜失败。";
             }
@@ -260,13 +260,13 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
-        private BackDishRequest GenerateBackAllDishRequest(string orderId, string tableNo, string userName)
+        private BackDishRequest GenerateBackAllDishRequest(string orderId, string tableNo, string userName, string reason)
         {
             return new BackDishRequest
             {
                 actionType = ((int)EnumBackDishType.All).ToString(),
                 currenttableid = tableNo,
-                discardReason = "整单退菜",
+                discardReason = reason,
                 discardUserId = userName,
                 orderNo = orderId,
             };

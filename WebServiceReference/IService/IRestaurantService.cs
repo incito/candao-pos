@@ -86,10 +86,11 @@ namespace WebServiceReference.IService
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="tableNo"></param>
-        /// <param name="orderId"></param>
+        /// <param name="tableNo">餐桌号。</param>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="reason">退菜原因。</param>
         /// <returns></returns>
-        string BackAllDish(string tableNo, string orderId);
+        string BackAllDish(string tableNo, string orderId, string reason);
 
     }
 }
