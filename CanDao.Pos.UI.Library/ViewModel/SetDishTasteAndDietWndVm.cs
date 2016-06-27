@@ -18,7 +18,7 @@ namespace CanDao.Pos.UI.Library.ViewModel
         public SetDishTasteAndDietWndVm(DishSimpleInfo dishSimpleInfo)
         {
             DishInfo = dishSimpleInfo;
-            DishNum = 1;
+            DishNum = dishSimpleInfo.DishNum;
         }
 
         #endregion
@@ -33,11 +33,11 @@ namespace CanDao.Pos.UI.Library.ViewModel
         /// <summary>
         /// 菜品个数。
         /// </summary>
-        private int _dishNum;
+        private decimal _dishNum;
         /// <summary>
         /// 菜品个数。
         /// </summary>
-        public int DishNum
+        public decimal DishNum
         {
             get { return _dishNum; }
             set

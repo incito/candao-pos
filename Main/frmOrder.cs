@@ -902,7 +902,8 @@ namespace Main
             {
                 DishName = dishInfo.DishName,
                 DishPrice = dishInfo.Price,
-                DishUnit = dishInfo.Dishunit
+                DishUnit = dishInfo.Dishunit,
+                DishNum = 1,
             };
         }
 

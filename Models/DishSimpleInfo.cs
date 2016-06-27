@@ -19,5 +19,10 @@
         /// 菜品单位。
         /// </summary>
         public string DishUnit { get; set; }
+
+        /// <summary>
+        /// 菜品数量。
+        /// </summary>
+        public decimal DishNum { get; set; }
     }
 }

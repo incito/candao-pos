@@ -5288,13 +5288,14 @@ namespace Main
 
             var dishName = dr["dishName"].ToString();
             decimal price = decimal.Parse(dr["price"].ToString());
+            decimal dishNum = decimal.Parse(dr["dishnum"].ToString());
             var dishSimpleInfo = new DishSimpleInfo()
             {
                 DishName = dishName,
                 DishPrice = price,
-                DishUnit = dishunit
+                DishUnit = dishunit,
+                DishNum = dishNum,
             };
-
 
             var wnd = new SetDishTasteAndDietWindow(null, dishSimpleInfo);
             if (wnd.ShowDialog() == true)
@@ -5323,6 +5324,7 @@ namespace Main
             }
 
             Warning("整单退菜成功。");
+            Opentable2(true);
         }
     }
 }
