@@ -4,6 +4,14 @@
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              x:Name="Ctrl">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+                <ResourceDictionary Source="/CanDao.Pos.UI.Library;component/MyDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <StackPanel Orientation="Vertical">
         <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="Bold" VerticalAlignment="Top"/>
         <Border Height="2" Background="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
@@ -15,7 +23,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ToggleButton Content="{Binding Name}" IsChecked="{Binding IsSelected}" Margin="5" FontSize="20" MinWidth="70" MinHeight="35"/>
+                    <ToggleButton Content="{Binding Name}" IsChecked="{Binding IsSelected}" Style="{StaticResource DietTogBtnStyle}" Margin="5" FontSize="20" MinWidth="70" MinHeight="35"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

@@ -28,8 +28,7 @@ namespace Main
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.tmrClear = new System.Windows.Forms.Timer(this.components);
+            this.tmrClear = new System.Windows.Forms.Timer();
             this.panel3 = new System.Windows.Forms.Panel();
             this.pnlType = new System.Windows.Forms.Panel();
             this.btnType10 = new Library.UserControls.ucDish();
@@ -698,9 +697,9 @@ namespace Main
             this.BtnRemarkOrder.Font = new System.Drawing.Font("Tahoma", 12F);
             this.BtnRemarkOrder.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.BtnRemarkOrder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BtnRemarkOrder.Location = new System.Drawing.Point(324, 1);
+            this.BtnRemarkOrder.Location = new System.Drawing.Point(351, 1);
             this.BtnRemarkOrder.Name = "BtnRemarkOrder";
-            this.BtnRemarkOrder.Size = new System.Drawing.Size(82, 53);
+            this.BtnRemarkOrder.Size = new System.Drawing.Size(91, 53);
             this.BtnRemarkOrder.TabIndex = 365;
             this.BtnRemarkOrder.Tag = "0";
             this.BtnRemarkOrder.Text = "全单备注";
@@ -729,7 +728,7 @@ namespace Main
             this.btnZD.ForeColor = System.Drawing.Color.CornflowerBlue;
             this.btnZD.Image = global::KYPOS.Properties.Resources.freeamount;
             this.btnZD.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnZD.Location = new System.Drawing.Point(223, 0);
+            this.btnZD.Location = new System.Drawing.Point(224, 0);
             this.btnZD.Name = "btnZD";
             this.btnZD.Size = new System.Drawing.Size(99, 53);
             this.btnZD.TabIndex = 364;
@@ -820,9 +819,9 @@ namespace Main
             this.btnOrder.ForeColor = System.Drawing.Color.White;
             this.btnOrder.Image = global::KYPOS.Properties.Resources.orderok;
             this.btnOrder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnOrder.Location = new System.Drawing.Point(503, 0);
+            this.btnOrder.Location = new System.Drawing.Point(471, 0);
             this.btnOrder.Name = "btnOrder";
-            this.btnOrder.Size = new System.Drawing.Size(92, 53);
+            this.btnOrder.Size = new System.Drawing.Size(106, 53);
             this.btnOrder.TabIndex = 288;
             this.btnOrder.Text = "        结帐";
             this.btnOrder.UseVisualStyleBackColor = false;
@@ -833,7 +832,7 @@ namespace Main
             this.button1.BackColor = System.Drawing.Color.White;
             this.button1.Font = new System.Drawing.Font("Tahoma", 12F);
             this.button1.ForeColor = System.Drawing.Color.Blue;
-            this.button1.Location = new System.Drawing.Point(594, 1);
+            this.button1.Location = new System.Drawing.Point(583, 1);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(88, 53);
             this.button1.TabIndex = 290;

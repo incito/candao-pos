@@ -166,7 +166,7 @@ namespace Main
             //focusEdt = edtNum1;
             pnlBtn.Parent = this;
             pnlBtn.BringToFront();
-            pnlBtn.Top = this.Height - pnlBtn.Height - 50;
+            pnlBtn.Top = this.Height - pnlBtn.Height - 200;
         }
         public void initData(string tableNo)
         {

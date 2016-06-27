@@ -49,6 +49,23 @@
         </Setter>
     </Style>
     
+    <Style TargetType="ToggleButton" x:Key="DietTogBtnStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Bd" Background="White">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="Gray"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <DataTemplate x:Key="RowIndexDataTemplate">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
             <TextBlock FontSize="10" Text="{Binding Path=RowHandle.Value, Converter={StaticResource IndexCountCvt}}" TextAlignment="Center" VerticalAlignment="Center" />

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -62,6 +61,7 @@
             this.LbOrderMark = new System.Windows.Forms.Label();
             this.BtnMark = new System.Windows.Forms.Button();
             this.pnlMore = new System.Windows.Forms.Panel();
+            this.BtnBackAll = new System.Windows.Forms.Button();
             this.btnOrderML = new System.Windows.Forms.Button();
             this.btnRePrint = new System.Windows.Forms.Button();
             this.btnCancelOrder = new System.Windows.Forms.Button();
@@ -74,6 +74,13 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.dgvBill = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dishidleft = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dishnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dishunit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dishstatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlAmount = new System.Windows.Forms.Panel();
             this.lbTip = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
@@ -95,10 +102,10 @@
             this.lblRs = new System.Windows.Forms.Label();
             this.lblDesk = new System.Windows.Forms.Label();
             this.edtRoom = new DevExpress.XtraEditors.TextEdit();
-            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
-            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
+            this.barManager1 = new DevExpress.XtraBars.BarManager();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -238,19 +245,12 @@
             this.label22 = new System.Windows.Forms.Label();
             this.edtWx = new DevExpress.XtraEditors.TextEdit();
             this.label6 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.tmrOpen = new System.Windows.Forms.Timer(this.components);
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.tmrClose = new System.Windows.Forms.Timer(this.components);
-            this.tmrOpenTable = new System.Windows.Forms.Timer(this.components);
-            this.iltDbgBill = new System.Windows.Forms.ImageList(this.components);
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dishidleft = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dishnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dishunit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dishstatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timer1 = new System.Windows.Forms.Timer();
+            this.tmrOpen = new System.Windows.Forms.Timer();
+            this.imageList1 = new System.Windows.Forms.ImageList();
+            this.tmrClose = new System.Windows.Forms.Timer();
+            this.tmrOpenTable = new System.Windows.Forms.Timer();
+            this.iltDbgBill = new System.Windows.Forms.ImageList();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgWidgh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -631,7 +631,7 @@
             this.LbOrderMark.ForeColor = System.Drawing.Color.Gray;
             this.LbOrderMark.Location = new System.Drawing.Point(0, 400);
             this.LbOrderMark.Name = "LbOrderMark";
-            this.LbOrderMark.Size = new System.Drawing.Size(279, 61);
+            this.LbOrderMark.Size = new System.Drawing.Size(282, 61);
             this.LbOrderMark.TabIndex = 303;
             this.LbOrderMark.Tag = "171";
             this.LbOrderMark.Text = "全单备注：";
@@ -654,15 +654,31 @@
             // 
             // pnlMore
             // 
+            this.pnlMore.Controls.Add(this.BtnBackAll);
             this.pnlMore.Controls.Add(this.btnOrderML);
             this.pnlMore.Controls.Add(this.btnRePrint);
             this.pnlMore.Controls.Add(this.btnCancelOrder);
             this.pnlMore.Controls.Add(this.btnRePrintCust);
             this.pnlMore.Controls.Add(this.btnPrintMember1);
-            this.pnlMore.Location = new System.Drawing.Point(162, 200);
+            this.pnlMore.Location = new System.Drawing.Point(162, 154);
             this.pnlMore.Name = "pnlMore";
-            this.pnlMore.Size = new System.Drawing.Size(120, 257);
+            this.pnlMore.Size = new System.Drawing.Size(120, 303);
             this.pnlMore.TabIndex = 280;
+            // 
+            // BtnBackAll
+            // 
+            this.BtnBackAll.Enabled = false;
+            this.BtnBackAll.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.BtnBackAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnBackAll.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.BtnBackAll.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.BtnBackAll.Location = new System.Drawing.Point(3, 7);
+            this.BtnBackAll.Name = "BtnBackAll";
+            this.BtnBackAll.Size = new System.Drawing.Size(114, 44);
+            this.BtnBackAll.TabIndex = 245;
+            this.BtnBackAll.Text = "整单退菜";
+            this.BtnBackAll.UseVisualStyleBackColor = true;
+            this.BtnBackAll.Click += new System.EventHandler(this.BtnBackAll_Click);
             // 
             // btnOrderML
             // 
@@ -671,7 +687,7 @@
             this.btnOrderML.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOrderML.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnOrderML.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnOrderML.Location = new System.Drawing.Point(3, 200);
+            this.btnOrderML.Location = new System.Drawing.Point(3, 249);
             this.btnOrderML.Name = "btnOrderML";
             this.btnOrderML.Size = new System.Drawing.Size(114, 50);
             this.btnOrderML.TabIndex = 244;
@@ -686,7 +702,7 @@
             this.btnRePrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRePrint.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnRePrint.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnRePrint.Location = new System.Drawing.Point(3, 3);
+            this.btnRePrint.Location = new System.Drawing.Point(3, 53);
             this.btnRePrint.Name = "btnRePrint";
             this.btnRePrint.Size = new System.Drawing.Size(114, 44);
             this.btnRePrint.TabIndex = 242;
@@ -701,7 +717,7 @@
             this.btnCancelOrder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelOrder.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnCancelOrder.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnCancelOrder.Location = new System.Drawing.Point(3, 146);
+            this.btnCancelOrder.Location = new System.Drawing.Point(3, 198);
             this.btnCancelOrder.Name = "btnCancelOrder";
             this.btnCancelOrder.Size = new System.Drawing.Size(114, 50);
             this.btnCancelOrder.TabIndex = 243;
@@ -716,7 +732,7 @@
             this.btnRePrintCust.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRePrintCust.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnRePrintCust.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnRePrintCust.Location = new System.Drawing.Point(3, 49);
+            this.btnRePrintCust.Location = new System.Drawing.Point(3, 99);
             this.btnRePrintCust.Name = "btnRePrintCust";
             this.btnRePrintCust.Size = new System.Drawing.Size(114, 44);
             this.btnRePrintCust.TabIndex = 241;
@@ -731,7 +747,7 @@
             this.btnPrintMember1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPrintMember1.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnPrintMember1.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnPrintMember1.Location = new System.Drawing.Point(3, 94);
+            this.btnPrintMember1.Location = new System.Drawing.Point(3, 146);
             this.btnPrintMember1.Name = "btnPrintMember1";
             this.btnPrintMember1.Size = new System.Drawing.Size(114, 50);
             this.btnPrintMember1.TabIndex = 240;
@@ -883,6 +899,66 @@
             this.dgvBill.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgvBill_MouseDown);
             this.dgvBill.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dgvBill_MouseMove);
             this.dgvBill.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dgvBill_MouseUp);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "序";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Width = 30;
+            // 
+            // dishidleft
+            // 
+            this.dishidleft.DataPropertyName = "dishidleft";
+            this.dishidleft.FillWeight = 30F;
+            this.dishidleft.HeaderText = "ID";
+            this.dishidleft.Name = "dishidleft";
+            this.dishidleft.ReadOnly = true;
+            this.dishidleft.Visible = false;
+            this.dishidleft.Width = 30;
+            // 
+            // title
+            // 
+            this.title.DataPropertyName = "title";
+            this.title.FillWeight = 135F;
+            this.title.HeaderText = "菜品名称";
+            this.title.Name = "title";
+            this.title.ReadOnly = true;
+            this.title.Width = 80;
+            // 
+            // dishnum
+            // 
+            this.dishnum.DataPropertyName = "dishnum";
+            this.dishnum.FillWeight = 40F;
+            this.dishnum.HeaderText = "数量";
+            this.dishnum.Name = "dishnum";
+            this.dishnum.ReadOnly = true;
+            this.dishnum.Width = 58;
+            // 
+            // dishunit
+            // 
+            this.dishunit.DataPropertyName = "dishunit";
+            this.dishunit.HeaderText = "单位";
+            this.dishunit.Name = "dishunit";
+            this.dishunit.ReadOnly = true;
+            this.dishunit.Width = 46;
+            // 
+            // amount
+            // 
+            this.amount.DataPropertyName = "amount";
+            this.amount.FillWeight = 80F;
+            this.amount.HeaderText = "小计";
+            this.amount.Name = "amount";
+            this.amount.ReadOnly = true;
+            this.amount.Width = 90;
+            // 
+            // dishstatus
+            // 
+            this.dishstatus.DataPropertyName = "dishstatus";
+            this.dishstatus.HeaderText = "dishstatus";
+            this.dishstatus.Name = "dishstatus";
+            this.dishstatus.ReadOnly = true;
+            this.dishstatus.Visible = false;
             // 
             // pnlAmount
             // 
@@ -3125,66 +3201,6 @@
             this.iltDbgBill.Images.SetKeyName(0, "weigh_icon.png");
             this.iltDbgBill.Images.SetKeyName(1, "weigh_blue.png");
             // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "序";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Width = 30;
-            // 
-            // dishidleft
-            // 
-            this.dishidleft.DataPropertyName = "dishidleft";
-            this.dishidleft.FillWeight = 30F;
-            this.dishidleft.HeaderText = "ID";
-            this.dishidleft.Name = "dishidleft";
-            this.dishidleft.ReadOnly = true;
-            this.dishidleft.Visible = false;
-            this.dishidleft.Width = 30;
-            // 
-            // title
-            // 
-            this.title.DataPropertyName = "title";
-            this.title.FillWeight = 135F;
-            this.title.HeaderText = "菜品名称";
-            this.title.Name = "title";
-            this.title.ReadOnly = true;
-            this.title.Width = 80;
-            // 
-            // dishnum
-            // 
-            this.dishnum.DataPropertyName = "dishnum";
-            this.dishnum.FillWeight = 40F;
-            this.dishnum.HeaderText = "数量";
-            this.dishnum.Name = "dishnum";
-            this.dishnum.ReadOnly = true;
-            this.dishnum.Width = 58;
-            // 
-            // dishunit
-            // 
-            this.dishunit.DataPropertyName = "dishunit";
-            this.dishunit.HeaderText = "单位";
-            this.dishunit.Name = "dishunit";
-            this.dishunit.ReadOnly = true;
-            this.dishunit.Width = 46;
-            // 
-            // amount
-            // 
-            this.amount.DataPropertyName = "amount";
-            this.amount.FillWeight = 80F;
-            this.amount.HeaderText = "小计";
-            this.amount.Name = "amount";
-            this.amount.ReadOnly = true;
-            this.amount.Width = 90;
-            // 
-            // dishstatus
-            // 
-            this.dishstatus.DataPropertyName = "dishstatus";
-            this.dishstatus.HeaderText = "dishstatus";
-            this.dishstatus.Name = "dishstatus";
-            this.dishstatus.ReadOnly = true;
-            this.dishstatus.Visible = false;
-            // 
             // frmPosMainV3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -3496,5 +3512,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dishunit;
         private System.Windows.Forms.DataGridViewTextBoxColumn amount;
         private System.Windows.Forms.DataGridViewTextBoxColumn dishstatus;
+        private System.Windows.Forms.Button BtnBackAll;
     }
 }

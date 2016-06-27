@@ -243,5 +243,33 @@ namespace WebServiceReference.ServiceImpl
                 return new Tuple<string, List<SystemSetData>>(ex.Message, null);
             }
         }
+
+        public string BackAllDish(string tableNo, string orderId)
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/discarddish.json", RestClient.server, RestClient.apiPath);
+                var request = GenerateBackAllDishRequest(orderId, tableNo, Globals.UserInfo.UserID);
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                return response.IsSuccess ? null : "退菜失败。";
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("整桌退菜异常。", ex.Message);
+                return "整桌退菜异常。" + ex.Message;
+            }
+        }
+
+        private BackDishRequest GenerateBackAllDishRequest(string orderId, string tableNo, string userName)
+        {
+            return new BackDishRequest
+            {
+                actionType = ((int)EnumBackDishType.All).ToString(),
+                currenttableid = tableNo,
+                discardReason = "整单退菜",
+                discardUserId = userName,
+                orderNo = orderId,
+            };
+        }
     }
 }

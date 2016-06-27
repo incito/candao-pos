@@ -65,6 +65,7 @@ namespace Main
             this.dietSetControl1 = new CanDao.Pos.UI.Library.View.DietSetControl();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.tasteSetControl = new CanDao.Pos.UI.Library.View.TasteSetControl();
+            this.panel3 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.edtNum2.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtNum1.Properties)).BeginInit();
             this.panel1.SuspendLayout();
@@ -73,6 +74,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlNum.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblNum2
@@ -81,7 +83,7 @@ namespace Main
             this.lblNum2.BackColor = System.Drawing.SystemColors.Window;
             this.lblNum2.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblNum2.ForeColor = System.Drawing.Color.HotPink;
-            this.lblNum2.Location = new System.Drawing.Point(50, 265);
+            this.lblNum2.Location = new System.Drawing.Point(6, 99);
             this.lblNum2.Name = "lblNum2";
             this.lblNum2.Size = new System.Drawing.Size(54, 22);
             this.lblNum2.TabIndex = 303;
@@ -93,7 +95,7 @@ namespace Main
             this.label1.BackColor = System.Drawing.SystemColors.Window;
             this.label1.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.HotPink;
-            this.label1.Location = new System.Drawing.Point(50, 200);
+            this.label1.Location = new System.Drawing.Point(11, 34);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 22);
             this.label1.TabIndex = 302;
@@ -144,7 +146,7 @@ namespace Main
             // edtNum2
             // 
             this.edtNum2.EditValue = "";
-            this.edtNum2.Location = new System.Drawing.Point(105, 256);
+            this.edtNum2.Location = new System.Drawing.Point(71, 90);
             this.edtNum2.Name = "edtNum2";
             this.edtNum2.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 18F);
             this.edtNum2.Properties.Appearance.ForeColor = System.Drawing.Color.Black;
@@ -159,7 +161,7 @@ namespace Main
             this.lblDishNameFish2.AutoSize = true;
             this.lblDishNameFish2.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblDishNameFish2.ForeColor = System.Drawing.Color.Blue;
-            this.lblDishNameFish2.Location = new System.Drawing.Point(50, 232);
+            this.lblDishNameFish2.Location = new System.Drawing.Point(11, 63);
             this.lblDishNameFish2.Name = "lblDishNameFish2";
             this.lblDishNameFish2.Size = new System.Drawing.Size(32, 22);
             this.lblDishNameFish2.TabIndex = 296;
@@ -168,7 +170,7 @@ namespace Main
             // edtNum1
             // 
             this.edtNum1.EditValue = "";
-            this.edtNum1.Location = new System.Drawing.Point(105, 192);
+            this.edtNum1.Location = new System.Drawing.Point(71, 25);
             this.edtNum1.Name = "edtNum1";
             this.edtNum1.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 18F);
             this.edtNum1.Properties.Appearance.ForeColor = System.Drawing.Color.Black;
@@ -184,7 +186,7 @@ namespace Main
             this.lblDishNameFish1.BackColor = System.Drawing.SystemColors.Window;
             this.lblDishNameFish1.Font = new System.Drawing.Font("宋体", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblDishNameFish1.ForeColor = System.Drawing.Color.Blue;
-            this.lblDishNameFish1.Location = new System.Drawing.Point(50, 167);
+            this.lblDishNameFish1.Location = new System.Drawing.Point(11, 2);
             this.lblDishNameFish1.Name = "lblDishNameFish1";
             this.lblDishNameFish1.Size = new System.Drawing.Size(32, 22);
             this.lblDishNameFish1.TabIndex = 294;
@@ -486,6 +488,19 @@ namespace Main
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Child = this.tasteSetControl;
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.lblDishNameFish1);
+            this.panel3.Controls.Add(this.lblNum2);
+            this.panel3.Controls.Add(this.edtNum1);
+            this.panel3.Controls.Add(this.label1);
+            this.panel3.Controls.Add(this.lblDishNameFish2);
+            this.panel3.Controls.Add(this.edtNum2);
+            this.panel3.Location = new System.Drawing.Point(39, 166);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(305, 155);
+            this.panel3.TabIndex = 305;
+            // 
             // frmFish
             // 
             this.Appearance.BackColor = System.Drawing.SystemColors.Window;
@@ -494,21 +509,16 @@ namespace Main
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(658, 613);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.lblNum2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblDishNameYg);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnFish);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.edtNum2);
-            this.Controls.Add(this.lblDishNameFish2);
-            this.Controls.Add(this.edtNum1);
-            this.Controls.Add(this.lblDishNameFish1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnlNum);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblDishName);
             this.Controls.Add(this.btnOK);
+            this.Controls.Add(this.panel3);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmFish";
@@ -525,6 +535,8 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlNum.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -569,6 +581,7 @@ namespace Main
         private CanDao.Pos.UI.Library.View.DietSetControl dietSetControl1;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private CanDao.Pos.UI.Library.View.TasteSetControl tasteSetControl;
+        private System.Windows.Forms.Panel panel3;
 
     }
 }

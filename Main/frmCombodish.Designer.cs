@@ -63,15 +63,16 @@ namespace Main
             this.lblLine = new System.Windows.Forms.Label();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.dietSetControl1 = new CanDao.Pos.UI.Library.View.DietSetControl();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlNum.SuspendLayout();
-            this.pnlLeft.SuspendLayout();
             this.pnlMain.SuspendLayout();
             this.pnlBtn.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.edtNum1.Properties)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
@@ -322,7 +323,7 @@ namespace Main
             // 
             this.btnCancel.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnCancel.ForeColor = System.Drawing.Color.Blue;
-            this.btnCancel.Location = new System.Drawing.Point(721, 565);
+            this.btnCancel.Location = new System.Drawing.Point(733, 565);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(108, 52);
             this.btnCancel.TabIndex = 290;
@@ -344,7 +345,7 @@ namespace Main
             // 
             this.btnOK.Font = new System.Drawing.Font("Tahoma", 12F);
             this.btnOK.ForeColor = System.Drawing.Color.Blue;
-            this.btnOK.Location = new System.Drawing.Point(721, 507);
+            this.btnOK.Location = new System.Drawing.Point(733, 507);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(108, 52);
             this.btnOK.TabIndex = 288;
@@ -354,10 +355,9 @@ namespace Main
             // 
             // pnlLeft
             // 
-            this.pnlLeft.Controls.Add(this.pnlMain);
             this.pnlLeft.Location = new System.Drawing.Point(18, 103);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(693, 514);
+            this.pnlLeft.Size = new System.Drawing.Size(693, 469);
             this.pnlLeft.TabIndex = 299;
             // 
             // pnlMain
@@ -369,9 +369,9 @@ namespace Main
             this.pnlMain.Controls.Add(this.lblCombo);
             this.pnlMain.Controls.Add(this.lblSimple);
             this.pnlMain.Controls.Add(this.lblLine);
-            this.pnlMain.Location = new System.Drawing.Point(0, -3);
+            this.pnlMain.Location = new System.Drawing.Point(18, 100);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(697, 517);
+            this.pnlMain.Size = new System.Drawing.Size(697, 471);
             this.pnlMain.TabIndex = 1;
             this.pnlMain.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlMain_Paint);
             // 
@@ -379,7 +379,7 @@ namespace Main
             // 
             this.pnlBtn.Controls.Add(this.btnUp);
             this.pnlBtn.Controls.Add(this.btnDown);
-            this.pnlBtn.Location = new System.Drawing.Point(462, 459);
+            this.pnlBtn.Location = new System.Drawing.Point(463, 407);
             this.pnlBtn.Name = "pnlBtn";
             this.pnlBtn.Size = new System.Drawing.Size(109, 55);
             this.pnlBtn.TabIndex = 300;
@@ -466,7 +466,7 @@ namespace Main
             this.lblSimple.BackColor = System.Drawing.SystemColors.Window;
             this.lblSimple.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblSimple.ForeColor = System.Drawing.Color.Blue;
-            this.lblSimple.Location = new System.Drawing.Point(15, 8);
+            this.lblSimple.Location = new System.Drawing.Point(14, 14);
             this.lblSimple.Name = "lblSimple";
             this.lblSimple.Size = new System.Drawing.Size(24, 16);
             this.lblSimple.TabIndex = 300;
@@ -484,12 +484,20 @@ namespace Main
             // 
             // elementHost1
             // 
-            this.elementHost1.Location = new System.Drawing.Point(15, 625);
+            this.elementHost1.Location = new System.Drawing.Point(3, 6);
             this.elementHost1.Name = "elementHost1";
             this.elementHost1.Size = new System.Drawing.Size(707, 100);
             this.elementHost1.TabIndex = 0;
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Child = this.dietSetControl1;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.elementHost1);
+            this.panel2.Location = new System.Drawing.Point(12, 577);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(714, 148);
+            this.panel2.TabIndex = 300;
             // 
             // frmCombodish
             // 
@@ -498,7 +506,7 @@ namespace Main
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(898, 741);
-            this.Controls.Add(this.elementHost1);
+            this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlLeft);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.panel1);
@@ -506,6 +514,7 @@ namespace Main
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblDishName);
             this.Controls.Add(this.btnOK);
+            this.Controls.Add(this.panel2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmCombodish";
@@ -518,11 +527,11 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlNum.ResumeLayout(false);
-            this.pnlLeft.ResumeLayout(false);
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
             this.pnlBtn.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.edtNum1.Properties)).EndInit();
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -565,6 +574,7 @@ namespace Main
         private System.Windows.Forms.Panel pnlBtn;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private CanDao.Pos.UI.Library.View.DietSetControl dietSetControl1;
+        private System.Windows.Forms.Panel panel2;
 
     }
 }

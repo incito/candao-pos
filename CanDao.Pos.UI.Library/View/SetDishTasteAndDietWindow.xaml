@@ -27,7 +27,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,30,0">
                     <Button Command="{Binding SetDishNumCmd}" Margin="3" Style="{StaticResource SelectNumBtnStyle}"/>
                     <Button Command="{Binding DishNumSubCmd}" Margin="3" Style="{StaticResource ReduceBtnStyle}"/>
-                    <TextBox IsEnabled="False" Text="{Binding DishNum}" Width="60" FontSize="18" TextAlignment="Center"/>
+                    <dxe:TextEdit IsEnabled="False" Text="{Binding DishNum}" Width="60" FontSize="18"/>
                     <TextBlock Text="{Binding DishInfo.DishUnit}" VerticalAlignment="Center"/>
                     <Button Command="{Binding DishNumAddCmd}" Margin="3" Style="{StaticResource AddBtnStyle}"/>
                 </StackPanel>

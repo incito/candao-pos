@@ -63,6 +63,7 @@
     <Compile Include="DishSaleInfo.cs" />
     <Compile Include="DataTableHelper.cs" />
     <Compile Include="DishSimpleInfo.cs" />
+    <Compile Include="Enum\EnumBackDishType.cs" />
     <Compile Include="Enum\EnumBookOrderResult.cs" />
     <Compile Include="Enum\EnumDishSalePeriodsType.cs" />
     <Compile Include="Enum\EnumOddAccuracy.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="NoClearMachineInfo.cs" />
     <Compile Include="PrintStatusInfo.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
+    <Compile Include="Request\BackDishRequest.cs" />
     <Compile Include="Request\BillingTipRequest.cs" />
     <Compile Include="Request\GetDishSaleRequest.cs" />
     <Compile Include="Request\GetSystemSetDataRequest.cs" />

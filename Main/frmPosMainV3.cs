@@ -170,6 +170,7 @@ namespace Main
                 maling = true;
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
+                BtnBackAll.Enabled = false;
                 lblMsg.Text = "";
                 lblAmount2.Text = "应收:0";
                 lblAmount.Text = "消费:0";
@@ -220,6 +221,7 @@ namespace Main
                 edtRoom.Enabled = false;
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
+                BtnBackAll.Enabled = false;
                 lblDesk.Text = string.Format("桌号：{0}", tableno);
                 InitWm();
                 StartWm();
@@ -729,10 +731,12 @@ namespace Main
             btnPrintMember1.Enabled = false;
             btnRePrint.Enabled = false;
             btnCancelOrder.Enabled = false;
+            BtnBackAll.Enabled = false;
             btnOrderML.Enabled = true;
             if (!iswm)
             {
                 btnCancelOrder.Enabled = true;
+                BtnBackAll.Enabled = true;
                 btnPrintBill.Enabled = true;
             }
             btnRePrintCust.Enabled = true;
@@ -744,6 +748,7 @@ namespace Main
             {
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
+                BtnBackAll.Enabled = false;
                 btnRBill.Enabled = true;
                 btnPrintMember1.Enabled = true;
                 btnPrintBill.Enabled = false;
@@ -5305,6 +5310,19 @@ namespace Main
                     AllLog.Instance.E(ex.Message);
                 }
             }
+        }
+
+        private void BtnBackAll_Click(object sender, EventArgs e)
+        {
+            var service = new RestaurantServiceImpl();
+            var msg = service.BackAllDish(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                Warning(msg);
+                return;
+            }
+
+            Warning("整单退菜成功。");
         }
     }
 }

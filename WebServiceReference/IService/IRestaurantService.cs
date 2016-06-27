@@ -83,5 +83,13 @@ namespace WebServiceReference.IService
         /// <returns>Item1全部正常则为null，否则为错误信息，Item2为系统设置值。</returns>
         Tuple<string, List<SystemSetData>> GetSystemSetData(EnumSystemDataType type);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tableNo"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        string BackAllDish(string tableNo, string orderId);
+
     }
 }
