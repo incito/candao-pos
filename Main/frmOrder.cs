@@ -1191,7 +1191,7 @@ namespace Main
         /// </summary>
         private void CheckBtnRemarkOrderStatus()
         {
-            if (Globals.ShoppTable.Rows.Count > 0)
+            if (Globals.ShoppTable.Rows.Count == 0)
                 OnOrderRemarkChanged("");
             BtnRemarkOrder.Enabled = Globals.ShoppTable.Rows.Count > 0;
         }
