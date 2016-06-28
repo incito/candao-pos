@@ -219,6 +219,7 @@ namespace Common
         public static JArray cjFood;//餐具
         public static String branch_id = "";//分店ID号
 
+
         /// <summary>
         /// 店铺营业时间。
         /// </summary>

@@ -333,7 +333,6 @@ namespace WebServiceReference
             }
             catch { }
             JArray jr = (JArray)JsonConvert.DeserializeObject(ret.Cardlist);
-        
             JObject jaCard = (JObject)jr[0];
             ret.Mcard = jaCard["cardno"].ToString();
             ret.Mobile = ja["mobile"].ToString();
@@ -1135,8 +1134,8 @@ namespace WebServiceReference
                 String jsonResult = RestClient.Post_Rest(address, sw);
                 AllLog.Instance.I(string.Format("【VipChangePsw】 result：{0}。", jsonResult));
                 JObject ja = null;
-              
-                ja = (JObject) JsonConvert.DeserializeObject(jsonResult);
+
+                ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
 
                 ret.Retcode = ja["Retcode"].ToString();
                 ret.Ret = ret.Retcode.Equals("0");
@@ -1148,8 +1147,8 @@ namespace WebServiceReference
                 ret.Ret = false;
                 return ret;
             }
-         
-          
+
+
         }
         /// <summary>
         /// 判断会员实体卡

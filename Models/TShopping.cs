@@ -398,6 +398,7 @@ namespace Models
 
             shopptable = tbyh;
         }
+
         /// <summary>
         /// 往购物车内增加一行数据
         /// </summary>
@@ -407,7 +408,8 @@ namespace Models
             //如果dishid和单位相同就相加
             int i = 0;
             if (!isdish)
-            {                    //如果是鱼锅不能加一起 套餐
+            {
+                //如果是鱼锅不能加一起 套餐
                 foreach (DataRow dr2 in shopptable.Rows)
                 {
                     string dishid = dr2["dishid"].ToString();
@@ -415,7 +417,8 @@ namespace Models
                     string primarydishtype = dr2["primarydishtype"].ToString();
                     string dishName = dr2["title"].ToString();
 
-                    if ((dishid.Equals(dishrow.Dishid)) && (dishunit.Equals(dishrow.Dishunit)) && (primarydishtype.Equals(dishrow.Primarydishtype.ToString())))
+                    if ((dishid.Equals(dishrow.Dishid)) && (dishunit.Equals(dishrow.Dishunit)) &&
+                        (primarydishtype.Equals(dishrow.Primarydishtype.ToString())))
                     {
                         if (dishrow.Title.Contains("临时菜"))//临时菜
                         {
@@ -445,7 +448,7 @@ namespace Models
             dr["userid"] = dishrow.Userid;
             dr["ordertime"] = dishrow.Ordertime;
             dr["orderstatus"] = dishrow.Orderstatus;
-            dr["dishnum"] = (decimal)Math.Round(dishrow.Dishnum, 2);
+            dr["dishnum"] = (decimal) Math.Round(dishrow.Dishnum, 2);
             dr["tableid"] = dishrow.Tableid;
             dr["dishid"] = dishrow.Dishid;
             dr["avoid"] = dishrow.Avoid;
@@ -458,9 +461,9 @@ namespace Models
             dr["price"] = dishrow.Price;
             dr["price2"] = dishrow.Price2;
             dr["ordertype"] = dishrow.Ordertype;
-            dr["amount"] = dishrow.Price * (decimal)dishrow.Dishnum;
+            dr["amount"] = dishrow.Price*(decimal) dishrow.Dishnum;
             dr["source"] = dishrow.Source;
-            dr["weigh"] = dishrow.Weigh;//dishstatus 如果是称重下单为1
+            dr["weigh"] = dishrow.Weigh; //dishstatus 如果是称重下单为1
             dr["primarydishtype"] = dishrow.Primarydishtype;
 
             dr["ispot"] = dishrow.IsPot.ToString();
@@ -472,6 +475,12 @@ namespace Models
             dr["freeuser"] = dishrow.Freeuser ?? "";
             dr["freeauthorize"] = dishrow.Freeauthorize ?? "";
             dr["freereason"] = dishrow.Freereason ?? "";
+
+            dr["taste"] = dishrow.Taste;
+            dr["freeuser"] = dishrow.Freeuser;
+            dr["freeauthorize"] = dishrow.Freeauthorize;
+            dr["freereason"] = dishrow.Freereason;
+
 
             shopptable.Rows.Add(dr);
 

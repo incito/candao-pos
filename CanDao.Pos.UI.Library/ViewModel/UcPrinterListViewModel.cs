@@ -135,11 +135,7 @@ namespace CanDao.Pos.UI.Library.ViewModel
                 var result = service.GetPrinterStatusInfo();
                 if (!string.IsNullOrEmpty(result.Item1))
                 {
-                    OwnerCtrl.Dispatcher.BeginInvoke((Action) delegate
-                    {
-                        Msg.Warning(result.Item1);
-                        _refreshTimer.Start();
-                    });
+                    OwnerCtrl.Dispatcher.BeginInvoke((Action)delegate { MessageDialog.Warning(result.Item1); });
                     return;
                 }
 
@@ -155,8 +151,8 @@ namespace CanDao.Pos.UI.Library.ViewModel
                         AllLog.Instance.I("打印机全部状态正常。");
                     else
                         AllLog.Instance.E("有打印机状态异常。");
-                    _refreshTimer.Start();
                 });
+                _refreshTimer.Start();
             });
         }
 
@@ -170,19 +166,6 @@ namespace CanDao.Pos.UI.Library.ViewModel
         {
             OwnerCtrl.GcPrinterList.Focus();
             Keyboard.Press(Key.PageDown);
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// 停止刷新。
-        /// </summary>
-        public void StopRefresh()
-        {
-            _refreshTimer.Stop();
-            _refreshTimer.Dispose();
         }
 
         #endregion
@@ -202,7 +185,7 @@ namespace CanDao.Pos.UI.Library.ViewModel
         private void RefreshTimerElspsed(object sender, ElapsedEventArgs e)
         {
             _refreshTimer.Stop();
-            if (--RemainingTimes <= 0)
+            if (--RemainingTimes < 0)
                 Refresh(null);
             else
                 _refreshTimer.Start();

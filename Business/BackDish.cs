@@ -16,15 +16,14 @@ namespace Business
     public class BackDish
     {
         public static DataTable backdt = null;
-        public static bool backDish(string orderNo, string tableno, string discardUserId, string userid, DataTable dt, double backnum, string discardReason)
+        public static bool backDish(string orderNo, string tableno, string discardUserId, string userid, DataRow dr, double backnum, string discardReason)
         {
             double tmpbacknum = backnum;
             double dishnum = 0;
             double num = 0;
             bool backret = false;
             bool backret2 = false;
-            foreach (DataRow dr in dt.Rows)
-            {
+         
                 dishnum = double.Parse(dr["dishnum"].ToString());
                 if(dishnum>=tmpbacknum)
                 {
@@ -38,8 +37,7 @@ namespace Business
                 string dishtype = dr["dishtype"].ToString();
                 StringWriter sw=null;
                 string ispot = dr["ispot"].ToString();
-                string dishstatus = dr["dishstatus"].ToString();
-                string dishtype2 = dr["dishtype"].ToString();
+           
                 string ismaster = dr["ismaster"].ToString();
                 string childdishtype = dr["childdishtype"].ToString();
                 int backtype = 0;
@@ -86,8 +84,8 @@ namespace Business
                         break;
                 }
                 if(tmpbacknum<=0)
-                { break; }
-            }
+                { }
+            
             return backret2;
         }
         public static double getBackNum(DataTable dt)
@@ -174,6 +172,8 @@ namespace Business
             writer.Flush();
             return sw;
         }
+
+    
         public static string getdishNum(double dishnum)
         {
             return dishnum.ToString();

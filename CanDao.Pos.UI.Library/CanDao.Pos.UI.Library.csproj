@@ -228,12 +228,6 @@
     <Resource Include="Images\Alert.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\return.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Reduce.png" />
     <Resource Include="Images\Add.png" />
     <Resource Include="Images\SelectNum.png" />

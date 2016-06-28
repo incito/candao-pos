@@ -31,48 +31,39 @@ namespace Main
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Globals.ProductVersion = Application.ProductVersion;
-            frmStart.ShowStart();
-            frmStart.frm.Update();
-            Thread.Sleep(50);
-            frmStart.frm.setMsg("加载样式...");
-            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);//捕获系统所产生的异常。
-            Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
-            frmStart.frm.setMsg("检测实例...");
-            Process instance = RunningInstance();
-            if (instance != null)//已经有一个实例在运行
+            try
             {
-                HandleRunningInstance(instance);
-                return;
-            }
-            frmStart.frm.setMsg("读取配置文件...");
-            SystemConfig.ReadSettings(); //读取用户自定义设置
-
-            BonusSkins.Register();//注册Dev酷皮肤
-            //OfficeSkins.Register();////注册Office样式的皮肤
-            SkinManager.EnableFormSkins();//启用窗体支持换肤特性
-            RestClient.GetSoapRemoteAddress();
-
-            var netResult = RestClient.CheckServerConnection();
-            if (!string.IsNullOrEmpty(netResult))
-            {
-                var frm = new FrmRetry(netResult);
-                if (frm.ShowDialog() == DialogResult.Cancel)
-                    return;
-            }
-
-            netResult = RestClient.CheckDataServerConnection();
-            if (!string.IsNullOrEmpty(netResult))
-            {
-                if (!RestClient.RestartDataserver())
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Globals.ProductVersion = Application.ProductVersion;
+                frmStart.ShowStart();
+                frmStart.frm.Update();
+                Thread.Sleep(50);
+                frmStart.frm.setMsg("加载样式...");
+                Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);//捕获系统所产生的异常。
+                Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
+                frmStart.frm.setMsg("检测实例...");
+                Process instance = RunningInstance();
+                if (instance != null)//已经有一个实例在运行
                 {
-                    AllLog.Instance.E("DataServer启动失败。");
-                    Msg.ShowError("DataServer启动失败，请联系管理人员。");
+                    HandleRunningInstance(instance);
                     return;
                 }
-            }
+                frmStart.frm.setMsg("读取配置文件...");
+                SystemConfig.ReadSettings(); //读取用户自定义设置
+
+                BonusSkins.Register();//注册Dev酷皮肤
+                //OfficeSkins.Register();////注册Office样式的皮肤
+                SkinManager.EnableFormSkins();//启用窗体支持换肤特性
+                RestClient.GetSoapRemoteAddress();
+
+                var netResult = RestClient.CheckServerConnection();
+                if (!string.IsNullOrEmpty(netResult))
+                {
+                    var frm = new FrmRetry(netResult);
+                    if (frm.ShowDialog() == DialogResult.Cancel)
+                        return;
+                }
 
             ReportPrint.Init();
 
@@ -89,123 +80,152 @@ namespace Main
                 // ignored
             }
 
-            frmStart.frm.setMsg("获取营业时间...");
-            IRestaurantService service = new RestaurantServiceImpl();
-            try
-            {
-                var result = service.GetRestaurantTradeTime();
-                if (!string.IsNullOrEmpty(result.Item1))
+                //netResult = RestClient.CheckDataServerConnection();
+                //if (!string.IsNullOrEmpty(netResult))
+                //{
+                //    if (!RestClient.RestartDataserver())
+                //    {
+                //        AllLog.Instance.E("DataServer启动失败。");
+                //        Msg.ShowError("DataServer启动失败，请联系管理人员。");
+                //        return;
+                //    }
+                //}
+
+                ReportPrint.Init();
+                frmStart.frm.setMsg("获取系统设置...");
+                try
                 {
-                    Msg.ShowError(result.Item1);
-                    return;
+                    RestClient.getSystemSetData(out Globals.roundinfo);
+                }
+                catch
+                {
+                    // ignored
                 }
 
-                Globals.TradeTime = result.Item2;
-            }
-            catch (Exception ex)
-            {
-                AllLog.Instance.E(ex);
-                Msg.ShowException(ex);
-            }
-
-            frmStart.frm.setMsg("检查之前是否结业...");
-            var endworkResult = service.CheckWhetherTheLastEndWork();
-            if (!string.IsNullOrEmpty(endworkResult.Item1))
-            {
-                frmBase.Warning(endworkResult.Item1);
-                return;
-            }
-            if (!endworkResult.Item2)//未结业走强制结业流程。
-            {
-                var allTableResult = service.GetAllTableInfoes();
-                if (!string.IsNullOrEmpty(allTableResult.Item1))
+                frmStart.frm.setMsg("获取营业时间...");
+                IRestaurantService service = new RestaurantServiceImpl();
+                try
                 {
-                    frmBase.Warning(allTableResult.Item1);
-                    return;
-                }
-
-                if (allTableResult.Item2.Any(t => t.TableStatus == EnumTableStatus.Dinner))//还有就餐的餐台，就让收银员登录，结账。
-                {
-                    frmBase.Warning("昨日还有未结账餐台，请先登录收银员账号并结账，然后进行清机和结业。");
-                    while (true)
+                    var result = service.GetRestaurantTradeTime();
+                    if (!string.IsNullOrEmpty(result.Item1))
                     {
-                        var loginResult = CashierLogin();
-                        if (!loginResult.HasValue)
+                        Msg.ShowError(result.Item1);
+                        return;
+                    }
+
+                    Globals.TradeTime = result.Item2;
+                }
+                catch (Exception ex)
+                {
+                    AllLog.Instance.E(ex);
+                    Msg.ShowException(ex);
+                }
+
+                frmStart.frm.setMsg("检查之前是否结业...");
+                var endworkResult = service.CheckWhetherTheLastEndWork();
+                if (!string.IsNullOrEmpty(endworkResult.Item1))
+                {
+                    frmBase.Warning(endworkResult.Item1);
+                    return;
+                }
+                if (!endworkResult.Item2)//未结业走强制结业流程。
+                {
+                    var allTableResult = service.GetAllTableInfoes();
+                    if (!string.IsNullOrEmpty(allTableResult.Item1))
+                    {
+                        frmBase.Warning(allTableResult.Item1);
+                        return;
+                    }
+
+                    if (allTableResult.Item2.Any(t => t.TableStatus == EnumTableStatus.Dinner))//还有就餐的餐台，就让收银员登录，结账。
+                    {
+                        frmBase.Warning("昨日还有未结账餐台，请先登录收银员账号并结账，然后进行清机和结业。");
+                        while (true)
                         {
-                            frmBase.Warning("请登录收银员账号以便结账餐台。");
-                            continue;
-                        }
+                            var loginResult = CashierLogin();
+                            if (!loginResult.HasValue)
+                            {
+                                frmBase.Warning("请登录收银员账号以便结账餐台。");
+                                continue;
+                            }
 
-                        if (!loginResult.Value)//取消登录。
+                            if (!loginResult.Value)//取消登录。
+                                return;
+
+                            MainForm.Show();
+                            MainForm.SetInForcedEndWorkModel();
+                            Application.Run();
                             return;
-
-                        MainForm.Show();
-                        MainForm.SetInForcedEndWorkModel();
-                        Application.Run();
-                        return;
+                        }
                     }
+
+                    if (!CommonHelper.ClearAllMachine(true))
+                        return;
+
+                    frmBase.Warning("昨日还有未结业，请先结业。");
+                    CommonHelper.EndWork();
+                    return;
                 }
 
-                if (!CommonHelper.ClearAllMachine(true))
-                    return;
-
-                frmBase.Warning("昨日还有未结业，请先结业。");
-                CommonHelper.EndWork();
-                return;
-            }
-
-            //如果还没有开业，提示开业授权
-            string reinfo = "";
-            frmStart.frm.setMsg("检查是否开业...");
-            try
-            {
-                if (!RestClient.OpenUp("", "", 0, out reinfo))
+                //如果还没有开业，提示开业授权
+                string reinfo = "";
+                frmStart.frm.setMsg("检查是否开业...");
+                try
                 {
-                    //Thread.Sleep(1000);
-                    try
-                    { frmStart.frm.Close(); }
-                    catch { }
-                    if (!frmPermission.ShowPermission())
+                    if (!RestClient.OpenUp("", "", 0, out reinfo))
                     {
-                        Application.Exit();
-                        return;
+                        //Thread.Sleep(1000);
+                        try
+                        { frmStart.frm.Close(); }
+                        catch { }
+                        if (!frmPermission.ShowPermission())
+                        {
+                            Application.Exit();
+                            return;
+                        }
+                        else
+                        {
+                            //经理权限开业
+                            if (!frmPermission2.ShowPermission2("开业经理授权", EnumRightType.OpenUp))
+                            {
+                                Application.Exit();
+                                return;
+                            }
+                        }
                     }
-                    else
+                }
+                catch (Exception ex)
+                {
+                    Msg.ShowException(ex);
+                    Application.Exit();
+                    return;
+                }
+                //注意：先打开登陆窗体,登陆成功后正式运行程序(MDI主窗体)
+                frmStart.frm.setMsg("开始登录...");
+
+                if (frmLogin.Login())
+                {
+                    //如果没有收银权限，那不用输入零找金
+                    if (Globals.userRight.getSyRigth())
                     {
-                        //经理权限开业
-                        if (!frmPermission2.ShowPermission2("开业经理授权", EnumRightType.OpenUp))
+                        if (!frmPosMainV3.checkInputTellerCash())
                         {
                             Application.Exit();
                             return;
                         }
                     }
+                    MainForm.Show();
+                    Application.Run();
                 }
+                else//登录失败,退出程序
+                    Application.Exit();
             }
             catch (Exception ex)
             {
-                Msg.ShowException(ex);
+                frmBase.Warning("启动失败：" + ex);
                 Application.Exit();
-                return;
             }
-            //注意：先打开登陆窗体,登陆成功后正式运行程序(MDI主窗体)
-            frmStart.frm.setMsg("开始登录...");
 
-            if (frmLogin.Login())
-            {
-                //如果没有收银权限，那不用输入零找金
-                if (Globals.userRight.getSyRigth())
-                {
-                    if (!frmPosMainV3.checkInputTellerCash())
-                    {
-                        Application.Exit();
-                        return;
-                    }
-                }
-                MainForm.Show();
-                Application.Run();
-            }
-            else//登录失败,退出程序
-                Application.Exit();
         }
 
         /// <summary>

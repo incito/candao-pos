@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.InteropServices;
 using CanDao.Pos.UI.Library.View;
+using KYPOS.Dishes;
 
 namespace Main
 {
@@ -721,7 +722,6 @@ namespace Main
         }
         private void addDish(JObject ja)
         {
-            //增加菜品到购物车
             if (ja == null)
                 return;
             //如果是多单位的要选择单位
@@ -746,6 +746,8 @@ namespace Main
             dishinfo.Taste = ja["imagetitle"].ToString();
             dishinfo.Memberprice = 0;
             dishinfo.Level = "0";
+
+             
             try
             {
                 dishinfo.Level = ja["level"].ToString();
@@ -852,7 +854,6 @@ namespace Main
                         }
                     }
                 }
-                else//单品
                 {
                     var tasteString = ja["imagetitle"].ToString();//口味
                     if (!string.IsNullOrEmpty(tasteString))
@@ -872,12 +873,48 @@ namespace Main
                             return;
                         }
                     }
-                    t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
+                    AddShopping(dishinfo, false);
                 }
             //通知调用页更新页面
             OnShoppingChange();
 
         }
+
+        /// <summary>
+        /// 加入购物车(分支检查是否是临时菜)
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="dishInfo"></param>
+        /// <param name="isdish"></param>
+        private void AddShopping(t_shopping dishinfo, bool isdish)
+        {
+            if (dishinfo.DishType.Equals("0") & dishinfo.Title.Contains("临时菜"))//临时菜判断 单品且菜品名称字段包含“临时菜”
+            {
+                var customDishes = new UcCustomDishesViewModel();
+                var wind = customDishes.GetWindow();
+                if (wind.ShowDialog() == true)
+                {
+                    dishinfo.Title = string.Format("({0}){1}", customDishes.Model.DishesName, dishinfo.Title);
+                    dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount) * float.Parse(customDishes.Model.Price);
+                    dishinfo.Taste = customDishes.Model.DishesName;
+                    //dishinfo.Price = float.Parse(customDishes.Model.Price);
+                    dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString()) * dishinfo.Price;
+
+                    dishinfo.Ordertype = 0;
+                    dishinfo.Primarydishtype = 0;
+                    t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
+            }
+        }
+
 
         private DishSimpleInfo GenerateDishSimpleInfo(t_shopping dishInfo)
         {
@@ -999,6 +1036,7 @@ namespace Main
         {
             //下单
             //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";
+        
             return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, 1, 0, Globals.OrderRemark);
         }
 

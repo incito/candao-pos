@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using CanDao.Pos.UI.Library.ViewModel;
-using Common;
+﻿using CanDao.Pos.UI.Library.ViewModel;
 
 namespace CanDao.Pos.UI.Library.View
 {
