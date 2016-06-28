@@ -12,10 +12,10 @@ namespace CanDao.Pos.UI.Library.View
     /// </summary>
     public partial class SetDishTasteAndDietWindow
     {
-        public SetDishTasteAndDietWindow(List<string> tasteList, DishSimpleInfo dishSimpleInfo)
+        public SetDishTasteAndDietWindow(List<string> tasteList, DishSimpleInfo dishSimpleInfo, bool allowInputDishNum)
         {
             InitializeComponent();
-            var vm = new SetDishTasteAndDietWndVm(dishSimpleInfo) { OwnerWindow = this };
+            var vm = new SetDishTasteAndDietWndVm(dishSimpleInfo, allowInputDishNum) { OwnerWindow = this };
             if (tasteList != null)
             {
                 TasteSetCtrl.TasteInfos = tasteList.Select(t => new TasteInfo { TasteTitle = t }).ToList();
@@ -42,6 +42,7 @@ namespace CanDao.Pos.UI.Library.View
 
         public int DishNum
         {
-            get { return (int)((SetDishTasteAndDietWndVm)DataContext).DishNum; }}
+            get { return (int)((SetDishTasteAndDietWndVm)DataContext).DishNum; }
+        }
     }
 }

@@ -15,10 +15,11 @@ namespace CanDao.Pos.UI.Library.ViewModel
     {
         #region Constructor
 
-        public SetDishTasteAndDietWndVm(DishSimpleInfo dishSimpleInfo)
+        public SetDishTasteAndDietWndVm(DishSimpleInfo dishSimpleInfo, bool allowInputDishNum)
         {
+            AllowInputDishNum = allowInputDishNum;//必须在DishNum设置之前。
             DishInfo = dishSimpleInfo;
-            DishNum = dishSimpleInfo.DishNum;
+            _dishNum = dishSimpleInfo.DishNum;//不是用DishNum是因为DishNum的Set里面有判断。
         }
 
         #endregion
@@ -42,6 +43,11 @@ namespace CanDao.Pos.UI.Library.ViewModel
             get { return _dishNum; }
             set
             {
+                if (!AllowInputDishNum)
+                {
+                    Msg.Warning("不允许直接输入数量，请从右侧点菜。");
+                    return;
+                }
                 _dishNum = value;
                 RaisePropertyChanged("DishNum");
             }
@@ -51,6 +57,11 @@ namespace CanDao.Pos.UI.Library.ViewModel
         /// 是否包含口味。
         /// </summary>
         public bool HasTasteInfos { get; set; }
+
+        /// <summary>
+        /// 是否允许输入菜品数量。
+        /// </summary>
+        public bool AllowInputDishNum { get; set; }
 
         #endregion
 
@@ -81,6 +92,12 @@ namespace CanDao.Pos.UI.Library.ViewModel
         /// <param name="arg"></param>
         private void SetDishNum(object arg)
         {
+            if (!AllowInputDishNum)
+            {
+                Msg.Warning("不允许直接输入数量，请从右侧点菜。");
+                return;
+            }
+
             var wnd = new DishInfoEditWindow(DishInfo.DishName, DishInfo.DishPrice);
             if (wnd.ShowDialog() == true)
             {

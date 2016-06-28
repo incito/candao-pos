@@ -858,7 +858,7 @@ namespace Main
                     if (!string.IsNullOrEmpty(tasteString))
                     {
                         var list = tasteString.Split(',').ToList();
-                        var wnd = new SetDishTasteAndDietWindow(list, GenerateDishSimpleInfo(dishinfo));
+                        var wnd = new SetDishTasteAndDietWindow(list, GenerateDishSimpleInfo(dishinfo), true);
                         if (wnd.ShowDialog() == true)
                         {
                             dishinfo.SelectedTaste = wnd.Taste;

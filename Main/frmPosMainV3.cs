@@ -5275,16 +5275,19 @@ namespace Main
             string Groupid = dr["Groupid"].ToString();
             string Orderstatus = dr["Orderstatus"].ToString();
             string primarydishtype = dr["primarydishtype"].ToString();
+            bool allowInputDishNum = true;
             if (!Groupid.Equals(""))
             {
-                if (primarydishtype.Equals("2"))
+                allowInputDishNum = false;
+                if (primarydishtype.Equals("2") && Orderstatus != "0")//orderstatus=3是套餐主体
                 {
-                    Warning("套餐不允许直接输入数量。");
+                    Warning("请选择套餐主体设置备注。");
                     return;
                 }
-                if (!Orderstatus.Equals("3"))
+                if (primarydishtype.Equals("1") && Orderstatus != "0")//orderstatus=3是套餐主体
                 {
-                    Warning("锅和鱼锅不能直接输入数量。"); return;
+                    Warning("请选择鱼锅主体设置备注。");
+                    return;
                 }
             }
 
@@ -5308,7 +5311,7 @@ namespace Main
                 DishNum = dishNum,
             };
 
-            var wnd = new SetDishTasteAndDietWindow(null, dishSimpleInfo);
+            var wnd = new SetDishTasteAndDietWindow(null, dishSimpleInfo, allowInputDishNum);
             if (wnd.ShowDialog() == true)
             {
                 try

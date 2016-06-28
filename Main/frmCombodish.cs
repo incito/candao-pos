@@ -180,7 +180,6 @@ namespace Main
             pot.PotDish.Groupid2 = guid;
             pot.PotDish.IsPot = 0;
             pot.PotDish.Primarydishtype = 2;
-            pot.PotDish.Avoid = dietSetControl1.Diet;
 
             pot.PotInfo.Orderstatus = 2;
             pot.PotInfo.Orderid = Globals.CurrOrderInfo.orderid;
@@ -193,7 +192,6 @@ namespace Main
             pot.PotInfo.Groupid2 = guid;
             pot.PotInfo.IsPot = 1;
             pot.PotInfo.Primarydishtype = 2;
-            pot.PotInfo.Avoid = dietSetControl1.Diet;
 
             pot.FishDishInfo1.Orderstatus = 5;
             pot.FishDishInfo1.PrimaryKey = getGUID();
@@ -205,7 +203,6 @@ namespace Main
             pot.FishDishInfo1.Groupid = FGuid;
             pot.FishDishInfo1.Groupid2 = guid;
             pot.FishDishInfo1.Primarydishtype = 2;
-            pot.FishDishInfo1.Avoid = dietSetControl1.Diet;
             pot.PotDish.Ordertype = 3;
             t_shopping.add(ref Globals.ShoppTable, pot.PotDish, true);
             pot.PotInfo.Ordertype = 3;
@@ -225,7 +222,6 @@ namespace Main
                 pot.FishDishInfo2.Groupid2 = guid;
                 pot.FishDishInfo2.Groupid = FGuid;
                 pot.FishDishInfo2.Primarydishtype = 2;
-                pot.FishDishInfo2.Avoid = dietSetControl1.Diet;
                 t_shopping.add(ref Globals.ShoppTable, pot.FishDishInfo2, true);
             }
         }
@@ -244,7 +240,6 @@ namespace Main
             dishinfo.Tableid = Globals.CurrTableInfo.tableNo;
             dishinfo.Ordertype = 3;
             dishinfo.Primarydishtype = 2;
-            dishinfo.Avoid = dietSetControl1.Diet;
             t_shopping.add(ref Globals.ShoppTable, dishinfo, true);
         }
         private void AddComboToShopping()
@@ -255,6 +250,7 @@ namespace Main
                 userid = Globals.UserInfo.UserID;
             comboDish.Dishinfo.Dishnum = 1;
             comboDish.Dishinfo.Orderstatus = 0;
+            comboDish.Dishinfo.Avoid = dietSetControl1.Diet;
             addNor(comboDish.Dishinfo);
             TComboFromControl cfc;
             //×éºÏ

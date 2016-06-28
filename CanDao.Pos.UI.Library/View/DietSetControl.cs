@@ -18,6 +18,9 @@ namespace CanDao.Pos.UI.Library.View
             Content = _allowMultSelectorCtrl;
         }
 
+        /// <summary>
+        /// 选择的忌口。
+        /// </summary>
         public string Diet
         {
             get { return _allowMultSelectorCtrl.SelectInfo; }
