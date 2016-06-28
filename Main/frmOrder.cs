@@ -98,11 +98,13 @@ namespace Main
             showTypeNum();
             CheckBtnRemarkOrderStatus();
         }
+
         private void OnAccounts(int ordertype)
         {
             if (accounts != null)
                 accounts(this, new EventArgs(), ordertype);
         }
+
         private void frmPettyCash_Activated(object sender, EventArgs e)
         {
             edtPy.Focus();
@@ -111,30 +113,8 @@ namespace Main
 
         private void button26_Click(object sender, EventArgs e)
         {
-            //edtRoom.Focus();
             SendKeys.Send(((Button)sender).Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
-        }
-
-        private void button17_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button28_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox3_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void edtRoom_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
         }
 
         private void frmPettyCash_Load(object sender, EventArgs e)
@@ -156,7 +136,6 @@ namespace Main
 
                 Left = 0;
                 Top = 0;
-                //CreateBtnArr();
                 refreshBtn();
             }
             finally

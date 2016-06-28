@@ -46,8 +46,6 @@ namespace Common
 
                 //设定键盘显示位置
                 MoveWindow(intptr, posX, posY, 1000, 300, true);
-
-                SetForegroundWindow(intptr);
                 return null;
             }
             catch (Exception ex)

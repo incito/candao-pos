@@ -764,7 +764,7 @@ namespace Main
             if (!iswm)
             {
                 btnCancelOrder.Enabled = true;
-                BtnBackAll.Enabled = true;
+                BtnBackAll.Enabled = Globals.OrderTable.Rows.Count > 0;
                 btnPrintBill.Enabled = true;
             }
             btnRePrintCust.Enabled = true;

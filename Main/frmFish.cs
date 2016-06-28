@@ -34,8 +34,10 @@ namespace Main
             frm.getGroupDetail();
             frm.initView();
 
-            var dishTasteInfos = dishinfo.Taste.Split(',').Select(t => new TasteInfo { TasteTitle = t }).ToList();
-            if (dishTasteInfos.Any())
+            List<TasteInfo> dishTasteInfos = null;
+            if (!string.IsNullOrEmpty(dishinfo.Taste))
+                dishTasteInfos = dishinfo.Taste.Split(',').Select(t => new TasteInfo { TasteTitle = t }).ToList();
+            if (dishTasteInfos != null && dishTasteInfos.Any())
                 frm.tasteSetControl.TasteInfos = dishTasteInfos;
             else
                 frm.tasteSetControl.Visibility = Visibility.Collapsed;
