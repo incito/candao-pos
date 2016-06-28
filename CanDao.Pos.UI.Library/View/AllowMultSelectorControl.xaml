@@ -27,7 +27,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <dxe:TextEdit EditValue="{Binding OtherInfo}" NullText="{Binding Title, StringFormat=其他{0}}" VerticalAlignment="Bottom" Height="30" Focusable="False">
+        <dxe:TextEdit EditValue="{Binding OtherInfo, UpdateSourceTrigger=PropertyChanged}" NullText="{Binding Title, StringFormat=其他{0}}" VerticalAlignment="Bottom" Height="30" Focusable="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDown">
                     <i:InvokeCommandAction Command="{Binding SetOtherInfoCmd}"/>
