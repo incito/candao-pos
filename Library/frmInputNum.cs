@@ -11,7 +11,7 @@ namespace Library
 {
     public partial class frmInputNum : frmBase
     {
-        public string inputNo="";
+        public string inputNo = "";
         public double maxnum = 0;
 
         public static bool ShowInputNum(string msg, out int inputNum, int maxnum)
@@ -22,16 +22,16 @@ namespace Library
             frm.button1.Left = frm.button2.Left;
             frm.button2.Visible = false;
             frm.ShowDialog();
-            bool ret=frm.DialogResult == DialogResult.OK ;
-            if(ret)
+            bool ret = frm.DialogResult == DialogResult.OK;
+            if (ret)
             {
-                inputNum = int.Parse(frm.tbxNum.Text); 
+                inputNum = int.Parse(frm.tbxNum.Text);
             }
             else
             { inputNum = 0; }
-            return ret; 
+            return ret;
         }
-        public static bool ShowInputNum(string msg,string lbltext, out int inputNum, int maxnum)
+        public static bool ShowInputNum(string msg, string lbltext, out int inputNum, int maxnum)
         {
             frmInputNum frm = new frmInputNum();
             frm.lblMsg.Text = msg;
@@ -39,7 +39,7 @@ namespace Library
             frm.button1.Left = frm.button2.Left;
             frm.button2.Visible = false;
             frm.label1.Text = lbltext;
-            if (msg.IndexOf("退")>0)
+            if (msg.IndexOf("退") > 0)
             {
                 frm.label1.ForeColor = Color.Red;
             }
@@ -87,13 +87,8 @@ namespace Library
                 frm.label1.ForeColor = Color.Red;
             }
             frm.ShowDialog();
-            bool ret = frm.DialogResult == DialogResult.OK;
-            if (ret)
-            {
-                inputNum = double.Parse(frm.tbxNum.Text);
-            }
-            else
-            { inputNum = 0; }
+            var ret = frm.DialogResult == DialogResult.OK;
+            inputNum = ret ? Math.Round(double.Parse(frm.tbxNum.Text), 2) : 0;
             return ret;
         }
         public frmInputNum()
@@ -123,7 +118,7 @@ namespace Library
 
         private void button28_Click(object sender, EventArgs e)
         {
- 
+
         }
 
         private void button27_Click(object sender, EventArgs e)
@@ -156,7 +151,7 @@ namespace Library
                 tbxNum.Focus();
                 return;
             }
-            if(inputNum - maxnum > 0.00000001)
+            if (inputNum - maxnum > 0.00000001)
             {
                 frmWarning.Warning(String.Format("数量不能多于:{0}", this.maxnum));
                 tbxNum.SelectAll();
