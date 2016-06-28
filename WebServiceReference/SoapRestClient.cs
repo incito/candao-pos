@@ -2453,7 +2453,15 @@ namespace WebServiceReference
                     writer.WriteValue(str0);
                     string orderprice = dr["price"].ToString();
                     if (ordertype == 1)
+                    {
                         orderprice = "0";//赠送
+                        writer.WritePropertyName("freeuser");
+                        writer.WriteValue(Globals.AuthorizerInfo.UserID);
+                        writer.WritePropertyName("freeauthorize");
+                        writer.WriteValue(Globals.AuthorizerInfo.UserName);
+                        writer.WritePropertyName("freereason");
+                        writer.WriteValue(Globals.DishGiftReason);
+                    }
                     string dishid = dr["dishid"].ToString();
                     string pricetype = ordertype.ToString();
                     if (dishid.Equals(Globals.cjSetting.Id))
