@@ -2523,7 +2523,7 @@ namespace WebServiceReference
                     string sperequire = dr["avoid"].ToString(); //忌口
                     writer.WritePropertyName("sperequire");
                     writer.WriteValue(sperequire);
-                    writer.WritePropertyName("primarykey"); ////
+                    writer.WritePropertyName("primarykey"); 
                     writer.WriteValue(dr["primarykey"].ToString());
                     string dishstatus = "0";
                     if (dr["weigh"].ToString().Equals("1"))
@@ -2538,12 +2538,6 @@ namespace WebServiceReference
                     string taste = dr["taste"].ToString();
                     writer.WritePropertyName("taste");
                     writer.WriteValue(taste);
-                    writer.WritePropertyName("freeuser");
-                    writer.WriteValue(Globals.AuthorizerInfo.UserID);
-                    writer.WritePropertyName("freeauthorize");
-                    writer.WriteValue(Globals.AuthorizerInfo.UserName);
-                    writer.WritePropertyName("freereason");
-                    writer.WriteValue(Globals.DishGiftReason);
                     writer.WriteEndObject();
                 }
 
@@ -2641,20 +2635,15 @@ namespace WebServiceReference
                         string dishnum = dr["dishnum"].ToString();
                         writer.WritePropertyName("dishnum");
                         writer.WriteValue(double.Parse(dishnum));
-                        writer.WritePropertyName("sperequire"); //忌口
-                        writer.WriteValue("");
                         writer.WritePropertyName("primarykey"); ////
                         writer.WriteValue(dr["primarykey"].ToString());
 
+                        var sperequire = dr["avoid"].ToString();
+                        writer.WritePropertyName("sperequire"); //忌口
+                        writer.WriteValue(sperequire);
                         string taste = dr["taste"].ToString();
                         writer.WritePropertyName("taste");
                         writer.WriteValue(taste);
-                        writer.WritePropertyName("freeuser");
-                        writer.WriteValue(Globals.AuthorizerInfo.UserID);
-                        writer.WritePropertyName("freeauthorize");
-                        writer.WriteValue(Globals.AuthorizerInfo.UserName);
-                        writer.WritePropertyName("freereason");
-                        writer.WriteValue(Globals.DishGiftReason);
 
                         string dishstatus = "0";
                         if (dr["weigh"].ToString().Equals("1"))
@@ -2737,20 +2726,15 @@ namespace WebServiceReference
                         string dishnum = dr["dishnum"].ToString();
                         writer.WritePropertyName("dishnum");
                         writer.WriteValue(double.Parse(dishnum));
-                        writer.WritePropertyName("sperequire"); //忌口
-                        writer.WriteValue("");
                         writer.WritePropertyName("primarykey"); ////
                         writer.WriteValue(dr["primarykey"].ToString());
 
                         string taste = dr["taste"].ToString();
                         writer.WritePropertyName("taste");
                         writer.WriteValue(taste);
-                        writer.WritePropertyName("freeuser");
-                        writer.WriteValue(Globals.AuthorizerInfo.UserID);
-                        writer.WritePropertyName("freeauthorize");
-                        writer.WriteValue(Globals.AuthorizerInfo.UserName);
-                        writer.WritePropertyName("freereason");
-                        writer.WriteValue(Globals.DishGiftReason);
+                        var sperequire = dr["avoid"].ToString();
+                        writer.WritePropertyName("sperequire"); //忌口
+                        writer.WriteValue(sperequire);
 
                         string dishstatus = "0";
                         if (dr["weigh"].ToString().Equals("1"))

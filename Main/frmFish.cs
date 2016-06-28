@@ -30,10 +30,16 @@ namespace Main
         private DevExpress.XtraEditors.TextEdit focusEdt;
         public static bool ShowFish(t_shopping dishinfo, out TPotDishInfo potDishInfo)
         {
-            frmFish frm = new frmFish();
-            frm.dishinfo = dishinfo;
+            frmFish frm = new frmFish { dishinfo = dishinfo };
             frm.getGroupDetail();
             frm.initView();
+
+            var dishTasteInfos = dishinfo.Taste.Split(',').Select(t => new TasteInfo {TasteTitle = t}).ToList();
+            if (dishTasteInfos.Any())
+                frm.tasteSetControl.TasteInfos = dishTasteInfos;
+            else
+                frm.tasteSetControl.Visibility = Visibility.Collapsed;
+
             frm.ShowDialog();
             bool ret = frm.DialogResult == DialogResult.OK;
             potDishInfo = frm.potDishInfo;
@@ -44,36 +50,29 @@ namespace Main
             if (frmClose != null)
                 frmClose(this, new EventArgs());
         }
+
         public frmFish()
         {
             InitializeComponent();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
         private void setBtnFocus()
         {
-            Common.Globals.SetButton(button18);
-            Common.Globals.SetButton(button19);
-            Common.Globals.SetButton(button20);
-            Common.Globals.SetButton(button21);
-            Common.Globals.SetButton(button22);
-            Common.Globals.SetButton(button23);
-            Common.Globals.SetButton(button24);
-            Common.Globals.SetButton(button25);
-            Common.Globals.SetButton(button26);
-            Common.Globals.SetButton(btnOK);
-            Common.Globals.SetButton(button28);
-            Common.Globals.SetButton(button2);
-            Common.Globals.SetButton(button15);
-            Common.Globals.SetButton(button16);
-            Common.Globals.SetButton(button17);
-        }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            SendKeys.Send("{Tab}");
+            Globals.SetButton(button18);
+            Globals.SetButton(button19);
+            Globals.SetButton(button20);
+            Globals.SetButton(button21);
+            Globals.SetButton(button22);
+            Globals.SetButton(button23);
+            Globals.SetButton(button24);
+            Globals.SetButton(button25);
+            Globals.SetButton(button26);
+            Globals.SetButton(btnOK);
+            Globals.SetButton(button28);
+            Globals.SetButton(button2);
+            Globals.SetButton(button15);
+            Globals.SetButton(button16);
+            Globals.SetButton(button17);
         }
 
         private void frmPettyCash_Activated(object sender, EventArgs e)
@@ -83,28 +82,21 @@ namespace Main
 
         private void button26_Click(object sender, EventArgs e)
         {
-            //edtRoom.Focus();
             SendKeys.Send(((Button)sender).Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
         }
 
         private void button17_Click(object sender, EventArgs e)
         {
-            //edtRoom.Focus();
             SendKeys.Send(button16.Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
             SendKeys.Send(button16.Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
         }
 
         private void button28_Click(object sender, EventArgs e)
         {
-            //edtRoom.Focus();
             SendKeys.Send("{Backspace}");
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
         }
 
@@ -113,24 +105,13 @@ namespace Main
             Close();
         }
 
-        private void edtRoom_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == 13)
-            {
-                button2_Click(button2, e);
-            }
-        }
-
         private void frmPettyCash_Load(object sender, EventArgs e)
         {
             setBtnFocus();
             edtNum1.Focus();
             focusEdt = edtNum1;
         }
-        public void initData(string tableNo)
-        {
-            edtNum1.Text = tableNo;
-        }
+
         private void frmOpenTable_FormClosed(object sender, FormClosedEventArgs e)
         {
             OnfrmClose();
@@ -145,8 +126,13 @@ namespace Main
                 return;
             }
 
+            if (string.IsNullOrEmpty(tasteSetControl.SelectedTaste))
+            {
+                Warning("请选择口味。");
+                return;
+            }
+
             potDishInfo.FishDishInfo1.Dishnum = dishNum1;
-            SetDishTasteAndDiet(potDishInfo.FishDishInfo1, tasteSetControl.SelectedTaste, dietSetControl1.Diet);
 
             if (potDishInfo.FishDishInfo2 != null)
             {
@@ -157,9 +143,9 @@ namespace Main
                     return;
                 }
                 potDishInfo.FishDishInfo2.Dishnum = dishNum2;
-                SetDishTasteAndDiet(potDishInfo.FishDishInfo2, tasteSetControl.SelectedTaste, dietSetControl1.Diet);
             }
 
+            SetDishTasteAndDiet(dishinfo, tasteSetControl.SelectedTaste, dietSetControl1.Diet);//鱼锅本身设置口味和忌口。
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -167,7 +153,7 @@ namespace Main
         private void SetDishTasteAndDiet(t_shopping dish, string taste, string diet)
         {
             dish.Avoid = diet;
-            dish.Taste = taste;
+            dish.SelectedTaste = taste;
         }
 
         private float strtofloatdef0(string str)
@@ -183,32 +169,22 @@ namespace Main
             return tmpret;
         }
 
-        private void btnSelectGz_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
             Close();
         }
+
         private bool getGroupDetail()
         {
             bool ret = false;
             JArray groupData = null;
-            ret = RestClient.getGroupDetail(this.dishinfo.Dishid, out groupData);
+            ret = RestClient.getGroupDetail(dishinfo.Dishid, out groupData);
             if (!ret)
             {
                 Warning("获取鱼锅信息失败!");
                 return false;
             }
-
-            var dishTasteInfos = GetDishTasteInfos(groupData);
-            if (dishTasteInfos.Any())
-                tasteSetControl.TasteInfos = dishTasteInfos;
-            else
-                tasteSetControl.Visibility = Visibility.Collapsed;
 
             potDishInfo = TPotDishInfo.getPotDishInfo(Globals.CurrOrderInfo.memberno, dishinfo.Dishid, groupData);
             potDishInfo.PotInfo.Dishnum = 1;//strtointdef0(edtnum1)
@@ -221,26 +197,13 @@ namespace Main
                 potDishInfo.FishDishInfo2.Groupid = guid;
                 potDishInfo.FishDishInfo2.Groupid2 = guid;
             }
-            potDishInfo.PotInfo.Parentdishid = this.dishinfo.Dishid;
+            potDishInfo.PotInfo.Parentdishid = dishinfo.Dishid;
             potDishInfo.FishDishInfo1.Parentdishid = dishinfo.Dishid;
             potDishInfo.PotInfo.Groupid = guid;
             potDishInfo.FishDishInfo1.Groupid = guid;
             potDishInfo.PotInfo.Groupid2 = guid;
             potDishInfo.FishDishInfo1.Groupid2 = guid;
-            ret = true;
-            return ret;
-        }
-
-        private List<TasteInfo> GetDishTasteInfos(JArray dishJArray)
-        {
-            var list = new List<TasteInfo>();
-            foreach (var jobj in dishJArray)
-            {
-                var tasteStr = jobj["imagetitle"].ToString();
-                if (!string.IsNullOrEmpty(tasteStr))
-                    list.AddRange(tasteStr.Split(',').Select(t => new TasteInfo { TasteTitle = t }));
-            }
-            return list;
+            return true;
         }
 
         private void initView()
@@ -291,7 +254,7 @@ namespace Main
         }
         private static string getGUID()
         {
-            System.Guid guid = new Guid();
+            Guid guid = new Guid();
             guid = Guid.NewGuid();
             string str = guid.ToString();
             return str;

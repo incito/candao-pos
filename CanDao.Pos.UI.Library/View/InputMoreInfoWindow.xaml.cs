@@ -1,4 +1,5 @@
-﻿using CanDao.Pos.UI.Library.ViewModel;
+﻿using System.Windows;
+using CanDao.Pos.UI.Library.ViewModel;
 
 namespace CanDao.Pos.UI.Library.View
 {
@@ -21,5 +22,9 @@ namespace CanDao.Pos.UI.Library.View
             get { return _vm.InputInfo; }
         }
 
+        private void InputMoreInfoWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            TbMoreInfo.Focus();
+        }
     }
 }

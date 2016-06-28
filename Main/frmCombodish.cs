@@ -34,6 +34,7 @@ namespace Main
         private int edtHeight = 27;
         private int comboheight = 0;
         private string FGuid = "";
+
         public static bool ShowCombodish(t_shopping dishinfo, TComboDish comboDish)
         {
             frmCombodish frm = new frmCombodish();
@@ -50,99 +51,59 @@ namespace Main
             //potDishInfo = frm.potDishInfo;
             return ret;
         }
-        private void getcomboDishPad()
-        {
-            //
-            comboDishPad = new ArrayList();
-            ArrayList onlydishs = comboDish.Onlydishs;
-            TPotDishInfo potinfo = new TPotDishInfo();
-            //组合
-            ArrayList combodishs = comboDish.Combodishs;
-            for (int i = 0; i <= combodishs.Count - 1; i++)
-            {
-                TCombo combo = (TCombo)combodishs[i];
-                for (int k = 0; k <= combo.Endnum - 1; k++)
-                {
-                    for (int j = 0; j <= combo.Dishs.Count - 1; j++)
-                    {
-                        combodishs.Add(combo.Dishs[i]);
-                    }
-                }
-            }
-            //必选
-            for (int i = 0; i <= onlydishs.Count - 1; i++)
-            {
-                combodishs.Add((TPotDishInfo)onlydishs[i]);
-            }
-            //把选择的数量一个一个加到新套餐结构上，下单的时候 primarykey 的尾号就是numbers[]对应的序号
 
-        }
         private void OnfrmClose()
         {
             if (frmClose != null)
                 frmClose(this, new EventArgs());
         }
+
         public frmCombodish()
         {
             InitializeComponent();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
         private void setBtnFocus()
         {
-            Common.Globals.SetButton(button18);
-            Common.Globals.SetButton(button19);
-            Common.Globals.SetButton(button20);
-            Common.Globals.SetButton(button21);
-            Common.Globals.SetButton(button22);
-            Common.Globals.SetButton(button23);
-            Common.Globals.SetButton(button24);
-            Common.Globals.SetButton(button25);
-            Common.Globals.SetButton(button26);
-            Common.Globals.SetButton(btnOK);
-            Common.Globals.SetButton(button28);
-            Common.Globals.SetButton(button2);
-            Common.Globals.SetButton(button15);
-            Common.Globals.SetButton(button16);
-            Common.Globals.SetButton(button17);
+            Globals.SetButton(button18);
+            Globals.SetButton(button19);
+            Globals.SetButton(button20);
+            Globals.SetButton(button21);
+            Globals.SetButton(button22);
+            Globals.SetButton(button23);
+            Globals.SetButton(button24);
+            Globals.SetButton(button25);
+            Globals.SetButton(button26);
+            Globals.SetButton(btnOK);
+            Globals.SetButton(button28);
+            Globals.SetButton(button2);
+            Globals.SetButton(button15);
+            Globals.SetButton(button16);
+            Globals.SetButton(button17);
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
             SendKeys.Send("{Tab}");
         }
 
-        private void frmPettyCash_Activated(object sender, EventArgs e)
-        {
-            //edtNum1.Focus();
-        }
-
         private void button26_Click(object sender, EventArgs e)
         {
-            //edtRoom.Focus();
             SendKeys.Send(((Button)sender).Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
         }
 
         private void button17_Click(object sender, EventArgs e)
         {
-            //edtRoom.Focus();
             SendKeys.Send(button16.Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
             SendKeys.Send(button16.Text);
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
         }
 
         private void button28_Click(object sender, EventArgs e)
         {
-            //edtRoom.Focus();
             SendKeys.Send("{Backspace}");
-            //System.Threading.Thread.Sleep(100);
             SendKeys.Flush();
         }
 
@@ -151,31 +112,19 @@ namespace Main
             Close();
         }
 
-        private void edtRoom_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == 13)
-            {
-                button2_Click(button2, e);
-            }
-        }
-
         private void frmPettyCash_Load(object sender, EventArgs e)
         {
             setBtnFocus();
-            //edtNum1.Focus();
-            //focusEdt = edtNum1;
             pnlBtn.Parent = this;
             pnlBtn.BringToFront();
-            pnlBtn.Top = this.Height - pnlBtn.Height - 200;
+            pnlBtn.Top = Height - pnlBtn.Height - 200;
         }
-        public void initData(string tableNo)
-        {
-            //edtNum1.Text = tableNo;
-        }
+
         private void frmOpenTable_FormClosed(object sender, FormClosedEventArgs e)
         {
             OnfrmClose();
         }
+
         private bool checkSelected()
         {
             string lblname = "";
@@ -184,7 +133,7 @@ namespace Main
             {
                 combo = (TCombo)comboDish.Combodishs[i];
                 lblname = "lbl" + combo.Columnid;
-                Label lbl = (Label)this.Controls.Find(lblname, true)[0];
+                Label lbl = (Label)Controls.Find(lblname, true)[0];
                 if (lbl.BackColor == lblCombo.BackColor)
                 {
                     return false;
@@ -210,7 +159,7 @@ namespace Main
             //套餐加入已选
             FGuid = getGUID();
             AddComboToShopping();
-            this.DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
             Close();
         }
         private void addPot(TPotDishInfo pot)
@@ -376,7 +325,7 @@ namespace Main
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
             Close();
         }
         private bool getGroupDetail()
@@ -604,7 +553,7 @@ namespace Main
         }
         private static string getGUID()
         {
-            System.Guid guid = new Guid();
+            Guid guid = new Guid();
             guid = Guid.NewGuid();
             string str = guid.ToString();
             return str;
@@ -631,7 +580,7 @@ namespace Main
             DevExpress.XtraEditors.TextEdit edt = (DevExpress.XtraEditors.TextEdit)sender;
             TCombo combo = (TCombo)edt.Tag;
             string lblname = "lbl" + combo.Columnid;
-            Label lbl = (Label)this.Controls.Find(lblname, true)[0];
+            Label lbl = (Label)Controls.Find(lblname, true)[0];
             TCombo comb = (TCombo)edt.Tag;
             int groupnum = 0;
             for (int i = 0; i <= combocontrols.Count - 1; i++)

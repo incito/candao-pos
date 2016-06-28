@@ -51,32 +51,12 @@ namespace Main
         private int pagecount_type = 0;//一个分类中的菜品有多少页
         private int currpage_type = 0;//当前分类第几页菜品
         private string selectSource = "";
-        public static bool ShowOrder()
-        {
-            frmOrder frm = new frmOrder();
-            frm.ShowDialog();
-            bool ret = frm.DialogResult == DialogResult.OK;
-            if (ret)
-            {
-                //gzname = frm.dgvBill.SelectedRows[0].Cells["gzName"].Value.ToString();
-                //id = frm.dgvBill.SelectedRows[0].Cells["parternerid"].Value.ToString(); 
-            }
-            return ret;
-        }
+
         public frmOrder()
         {
             InitializeComponent();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
         public void shoppingchange()
         {
             try
@@ -86,6 +66,7 @@ namespace Main
             catch { }
             showbtnOrderText();
         }
+
         private void OnShoppingChange()
         {
             try
@@ -96,8 +77,10 @@ namespace Main
             //如果购物车不为空就显示为下单
             if (shoppingChange != null)
                 shoppingChange(this, new EventArgs());
+
             showbtnOrderText();
         }
+
         public void showbtnOrderText()
         {
             if (!iswm)
@@ -112,6 +95,7 @@ namespace Main
                 }
             }
             showTypeNum();
+            CheckBtnRemarkOrderStatus();
         }
         private void OnAccounts(int ordertype)
         {
@@ -737,13 +721,11 @@ namespace Main
         }
         private void addDish(JObject ja)
         {
-            ///增加菜品到购物车
+            //增加菜品到购物车
             if (ja == null)
                 return;
             //如果是多单位的要选择单位
-            string userid = Globals.CurrOrderInfo.userid;
-            if (userid == null)
-                userid = Globals.UserInfo.UserID;
+            string userid = Globals.CurrOrderInfo.userid ?? Globals.UserInfo.UserID;
 
             t_shopping dishinfo = new t_shopping();
             dishinfo.Orderid = Globals.CurrOrderInfo.orderid;
@@ -761,6 +743,7 @@ namespace Main
             dishinfo.DishType = ja["dishtype"].ToString();
             dishinfo.DishUnitSrc = ja["unit"].ToString();
             dishinfo.Weigh = int.Parse(ja["weigh"].ToString());
+            dishinfo.Taste = ja["imagetitle"].ToString();
             dishinfo.Memberprice = 0;
             dishinfo.Level = "0";
             try
@@ -878,7 +861,7 @@ namespace Main
                         var wnd = new SetDishTasteAndDietWindow(list, GenerateDishSimpleInfo(dishinfo));
                         if (wnd.ShowDialog() == true)
                         {
-                            dishinfo.Taste = wnd.Taste;
+                            dishinfo.SelectedTaste = wnd.Taste;
                             dishinfo.Avoid = wnd.Diet;
                             dishinfo.Dishnum = wnd.DishNum;
                             dishinfo.Ordertype = 0;
@@ -1175,7 +1158,6 @@ namespace Main
 
         private void btnDishPageUp_Click(object sender, EventArgs e)
         {
-            //
             if (currpage_type > 1)
             {
                 currpage_type = currpage_type - 1;
@@ -1185,7 +1167,6 @@ namespace Main
 
         private void btnDishPageDown_Click(object sender, EventArgs e)
         {
-            //
             if (currpage_type < pagecount_type)
             {
                 currpage_type = currpage_type + 1;
@@ -1193,17 +1174,36 @@ namespace Main
             }
         }
 
+        /// <summary>
+        /// 点击全单备注按钮时执行。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnRemarkOrder_Click(object sender, EventArgs e)
         {
             var wnd = new RemarkOrderWindow();
             if (wnd.ShowDialog() == true)
-            {
-                Globals.OrderRemark = wnd.Diet;
-                if (OrderRemarkChanged != null)
-                {
-                    OrderRemarkChanged();
-                }
-            }
+                OnOrderRemarkChanged(wnd.Diet);
+        }
+
+        /// <summary>
+        /// 检测设置全单备注按钮的状态。
+        /// </summary>
+        private void CheckBtnRemarkOrderStatus()
+        {
+            if (Globals.ShoppTable.Rows.Count > 0)
+                OnOrderRemarkChanged("");
+            BtnRemarkOrder.Enabled = Globals.ShoppTable.Rows.Count > 0;
+        }
+
+        /// <summary>
+        /// 触发全单备注改变事件。
+        /// </summary>
+        private void OnOrderRemarkChanged(string orderRemark)
+        {
+            Globals.OrderRemark = orderRemark;
+            if (OrderRemarkChanged != null)
+                OrderRemarkChanged();
         }
     }
 }

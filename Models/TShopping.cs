@@ -46,23 +46,24 @@ namespace Models
         private string _level;
         private string _dishUnitSrc;
 
-        private string _taste=string.Empty;//口味
+        private string _selectedTaste = string.Empty;//口味
         private string _freeuser = string.Empty;//赠菜人
         private string _freeauthorize = string.Empty;//赠菜授权人
         private string _freereason = string.Empty;//赠菜原因
 
         /// <summary>
-        /// 口味
+        /// 设定的口味
         /// </summary>
-        public string Taste
+        public string SelectedTaste
         {
-            get { return _taste; }
+            get { return _selectedTaste; }
             set
             {
-                _taste = value;
+                _selectedTaste = value;
                 Title = GenerateDishName(DishName, value, Avoid);
             }
         }
+
         /// <summary>
         /// 赠菜人
         /// </summary>
@@ -258,7 +259,7 @@ namespace Models
             set
             {
                 _avoid = value;
-                Title = GenerateDishName(DishName, Taste, value);
+                Title = GenerateDishName(DishName, SelectedTaste, value);
             }
         }
 
@@ -268,6 +269,11 @@ namespace Models
         /// 菜品+口味+忌口。
         /// </summary>
         public string DishName { get; set; }
+
+        /// <summary>
+        /// 口味。
+        /// </summary>
+        public string Taste { get; set; }
 
         #endregion Model
 
@@ -461,7 +467,7 @@ namespace Models
             dr["Parentdishid"] = dishrow.Parentdishid ?? "";
             dr["groupid"] = dishrow.Groupid ?? "";
             dr["Groupid2"] = dishrow.Groupid2 ?? "";
-            dr["taste"] = dishrow.Taste ?? "";
+            dr["taste"] = dishrow.SelectedTaste ?? "";
             dr["avoid"] = dishrow.Avoid ?? "";
             dr["freeuser"] = dishrow.Freeuser ?? "";
             dr["freeauthorize"] = dishrow.Freeauthorize ?? "";
