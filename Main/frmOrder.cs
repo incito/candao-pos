@@ -898,9 +898,9 @@ namespace Main
                 if (wind.ShowDialog() == true)
                 {
                     dishinfo.Title = string.Format("({0}){1}", customDishes.Model.DishesName, dishinfo.Title);
-                    dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount);
+                    dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount) * float.Parse(customDishes.Model.Price);
                     dishinfo.Taste = customDishes.Model.DishesName;
-                    dishinfo.Price = decimal.Parse(customDishes.Model.Price);
+                    //dishinfo.Price = float.Parse(customDishes.Model.Price);
                     dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString()) * dishinfo.Price;
 
                     dishinfo.Ordertype = 0;

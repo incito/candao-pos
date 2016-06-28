@@ -491,26 +491,29 @@ namespace WebServiceReference
             catch (Exception wex)
             {
                 AllLog.Instance.E(wex);
-                var serverConnect = CheckServerConnection();
-                if (!string.IsNullOrEmpty(serverConnect))
-                {
-                    AllLog.Instance.E(serverConnect);
-                    Msg.ShowError(serverConnect);
-                }
-                else
-                {
-                    if (restartDataServerTimes > 0)
-                    {
-                        AllLog.Instance.I("尝试重启DataServer...");
-                        if (RestartDataserver())
-                        {
-                            AllLog.Instance.I("重启DataServer成功，用户失败操作再次执行...");
-                            return Request_Rest(url, timeoutSecond, --restartDataServerTimes);
-                        }
-                    }
-                    AllLog.Instance.I("重启DataServer失败。");
-                    Msg.ShowError("DataServer服务或网络出现问题，请联系管理人员。");
-                }
+
+                //屏蔽DataServer检测重启-使用门店后台提供
+
+                //var serverConnect = CheckServerConnection();
+                //if (!string.IsNullOrEmpty(serverConnect))
+                //{
+                //    AllLog.Instance.E(serverConnect);
+                //    Msg.ShowError(serverConnect);
+                //}
+                //else
+                //{
+                //    if (restartDataServerTimes > 0)
+                //    {
+                //        AllLog.Instance.I("尝试重启DataServer...");
+                //        if (RestartDataserver())
+                //        {
+                //            AllLog.Instance.I("重启DataServer成功，用户失败操作再次执行...");
+                //            return Request_Rest(url, timeoutSecond, --restartDataServerTimes);
+                //        }
+                //    }
+                //    AllLog.Instance.I("重启DataServer失败。");
+                //    Msg.ShowError("DataServer服务或网络出现问题，请联系管理人员。");
+                //}
             }
             finally
             {
