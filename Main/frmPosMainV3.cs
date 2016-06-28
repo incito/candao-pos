@@ -214,6 +214,7 @@ namespace Main
                 maling = true;
                 xtraTabControl1.SelectedTabPageIndex = 0;
                 pnlCash.Enabled = true;
+                BtnMark.Visible = true;
                 Globals.CurrOrderInfo.orderid = "";
                 lblMsg.Text = "";
                 Globals.CurrTableInfo.tableNo = tableno;
@@ -5344,6 +5345,15 @@ namespace Main
             {
                 Warning(msg);
                 return;
+            }
+
+            try
+            {
+                RestClient.broadcastmsg(1005, Globals.CurrOrderInfo.orderid); //这里是发清帐单指令1005
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E(ex);
             }
 
             Warning("整单退菜成功。");
