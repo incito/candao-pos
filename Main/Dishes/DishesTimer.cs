@@ -28,6 +28,12 @@ namespace KYPOS.Dishes
 #region 事件
 
         public Action DataChangeAction;
+
+        public string OrderID
+        {
+            set { _orderID = value; }
+            get { return _orderID; }
+        }
 #endregion
 
         #region 构造函数
@@ -85,10 +91,10 @@ namespace KYPOS.Dishes
         {
             try
             {
-                if (Globals.CurrOrderInfo.orderid == null || Globals.UserInfo.UserID == null)
+                if (string.IsNullOrEmpty(_orderID) || Globals.UserInfo.UserID == null)
                     return;
-                
-                var resTable = RestClient.GetOrderTable(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);
+
+                var resTable = RestClient.GetOrderTable(_orderID, Globals.UserInfo.UserID);
 
                 if (resTable.Rows.Count != Globals.OrderTable.Rows.Count)
                 {

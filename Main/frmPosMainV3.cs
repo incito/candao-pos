@@ -208,7 +208,7 @@ namespace Main
 
                 //定时刷新菜单列表（比对菜单明细数量和总额）
                 _dishesTimer = new DishesTimer();
-                _dishesTimer.Start();
+             
                 if (_dishesTimer.DataChangeAction == null)
                 {
                     _dishesTimer.DataChangeAction = new Action(DataChangeHandel);
@@ -1843,6 +1843,8 @@ namespace Main
                 btnRBill_Click(btnRBill, e);
                 isreback = false;
             }
+            _dishesTimer.OrderID = lblZd.Text.Replace("帐单：","");
+            _dishesTimer.Start();
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
@@ -3916,7 +3918,6 @@ namespace Main
         /// </summary>
         private void DeleDishes(DataRow selectRow)
         {
-
             double num = double.Parse(selectRow["dishnum"].ToString());
             string dishid = selectRow["dishid"].ToString();
             string dishunit = selectRow["dishunitSrc"].ToString();
@@ -3971,55 +3972,16 @@ namespace Main
                 num = 0;
                 if (!ShowInputNum("请输入退菜数量!", "退菜数量：", out num, maxnum))
                     return;
-                }
-                double maxnum = BackDish.getBackNum(dt);
-                //获取总共可退数量 如果是鱼锅和套餐， 那不用输入数量
-                DataRow dr2 = dt.Rows[0];
-                string ispot = dr2["ispot"].ToString(); //如果是锅底
-                dishstatus = dr2["dishstatus"].ToString();
-                string dishtype = dr2["dishtype"].ToString();
-                string ismaster = dr2["ismaster"].ToString();
-                string childdishtype = dr2["childdishtype"].ToString();
-                num = 1;
-                bool inputnum = true;
-                //如果是鱼锅
-                if (ispot.Equals("1"))
-                {
-                    inputnum = false;
-                }
-                if ((ismaster.Equals("1") && (dishtype.Equals("1"))))
-                {
-                    inputnum = false;
-                }
-                //如果是套餐
-                if (dishtype.Equals("2"))
-                {
-                    if (!childdishtype.Equals("2"))
-                    {
-                        Warning("请选择套餐名称退整个套餐!");
-                        return;
-                    }
-                    inputnum = false;
-                }
-
-                var wnd = new BackDishReasonSelectWindow();
-                if (wnd.ShowDialog() != true)
-                    return;
-
-                if (inputnum)  //还有套餐条件
-                {
-                    num = 0;
-                    if (!ShowInputNum("请输入退菜数量!", "退菜数量：", out num, maxnum))
-                        return;
-                }
+            }
 
             string discardUserId;
             if (!frmAuthorize.ShowAuthorize("退菜权限验证", Globals.UserInfo.UserID, "030102", out discardUserId))
                 return;
 
-                //调用退菜接口
-                double backnum = num;
-                var result = BackDish.backDish(Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo, discardUserId, Globals.UserInfo.UserID, dt, backnum, wnd.SelectedReason);
+            //调用退菜接口
+            double backnum = num;
+            string discardReason = "";
+            var result = BackDish.backDish(Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo, discardUserId, Globals.UserInfo.UserID, selectRow, backnum, discardReason);
 
             Opentable2();
             if (!result)

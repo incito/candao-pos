@@ -833,6 +833,13 @@ namespace Main
                         }
                     }
                 }
+                else if(dishinfo.Title.Contains("临时菜"))
+                {
+                    dishinfo.Ordertype = 0;
+                    dishinfo.Primarydishtype = 0;
+                    AddShopping(dishinfo, false);
+                }
+                else
                 {
                     var tasteString = ja["imagetitle"].ToString();//口味
                     if (!string.IsNullOrEmpty(tasteString))
@@ -852,7 +859,7 @@ namespace Main
                             return;
                         }
                     }
-                    AddShopping(dishinfo, false);
+                    t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
                 }
             //通知调用页更新页面
             OnShoppingChange();
@@ -867,30 +874,24 @@ namespace Main
         /// <param name="isdish"></param>
         private void AddShopping(t_shopping dishinfo, bool isdish)
         {
-            if (dishinfo.DishType.Equals("0") & dishinfo.Title.Contains("临时菜"))//临时菜判断 单品且菜品名称字段包含“临时菜”
-            {
-                var customDishes = new UcCustomDishesViewModel();
-                var wind = customDishes.GetWindow();
-                if (wind.ShowDialog() == true)
-                {
-                    dishinfo.Title = string.Format("({0}){1}", customDishes.Model.DishesName, dishinfo.Title);
-                    dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount) * float.Parse(customDishes.Model.Price);
-                    dishinfo.Taste = customDishes.Model.DishesName;
-                    //dishinfo.Price = float.Parse(customDishes.Model.Price);
-                    dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString()) * dishinfo.Price;
 
-                    dishinfo.Ordertype = 0;
-                    dishinfo.Primarydishtype = 0;
-                    t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
-                }
-                else
-                {
-                    return;
-                }
+            var customDishes = new UcCustomDishesViewModel();
+            var wind = customDishes.GetWindow();
+            if (wind.ShowDialog() == true)
+            {
+                dishinfo.Title = string.Format("({0}){1}", customDishes.Model.DishesName, dishinfo.Title);
+                dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount)*float.Parse(customDishes.Model.Price);
+                dishinfo.Taste = customDishes.Model.DishesName;
+                //dishinfo.Price = float.Parse(customDishes.Model.Price);
+                dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString())*dishinfo.Price;
+
+                dishinfo.Ordertype = 0;
+                dishinfo.Primarydishtype = 0;
+                t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
             }
             else
             {
-                t_shopping.add(ref Globals.ShoppTable, dishinfo, false);
+                return;
             }
         }
 
