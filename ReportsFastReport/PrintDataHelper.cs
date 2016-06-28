@@ -54,6 +54,10 @@ namespace ReportsFastReport
             var dishName = GetJObjectString(dataJObj, "title");
             dishName = InternationaHelper.FilterSeparatorFlag(dishName);
 
+            var priceType = Convert.ToInt32(dataJObj["pricetype"]);
+            if (priceType == 1) //1是赠菜。
+                dishName += "(赠)";
+
             var item = new OrderDishPrintInfo
             {
                 DishName = dishName,

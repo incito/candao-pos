@@ -5343,7 +5343,7 @@ namespace Main
             }
 
             Warning("整单退菜成功。");
-            Opentable2(true);
+            Opentable2();
         }
     }
 }
