@@ -34,7 +34,7 @@ namespace Main
             frm.getGroupDetail();
             frm.initView();
 
-            var dishTasteInfos = dishinfo.Taste.Split(',').Select(t => new TasteInfo {TasteTitle = t}).ToList();
+            var dishTasteInfos = dishinfo.Taste.Split(',').Select(t => new TasteInfo { TasteTitle = t }).ToList();
             if (dishTasteInfos.Any())
                 frm.tasteSetControl.TasteInfos = dishTasteInfos;
             else
@@ -180,7 +180,7 @@ namespace Main
             bool ret = false;
             JArray groupData = null;
             ret = RestClient.getGroupDetail(dishinfo.Dishid, out groupData);
-            if (!ret)
+            if (!ret || groupData == null)
             {
                 Warning("获取鱼锅信息失败!");
                 return false;
