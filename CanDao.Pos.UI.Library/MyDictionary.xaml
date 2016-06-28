@@ -53,7 +53,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="Bd" Background="White">
+                    <Border x:Name="Bd" Background="White" BorderBrush="Gray" BorderThickness="1.5">
                         <ContentPresenter Content="{TemplateBinding Content}"/>
                     </Border>
                     <ControlTemplate.Triggers>

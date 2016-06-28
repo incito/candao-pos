@@ -3685,6 +3685,7 @@ namespace Main
 
         private void SetRemarkOrder(string remark)
         {
+            LbOrderMark.Visible = !string.IsNullOrEmpty(remark);
             LbOrderMark.Text = string.Format("全单备注:{0}", remark);
         }
 
