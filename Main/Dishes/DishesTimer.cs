@@ -66,7 +66,16 @@ namespace KYPOS.Dishes
         /// </summary>
         public void stop()
         {
-            _refreshTimer.Stop();
+            try
+            {
+                _orderID = string.Empty;
+                _refreshTimer.Stop();
+            }
+            catch
+            {
+               
+            }
+        
         }
 
         #endregion
@@ -80,7 +89,6 @@ namespace KYPOS.Dishes
         /// <param name="e"></param>
         void _refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-
             Excute();
         }
 

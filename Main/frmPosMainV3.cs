@@ -214,6 +214,8 @@ namespace Main
                     _dishesTimer.DataChangeAction = new Action(DataChangeHandel);
                 }
                 ShowDialog();
+                _dishesTimer.stop();
+                _dishesTimer = null;
             }
             finally
             {
@@ -1843,6 +1845,7 @@ namespace Main
                 btnRBill_Click(btnRBill, e);
                 isreback = false;
             }
+            
             _dishesTimer.OrderID = lblZd.Text.Replace("帐单：","");
             _dishesTimer.Start();
         }
@@ -1867,6 +1870,12 @@ namespace Main
                     showOpenTable();
 
                 }
+            }
+
+            if (string.IsNullOrEmpty(_dishesTimer.OrderID))
+            {
+                _dishesTimer.OrderID = lblZd.Text.Replace("帐单：", "");
+                _dishesTimer.Start();
             }
         }
 
