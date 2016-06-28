@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
              mc:Ignorable="d" 
-             Height="360" Width="450" Background="White" BorderThickness="1" BorderBrush="Blue" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize">
+             Height="360" Width="600" Background="White" BorderThickness="1" BorderBrush="Blue" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize">
     <Grid>
           <Grid.RowDefinitions>
               <RowDefinition Height="35"></RowDefinition>
@@ -13,7 +13,10 @@
               <RowDefinition Height="80"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBox Text="  临时菜" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Background="#E5E5E5" FontSize="16"></TextBox>
+        <Border Background="#E5E5E5">
+            <TextBlock Text="  临时菜" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16"></TextBlock>  
+        </Border>
+      
         <Grid Grid.Row="1">
             <Grid.Resources>
                 <Style TargetType="TextBlock">
@@ -36,7 +39,7 @@
             <TextBlock Text="价格(元):" Grid.Row="1"></TextBlock>
             <TextBlock Text="数量(份):" Grid.Row="2"></TextBlock>
 
-            <TextBox Grid.Column="1" Grid.Row="0" Margin="10" Text="{Binding Model.DishesName}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"></TextBox>
+            <TextBox x:Name="TxtName" Grid.Column="1" Grid.Row="0" Margin="10" Text="{Binding Model.DishesName}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"></TextBox>
             <TextBox Grid.Column="1" Grid.Row="1" Margin="10" Text="{Binding Model.Price}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"></TextBox>
             <TextBox Grid.Column="1" Grid.Row="2" Margin="10" Text="{Binding Model.DishesCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"></TextBox>
         </Grid>

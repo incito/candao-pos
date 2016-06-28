@@ -22,6 +22,7 @@ namespace KYPOS.Dishes
         public UcCustomDishesView()
         {
             InitializeComponent();
+            TxtName.Focus();
         }
     }
 }

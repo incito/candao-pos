@@ -15,6 +15,7 @@ using System.Xml;
 using Common;
 using Models;
 using Models.Enum;
+using Models.Reports;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -885,36 +886,30 @@ namespace WebServiceReference
           
             if (!result.Equals("0"))
             {
-                string tablelistjson = jaAll["JSJson"].ToString();
-                if (tablelistjson.Length > 30)
+                //把JSON转为DataSet
+                DataTableConverter dtc = new DataTableConverter();
+                JsonReader jread = new JsonTextReader(new StringReader(result));
+                dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
+             
+
+                //国际化处理品项名称和单位
+                var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
+                dt.Columns.Add(column);
+                foreach (DataRow dr in dt.Rows)
                 {
-                    DataTableConverter dtc = new DataTableConverter();
-                    JsonReader jread = new JsonTextReader(new StringReader(tablelistjson));
-                   
-                    dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
-                    Globals.OrderTable.Clear();
-
-                    //国际化处理品项名称和单位
-                    var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
-                    dt.Columns.Add(column);
-                    foreach (DataRow dr in dt.Rows)
+                    var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                    var avoid = dr["avoid"].ToString();
+                    if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
                     {
-                        var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
-                        var avoid = dr["avoid"].ToString();
-                        if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
-                        {
-                            dr["title"] = string.Format("({0}){1}", avoid, title);
-                        }
-                        else
-                        {
-                            dr["title"] = title;
-                        }
-
-                        dr["dishunitSrc"] = dr["dishunit"];
-                        dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
-
+                        dr["title"] = string.Format("({0}){1}", avoid.Replace("|", ""), title);
                     }
-                  
+                    else
+                    {
+                        dr["title"] = title;
+                    }
+
+                    dr["dishunitSrc"] = dr["dishunit"];
+                    dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
                 }
             }
             return dt;
@@ -2735,6 +2730,169 @@ namespace WebServiceReference
                 return msg;
             }
         }
+
+        /// <summary>
+        /// 获取营业明细（品类、金额）
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static List<MCategory> GetItemForList(string beginTime, string endTime)
+        {
+            var catList = new List<MCategory>();
+            string address = String.Format("http://{0}/" + apiPath + "/itemDetail/getItemForList.json?beginTime={1}&endTime={2}", server2,beginTime,endTime);
+            AllLog.Instance.I(string.Format("【GetItemForList】 beginTime：{0}，endTime：{1}。", beginTime, endTime));
+            String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetItemForList】 result：{0}。", jsonResult));
+            try
+            {
+                JArray jArray = (JArray)JsonConvert.DeserializeObject(jsonResult);
+            
+                foreach (var ja in jArray)
+                {
+                    var cat = new MCategory();
+                    cat.DishName = ja["itemDesc"].ToString();
+                    cat.money = ja["orignalprice"].ToString();
+                    catList.Add(cat);
+                }
+                return catList;
+            }
+            catch (Exception ex)
+            {
+                var msg = string.Format("获取营业明细：{0}", ex.Message);
+                AllLog.Instance.E(msg);
+                return catList;
+            }
+        }
+
+        /// <summary>
+        /// 获取营业明细（其它）
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static MBusinessDataDetail GetDayReportList(string beginTime, string endTime, string userName)
+        {
+            string address = String.Format("http://{0}/" + apiPath + "/daliyReports/getDayReportList.json?beginTime={1}&endTime={2}", server2,beginTime,endTime);
+            AllLog.Instance.I(string.Format("【GetDayReportList】 beginTime：{0}，endTime：{1}。", beginTime, endTime));
+            String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetDayReportList】 result：{0}。", jsonResult));
+
+            var dataDetail=new MBusinessDataDetail();
+            try
+            {
+                JArray jArray = (JArray)JsonConvert.DeserializeObject(jsonResult);
+
+                var jo = (JObject)jArray[0];
+                dataDetail.StartTime = DateTime.Parse(beginTime);
+                dataDetail.EndTime = DateTime.Parse(endTime);
+                dataDetail.CurrentTime=DateTime.Now;
+                dataDetail.UserName = userName;
+                dataDetail.kaitaishu = jo["kaitaishu"].ToString();
+
+                dataDetail.bastfree = jo["bastfree"].ToString();
+                dataDetail.integralconsum = jo["integralconsum"].ToString();
+                dataDetail.meberTicket = jo["meberTicket"].ToString();
+                dataDetail.discountmoney = jo["discountmoney"].ToString();
+                dataDetail.malingincom = jo["malingincom"].ToString();
+                dataDetail.give = jo["give"].ToString();
+                dataDetail.handervalue = jo["handervalue"].ToString();
+                dataDetail.mebervalueadd = jo["mebervalueadd"].ToString();
+
+                dataDetail.money = jo["money"].ToString();
+                dataDetail.card = jo["card"].ToString();
+                dataDetail.weixin = jo["weixin"].ToString();
+                dataDetail.zhifubao = jo["zhifubao"].ToString();
+                dataDetail.icbc = jo["icbc"].ToString();
+                dataDetail.otherbank = jo["otherbank"].ToString();
+                dataDetail.merbervaluenet = jo["merbervaluenet"].ToString();
+
+                dataDetail.shouldamount = jo["shouldamount"].ToString();
+                dataDetail.discountamount = jo["discountamount"].ToString();
+                dataDetail.paidinamount = jo["paidinamount"].ToString();
+
+                dataDetail.Categories= GetItemForList(beginTime, endTime);//获取品项列表
+
+                dataDetail.HangingMonies = GetGzdwForList(beginTime, endTime);//获取挂账列表
+
+                dataDetail.xiaofei = GetTipMoney(beginTime, endTime);
+
+                return dataDetail;
+            }
+            catch (Exception ex)
+            {
+                var msg = string.Format("获取营业明细（其它）错误：{0}", ex.Message);
+                AllLog.Instance.E(msg);
+                return dataDetail;
+            }
+        }
+
+        /// <summary>
+        /// 获取营业明细（获取挂账单位）
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static List<MHangingMoney> GetGzdwForList(string beginTime, string endTime)
+        {
+            var cList = new List<MHangingMoney>();
+            string address = String.Format("http://{0}/" + apiPath + "/gisterBill/getBillCount.json?beginTime={1}&endTime={2}&billName=0&clearStatus=0", server2, beginTime, endTime);
+            AllLog.Instance.I(string.Format("【GetGzdwForList】 beginTime：{0}，endTime：{1}。", beginTime, endTime));
+            String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetGzdwForList】 result：{0}。", jsonResult));
+            try
+            {
+              
+                JObject jObj = (JObject)JsonConvert.DeserializeObject(jsonResult);
+                string data = jObj["resultList"].ToString();
+
+                JArray jArray = (JArray)JsonConvert.DeserializeObject(data);
+
+                foreach (var ja in jArray)
+                {
+                    var cat = new MHangingMoney();
+                    cat.HangingName = ja["gzdw"].ToString();
+                    cat.HangingMoney = ja["gzze"].ToString();
+                    cList.Add(cat);
+                }
+                return cList;
+            }
+            catch (Exception ex)
+            {
+                var msg = string.Format("获取营业明细-挂账单位：{0}", ex.Message);
+                AllLog.Instance.E(msg);
+                return cList;
+            }
+        }
+        /// <summary>
+        /// 获取小费总额
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static string GetTipMoney(string beginTime, string endTime)
+        {
+            try
+            {
+                string address = String.Format("http://{0}/" + apiPath + "/tip/tipListByTime.json?beginTime={1}&endTime={2}", server2, beginTime, endTime);
+                AllLog.Instance.I(string.Format("【GetTipMoney】 beginTime：{0}&endTime:。", beginTime, endTime));
+                String jsonResult = Request_Rest(address);
+                AllLog.Instance.I(string.Format("【GetTipMoney】 result：{0}。", jsonResult));
+                if (jsonResult == "0")
+                    return "";
+
+                JObject jaAll = (JObject)JsonConvert.DeserializeObject(jsonResult);
+                return jaAll["tipMoney"].ToString();
+            }
+            catch (Exception ex)
+            {
+                var msg = string.Format("获取小费总额：{0}", ex.Message);
+                AllLog.Instance.E(msg);
+                return "";
+            }
+        }
+
+
 
         public static bool getSystemSetData(string settingname, out TSetting setting)
         {

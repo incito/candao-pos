@@ -183,29 +183,49 @@ namespace Main
                 {
                     HideOpenTable();
                 }
-                catch { }
+                catch
+                {
+                }
                 if (status == 0)
                 {
                     //tmrOpenTable.Enabled = true;
                     showOpenTable();
                 }
+                else if (status == 8)
+                {
+                    tmrOpen.Enabled = true;
+                }
                 else
-                    if (status == 8)
-                    {
-                        tmrOpen.Enabled = true;
-                    }
-                    else
-                    {
-                        ShowAccounts(null, null, 0);
-                        isreback = status == 9;
-                        tmrOpen.Enabled = true;
-                    }
+                {
+                    ShowAccounts(null, null, 0);
+                    isreback = status == 9;
+                    tmrOpen.Enabled = true;
+                }
                 xtraTabControl1.SelectedTabPageIndex = 0;
+
+                //定时刷新菜单列表（比对菜单明细数量和总额）
+                _dishesTimer = new DishesTimer();
+                _dishesTimer.Start();
+                if (_dishesTimer.DataChangeAction == null)
+                {
+                    _dishesTimer.DataChangeAction = new Action(DataChangeHandel);
+                }
                 ShowDialog();
             }
             finally
             {
             }
+        }
+
+        /// <summary>
+        /// 数据更新
+        /// </summary>
+        private void DataChangeHandel()
+        {
+            this.BeginInvoke(new EventHandler(delegate
+            {
+                Opentable2();
+            }));
         }
 
         public void showFrmWm(string tableno)
@@ -335,9 +355,6 @@ namespace Main
             InitMemberFun();
             //pnlMore.Top = 200;
             setFormToPayType1();
-            //_dishesTimer=new DishesTimer();
-            //_dishesTimer.Start();
-            //_dishesTimer.Excute();
         }
        
         /// <summary>
@@ -1280,6 +1297,14 @@ namespace Main
                 //发   服务员|台号|帐单号
                 string msg = String.Format("{0}|{1}|{2}", Globals.CurrOrderInfo.userid, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid);
                 RestClient.broadcastmsg(2002, msg); //这里是发结算指令1002
+            }
+            catch { }
+            //广播手环2011
+            try
+            {
+                //发   服务员|台号|帐单号
+                string msg = String.Format("{0}|17|0|{1}|{2}|{3}", Globals.CurrOrderInfo.userid,Globals.CurrTableInfo.areaid, Globals.CurrTableInfo.tableNo, Guid.NewGuid().ToString("N"));
+                RestClient.broadcastmsg(2011, msg);
             }
             catch { }
         }

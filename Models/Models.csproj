@@ -72,6 +72,9 @@
     <Compile Include="InternationaHelper.cs" />
     <Compile Include="NoClearMachineInfo.cs" />
     <Compile Include="PrintStatusInfo.cs" />
+    <Compile Include="Reports\MBusinessDataDetail.cs" />
+    <Compile Include="Reports\MCategory.cs" />
+    <Compile Include="Reports\MHangingMoney.cs" />
     <Compile Include="Request\AuthorizeLoginRequest.cs" />
     <Compile Include="Request\BillingTipRequest.cs" />
     <Compile Include="Request\GetDishSaleRequest.cs" />

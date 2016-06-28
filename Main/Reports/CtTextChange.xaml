@@ -1,0 +1,45 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Reports="clr-namespace:KYPOS.Reports" x:Class="KYPOS.Reports.CtTextChange" 
+             mc:Ignorable="d" Height="88" Background="White">
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="Reports:CtDigitalTextBox">
+                <Setter Property="FontSize" Value="16"></Setter>
+                <Setter Property="Margin" Value="2"></Setter>
+                <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="FontSize" Value="24"></Setter>
+                <Setter Property="Margin" Value="2"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border BorderThickness="1" BorderBrush="#0072c6" Background="White"> 
+                                <TextBlock Text="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+       <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"></ColumnDefinition>
+            <ColumnDefinition Width="8"></ColumnDefinition>
+            <ColumnDefinition Width="60"></ColumnDefinition>
+            <ColumnDefinition Width="8"></ColumnDefinition>
+            <ColumnDefinition Width="60"></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Reports:CtDigitalTextBox x:Name="TexHour" Text="0" MinValue="0" MaxValue="23"></Reports:CtDigitalTextBox>
+        <TextBlock Text=":" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"></TextBlock>
+        <Reports:CtDigitalTextBox x:Name="TexMinute" Text="0" Grid.Column="2"  MinValue="0" MaxValue="59"></Reports:CtDigitalTextBox>
+        <TextBlock Text=":" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"></TextBlock>
+        <Reports:CtDigitalTextBox x:Name="TexSecond" Text="0" Grid.Column="4"  MinValue="0" MaxValue="59"></Reports:CtDigitalTextBox>
+        <Button x:Name="BtnUp" Grid.Column="5" Height="40" VerticalAlignment="Top" Content="+" PreviewMouseDown="BtnUp_OnPreviewMouseDown" Focusable="False"></Button>
+        <Button x:Name="BtnDown" Grid.Column="5" Height="40" VerticalAlignment="Bottom" Content="-" PreviewMouseDown="BtnDown_OnPreviewMouseDown" Focusable="False"></Button>
+    </Grid>
+</UserControl>

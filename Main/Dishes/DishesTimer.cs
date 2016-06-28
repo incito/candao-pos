@@ -50,7 +50,7 @@ namespace KYPOS.Dishes
         /// <param name="userID"></param>
         public void Start()
         {
-            _refreshTimer.Interval = 5*1000;
+            _refreshTimer.Interval = 30*1000;
             _refreshTimer.Elapsed += _refreshTimer_Elapsed;
             _refreshTimer.Start();
         }
@@ -75,13 +75,19 @@ namespace KYPOS.Dishes
         void _refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
 
-            
+            Excute();
         }
 
-        public void Excute()
+        /// <summary>
+        /// 执行
+        /// </summary>
+        private void Excute()
         {
             try
             {
+                if (Globals.CurrOrderInfo.orderid == null || Globals.UserInfo.UserID == null)
+                    return;
+                
                 var resTable = RestClient.GetOrderTable(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);
 
                 if (resTable.Rows.Count != Globals.OrderTable.Rows.Count)

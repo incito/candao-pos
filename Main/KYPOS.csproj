@@ -300,6 +300,18 @@
     <Compile Include="ReportDishInfoControl.xaml.cs">
       <DependentUpon>ReportDishInfoControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Reports\CtDigitalTextBox.cs" />
+    <Compile Include="Reports\CtTextChange.xaml.cs">
+      <DependentUpon>CtTextChange.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\UcBusinessDataDetailsModel.cs" />
+    <Compile Include="Reports\UcBusinessDataDetailsView.xaml.cs">
+      <DependentUpon>UcBusinessDataDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\UcBusinessDataDetailsViewModel.cs" />
+    <Compile Include="Reports\WTimeSelect.xaml.cs">
+      <DependentUpon>WTimeSelect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ReportTipInfoControl.xaml.cs">
       <DependentUpon>ReportTipInfoControl.xaml</DependentUpon>
     </Compile>
@@ -451,6 +463,7 @@
   <ItemGroup>
     <Content Include="icon64.ico" />
     <Content Include="logo.ico" />
+    <Resource Include="Reports\CalendarImage.png" />
     <None Include="Resources\SysCfg48.png" />
     <None Include="Resources\Report48.png" />
     <None Include="Resources\Report48.bmp" />
@@ -1295,6 +1308,18 @@
     <Page Include="ReportDishInfoControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Reports\CtTextChange.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Reports\UcBusinessDataDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Reports\WTimeSelect.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ReportTipInfoControl.xaml">
       <SubType>Designer</SubType>
