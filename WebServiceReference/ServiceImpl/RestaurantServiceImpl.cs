@@ -244,12 +244,12 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
-        public string BackAllDish(string tableNo, string orderId, string reason)
+        public string BackAllDish(string tableNo, string orderId, string authorizer, string reason)
         {
             try
             {
                 var addr = string.Format("http://{0}/{1}/padinterface/discarddish.json", RestClient.server, RestClient.apiPath);
-                var request = GenerateBackAllDishRequest(orderId, tableNo, Globals.UserInfo.UserID, reason);
+                var request = GenerateBackAllDishRequest(orderId, tableNo, authorizer, reason);
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
                 return response.IsSuccess ? null : "退菜失败。";
             }

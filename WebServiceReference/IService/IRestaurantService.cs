@@ -88,9 +88,10 @@ namespace WebServiceReference.IService
         /// </summary>
         /// <param name="tableNo">餐桌号。</param>
         /// <param name="orderId">订单号。</param>
+        /// <param name="authorizer">授权人。</param>
         /// <param name="reason">退菜原因。</param>
         /// <returns></returns>
-        string BackAllDish(string tableNo, string orderId, string reason);
+        string BackAllDish(string tableNo, string orderId, string authorizer, string reason);
 
     }
 }

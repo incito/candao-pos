@@ -5330,8 +5330,12 @@ namespace Main
             if (wnd.ShowDialog() != true)
                 return;
 
+            string discardUserId;
+            if (!frmAuthorize.ShowAuthorize("退菜权限验证", Globals.UserInfo.UserID, "030102", out discardUserId))
+                return;
+
             var service = new RestaurantServiceImpl();
-            var msg = service.BackAllDish(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid, wnd.SelectedReason);
+            var msg = service.BackAllDish(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid, discardUserId, wnd.SelectedReason);
             if (!string.IsNullOrEmpty(msg))
             {
                 Warning(msg);
