@@ -128,7 +128,7 @@ namespace Main
                 return;
             }
 
-            if (string.IsNullOrEmpty(tasteSetControl.SelectedTaste))
+            if (tasteSetControl.TasteInfos != null && tasteSetControl.TasteInfos.Any() && string.IsNullOrEmpty(tasteSetControl.SelectedTaste))
             {
                 Warning("ÇëÑ¡Ôñ¿ÚÎ¶¡£");
                 return;
