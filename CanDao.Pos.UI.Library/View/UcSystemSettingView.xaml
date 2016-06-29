@@ -5,7 +5,7 @@
              xmlns:views="clr-namespace:CanDao.Pos.SystemConfig.Views"
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
              xmlns:view="clr-namespace:CanDao.Pos.UI.Library.View"
-             xmlns:views1="clr-namespace:CanDao.Pos.SystemConfig.Views;assembly=CanDao.Pos.SystemConfig">
+             xmlns:views2="clr-namespace:CanDao.Pos.SystemConfig.Views;assembly=CanDaoCD.Pos.SystemConfig">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -28,7 +28,7 @@
                     </Border>
                 </dx:DXTabItem.Header>
                 <dx:DXTabItem.Content>
-                    <views1:UcCopyPrintView/>
+                    <views2:UcCopyPrintView/>
                 </dx:DXTabItem.Content>
             </dx:DXTabItem>
 

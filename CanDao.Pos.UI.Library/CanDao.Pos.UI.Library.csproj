@@ -36,22 +36,8 @@
       <HintPath>..\Bin\Lib\CanDao.Pos.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="CanDao.Pos.SystemConfig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Bin\Lib\CanDao.Pos.SystemConfig.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="CanDao.Pos.UI.Utility">
       <HintPath>..\Bin\Lib\CanDao.Pos.UI.Utility.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="CanDaoCD.Pos.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Bin\Lib\CanDaoCD.Pos.Common.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="CanDaoCD.Pos.ResourceService">
-      <HintPath>..\Bin\Lib\CanDaoCD.Pos.ResourceService.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.Data.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
@@ -208,6 +194,21 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CanDao.Pos.SystemConfig\CanDaoCD.Pos.SystemConfig.csproj">
+      <Project>{fc4def0b-50e2-4f55-a183-c0959b61b50a}</Project>
+      <Name>CanDaoCD.Pos.SystemConfig</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDaoCD.Pos.Common\CanDaoCD.Pos.Common.csproj">
+      <Project>{7ddd5dce-b2cd-429d-80ae-6ff2f66d15d8}</Project>
+      <Name>CanDaoCD.Pos.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDaoCD.Pos.ResourceService\CanDaoCD.Pos.ResourceService.csproj">
+      <Project>{8b73af41-0061-4213-9ec0-318986d1c408}</Project>
+      <Name>CanDaoCD.Pos.ResourceService</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{269eceff-b6c2-4708-86ba-afbb1a2b045c}</Project>
       <Name>Common</Name>

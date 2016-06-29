@@ -52,11 +52,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CanDaoCD.Pos.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Bin\Lib\CanDaoCD.Pos.Common.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="DevExpress.Data.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Utils.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Xpf.Core.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
@@ -404,6 +399,11 @@
     <None Include="Resources\find50x50.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CanDaoCD.Pos.Common\CanDaoCD.Pos.Common.csproj">
+      <Project>{7ddd5dce-b2cd-429d-80ae-6ff2f66d15d8}</Project>
+      <Name>CanDaoCD.Pos.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{269eceff-b6c2-4708-86ba-afbb1a2b045c}</Project>
       <Name>Common</Name>
