@@ -3969,6 +3969,11 @@ namespace Main
             {
                 inputnum = false;
             }
+
+            var wnd = new BackDishReasonSelectWindow();
+            if (wnd.ShowDialog() != true)
+                return;
+
             //如果是套餐
             if (dishtype.Equals("2"))
             {
@@ -3992,8 +3997,7 @@ namespace Main
 
             //调用退菜接口
             double backnum = num;
-            string discardReason = "";
-            var result = BackDish.backDish(Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo, discardUserId, Globals.UserInfo.UserID, selectRow, backnum, discardReason);
+            var result = BackDish.backDish(Globals.CurrOrderInfo.orderid, Globals.CurrTableInfo.tableNo, discardUserId, Globals.UserInfo.UserID, selectRow, backnum, wnd.SelectedReason);
 
             Opentable2();
             if (!result)
