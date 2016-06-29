@@ -5513,6 +5513,15 @@ namespace Main
                 return;
             }
 
+            try
+            {
+                RestClient.broadcastmsg(2201, Globals.CurrOrderInfo.orderid); //这里是发清帐单指令1005
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.E(ex);
+            }
+
             Warning("整单退菜成功。");
             Opentable2();
         }
