@@ -243,6 +243,7 @@ namespace Main
                 maling = true;
                 xtraTabControl1.SelectedTabPageIndex = 0;
                 pnlCash.Enabled = true;
+                BtnMark.Visible = true;
                 Globals.CurrOrderInfo.orderid = "";
                 lblMsg.Text = "";
                 Globals.CurrTableInfo.tableNo = tableno;
