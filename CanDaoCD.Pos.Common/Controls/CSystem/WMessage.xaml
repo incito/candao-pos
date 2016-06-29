@@ -20,7 +20,7 @@
         <Grid Background="#FFC080">
             <Image Source="{DynamicResource Logo}" HorizontalAlignment="Left"></Image>
         </Grid>
-        <TextBox x:Name="TexMessage" Grid.Row="1" TextWrapping="Wrap" Foreground="Red" Text="确认消息" FontSize="24"></TextBox>
+        <TextBox x:Name="TexMessage" IsEnabled="False" Grid.Row="1" TextWrapping="Wrap" Foreground="Red" Text="确认消息" FontSize="24"></TextBox>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
             <controls:CtlImageButton x:Name="BtnOk" Style="{DynamicResource ImgButton}" HorizontalAlignment="Right" Margin="0,0,20,0" Click="BtnOk_OnClick" DefaultImage="{DynamicResource ImgOk}"></controls:CtlImageButton>
             <controls:CtlImageButton x:Name="BtnClose" Style="{DynamicResource ImgButton}" HorizontalAlignment="Right" Margin="0,0,20,0" Click="BtnClose_Click" DefaultImage="{DynamicResource ImgClose}"></controls:CtlImageButton>

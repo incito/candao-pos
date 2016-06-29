@@ -49,6 +49,12 @@ namespace CanDaoCD.Pos.Common.Controls.CSystem
                     Keyboard.Press(Key.Enter);
                     Keyboard.Release(Key.Enter);
                     break;
+                case ".":
+                {
+                    Keyboard.Press(Key.Decimal);
+                    Keyboard.Release(Key.Decimal);
+                    break;
+                }
                 default:
                     Keyboard.Type(param);
                     break;

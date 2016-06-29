@@ -185,7 +185,7 @@ namespace Newtonsoft.Json.Converters
             switch (tokenType)
             {
                 case JsonToken.Integer:
-                    return typeof(long);
+                    return typeof(string);
                 case JsonToken.Float:
                     return typeof(double);
                 case JsonToken.String:
