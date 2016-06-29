@@ -56,7 +56,7 @@ namespace KYPOS.Dishes
         /// <param name="userID"></param>
         public void Start()
         {
-            _refreshTimer.Interval = 30*1000;
+            _refreshTimer.Interval = 10*1000;
             _refreshTimer.Elapsed += _refreshTimer_Elapsed;
             _refreshTimer.Start();
         }
