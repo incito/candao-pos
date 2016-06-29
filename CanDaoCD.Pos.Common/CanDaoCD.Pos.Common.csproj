@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7DDD5DCE-B2CD-429D-80AE-6FF2F66D15D8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CanDaoCD.Pos.Common</RootNamespace>
+    <AssemblyName>CanDaoCD.Pos.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Mvvms\MessageBase.cs" />
+    <Compile Include="Classes\Mvvms\PropertyChangedMessageBase.cs" />
+    <Compile Include="Classes\Mvvms\PropertyChangedMessage.cs" />
+    <Compile Include="Classes\Mvvms\Messenger.cs" />
+    <Compile Include="Classes\Mvvms\IMessenger.cs" />
+    <Compile Include="Classes\Mvvms\ViewModelBase.cs" />
+    <Compile Include="Classes\Mvvms\ObservableObject.cs" />
+    <Compile Include="Classes\Mvvms\WeakFuncT.cs" />
+    <Compile Include="Classes\Mvvms\WeakActionT.cs" />
+    <Compile Include="Classes\Mvvms\RelayCommandT.cs" />
+    <Compile Include="Classes\Mvvms\WeakFunc.cs" />
+    <Compile Include="Classes\Mvvms\WeakAction.cs" />
+    <Compile Include="Classes\Mvvms\RelayCommand.cs" />
+    <Compile Include="Controls\CSystem\AsynWindow.xaml.cs">
+      <DependentUpon>AsynWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\CtlDigitalKeyboardAcross.xaml.cs">
+      <DependentUpon>CtlDigitalKeyboardAcross.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\DigitalInputKeyboard.xaml.cs">
+      <DependentUpon>DigitalInputKeyboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\CtlDigitalKeyboard.xaml.cs">
+      <DependentUpon>CtlDigitalKeyboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\DigitalInputKeyboardVm.cs" />
+    <Compile Include="Controls\CSystem\LoadingWait.xaml.cs">
+      <DependentUpon>LoadingWait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\UserControlBase.cs" />
+    <Compile Include="Controls\CSystem\WMessage.xaml.cs">
+      <DependentUpon>WMessage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\WPopup.xaml.cs">
+      <DependentUpon>WPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\WUserCheck.xaml.cs">
+      <DependentUpon>WUserCheck.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NewControl\UcPageList.xaml.cs">
+      <DependentUpon>UcPageList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MListBoxInfo.cs" />
+    <Compile Include="Models\MSystemConfig.cs" />
+    <Compile Include="Operates\AsyncLoadServer.cs" />
+    <Compile Include="Operates\FileOperate\OXmlOperate.cs" />
+    <Compile Include="Operates\OCheckFormat.cs" />
+    <Compile Include="Operates\OKeyBoardPre.cs" />
+    <Compile Include="Operates\OWindowManage.cs" />
+    <Compile Include="Operates\Simulation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="PublicValues\PvSystemConfig.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\CSystem\AsynWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\CtlDigitalKeyboardAcross.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\DigitalInputKeyboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\CtlDigitalKeyboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\LoadingWait.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\WMessage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CSystem\WPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CSystem\WUserCheck.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NewControl\UcPageList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CanDaoCD.Pos.ResourceService\CanDaoCD.Pos.ResourceService.csproj">
+      <Project>{8b73af41-0061-4213-9ec0-318986d1c408}</Project>
+      <Name>CanDaoCD.Pos.ResourceService</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -2895,6 +2895,16 @@ namespace WebServiceReference
                 dataDetail.malingincom = jo["malingincom"].ToString();
                 dataDetail.give = jo["give"].ToString();
                 dataDetail.handervalue = jo["handervalue"].ToString();
+
+                if (jo["handerWay"].ToString().Equals("抹零"))
+                {
+                    dataDetail.handervalue = "0";//四舍五入为“0”
+                }
+                else
+                {
+                    dataDetail.malingincom = "0";
+                }
+
                 dataDetail.mebervalueadd = jo["mebervalueadd"].ToString();
 
                 dataDetail.money = jo["money"].ToString();
