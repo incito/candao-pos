@@ -2864,6 +2864,40 @@ namespace WebServiceReference
         }
 
         /// <summary>
+        /// 获取营业明细(团购券)
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static List<MHangingMoney> GetGrouponForList(string beginTime, string endTime)
+        {
+            var catList = new List<MHangingMoney>();
+            string address = String.Format("http://{0}/" + apiPath + "/preferentialAnalysisCharts/findPreferential.json?beginTime={1}&endTime={2}&shiftid=-1&bankcardno=-1&settlementWay=5&type=-1", server2, beginTime, endTime);
+            AllLog.Instance.I(string.Format("【GetGrouponForList】 beginTime：{0}，endTime：{1}。", beginTime, endTime));
+            String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetGrouponForList】 result：{0}。", jsonResult));
+            try
+            {
+                JArray jArray = (JArray)JsonConvert.DeserializeObject(jsonResult);
+
+                foreach (var ja in jArray)
+                {
+                    var cat = new MHangingMoney();
+                    cat.HangingName = ja["pname"].ToString();
+                    cat.HangingMoney = ja["payamount"].ToString();
+                    catList.Add(cat);
+                }
+                return catList;
+            }
+            catch (Exception ex)
+            {
+                var msg = string.Format("获取营业明细(团购券)：{0}", ex.Message);
+                AllLog.Instance.E(msg);
+                return catList;
+            }
+        }
+
+        /// <summary>
         /// 获取营业明细（其它）
         /// </summary>
         /// <param name="beginTime"></param>
@@ -2927,9 +2961,11 @@ namespace WebServiceReference
 
                 dataDetail.Categories= GetItemForList(beginTime, endTime);//获取品项列表
 
-                dataDetail.HangingMonies = GetGzdwForList(beginTime, endTime);//获取挂账列表
+                dataDetail.HangingMonies = GetGrouponForList(beginTime, endTime);//获取团购列表
 
-                dataDetail.xiaofei = GetTipMoney(beginTime, endTime);
+                dataDetail.HangingMonies.AddRange(GetGzdwForList(beginTime, endTime));//获取挂账列表
+
+                dataDetail.xiaofei = GetTipMoney(beginTime, endTime);//获取消费
 
                 return dataDetail;
             }
