@@ -2455,9 +2455,9 @@ namespace WebServiceReference
                     {
                         orderprice = "0";//赠送
                         writer.WritePropertyName("freeuser");
-                        writer.WriteValue(Globals.AuthorizerInfo.UserID);
+                        writer.WriteValue(Globals.UserInfo.UserID);
                         writer.WritePropertyName("freeauthorize");
-                        writer.WriteValue(Globals.AuthorizerInfo.UserName);
+                        writer.WriteValue(Globals.AuthorizerInfo.UserID);
                         writer.WritePropertyName("freereason");
                         writer.WriteValue(Globals.DishGiftReason);
                     }
@@ -2545,15 +2545,6 @@ namespace WebServiceReference
                     string taste = dr["taste"].ToString();
                     writer.WritePropertyName("taste");
                     writer.WriteValue(taste);
-                    string freeuser = dr["freeuser"].ToString();
-                    writer.WritePropertyName("freeuser");
-                    writer.WriteValue(freeuser);
-                    string freeauthorize = dr["freeauthorize"].ToString();
-                    writer.WritePropertyName("freeauthorize");
-                    writer.WriteValue(freeauthorize);
-                    string freereason = dr["freereason"].ToString();
-                    writer.WritePropertyName("freereason");
-                    writer.WriteValue(freereason);
                     writer.WriteEndObject();
                 }
 
@@ -2592,9 +2583,9 @@ namespace WebServiceReference
                         {
                             orderprice = "0";//赠送
                             writer.WritePropertyName("freeuser");
-                            writer.WriteValue(Globals.AuthorizerInfo.UserID);
+                            writer.WriteValue(Globals.UserInfo.UserID);
                             writer.WritePropertyName("freeauthorize");
-                            writer.WriteValue(Globals.AuthorizerInfo.UserName);
+                            writer.WriteValue(Globals.AuthorizerInfo.UserID);
                             writer.WritePropertyName("freereason");
                             writer.WriteValue(Globals.DishGiftReason);
                         }

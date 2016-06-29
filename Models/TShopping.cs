@@ -275,6 +275,8 @@ namespace Models
         /// </summary>
         public string Taste { get; set; }
 
+        public string ImageTitle { get; set; }
+
         #endregion Model
 
         /// <summary>
@@ -448,7 +450,7 @@ namespace Models
             dr["userid"] = dishrow.Userid;
             dr["ordertime"] = dishrow.Ordertime;
             dr["orderstatus"] = dishrow.Orderstatus;
-            dr["dishnum"] = (decimal) Math.Round(dishrow.Dishnum, 2);
+            dr["dishnum"] = (decimal)Math.Round(dishrow.Dishnum, 2);
             dr["tableid"] = dishrow.Tableid;
             dr["dishid"] = dishrow.Dishid;
             dr["avoid"] = dishrow.Avoid;
@@ -461,7 +463,7 @@ namespace Models
             dr["price"] = dishrow.Price;
             dr["price2"] = dishrow.Price2;
             dr["ordertype"] = dishrow.Ordertype;
-            dr["amount"] = dishrow.Price*(decimal) dishrow.Dishnum;
+            dr["amount"] = dishrow.Price * (decimal)dishrow.Dishnum;
             dr["source"] = dishrow.Source;
             dr["weigh"] = dishrow.Weigh; //dishstatus 如果是称重下单为1
             dr["primarydishtype"] = dishrow.Primarydishtype;
@@ -470,17 +472,11 @@ namespace Models
             dr["Parentdishid"] = dishrow.Parentdishid ?? "";
             dr["groupid"] = dishrow.Groupid ?? "";
             dr["Groupid2"] = dishrow.Groupid2 ?? "";
-            dr["taste"] = dishrow.SelectedTaste ?? "";
+            dr["taste"] = dishrow.Title.Contains("临时菜") ? dishrow.Taste : (dishrow.SelectedTaste ?? "");
             dr["avoid"] = dishrow.Avoid ?? "";
             dr["freeuser"] = dishrow.Freeuser ?? "";
             dr["freeauthorize"] = dishrow.Freeauthorize ?? "";
             dr["freereason"] = dishrow.Freereason ?? "";
-
-            dr["taste"] = dishrow.Taste;
-            dr["freeuser"] = dishrow.Freeuser;
-            dr["freeauthorize"] = dishrow.Freeauthorize;
-            dr["freereason"] = dishrow.Freereason;
-
 
             shopptable.Rows.Add(dr);
 
