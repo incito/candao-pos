@@ -354,7 +354,9 @@ namespace Main
             lblRs.Text = String.Format("人数：{0}", "");
             lblZd.Text = String.Format("帐单：{0}", "");
             lblMember.Text = String.Format("会员：{0}", "");
-            lblMember.TextChanged += lblMember_TextChanged;
+
+            //lblMember.TextChanged += lblMember_TextChanged;
+
             //btnDelete.Visible = !RestClient.isClearCoupon();
             dgvjs.Width = 330;
            
