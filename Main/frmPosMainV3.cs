@@ -250,9 +250,11 @@ namespace Main
                 lblRs.Visible = false;
                 edtRoom.Enabled = false;
                 btnOrderML.Enabled = false;
+                btnOpen.Enabled = false;
                 btnCancelOrder.Enabled = false;
                 BtnBackAll.Enabled = false;
                 lblDesk.Text = string.Format("桌号：{0}", tableno);
+                Globals.CurrTableInfo.tableName = tableno;
                 InitWm();
                 StartWm();
                 Globals.ShoppTable.Clear();
