@@ -1298,6 +1298,7 @@ namespace Main
 
         private void broadMsg()
         {
+            var aer = Globals.CurrTableInfo.areaid;
             try
             {
                 RestClient.broadcastmsg(1002, Globals.CurrOrderInfo.orderid); //这里是发结算指令1002
@@ -1314,8 +1315,15 @@ namespace Main
             //广播手环2011
             try
             {
+              
+
+                if (string.IsNullOrEmpty(aer))
+                {
+                    aer = Globals.CurrTableInfo.tableNo;
+                }
+
                 //发   服务员|台号|帐单号
-                string msg = String.Format("{0}|17|0|{1}|{2}|{3}", Globals.CurrOrderInfo.userid,Globals.CurrTableInfo.areaid, Globals.CurrTableInfo.tableNo, Guid.NewGuid().ToString("N"));
+                string msg = String.Format("{0}|17|0|{1}|{2}|{3}", Globals.CurrOrderInfo.userid, aer, Globals.CurrTableInfo.tableNo, Guid.NewGuid().ToString("N"));
                 RestClient.broadcastmsg(2011, msg);
             }
             catch { }

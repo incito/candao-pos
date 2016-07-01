@@ -57,7 +57,11 @@ namespace WebServiceReference
                 if (node != null)
                 {
                     var reasons = node.Attributes["value"].Value;
-                    _dishGiftReasonList = reasons.Split(';').ToList();
+                    if (!string.IsNullOrEmpty(reasons))
+                    {
+                        _dishGiftReasonList = reasons.Split(';').ToList(); 
+                    }
+                   
                 }
                 return _dishGiftReasonList;
             }
@@ -903,7 +907,7 @@ namespace WebServiceReference
                         var avoid = dr["avoid"].ToString();
                         if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
                         {
-                            dr["title"] = string.Format("({0}){1}", avoid.Replace("|", ""), title);
+                            dr["title"] = string.Format("({0}){1}", avoid.Split('|')[2], title);
                         }
                         else
                         {
@@ -961,7 +965,7 @@ namespace WebServiceReference
                     var avoid = dr["avoid"].ToString();
                     if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
                     {
-                        dr["title"] = string.Format("({0}){1}", avoid.Replace("|", ""), title);
+                        dr["title"] = string.Format("({0}){1}", avoid.Split('|')[2], title);
                     }
                     else
                     {
@@ -1097,7 +1101,7 @@ namespace WebServiceReference
                     var avoid = dr["avoid"].ToString();
                     if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
                     {
-                        dr["title"] = string.Format("({0}){1}", avoid.Replace("|",""), title);
+                        dr["title"] = string.Format("({0}){1}", avoid.Split('|')[2], title);
                     }
                     else
                     {

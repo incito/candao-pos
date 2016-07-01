@@ -59,11 +59,21 @@ namespace CanDao.Pos.UI.Library.View
             _vm.ItemSource.Clear();
             if (source != null)
             {
+                if (source.Count() == 0)
+                {
+                    ItmCto.Visibility= Visibility.Collapsed;
+                    return;
+                }
+                else
+                {
+                    ItmCto.Visibility = Visibility.Visible;
+                }
                 foreach (var item in source)
                 {
                     _vm.ItemSource.Add(item);
                 }
             }
+           
         }
         #endregion
 

@@ -539,6 +539,10 @@ namespace Models
             dr["avoid"] = dishDiet;
             var name = dr["dishName"].ToString();
             var taste = dr["taste"].ToString();
+            if (name.Contains("临时菜"))
+            {
+                taste = "";
+            }
             dr["title"] = GenerateDishName(name, taste, dishDiet);
         }
 

@@ -15,7 +15,7 @@
     <StackPanel Orientation="Vertical">
         <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="Bold" VerticalAlignment="Top"/>
         <Border Height="2" Background="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-        <ItemsControl ItemsSource="{Binding ItemSource}" MaxWidth="{Binding ActualWidth, ElementName=Ctrl}">
+        <ItemsControl x:Name="ItmCto" ItemsSource="{Binding ItemSource}" MaxWidth="{Binding ActualWidth, ElementName=Ctrl}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"/>
