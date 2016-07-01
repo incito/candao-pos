@@ -65,7 +65,7 @@
         </Grid.Resources>
           <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="80"></RowDefinition>
             <RowDefinition Height="5"></RowDefinition>
@@ -74,7 +74,7 @@
         </Grid.RowDefinitions>
         
         <TextBlock Text="选择营业时间"></TextBlock>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" >
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Visibility="Collapsed">
             <RadioButton Content="{Binding Model.Today}" ToolTip="今天" Margin="15,0,0,0" Command="{Binding TodayCommand}" IsChecked="{Binding Model.IsToday}"></RadioButton>
             <RadioButton Content="{Binding Model.Yesterday}" ToolTip="昨天" Margin="15,0,0,0" Command="{Binding YesterdayCommand}" IsChecked="{Binding Model.IsYesterday}"></RadioButton>
             <RadioButton Content="{Binding Model.Month}" ToolTip="本月" Margin="15,0,0,0" Command="{Binding MonthCommand}" IsChecked="{Binding Model.IsMonth}"></RadioButton>
