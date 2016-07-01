@@ -130,7 +130,7 @@ namespace KYPOS.OpenTables
 
         }
 
-        public void Set
+       
         #endregion
     }
 }
