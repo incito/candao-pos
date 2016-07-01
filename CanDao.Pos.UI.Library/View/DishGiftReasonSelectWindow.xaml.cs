@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.UI.Library.Model;
-using Common;
 using WebServiceReference;
 
 namespace CanDao.Pos.UI.Library.View

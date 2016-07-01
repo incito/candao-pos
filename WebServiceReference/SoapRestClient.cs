@@ -58,10 +58,7 @@ namespace WebServiceReference
                 {
                     var reasons = node.Attributes["value"].Value;
                     if (!string.IsNullOrEmpty(reasons))
-                    {
-                        _dishGiftReasonList = reasons.Split(';').ToList(); 
-                    }
-                   
+                        _dishGiftReasonList = reasons.Split(';').ToList();
                 }
                 return _dishGiftReasonList;
             }
@@ -88,7 +85,8 @@ namespace WebServiceReference
                 if (node != null)
                 {
                     var reasons = node.Attributes["value"].Value;
-                    _backDishReasonList = reasons.Split(';').ToList();
+                    if (!string.IsNullOrEmpty(reasons))
+                        _backDishReasonList = reasons.Split(';').ToList();
                 }
                 return _backDishReasonList;
             }
@@ -903,7 +901,7 @@ namespace WebServiceReference
                     dt.Columns.Add(column);
                     foreach (DataRow dr in dt.Rows)
                     {
-                        var title =InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                        var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
                         var avoid = dr["avoid"].ToString();
                         if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
                         {
@@ -916,7 +914,7 @@ namespace WebServiceReference
 
                         dr["dishunitSrc"] = dr["dishunit"];
                         dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
-                      
+
                     }
 
                     Globals.OrderTable = dt;
@@ -947,14 +945,14 @@ namespace WebServiceReference
 
             JObject jaAll = (JObject)JsonConvert.DeserializeObject(jsonResult);
             string result = jaAll["Data"].ToString();
-          
+
             if (!result.Equals("0"))
             {
                 //把JSON转为DataSet
                 DataTableConverter dtc = new DataTableConverter();
                 JsonReader jread = new JsonTextReader(new StringReader(result));
                 dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
-             
+
 
                 //国际化处理品项名称和单位
                 var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
@@ -1096,7 +1094,7 @@ namespace WebServiceReference
                 var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
                 dt.Columns.Add(column);
                 foreach (DataRow dr in dt.Rows)
-                {               
+                {
                     var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
                     var avoid = dr["avoid"].ToString();
                     if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
@@ -2833,14 +2831,14 @@ namespace WebServiceReference
         public static List<MCategory> GetItemForList(string beginTime, string endTime)
         {
             var catList = new List<MCategory>();
-            string address = String.Format("http://{0}/" + apiPath + "/itemDetail/getItemForList.json?beginTime={1}&endTime={2}", server2,beginTime,endTime);
+            string address = String.Format("http://{0}/" + apiPath + "/itemDetail/getItemForList.json?beginTime={1}&endTime={2}", server2, beginTime, endTime);
             AllLog.Instance.I(string.Format("【GetItemForList】 beginTime：{0}，endTime：{1}。", beginTime, endTime));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【GetItemForList】 result：{0}。", jsonResult));
             try
             {
                 JArray jArray = (JArray)JsonConvert.DeserializeObject(jsonResult);
-            
+
                 foreach (var ja in jArray)
                 {
                     var cat = new MCategory();
@@ -2900,12 +2898,12 @@ namespace WebServiceReference
         /// <returns></returns>
         public static MBusinessDataDetail GetDayReportList(string beginTime, string endTime, string userName)
         {
-            string address = String.Format("http://{0}/" + apiPath + "/daliyReports/getDayReportList.json?beginTime={1}&endTime={2}", server2,beginTime,endTime);
+            string address = String.Format("http://{0}/" + apiPath + "/daliyReports/getDayReportList.json?beginTime={1}&endTime={2}", server2, beginTime, endTime);
             AllLog.Instance.I(string.Format("【GetDayReportList】 beginTime：{0}，endTime：{1}。", beginTime, endTime));
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【GetDayReportList】 result：{0}。", jsonResult));
 
-            var dataDetail=new MBusinessDataDetail();
+            var dataDetail = new MBusinessDataDetail();
             try
             {
                 JArray jArray = (JArray)JsonConvert.DeserializeObject(jsonResult);
@@ -2913,7 +2911,7 @@ namespace WebServiceReference
                 var jo = (JObject)jArray[0];
                 dataDetail.StartTime = DateTime.Parse(beginTime);
                 dataDetail.EndTime = DateTime.Parse(endTime);
-                dataDetail.CurrentTime=DateTime.Now;
+                dataDetail.CurrentTime = DateTime.Now;
                 dataDetail.UserName = userName;
                 dataDetail.kaitaishu = jo["kaitaishu"].ToString();
 
@@ -2925,13 +2923,13 @@ namespace WebServiceReference
                 dataDetail.give = jo["give"].ToString();
                 dataDetail.handervalue = jo["handervalue"].ToString();
 
-                
+
 
                 if (jo["handerWay"].ToString().Equals("抹零"))
                 {
                     dataDetail.handervalue = "0";//四舍五入为“0”
                 }
-                else if(string.IsNullOrEmpty(jo["handerWay"].ToString()))
+                else if (string.IsNullOrEmpty(jo["handerWay"].ToString()))
                 {
                     dataDetail.handervalue = "0";
                     dataDetail.malingincom = "0";
@@ -2954,7 +2952,7 @@ namespace WebServiceReference
                 dataDetail.discountamount = jo["discountamount"].ToString();
                 dataDetail.paidinamount = jo["paidinamount"].ToString();
 
-                dataDetail.Categories= GetItemForList(beginTime, endTime);//获取品项列表
+                dataDetail.Categories = GetItemForList(beginTime, endTime);//获取品项列表
 
                 dataDetail.HangingMonies = GetGrouponForList(beginTime, endTime);//获取团购列表
 
@@ -2987,7 +2985,7 @@ namespace WebServiceReference
             AllLog.Instance.I(string.Format("【GetGzdwForList】 result：{0}。", jsonResult));
             try
             {
-              
+
                 JObject jObj = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 string data = jObj["resultList"].ToString();
 
@@ -3317,7 +3315,7 @@ namespace WebServiceReference
                 if (jsonResult.Equals("0"))
                     return false;
 
-                var jobj = (JObject) JsonConvert.DeserializeObject(jsonResult);
+                var jobj = (JObject)JsonConvert.DeserializeObject(jsonResult);
                 return jobj["result"].ToString().Equals("0");//返回0表示成功，其他失败。
             }
             catch (Exception ex)
