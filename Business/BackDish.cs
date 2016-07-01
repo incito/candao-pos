@@ -23,69 +23,70 @@ namespace Business
             double num = 0;
             bool backret = false;
             bool backret2 = false;
-         
-                dishnum = double.Parse(dr["dishnum"].ToString());
-                if(dishnum>=tmpbacknum)
-                {
-                    num = tmpbacknum;
-                    tmpbacknum = 0;
-                }else
-                {
-                    num = dishnum;
-                    tmpbacknum = tmpbacknum - dishnum;
-                }
-                string dishtype = dr["dishtype"].ToString();
-                StringWriter sw=null;
-                string ispot = dr["ispot"].ToString();
-           
-                string ismaster = dr["ismaster"].ToString();
-                string childdishtype = dr["childdishtype"].ToString();
-                int backtype = 0;
-                if (ispot.Equals("1"))
-                    backtype = 1; //是鱼锅，退整个锅
-                if ((ismaster.Equals("1") && (dishtype.Equals("1"))))
-                {
-                    backtype = 1; //是鱼锅套餐dish,退整个锅
-                }
-                if ((ispot.Equals("0")) && (ismaster.Equals("0") && (dishtype.Equals("1"))))
-                {
-                    backtype = 4; //是鱼锅中的鱼
-                }
-                //如果是套餐
-                if ((childdishtype.Equals("2") && (dishtype.Equals("2"))))
-                {
-                    backtype = 5; 
-                }
-                switch (backtype)
-                {
-                    case 0: //退普通菜
-                        sw=getBackDish_1(orderNo,tableno,discardUserId,userid,dr,num,"");
-                        backret=RestClient.discarddish(sw);
-                        if (backret)
-                            backret2 = backret;
-                        break;
-                    case 1: //退整个鱼锅
-                        sw = getBackDish_allyg(orderNo, tableno, discardUserId, userid, dr, num, discardReason);
-                        backret=RestClient.discarddish(sw);
-                        if (backret)
-                            backret2 = backret;
-                        break;
-                    case 4: //退整个鱼锅
-                        sw = getBackDish_y(orderNo, tableno, discardUserId, userid, dr, num, discardReason);
-                        backret = RestClient.discarddish(sw);
-                        if (backret)
-                            backret2 = backret;
-                        break;
-                    case 5: //套餐 
-                        sw = getBackDish_dc(orderNo, tableno, discardUserId, userid, dr, num, discardReason);
-                        backret=RestClient.discarddish(sw);
-                        if (backret)
-                            backret2 = backret;
-                        break;
-                }
-                if(tmpbacknum<=0)
-                { }
-            
+
+            dishnum = double.Parse(dr["dishnum"].ToString());
+            if (dishnum >= tmpbacknum)
+            {
+                num = tmpbacknum;
+                tmpbacknum = 0;
+            }
+            else
+            {
+                num = dishnum;
+                tmpbacknum = tmpbacknum - dishnum;
+            }
+            string dishtype = dr["dishtype"].ToString();
+            StringWriter sw = null;
+            string ispot = dr["ispot"].ToString();
+
+            string ismaster = dr["ismaster"].ToString();
+            string childdishtype = dr["childdishtype"].ToString();
+            int backtype = 0;
+            if (ispot.Equals("1"))
+                backtype = 1; //是鱼锅，退整个锅
+            if ((ismaster.Equals("1") && (dishtype.Equals("1"))))
+            {
+                backtype = 1; //是鱼锅套餐dish,退整个锅
+            }
+            if ((ispot.Equals("0")) && (ismaster.Equals("0") && (dishtype.Equals("1"))))
+            {
+                backtype = 4; //是鱼锅中的鱼
+            }
+            //如果是套餐
+            if ((childdishtype.Equals("2") && (dishtype.Equals("2"))))
+            {
+                backtype = 5;
+            }
+            switch (backtype)
+            {
+                case 0: //退普通菜
+                    sw = getBackDish_1(orderNo, tableno, discardUserId, userid, dr, num, discardReason);
+                    backret = RestClient.discarddish(sw);
+                    if (backret)
+                        backret2 = backret;
+                    break;
+                case 1: //退整个鱼锅
+                    sw = getBackDish_allyg(orderNo, tableno, discardUserId, userid, dr, num, discardReason);
+                    backret = RestClient.discarddish(sw);
+                    if (backret)
+                        backret2 = backret;
+                    break;
+                case 4: //退整个鱼锅
+                    sw = getBackDish_y(orderNo, tableno, discardUserId, userid, dr, num, discardReason);
+                    backret = RestClient.discarddish(sw);
+                    if (backret)
+                        backret2 = backret;
+                    break;
+                case 5: //套餐 
+                    sw = getBackDish_dc(orderNo, tableno, discardUserId, userid, dr, num, discardReason);
+                    backret = RestClient.discarddish(sw);
+                    if (backret)
+                        backret2 = backret;
+                    break;
+            }
+            if (tmpbacknum <= 0)
+            { }
+
             return backret2;
         }
         public static double getBackNum(DataTable dt)
@@ -104,9 +105,9 @@ namespace Business
         /// <param name="tableno"></param>
         /// <param name="dishunit"></param>
         /// <returns></returns>
-        public static bool getbackdish(string orderNo, string dishid, string dishunit,string tableno, out string msg, out JArray ja)
+        public static bool getbackdish(string orderNo, string dishid, string dishunit, string tableno, out string msg, out JArray ja)
         {
-            DataRow orderdishidinfo=null;
+            DataRow orderdishidinfo = null;
             double dishnum = 0;
             JArray jrorder = null;
             if (!RestClient.getBackDishInfo(orderNo, dishid, dishunit, tableno, out jrorder))
@@ -120,7 +121,7 @@ namespace Business
             msg = "";
             return true;
         }
-        public static void writeObject(ref JsonWriter writer,string PropertyName,string value)
+        public static void writeObject(ref JsonWriter writer, string PropertyName, string value)
         {
             if (value == null)
                 value = "";
@@ -165,7 +166,7 @@ namespace Business
             writeObject(ref writer, "userName", userid);
             writeObject(ref writer, "dishunit", dishunit);
             writeObject(ref writer, "dishNum", getdishNum(dishNum));// 
-            writeObject(ref writer,"actionType","0");
+            writeObject(ref writer, "actionType", "0");
             writeObject(ref writer, "dishtype", "0");
             writeObject(ref writer, "dishNo", dishNo);
             writer.WriteEndObject();
@@ -173,7 +174,7 @@ namespace Business
             return sw;
         }
 
-    
+
         public static string getdishNum(double dishnum)
         {
             return dishnum.ToString();
