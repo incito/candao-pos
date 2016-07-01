@@ -5502,7 +5502,7 @@ namespace Main
                 {
                     t_shopping.EditDishDietAndNum(dr, wnd.DishNum, wnd.Diet);
 
-                    if (!string.IsNullOrEmpty(groupid))//套餐或鱼锅需要设置内部所有菜品的忌口。
+                    if (!string.IsNullOrEmpty(groupid) && primarydishtype.Equals("2"))//套餐需要设置内部所有菜品的忌口。
                     {
                         foreach (DataRow dataRow in Globals.ShoppTable.Rows)
                         {

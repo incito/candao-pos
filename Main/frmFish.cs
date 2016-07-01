@@ -135,7 +135,6 @@ namespace Main
             }
 
             potDishInfo.FishDishInfo1.Dishnum = dishNum1;
-            SetDishTasteAndDiet(potDishInfo.FishDishInfo1, tasteSetControl.SelectedTaste, dietSetControl1.Diet);//锅鱼1设置口味和忌口。
 
             if (potDishInfo.FishDishInfo2 != null)
             {
@@ -146,11 +145,9 @@ namespace Main
                     return;
                 }
                 potDishInfo.FishDishInfo2.Dishnum = dishNum2;
-                SetDishTasteAndDiet(potDishInfo.FishDishInfo2, tasteSetControl.SelectedTaste, dietSetControl1.Diet);//锅鱼2设置口味和忌口。
             }
 
             SetDishTasteAndDiet(dishinfo, tasteSetControl.SelectedTaste, dietSetControl1.Diet);//鱼锅本身设置口味和忌口。
-            SetDishTasteAndDiet(potDishInfo.PotInfo, tasteSetControl.SelectedTaste, dietSetControl1.Diet);//锅底设置口味和忌口。
             DialogResult = DialogResult.OK;
             Close();
         }
