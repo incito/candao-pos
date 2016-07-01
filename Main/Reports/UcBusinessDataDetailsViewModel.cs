@@ -48,7 +48,7 @@ namespace KYPOS.Reports
             Model = new UcBusinessDataDetailsModel();
             Model.Today = DateTime.Now.ToString("yyyy.MM.dd");
             Model.Yesterday = DateTime.Now.AddDays(-1).ToString("yyyy.MM.dd");
-            Model.Month = DateTime.Now.AddDays(-1).ToString("yyyy.MM");
+            Model.Month = DateTime.Now.ToString("yyyy.MM");
             Model.LastMonth = DateTime.Now.AddMonths(-1).ToString("yyyy.MM");
             TodayCommand = new RelayCommand(TodayHandel);
             YesterdayCommand=new RelayCommand(YesterdayHandel);
