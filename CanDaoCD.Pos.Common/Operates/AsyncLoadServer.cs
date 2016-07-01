@@ -15,25 +15,32 @@ namespace CanDaoCD.Pos.Common.Operates
     public class AsyncLoadServer
     {
         #region 字段
+
         private BackgroundWorker _backWorker;
 
         private AsynWindow _asynWindow;
 
         private Action _processMethod;
+
         #endregion
 
-#region 属性
+        #region 属性
+
         public string ErrorMessage { set; get; }
-#endregion
+
+        #endregion
 
         #region 事件
+
         /// <summary>
         /// 工作状态-0：正常；1：取消;2：异常
         /// </summary>
         public Action<int> ActionWorkerState;
+
         #endregion
 
         #region 公共方法
+
         /// <summary>
         ///  初始化信息
         /// </summary>
@@ -54,7 +61,7 @@ namespace CanDaoCD.Pos.Common.Operates
             _asynWindow.Show();
             _asynWindow.ActionCancel = Stop;
             _backWorker.RunWorkerAsync();
-           
+
         }
 
         /// <summary>
@@ -63,7 +70,7 @@ namespace CanDaoCD.Pos.Common.Operates
         /// <param name="showText">显示内容</param>
         public void SetMessage(string showText)
         {
-            _asynWindow.SetShowText(string.Format("{0}",showText));
+            _asynWindow.SetShowText(string.Format("{0}", showText));
         }
 
         public void Stop()
@@ -76,6 +83,7 @@ namespace CanDaoCD.Pos.Common.Operates
         #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 工作
         /// </summary>
@@ -91,9 +99,9 @@ namespace CanDaoCD.Pos.Common.Operates
                     _processMethod();
                 }
             }
-           catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new InvalidOperationException(ex.Message);
+                ErrorMessage = ex.Message;
             }
         }
 
@@ -104,7 +112,7 @@ namespace CanDaoCD.Pos.Common.Operates
         /// <param name="e"></param>
         void backWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-         
+
         }
 
         /// <summary>
@@ -116,7 +124,7 @@ namespace CanDaoCD.Pos.Common.Operates
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
-                OWindowManage.ShowMessageWindow(ErrorMessage,false);
+                ProgressWorker(2);
             }
 
             if (e.Error != null)
@@ -132,18 +140,20 @@ namespace CanDaoCD.Pos.Common.Operates
                 ProgressWorker(0);
             }
         }
+
         /// <summary>
         /// 处理工作状态
         /// </summary>
         /// <param name="state"></param>
         private void ProgressWorker(int state)
         {
-            _asynWindow.Close();
-            if(ActionWorkerState!=null)
+            if (ActionWorkerState != null)
             {
                 ActionWorkerState(state);
             }
+            _asynWindow.Close();
         }
+
         #endregion
     }
 }
