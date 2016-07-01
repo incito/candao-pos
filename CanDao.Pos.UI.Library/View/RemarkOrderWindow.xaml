@@ -5,7 +5,7 @@
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              xmlns:view="clr-namespace:CanDao.Pos.UI.Library.View"
              xmlns:view1="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
-             Width="480" Height="240" Title="全单备注"
+             Width="480" SizeToContent="Height" Title="全单备注"
              WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
     <dxlc:LayoutControl Orientation="Vertical">
         <view:DietSetControl x:Name="DietSetCtrl"/>
