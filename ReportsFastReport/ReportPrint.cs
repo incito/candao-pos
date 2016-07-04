@@ -558,7 +558,7 @@ namespace ReportsFastReport
         /// </summary>
         /// <param name="billno"></param>
         /// <param name="printuser"></param>
-        public static void PrintMemberPay1(String billno, String printuser)
+        public static void PrintMemberPay1(String billno, String printuser, float oldIntegral)
         {
             //
             JArray jrOrder = null;
@@ -579,7 +579,7 @@ namespace ReportsFastReport
                 }
 
                 //打印复写卡
-                //PrintCopyCard(dtOrder, oldIntegral);
+                PrintCopyCard(dtOrder, oldIntegral);
 
 
                 string file = Application.StartupPath + @"\Reports\rptyz1.frx";
