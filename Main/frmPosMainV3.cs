@@ -3324,7 +3324,7 @@ namespace Main
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName,psIntegralOverall);
+                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, psIntegralOverall);
             }
             finally
             {
@@ -4247,11 +4247,11 @@ namespace Main
         /// </summary>
         private void setOrder()
         {
-            //getTakeOutTable
             string orderid = "";
-            if (!RestClient.setorder(currtableno, Globals.UserInfo.UserID, ref orderid))
+            var result = RestClient.setorder(currtableno, Globals.UserInfo.UserID, ref orderid);
+            if (!string.IsNullOrEmpty(result))
             {
-                Warning("开台失败,1！");
+                Warning(result);
                 return;
             }
             //标记帐单的ordertpe=1为正常外卖

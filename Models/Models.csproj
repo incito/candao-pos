@@ -68,6 +68,7 @@
     <Compile Include="Enum\EnumDishSalePeriodsType.cs" />
     <Compile Include="Enum\EnumOddAccuracy.cs" />
     <Compile Include="Enum\EnumOddModel.cs" />
+    <Compile Include="Enum\EnumOpenTableResult.cs" />
     <Compile Include="Enum\EnumPrintStatus.cs" />
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumSystemDataType.cs" />

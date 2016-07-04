@@ -726,7 +726,7 @@ namespace Main
             dishinfo.Memberprice = 0;
             dishinfo.Level = "0";
 
-             
+
             try
             {
                 dishinfo.Level = ja["level"].ToString();
@@ -833,7 +833,7 @@ namespace Main
                         }
                     }
                 }
-                else if(dishinfo.Title.Contains("临时菜"))
+                else if (dishinfo.Title.Contains("临时菜"))
                 {
                     dishinfo.Ordertype = 0;
                     dishinfo.Primarydishtype = 0;
@@ -881,10 +881,10 @@ namespace Main
             {
                 dishinfo.Title = string.Format("({0}){1}", customDishes.Model.DishesName, dishinfo.Title);
                 dishinfo.DishName = dishinfo.Title;
-                dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount)*float.Parse(customDishes.Model.Price);
+                dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount) * float.Parse(customDishes.Model.Price);
                 dishinfo.Taste = customDishes.Model.DishesName;
                 //dishinfo.Price = float.Parse(customDishes.Model.Price);
-                dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString())*dishinfo.Price;
+                dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString()) * dishinfo.Price;
 
                 dishinfo.Ordertype = 0;
                 dishinfo.Primarydishtype = 0;
@@ -968,20 +968,20 @@ namespace Main
             //保存挂帐人信息到数据库
             string settleorderorderid = Globals.CurrOrderInfo.orderid;
         }
+
         private void setOrder(TGzInfo gzinfo)
         {
-            //getTakeOutTable
             string orderid = "";
-            if (!RestClient.setorder(Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, ref orderid))
+            var result = RestClient.setorder(Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, ref orderid);
+            if (!string.IsNullOrEmpty(result))
             {
-                Warning("开外卖台失败！");
+                Warning(result);
                 return;
             }
-            try
-            {
-                Thread.Sleep(1000);
-            }
-            catch { }
+
+            //标记帐单的ordertpe=1为正常外卖
+            RestClient.wmOrder(orderid);
+
             Globals.CurrOrderInfo.orderid = orderid;
             Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
             if (!bookOrder())
@@ -996,8 +996,6 @@ namespace Main
             }
             catch { }
             Warning("挂单成功,单号：" + orderid);
-            //挂完单，把台关掉，再清掉购物车开新单
-            //
         }
 
         private bool bookOrder()
@@ -1017,7 +1015,7 @@ namespace Main
         {
             //下单
             //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";
-        
+
             return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, 1, 0, Globals.OrderRemark);
         }
 
