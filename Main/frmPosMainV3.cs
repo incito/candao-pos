@@ -962,7 +962,7 @@ namespace Main
                 tmpstr += string.Format("微信{0} ", amountwx);
 
             if (decgz2 < 0)
-                tmpstr += string.Format("挂帐多收{0} ", decgz2);
+                tmpstr += string.Format("挂账多收{0} ", Math.Abs(decgz2));
             if ((amountym + decym) > 0)
                 tmpstr += string.Format("优免{0} ", amountym + decym);
 
