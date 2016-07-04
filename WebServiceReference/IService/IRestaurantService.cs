@@ -84,7 +84,7 @@ namespace WebServiceReference.IService
         Tuple<string, List<SystemSetData>> GetSystemSetData(EnumSystemDataType type);
 
         /// <summary>
-        /// 
+        /// 整单退菜。
         /// </summary>
         /// <param name="tableNo">餐桌号。</param>
         /// <param name="orderId">订单号。</param>
@@ -93,5 +93,11 @@ namespace WebServiceReference.IService
         /// <returns></returns>
         string BackAllDish(string tableNo, string orderId, string authorizer, string reason);
 
+        /// <summary>
+        /// 获取指定类型的餐桌信息。
+        /// </summary>
+        /// <param name="tableTypes">餐台类型集合。</param>
+        /// <returns>Item1全部正常则为null，否则为错误信息，Item2为餐桌信息集合。</returns>
+        Tuple<string, List<TableInfo>> GetTableInfoByType(List<EnumTableType> tableTypes);
     }
 }

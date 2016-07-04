@@ -260,6 +260,26 @@ namespace WebServiceReference.ServiceImpl
             }
         }
 
+        public Tuple<string, List<TableInfo>> GetTableInfoByType(List<EnumTableType> tableTypes)
+        {
+            try
+            {
+                var addr = string.Format("http://{0}/{1}/padinterface/getTableByType.json", RestClient.server, RestClient.apiPath);
+
+                var request = new GetTableByTypeRequest { tableType = tableTypes.Select(t => ((int)t).ToString()).ToList() };
+                var result = HttpHelper.HttpPost<List<TableInfoResponse>>(addr, request);
+                var dataList = new List<TableInfo>();
+                if (result != null && result.Any())
+                    dataList = result.Select(DataConverter.ToTableInfo).ToList();
+
+                return new Tuple<string, List<TableInfo>>(null, dataList);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, List<TableInfo>>(ex.Message, null);
+            }
+        }
+
         private BackDishRequest GenerateBackAllDishRequest(string orderId, string tableNo, string userName, string reason)
         {
             return new BackDishRequest
