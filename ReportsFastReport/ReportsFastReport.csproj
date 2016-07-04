@@ -120,6 +120,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CanDaoCD.Pos.PrintManage\CanDaoCD.Pos.PrintManage.csproj">
+      <Project>{2aa08d85-71ba-4988-9116-be1bf3e736f1}</Project>
+      <Name>CanDaoCD.Pos.PrintManage</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{269ECEFF-B6C2-4708-86BA-AFBB1A2B045C}</Project>
       <Name>Common</Name>

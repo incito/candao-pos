@@ -14,6 +14,7 @@ using WebServiceReference;
 using Library;
 using Models;
 using System.Threading;
+using CanDaoCD.Pos.PrintManage;
 using Models.Reports;
 
 namespace ReportsFastReport
@@ -576,6 +577,11 @@ namespace ReportsFastReport
                     Library.frmWarning.ShowWarning("该单没有会员消费记录!");
                     return;
                 }
+
+                //打印复写卡
+                //PrintCopyCard(dtOrder, oldIntegral);
+
+
                 string file = Application.StartupPath + @"\Reports\rptyz1.frx";
                 rptReport.Load(file); //加载报表模板文件
                 DataSet ds = new DataSet();
@@ -1055,6 +1061,59 @@ namespace ReportsFastReport
                 AllLog.Instance.D("InitReport:" + ex.Message);
             }
             return report;
+        }
+
+        /// <summary>
+        /// 打印消费复写卡
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="oldIntegral"></param>
+        public static void PrintCopyCard(DataTable dt, float oldIntegral)
+        {
+
+            if (dt.Rows.Count > 0)
+            {
+                double temdouble = 0;
+                double czzjDecimal = 0;
+                double jfDecimal = 0;
+                double czDecimal = 0;
+                string cardno = "";
+
+                //
+                if (double.TryParse(dt.Rows[0]["stored"].ToString(), out temdouble))
+                {
+                    czzjDecimal = -temdouble;
+                }
+
+                if (double.TryParse(dt.Rows[0]["scorebalance"].ToString(), out temdouble))
+                {
+                    jfDecimal = temdouble;
+                }
+
+                if (double.TryParse(dt.Rows[0]["storedbalance"].ToString(), out temdouble))
+                {
+                    czDecimal = temdouble;
+                }
+
+                //查询会员信息
+                string name = string.Empty;
+                string telnum = string.Empty;
+                try
+                {
+                    var info = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", Globals.CurrOrderInfo.memberno, "");
+                    name = info.Name;
+                    telnum = info.Mobile;
+                }
+                catch
+                {
+
+                }
+
+                PrintService.PayPrint(name, telnum, (czDecimal - czzjDecimal).ToString()
+                    , czzjDecimal.ToString(), czDecimal.ToString(), oldIntegral.ToString(),
+                    (jfDecimal - oldIntegral).ToString(), jfDecimal.ToString());
+
+            }
         }
 
         #endregion
