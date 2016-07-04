@@ -185,7 +185,7 @@ namespace Main
                 {
                     HideOpenTable();
                 }
-             
+
                 catch
                 {
                 }
@@ -208,7 +208,7 @@ namespace Main
 
                 //定时刷新菜单列表（比对菜单明细数量和总额）
                 _dishesTimer = new DishesTimer();
-             
+
                 if (_dishesTimer.DataChangeAction == null)
                 {
                     _dishesTimer.DataChangeAction = new Action(DataChangeHandel);
@@ -362,12 +362,12 @@ namespace Main
 
             //btnDelete.Visible = !RestClient.isClearCoupon();
             dgvjs.Width = 330;
-           
+
             InitMemberFun();
             //pnlMore.Top = 200;
             setFormToPayType1();
         }
-       
+
         /// <summary>
         /// 会员卡号变化
         /// </summary>
@@ -1256,7 +1256,7 @@ namespace Main
                             {
                                 try
                                 {
-                            
+
                                 }
                                 catch (Exception ex)
                                 {
@@ -1317,7 +1317,7 @@ namespace Main
             //广播手环2011
             try
             {
-              
+
 
                 if (string.IsNullOrEmpty(aer))
                 {
@@ -1858,8 +1858,8 @@ namespace Main
                 btnRBill_Click(btnRBill, e);
                 isreback = false;
             }
-            
-            _dishesTimer.OrderID = lblZd.Text.Replace("帐单：","");
+
+            _dishesTimer.OrderID = lblZd.Text.Replace("帐单：", "");
             _dishesTimer.Start();
         }
 
@@ -5456,19 +5456,19 @@ namespace Main
 
             DataRow dr = (this.dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
 
-            string Groupid = dr["Groupid"].ToString();
-            string Orderstatus = dr["Orderstatus"].ToString();
+            string groupid = dr["Groupid"].ToString();
+            string orderstatus = dr["Orderstatus"].ToString();
             string primarydishtype = dr["primarydishtype"].ToString();
             bool allowInputDishNum = true;
-            if (!Groupid.Equals(""))
+            if (!groupid.Equals(""))
             {
                 allowInputDishNum = false;
-                if (primarydishtype.Equals("2") && Orderstatus != "0")//orderstatus=3是套餐主体
+                if (primarydishtype.Equals("2") && orderstatus != "0")//orderstatus=0是套餐主体
                 {
                     Warning("请选择套餐主体设置备注。");
                     return;
                 }
-                if (primarydishtype.Equals("1") && Orderstatus != "0")//orderstatus=3是套餐主体
+                if (primarydishtype.Equals("1") && orderstatus != "0")//orderstatus=0是鱼锅主体
                 {
                     Warning("请选择鱼锅主体设置备注。");
                     return;
@@ -5501,6 +5501,17 @@ namespace Main
                 try
                 {
                     t_shopping.EditDishDietAndNum(dr, wnd.DishNum, wnd.Diet);
+
+                    if (!string.IsNullOrEmpty(groupid) && primarydishtype.Equals("2"))//套餐需要设置内部所有菜品的忌口。
+                    {
+                        foreach (DataRow dataRow in Globals.ShoppTable.Rows)
+                        {
+                            if (!groupid.Equals(dataRow["groupid"].ToString()))
+                                continue;
+
+                            t_shopping.EditDishDietAndNum(dataRow, wnd.DishNum, wnd.Diet);
+                        }
+                    }
                     ShowTotal();
                     frmorder.shoppingchange();
                 }
