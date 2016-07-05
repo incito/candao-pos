@@ -1,10 +1,13 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using CanDaoCD.Pos.Common.Operates.FileOperate;
 using Common;
 using DevExpress.Skins;
 using DevExpress.UserSkins;
@@ -15,6 +18,8 @@ using ReportsFastReport;
 using WebServiceReference;
 using WebServiceReference.IService;
 using WebServiceReference.ServiceImpl;
+using CanDaoCD.Pos.Common.PublicValues;
+using CanDaoCD.Pos.Common.Models;
 
 /************************************************************************* 
  * 程序说明: 程序入口
@@ -51,6 +56,12 @@ namespace Main
                 }
                 frmStart.frm.setMsg("读取配置文件...");
                 SystemConfig.ReadSettings(); //读取用户自定义设置
+
+                if (File.Exists(PvSystemConfig.VSystemConfigFile))
+                {
+                    PvSystemConfig.VSystemConfig =
+                        OXmlOperate.DeserializeFile<MSystemConfig>(PvSystemConfig.VSystemConfigFile);
+                }
 
                 BonusSkins.Register();//注册Dev酷皮肤
                 //OfficeSkins.Register();////注册Office样式的皮肤

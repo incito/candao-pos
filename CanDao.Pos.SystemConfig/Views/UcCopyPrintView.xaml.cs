@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CanDao.Pos.SystemConfig.ViewModels;
 using CanDaoCD.Pos.Common.Models;
 using CanDaoCD.Pos.Common.Operates.FileOperate;
 
@@ -26,14 +27,18 @@ namespace CanDao.Pos.SystemConfig.Views
         public UcCopyPrintView()
         {
             InitializeComponent();
-           
+            var viewModel = new UcCopyPrintViewModel();
+
+            this.DataContext = viewModel;
+            viewModel.InitContor(this);
         }
 
-#region 事件
+        #region 事件
 
         public Action EnterAction;
-#endregion
-  
+
+        #endregion
+
         private void CkBullet_OnUnchecked(object sender, RoutedEventArgs e)
         {
             try
@@ -43,9 +48,9 @@ namespace CanDao.Pos.SystemConfig.Views
             }
             catch
             {
-               
+
             }
-         
+
         }
 
         private void CkBullet_OnChecked(object sender, RoutedEventArgs e)
@@ -60,25 +65,6 @@ namespace CanDao.Pos.SystemConfig.Views
                 if (EnterAction != null)
                 {
                     EnterAction();
-                }
-            }
-            else
-            {
-                var num = 1;
-                if (int.TryParse(TexNum.Text, out num))
-                {
-                    if (num > 0 & num < 257)
-                    {
-                        
-                    }
-                    else
-                    {
-                        TexNum.Text = "1";
-                    }
-                }
-                else
-                {
-                    TexNum.Text = "1";
                 }
             }
         }
