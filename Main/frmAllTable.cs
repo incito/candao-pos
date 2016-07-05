@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Media;
 using CanDao.Pos.SystemConfig.Views;
+using CanDao.Pos.UI.Library.View;
 using CanDaoCD.Pos.Common.Operates;
 using Common;
 using KYPOS;
@@ -400,7 +401,25 @@ namespace Main
                 Warning("您没有收银权限！");
                 return;
             }
-            string tableno = RestClient.getTakeOutTable();
+
+            //获取咖啡外卖台
+            var service = new RestaurantServiceImpl();
+            var result = service.GetTableInfoByType(new List<EnumTableType>() { EnumTableType.CFTakeout });//查询咖啡模式外卖台
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                Warning(result.Item1);
+                return;
+            }
+
+            string tableno = RestClient.getTakeOutTable();//默认选中配置文件的外卖台。
+            if (result.Item2 != null)
+            {
+                var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
+                if (selectTableWnd.ShowDialog() == true && selectTableWnd.SelectedTable != null)
+                {
+                    tableno = selectTableWnd.SelectedTable.TableNo;
+                }
+            }
             try
             {
                 this.Cursor = Cursors.WaitCursor;

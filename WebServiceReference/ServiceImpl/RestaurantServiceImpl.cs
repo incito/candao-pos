@@ -264,6 +264,12 @@ namespace WebServiceReference.ServiceImpl
         {
             try
             {
+                return new Tuple<string, List<TableInfo>>(null, new List<TableInfo>()
+                {
+                    new TableInfo() { TableNo = "路飞" },
+                    new TableInfo() { TableNo = "娜美" },
+                    new TableInfo() { TableNo = "乔巴" }
+                });
                 var addr = string.Format("http://{0}/{1}/padinterface/getTableByType.json", RestClient.server, RestClient.apiPath);
 
                 var request = new GetTableByTypeRequest { tableType = tableTypes.Select(t => ((int)t).ToString()).ToList() };

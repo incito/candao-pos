@@ -103,6 +103,7 @@
     <Compile Include="ViewModel\AllowMultSelectorCtrlVm.cs" />
     <Compile Include="ViewModel\DishInfoEditWndVm.cs" />
     <Compile Include="ViewModel\InputMoreInfoWndVm.cs" />
+    <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
     <Compile Include="ViewModel\SetDishTasteAndDietWndVm.cs" />
     <Compile Include="ViewModel\TasteSetControlVm.cs" />
     <Compile Include="ViewModel\UcPrinterListViewModel.cs" />
@@ -124,6 +125,9 @@
     </Compile>
     <Compile Include="View\RemarkOrderWindow.xaml.cs">
       <DependentUpon>RemarkOrderWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SelectCoffeeTakeoutTableWindow.xaml.cs">
+      <DependentUpon>SelectCoffeeTakeoutTableWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SetDishTasteAndDietWindow.xaml.cs">
       <DependentUpon>SetDishTasteAndDietWindow.xaml</DependentUpon>
@@ -173,6 +177,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\RemarkOrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SelectCoffeeTakeoutTableWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
