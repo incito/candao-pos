@@ -1256,7 +1256,7 @@ namespace Main
                             {
                                 try
                                 {
-
+                                    ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName);
                                 }
                                 catch (Exception ex)
                                 {
