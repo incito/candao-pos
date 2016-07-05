@@ -324,17 +324,15 @@ namespace Main
                     return;
                 }
             }
-            else
+
+            if (Globals.ShoppTable.Rows.Count > 0)
             {
-                if (Globals.ShoppTable.Rows.Count > 0)
+                if (!AskQuestion(Globals.CurrTableInfo.tableName + "确定下单吗?"))
                 {
-                    if (!AskQuestion(Globals.CurrTableInfo.tableName + "确定下单吗?"))
-                    {
-                        return;
-                    }
+                    return;
                 }
             }
-            ///转到结帐页 //如果是堂食，就是下单
+            //转到结帐页 //如果是堂食，就是下单
             OnAccounts(0);
         }
 
@@ -957,45 +955,29 @@ namespace Main
             if (!frmWMInfo.ShowWMInfo(out gzinfo))
             {
                 return;
-
-                //if (!AskQuestion("确定要挂帐吗?"))
-                //{
-                //    return;
-                // }
             }
-            //挂帐 开台/下单/（关台，不结账）
+
             setOrder(gzinfo);
-            //保存挂帐人信息到数据库
             string settleorderorderid = Globals.CurrOrderInfo.orderid;
         }
 
         private void setOrder(TGzInfo gzinfo)
         {
-            string orderid = "";
-            var result = RestClient.setorder(Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, ref orderid);
-            if (!string.IsNullOrEmpty(result))
-            {
-                Warning(result);
-                return;
-            }
-
-            //标记帐单的ordertpe=1为正常外卖
-            RestClient.wmOrder(orderid);
-
-            Globals.CurrOrderInfo.orderid = orderid;
-            Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
             if (!bookOrder())
             {
                 return;
             }
-            RestClient.putOrder(Globals.CurrTableInfo.tableNo, orderid, gzinfo);
+            RestClient.putOrder(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid, gzinfo);
             Globals.ShoppTable.Clear();
             try
             {
-                RestClient.caleTableAmount(Globals.UserInfo.UserID, orderid);
+                RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
             }
-            catch { }
-            Warning("挂单成功,单号：" + orderid);
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("挂单时计算实收异常。" + ex.Message);
+            }
+            Warning("挂单成功,单号：" + Globals.CurrOrderInfo.orderid);
         }
 
         private bool bookOrder()
