@@ -72,6 +72,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\UCCashboxModel.cs" />
     <Compile Include="Models\UcCopyPrintModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -86,7 +87,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\UCCashboxViewModel.cs" />
     <Compile Include="ViewModels\UcCopyPrintViewModel.cs" />
+    <Compile Include="Views\UCCashboxView.xaml.cs">
+      <DependentUpon>UCCashboxView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UcCopyPrintView.xaml.cs">
       <DependentUpon>UcCopyPrintView.xaml</DependentUpon>
     </Compile>
@@ -118,6 +123,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\UCCashboxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UcCopyPrintView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

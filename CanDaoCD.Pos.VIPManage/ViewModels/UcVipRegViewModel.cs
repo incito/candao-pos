@@ -154,8 +154,9 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                         return;
                     }
 
-                    if (PrintService.CardCheck())//判断复写卡是否在位
-                    {
+                    PrintService.CardCheck();
+                    //if (PrintService.CardCheck())//判断复写卡是否在位
+                    //{
                         //调用注册接口
                         TCandaoRegMemberInfo memberinfo = new TCandaoRegMemberInfo();
                         memberinfo.Branch_id = Globals.branch_id;
@@ -191,7 +192,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     
                             //CloseHandel();
                         }
-                    }
+                    //}
                 }
             }
             catch (Exception ex)

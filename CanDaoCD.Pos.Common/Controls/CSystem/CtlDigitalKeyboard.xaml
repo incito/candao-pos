@@ -45,6 +45,6 @@
         <Button Content="0" Grid.Row="3" Grid.Column="1" Command="{Binding InputCmd}" CommandParameter="0"/>
         <Button Content="." Grid.Row="3" Grid.Column="2" Command="{Binding InputCmd}" CommandParameter="."/>
         <Button Content="&lt;-" Grid.Row="0" Grid.Column="3" Command="{Binding InputCmd}" CommandParameter="Back"/>
-        <Button Content="回车" Grid.Row="1" Grid.RowSpan="3" Grid.Column="3" Command="{Binding InputCmd}" CommandParameter="Enter" Height="183"/>
+        <Button Content="确定" Grid.Row="1" Grid.RowSpan="3" Grid.Column="3" Command="{Binding InputCmd}" CommandParameter="Enter" Height="183"/>
     </Grid>
 </UserControl>

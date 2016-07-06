@@ -27,7 +27,7 @@ namespace CanDaoCD.Pos.PrintManage.Operates
         //最大超时时间
         private int _timeOut;
 
-        private bool _isInit;
+        public bool _isInit;
         #endregion
 
         #region 属性
@@ -113,9 +113,10 @@ namespace CanDaoCD.Pos.PrintManage.Operates
                     }
                     else
                     {
-                        ErrorString = "打印机连接错误，请检查打印机是否连接正常！";
-                        OWindowManage.ShowMessageWindow(
-                                  string.Format("{0}", ErrorString), false);
+                        //ErrorString = "打印机连接错误，请检查打印机是否连接正常！";
+                        //OWindowManage.ShowMessageWindow(
+                        //          string.Format("{0}", ErrorString), false);
+                        _isInit = false;
                         return false;
                     }
                 }
@@ -124,9 +125,46 @@ namespace CanDaoCD.Pos.PrintManage.Operates
             catch (Exception ex)
             {
                 ErrorString = ex.Message;
+                _isInit = false;
                 return false;
             }
         }
+
+        /// <summary>
+        /// 多次连接
+        /// </summary>
+        /// <returns></returns>
+        private bool ConnectPrint()
+        {
+            int testCount = 3;//重连3次
+
+            while(testCount>0)
+            {
+                try
+                {
+                    if (PrintKs.OpenCom(_port, 8, 1, 0, _bandRate) == 0)
+                    {
+                        //连接成功
+                        _isInit = true;
+                        return true;
+                    }
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+                    testCount--;
+                }
+            }
+
+            //连接失败
+            _isInit = false;
+            ErrorString = "打印机连接错误，请检查打印机是否连接正常！";
+            return false;
+        }
+
         /// <summary>
         /// 释放组件
         /// </summary>
@@ -232,6 +270,18 @@ namespace CanDaoCD.Pos.PrintManage.Operates
                     if (res !=6)
                     {
                         ErrorString = OInfoManage.GetErrorString(res);
+
+                        if (ErrorString.Equals("Null"))//连接失败
+                        {
+                            if (ConnectPrint())
+                            {
+                                return CardState();
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
                         return false;
                     }
                     else
@@ -246,19 +296,17 @@ namespace CanDaoCD.Pos.PrintManage.Operates
                             return false;
                         }
                     }
-                  
                 }
                 else
                 {
-                    if (Init(PvSystemConfig.VSystemConfig.SerialNum))
-                    {
-                        return CardState();
-                    }
-                    else
-                    {
-                        return false; 
-                    }
-                    
+                   if(ConnectPrint())
+                   {
+                      return CardState();
+                   }
+                   else
+                   {
+                       return false;
+                   }
                 }
 
             }

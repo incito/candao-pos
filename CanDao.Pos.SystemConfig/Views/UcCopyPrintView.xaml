@@ -6,7 +6,7 @@
              xmlns:Controls="clr-namespace:CanDaoCD.Pos.ResourceService.Controls;assembly=CanDaoCD.Pos.ResourceService"
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
              xmlns:controls="clr-namespace:CanDaoCD.Pos.Common.Controls;assembly=CanDaoCD.Pos.Common"
-             x:Class="CanDao.Pos.SystemConfig.Views.UcCopyPrintView" 
+             x:Class="CanDaoCD.Pos.SystemConfig.Views.UcCopyPrintView" 
              mc:Ignorable="d" 
              d:DesignHeight="570" d:DesignWidth="520" Background="#F0F0F0">
     <UserControl.Resources>

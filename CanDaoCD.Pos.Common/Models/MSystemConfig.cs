@@ -12,6 +12,7 @@ namespace CanDaoCD.Pos.Common.Models
 
         private bool _isEnabledPrint;
 
+        private bool _isEnabledCheck;
         /// <summary>
         /// 串口号
         /// </summary>
@@ -41,6 +42,14 @@ namespace CanDaoCD.Pos.Common.Models
                 return _isEnabledPrint;
 
             }
+        }
+        /// <summary>
+        /// 是否启用钱箱权限验证
+        /// </summary>
+        public bool IsEnabledCheck
+        {
+            set { _isEnabledCheck = value; }
+            get { return _isEnabledCheck; }
         }
     }
 }

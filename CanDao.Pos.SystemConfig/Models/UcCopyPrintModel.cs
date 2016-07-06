@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CanDaoCD.Pos.Common.Classes.Mvvms;
 
-namespace CanDao.Pos.SystemConfig.Models
+namespace CanDaoCD.Pos.SystemConfig.Models
 {
    
    public class UcCopyPrintModel:ViewModelBase

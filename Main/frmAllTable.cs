@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Media;
-using CanDao.Pos.SystemConfig.Views;
+using CanDaoCD.Pos.SystemConfig.Views;
 using CanDaoCD.Pos.Common.Operates;
 using Common;
 using KYPOS;

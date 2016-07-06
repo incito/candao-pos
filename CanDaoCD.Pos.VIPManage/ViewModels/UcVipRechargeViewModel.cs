@@ -315,8 +315,10 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                                 return;
                             }
                         }
-                        if (PrintService.CardCheck())
-                        {
+
+                        PrintService.CardCheck();
+                        //if (PrintService.CardCheck())
+                        //{
                             //会员注册
                             decimal amount = 0;
                             int typeRecharge = Model.IsBankCard == true ? 1 : 0;
@@ -343,7 +345,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
 
                             }
 
-                        }
+                        //}
                     }
                     catch (Exception ex)
                     {

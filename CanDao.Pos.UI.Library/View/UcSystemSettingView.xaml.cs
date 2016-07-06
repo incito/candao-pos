@@ -1,4 +1,4 @@
-﻿namespace CanDao.Pos.SystemConfig.Views
+﻿namespace CanDaoCD.Pos.SystemConfig.Views
 {
     /// <summary>
     /// 系统设置控件。

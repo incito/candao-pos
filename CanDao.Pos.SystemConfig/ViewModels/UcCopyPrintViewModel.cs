@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using CanDao.Pos.SystemConfig.Models;
-using CanDao.Pos.SystemConfig.Views;
+using CanDaoCD.Pos.SystemConfig.Models;
+using CanDaoCD.Pos.SystemConfig.Views;
 using CanDaoCD.Pos.Common.Classes.Mvvms;
 using CanDaoCD.Pos.Common.Operates.FileOperate;
 using CanDaoCD.Pos.Common.Controls.CSystem;
@@ -14,7 +14,7 @@ using CanDaoCD.Pos.Common.PublicValues;
 using CanDaoCD.Pos.Common.Operates;
 using CanDaoCD.Pos.PrintManage;
 
-namespace CanDao.Pos.SystemConfig.ViewModels
+namespace CanDaoCD.Pos.SystemConfig.ViewModels
 {
     /// <summary>
     /// 复写打印

@@ -300,6 +300,11 @@
       <DependentUpon>frmLogin.cs</DependentUpon>
     </Compile>
     <Compile Include="OpenTables\TableManage.cs" />
+    <Compile Include="OpenTables\UCCashboxPswModel.cs" />
+    <Compile Include="OpenTables\UCCashboxPswView.xaml.cs">
+      <DependentUpon>UCCashboxPswView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OpenTables\UCCashboxPswViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportDishInfoControl.xaml.cs">
@@ -1324,6 +1329,10 @@
     <Page Include="Dishes\UcCustomDishesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OpenTables\UCCashboxPswView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ReportDishInfoControl.xaml">
       <SubType>Designer</SubType>

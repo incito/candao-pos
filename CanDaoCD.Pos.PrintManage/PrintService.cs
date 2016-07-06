@@ -41,12 +41,22 @@ namespace CanDaoCD.Pos.PrintManage
            {
                if (!_printManage.CardState())
                {
-                   if (OWindowManage.ShowMessageWindow("请先将复写卡插入到复写卡打印机，再尝试。", true))
+                   if (_printManage._isInit)
                    {
-                       CardCheck();
+                       if (OWindowManage.ShowMessageWindow("请先将复写卡插入到复写卡打印机，再尝试。", true))
+                       {
+                           CardCheck();
+                       }
+                       else
+                       {
+                           return false;
+                       }
                    }
                    else
                    {
+                       var ErrorString = "打印机连接错误，请检查打印机是否连接正常！";
+                       OWindowManage.ShowMessageWindow(
+                                 string.Format("{0}", ErrorString), false);
                        return false;
                    }
                }

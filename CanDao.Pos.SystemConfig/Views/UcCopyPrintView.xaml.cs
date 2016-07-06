@@ -13,11 +13,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CanDao.Pos.SystemConfig.ViewModels;
+using CanDaoCD.Pos.SystemConfig.ViewModels;
 using CanDaoCD.Pos.Common.Models;
 using CanDaoCD.Pos.Common.Operates.FileOperate;
 
-namespace CanDao.Pos.SystemConfig.Views
+namespace CanDaoCD.Pos.SystemConfig.Views
 {
     /// <summary>
     /// UcCopyPrintView.xaml 的交互逻辑
