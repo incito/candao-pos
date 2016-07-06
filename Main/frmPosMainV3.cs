@@ -1240,8 +1240,6 @@ namespace Main
                     Opentable2(true);
                     if (isok)
                     {
-                        ThreadPool.QueueUserWorkItem(t =>
-                        {
                             try
                             {
                                 PrintBill2();
@@ -1256,15 +1254,13 @@ namespace Main
                             {
                                 try
                                 {
-
+                                    ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, psIntegralOverall);
                                 }
                                 catch (Exception ex)
                                 {
                                     AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
                                 }
                             }
-                        });
-
                         if (!iswm)
                         {
                             ThreadPool.QueueUserWorkItem(t => { broadMsg(); });
@@ -5551,6 +5547,22 @@ namespace Main
 
             Warning("整单退菜成功。");
             Opentable2();
+        }
+
+        /// <summary>
+        /// 加入密码输入回车结算
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void edtPwd_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                if (getamount >= payamount)
+                {
+                    button27_Click_1(btnPay, e);
+                }
+            }
         }
     }
 }
