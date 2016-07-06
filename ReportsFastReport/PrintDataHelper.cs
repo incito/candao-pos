@@ -50,9 +50,9 @@ namespace ReportsFastReport
 
             var num = GetJObjectDecimal(dataJObj, "dishnum");
             var unit = GetJObjectString(dataJObj, "dishunit");
-            unit = InternationaHelper.FilterSeparatorFlag(unit);
+            unit = InternationaHelper.ReplaceSeparatorFlag(unit, "\n");
             var dishName = GetJObjectString(dataJObj, "title");
-            dishName = InternationaHelper.FilterSeparatorFlag(dishName);
+            dishName = InternationaHelper.ReplaceSeparatorFlag(dishName, "\n");
 
             var priceType = Convert.ToInt32(dataJObj["pricetype"]);
             if (priceType == 1) //1是赠菜。

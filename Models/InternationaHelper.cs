@@ -25,5 +25,16 @@
             var index = srcString.IndexOf('#');
             return index > 0 ? srcString.Substring(0, index) : srcString;
         }
+
+        /// <summary>
+        /// 替换分隔符。
+        /// </summary>
+        /// <param name="srcString"></param>
+        /// <param name="flag"></param>
+        /// <returns></returns>
+        public static string ReplaceSeparatorFlag(string srcString, string flag)
+        {
+            return srcString.Replace("#", flag);
+        }
     }
 }

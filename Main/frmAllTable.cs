@@ -401,6 +401,7 @@ namespace Main
                 Warning("您没有收银权限！");
                 return;
             }
+            timer2.Enabled = false;
 
             //获取咖啡外卖台
             var service = new RestaurantServiceImpl();
@@ -423,7 +424,6 @@ namespace Main
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                timer2.Enabled = false;
                 frmposwm.showFrmWm(tableno);
             }
             finally

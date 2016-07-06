@@ -1242,10 +1242,14 @@ namespace WebServiceReference
         /// <param name="OrderID"></param>
         /// <param name="UserID"></param>
         /// <param name="payDetail"></param>
+        /// <param name="isTakeout">是否是外卖结算。</param>
         /// <returns></returns>
-        public static string settleorder(string OrderID, string UserID, JArray payDetail)
+        public static string settleorder(string OrderID, string UserID, JArray payDetail, bool isTakeout)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/settleorder.json", server2);
+            if (isTakeout)
+                address = string.Format("http://{0}/{1}/padinterface/checkout.json", server, apiPath);
+
             AllLog.Instance.I(string.Format("【settleorder】 OrderID：{0}。", OrderID));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);
@@ -2318,8 +2322,8 @@ namespace WebServiceReference
             AllLog.Instance.I(string.Format("【setorder】 result：{0}。", jsonResult));
             try
             {
-                JObject ja = (JObject) JsonConvert.DeserializeObject(jsonResult);
-                var result = (EnumOpenTableResult) Convert.ToInt32(ja["result"]);
+                JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+                var result = (EnumOpenTableResult)Convert.ToInt32(ja["result"]);
                 orderid = "";
                 switch (result)
                 {
@@ -2327,16 +2331,16 @@ namespace WebServiceReference
                         orderid = ja["orderid"].ToString();
                         return null;
                     case EnumOpenTableResult.Occupied:
-                        return "开台失败：餐台被占用。"; 
+                        return "开台失败：餐台被占用。";
                     case EnumOpenTableResult.TableNotExist:
-                        return "开台失败：餐台不存在。"; 
+                        return "开台失败：餐台不存在。";
                     case EnumOpenTableResult.NoOpenUp:
-                        return "开台失败：未开业。"; 
+                        return "开台失败：未开业。";
                     default:
                         return "开台失败：其他未知错误。";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AllLog.Instance.E(ex.Message);
                 return "开台失败，请重试。";
@@ -2750,9 +2754,12 @@ namespace WebServiceReference
             return str;
         }
 
-        public static string bookorder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype, string globalsperequire = "")
+        public static string BookOrder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype, bool IsTakeout = false, string globalsperequire = "")
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);
+            if (IsTakeout)//外卖下单走另外接口。
+                address = string.Format("http://{0}/{1}/padinterface/placeOrder.json", server, apiPath);
+
             AllLog.Instance.I(string.Format("【bookorderList】 tableid：{0}，orderid：{1}，sequence：{2}。", tableid, orderid, sequence));
             StringWriter sw = new StringWriter();
             JsonWriter writer = new JsonTextWriter(sw);

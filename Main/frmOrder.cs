@@ -46,7 +46,7 @@ namespace Main
         public event Accounts accounts;
         public event Action OrderRemarkChanged;
         private Library.UserControls.ucDish selectbtn = null;
-        private bool iswm = true;
+        public bool iswm = true;
         private string menuid = "";
         private int dishcount_type = 0;//分类中的菜品数量
         private int pagecount_type = 0;//一个分类中的菜品有多少页
@@ -65,7 +65,7 @@ namespace Main
                 showTypeNum();
             }
             catch { }
-            showbtnOrderText();
+            ShowbtnOrderText();
         }
 
         private void OnShoppingChange()
@@ -79,22 +79,12 @@ namespace Main
             if (shoppingChange != null)
                 shoppingChange(this, new EventArgs());
 
-            showbtnOrderText();
+            ShowbtnOrderText();
         }
 
-        public void showbtnOrderText()
+        public void ShowbtnOrderText()
         {
-            if (!iswm)
-            {
-                if (Globals.ShoppTable.Rows.Count <= 0)
-                {
-                    btnOrder.Text = "        结帐";
-                }
-                else
-                {
-                    btnOrder.Text = "        下单";
-                }
-            }
+            btnOrder.Text = Globals.ShoppTable.Rows.Count <= 0 ? "        结帐" : "        下单";
             showTypeNum();
             CheckBtnRemarkOrderStatus();
         }
@@ -311,7 +301,7 @@ namespace Main
             }
             Globals.ShoppTable.Clear();
             showTypeNum();
-            showbtnOrderText();
+            ShowbtnOrderText();
         }
 
         private void button27_Click(object sender, EventArgs e)
@@ -332,6 +322,18 @@ namespace Main
                     return;
                 }
             }
+
+            if (iswm)
+            {
+                var result = bookorder();
+                if (!string.IsNullOrEmpty(result))
+                {
+                    Warning(result);
+                    return;
+                }
+                Warning("下单成功。");
+            }
+
             //转到结帐页 //如果是堂食，就是下单
             OnAccounts(0);
         }
@@ -995,10 +997,7 @@ namespace Main
 
         private string bookorder()
         {
-            //下单
-            //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";
-
-            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, 1, 0, Globals.OrderRemark);
+            return RestClient.BookOrder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, 1, 0, true, Globals.OrderRemark);
         }
 
         private void btnType1_Load(object sender, EventArgs e)
@@ -1043,8 +1042,7 @@ namespace Main
         }
         public void hideGz()
         {
-            ///堂食开台下单，如果有已点把按钮显示为下单
-            iswm = false;
+            //堂食开台下单，如果有已点把按钮显示为下单
             btnGd.Visible = false;
         }
         private void setSelectTypeColor()
