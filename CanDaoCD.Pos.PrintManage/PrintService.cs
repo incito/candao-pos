@@ -13,6 +13,11 @@ namespace CanDaoCD.Pos.PrintManage
    public class PrintService
    {
        private static OPrintManage _printManage;
+
+       /// <summary>
+       /// 打印数据
+       /// </summary>
+       private static List<string> model;
        static PrintService()
        {
            _printManage=new OPrintManage();
@@ -57,11 +62,11 @@ namespace CanDaoCD.Pos.PrintManage
        /// <summary>
        /// 注册打印
        /// </summary>
-       public static void RegPrint(string vipName,string vipNum)
+       public static void RegPrint(string vipName, string vipNum, Action<int> workAction)
        {
            if (PvSystemConfig.VSystemConfig.IsEnabledPrint)
            {
-               var model = new List<string>();
+               model = new List<string>();
                model.Add(vipNum);
                model.Add(vipName);
 
@@ -74,13 +79,20 @@ namespace CanDaoCD.Pos.PrintManage
                model.Add("0.00");
                model.Add("0.00元");
 
-               if (!_printManage.Print(CreadModel(model)))
-               {
-                   //OWindowManage.ShowMessageWindow("打印失败:" + _printManage.ErrorString, false);
-               }
+               AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
+               asyncLoadServer.Init();
+               asyncLoadServer.ActionWorkerState = new Action<int>(workAction);
+               asyncLoadServer.Start(PatPrintR);
+               asyncLoadServer.SetMessage("正在打印复写卡，请稍等... ...");
+            
+           }
+           else
+           {
+               workAction(0);
            }
        }
 
+      
        /// <summary>
        /// 消费打印
        /// </summary>
@@ -112,7 +124,9 @@ namespace CanDaoCD.Pos.PrintManage
            }
        }
 
-       public static List<string> model;
+       /// <summary>
+       /// 打印
+       /// </summary>
        public static void PatPrintR()
        {
            if (!_printManage.Print(CreadModel(model)))
@@ -121,15 +135,14 @@ namespace CanDaoCD.Pos.PrintManage
            }
        }
 
-
        /// <summary>
        /// 充值打印
        /// </summary>
-       public static void RechargePrint(string vipName, string vipNum, string lastRecharge, string recharge, string nowRecharge, string oldIntegral)
+       public static void RechargePrint(string vipName, string vipNum, string lastRecharge, string recharge, string nowRecharge, string oldIntegral,Action<int> workAction)
        {
            if (PvSystemConfig.VSystemConfig.IsEnabledPrint)
            {
-               var model = new List<string>();
+               model = new List<string>();
                model.Add(vipNum);
                model.Add(vipName);
 
@@ -142,10 +155,16 @@ namespace CanDaoCD.Pos.PrintManage
                model.Add(string.Format("{0}", oldIntegral));
                model.Add(string.Format("{0}元", nowRecharge));
 
-               if (!_printManage.Print(CreadModel(model)))
-               {
-                   //OWindowManage.ShowMessageWindow("打印失败:" + _printManage.ErrorString, false);
-               }
+               AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
+               asyncLoadServer.Init();
+               asyncLoadServer.ActionWorkerState = workAction;
+               asyncLoadServer.Start(PatPrintR);
+               asyncLoadServer.SetMessage("正在打印复写卡，请稍等... ...");
+              
+           }
+           else
+           {
+               workAction(0);
            }
        }
        /// <summary>

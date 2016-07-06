@@ -227,10 +227,13 @@ namespace Main
         /// </summary>
         private void DataChangeHandel()
         {
-            this.BeginInvoke(new EventHandler(delegate
+            if (this.IsHandleCreated)
             {
-                Opentable2();
-            }));
+                this.BeginInvoke(new EventHandler(delegate
+                {
+                    Opentable2();
+                }));
+            }
         }
 
         public void showFrmWm(string tableno)

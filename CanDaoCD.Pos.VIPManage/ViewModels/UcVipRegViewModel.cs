@@ -186,12 +186,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                         }
                         else
                         {
-                            AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
-                            asyncLoadServer.Init();
-                            asyncLoadServer.ActionWorkerState = new Action<int>(WorkOk);
-                            asyncLoadServer.Start(Print);
-                            asyncLoadServer.SetMessage("正在打印复写卡，请稍等... ...");
-
+                            Print();
                             //OWindowManage.ShowMessageWindow(string.Format("会员注册成功!"), false);
                     
                             //CloseHandel();
@@ -210,16 +205,18 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         private void Print()
         {
             //复写卡打印
-            PrintService.RegPrint(Model.UserName, Model.TelNum);
+            PrintService.RegPrint(Model.UserName, Model.TelNum, WorkOk);
         }
-
+        /// <summary>
+        /// 异步完成
+        /// </summary>
+        /// <param name="res"></param>
         private void WorkOk(int res)
         {
             OWindowManage.ShowMessageWindow(string.Format("会员注册成功!"), false);
 
             CloseHandel();
         }
-
         #endregion
 
         /// <summary>
