@@ -3320,7 +3320,7 @@ namespace Main
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName,psIntegralOverall);
+                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, psIntegralOverall);
             }
             finally
             {
