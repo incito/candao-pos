@@ -34,14 +34,15 @@
             this.lbAmount = new System.Windows.Forms.Label();
             this.lbSep = new System.Windows.Forms.Label();
             this.plInfo = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.plInfo.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lbTableName
             // 
-            this.lbTableName.Dock = System.Windows.Forms.DockStyle.Top;
             this.lbTableName.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbTableName.Location = new System.Drawing.Point(0, 0);
+            this.lbTableName.Location = new System.Drawing.Point(-1, 0);
             this.lbTableName.Name = "lbTableName";
             this.lbTableName.Size = new System.Drawing.Size(98, 22);
             this.lbTableName.TabIndex = 0;
@@ -51,11 +52,10 @@
             // 
             // lbCusNum
             // 
-            this.lbCusNum.Dock = System.Windows.Forms.DockStyle.Top;
             this.lbCusNum.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbCusNum.Location = new System.Drawing.Point(0, 22);
             this.lbCusNum.Name = "lbCusNum";
-            this.lbCusNum.Size = new System.Drawing.Size(98, 25);
+            this.lbCusNum.Size = new System.Drawing.Size(98, 22);
             this.lbCusNum.TabIndex = 1;
             this.lbCusNum.Text = "5人桌";
             this.lbCusNum.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -102,22 +102,31 @@
             this.plInfo.Controls.Add(this.lbSep);
             this.plInfo.Controls.Add(this.lbTime);
             this.plInfo.Controls.Add(this.lbAmount);
-            this.plInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.plInfo.Location = new System.Drawing.Point(0, 47);
             this.plInfo.Name = "plInfo";
             this.plInfo.Size = new System.Drawing.Size(98, 17);
             this.plInfo.TabIndex = 5;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.lbTableName);
+            this.panel1.Controls.Add(this.plInfo);
+            this.panel1.Controls.Add(this.lbCusNum);
+            this.panel1.Location = new System.Drawing.Point(4, 4);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(98, 64);
+            this.panel1.TabIndex = 6;
+            // 
             // UcTable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.plInfo);
-            this.Controls.Add(this.lbCusNum);
-            this.Controls.Add(this.lbTableName);
+            this.Controls.Add(this.panel1);
             this.Name = "UcTable";
-            this.Size = new System.Drawing.Size(98, 64);
+            this.Size = new System.Drawing.Size(106, 72);
             this.plInfo.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -130,6 +139,7 @@
         private System.Windows.Forms.Label lbAmount;
         private System.Windows.Forms.Label lbSep;
         private System.Windows.Forms.Panel plInfo;
+        private System.Windows.Forms.Panel panel1;
 
 
     }
