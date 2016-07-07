@@ -3406,7 +3406,7 @@ namespace Main
             string partnername = "";
             float freeamount = 0;
             int num = 0;
-            if (jrOrder != null)
+            if (jrOrder != null && jrOrder.Count > 0)
             {
                 if (!isaddFavorale)
                 {
@@ -3424,7 +3424,7 @@ namespace Main
                     }
                 }
             }
-            if (jsList != null)
+            if (jsList != null && jsList.Count > 0)
             {
                 string decorderprice = jsList["decorderprice"].ToString();
                 if (decorderprice.Length > 0)
@@ -3453,7 +3453,7 @@ namespace Main
                 if ((membercard.Length > 0) || Globals.CurrOrderInfo.memberno.Length > 0)
                 {
 
-                    if (jsDouble != null)
+                    if (jsDouble != null && jsDouble.Count > 0)
                     {
                         string decorderprice = jsDouble["decorderprice"].ToString();
                         if (decorderprice.Length > 0)
