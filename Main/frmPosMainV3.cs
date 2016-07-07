@@ -182,6 +182,7 @@ namespace Main
             {
                 _curTableInfo = tableInfo;
                 SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
+                Globals.CurrOrderInfo.orderid = tableInfo.OrderId;
                 currtableno = tableInfo.TableNo;
                 edtRoom.Text = tableInfo.TableNo;
                 pnlCash.Enabled = false;
