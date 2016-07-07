@@ -227,10 +227,13 @@ namespace Main
         /// </summary>
         private void DataChangeHandel()
         {
-            this.BeginInvoke(new EventHandler(delegate
+            if (this.IsHandleCreated)
             {
-                Opentable2();
-            }));
+                this.BeginInvoke(new EventHandler(delegate
+                {
+                    Opentable2();
+                }));
+            }
         }
 
         public void showFrmWm(string tableno)
@@ -1240,8 +1243,6 @@ namespace Main
                     Opentable2(true);
                     if (isok)
                     {
-                        ThreadPool.QueueUserWorkItem(t =>
-                        {
                             try
                             {
                                 PrintBill2();
@@ -1263,8 +1264,6 @@ namespace Main
                                     AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
                                 }
                             }
-                        });
-
                         if (!iswm)
                         {
                             ThreadPool.QueueUserWorkItem(t => { broadMsg(); });
@@ -5539,6 +5538,22 @@ namespace Main
 
             Warning("整单退菜成功。");
             Opentable2();
+        }
+
+        /// <summary>
+        /// 加入密码输入回车结算
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void edtPwd_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                if (getamount >= payamount)
+                {
+                    button27_Click_1(btnPay, e);
+                }
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
     {
         #region 字段
 
-        private UcCopyPrintView _userControl;
+        public UcCopyPrintView _userControl;
         #endregion
 
         #region 属性
@@ -37,10 +37,15 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         
         public UcCopyPrintViewModel()
         {
-            Init();
+           
         }
 
-       
+        public void InitContor(UcCopyPrintView view)
+        {
+            _userControl = view;
+            Init();
+            _userControl.EnterAction = new Action(SaveConfig);
+        }
         #endregion
 
         #region 公共方法
@@ -78,7 +83,6 @@ namespace CanDao.Pos.SystemConfig.ViewModels
         {
             Model = new UcCopyPrintModel();
           
-            //PvSystemConfig.VSystemConfig = OXmlOperate.DeserializeFile<MSystemConfig>(_fileName);
             if (PvSystemConfig.VSystemConfig != null)
             {
                 Model.IsEnabledPrint = PvSystemConfig.VSystemConfig.IsEnabledPrint;

@@ -25,10 +25,10 @@ namespace Common
         {
             try
             {
-                var filePath = Path.Combine(Environment.SystemDirectory, "osk.exe");
+                var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Lib\osk.exe");
                 if (!File.Exists(filePath))
                     return "软键盘可执行文件不存在。";
-
+            
                 _oskProcess = Process.Start(filePath);
                 IntPtr intptr = IntPtr.Zero;
                 while (IntPtr.Zero == intptr)

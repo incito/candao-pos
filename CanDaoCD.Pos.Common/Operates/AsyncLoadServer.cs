@@ -56,12 +56,13 @@ namespace CanDaoCD.Pos.Common.Operates
 
         public void Start(Action processMethod)
         {
-            _processMethod = processMethod;
-            _asynWindow = new AsynWindow();
-            _asynWindow.Show();
-            _asynWindow.ActionCancel = Stop;
-            _backWorker.RunWorkerAsync();
-
+          
+                _processMethod = processMethod;
+                _asynWindow = new AsynWindow();
+                _asynWindow.Show();
+                _asynWindow.ActionCancel = Stop;
+                _backWorker.RunWorkerAsync();
+         
         }
 
         /// <summary>

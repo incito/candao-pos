@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -102,10 +103,10 @@
             this.lblRs = new System.Windows.Forms.Label();
             this.lblDesk = new System.Windows.Forms.Label();
             this.edtRoom = new DevExpress.XtraEditors.TextEdit();
-            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu();
+            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu(this.components);
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
-            this.barManager1 = new DevExpress.XtraBars.BarManager();
+            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -245,12 +246,12 @@
             this.label22 = new System.Windows.Forms.Label();
             this.edtWx = new DevExpress.XtraEditors.TextEdit();
             this.label6 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer();
-            this.tmrOpen = new System.Windows.Forms.Timer();
-            this.imageList1 = new System.Windows.Forms.ImageList();
-            this.tmrClose = new System.Windows.Forms.Timer();
-            this.tmrOpenTable = new System.Windows.Forms.Timer();
-            this.iltDbgBill = new System.Windows.Forms.ImageList();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpen = new System.Windows.Forms.Timer(this.components);
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.tmrClose = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpenTable = new System.Windows.Forms.Timer(this.components);
+            this.iltDbgBill = new System.Windows.Forms.ImageList(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgWidgh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -2796,6 +2797,7 @@
             this.edtPwd.Size = new System.Drawing.Size(180, 40);
             this.edtPwd.TabIndex = 307;
             this.edtPwd.Enter += new System.EventHandler(this.edtPwd_Enter);
+            this.edtPwd.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.edtPwd_KeyPress);
             // 
             // label20
             // 

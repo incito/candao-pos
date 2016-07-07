@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Controls="clr-namespace:CanDaoCD.Pos.ResourceService.Controls;assembly=CanDaoCD.Pos.ResourceService"
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
+             xmlns:controls="clr-namespace:CanDaoCD.Pos.Common.Controls;assembly=CanDaoCD.Pos.Common"
              x:Class="CanDao.Pos.SystemConfig.Views.UcCopyPrintView" 
              mc:Ignorable="d" 
              d:DesignHeight="570" d:DesignWidth="520" Background="#F0F0F0">
@@ -31,11 +32,11 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="请设置串口号：" FontSize="24" Margin="10" VerticalAlignment="Center"></TextBlock>
-                <TextBox x:Name="TexNum" Text="{Binding Model.SerialNum}" FontSize="14" VerticalAlignment="Center" Width="300" Height="28" PreviewKeyDown="TexNum_OnPreviewKeyDown"></TextBox>
+                <controls:CtDigitalTextBox x:Name="TexNum" Text="{Binding Model.SerialNum,UpdateSourceTrigger=PropertyChanged}" FontSize="14" VerticalAlignment="Center" Width="300" Height="28" PreviewKeyDown="TexNum_OnPreviewKeyDown" MaxValue="256" MinValue="1"></controls:CtDigitalTextBox>
             </StackPanel>
             <!--<newControl:CtlDigitalKeyboard Grid.Row="1" MaxNum="256" MinNum="1"  Width="300" Height="310"/>-->
             <TextBlock Text="{Binding Model.PrintState}" FontSize="16" Margin="10" VerticalAlignment="Center" Grid.Row="1" Foreground="Green" HorizontalAlignment="Center"></TextBlock>
-            <cSystem:CtlDigitalKeyboard Grid.Row="2"  Width="300" Height="310"/>
+            <cSystem:CtlDigitalKeyboard Grid.Row="2" Height="280" VerticalAlignment="Top" Width="310"/>
         </Grid>
     </Grid>
 </cSystem:UserControlBase>

@@ -334,13 +334,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                             if (ret.Ret)
                             {
                                 _ret = ret;
-
-                                AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
-                                asyncLoadServer.Init();
-                                asyncLoadServer.ActionWorkerState = new Action<int>(WorkOk);
-                                asyncLoadServer.Start(Print);
-                                asyncLoadServer.SetMessage("正在打印复写卡，请稍等... ...");
-
+                                Print();
                             }
                             else
                             {
@@ -390,7 +384,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
 
             //复写卡打印
             PrintService.RechargePrint(SelectModel.UserName, Model.TelNum, oldRecharge.ToString(),
-                recharge.ToString(), _ret.StoreCardbalance.ToString(),SelectModel.Integral);
+                recharge.ToString(), _ret.StoreCardbalance.ToString(), SelectModel.Integral, WorkOk);
 
         }
 
