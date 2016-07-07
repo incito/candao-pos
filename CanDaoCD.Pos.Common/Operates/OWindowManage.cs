@@ -18,7 +18,7 @@ namespace CanDaoCD.Pos.Common.Operates
         /// 模态方式打开弹出窗口
         /// </summary>
         /// <param name="showUc">显示的用户控件</param>
-        public static void ShowPopupWindow(UserControlBase showUc, Brush bgColor = null)
+        public static bool ShowPopupWindow(UserControlBase showUc, Brush bgColor = null)
         {
             var wPopup = new WPopup();
             wPopup.Background = bgColor;
@@ -27,7 +27,14 @@ namespace CanDaoCD.Pos.Common.Operates
             wPopup.WindowStartupLocation= WindowStartupLocation.CenterScreen;
             wPopup.SetShowUc(showUc);
             wPopup.IsDialog = true;//设置模态方式打开
-            wPopup.ShowDialog();
+            if (wPopup.ShowDialog() == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

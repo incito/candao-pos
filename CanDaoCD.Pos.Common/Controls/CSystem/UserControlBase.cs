@@ -26,6 +26,10 @@ namespace CanDaoCD.Pos.Common.Controls.CSystem
         /// </summary>
         public Action UcClose { set; get; }
 
+        /// <summary>
+        /// 关闭事件加状态
+        /// </summary>
+        public Action<bool> UcCloseaAction { set; get; }
         #endregion
     }
 }

@@ -11,17 +11,40 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CanDaoCD.Pos.Common.Controls.CSystem;
 
 namespace KYPOS.OpenTables
 {
     /// <summary>
     /// UCCashboxPsw.xaml 的交互逻辑
     /// </summary>
-    public partial class UCCashboxPswView : UserControl
+    public partial class UCCashboxPswView : UserControlBase
     {
+        public Action EnterAction { set; get; }
+        
         public UCCashboxPswView()
         {
             InitializeComponent();
+            this.Loaded += UCCashboxPswView_Loaded;
+            
+        }
+
+        void UCCashboxPswView_Loaded(object sender, RoutedEventArgs e)
+        {
+            TexPassWord.HorizontalContentAlignment =HorizontalAlignment.Left;
+            TexPassWord.VerticalContentAlignment = VerticalAlignment.Center;
+            TexPassWord.Focus();
+        }
+
+        private void TexPassWord_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (EnterAction != null)
+                {
+                    EnterAction();
+                }
+            }
         }
     }
 }

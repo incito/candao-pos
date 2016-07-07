@@ -26,6 +26,7 @@ using Timer = System.Timers.Timer;
 using System.Text.RegularExpressions;
 using CanDao.Pos.UI.Library.View;
 using KYPOS.Dishes;
+using KYPOS.OpenTables;
 
 namespace Main
 {
@@ -3333,12 +3334,22 @@ namespace Main
 
         }
 
+        /// <summary>
+        /// 开启钱箱
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button52_Click_1(object sender, EventArgs e)
         {
             try
             {
                 button52.Enabled = false;
-                RestClient.OpenCash();
+                var viewModel = new UCCashboxPswViewModel();
+                if (OWindowManage.ShowPopupWindow(viewModel.GetUserCtl())==true)
+                {
+                    RestClient.OpenCash();
+                }
+              
             }
             finally
             {

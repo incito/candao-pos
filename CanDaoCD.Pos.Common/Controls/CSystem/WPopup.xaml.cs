@@ -46,6 +46,7 @@ namespace CanDaoCD.Pos.Common.Controls.CSystem
             _showUc = showUc;
             CtlShowFm.Content = _showUc;
             showUc.UcClose = new Action(CloseWindow);
+            showUc.UcCloseaAction = new Action<bool>(CloseWindowRes);
         }
         #endregion
 
@@ -58,6 +59,20 @@ namespace CanDaoCD.Pos.Common.Controls.CSystem
             if (IsDialog)
             {
                 this.DialogResult = false;
+            }
+            else
+            {
+                this.Close();
+            }
+        }
+        /// <summary>
+        /// 关闭窗体
+        /// </summary>
+        private void CloseWindowRes(bool res)
+        {
+            if (IsDialog)
+            {
+                this.DialogResult = res;
             }
             else
             {

@@ -592,6 +592,11 @@
       <Name>CanDaoCD.Pos.PrintManage</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\CanDaoCD.Pos.ResourceService\CanDaoCD.Pos.ResourceService.csproj">
+      <Project>{8b73af41-0061-4213-9ec0-318986d1c408}</Project>
+      <Name>CanDaoCD.Pos.ResourceService</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\CanDaoCD.Pos.VIPManage\CanDaoCD.Pos.VIPManage.csproj">
       <Project>{98f33740-d8b6-44fd-bf0b-73928f26fe72}</Project>
       <Name>CanDaoCD.Pos.VIPManage</Name>

@@ -36,6 +36,7 @@ namespace CanDaoCD.Pos.Common.Controls.CSystem
             if (!isShowClose)
             {
                 BtnClose.Visibility = Visibility.Collapsed;
+                BtnOk.IsDefault = true;
             }
            
         }

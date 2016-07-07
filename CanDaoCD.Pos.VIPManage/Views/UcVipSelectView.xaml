@@ -6,7 +6,7 @@
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
              x:Class="CanDaoCD.Pos.VIPManage.Views.UcVipSelectView" 
              mc:Ignorable="d" 
-             d:DesignHeight="510" d:DesignWidth="758" Background="White">
+             Height="510" Width="760" Background="White">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

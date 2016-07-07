@@ -8,7 +8,7 @@
              xmlns:bindConverter="clr-namespace:CanDaoCD.Pos.ResourceService.BindConverter;assembly=CanDaoCD.Pos.ResourceService"
              xmlns:operates="clr-namespace:CanDaoCD.Pos.VIPManage.Operates"
              mc:Ignorable="d" 
-             d:DesignHeight="510" d:DesignWidth="758" Background="White">
+             Height="510" Width="760" Background="White">
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="5"/>
