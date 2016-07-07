@@ -2223,14 +2223,14 @@ namespace WebServiceReference
         /// <param name="jsorder"></param>
         /// <param name="jrorder"></param>
         /// <returns></returns>
-        public static bool getFavorale(string aUserid, string jsorder, out JArray jrorder, out JArray jrlist, out JArray jrdouble)
+        public static bool getFavorale(string aUserid, string jsorder, out JObject jrorder, out JObject jrlist, out JObject jrdouble)
         {
             String OrderJson = "";
             String JSJson = "";
             String DoubleJson = "";
-            JArray jrOrder = null;
-            JArray jrList = null;
-            JArray jrDouble = null;
+            JObject jrOrder = null;
+            JObject jrList = null;
+            JObject jrDouble = null;
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/getFavorale/{0}/{1}/", aUserid, jsorder);
             AllLog.Instance.I(string.Format("【getFavorale】 aUserid：{0}，jsorder：{1}。", aUserid, jsorder));
             String jsonResult = Request_Rest(address);
@@ -2259,21 +2259,21 @@ namespace WebServiceReference
                 {
                     ja = (JObject)JsonConvert.DeserializeObject(OrderJson);
                     result = ja["Data"].ToString();
-                    jrOrder = (JArray)JsonConvert.DeserializeObject(result);
+                    jrOrder = (JObject)JsonConvert.DeserializeObject(result);
                 }
                 catch { }
                 try
                 {
                     ja = (JObject)JsonConvert.DeserializeObject(JSJson);
                     result = ja["Data"].ToString();
-                    jrList = (JArray)JsonConvert.DeserializeObject(result);
+                    jrList = (JObject)JsonConvert.DeserializeObject(result);
                 }
                 catch { }
                 try
                 {
                     ja = (JObject)JsonConvert.DeserializeObject(DoubleJson);
                     result = ja["Data"].ToString();
-                    jrDouble = (JArray)JsonConvert.DeserializeObject(result);
+                    jrDouble = (JObject)JsonConvert.DeserializeObject(result);
                 }
                 catch { }
             }
