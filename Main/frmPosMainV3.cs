@@ -3384,9 +3384,9 @@ namespace Main
                     tbyh.Rows.Remove(dr);
                 }
             }*/
-            JArray jrOrder = null;
-            JArray jsList = null;
-            JArray jsDouble = null;
+            JObject jrOrder = null;
+            JObject jsList = null;
+            JObject jsDouble = null;
             string printuser = Globals.UserInfo.UserID;
             string jsorder = Globals.CurrOrderInfo.orderid;
             if (jsorder.Trim().ToString().Length <= 0)
@@ -3406,43 +3406,35 @@ namespace Main
             string partnername = "";
             float freeamount = 0;
             int num = 0;
-            if (jrOrder != null)
+            if (jrOrder != null && jrOrder.Count > 0)
             {
-                if (jrOrder.Count > 0)
+                if (!isaddFavorale)
                 {
-                    if (!isaddFavorale)
+                    string decorderprice = jrOrder["decorderprice"].ToString();
+                    if (decorderprice.Length > 0)
                     {
-                        JObject ja = (JObject)jrOrder[0];
-                        string decorderprice = ja["decorderprice"].ToString();
-                        if (decorderprice.Length > 0)
+                        num = int.Parse(jrOrder["decdishnum"].ToString());
+                        if (num > 0)
                         {
-                            num = int.Parse(ja["decdishnum"].ToString());
-                            if (num > 0)
-                            {
-                                couponname = ja["couponname"].ToString();
-                                freeamount = float.Parse(ja["decorderprice"].ToString());
-                                addFavorale(couponname, freeamount, num, "0");
-                                isaddFavorale = true;
-                            }
+                            couponname = jrOrder["couponname"].ToString();
+                            freeamount = float.Parse(jrOrder["decorderprice"].ToString());
+                            addFavorale(couponname, freeamount, num, "0");
+                            isaddFavorale = true;
                         }
                     }
                 }
             }
-            if (jsList != null)
+            if (jsList != null && jsList.Count > 0)
             {
-                if (jsList.Count > 0)
+                string decorderprice = jsList["decorderprice"].ToString();
+                if (decorderprice.Length > 0)
                 {
-                    JObject ja = (JObject)jsList[0];
-                    string decorderprice = ja["decorderprice"].ToString();
-                    if (decorderprice.Length > 0)
+                    num = int.Parse(jsList["decdishnum"].ToString());
+                    if (num > 0)
                     {
-                        num = int.Parse(ja["decdishnum"].ToString());
-                        if (num > 0)
-                        {
-                            couponname = ja["couponname"].ToString();
-                            freeamount = float.Parse(ja["decorderprice"].ToString());
-                            addFavorale(couponname, freeamount, num, RestClient.getYhID());
-                        }
+                        couponname = jsList["couponname"].ToString();
+                        freeamount = float.Parse(jsList["decorderprice"].ToString());
+                        addFavorale(couponname, freeamount, num, RestClient.getYhID());
                     }
                 }
             }
@@ -3461,22 +3453,18 @@ namespace Main
                 if ((membercard.Length > 0) || Globals.CurrOrderInfo.memberno.Length > 0)
                 {
 
-                    if (jsDouble != null)
+                    if (jsDouble != null && jsDouble.Count > 0)
                     {
-                        if (jsDouble.Count > 0)
+                        string decorderprice = jsDouble["decorderprice"].ToString();
+                        if (decorderprice.Length > 0)
                         {
-                            JObject ja = (JObject)jsDouble[0];
-                            string decorderprice = ja["decorderprice"].ToString();
-                            if (decorderprice.Length > 0)
+                            num = int.Parse(jsDouble["decdishnum"].ToString());
+                            if (num > 0)
                             {
-                                num = int.Parse(ja["decdishnum"].ToString());
-                                if (num > 0)
-                                {
-                                    isaddmember = true;
-                                    couponname = ja["couponname"].ToString();
-                                    freeamount = float.Parse(ja["decorderprice"].ToString());
-                                    addFavorale(couponname, freeamount, num, RestClient.getDoubleDishTicket());
-                                }
+                                isaddmember = true;
+                                couponname = jsDouble["couponname"].ToString();
+                                freeamount = float.Parse(jsDouble["decorderprice"].ToString());
+                                addFavorale(couponname, freeamount, num, RestClient.getDoubleDishTicket());
                             }
                         }
                     }
