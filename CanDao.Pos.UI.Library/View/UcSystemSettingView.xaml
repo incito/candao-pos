@@ -4,7 +4,7 @@
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
              xmlns:view="clr-namespace:CanDao.Pos.UI.Library.View"
-             xmlns:views2="clr-namespace:CanDaoCD.Pos.SystemConfig.Views;assembly=CanDaoCD.Pos.SystemConfig">
+             xmlns:views2="clr-namespace:CanDaoCD.Pos.SystemConfig.Views;assembly=CanDaoCD.Pos.SystemConfig" Width="760" Height="560">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

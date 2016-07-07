@@ -25,6 +25,7 @@ using CanDaoCD.Pos.PrintManage;
 using Timer = System.Timers.Timer;
 using System.Text.RegularExpressions;
 using CanDao.Pos.UI.Library.View;
+using CanDaoCD.Pos.Common.PublicValues;
 using KYPOS.Dishes;
 using KYPOS.OpenTables;
 
@@ -3344,12 +3345,22 @@ namespace Main
             try
             {
                 button52.Enabled = false;
-                var viewModel = new UCCashboxPswViewModel();
-                if (OWindowManage.ShowPopupWindow(viewModel.GetUserCtl())==true)
+
+                bool isOpenCash = true;
+                if (PvSystemConfig.VSystemConfig.IsEnabledCheck)
                 {
-                    RestClient.OpenCash();
+                    var viewModel = new UCCashboxPswViewModel();
+                    if (OWindowManage.ShowPopupWindow(viewModel.GetUserCtl()) == false)
+                    {
+                        isOpenCash = false;
+                    }
                 }
-              
+
+                if (isOpenCash)
+                {
+                    RestClient.OpenCash(); 
+                }
+            
             }
             finally
             {
