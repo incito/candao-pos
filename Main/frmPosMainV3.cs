@@ -23,7 +23,6 @@ using Models.Enum;
 using WebServiceReference.ServiceImpl;
 using CanDaoCD.Pos.PrintManage;
 using Timer = System.Timers.Timer;
-using System.Text.RegularExpressions;
 using CanDao.Pos.UI.Library.View;
 using KYPOS.Dishes;
 
@@ -123,6 +122,11 @@ namespace Main
         private VCouponRule _curCoupon;
 
         /// <summary>
+        /// 当前餐台信息。
+        /// </summary>
+        private TableInfo _curTableInfo;
+
+        /// <summary>
         /// 是否是现金控件更改金额。为true时不自动更改金额。
         /// </summary>
         private bool _isCashTextBoxChanged;
@@ -169,6 +173,12 @@ namespace Main
 
                 xtraTabControl2_SelectedPageChanged(xtraCoupon, null);
             });
+        }
+
+        public void ShowFrm(TableInfo tableInfo, int status)
+        {
+            _curTableInfo = tableInfo;
+            ShowFrm(tableInfo.TableNo, status, tableInfo.TableType == EnumTableType.CFTakeout || tableInfo.TableType == EnumTableType.Takeout);
         }
 
         public void ShowFrm(string tableno, int status, bool isWm = false)
@@ -3701,7 +3711,7 @@ namespace Main
                 frmorder.btnZD.Visible = false;
                 frmorder.Show();
             }
-            
+
             xtraCoupon.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
