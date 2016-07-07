@@ -416,19 +416,21 @@ namespace Main
                 return;
             }
 
-            string tableno = RestClient.getTakeOutTable();//默认选中配置文件的外卖台。
+            var takeoutTableInfo = new TableInfo
+            {
+                TableNo = RestClient.getTakeOutTable(),//默认选中配置文件的外卖台。,
+                TableType = EnumTableType.Takeout,
+            };
             if (result.Item2 != null)
             {
                 var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
                 if (selectTableWnd.ShowDialog() == true && selectTableWnd.SelectedTable != null)
-                {
-                    tableno = selectTableWnd.SelectedTable.TableNo;
-                }
+                    takeoutTableInfo = selectTableWnd.SelectedTable;
             }
             try
             {
-                this.Cursor = Cursors.WaitCursor;
-                frmposwm.showFrmWm(tableno);
+                Cursor = Cursors.WaitCursor;
+                frmposwm.ShowFrmWm(takeoutTableInfo);
             }
             finally
             {

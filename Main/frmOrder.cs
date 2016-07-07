@@ -302,6 +302,8 @@ namespace Main
             Globals.ShoppTable.Clear();
             showTypeNum();
             ShowbtnOrderText();
+            //通知调用页更新页面
+            OnShoppingChange();
         }
 
         private void button27_Click(object sender, EventArgs e)

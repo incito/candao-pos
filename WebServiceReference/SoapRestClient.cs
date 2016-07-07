@@ -645,14 +645,12 @@ namespace WebServiceReference
             return "0";
         }
 
-
         /// <summary>
         ///登录
         /// </summary>
         /// <param name="userid"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        /// http://192.168.102.7/ladaotu/padinterface/login.json
         public static string Login(string userid, string password, string loginType)
         {
             string newloginType = getRightCode(loginType);
@@ -709,85 +707,7 @@ namespace WebServiceReference
             if (jsonResult == "0")
                 return "";
 
-            JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-            string result = ja["Data"].ToString();
-            if (!result.Equals("0"))
-            {
-                JArray jr = (JArray)JsonConvert.DeserializeObject(result);
-                ja = (JObject)jr[0];
-                Globals.CurrTableInfo.tableid = ja["tableid"].ToString();
-                Globals.CurrTableInfo.tableName = ja["tableName"].ToString();
-                Globals.CurrTableInfo.tableNo = ja["tableNo"].ToString();
-                Globals.CurrTableInfo.tabletype = ja["tabletype"].ToString();
-                Globals.CurrTableInfo.personNum = int.Parse(ja["personNum"].ToString());
-
-                Globals.CurrOrderInfo.orderstatus = int.Parse(ja["orderstatus"].ToString());
-                try
-                {
-                    Globals.CurrTableInfo.amount = float.Parse(ja["dueamount"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.begintime = DateTime.Parse(ja["begintime"].ToString());
-                }
-                catch
-                { }
-                Globals.CurrOrderInfo.orderid = ja["orderid"].ToString();
-                try
-                {
-                    Globals.CurrOrderInfo.childNum = Int32.Parse(ja["childNum"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.womanNum = Int32.Parse(ja["womanNum"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.mannum = Int32.Parse(ja["mannum"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.custnum = Int32.Parse(ja["custnum"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.fulldiscountrate = float.Parse(ja["fulldiscountrate"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.memberno = ja["memberno"].ToString();
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrTableInfo.status = int.Parse(ja["status"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.userid = ja["userid"].ToString();
-                }
-                catch
-                { }
-
-            }
-            return result;
-
-
+            return DealWithOrderInfo(jsonResult);
         }
 
         public static string GetOrder(string TableName, string UserID)
@@ -803,126 +723,118 @@ namespace WebServiceReference
             string result = jaAll["Data"].ToString();
             if (!result.Equals("0"))
             {
-                string tableinfojson = jaAll["OrderJson"].ToString();
-                JObject ja = (JObject)JsonConvert.DeserializeObject(tableinfojson);
-                result = ja["Data"].ToString();
-                JArray jr = (JArray)JsonConvert.DeserializeObject(result);
-                ja = (JObject)jr[0];
-                Globals.CurrTableInfo.tableid = ja["tableid"].ToString();
-                Globals.CurrTableInfo.tableName = ja["tableName"].ToString();
-                Globals.CurrTableInfo.tableNo = ja["tableNo"].ToString();
-                Globals.CurrTableInfo.tabletype = ja["tabletype"].ToString();
-                Globals.CurrTableInfo.personNum = int.Parse(ja["personNum"].ToString());
-
-                Globals.CurrOrderInfo.orderstatus = int.Parse(ja["orderstatus"].ToString());
-                try
-                {
-                    Globals.CurrTableInfo.amount = float.Parse(ja["dueamount"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.begintime = DateTime.Parse(ja["begintime"].ToString());
-                }
-                catch
-                { }
-                Globals.CurrOrderInfo.orderid = ja["orderid"].ToString();
-                try
-                {
-                    Globals.CurrOrderInfo.childNum = Int32.Parse(ja["childNum"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.womanNum = Int32.Parse(ja["womanNum"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.mannum = Int32.Parse(ja["mannum"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.custnum = Int32.Parse(ja["custnum"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.fulldiscountrate = float.Parse(ja["fulldiscountrate"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.memberno = ja["memberno"].ToString();
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrTableInfo.status = int.Parse(ja["status"].ToString());
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrOrderInfo.userid = ja["userid"].ToString();
-                }
-                catch
-                { }
-                try
-                {
-                    Globals.CurrTableInfo.TipAmount = float.Parse(ja["tipAmount"].ToString());
-                }
-                catch (Exception)
-                {
-                }
-                //tablelist
-                string tablelistjson = jaAll["JSJson"].ToString();
-                //JObject jaList = (JObject)JsonConvert.DeserializeObject(tablelistjson);
-                if (tablelistjson.Length > 30)
-                {
-                    DataTableConverter dtc = new DataTableConverter();
-                    JsonReader jread = new JsonTextReader(new StringReader(tablelistjson));
-                    DataTable dt = new DataTable();
-                    dt.TableName = "tb_data";
-                    dt.Clear();
-                    dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
-                    Globals.OrderTable.Clear();
-
-                    //国际化处理品项名称和单位
-                    var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
-                    dt.Columns.Add(column);
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
-                        var avoid = dr["avoid"].ToString();
-                        if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
-                        {
-                            dr["title"] = string.Format("({0}){1}", avoid.Split('|')[2], title);
-                        }
-                        else
-                        {
-                            dr["title"] = title;
-                        }
-
-                        dr["dishunitSrc"] = dr["dishunit"];
-                        dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
-
-                    }
-
-                    Globals.OrderTable = dt;
-                }
+                result = DealWithOverallOrderInfo(jaAll);
             }
             return result;
+        }
 
+        /// <summary>
+        /// 处理订单整体。
+        /// </summary>
+        /// <param name="jaAll"></param>
+        /// <returns></returns>
+        private static string DealWithOverallOrderInfo(JObject jaAll)
+        {
+            var result = DealWithOrderInfo(jaAll["OrderJson"].ToString());
+            DealWithOrderListInfo(jaAll["JSJson"].ToString());
+            return result;
+        }
 
+        /// <summary>
+        /// 处理订单菜品集合。
+        /// </summary>
+        /// <param name="tablelistjson"></param>
+        private static void DealWithOrderListInfo(string tablelistjson)
+        {
+            if (tablelistjson.Length > 30)
+            {
+                DataTableConverter dtc = new DataTableConverter();
+                JsonReader jread = new JsonTextReader(new StringReader(tablelistjson));
+                DataTable dt = new DataTable();
+                dt.TableName = "tb_data";
+                dt.Clear();
+                dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
+                Globals.OrderTable.Clear();
+
+                //国际化处理品项名称和单位
+                var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", ""); //中英文国际化的原始单位。
+                dt.Columns.Add(column);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
+                    var avoid = dr["avoid"].ToString();
+                    if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
+                    {
+                        dr["title"] = string.Format("({0}){1}", avoid.Split('|')[2], title);
+                    }
+                    else
+                    {
+                        dr["title"] = title;
+                    }
+
+                    dr["dishunitSrc"] = dr["dishunit"];
+                    dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
+                }
+
+                Globals.OrderTable = dt;
+            }
+        }
+
+        /// <summary>
+        /// 处理订单主体信息。
+        /// </summary>
+        /// <param name="tableinfojson"></param>
+        /// <returns></returns>
+        private static string DealWithOrderInfo(string tableinfojson)
+        {
+            JObject ja = (JObject)JsonConvert.DeserializeObject(tableinfojson);
+            var result = ja["Data"].ToString();
+            if (result.Equals("0"))
+                return result;
+            JArray jr = (JArray)JsonConvert.DeserializeObject(result);
+            ja = (JObject)jr[0];
+            Globals.CurrTableInfo.tableid = ja["tableid"].ToString();
+            Globals.CurrTableInfo.tableName = ja["tableName"].ToString();
+            Globals.CurrTableInfo.tableNo = ja["tableNo"].ToString();
+            Globals.CurrTableInfo.tabletype = ja["tabletype"].ToString();
+            Globals.CurrTableInfo.personNum = int.Parse(ja["personNum"].ToString());
+            Globals.CurrOrderInfo.orderstatus = int.Parse(ja["orderstatus"].ToString());
+            Globals.CurrTableInfo.amount = Parse2Float(ja["dueamount"]);
+            Globals.CurrOrderInfo.orderid = ja["orderid"].ToString();
+            Globals.CurrOrderInfo.childNum = Parse2Int(ja["childNum"]);
+            Globals.CurrOrderInfo.womanNum = Parse2Int(ja["womanNum"]);
+            Globals.CurrOrderInfo.mannum = Parse2Int(ja["mannum"]);
+            Globals.CurrOrderInfo.begintime = Parse2DateTime(ja["begintime"]);
+            Globals.CurrOrderInfo.custnum = Parse2Int(ja["custnum"]);
+            Globals.CurrOrderInfo.fulldiscountrate = Parse2Float(ja["fulldiscountrate"]);
+            Globals.CurrOrderInfo.memberno = Parse2String(ja["memberno"]);
+            Globals.CurrTableInfo.status = Parse2Int(ja["status"]);
+            Globals.CurrOrderInfo.userid = Parse2String(ja["userid"]);
+            Globals.CurrTableInfo.TipAmount = Parse2Float(ja["tipAmount"]);
+            return result;
+        }
+
+        /// <summary>
+        /// 通过订单号获取订单信息。
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <param name="userid"></param>
+        public static string GetOrderByOrderId(string orderid, string userid)
+        {
+            string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetOrderByOrderid/{0}/{1} ", orderid, userid);
+            AllLog.Instance.I(string.Format("【GetOrder】 TableName：{0}，UserID：{1}。", orderid, userid));
+            String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetOrder】 result：{0}。", jsonResult));
+            if (jsonResult == "0")
+                return "";
+
+            JObject jaAll = (JObject)JsonConvert.DeserializeObject(jsonResult);
+            string result = jaAll["Data"].ToString();
+            if (!result.Equals("0"))
+            {
+                result = DealWithOverallOrderInfo(jaAll);
+            }
+            return result;
         }
 
         /// <summary>
@@ -1081,36 +993,7 @@ namespace WebServiceReference
 
             if (!result.Equals("0"))
             {
-                //把JSON转为DataSet
-                DataTableConverter dtc = new DataTableConverter();
-                JsonReader jread = new JsonTextReader(new StringReader(result));
-                DataTable dt = new DataTable();
-                dt.TableName = "tb_data";
-                dt.Clear();
-                dtc.ReadJson(jread, typeof(DataTable), dt, new JsonSerializer());
-                Globals.OrderTable.Clear();
-
-                //国际化处理品项名称和单位
-                var column = DataTableHelper.CreateDataColumn(typeof(string), "原始单位", "dishunitSrc", "");//中英文国际化的原始单位。
-                dt.Columns.Add(column);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    var title = InternationaHelper.GetBeforeSeparatorFlagData(dr["title"].ToString());
-                    var avoid = dr["avoid"].ToString();
-                    if (title.Contains("临时菜") & !string.IsNullOrEmpty(avoid))
-                    {
-                        dr["title"] = string.Format("({0}){1}", avoid.Split('|')[2], title);
-                    }
-                    else
-                    {
-                        dr["title"] = title;
-                    }
-
-                    dr["dishunitSrc"] = dr["dishunit"];
-                    dr["dishunit"] = InternationaHelper.GetBeforeSeparatorFlagData(dr["dishunit"].ToString());
-                }
-
-                Globals.OrderTable = dt;
+                DealWithOrderListInfo(result);
             }
             return result;
         }
@@ -3369,47 +3252,43 @@ namespace WebServiceReference
             AllLog.Instance.I("DataServer服务正常。");
             return null;
         }
+
+
+        private static float Parse2Float(JToken value)
+        {
+            if (value == null)
+                return 0f;
+
+            return float.Parse(value.ToString());
+        }
+
+        private static int Parse2Int(JToken value)
+        {
+            if (value == null)
+                return 0;
+
+            return int.Parse(value.ToString());
+        }
+
+        private static DateTime? Parse2DateTime(JToken value)
+        {
+            if (value == null)
+                return null;
+
+            try
+            {
+                return DateTime.Parse(value.ToString());
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private static string Parse2String(JToken value)
+        {
+            return value == null ? null : value.ToString();
+        }
     }
+
 }
-
-/*
-
-修改菜品重量
-	JSONObject jsonObject = new JSONObject();
-					jsonObject.put("tableNo", tableno);
-					jsonObject.put("dishid", modifyDishInfo.getDishId());
-					List<? extends IBaseDishCount> counts = IShopCart.getOrderDishes().get(modifyDishInfo.getDishId());
-					if (typeflag.equals("1")) {
-						int normal_size = counts.get(fishpotposition).getNumbers().length;
-						if (normal_size > 1) {// 多单位计量
-							jsonObject.put("primarykey", ((INormalDishCount) counts.get(fishpotposition)).getPrimarykey() + "-" + fishPosition);
-						} else {
-							jsonObject.put("primarykey", ((INormalDishCount) counts.get(fishpotposition)).getPrimarykey());
-						}
-					}
-					if (typeflag.equals("4")) {
-						jsonObject.put("primarykey", modifyDishCount.getPrimarykey() + "-" + fishPosition);
-					}
-
-					jsonObject.put("dishnum", et_modifydishweight.getText().toString());
-public static String modifydish = HTTP + URL_HOST + WEB_NAME + "/padinterface/updateDishWeight.json";
-5.结算
-http://192.168.40.186:8080/newspicyway/padinterface/settleorder.json
-{
-	"userName" : "admin",
-	"orderNo" : "001",
-	"payDetail" : [{
-			"payWay" : "0",（现金）
-			"payAmount" : "100", 
-		}, {
-			"payWay" : "1",（银行卡）
-			"payAmount" : "200", 
-			"bankCardNo" : "7777777777"
-		}, {
-			"payWay" : "2",（会员卡）
-			"payAmount" : "300",
-			"memerberCardNo" : "9999",
-		}
-	]
-}
-*/

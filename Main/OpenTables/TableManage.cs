@@ -50,59 +50,6 @@ namespace KYPOS.OpenTables
         #region 私有方法
 
         /// <summary>
-        /// 检查是否开台
-        /// </summary>
-        /// <returns></returns>
-        private bool CheckIsOpenTable()
-        {
-
-            return false;
-        }
-
-        /// <summary>
-        /// 获取点菜明细
-        /// </summary>
-        /// <returns></returns>
-        private bool GetOrderDishes()
-        {
-            string resOrder = RestClient.GetOrder(_tableName, Globals.UserInfo.UserID);
-
-            if (resOrder == "0") //调用
-            {
-                asyncLoad.ErrorMessage = "未找到帐单,请确认是否已开台!";
-                return false;
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(resOrder))
-                {
-                    asyncLoad.ErrorMessage = "获取数据失败，请检查网络连接是否正常!";
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// 获取优惠列表
-        /// </summary>
-        /// <returns></returns>
-        private bool GetCoupons()
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// 计算账单金额
-        /// </summary>
-        /// <returns></returns>
-        private bool SetBillInfo()
-        {
-            return false;
-        }
-
-       
-
-        /// <summary>
         /// 工作完成结果
         /// </summary>
         /// <param name="state"></param>

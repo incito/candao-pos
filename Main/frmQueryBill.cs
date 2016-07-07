@@ -309,7 +309,9 @@ namespace Main
                     {
                         DataRow dr = (dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
                         var tableType = (EnumTableType)Convert.ToInt32(dr["tabletype"]);
-                        frmtable.frmpos.ShowFrm(errStr, 9, tableType == EnumTableType.CFTakeout || tableType == EnumTableType.Takeout);
+                        var tableName = dr["tablename"].ToString();
+                        var tableInfo = new TableInfo(tableName, tableType, orderid);
+                        frmtable.frmpos.ShowFrm(tableInfo, 9);
                     }
                     else
                     {
@@ -361,7 +363,9 @@ namespace Main
                     {
                         DataRow dr = (dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
                         var tableType = (EnumTableType)Convert.ToInt32(dr["tabletype"]);
-                        frmtable.frmpos.ShowFrm(errStr, 8, tableType == EnumTableType.CFTakeout || tableType == EnumTableType.Takeout);
+                        var tableName = dr["tablename"].ToString();
+                        var tableInfo = new TableInfo(tableName, tableType, orderid);
+                        frmtable.frmpos.ShowFrm(tableInfo, 8);
                     }
                     else
                     {

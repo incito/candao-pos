@@ -175,22 +175,18 @@ namespace Main
             });
         }
 
-        public void ShowFrm(TableInfo tableInfo, int status)
-        {
-            _curTableInfo = tableInfo;
-            ShowFrm(tableInfo.TableNo, status, tableInfo.TableType == EnumTableType.CFTakeout || tableInfo.TableType == EnumTableType.Takeout);
-        }
 
-        public void ShowFrm(string tableno, int status, bool isWm = false)
+        public void ShowFrm(TableInfo tableInfo, int status)
         {
             try
             {
+                _curTableInfo = tableInfo;
                 SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
-                currtableno = tableno;
-                edtRoom.Text = tableno;
+                currtableno = tableInfo.TableNo;
+                edtRoom.Text = tableInfo.TableNo;
                 pnlCash.Enabled = false;
                 maling = true;
-                iswm = isWm;
+                iswm = tableInfo.TableType == EnumTableType.CFTakeout || tableInfo.TableType == EnumTableType.Takeout;
                 isNewWm = false;
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
@@ -251,10 +247,12 @@ namespace Main
             }));
         }
 
-        public void showFrmWm(string tableno)
+        public void ShowFrmWm(TableInfo tableInfo)
         {
             try
             {
+                _curTableInfo = tableInfo;
+                var tableno = tableInfo.TableNo;
                 currtableno = tableno;
                 edtRoom.Text = tableno;
                 iswm = true;
@@ -509,11 +507,12 @@ namespace Main
                 //}
                 //catch { }
 
-                string loginReturn = RestClient.GetOrder(TableName, Globals.UserInfo.UserID);
+                var loginReturn = string.IsNullOrEmpty(Globals.CurrOrderInfo.orderid) ? RestClient.GetOrder(TableName, Globals.UserInfo.UserID) : RestClient.GetOrderByOrderId(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);//没有订单号的时候走原有接口，有订单号走新接口。
+
                 if (loginReturn == "0") //调用
                 {
                     Warning("未找到帐单,请确认是否已开台!");
-                    this.SetButtonEnable(true);
+                    SetButtonEnable(true);
                     edtRoom.Focus();
                     edtRoom.SelectAll();
                 }
@@ -548,70 +547,19 @@ namespace Main
                                 if (RestClient.getOrderCouponList(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, out jrOrder))
                                 {
                                     DataTable dtOrder = null;
-                                    dtOrder = Models.Bill_Order.gett_order_rule(jrOrder);
+                                    dtOrder = Bill_Order.gett_order_rule(jrOrder);
                                     addOrderCoupon(dtOrder);
                                     getAmount();
                                 }
                             }
-                            catch (Exception e) { }
-                        }
-                    }
-                }
-
-                /*string loginReturn = RestClient.GetServerTableInfo(TableName, Globals.UserInfo.UserID);
-                if (loginReturn == "0") //调用
-                {
-                    Warning("未找到帐单,请确认是否已开台!");
-                    this.SetButtonEnable(true);
-                    edtRoom.Focus();
-                    edtRoom.SelectAll();
-                }
-                else
-
-                    if (loginReturn == "")
-                    {
-                        Warning("获取数据失败，请检查网络连接是否正常!");
-                        this.SetButtonEnable(true);
-                        edtRoom.Focus();
-                        edtRoom.SelectAll();
-                    }
-                    else
-                    {
-                        //先取消会员价
-                        try
-                        {
-                            RestClient.setMemberPrice3(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
-                        }
-                        catch { }
-                        //返回成功
-                        RestClient.GetServerTableList(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID);
-                        //ShowLeftInfo();
-                        try
-                        {
-                            addAutoFavorale();
-                        }
-                        catch { }
-                        getAmount();
-                        this.SetButtonEnable(true);
-                        btnml_Click(btnml, null);
-
-                        //恢复帐单的优惠列表
-                        if (!RestClient.isClearCoupon())
-                        {
-                            try
+                            catch (Exception e)
                             {
-                                JArray jrOrder = null;
-                                if (RestClient.getOrderCouponList(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, out jrOrder))
-                                {
-                                    DataTable dtOrder = null;
-                                    dtOrder = Models.Bill_Order.gett_order_rule(jrOrder);
-                                    addOrderCoupon(dtOrder);
-                                    getAmount();
-                                }
+                                AllLog.Instance.E(e);
                             }
-                            catch (Exception e) { }
                         }
-                    }*/
+                    }
+                }
+
                 xtraTabControl1.SelectedTabPageIndex = 0;//不刷新优惠，加快速度 20151008
             }
             catch (CustomException ex)
@@ -1829,12 +1777,15 @@ namespace Main
             {
                 if (iswm && isNewWm)
                 {
-                    if (Globals.ShoppTable.Rows.Count > 0)
+                    if ((Globals.ShoppTable != null && Globals.ShoppTable.Rows.Count > 0) || (Globals.OrderTable != null && Globals.OrderTable.Rows.Count > 0))
                     {
                         if (!AskQuestion("退出将清空已选,是否放弃结算?"))
                         {
                             return;
                         }
+                        if (Globals.ShoppTable != null)
+                            Globals.ShoppTable.Clear();
+                        
                     }
                     TaskService.Start(null, BackAllTakeOutDishProcess, BackAllTakeOutDishComplete);
                 }
@@ -3696,42 +3647,41 @@ namespace Main
         {
             if (isNewWm)
             {
-                if (frmorder != null)
+                if (frmorder == null)
                 {
-                    ShowWm();
-                    return;
+                    frmorder = new frmOrder();
+                    frmorder.shoppingChange += new frmOrder.ShoppingChange(ShoppingChange);
+                    frmorder.accounts += new frmOrder.Accounts(ShowAccounts);
+                    frmorder.OrderRemarkChanged += FrmorderOnOrderRemarkChanged;
+                    this.IsMdiContainer = true;
+                    frmorder.MdiParent = this;
+                    frmorder.Parent = pnlCash;
+                    frmorder.btnZD.Visible = false;
                 }
-                frmorder = new frmOrder();
-                frmorder.shoppingChange += new frmOrder.ShoppingChange(ShoppingChange);
-                frmorder.accounts += new frmOrder.Accounts(ShowAccounts);
-                frmorder.OrderRemarkChanged += FrmorderOnOrderRemarkChanged;
-                this.IsMdiContainer = true;
-                frmorder.MdiParent = this;
-                frmorder.Parent = pnlCash;
-                frmorder.btnZD.Visible = false;
+                
+                btnOrder.Visible = false;
+                xtraTabControl1.SelectedTabPageIndex = 0;
+                pnlCash.Enabled = true;
+                xtraCoupon.Visible = false;
+                xtraTabControl1.Visible = false;
+                pnlAmount.Visible = false;
+                LbOrderMark.Visible = true;
+                Globals.OrderRemark = "";//重置全单备注。
+                SetRemarkOrder("");
+                panel7.Visible = false;
+                SetShowOrderFrm(true);
                 frmorder.Show();
             }
 
-            xtraCoupon.Visible = false;
-            xtraTabControl1.Visible = false;
-            pnlAmount.Visible = false;
-            LbOrderMark.Visible = true;
-            panel7.Visible = false;
-            //btnOpen.Visible = false;
-            //edtRoom.Enabled = false;
-            //btnAdd.Visible = true;
-            //btnDec.Visible = true;
-            SetShowOrderFrm(true);
-            //
-            if (Globals.ShoppTable == null)
+            if (Globals.ShoppTable == null)//创建购物车表
             {
-                //创建购物车表
                 t_shopping.createShoppTable(ref Globals.ShoppTable);
             }
             else
             {
                 Globals.ShoppTable.Clear();
             }
+
             DataView dv = new DataView(Globals.ShoppTable);
             dv.AllowNew = false;
             this.dgvBill.AutoGenerateColumns = false;
@@ -4518,9 +4468,8 @@ namespace Main
             panel7.Visible = false;
             btnOpen.Visible = false;
             SetShowOrderFrm(true);
-            if (Globals.ShoppTable == null)
+            if (Globals.ShoppTable == null)//创建购物车表
             {
-                //创建购物车表
                 t_shopping.createShoppTable(ref Globals.ShoppTable);
             }
             else
@@ -5586,7 +5535,7 @@ namespace Main
         /// <returns></returns>
         private object BackAllTakeOutDishProcess(object arg)
         {
-            if (!CheckCallBill() && Globals.ShoppTable != null && Globals.ShoppTable.Rows.Count > 0)//外卖购物车不为空时先退菜。
+            if (!CheckCallBill() && Globals.OrderTable != null && Globals.OrderTable.Rows.Count > 0)//外卖购物车不为空时先退菜。
             {
                 var service = new RestaurantServiceImpl();
                 var result = service.BackAllDish(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, "");

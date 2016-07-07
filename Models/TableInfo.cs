@@ -8,6 +8,19 @@ namespace Models
     /// </summary>
     public class TableInfo
     {
+        public TableInfo()
+        {
+            
+        }
+
+        public TableInfo(string tableNo,  EnumTableType tableType, string orderId)
+        {
+            TableNo = tableNo;
+            TableName = tableNo;
+            TableType = tableType;
+            OrderId = orderId;
+        }
+
         /// <summary>
         /// 餐台编号。
         /// </summary>
