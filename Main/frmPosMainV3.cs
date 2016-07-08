@@ -191,7 +191,6 @@ namespace Main
                 isNewWm = false;
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
-                BtnBackAll.Enabled = false;
                 lblMsg.Text = "";
                 lblAmount2.Text = "应收:0";
                 lblAmount.Text = "消费:0";
@@ -270,7 +269,6 @@ namespace Main
                 btnOrderML.Enabled = false;
                 btnOpen.Enabled = false;
                 btnCancelOrder.Enabled = false;
-                BtnBackAll.Enabled = false;
                 lblDesk.Text = string.Format("桌号：{0}", tableno);
                 Globals.CurrTableInfo.tableName = tableno;
                 ShowDialog();
@@ -733,13 +731,12 @@ namespace Main
             btnRBill.Enabled = false;
             btnPrintMember1.Enabled = false;
             btnRePrint.Enabled = false;
-            btnCancelOrder.Enabled = false;
-            BtnBackAll.Enabled = false;
+            btnCancelOrder.Enabled = true;
+            BtnBackAll.Enabled = Globals.OrderTable.Rows.Count > 0;
             btnOrderML.Enabled = true;
             if (!iswm)
             {
                 btnCancelOrder.Enabled = true;
-                BtnBackAll.Enabled = Globals.OrderTable.Rows.Count > 0;
                 btnPrintBill.Enabled = true;
             }
             btnRePrintCust.Enabled = true;
@@ -3654,6 +3651,7 @@ namespace Main
                     frmorder.shoppingChange += new frmOrder.ShoppingChange(ShoppingChange);
                     frmorder.accounts += new frmOrder.Accounts(ShowAccounts);
                     frmorder.OrderRemarkChanged += FrmorderOnOrderRemarkChanged;
+                    frmorder.PutOrderEvent += FrmorderOnPutOrderEvent;
                     this.IsMdiContainer = true;
                     frmorder.MdiParent = this;
                     frmorder.Parent = pnlCash;
@@ -3689,6 +3687,11 @@ namespace Main
             this.dgvBill.DataSource = dv;
             this.dgvBill.Tag = 1;
             ShowTotal();
+        }
+
+        private void FrmorderOnPutOrderEvent()
+        {
+            Close();
         }
 
         private void FrmorderOnOrderRemarkChanged()
