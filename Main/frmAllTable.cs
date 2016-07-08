@@ -270,7 +270,9 @@ namespace Main
 
                     table.Click += ucTable1_Click;
                     _tableControls.Add(table);
-                    if (_isForcedEndWorkModel || table.TableInfo.TableType == EnumTableType.CFTable)//如果是强制结业模式，则只允许操作就餐餐台。咖啡台不允许直接开台，只允许PAD开台后POS进行操作。
+                    //if (_isForcedEndWorkModel || table.TableInfo.TableType == EnumTableType.CFTable)//如果是强制结业模式，则只允许操作就餐餐台。咖啡台不允许直接开台，只允许PAD开台后POS进行操作。
+                    //    table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
+                    if (_isForcedEndWorkModel)//如果是强制结业模式，则只允许操作就餐餐台。咖啡台不允许直接开台，只允许PAD开台后POS进行操作。
                         table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
                     //frmProgress.frm.SetProgress("正在加载桌台资料..." + tableInfo.TableNo, TableInfos.Count, idx);
                     idx++;

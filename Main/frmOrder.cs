@@ -83,6 +83,7 @@ namespace Main
         public void ShowbtnOrderText()
         {
             btnOrder.Text = Globals.ShoppTable.Rows.Count <= 0 ? "        结帐" : "        下单";
+            btnGd.Enabled = Globals.ShoppTable.Rows.Count > 0;//不允许挂空订单。
             showTypeNum();
             CheckBtnRemarkOrderStatus();
         }
@@ -945,20 +946,12 @@ namespace Main
 
         private void btnGd_Click(object sender, EventArgs e)
         {
-            if (Globals.ShoppTable.Rows.Count <= 0)
-                return;
             TGzInfo gzinfo = new TGzInfo();
             if (!frmWMInfo.ShowWMInfo(out gzinfo))
             {
                 return;
             }
 
-            setOrder(gzinfo);
-            string settleorderorderid = Globals.CurrOrderInfo.orderid;
-        }
-
-        private void setOrder(TGzInfo gzinfo)
-        {
             if (!bookOrder())
             {
                 return;
@@ -979,7 +972,6 @@ namespace Main
 
         private bool bookOrder()
         {
-            //下单
             var result = bookorder();
             if (!string.IsNullOrEmpty(result))
             {

@@ -191,6 +191,7 @@ namespace Main
                 isNewWm = false;
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
+                btnClearnTable.Visible = tableInfo.TableType == EnumTableType.CFTable;
                 lblMsg.Text = "";
                 lblAmount2.Text = "应收:0";
                 lblAmount.Text = "消费:0";
@@ -269,6 +270,7 @@ namespace Main
                 btnOrderML.Enabled = false;
                 btnOpen.Enabled = false;
                 btnCancelOrder.Enabled = false;
+                btnClearnTable.Visible = tableInfo.TableType == EnumTableType.CFTable;
                 lblDesk.Text = string.Format("桌号：{0}", tableno);
                 Globals.CurrTableInfo.tableName = tableno;
                 ShowDialog();
@@ -644,7 +646,7 @@ namespace Main
                 this.SetButtonEnable(false);
                 this.Update();//必须
                 string tableName = edtRoom.Text;
-                string loginReturn = RestClient.GetServerTableInfo(tableName, Globals.UserInfo.UserID);
+                string loginReturn = !string.IsNullOrEmpty(Globals.CurrOrderInfo.orderid) ? RestClient.GetServerTableInfoByOrderId(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID) : RestClient.GetServerTableInfo(tableName, Globals.UserInfo.UserID);
                 if (loginReturn == "0") //调用
                 {
                     Warning("未找到帐单,请确认是否已开台!");
@@ -744,6 +746,10 @@ namespace Main
             lblAmount2.ForeColor = Color.Red;
             //pnlCash.Enabled = true;
             //如果订单已结算就不能结算了
+            pnlCash.Enabled = true;
+            btnClearnTable.Enabled = false;
+            xtraTabControl1.Enabled = true;
+            xtraCoupon.Enabled = true;
             if (CheckCallBill() && (!iswm))
             {
                 btnOrderML.Enabled = false;
@@ -755,7 +761,9 @@ namespace Main
                 btnOrder2.Enabled = false;
                 btnRePrintCust.Enabled = false;
                 lblAmount2.ForeColor = Color.Green;
-                pnlCash.Enabled = false;
+                xtraTabControl1.Enabled = false;
+                xtraCoupon.Enabled = false;
+                btnClearnTable.Enabled = true;
                 lblSum.Text = "已结算";
                 btnRePrint.Enabled = true;
             }
@@ -1105,7 +1113,10 @@ namespace Main
                     }
                     else
                     {
-                        if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray(), false).Equals("0"))
+                        var isNewWay = _curTableInfo.TableType == EnumTableType.CFTable ||
+                                       _curTableInfo.TableType == EnumTableType.CFTakeout ||
+                                       _curTableInfo.TableType == EnumTableType.Takeout;
+                        if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray(), isNewWay).Equals("0"))
                         {
                             Warning("结算失败...");
                         }
@@ -1783,7 +1794,7 @@ namespace Main
                         }
                         if (Globals.ShoppTable != null)
                             Globals.ShoppTable.Clear();
-                        
+
                     }
                     TaskService.Start(null, BackAllTakeOutDishProcess, BackAllTakeOutDishComplete);
                 }
@@ -2026,12 +2037,6 @@ namespace Main
                         Opentable2();
                     }
                     catch { }
-                    if (iswm)
-                    {
-                        ///如果是外卖把本地的价格变成会员价;
-                        t_shopping.setMemberPrice(ref Globals.ShoppTable);
-                        ShowTotal();
-                    }
                 }
                 return ret;
             }
@@ -3592,6 +3597,8 @@ namespace Main
         }
         private void openRm(object serder, EventArgs e)
         {
+            pnlSum.Visible = true;
+            btnClearnTable.Visible = true;
             try
             {
                 btnOpen_Click(serder, e);
@@ -3606,7 +3613,7 @@ namespace Main
         /// </summary>
         public void showOpenTable()
         {
-            ///如果刷新的台还未开台就显示开台界面,已开台显示结算 POS开完台跳到堂食点菜界面
+            //如果刷新的台还未开台就显示开台界面,已开台显示结算 POS开完台跳到堂食点菜界面
             if (frmopentable != null)
             {
                 frmopentable.Close();
@@ -3621,6 +3628,8 @@ namespace Main
             frmopentable.MdiParent = this;
             frmopentable.Parent = pnlCash;
             pnlCash.Enabled = true;
+            pnlSum.Visible = false;
+            btnClearnTable.Visible = false;
             frmopentable.frmClose += new frmOpenTable.FrmClose(openfrmClose);
             frmopentable.openRm += new frmOpenTable.OpenRm(openRm);
             frmopentable.initData(currtableno);
@@ -3657,12 +3666,14 @@ namespace Main
                     frmorder.Parent = pnlCash;
                     frmorder.btnZD.Visible = false;
                 }
-                
+
                 btnOrder.Visible = false;
                 xtraTabControl1.SelectedTabPageIndex = 0;
                 pnlCash.Enabled = true;
                 xtraCoupon.Visible = false;
                 xtraTabControl1.Visible = false;
+                pnlSum.Visible = false;
+                btnClearnTable.Visible = false;
                 pnlAmount.Visible = false;
                 LbOrderMark.Visible = true;
                 Globals.OrderRemark = "";//重置全单备注。
@@ -3993,6 +4004,10 @@ namespace Main
             pnlCash.Enabled = true;
             xtraCoupon.Visible = true;
             xtraTabControl1.Visible = true;
+            xtraTabControl1.Enabled = true;
+            xtraCoupon.Enabled = true;
+            pnlSum.Visible = true;
+            btnClearnTable.Visible = true;
             BtnMark.Visible = false;
             pnlAmount.Visible = true;
             LbOrderMark.Visible = false;
@@ -4001,6 +4016,10 @@ namespace Main
             if (!iswm)
             {
                 btnOpen.Visible = true;
+            }
+            else
+            {
+                btnClearnTable.Visible = false;
             }
             //
             edtAmount.Focus();
@@ -4050,14 +4069,16 @@ namespace Main
             pnlCash.Enabled = true;
             xtraCoupon.Visible = false;
             xtraTabControl1.Visible = false;
+            pnlSum.Visible = false;
+            btnClearnTable.Visible = false;
             pnlAmount.Visible = false;
             LbOrderMark.Visible = true;
             Globals.OrderRemark = "";//重置全单备注。
             SetRemarkOrder("");
             panel7.Visible = false;
-            //btnOpen.Visible = false; 
             SetShowOrderFrm(true);
-            frmorder.Show();
+            //frmorder.Show();
+            ShowOrder();
         }
         private void btnOrder_Click(object sender, EventArgs e)
         {
@@ -4192,9 +4213,10 @@ namespace Main
         /// </summary>
         /// <param name="ordertype"></param>
         /// <returns></returns>
-        private string bookorder(int ordertype, bool isTakeout = false)
+        private string bookorder(int ordertype)
         {
-            return RestClient.BookOrder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, 1, ordertype, isTakeout, Globals.OrderRemark);
+            var isNewWay = _curTableInfo.TableType == EnumTableType.CFTable;//咖啡台走新的接口。
+            return RestClient.BookOrder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.userid, Globals.CurrOrderInfo.orderid, 1, ordertype, isNewWay, Globals.OrderRemark);
         }
 
         private bool startorder(int ordertype)
@@ -4465,6 +4487,8 @@ namespace Main
             btnOrder.Visible = false;
             xtraTabControl1.Visible = false;
             pnlAmount.Visible = false;
+            pnlSum.Visible = false;
+            btnClearnTable.Visible = false;
             LbOrderMark.Visible = true;
             Globals.OrderRemark = "";//重置全单备注。
             SetRemarkOrder("");
@@ -4555,7 +4579,7 @@ namespace Main
                 {
                     if (!AskQuestion("确定要取消帐单吗?"))
                         return;
-                    if (RestClient.cleantable(Globals.CurrTableInfo.tableNo))
+                    if (RestClient.Cleantable(Globals.CurrTableInfo.tableNo))
                     {
                         try
                         {
@@ -4868,16 +4892,6 @@ namespace Main
                     msg = "获取余额失败,请重试...";
                     return false;
                 }
-                //getTicketList(json["psTicketInfo"].ToString());
-                //if (xtraTabControl2.SelectedTabPageIndex != 5)
-                //{
-                //    xtraTabControl2.SelectedTabPageIndex = 5;
-                //}
-                //else
-                //{
-                //pnlz
-                //     xtraTabControl2_SelectedPageChanged(xtraTabControl2, null);
-                //}
                 label15.Text = string.Format("储值余额：{0}", psStoredCardsBalance);
                 label9.Text = string.Format("积分余额：{0}", psIntegralOverall);
                 try
@@ -4905,12 +4919,6 @@ namespace Main
                     Opentable2();
                 }
                 catch { }
-                if (iswm)
-                {
-                    ///如果是外卖把本地的价格变成会员价;
-                    t_shopping.setMemberPrice(ref Globals.ShoppTable);
-                    ShowTotal();
-                }
                 //如果是一号多卡，弹出框选择一张卡号再根据卡号查询
             }
             edtMember.Focus();
@@ -5370,13 +5378,12 @@ namespace Main
 
         private void ClearnTableAsync(string loadingMsg)
         {
-
             TaskService.Start(null, ClearnTableProcess, ClearnTableComplete, loadingMsg);
         }
 
         private object ClearnTableProcess(object arg)
         {
-            if (!RestClient.cleantable(Globals.CurrTableInfo.tableNo))
+            if (!RestClient.ClearnTableCoffee(Globals.CurrTableInfo.tableNo))
                 return false;
 
             try
@@ -5546,7 +5553,7 @@ namespace Main
                     return result;
             }
 
-            return !RestClient.cancelOrder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, currtableno) ? "外卖账单取消失败。" : null;//给外卖台清台。
+            return !RestClient.cancelOrder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, currtableno) ? "外卖账单取消失败，请联系管理员或重试。" : null;//给外卖台清台。
         }
 
         /// <summary>

@@ -710,6 +710,24 @@ namespace WebServiceReference
             return DealWithOrderInfo(jsonResult);
         }
 
+        /// <summary>
+        /// 通过订单id获取餐桌信息。
+        /// </summary>
+        /// <param name="orderId">订单id。</param>
+        /// <param name="userId">用户id。</param>
+        /// <returns></returns>
+        public static string GetServerTableInfoByOrderId(string orderId, string userId)
+        {
+            string address = string.Format("http://{0}/datasnap/rest/TServerMethods1/GetServerTableInfoByOrderid/{1}/{2} ", Server3, orderId, userId);
+            AllLog.Instance.I(string.Format("【GetServerTableInfoByOrderId】 orderId：{0}，userId：{1}。", orderId, userId));
+            String jsonResult = Request_Rest(address);
+            AllLog.Instance.I(string.Format("【GetServerTableInfoByOrderId】 result：{0}。", jsonResult));
+            if (jsonResult == "0")
+                return "";
+
+            return DealWithOrderInfo(jsonResult);
+        }
+
         public static string GetOrder(string TableName, string UserID)
         {
             string address = String.Format("http://" + Server3 + "/datasnap/rest/TServerMethods1/GetOrder/{0}/{1} ", TableName, UserID);
@@ -1125,12 +1143,12 @@ namespace WebServiceReference
         /// <param name="OrderID"></param>
         /// <param name="UserID"></param>
         /// <param name="payDetail"></param>
-        /// <param name="isTakeout">是否是外卖结算。</param>
+        /// <param name="isNewWay">是否走咖啡结算。</param>
         /// <returns></returns>
-        public static string settleorder(string OrderID, string UserID, JArray payDetail, bool isTakeout)
+        public static string settleorder(string OrderID, string UserID, JArray payDetail, bool isNewWay)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/settleorder.json", server2);
-            if (isTakeout)
+            if (isNewWay)
                 address = string.Format("http://{0}/{1}/padinterface/checkout.json", server, apiPath);
 
             AllLog.Instance.I(string.Format("【settleorder】 OrderID：{0}。", OrderID));
@@ -2640,10 +2658,10 @@ namespace WebServiceReference
             return str;
         }
 
-        public static string BookOrder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype, bool IsTakeout = false, string globalsperequire = "")
+        public static string BookOrder(DataTable dt, string tableid, string UserID, string orderid, int sequence, int ordertype, bool isNewWay = false, string globalsperequire = "")
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/bookorderList.json", server2);
-            if (IsTakeout)//外卖下单走另外接口。
+            if (isNewWay)//外卖下单走另外接口。
                 address = string.Format("http://{0}/{1}/padinterface/placeOrder.json", server, apiPath);
 
             AllLog.Instance.I(string.Format("【bookorderList】 tableid：{0}，orderid：{1}，sequence：{2}。", tableid, orderid, sequence));
@@ -2991,7 +3009,7 @@ namespace WebServiceReference
         /// </summary>
         /// <param name="tableno"></param>
         /// <returns></returns>
-        public static bool cleantable(string tableno)
+        public static bool Cleantable(string tableno)
         {
             string address = String.Format("http://{0}/" + apiPath + "/padinterface/cleantable.Json", server2);
             AllLog.Instance.I(string.Format("【cleantable】 tableno：{0}。", tableno));
@@ -3000,6 +3018,29 @@ namespace WebServiceReference
             writer.WriteStartObject();
             writer.WritePropertyName("tableNo");
             writer.WriteValue(tableno);
+            writer.WriteEndObject();
+            writer.Flush();
+            String jsonResult = Post_Rest(address, sw);
+            AllLog.Instance.I(string.Format("【cleantable】 result：{0}。", jsonResult));
+            bool result = false;
+            try
+            {
+                JObject ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+                result = ja["result"].ToString().Equals("0");
+            }
+            catch { return false; }
+            return result;
+        }
+
+        public static bool ClearnTableCoffee(string tableNo)
+        {
+            string address = String.Format("http://{0}/" + apiPath + "/padinterface/cleanTableSimply.Json", server);
+            AllLog.Instance.I(string.Format("【cleantable】 tableno：{0}。", tableNo));
+            StringWriter sw = new StringWriter();
+            JsonWriter writer = new JsonTextWriter(sw);
+            writer.WriteStartObject();
+            writer.WritePropertyName("tableNo");
+            writer.WriteValue(tableNo);
             writer.WriteEndObject();
             writer.Flush();
             String jsonResult = Post_Rest(address, sw);
