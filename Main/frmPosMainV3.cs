@@ -4101,7 +4101,6 @@ namespace Main
                 lblZd.Text = "帐单：";
                 pnlCash.Enabled = true;
                 edtRoom.Enabled = false;
-                pbxWm.Visible = true;
                 btnSelect.Visible = false;
                 btnPrintMember1.Enabled = false;
                 btnRePrint.Enabled = false;

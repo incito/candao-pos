@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -96,16 +97,15 @@
             this.num = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.yhamount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.pbxWm = new System.Windows.Forms.PictureBox();
             this.lblMember = new System.Windows.Forms.Label();
             this.lblZd = new System.Windows.Forms.Label();
             this.lblRs = new System.Windows.Forms.Label();
             this.lblDesk = new System.Windows.Forms.Label();
             this.edtRoom = new DevExpress.XtraEditors.TextEdit();
-            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu();
+            this.ppmRePrint = new DevExpress.XtraBars.PopupMenu(this.components);
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
-            this.barManager1 = new DevExpress.XtraBars.BarManager();
+            this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -245,12 +245,12 @@
             this.label22 = new System.Windows.Forms.Label();
             this.edtWx = new DevExpress.XtraEditors.TextEdit();
             this.label6 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer();
-            this.tmrOpen = new System.Windows.Forms.Timer();
-            this.imageList1 = new System.Windows.Forms.ImageList();
-            this.tmrClose = new System.Windows.Forms.Timer();
-            this.tmrOpenTable = new System.Windows.Forms.Timer();
-            this.iltDbgBill = new System.Windows.Forms.ImageList();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpen = new System.Windows.Forms.Timer(this.components);
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.tmrClose = new System.Windows.Forms.Timer(this.components);
+            this.tmrOpenTable = new System.Windows.Forms.Timer(this.components);
+            this.iltDbgBill = new System.Windows.Forms.ImageList(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgWidgh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -265,7 +265,6 @@
             this.pnlAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvjs)).BeginInit();
             this.panel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxWm)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtRoom.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppmRePrint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
@@ -1154,7 +1153,6 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.SkyBlue;
-            this.panel5.Controls.Add(this.pbxWm);
             this.panel5.Controls.Add(this.lblMember);
             this.panel5.Controls.Add(this.lblZd);
             this.panel5.Controls.Add(this.lblRs);
@@ -1164,17 +1162,6 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(334, 70);
             this.panel5.TabIndex = 23;
-            // 
-            // pbxWm
-            // 
-            this.pbxWm.Image = global::KYPOS.Properties.Resources.外带;
-            this.pbxWm.Location = new System.Drawing.Point(264, 0);
-            this.pbxWm.Name = "pbxWm";
-            this.pbxWm.Size = new System.Drawing.Size(68, 69);
-            this.pbxWm.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbxWm.TabIndex = 4;
-            this.pbxWm.TabStop = false;
-            this.pbxWm.Visible = false;
             // 
             // lblMember
             // 
@@ -3242,7 +3229,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvjs)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxWm)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtRoom.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppmRePrint)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
@@ -3431,7 +3417,6 @@
         private System.Windows.Forms.Button btnDec;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnOrder;
-        private System.Windows.Forms.PictureBox pbxWm;
         private DevExpress.XtraTab.XtraTabControl xtraCoupon;
         private DevExpress.XtraTab.XtraTabPage xtp1;
         private System.Windows.Forms.Panel pnlyh;

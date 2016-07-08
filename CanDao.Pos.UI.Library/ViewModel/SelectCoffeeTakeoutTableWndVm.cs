@@ -27,5 +27,9 @@ namespace CanDao.Pos.UI.Library.ViewModel
         /// </summary>
         public TableInfo SelectedTable { get; set; }
 
+        protected override bool CanConfirm(object param)
+        {
+            return SelectedTable != null;
+        }
     }
 }
