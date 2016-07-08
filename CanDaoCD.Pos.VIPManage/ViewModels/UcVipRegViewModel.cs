@@ -149,7 +149,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                          Model.TelNum);
                     if (!ret2.Retcode.Equals("0"))
                     {
-                        OWindowManage.ShowMessageWindow(string.Format("手机验证码错误：{0}", ret2.Retinfo), false);
+                        OWindowManage.ShowMessageWindow(string.Format("会员注册错误：{0}", ret2.Retinfo), false);
 
                         return;
                     }

@@ -634,38 +634,43 @@ namespace ReportsFastReport
         /// //打印清机报表
         /// </summary>
         /// <param name="userid"></param>
-        public static void PrintClearMachine()
+        public static bool PrintClearMachine()
         {
+
             JArray jrOrder = null;
             JArray jrJS = null;
             string printuser = Globals.UserInfo.UserID;
             string jsorder = Globals.jsOrder;
-            if (jsorder.Trim().ToString().Length <= 0)
-            {
-                jsorder = " ";
-            }
             try
             {
+                if (jsorder.Trim().ToString().Length <= 0)
+                {
+                    jsorder = " ";
+                }
+
                 if (!RestClient.getClearMachineData(printuser, jsorder, out jrOrder, out jrJS))
                 {
                     AllLog.Instance.D("PrintClearMachine:" +
                                       string.Format("{0}-{1}-{2}-{3}", printuser, jsorder, jrOrder, jrJS));
-                    return;
+                    return false;
                 }
+
+                //初始化创建打印模板
+                DataSet ds = new DataSet();
+                string fileName = Application.StartupPath + @"\Reports\rptClea.frx";
+                Report printReport = InitReport(fileName, ds, jrOrder, jrJS);
+
+                PrintRpt(printReport, 1);
+                return true;
             }
             catch (Exception ex)
             {
                 AllLog.Instance.D("PrintClearMachine:" +
                                   string.Format("{0}-{1}-{2}-{3}", printuser, jsorder, jrOrder, jrJS) + "----" +
                                   ex.Message);
+                return false;
             }
 
-            //初始化创建打印模板
-            DataSet ds = new DataSet();
-            string fileName = Application.StartupPath + @"\Reports\rptClea.frx";
-            Report printReport = InitReport(fileName, ds, jrOrder, jrJS);
-
-            PrintRpt(printReport, 1);
         }
 
         public static void printProgress(object sender, ProgressEventArgs e)

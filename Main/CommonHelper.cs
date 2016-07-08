@@ -83,9 +83,17 @@ namespace KYPOS
             if (!frmPermission2.ShowPermission2("收银员清机", EnumRightType.ClearMachine, userName))
                 return false;
 
-            ReportPrint.PrintClearMachine(); //打印清机报表
-            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-            frmBase.Warning("清机成功!");
+            if (ReportPrint.PrintClearMachine()) //打印清机报表
+            {
+                ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
+                frmBase.Warning("清机成功!");
+            }
+            else
+            {
+                frmBase.Warning("打印清机报表异常，清机失败。请联系管理！");
+                return false;
+            }
+          
             return true;
         }
 
