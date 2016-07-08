@@ -421,7 +421,7 @@ namespace Main
                 TableNo = RestClient.getTakeOutTable(),//默认选中配置文件的外卖台。,
                 TableType = EnumTableType.Takeout,
             };
-            if (result.Item2 != null)
+            if (result.Item2 != null && result.Item2.Any())
             {
                 var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
                 if (selectTableWnd.ShowDialog() == true && selectTableWnd.SelectedTable != null)
