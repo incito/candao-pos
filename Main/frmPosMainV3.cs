@@ -1238,7 +1238,13 @@ namespace Main
 
                         if (!iswm)
                         {
-                            ThreadPool.QueueUserWorkItem(t => { broadMsg(); });
+                            ThreadPool.QueueUserWorkItem(t =>
+                            {
+                                if (_curTableInfo.TableType != EnumTableType.CFTable)
+                                    broadMsg();
+                                else
+                                    BroadSettlementMsg();
+                            });
                         }
 
                         CanClose();
@@ -1285,8 +1291,6 @@ namespace Main
             //广播手环2011
             try
             {
-
-
                 if (string.IsNullOrEmpty(aer))
                 {
                     aer = Globals.CurrTableInfo.tableNo;
@@ -1298,6 +1302,7 @@ namespace Main
             }
             catch { }
         }
+
         private void broadMsg2201()
         {
             try
@@ -1306,6 +1311,17 @@ namespace Main
             }
             catch { }
         }
+
+        /// <summary>
+        /// 广播结算消息。
+        /// </summary>
+        private void BroadSettlementMsg()
+        {
+            var msg = string.Format("{0}|{1}|{2}", Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid,
+                    ysamount);
+            RestClient.broadcastmsg(2501, msg);//广播消息给PAD
+        }
+
         private String getTicklistStr()
         {
             //Coupons_Name 30,Coupon_code 15,Coupon_Amount 12,Coupon_No 4
@@ -4037,15 +4053,9 @@ namespace Main
                         {
                             if (startorder(ordertype))
                             {
-                                try
-                                {
-                                    msgorderid = Globals.CurrOrderInfo.orderid; //广播消息到PAD同步菜单
-                                    Thread thread = new Thread(broadMsg2201);
-                                    thread.Start(); // 
-                                }
-                                catch
-                                {
-                                }
+                                msgorderid = Globals.CurrOrderInfo.orderid; //广播消息到PAD同步菜单
+                                Thread thread = new Thread(broadMsg2201);
+                                thread.Start();
                                 Globals.ShoppTable.Clear();
                                 btnOpen_Click(serder, e);
                             }
@@ -5389,6 +5399,8 @@ namespace Main
             try
             {
                 RestClient.broadcastmsg(1005, Globals.CurrOrderInfo.orderid); //这里是发清帐单指令1005
+                var msg = String.Format("{0}|{1}|{2}", Globals.CurrOrderInfo.userid, Globals.CurrTableInfo.tableNo, msgorderid);
+                RestClient.broadcastmsg(2002, msg); //广播消息给手环。
             }
             catch (Exception ex)
             {
