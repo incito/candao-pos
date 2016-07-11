@@ -304,7 +304,7 @@ namespace Main
         {
             pnlz.Parent = xtraTabControl1.SelectedTabPage;
             pnlNum.Parent = xtraTabControl1.SelectedTabPage;
-            pnlSum.Parent = xtraTabControl1.SelectedTabPage;
+            //pnlSum.Parent = xtraTabControl1.SelectedTabPage;
             //pnlz.Parent = xtraTabControl1.SelectedTabPage;
             if (xtraTabControl1.SelectedTabPageIndex == 0)
             {
@@ -3614,7 +3614,7 @@ namespace Main
         private void openRm(object serder, EventArgs e)
         {
             pnlSum.Visible = true;
-            btnClearnTable.Visible = true;
+            btnClearnTable.Visible = _curTableInfo.TableType == EnumTableType.CFTable;
             try
             {
                 btnOpen_Click(serder, e);
@@ -4023,7 +4023,7 @@ namespace Main
             xtraTabControl1.Enabled = true;
             xtraCoupon.Enabled = true;
             pnlSum.Visible = true;
-            btnClearnTable.Visible = true;
+            btnClearnTable.Visible = _curTableInfo.TableType == EnumTableType.CFTable;
             BtnMark.Visible = false;
             pnlAmount.Visible = true;
             LbOrderMark.Visible = false;
@@ -4293,33 +4293,9 @@ namespace Main
                         if (edtPwd.Text.Trim().Length > 0)
                             pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
 
-                        JObject json = RestClient.MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1, amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
-                        string data = json["Data"].ToString();
-                        if (data == "0")
-                        {
-                            try
-                            {
-                                string err = json["Info"].ToString();
-                                if (err.IndexOf("密码不正确") > 0)
-                                {
-                                    Warning("卡号:" + cardno + err);
-                                    edtPwd.Focus();
-                                    edtPwd.SelectAll();
-                                }
-                                else
-                                {
-                                    Warning(err);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                AllLog.Instance.E(ex);
-                            }
-                        }
-                        else
-                        {
-                            isok = true;
-                        }
+                        isok = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,
+                                            membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1,
+                                            amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
                     }
                     catch (Exception ex)
                     {

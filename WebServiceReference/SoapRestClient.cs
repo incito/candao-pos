@@ -3297,7 +3297,7 @@ namespace WebServiceReference
 
         private static float Parse2Float(JToken value)
         {
-            if (value == null)
+            if (value == null || string.IsNullOrEmpty(value.ToString()))
                 return 0f;
 
             return float.Parse(value.ToString());
@@ -3305,7 +3305,7 @@ namespace WebServiceReference
 
         private static int Parse2Int(JToken value)
         {
-            if (value == null)
+            if (value == null || string.IsNullOrEmpty(value.ToString()))
                 return 0;
 
             return int.Parse(value.ToString());
@@ -3313,7 +3313,7 @@ namespace WebServiceReference
 
         private static DateTime? Parse2DateTime(JToken value)
         {
-            if (value == null)
+            if (value == null || string.IsNullOrEmpty(value.ToString()))
                 return null;
 
             try
