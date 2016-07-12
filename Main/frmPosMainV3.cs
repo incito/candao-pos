@@ -1096,85 +1096,62 @@ namespace Main
                 bool ismember = false;
                 if (AskQuestion("台号：" + Globals.CurrTableInfo.tableName + "确定现在结算吗?"))
                 {
-                    //如果是外卖，先开台,再上传菜品，再结算（外卖单品类优惠怎么用呢?,1、下单后循环优惠ID，使用一遍单品类的优惠，或者外卖我打包上传一下所有菜品的JSON数组，服务器端再返回优惠金额）
-                    if (iswm)
+                    var isNewWay = _curTableInfo.TableType == EnumTableType.CFTable ||
+                                       _curTableInfo.TableType == EnumTableType.CFTakeout ||
+                                       _curTableInfo.TableType == EnumTableType.Takeout;
+                    if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray(), isNewWay).Equals("0"))
                     {
-                        Globals.CurrOrderInfo.userid = Globals.UserInfo.UserID;
-                        settleorderorderid = Globals.CurrOrderInfo.orderid;
-                        if (string.IsNullOrEmpty(settleorderorderid))
-                            return;
-
-                        //如果是外卖先结算会员，如果会员结算失败就不再结算帐单
-                        isok = wmAccount(0);
-                        if (isok)
-                        {
-                            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-                        }
+                        Warning("结算失败...");
                     }
                     else
                     {
-                        var isNewWay = _curTableInfo.TableType == EnumTableType.CFTable ||
-                                       _curTableInfo.TableType == EnumTableType.CFTakeout ||
-                                       _curTableInfo.TableType == EnumTableType.Takeout;
-                        if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray(), isNewWay).Equals("0"))
-                        {
-                            Warning("结算失败...");
-                        }
-                        else
-                        {
-                            //如果有会员卡那么会员结算，如果会员结算失败，那就反结算 
+                        //如果有会员卡那么会员结算，如果会员结算失败，那就反结算 
 
-                            //现金金额，用于积分
-                            if (membercard.Length > 0)
+                        //现金金额，用于积分
+                        if (membercard.Length > 0)
+                        {
+                            float psccash = amountrmb + amountyhk + amountgz + amountzfb + amountwx;//现金 用于会员积分
+                            float pscpoint = amountjf; //使用积分付款
+                            float pszStore = amounthyk;//使用储值余额付款
+                            float tmppsccash = Math.Max(0, psccash - returnamount);
+
+                            //使用优惠券
+                            String tickstrs = getTicklistStr();
+                            if (tmppsccash > 0 || pscpoint > 0 || tickstrs.Length > 0 || amounthyk > 0)
                             {
-                                float psccash = amountrmb + amountyhk + amountgz + amountzfb + amountwx;//现金 用于会员积分
-                                float pscpoint = amountjf; //使用积分付款
-                                float pszStore = amounthyk;//使用储值余额付款
-                                float tmppsccash = Math.Max(0, psccash - returnamount);
-
-                                //使用优惠券
-                                String tickstrs = getTicklistStr();
-                                if (tmppsccash > 0 || pscpoint > 0 || tickstrs.Length > 0 || amounthyk > 0)
+                                ismember = true;
+                                try
                                 {
-                                    ismember = true;
-                                    try
+                                    string pwd = "0";
+                                    if (edtPwd.Text.Trim().Length > 0)
                                     {
-                                        string pwd = "0";
-                                        if (edtPwd.Text.Trim().Length > 0)
-                                        {
-                                            pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
-                                        }
-                                        bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,
-                                            membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1,
-                                            amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
-                                        if (data)
-                                        {
-                                            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-                                            isok = true;
-                                        }
+                                        pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
                                     }
-                                    catch (Exception ex)
+                                    bool data = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,
+                                        membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1,
+                                        amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
+                                    if (data)
                                     {
-                                        AllLog.Instance.E("会员消费异常。" + ex.Message);
-                                    }
-                                    finally
-                                    {
-                                        if (!isok)
-                                        {
-                                            var memType = RestClient.getMemberSystem() == 0 ? "雅座" : "餐道";
-                                            Warning(string.Format("{0}会员消费结算失败，请重试。", memType));
-                                            string msg;
-                                            if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, "会员结算失败,系统自动反结", out msg))
-                                            {
-                                                Warning(!string.IsNullOrEmpty(msg) ? msg : "帐单自动反结算失败...");
-                                            }
-                                        }
+                                        ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
+                                        isok = true;
                                     }
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
-                                    isok = true;
+                                    AllLog.Instance.E("会员消费异常。" + ex.Message);
+                                }
+                                finally
+                                {
+                                    if (!isok)
+                                    {
+                                        var memType = RestClient.getMemberSystem() == 0 ? "雅座" : "餐道";
+                                        Warning(string.Format("{0}会员消费结算失败，请重试。", memType));
+                                        string msg;
+                                        if (!RestClient.rebacksettleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, "会员结算失败,系统自动反结", out msg))
+                                        {
+                                            Warning(!string.IsNullOrEmpty(msg) ? msg : "帐单自动反结算失败...");
+                                        }
+                                    }
                                 }
                             }
                             else
@@ -1182,28 +1159,33 @@ namespace Main
                                 ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
                                 isok = true;
                             }
+                        }
+                        else
+                        {
+                            ThreadPool.QueueUserWorkItem(t => { RestClient.OpenCash(); });
+                            isok = true;
+                        }
 
-                            if (isok && Globals.CurrTableInfo.TipAmount > 0)
+                        if (isok && Globals.CurrTableInfo.TipAmount > 0)
+                        {
+                            var service = new RestaurantServiceImpl();
+                            var result = service.BillingTip(Globals.CurrOrderInfo.orderid, amountTip);
+                            if (!string.IsNullOrEmpty(result))
                             {
-                                var service = new RestaurantServiceImpl();
-                                var result = service.BillingTip(Globals.CurrOrderInfo.orderid, amountTip);
-                                if (!string.IsNullOrEmpty(result))
-                                {
-                                    Warning(result);
-                                    isok = false;
-                                }
+                                Warning(result);
+                                isok = false;
                             }
+                        }
 
-                            if (isok)
+                        if (isok)
+                        {
+                            try
                             {
-                                try
-                                {
-                                    RestClient.debitamout(Globals.CurrOrderInfo.orderid);
-                                }
-                                catch (Exception ex)
-                                {
-                                    AllLog.Instance.E("计算实收接口异常。" + ex.Message);
-                                }
+                                RestClient.debitamout(Globals.CurrOrderInfo.orderid);
+                            }
+                            catch (Exception ex)
+                            {
+                                AllLog.Instance.E("计算实收接口异常。" + ex.Message);
                             }
                         }
                     }
@@ -1211,30 +1193,27 @@ namespace Main
                     Opentable2(true);
                     if (isok)
                     {
-                        ThreadPool.QueueUserWorkItem(t =>
+                        try
+                        {
+                            PrintBill2();
+                        }
+                        catch (Exception ex)
+                        {
+                            AllLog.Instance.E("打印结账单异常。" + ex.Message);
+                        }
+
+                        Application.DoEvents();
+                        if (ismember)
                         {
                             try
                             {
-                                PrintBill2();
+                                ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, psIntegralOverall);
                             }
                             catch (Exception ex)
                             {
-                                AllLog.Instance.E("打印结账单异常。" + ex.Message);
+                                AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
                             }
-
-                            Application.DoEvents();
-                            if (ismember)
-                            {
-                                try
-                                {
-                                    ReportPrint.PrintMemberPay1(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, psIntegralOverall);
-                                }
-                                catch (Exception ex)
-                                {
-                                    AllLog.Instance.E("打印会员凭条异常。" + ex.Message);
-                                }
-                            }
-                        });
+                        }
 
                         if (!iswm)
                         {
@@ -4267,71 +4246,6 @@ namespace Main
             IniPos.setPosIniVlaue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, seqno_str);
             Warning("下单完成");
             return true;
-        }
-
-        /// <summary>
-        /// 外卖结算 需要先结算会员，如果失败就不下单不调用java结算
-        /// </summary>
-        private bool wmAccount(int ordertype)
-        {
-            bool isok = true;
-            if (membercard.Length > 0)
-            {
-                isok = false;
-                float psccash = amountrmb + amountyhk + amountgz;//现金 用于会员积分
-                float pscpoint = amountjf; //使用积分付款
-                float pszStore = amounthyk;//使用储值余额付款
-                float tmppsccash = Math.Max(0, psccash - returnamount);
-
-                //使用优惠券
-                String tickstrs = getTicklistStr();
-                if (tmppsccash > 0 || pscpoint > 0 || tickstrs.Length > 0 || amounthyk > 0)
-                {
-                    try
-                    {
-                        string pwd = "0";
-                        if (edtPwd.Text.Trim().Length > 0)
-                            pwd = edtPwd.Text.Substring(0, Math.Min(edtPwd.Text.Length, 6));
-
-                        isok = MemberSale(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid,
-                                            membercard, Globals.CurrOrderInfo.orderid, tmppsccash, pscpoint, 1,
-                                            amounthyk, tickstrs, pwd, (float)Math.Round(memberyhqamount, 2));
-                    }
-                    catch (Exception ex)
-                    {
-                        AllLog.Instance.E(ex);
-                        Warning("会员积分，结算失败!");
-                    }
-                }
-                else
-                {
-                    isok = true;
-                }
-            }
-
-            if (isok)
-            {
-                if (!RestClient.settleorder(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserID, getPayTypeJsonArray(), true).Equals("0"))
-                {
-                    Warning("结算失败...");
-                    return false;
-                }
-
-                RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid); //计算账单总金额。
-                try
-                {
-                    RestClient.debitamout(Globals.CurrOrderInfo.orderid);
-                }
-                catch (Exception ex)
-                {
-                    AllLog.Instance.E("计算实收接口异常。" + ex.Message);
-                }
-            }
-            else
-            {
-                RestClient.cancelOrder(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, currtableno);
-            }
-            return isok;
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
