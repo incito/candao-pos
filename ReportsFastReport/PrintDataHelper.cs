@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using Common;
 using Models;
@@ -52,7 +53,7 @@ namespace ReportsFastReport
             var unit = GetJObjectString(dataJObj, "dishunit");
             unit = InternationaHelper.ReplaceSeparatorFlag(unit, "\n");
             var dishName = GetJObjectString(dataJObj, "title");
-            dishName = InternationaHelper.ReplaceSeparatorFlag(dishName, "\n");
+            dishName = GetDishNameWithUnit(dishName, unit);
 
             var priceType = Convert.ToInt32(dataJObj["pricetype"]);
             if (priceType == 1) //1是赠菜。
@@ -62,10 +63,33 @@ namespace ReportsFastReport
             {
                 DishName = dishName,
                 Amount = GetJObjectDecimal(dataJObj, "amount"),
-                DishNumUnit = string.Format("{0}{1}", num, unit),
+                DishNumUnit = num.ToString(CultureInfo.InvariantCulture),
                 DishPrice = GetJObjectDecimal(dataJObj, "orderprice")
             };
             return item;
+        }
+
+        /// <summary>
+        /// 组合菜品和单位。
+        /// </summary>
+        /// <param name="dishName">菜名。</param>
+        /// <param name="dishUnit">菜单位。</param>
+        /// <returns></returns>
+        private static string GetDishNameWithUnit(string dishName, string dishUnit)
+        {
+            if (!InternationaHelper.HasInternationaFlag(dishName))
+                return string.Format("{0}({1})", dishName, dishUnit);
+
+            var names = InternationaHelper.SplitBySeparatorFlag(dishName);
+            var units = InternationaHelper.SplitBySeparatorFlag(dishUnit);
+
+            var result = string.Format("{0}({1})", names[0], units[0]);
+            if (names.Count > 1)
+            {
+                var result2 = string.Format("{0}({1})", names[1], units.Count > 1 ? units[1] : units[0]);
+                result = string.Format("{0}\n{1}", result, result2);
+            }
+            return result;
         }
 
         private static string GetJObjectString(JObject jObj, string key, string defaultValue = "")
