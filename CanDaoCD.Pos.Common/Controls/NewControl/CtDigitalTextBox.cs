@@ -62,6 +62,7 @@ namespace CanDaoCD.Pos.Common.Controls
             this.KeyDown += CtDigitalTextBox_PreviewKeyDown;
             this.VerticalContentAlignment = VerticalAlignment.Center;
             this.VerticalAlignment = VerticalAlignment.Center;
+            this.Height = 35;
         }
 
       
@@ -102,8 +103,8 @@ namespace CanDaoCD.Pos.Common.Controls
                 int offset = change[0].Offset;
                 if (change[0].AddedLength > 0)
                 {
-                    int num = 0;
-                    if (!int.TryParse(textBox.Text, out num))
+                    long num = 0;
+                    if (!long.TryParse(textBox.Text, out num))
                     {
                         textBox.Text = textBox.Text.Remove(offset, change[0].AddedLength);
                         textBox.Select(offset, 0);

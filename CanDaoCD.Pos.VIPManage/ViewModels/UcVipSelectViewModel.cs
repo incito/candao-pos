@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using CanDaoCD.Pos.Common.Classes.Mvvms;
 using CanDaoCD.Pos.Common.Controls.CSystem;
+using CanDaoCD.Pos.Common.Models.VipModels;
 using CanDaoCD.Pos.Common.Operates;
 using CanDaoCD.Pos.VIPManage.Models;
 using CanDaoCD.Pos.VIPManage.Operates;
@@ -24,12 +25,45 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
 
         private WinShowInfoViewModel _winShowInfo;
 
+        private MVipInfo _vipInfo;
+
+        private Action _textEnterAction;
+
+        //是否可操作
+        private bool _isOper = false;
+
         #endregion
 
         #region 属性
 
         public UcVipSelectModel Model { set; get; }
 
+        /// <summary>
+        /// 手机、会员卡回车事件
+        /// </summary>
+        public Action TextEnterAction
+        {
+            get { return _textEnterAction; }
+            set
+            {
+                _textEnterAction = value;
+                RaisePropertyChanged(() => TextEnterAction);
+            }
+        }
+
+        /// <summary>
+        /// 是否可操作
+        /// </summary>
+        public bool IsOper
+        {
+            get { return _isOper; }
+            set
+            {
+                _isOper = value;
+                RaisePropertyChanged(() => IsOper);
+            }
+        }
+      
         #endregion
 
         #region 事件
@@ -53,6 +87,29 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         /// 绑定卡事件
         /// </summary>
         public RelayCommand BindingCardCommand { set; get; }
+
+        /// <summary>
+        /// 修改基本信息
+        /// </summary>
+        public RelayCommand ModifyInfoCommand { set; get; }
+
+        /// <summary>
+        /// 修改卡号
+        /// </summary>
+        public RelayCommand ModifyCardNumCommand { set; get; }
+        /// <summary>
+        /// 会员挂失
+        /// </summary>
+        public RelayCommand ReportLossCommand { set; get; }
+        /// <summary>
+        /// 修改手机号码
+        /// </summary>
+        public RelayCommand ModifyTelNumCommand { set; get; }
+
+        /// <summary>
+        /// 查询信息
+        /// </summary>
+        public RelayCommand SelectCardCommand { set; get; }
         #endregion
 
         #region 构造函数
@@ -63,46 +120,193 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         public UcVipSelectViewModel()
         {
             Model = new UcVipSelectModel();
-            Model.TextEnterAction = new Action<TextBox>(SelectHandel);
-       
+
+            TextEnterAction = new Action(SelectHandel);
             StoredValueCommand=new RelayCommand(StoredValueHandel);
             LogOffCommand=new RelayCommand(LogOffHandel);
             ModifyPswCommand=new RelayCommand(ModifyPswHandel);
             BindingCardCommand = new RelayCommand(BindingCardHandel);
+            ModifyCardNumCommand = new RelayCommand(ModifyCardNumHandel);
+            ModifyInfoCommand = new RelayCommand(ModifyInfoHandel);
+            ReportLossCommand = new RelayCommand(ReportLossNumHandel);
+            ModifyTelNumCommand = new RelayCommand(ModifyTelNumHandel);
+
+            SelectCardCommand = new RelayCommand(SelectHandel);
+
+            IsOper = false;
         }
 
         #endregion
 
         #region 私有方法
-
-        private void SelectHandel(string text)
-        {
-            SelectModel(text, Model.Psw);
-        }
         /// <summary>
         /// 查询事件
         /// </summary>
-        private void SelectHandel(TextBox textBox)
+        private void SelectHandel()
         {
-            switch (textBox.Name)
+            try
             {
-                case "TexTelNum": //电话号码
+                if (string.IsNullOrEmpty(Model.SelectNum))//检查查询不能为空
                 {
-                    SelectModel(textBox.Text, Model.Psw);
-                    break;
+                    OWindowManage.ShowMessageWindow(
+                       string.Format("查询信息不能为空！"), false);
+                    return;
                 }
-                case "TexCardNum": //实体卡号
+
+                _vipInfo = CanDaoMemberClient.VipQuery(Globals.branch_id, "", Model.SelectNum);
+
+                if (_vipInfo.Result)
                 {
-                    SelectModel(textBox.Text, Model.Psw);
-                    break;
+                 
+                    Model.TelNum = _vipInfo.TelNum;
+                    Model.UserName = _vipInfo.VipName;
+
+                    Model.Birthday = DateTime.Parse(_vipInfo.Birthday).ToString("yyyy-MM-dd");
+                    if (_vipInfo.Sex == 0)
+                    {
+                        Model.Sex = "男";
+                    }
+                    else
+                    {
+                        Model.Sex = "女";
+                    }
+
+                    Model.CardLevel = _vipInfo.CardInfos[0].CardLevelName;
+                    Model.Integral = _vipInfo.CardInfos[0].Integral.ToString();
+                    Model.Balance = _vipInfo.CardInfos[0].Balance.ToString();
+                    Model.CardNum = _vipInfo.CardInfos[0].CardNum;
+                    switch (_vipInfo.CardInfos[0].CardState)
+                    {
+                        case 0:
+                        {
+                            Model.CardState = "注销";
+                           break; 
+                        }
+                        case 1:
+                        {
+                            Model.CardState = "正常";
+                            break;
+                        }
+                        case 2:
+                        {
+                            Model.CardState = "挂失";
+                            break;
+                        }
+                        default:
+                        {
+                            Model.CardState = "未知";
+                            break;
+                        }
+                    }
+                 
+                    IsOper = true; //启用操作区域
+                }
+                else
+                {
+                    OWindowManage.ShowMessageWindow(
+                        string.Format("会员查询错误：{0}", _vipInfo.ResultInfo), false);
+
+                    Model.Cleanup();
+                    IsOper = false; //禁用操作区域
+                }
+            }
+            catch (Exception ex)
+            {
+                OWindowManage.ShowMessageWindow(
+                    string.Format("会员查询错误[{0}-{1}]：{2}", Globals.branch_id, Model.SelectNum, ex.Message), false);
+            }
+        }
+        /// <summary>
+        /// 修改卡号
+        /// </summary>
+        private void ModifyCardNumHandel()
+        {
+            _winShowInfo = new WinShowInfoViewModel();
+
+            var vipChangeInfo=new MVipChangeInfo();
+            vipChangeInfo.TelNum = Model.TelNum;
+            vipChangeInfo.CardNum = Model.CardNum;
+
+            _winShowInfo.VipChangeInfo = vipChangeInfo;
+
+            var window = _winShowInfo.GetShoWindow();
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            _winShowInfo.Model.Title = "修改卡号-请刷卡";
+
+            if (window.ShowDialog() == true)
+            {
+                Model.CardNum = _winShowInfo.Model.CardNum;
+            }
+        }
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        private void ModifyInfoHandel()
+        {
+            var vipChangeInfo=new MVipChangeInfo();
+            vipChangeInfo.TelNum = Model.TelNum;
+            vipChangeInfo.CardNum = Model.CardNum;
+            vipChangeInfo.Birthday = Model.Birthday;
+            vipChangeInfo.VipName = Model.UserName;
+
+            if (Model.Sex.Equals("男"))
+            {
+                vipChangeInfo.Sex = 0;
+            }
+            else
+            {
+                vipChangeInfo.Sex = 1;  
+            }
+
+            var modifyVipInfo = new UcVipModifyVipInfoViewModel(vipChangeInfo);
+            if (OWindowManage.ShowPopupWindow(modifyVipInfo.GetUserCtl()))
+            {
+                Model.UserName = modifyVipInfo.Model.UserName;
+                Model.Birthday = modifyVipInfo.Model.Birthday.ToString("yyyy-MM-dd");
+                if (modifyVipInfo.Model.SexNan)
+                {
+                    Model.Sex = "男";
+                }
+                else
+                {
+                    Model.Sex = "女";
                 }
             }
         }
+        /// <summary>
+        /// 会员挂失
+        /// </summary>
+        private void ReportLossNumHandel()
+        {
+
+        }
+        /// <summary>
+        /// 修改手机号码
+        /// </summary>
+        private void ModifyTelNumHandel()
+        {
+            var vipChangeInfo = new MVipChangeInfo();
+            vipChangeInfo.TelNum = Model.TelNum;
+
+            var modifyTelNum = new UcVipModifyTelNumViewModel(vipChangeInfo);
+            if (OWindowManage.ShowPopupWindow(modifyTelNum.GetUserCtl()))
+            {
+                Model.TelNum = modifyTelNum.Model.NTelNum;
+            }
+        }
+
+        /// <summary>
+        /// 修改密码
+        /// </summary>
         private void ModifyPswHandel()
         {
             var veModel = new UcVipModifyPswViewModel(Model.TelNum);
             OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
         }
+        /// <summary>
+        /// 充值
+        /// </summary>
         private void StoredValueHandel()
         {
             var veModel = new UcVipRechargeViewModel(Model);
@@ -117,23 +321,17 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         {
             _winShowInfo = new WinShowInfoViewModel();
             _winShowInfo.InsideId = Model.CardNum;
-            _winShowInfo.OkReturn = new Action<string>(ReceiveCarNum);
             var window = _winShowInfo.GetShoWindow();
-            window.Topmost = true;
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.Show();
-        }
-        /// <summary>
-        /// 接收实体卡号
-        /// </summary>
-        /// <param name="carNum"></param>
-        private void ReceiveCarNum(string carNum)
-        {
-            Model.CardNum = carNum;
-            Model.IsShowCardBut = false;
-            Model.IsShowCardNum = true;
-        }
 
+            _winShowInfo.Model.Title = "绑定实体卡-请刷卡";
+
+            if (window.ShowDialog() == true)
+            {
+                Model.CardNum = _winShowInfo.Model.CardNum;
+            }
+        }
+      
         /// <summary>
         /// 会员注销
         /// </summary>
@@ -166,61 +364,6 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
            
         }
 
-        /// <summary>
-        /// 根据查询返回值创建信息
-        /// </summary>
-        /// <param name="info"></param>
-        private void SelectModel(string selectNum,string psw)
-        {
-            try
-            {
-                var info = CanDaoMemberClient.QueryBalance(Globals.branch_id, "", selectNum, psw);
-                if (info.Retcode.Equals("0"))
-                {
-                    Model.UserName = info.Name;
-                    if (info.Gender == 0)
-                    {
-                        Model.Sex = "男";
-                    }
-                    else
-                    {
-                        Model.Sex = "女";
-                    }
-                    Model.TelNum = info.Mobile;
-                    Model.Birthday = info.Birthday;
-                    Model.Integral = info.Integraloverall.ToString();
-                    Model.Balance = info.Storecardbalance.ToString();
-                    Model.CardNum = info.Mcard;
-
-                    Model.IsShowCardBut = true;
-                    Model.IsShowCardNum = false;
-                    Model.IsOper = true;//启用操作区域
-                }
-                else
-                {
-                    OWindowManage.ShowMessageWindow(
-                     string.Format("会员查询错误：{0}", info.Retinfo), true);
-
-                    Model.UserName = "";
-                    Model.Sex = "";
-                    Model.TelNum = "";
-                    Model.Birthday = "";
-                    Model.Integral = "";
-                    Model.Balance ="";
-                    Model.CardNum = "";
-
-                    Model.IsOper = false;//禁用操作区域
-                    Model.IsShowCardBut = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                OWindowManage.ShowMessageWindow(
-               string.Format("会员查询失败[{0}-{1}]：{2}",Globals.branch_id,selectNum, ex.Message), false);
-            }
-           
-        }
-
         #endregion
 
         #region 公共方法
@@ -233,7 +376,6 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         {
             _userControl = new UcVipSelectView();
             _userControl.DataContext = this;
-            _userControl.EntAction=new Action<string>(SelectHandel);
             return _userControl;
         }
 

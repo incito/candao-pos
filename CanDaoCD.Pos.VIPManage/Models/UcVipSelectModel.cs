@@ -7,139 +7,47 @@ using CanDaoCD.Pos.Common.Classes.Mvvms;
 
 namespace CanDaoCD.Pos.VIPManage.Models
 {
+    /// <summary>
+    /// 会员查询模型
+    /// </summary>
     public class UcVipSelectModel : ViewModelBase
     {
+
         #region 字段
 
+        private string _selectNum;
+
+        private string _cardNum;
         private string _telNum;
         private string _userName;
-        private string _psw;
-        private string _sex;
-        private string _integral;
-        private string _cardNum;
+
+        private string _cardLevel;
         private string _birthday;
+        private string _sex;
+
+        private string _integral;
         private string _balance;
+        private string _cardState;
 
-        //private bool _isEnabledPsw = false;
-        private bool _isShowCardNum = false;
-        private bool _isShowCardBut = false;
-
-        private bool _isOper = false;
-
-        private Action _sureAction;
-
-        private Action<TextBox> _textEnterAction;
         #endregion
 
         #region 属性
-        public bool IsShowCardBut
+        /// <summary>
+        /// 查询卡号
+        /// </summary>
+        public string SelectNum
         {
-            get { return _isShowCardBut; }
+            get { return _selectNum; }
             set
             {
-                _isShowCardBut = value;
-                RaisePropertyChanged(() => IsShowCardBut);
-            }
-        }
-        public bool IsShowCardNum
-        {
-            get { return _isShowCardNum; }
-            set
-            {
-                _isShowCardNum = value;
-                RaisePropertyChanged(() => IsShowCardNum);
-            }
-        }
-        public Action<TextBox> TextEnterAction
-        {
-            get { return _textEnterAction; }
-            set
-            {
-                _textEnterAction = value;
-                RaisePropertyChanged(() => TextEnterAction);
+                _selectNum = value;
+                RaisePropertyChanged(() => SelectNum);
             }
         }
 
-        public Action SureAction
-        {
-            get { return _sureAction; }
-            set
-            {
-                _sureAction = value;
-                RaisePropertyChanged(() => SureAction);
-            }
-        }
-
-        public string Integral
-        {
-            get { return _integral; }
-            set
-            {
-                _integral = value;
-                RaisePropertyChanged(() => Integral);
-            }
-        }
-
-        public string Balance
-        {
-            get { return _balance; }
-            set
-            {
-                _balance = value;
-                RaisePropertyChanged(() => Balance);
-            }
-        }
-        public string Sex
-        {
-            get { return _sex; }
-            set
-            {
-                _sex = value;
-                RaisePropertyChanged(() => Sex);
-            }
-        }
-
-        //public bool IsEnabledPsw
-        //{
-        //    get { return _isEnabledPsw; }
-        //    set
-        //    {
-        //        _isEnabledPsw = value;
-        //        RaisePropertyChanged(() => IsEnabledPsw);
-        //    }
-        //}
-      
-        public string TelNum
-        {
-            get { return _telNum; }
-            set
-            {
-                _telNum = value;
-                RaisePropertyChanged(() => TelNum);
-            }
-        }
-
-        public string UserName
-        {
-            get { return _userName; }
-            set
-            {
-                _userName = value;
-                RaisePropertyChanged(() => UserName);
-            }
-        }
-
-        public string Psw
-        {
-            get { return _psw; }
-            set
-            {
-                _psw = value;
-                RaisePropertyChanged(() => Psw);
-            }
-        }
-
-
+        /// <summary>
+        /// 会员卡
+        /// </summary>
         public string CardNum
         {
             get { return _cardNum; }
@@ -150,6 +58,47 @@ namespace CanDaoCD.Pos.VIPManage.Models
             }
         }
 
+        /// <summary>
+        /// 电话号码
+        /// </summary>
+        public string TelNum
+        {
+            get { return _telNum; }
+            set
+            {
+                _telNum = value;
+                RaisePropertyChanged(() => TelNum);
+            }
+        }
+
+        /// <summary>
+        /// 会员名称
+        /// </summary>
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                _userName = value;
+                RaisePropertyChanged(() => UserName);
+            }
+        }
+
+        /// <summary>
+        /// 会员等级
+        /// </summary>
+        public string CardLevel
+        {
+            get { return _cardLevel; }
+            set
+            {
+                _cardLevel = value;
+                RaisePropertyChanged(() => CardLevel);
+            }
+        }
+        /// <summary>
+        /// 生日
+        /// </summary>
         public string Birthday
         {
             get { return _birthday; }
@@ -159,17 +108,57 @@ namespace CanDaoCD.Pos.VIPManage.Models
                 RaisePropertyChanged(() => Birthday);
             }
         }
-
-        public bool IsOper
+        /// <summary>
+        /// 性别(汉字)
+        /// </summary>
+        public string Sex
         {
-            get { return _isOper; }
+            get { return _sex; }
             set
             {
-                _isOper = value;
-                RaisePropertyChanged(() => IsOper);
+                _sex = value;
+                RaisePropertyChanged(() => Sex);
             }
         }
-      
+
+        /// <summary>
+        /// 余额
+        /// </summary>
+        public string Balance
+        {
+            get { return _balance; }
+            set
+            {
+                _balance = value;
+                RaisePropertyChanged(() => Balance);
+            }
+        }
+        /// <summary>
+        /// 积分
+        /// </summary>
+        public string Integral
+        {
+            get { return _integral; }
+            set
+            {
+                _integral = value;
+                RaisePropertyChanged(() => Integral);
+            }
+        }
+
+        /// <summary>
+        /// 卡状态
+        /// </summary>
+        public string CardState
+        {
+            get { return _cardState; }
+            set
+            {
+                _cardState = value;
+                RaisePropertyChanged(() => CardState);
+            }
+        }
+
         #endregion
     }
 }

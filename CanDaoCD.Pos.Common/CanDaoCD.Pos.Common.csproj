@@ -112,11 +112,15 @@
       <DependentUpon>WUserCheck.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NewControl\CtDigitalTextBox.cs" />
+    <Compile Include="Controls\NewControl\CtEnterTextBox.cs" />
     <Compile Include="Controls\NewControl\UcPageList.xaml.cs">
       <DependentUpon>UcPageList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\MListBoxInfo.cs" />
     <Compile Include="Models\MSystemConfig.cs" />
+    <Compile Include="Models\VipModels\MVipCardInfo.cs" />
+    <Compile Include="Models\VipModels\MVipChangeInfo.cs" />
+    <Compile Include="Models\VipModels\MVipInfo.cs" />
     <Compile Include="Operates\AsyncLoadServer.cs" />
     <Compile Include="Operates\FileOperate\OXmlOperate.cs" />
     <Compile Include="Operates\OCheckFormat.cs" />

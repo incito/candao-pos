@@ -118,23 +118,17 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         private void BindingCardHandel()
         {
             _winShowInfo= new WinShowInfoViewModel();
-            _winShowInfo.OkReturn = new Action<string>(ReceiveCarNum);
             var window = _winShowInfo.GetShoWindow();
             window.Topmost = true;
             window.WindowStartupLocation= WindowStartupLocation.CenterScreen;
-            window.Show();
+            if (window.ShowDialog()==true)
+            {
+                Model.CardNum = _winShowInfo.Model.CardNum;
+                Model.IsShowCardBut = false;
+                Model.IsShowCardNum = true;
+            }
         }
 
-        /// <summary>
-        /// 接收实体卡号
-        /// </summary>
-        /// <param name="carNum"></param>
-        private void ReceiveCarNum(string carNum)
-        {
-            Model.CardNum = carNum;
-            Model.IsShowCardBut = false;
-            Model.IsShowCardNum = true;
-        }
         /// <summary>
         /// 会员注册
         /// </summary>

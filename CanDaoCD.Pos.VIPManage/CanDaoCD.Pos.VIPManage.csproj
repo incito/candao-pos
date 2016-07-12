@@ -71,6 +71,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\UcVipModifyTelNumModel.cs" />
+    <Compile Include="Models\UcVipModifyVipInfoModel.cs" />
     <Compile Include="Models\UcVipModifyPswModel.cs" />
     <Compile Include="Models\UcVipRechargeModel.cs" />
     <Compile Include="Models\UcVipRegModel.cs" />
@@ -91,11 +93,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\UcVipModifyVipInfoViewModel.cs" />
+    <Compile Include="ViewModels\UcVipModifyTelNumViewModel.cs" />
     <Compile Include="ViewModels\UcVipModifyPswViewModel.cs" />
     <Compile Include="ViewModels\UcVipRechargeViewModel.cs" />
     <Compile Include="ViewModels\UcVipRegViewModel.cs" />
     <Compile Include="ViewModels\UcVipSelectViewModel.cs" />
     <Compile Include="ViewModels\WinShowInfoViewModel.cs" />
+    <Compile Include="Views\UcVipModifyVipInfoView.xaml.cs">
+      <DependentUpon>UcVipModifyVipInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UcVipModifyTelNumView.xaml.cs">
+      <DependentUpon>UcVipModifyTelNumView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UcVipModifyPswView.xaml.cs">
       <DependentUpon>UcVipModifyPswView.xaml</DependentUpon>
     </Compile>
@@ -123,6 +133,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Views\UcVipModifyVipInfoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UcVipModifyTelNumView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\UcVipModifyPswView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

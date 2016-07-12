@@ -16,15 +16,14 @@ using System.Windows.Shapes;
 namespace CanDaoCD.Pos.VIPManage.Views
 {
     /// <summary>
-    /// UcVipSelect.xaml 的交互逻辑
+    /// UcVipLogOff.xaml 的交互逻辑
     /// </summary>
-    public partial class UcVipSelectView : UserControlBase
+    public partial class UcVipModifyTelNumView : UserControlBase
     {
-
-        public UcVipSelectView()
+        public UcVipModifyTelNumView()
         {
             InitializeComponent();
-            TexSelectNum.Focus();
         }
+
     }
 }

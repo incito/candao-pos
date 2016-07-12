@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using CanDaoCD.Pos.Common.Models.VipModels;
 using CanDaoCD.Pos.VIPManage.Models;
 using CanDaoCD.Pos.VIPManage.Views;
 using Common;
 using Models;
 using WebServiceReference;
+using CanDaoCD.Pos.Common.Operates;
 
 namespace CanDaoCD.Pos.VIPManage.ViewModels
 {
@@ -16,6 +18,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
     {
         private WinShowInfoView _window;
         private string _insideId=string.Empty;
+
         #region 属性
         /// <summary>
         /// 内部虚拟Id
@@ -24,10 +27,12 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         {
             set { _insideId = value; }
             get { return _insideId; } }
+
         public WinShowInfoModel Model
         {
             set; get; }
 
+        public MVipChangeInfo VipChangeInfo { set; get; }
         #endregion
 
         #region 事件
@@ -41,12 +46,6 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         /// 取消事件
         /// </summary>
         public RelayCommand CancelCommand { set; get; }
-        /// <summary>
-        /// 确认返回
-        /// </summary>
-
-        public Action<string> OkReturn;
-
 
         #endregion
 
@@ -55,7 +54,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             OkCommand = new RelayCommand(OkHandel);
             CancelCommand = new RelayCommand(CancelHandel);
             Model = new WinShowInfoModel();
-
+            VipChangeInfo=new MVipChangeInfo();
         }
 
 
@@ -72,13 +71,27 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     Model.ShowInfo = string.Format("会员卡绑定失败：{0}", ret2.Retinfo);
                     return;
                 }
+                else
+                {
+                    OWindowManage.ShowMessageWindow("会员卡绑定成功！", false);
+                }
             }
-           
-            if (OkReturn != null)
+            else if(!string.IsNullOrEmpty(VipChangeInfo.TelNum))
             {
-                OkReturn(Model.CardNum);
+                VipChangeInfo.CardNum = Model.CardNum;
+                TCandaoRetBase ret = CanDaoMemberClient.VipChangeInfo(Globals.branch_id, VipChangeInfo);
+                if (!ret.Ret)
+                {
+                    OWindowManage.ShowMessageWindow("会员卡修改失败：" + ret.Retinfo, false);
+                    return;
+                }
+                else
+                {
+                    OWindowManage.ShowMessageWindow("会员卡修改成功！", false);
+                }
             }
-            _window.Close();
+
+            _window.DialogResult = true;
         }
 
         /// <summary>
@@ -86,7 +99,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         /// </summary>
         private void CancelHandel()
         {
-            _window.Close();
+            _window.DialogResult = false;
         }
 
         /// <summary>

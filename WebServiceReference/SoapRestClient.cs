@@ -941,7 +941,7 @@ namespace WebServiceReference
             String jsonResult = Request_Rest(address);
             AllLog.Instance.I(string.Format("【GetOrderTable】 result：{0}。", jsonResult));
             if (jsonResult == "0")
-                return dt;
+                return null;
 
             JObject jaAll = (JObject)JsonConvert.DeserializeObject(jsonResult);
             string result = jaAll["Data"].ToString();

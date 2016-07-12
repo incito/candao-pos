@@ -15,9 +15,9 @@
     <Grid>
         <Grid.Resources>
             <Style TargetType="Button" BasedOn="{StaticResource ColBtn}">
-                <Setter Property="Width" Value="60"/>
+                <Setter Property="MinWidth" Value="60"/>
                 <Setter Property="Focusable" Value="False"/>
-                <Setter Property="Height" Value="60"/>
+                <Setter Property="MinHeight" Value="60"/>
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>

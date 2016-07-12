@@ -1400,7 +1400,15 @@ namespace Main
                 this.Cursor = Cursors.WaitCursor;
                 if (Globals.OrderTable.Rows.Count <= 0)
                     return;
-                ReportPrint.PrintPayBill(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, tbyh, ra);
+                if (!ReportPrint.PrintPayBill(Globals.CurrOrderInfo.orderid, Globals.UserInfo.UserName, tbyh, ra))
+                {
+                    Warning("预结单打印失败,请联系管理员！");
+                }
+            }
+            catch (Exception ex)
+            {
+                AllLog.Instance.D("PrintPayBill:", ex.Message);
+                Warning("预结单打印失败：" + ex.Message);
             }
             finally
             {

@@ -103,6 +103,10 @@ namespace KYPOS.Dishes
                     return;
 
                 var resTable = RestClient.GetOrderTable(_orderID, Globals.UserInfo.UserID);
+                if (resTable == null)
+                {
+                    return;
+                }
 
                 if (resTable.Rows.Count != Globals.OrderTable.Rows.Count)
                 {

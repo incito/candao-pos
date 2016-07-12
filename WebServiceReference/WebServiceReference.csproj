@@ -87,6 +87,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CanDaoCD.Pos.Common\CanDaoCD.Pos.Common.csproj">
+      <Project>{7ddd5dce-b2cd-429d-80ae-6ff2f66d15d8}</Project>
+      <Name>CanDaoCD.Pos.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{269ECEFF-B6C2-4708-86BA-AFBB1A2B045C}</Project>
       <Name>Common</Name>

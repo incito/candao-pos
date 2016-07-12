@@ -322,7 +322,7 @@ namespace ReportsFastReport
         /// <summary>
         /// 打印预结单2
         /// </summary>
-        public static void PrintPayBill(String billno, String printuser, DataTable yhList, ReportAmount ra)
+        public static bool PrintPayBill(String billno, String printuser, DataTable yhList, ReportAmount ra)
         {
             //
             ramount = ra;
@@ -336,28 +336,28 @@ namespace ReportsFastReport
                         out jrList, out jrJS))
                 {
                     AllLog.Instance.D("PrintPayBill:" + string.Format("{0}", billno));
-                    return;
+                    return false;
                 }
+                DataSet ds = new DataSet();
+                DataTable yh = new DataTable();
+                yh = yhList.Copy();
+                tipAmount = Convert.ToDecimal(((JObject)jrOrder[0])["tipAmount"].ToString());
+                tipPaid = Convert.ToDecimal(((JObject)jrOrder[0])["tipPaid"].ToString());
+                DataTable dtSettlementDetail =
+                    Bill_Order.GetSettlementDetailTable(GetPresettlementDetailList((JObject)jrOrder[0], ra));
+                ds.Tables.Add(yh);
+                ds.Tables.Add(dtSettlementDetail);
+                string fileName = Application.StartupPath + @"\Reports\rptBill.frx";
+                var printReport = InitReport(fileName, ds, jrOrder, jrList, jrJS);
+
+                PrintRpt(printReport, 1);
+                return true;
             }
             catch (Exception ex)
             {
                 AllLog.Instance.D("PrintPayBill:" + string.Format("{0}", billno) + "----" + ex.Message);
+                return false;
             }
-
-
-            DataSet ds = new DataSet();
-            DataTable yh = new DataTable();
-            yh = yhList.Copy();
-            tipAmount = Convert.ToDecimal(((JObject) jrOrder[0])["tipAmount"].ToString());
-            tipPaid = Convert.ToDecimal(((JObject) jrOrder[0])["tipPaid"].ToString());
-            DataTable dtSettlementDetail =
-                Bill_Order.GetSettlementDetailTable(GetPresettlementDetailList((JObject) jrOrder[0], ra));
-            ds.Tables.Add(yh);
-            ds.Tables.Add(dtSettlementDetail);
-            string fileName = Application.StartupPath + @"\Reports\rptBill.frx";
-            var printReport = InitReport(fileName, ds, jrOrder, jrList, jrJS);
-
-            PrintRpt(printReport, 1);
         }
 
         private static Dictionary<string, string> GetPresettlementDetailList(JObject jObj, ReportAmount ra)
@@ -737,6 +737,7 @@ namespace ReportsFastReport
         {
             try
             {
+                AllLog.Instance.I("PrintStart:" + ramount.orderid);
                 //显示打印对话框
                 ShowReportFrm();
                 //Application.DoEvents();
@@ -822,6 +823,7 @@ namespace ReportsFastReport
                         MessageBox.Show(e.Message);
                     }
                 }
+                AllLog.Instance.I("PrintEnd:" + ramount.orderid);
             }
             catch (Exception ex)
             {

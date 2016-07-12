@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cSystem="clr-namespace:CanDaoCD.Pos.Common.Controls.CSystem;assembly=CanDaoCD.Pos.Common"
+             xmlns:controls="clr-namespace:CanDaoCD.Pos.Common.Controls;assembly=CanDaoCD.Pos.Common"
+             xmlns:newControl="clr-namespace:CanDaoCD.Pos.Common.Controls.NewControl;assembly=CanDaoCD.Pos.Common"
              x:Class="CanDaoCD.Pos.VIPManage.Views.UcVipSelectView" 
              mc:Ignorable="d" 
              Height="510" Width="760" Background="White">
@@ -30,64 +32,81 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="222"/>
+            <RowDefinition Height="220"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <GroupBox x:Name="GbInfo" BorderBrush="#F0F0F0" Foreground="Black" FontSize="20" Header="会员信息">
+        <GroupBox Grid.Row="0" x:Name="GbInfo" BorderBrush="#F0F0F0" Foreground="Black" FontSize="20" Header="会员信息">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="35*"/>
-                    <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="35*"/>
+                    <ColumnDefinition Width="13*"/>
+                    <ColumnDefinition Width="38*"/>
+                    <ColumnDefinition Width="11*"/>
+                    <ColumnDefinition Width="18*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
+
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="手机号码：" Grid.Row="0"/>
-                <TextBlock Text="性别：" Grid.Row="3"/>
-                <TextBlock Text="储值余额：" Grid.Column="2" Grid.Row="2"/>
-                <!--<TextBlock Text="会员密码：" Grid.Row="3"/>-->
-                <TextBox x:Name="TexTelNum" Grid.Column="1" Grid.Row="0" Text="{Binding Model.TelNum}" GotFocus="TexTelNum_OnGotFocus" PreviewKeyDown="TexTelNum_OnPreviewKeyDown"/>
-                <TextBox x:Name="TexSex" Grid.Column="1" Grid.Row="3" Text="{Binding Model.Sex}" IsEnabled="False"/>
-                <TextBox x:Name="TexBalance" Grid.Column="3" Grid.Row="2" Text="{Binding Model.Balance}" IsEnabled="False"/>
-                <!--<TextBox x:Name="TexVipPsw" Grid.Column="1" Grid.Row="3" Text="{Binding Model.Psw}"/>-->
 
-                <TextBlock Text="姓名：" Grid.Row="1" Grid.Column="0"/>
-                <TextBlock Text="生日：" Grid.Row="2" Grid.Column="0"/>
-                <TextBlock Text="积分：" Grid.Row="1" Grid.Column="2"/>
-                <TextBlock Text="有实体卡,可刷卡登录" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left"/>
-                <TextBox x:Name="TexUserName" Grid.Column="1" Grid.Row="1" Text="{Binding Model.UserName}" IsEnabled="False"/>
-                <TextBox x:Name="TexBirthday" Grid.Column="1" Grid.Row="2" Text="{Binding Model.Birthday}" IsEnabled="False"/>
-                <TextBox x:Name="TexIntegral" Grid.Column="3" Grid.Row="1" Text="{Binding Model.Integral}" IsEnabled="False"/>
-                <TextBox x:Name="TexCardNum" Grid.Column="1" Grid.Row="1" Text="{Binding Model.CardNum}" GotFocus="TexCardNum_OnGotFocus" Visibility="Collapsed" IsEnabled="False"/>
-              
+                <TextBlock Text="卡号：" Grid.Row="1"/>
+                <TextBlock Text="手机号码：" Grid.Row="1" Grid.Column="2"/>
+                <TextBlock Text="姓名：" Grid.Row="1" Grid.Column="4" />
+                <TextBlock Text="会员卡等级：" Grid.Row="2" Grid.Column="0"/>
+                <TextBlock Text="生日：" Grid.Row="2" Grid.Column="2"/>
+                <TextBlock Text="性别：" Grid.Row="2" Grid.Column="4"/>
+                <TextBlock Text="余额：" Grid.Row="3" Grid.Column="0"/>
+                <TextBlock Text="积分：" Grid.Row="3" Grid.Column="2"/>
+                <TextBlock Text="卡状态：" Grid.Row="3" Grid.Column="4"/>
+
+                <newControl:CtEnterTextBox x:Name="TexSelectNum" Grid.Row="0" Grid.ColumnSpan="2" Margin="4,5,97,5" Text="{Binding Model.SelectNum,UpdateSourceTrigger=PropertyChanged}" EnterAction="{Binding TextEnterAction}"/>
+                <Button Style="{DynamicResource ColBtn}" Focusable="False" Height="30" Content="搜索" Command="{Binding SelectCardCommand}" Grid.Column="1" Margin="202,7,45,9" Grid.ColumnSpan="2"/>
+
+                <TextBox x:Name="TexCardNum"  Grid.Row="1" Grid.Column="1" Text="{Binding Model.CardNum}" IsEnabled="False"/>
+                <TextBox x:Name="TexTelNum" Grid.Row="1" Grid.Column="3" Text="{Binding Model.TelNum}" IsEnabled="False"></TextBox>
+                <TextBox x:Name="TexUserName" Grid.Row="1" Grid.Column="5" Text="{Binding Model.UserName}" IsEnabled="False"/>
+                
+                <TextBox x:Name="TexCardLevel" Grid.Row="2" Grid.Column="1" Text="{Binding Model.CardLevel}" IsEnabled="False"/>
+                <TextBox x:Name="TexBirthday" Grid.Row="2" Grid.Column="3" Text="{Binding Model.Birthday}" IsEnabled="False"/>
+                <TextBox x:Name="TexSex" Grid.Row="2" Grid.Column="5" Text="{Binding Model.Sex}" IsEnabled="False"/>
+                
+                <TextBox x:Name="TexBalance" Grid.Column="1" Grid.Row="3" Text="{Binding Model.Balance}" IsEnabled="False"/>
+                <TextBox x:Name="TexIntegral" Grid.Column="3" Grid.Row="3" Text="{Binding Model.Integral}" IsEnabled="False"/>
+                <TextBox x:Name="TexCardState" Grid.Column="5" Grid.Row="3" Text="{Binding Model.CardState}" IsEnabled="False"/>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="GbOperate" BorderBrush="#F0F0F0" Foreground="Black" FontSize="20" Header="操作" Grid.Row="1" >
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                <Grid IsEnabled="{Binding Model.IsOper}">
+                <Grid IsEnabled="{Binding IsOper}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Button Style="{DynamicResource ColBtn}" Width="220" Height="30" Content="绑定实体卡" Command="{Binding BindingCardCommand}"/>
-                        <TextBlock Text="可绑定IC卡、ID卡、磁条卡 " Margin="0,52,95,-8"/>
-                    </Grid>
-                    <Button Style="{DynamicResource ColBtn}" Content="修改消费密码" Width="220" Height="30" Grid.Row="1" Command="{Binding ModifyPswCommand}"/>
-                    <Button Style="{DynamicResource ColBtn}" Content="会员储值" Width="220" Height="30" Grid.Row="2" Command="{Binding StoredValueCommand}"/>
-                    <Button Style="{DynamicResource ColBtn}" Content="会员注销" Width="220" Height="30" Grid.Row="3" Command="{Binding LogOffCommand}"/>
+                    <Button Style="{DynamicResource ColBtn}" Content="会员储值" Width="160" Height="30" Grid.Row="0" Grid.Column="0" Command="{Binding StoredValueCommand}"/>
+                    <Button Style="{DynamicResource ColBtn}" Content="修改基本信息" Width="160" Height="30" Grid.Row="1" Grid.Column="0" Command="{Binding ModifyInfoCommand}"/>
+                    <Button Style="{DynamicResource ColBtn}" Content="修改卡号" Width="160" Height="30" Grid.Row="2" Grid.Column="0" Command="{Binding ModifyCardNumCommand}"/>
+                    <Button Style="{DynamicResource ColBtn}" Content="会员挂失" Width="160" Height="30" Grid.Row="3" Grid.Column="0" Command="{Binding ReportLossCommand}" IsEnabled="False"/>
+
+                    <Button Style="{DynamicResource ColBtn}" Content="新增实体卡" Width="160" Height="30" Grid.Row="0" Grid.Column="1" Command="{Binding BindingCardCommand}"/>
+                    <Button Style="{DynamicResource ColBtn}" Content="修改消费密码" Width="160" Height="30" Grid.Row="1" Grid.Column="1" Command="{Binding ModifyPswCommand}"/>
+                    <Button Style="{DynamicResource ColBtn}" Content="修改手机号码" Width="160" Height="30" Grid.Row="2" Grid.Column="1" Command="{Binding ModifyTelNumCommand}"/>
+                    <Button Style="{DynamicResource ColBtn}" Content="会员注销" Width="160" Height="30" Grid.Row="3" Grid.Column="1" Command="{Binding LogOffCommand}"/>
                 </Grid>
+                
                 <cSystem:CtlDigitalKeyboard x:Name="Keyboard" Grid.Column="1"  Height="250" VerticalAlignment="Top" Width="310" />
             </Grid>
         </GroupBox>

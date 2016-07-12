@@ -5,6 +5,7 @@ using Models;
 using Models.CandaoMember;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using CanDaoCD.Pos.Common.Models.VipModels;
 
 namespace WebServiceReference
 {
@@ -1238,5 +1239,157 @@ namespace WebServiceReference
                 return ret;
             }
         }
+
+        /// <summary>
+        /// 会员查询(新)
+        /// </summary>
+        /// <param name="branch_id">门店ID</param>
+        /// <param name="securitycode"></param>
+        /// <param name="selectNum">手机或会员卡号</param>
+        /// <returns></returns>
+        public static MVipInfo VipQuery(string branch_id, string securitycode, string selectNum)
+        {
+            var info = new MVipInfo();
+            try
+            {
+
+                string address = String.Format("http://{0}/member/rest/memberCardService/getCardNoByMobile",
+                    WebServiceReference.Candaomemberserver);
+                StringWriter sw = new StringWriter();
+                JsonWriter writer = new JsonTextWriter(sw);
+                writer.WriteStartObject();
+                writer.WritePropertyName("branch_id");
+                writer.WriteValue(branch_id);
+                writer.WritePropertyName("securityCode");
+                writer.WriteValue(securitycode);
+                writer.WritePropertyName("cardno");
+                writer.WriteValue(selectNum);
+                writer.WriteEndObject();
+                writer.Flush();
+                AllLog.Instance.I(string.Format("【VipQuery】{0}-{1}", branch_id, selectNum));
+                String jsonResult = RestClient.Post_Rest(address, sw);
+                AllLog.Instance.I(string.Format("【VipQuery】 result：{0}。", jsonResult));
+
+                if (jsonResult.Equals("0"))
+                {
+                    info.Result = false;
+                    info.ResultInfo = "会员服务器连接异常，请联系管理员！";
+                    return info;
+                }
+
+                JObject ja = null;
+                info.Result = true;
+
+                ja = (JObject) JsonConvert.DeserializeObject(jsonResult);
+
+                var retcode = ja["retcode"].ToString();
+                var retInfo = ja["retInfo"].ToString();
+
+                if (retcode.Equals("1"))
+                {
+                    info.Result = false;
+                    info.ResultInfo = retInfo;
+                    return info;
+                }
+                else
+                {
+                    info.VipName = ja["name"].ToString();
+                    info.Sex = (int) ja["gender"];
+                    info.Birthday = ja["birthday"].ToString();
+                    info.Address = ja["member_address"].ToString();
+                    info.Creattime = ja["createtime"].ToString();
+                    info.TelNum = ja["mobile"].ToString();
+
+                    var cardList = ja["result"].ToString();
+                    JArray cardArray = (JArray) JsonConvert.DeserializeObject(cardList);
+                    foreach (var card in cardArray)
+                    {
+                        var cInfo = new MVipCardInfo();
+                        cInfo.CardNum = card["MCard"].ToString();
+                        cInfo.Balance = (float) card["StoreCardBalance"];
+                        cInfo.Integral = (float) card["IntegralOverall"];
+                        cInfo.CouponBalance = (float) card["CouponsOverall"];
+                        cInfo.TraceCode = card["TraceCode"].ToString();
+                        cInfo.CardType = (int) card["card_type"];
+                        cInfo.CardLevel = (int) card["level"];
+                        cInfo.CardLevelName = card["level"].ToString();
+                        cInfo.CardState = int.Parse(card["status"].ToString());
+                        info.CardInfos.Add(cInfo);
+                    }
+                    return info;
+                }
+            }
+            catch (Exception ex)
+            {
+                info.Result = false;
+                info.ResultInfo = ex.Message;
+                return info;
+            }
+        }
+
+        /// <summary>
+        /// 修改会员基本信息
+        /// </summary>
+        /// <param name="changeInfo"></param>
+        /// <returns></returns>
+        public static TCandaoRetBase VipChangeInfo(string branch_id, MVipChangeInfo changeInfo)
+        {
+            TCandaoRetBase ret = new TCandaoRetBase();
+            try
+            {
+                ret.Ret = true;
+                string address = String.Format("http://{0}/member/rest/memberService/memberEditService",
+                    WebServiceReference.Candaomemberserver);
+                StringWriter sw = new StringWriter();
+                JsonWriter writer = new JsonTextWriter(sw);
+                writer.WriteStartObject();
+                writer.WritePropertyName("branch_id");
+                writer.WriteValue(branch_id);
+                writer.WritePropertyName("securitycode");
+                writer.WriteValue("");
+                writer.WritePropertyName("mobile");
+                writer.WriteValue(changeInfo.TelNum);
+                writer.WritePropertyName("cardno");
+                writer.WriteValue(changeInfo.CardNum);
+                writer.WritePropertyName("password");
+                writer.WriteValue(changeInfo.Password);
+                writer.WritePropertyName("name");
+                writer.WriteValue(changeInfo.VipName);
+                writer.WritePropertyName("gender");
+                writer.WriteValue(changeInfo.Sex);
+                writer.WritePropertyName("birthday");
+                writer.WriteValue(changeInfo.Birthday);
+                writer.WritePropertyName("member_address");
+                writer.WriteValue(changeInfo.Address);
+                writer.WriteEndObject();
+                writer.Flush();
+                AllLog.Instance.I(string.Format("【VipChangeInfo】{0}-{1}-{2}。", branch_id,changeInfo.CardNum,changeInfo.TelNum));
+                String jsonResult = RestClient.Post_Rest(address, sw);
+                AllLog.Instance.I(string.Format("【VipChangeInfo】 result：{0}。", jsonResult));
+
+                if (jsonResult.Equals("0"))
+                {
+                    ret.Ret = false;
+                    ret.Retinfo = "会员服务器连接异常，请联系管理员！";
+                    return ret;
+                }
+
+                JObject ja = null;
+                ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+
+                ret.Retcode = ja["retcode"].ToString();
+                ret.Ret = ret.Retcode.Equals("0");
+                ret.Retinfo = ja["retinfo"].ToString();
+                return ret;
+            }
+            catch(Exception ex)
+            {
+                ret.Ret = false;
+                ret.Retinfo = ex.Message;
+                return ret;
+            }
+        }
+
+
     }
 }

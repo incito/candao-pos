@@ -50,7 +50,7 @@ namespace CanDaoCD.Pos.VIPManage.Operates
                 string.Format("会员查询错误：{0}", info.Retinfo), true);
 
                return false;
-               Model.IsOper = false;//禁用操作区域
+           
            }
        }
 
