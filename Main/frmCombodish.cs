@@ -333,7 +333,7 @@ namespace Main
             ret = RestClient.getMenuCombodish(dishinfo.Dishid, dishinfo.Menuid, out groupData);
             if (!ret)
             {
-                Warning("获取套餐信息失败!");
+                Warning("获取套餐信息失败，请重试。");
                 return false;
             }
             comboDish = TComboDish.parse(groupData);
