@@ -755,7 +755,7 @@ namespace Main
                 btnOrderML.Enabled = false;
                 btnCancelOrder.Enabled = false;
                 BtnBackAll.Enabled = false;
-                btnRBill.Enabled = true;
+                btnRBill.Enabled = _curTableInfo.TableType != EnumTableType.CFTable;//咖啡台不允许这里反结。
                 btnPrintMember1.Enabled = true;
                 btnPrintBill.Enabled = false;
                 btnOrder2.Enabled = false;
@@ -764,6 +764,8 @@ namespace Main
                 xtraTabControl1.Enabled = false;
                 xtraCoupon.Enabled = false;
                 btnClearnTable.Enabled = true;
+                btnAdd.Enabled = false;
+                btnDec.Enabled = false;
                 lblSum.Text = "已结算";
                 btnRePrint.Enabled = true;
             }
@@ -1090,6 +1092,24 @@ namespace Main
                         return;
                     }
                 }
+                if (amountjf > 0)
+                {
+                    if (membercard.Length <= 0)
+                    {
+                        Warning("请刷会员卡...");
+                        return;
+                    }
+                    if (amountjf > psIntegralOverall)
+                    {
+                        Warning("会员卡积分不足...");
+                        return;
+                    }
+                    if (amountjf > payamount)
+                    {
+                        Warning("会员卡使用积分不能大于应付额...");
+                        return;
+                    }
+                }
 
                 var invoiceAmount = (decimal)Globals.CurrTableInfo.amount;
                 string settleorderorderid = Globals.CurrOrderInfo.orderid;
@@ -1112,7 +1132,6 @@ namespace Main
                         {
                             float psccash = amountrmb + amountyhk + amountgz + amountzfb + amountwx;//现金 用于会员积分
                             float pscpoint = amountjf; //使用积分付款
-                            float pszStore = amounthyk;//使用储值余额付款
                             float tmppsccash = Math.Max(0, psccash - returnamount);
 
                             //使用优惠券
@@ -4141,6 +4160,8 @@ namespace Main
                 edtCard.Text = "";
                 edtPwd.Text = "";
                 //rgpType.SelectedIndex = 0;
+                btnFind.Tag = 0;
+                btnFind.Text = "登录";
                 edtGzAmount.Text = "";
                 edtGz.Text = "";
                 label15.Text = string.Format("储值余额：{0}", 0);
@@ -4718,7 +4739,7 @@ namespace Main
                         ordermemberinfo.Terminal = RestClient.getPosID();
                         ordermemberinfo.Serial = ret.Tracecode;
                         ordermemberinfo.Businessname = WebServiceReference.WebServiceReference.Report_title;
-                        ordermemberinfo.Score = (decimal)pszPoint;
+                        ordermemberinfo.Score = (ret.Addintegral - ret.Decintegral);
                         ordermemberinfo.Scorebalance = ret.Integraloverall;
                         ordermemberinfo.Couponsbalance = "0";
                         ordermemberinfo.Storedbalance = ret.Storecardbalance;
