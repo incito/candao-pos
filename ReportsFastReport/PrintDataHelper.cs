@@ -76,17 +76,18 @@ namespace ReportsFastReport
         /// <returns></returns>
         private static string GetDishNameWithUnit(string dishName, string dishUnit)
         {
-            if (!InternationaHelper.HasInternationaFlag(dishName))
+            if (!InternationaHelper.HasInternationaFlag(dishName) && !InternationaHelper.HasInternationaFlag(dishUnit))//当菜名和单位都不包含中英文的时候，直接处理。
                 return string.Format("{0}({1})", dishName, dishUnit);
 
             var names = InternationaHelper.SplitBySeparatorFlag(dishName);
             var units = InternationaHelper.SplitBySeparatorFlag(dishUnit);
 
             var result = string.Format("{0}({1})", names[0], units[0]);
-            if (names.Count > 1)
+            if (names.Count > 1 || units.Count > 1)
             {
-                var result2 = string.Format("{0}({1})", names[1], units.Count > 1 ? units[1] : units[0]);
-                result = string.Format("{0}\n{1}", result, result2);
+                var name = names.Count > 1 ? names[1] : "";
+                var unit = units.Count > 1 ? units[1] : units[0];
+                result += string.Format("\n{0}({1})", name, unit);
             }
             return result;
         }
