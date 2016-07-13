@@ -51,7 +51,6 @@ namespace ReportsFastReport
 
             var num = GetJObjectDecimal(dataJObj, "dishnum");
             var unit = GetJObjectString(dataJObj, "dishunit");
-            unit = InternationaHelper.ReplaceSeparatorFlag(unit, "\n");
             var dishName = GetJObjectString(dataJObj, "title");
             dishName = GetDishNameWithUnit(dishName, unit);
 
