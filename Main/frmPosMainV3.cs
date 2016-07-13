@@ -4244,7 +4244,7 @@ namespace Main
             }
 
             IniPos.setPosIniVlaue(Application.StartupPath, "ORDER", Globals.CurrTableInfo.tableNo, seqno_str);
-            Warning("下单完成");
+            Warning("下单成功。");
             return true;
         }
 
