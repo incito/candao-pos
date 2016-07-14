@@ -107,9 +107,7 @@
     <Compile Include="ViewModel\SetDishTasteAndDietWndVm.cs" />
     <Compile Include="ViewModel\TasteSetControlVm.cs" />
     <Compile Include="ViewModel\UcPrinterListViewModel.cs" />
-    <Compile Include="View\AllowMultSelectorControl.xaml.cs">
-      <DependentUpon>AllowMultSelectorControl.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="View\AllowMultSelectorControl.cs" />
     <Compile Include="View\BackDishReasonSelectWindow.xaml.cs">
       <DependentUpon>BackDishReasonSelectWindow.xaml</DependentUpon>
     </Compile>
@@ -156,9 +154,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\AllowMultSelectorControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\BackDishReasonSelectWindow.xaml">
       <SubType>Designer</SubType>

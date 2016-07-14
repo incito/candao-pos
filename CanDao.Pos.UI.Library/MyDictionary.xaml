@@ -2,15 +2,17 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converter="clr-namespace:CanDao.Pos.Common.Converter;assembly=CanDao.Pos.Common"
                     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-                    xmlns:cvt="clr-namespace:CanDao.Pos.UI.Library.Converter">
+                    xmlns:cvt="clr-namespace:CanDao.Pos.UI.Library.Converter"
+                    xmlns:view="clr-namespace:CanDao.Pos.UI.Library.View"
+                    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
     <converter:IndexCountConverter x:Key="IndexCountCvt"/>
     <cvt:PrinterStatusToColorConverter x:Key="PrinterStatus2ColorCvt"/>
-    
+
     <BitmapImage x:Key="AlertImgSource" UriSource="Images/Alert.png"/>
     <BitmapImage x:Key="ReduceImgSource" UriSource="Images/Reduce.png"/>
     <BitmapImage x:Key="SelectNumImgSource" UriSource="Images/SelectNum.png"/>
     <BitmapImage x:Key="AddImgSource" UriSource="Images/Add.png"/>
-    
+
     <Style TargetType="Button" x:Key="AddBtnStyle">
         <Setter Property="Width" Value="35"/>
         <Setter Property="Height" Value="35"/>
@@ -46,24 +48,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <Style TargetType="ToggleButton" x:Key="DietTogBtnStyle">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="Bd" Background="White" BorderBrush="Gray" BorderThickness="1.5">
-                        <ContentPresenter Content="{TemplateBinding Content}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="Gray"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
+
     <DataTemplate x:Key="RowIndexDataTemplate">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
             <TextBlock FontSize="10" Text="{Binding Path=RowHandle.Value, Converter={StaticResource IndexCountCvt}}" TextAlignment="Center" VerticalAlignment="Center" />
@@ -120,4 +105,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+
 </ResourceDictionary>

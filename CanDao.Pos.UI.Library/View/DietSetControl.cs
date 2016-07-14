@@ -11,10 +11,9 @@ namespace CanDao.Pos.UI.Library.View
 
         public DietSetControl()
         {
-            _allowMultSelectorCtrl = new AllowMultSelectorControl();
-            _allowMultSelectorCtrl.Title = "忌口";
+            _allowMultSelectorCtrl = new AllowMultSelectorControl { Title = "忌口" };
             if (Globals.DietSetting != null)
-                _allowMultSelectorCtrl.Source = Globals.DietSetting.Select(t => new AllowSelectInfo { Name = t }).ToList();
+                _allowMultSelectorCtrl.ItemsSource = Globals.DietSetting.Select(t => new AllowSelectInfo { Name = t }).ToList();
             Content = _allowMultSelectorCtrl;
         }
 
@@ -23,7 +22,7 @@ namespace CanDao.Pos.UI.Library.View
         /// </summary>
         public string Diet
         {
-            get { return _allowMultSelectorCtrl.SelectInfo; }
+            get { return _allowMultSelectorCtrl.SelectedInfo; }
         }
     }
 }

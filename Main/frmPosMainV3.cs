@@ -747,7 +747,6 @@ namespace Main
             //pnlCash.Enabled = true;
             //如果订单已结算就不能结算了
             pnlCash.Enabled = true;
-            btnClearnTable.Enabled = false;
             xtraTabControl1.Enabled = true;
             xtraCoupon.Enabled = true;
             if (CheckCallBill() && (!iswm))
@@ -763,7 +762,6 @@ namespace Main
                 lblAmount2.ForeColor = Color.Green;
                 xtraTabControl1.Enabled = false;
                 xtraCoupon.Enabled = false;
-                btnClearnTable.Enabled = true;
                 btnAdd.Enabled = false;
                 btnDec.Enabled = false;
                 lblSum.Text = "已结算";
