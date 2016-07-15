@@ -4441,8 +4441,7 @@ namespace Main
                 frmorder.MdiParent = this;
                 frmorder.Parent = pnlCash;
             }
-            frmorder.hideGz();
-            frmorder.iswm = iswm;
+            frmorder.IsWm = iswm;
             xtraTabControl1.SelectedTabPageIndex = 0;
             pnlCash.Enabled = true;
             BtnMark.Visible = true;

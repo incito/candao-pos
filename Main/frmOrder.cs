@@ -44,7 +44,7 @@ namespace Main
         /// </summary>
         public event Action PutOrderEvent;
         private ucDish selectbtn = null;
-        public bool iswm = true;
+        private bool _iswm = true;
         private string menuid = "";
         private int dishcount_type = 0;//分类中的菜品数量
         private int pagecount_type = 0;//一个分类中的菜品有多少页
@@ -54,6 +54,16 @@ namespace Main
         public frmOrder()
         {
             InitializeComponent();
+        }
+
+        public bool IsWm
+        {
+            get { return _iswm; }
+            set
+            {
+                _iswm = value;
+                btnGd.Visible = _iswm;
+            }
         }
 
         public void shoppingchange()
@@ -83,7 +93,6 @@ namespace Main
         public void ShowbtnOrderText()
         {
             btnOrder.Text = Globals.ShoppTable.Rows.Count <= 0 ? "        结帐" : "        下单";
-            btnGd.Enabled = Globals.ShoppTable.Rows.Count > 0;//不允许挂空订单。
             showTypeNum();
             CheckBtnRemarkOrderStatus();
         }
@@ -317,7 +326,7 @@ namespace Main
                     return;
                 }
 
-                if (iswm)
+                if (_iswm)
                 {
                     var result = bookorder();
                     if (!string.IsNullOrEmpty(result))
@@ -952,7 +961,7 @@ namespace Main
                 return;
             }
 
-            if (!bookOrder())
+            if (Globals.ShoppTable.Rows.Count > 0 && !bookOrder())
             {
                 return;
             }
