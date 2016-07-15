@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -51,18 +50,14 @@ namespace CanDao.Pos.UI.Library.View
             ctrl.NullText = string.Format("其他{0}", ctrl.Title);
         }
 
-
         public string NullText
         {
             get { return (string)GetValue(NullTextProperty); }
             set { SetValue(NullTextProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for NullText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NullTextProperty =
             DependencyProperty.Register("NullText", typeof(string), typeof(AllowMultSelectorControl), new PropertyMetadata(""));
-
-
 
         /// <summary>
         /// 分隔符。
@@ -85,7 +80,6 @@ namespace CanDao.Pos.UI.Library.View
             set { SetValue(OtherInfoProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for OtherInfo.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OtherInfoProperty =
             DependencyProperty.Register("OtherInfo", typeof(string), typeof(AllowMultSelectorControl), new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnOtherInfoChanged, null, false, UpdateSourceTrigger.PropertyChanged));
 
