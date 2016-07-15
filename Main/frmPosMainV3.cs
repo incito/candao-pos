@@ -3352,9 +3352,9 @@ namespace Main
 
                 if (isOpenCash)
                 {
-                    RestClient.OpenCash(); 
+                    RestClient.OpenCash();
                 }
-            
+
             }
             finally
             {
@@ -4018,9 +4018,12 @@ namespace Main
                     return;
             }
 
-            string discardUserId;
-            if (!frmAuthorize.ShowAuthorize("退菜权限验证", Globals.UserInfo.UserID, "030102", out discardUserId))
-                return;
+            string discardUserId = "";
+            if (!iswm && !isNewWm)//外卖且是新外卖时退菜不用输入权限。
+            {
+                if (!frmAuthorize.ShowAuthorize("退菜权限验证", Globals.UserInfo.UserID, "030102", out discardUserId))
+                    return;
+            }
 
             //调用退菜接口
             double backnum = num;
@@ -4689,7 +4692,7 @@ namespace Main
         }
         public bool MemberSale(string aUserid, string orderid, string pszInput, string pszSerial, float pszCash, float pszPoint, int psTransType, float pszStore, string pszTicketList, string pszPwd, float memberyhqamount)
         {
-           
+
             PrintService.CardCheck();//判断复写卡是否在位
 
 
@@ -4788,9 +4791,9 @@ namespace Main
                         ordermemberinfo.Coupons = 0;
                         ordermemberinfo.Stored = (decimal)amounthyk;
 
-                      
+
                         CanDaoMemberClient.AddOrderMember(ordermemberinfo);
-                      
+
                     }
                     return true;
                 }
