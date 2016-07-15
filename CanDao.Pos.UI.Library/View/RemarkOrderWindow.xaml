@@ -10,6 +10,6 @@
     <dxlc:LayoutControl Orientation="Vertical">
         <view:DietSetControl x:Name="DietSetCtrl"/>
 
-        <view1:WindowButtonOperControl HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+        <view1:WindowButtonOperControl HorizontalAlignment="Center" VerticalAlignment="Bottom" />
     </dxlc:LayoutControl>
 </dx:DXWindow>

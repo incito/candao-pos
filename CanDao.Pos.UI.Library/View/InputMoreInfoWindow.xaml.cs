@@ -25,6 +25,8 @@ namespace CanDao.Pos.UI.Library.View
         private void InputMoreInfoWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             TbMoreInfo.Focus();
+            if (!string.IsNullOrEmpty(TbMoreInfo.Text))
+                TbMoreInfo.CaretIndex = TbMoreInfo.Text.Length;
         }
     }
 }

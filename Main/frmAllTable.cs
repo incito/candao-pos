@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Media;
 using CanDaoCD.Pos.SystemConfig.Views;
+using CanDao.Pos.UI.Library.View;
 using CanDaoCD.Pos.Common.Operates;
 using Common;
 using KYPOS;
@@ -31,7 +32,7 @@ namespace Main
         private List<UcTable> _tableControls;        /// <summary>
         /// 列个数。
         /// </summary>
-        private const int Columncount = 8;
+        private const int Columncount = 7;
         /// <summary>
         /// 行个数。
         /// </summary>
@@ -44,8 +45,8 @@ namespace Main
         /// 当前餐台页数。
         /// </summary>
         private int curTablePage = 1;
-        private int btnWidth = 115;
-        private int btnHeight = 78;
+        private int btnWidth = 122;
+        private int btnHeight = 84;
         private int btnSpace = 9;
 
         private bool _isForcedEndWorkModel;//是否是强制结业模式。
@@ -169,13 +170,11 @@ namespace Main
                 }
             }
             var tableInfo = ((UcTable)sender).TableInfo;
-            string tableno = tableInfo.TableNo;
             try
             {
                 this.Cursor = Cursors.WaitCursor;
                 timer2.Enabled = false;
-                //frmPosMain.ShowPosMain(tableno, uctable.status);
-                frmpos.ShowFrm(tableno, (int)tableInfo.TableStatus);
+                frmpos.ShowFrm(tableInfo, (int)tableInfo.TableStatus);
 
                 if (_isForcedEndWorkModel)//如果已经是强制结业模式，就继续设定成强制结业（结算是在另外的弹出窗口）
                     SetInForcedEndWorkModel();
@@ -199,14 +198,20 @@ namespace Main
                 this.Update();//必须
 
                 IRestaurantService service = new RestaurantServiceImpl();
-                var result = service.GetAllTableInfoes();
+                var request = new List<EnumTableType>
+                {
+                    EnumTableType.Room,
+                    EnumTableType.Outside,
+                    EnumTableType.CFTable
+                };
+                var result = service.GetTableInfoByType(request);
                 if (!string.IsNullOrEmpty(result.Item1))
                 {
                     Warning(result.Item1);
                     return;
                 }
 
-                TableInfos = result.Item2.Where(t => t.TableType != EnumTableType.Takeout).ToList();//不显示外卖台。
+                TableInfos = result.Item2;
                 totalTablePageCount = (TableInfos.Count + Columncount * RowCount - 1) / (Columncount * RowCount);
                 panelPage.Visible = totalTablePageCount > 1;
                 UpdatePageButtonEnableStatus();
@@ -258,15 +263,17 @@ namespace Main
                     var table = new UcTable(tableInfo)
                     {
                         Parent = pnlMain,
-                        Width = btnWidth,
-                        Height = btnHeight,
-                        Left = colindex * btnWidth + btnSpace + (colindex * btnSpace),
-                        Top = btnHeight * rowindex + 75 + btnSpace + (rowindex * btnSpace),
+
                     };
+                    table.Left = colindex * table.Width + btnSpace + (colindex * btnSpace);
+                    table.Top = table.Height * rowindex + 75 + btnSpace + (rowindex * btnSpace);
+
                     table.Click += ucTable1_Click;
                     _tableControls.Add(table);
-                    if (_isForcedEndWorkModel)//如果是强制结业模式，则只允许操作就餐餐台。
+                    if (_isForcedEndWorkModel || table.TableInfo.TableType == EnumTableType.CFTable)//如果是强制结业模式，则只允许操作就餐餐台。咖啡台不允许直接开台，只允许PAD开台后POS进行操作。
                         table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
+                    //if (_isForcedEndWorkModel)//如果是强制结业模式，则只允许操作就餐餐台。咖啡台不允许直接开台，只允许PAD开台后POS进行操作。
+                    //    table.Enabled = tableInfo.TableStatus == EnumTableStatus.Dinner;
                     //frmProgress.frm.SetProgress("正在加载桌台资料..." + tableInfo.TableNo, TableInfos.Count, idx);
                     idx++;
                 }
@@ -400,12 +407,32 @@ namespace Main
                 Warning("您没有收银权限！");
                 return;
             }
-            string tableno = RestClient.getTakeOutTable();
+            timer2.Enabled = false;
+
+            //获取咖啡外卖台
+            var service = new RestaurantServiceImpl();
+            var result = service.GetTableInfoByType(new List<EnumTableType>() { EnumTableType.CFTakeout });//查询咖啡模式外卖台
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                Warning(result.Item1);
+                return;
+            }
+
+            var takeoutTableInfo = new TableInfo
+            {
+                TableNo = RestClient.getTakeOutTable(),//默认选中配置文件的外卖台。,
+                TableType = EnumTableType.Takeout,
+            };
+            if (result.Item2 != null && result.Item2.Any())
+            {
+                var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
+                if (selectTableWnd.ShowDialog() == true && selectTableWnd.SelectedTable != null)
+                    takeoutTableInfo = selectTableWnd.SelectedTable;
+            }
             try
             {
-                this.Cursor = Cursors.WaitCursor;
-                timer2.Enabled = false;
-                frmposwm.showFrmWm(tableno);
+                Cursor = Cursors.WaitCursor;
+                frmposwm.ShowFrmWm(takeoutTableInfo);
             }
             finally
             {

@@ -97,7 +97,6 @@
             this.num = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.yhamount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.pbxWm = new System.Windows.Forms.PictureBox();
             this.lblMember = new System.Windows.Forms.Label();
             this.lblZd = new System.Windows.Forms.Label();
             this.lblRs = new System.Windows.Forms.Label();
@@ -113,7 +112,10 @@
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.panel4 = new System.Windows.Forms.Panel();
             this.pnlCash = new System.Windows.Forms.Panel();
+            this.btnClearnTable = new System.Windows.Forms.Button();
             this.lblInvoice = new System.Windows.Forms.Label();
+            this.pnlSum = new System.Windows.Forms.Panel();
+            this.lblSum = new System.Windows.Forms.Label();
             this.xtraCoupon = new DevExpress.XtraTab.XtraTabControl();
             this.xtp1 = new DevExpress.XtraTab.XtraTabPage();
             this.pnlyh = new System.Windows.Forms.Panel();
@@ -164,8 +166,6 @@
             this.btn3 = new System.Windows.Forms.Button();
             this.button25 = new System.Windows.Forms.Button();
             this.button26 = new System.Windows.Forms.Button();
-            this.pnlSum = new System.Windows.Forms.Panel();
-            this.lblSum = new System.Windows.Forms.Label();
             this.pnlz = new System.Windows.Forms.Panel();
             this.btnPay2 = new System.Windows.Forms.Button();
             this.btnZ = new System.Windows.Forms.Button();
@@ -266,12 +266,12 @@
             this.pnlAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvjs)).BeginInit();
             this.panel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxWm)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtRoom.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppmRePrint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             this.panel4.SuspendLayout();
             this.pnlCash.SuspendLayout();
+            this.pnlSum.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraCoupon)).BeginInit();
             this.xtraCoupon.SuspendLayout();
             this.xtp1.SuspendLayout();
@@ -280,7 +280,6 @@
             this.xtraTabControl1.SuspendLayout();
             this.xtraTabPage1.SuspendLayout();
             this.pnlNum.SuspendLayout();
-            this.pnlSum.SuspendLayout();
             this.pnlz.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.edtReturn.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtAmount.Properties)).BeginInit();
@@ -1155,7 +1154,6 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.SkyBlue;
-            this.panel5.Controls.Add(this.pbxWm);
             this.panel5.Controls.Add(this.lblMember);
             this.panel5.Controls.Add(this.lblZd);
             this.panel5.Controls.Add(this.lblRs);
@@ -1165,17 +1163,6 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(334, 70);
             this.panel5.TabIndex = 23;
-            // 
-            // pbxWm
-            // 
-            this.pbxWm.Image = global::KYPOS.Properties.Resources.外带;
-            this.pbxWm.Location = new System.Drawing.Point(264, 0);
-            this.pbxWm.Name = "pbxWm";
-            this.pbxWm.Size = new System.Drawing.Size(68, 69);
-            this.pbxWm.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbxWm.TabIndex = 4;
-            this.pbxWm.TabStop = false;
-            this.pbxWm.Visible = false;
             // 
             // lblMember
             // 
@@ -1307,7 +1294,9 @@
             // pnlCash
             // 
             this.pnlCash.BackColor = System.Drawing.Color.White;
+            this.pnlCash.Controls.Add(this.btnClearnTable);
             this.pnlCash.Controls.Add(this.lblInvoice);
+            this.pnlCash.Controls.Add(this.pnlSum);
             this.pnlCash.Controls.Add(this.xtraCoupon);
             this.pnlCash.Controls.Add(this.xtraTabControl1);
             this.pnlCash.Controls.Add(this.label6);
@@ -1318,13 +1307,24 @@
             this.pnlCash.Size = new System.Drawing.Size(674, 627);
             this.pnlCash.TabIndex = 1;
             // 
+            // btnClearnTable
+            // 
+            this.btnClearnTable.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnClearnTable.Location = new System.Drawing.Point(573, 522);
+            this.btnClearnTable.Name = "btnClearnTable";
+            this.btnClearnTable.Size = new System.Drawing.Size(76, 65);
+            this.btnClearnTable.TabIndex = 281;
+            this.btnClearnTable.Text = "清台";
+            this.btnClearnTable.UseVisualStyleBackColor = true;
+            this.btnClearnTable.Click += new System.EventHandler(this.btnClearnTable_Click);
+            // 
             // lblInvoice
             // 
             this.lblInvoice.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblInvoice.ForeColor = System.Drawing.Color.SteelBlue;
-            this.lblInvoice.Location = new System.Drawing.Point(19, 594);
+            this.lblInvoice.Location = new System.Drawing.Point(6, 590);
             this.lblInvoice.Name = "lblInvoice";
-            this.lblInvoice.Size = new System.Drawing.Size(635, 27);
+            this.lblInvoice.Size = new System.Drawing.Size(648, 24);
             this.lblInvoice.TabIndex = 302;
             this.lblInvoice.Tag = "171";
             // 
@@ -1820,7 +1820,7 @@
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.PaintStyleName = "Flat";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(659, 383);
+            this.xtraTabControl1.Size = new System.Drawing.Size(655, 315);
             this.xtraTabControl1.TabIndex = 261;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -1846,7 +1846,6 @@
             this.xtraTabPage1.Appearance.PageClient.BackColor = System.Drawing.Color.White;
             this.xtraTabPage1.Appearance.PageClient.Options.UseBackColor = true;
             this.xtraTabPage1.Controls.Add(this.pnlNum);
-            this.xtraTabPage1.Controls.Add(this.pnlSum);
             this.xtraTabPage1.Controls.Add(this.pnlz);
             this.xtraTabPage1.Controls.Add(this.label11);
             this.xtraTabPage1.Controls.Add(this.label10);
@@ -1854,7 +1853,7 @@
             this.xtraTabPage1.Controls.Add(this.edtAmount);
             this.xtraTabPage1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Document, ((byte)(134)));
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(659, 350);
+            this.xtraTabPage1.Size = new System.Drawing.Size(655, 282);
             this.xtraTabPage1.Text = "现金支付";
             this.xtraTabPage1.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
             // 
@@ -2096,9 +2095,9 @@
             // 
             this.pnlSum.BackColor = System.Drawing.Color.Bisque;
             this.pnlSum.Controls.Add(this.lblSum);
-            this.pnlSum.Location = new System.Drawing.Point(9, 284);
+            this.pnlSum.Location = new System.Drawing.Point(3, 522);
             this.pnlSum.Name = "pnlSum";
-            this.pnlSum.Size = new System.Drawing.Size(634, 61);
+            this.pnlSum.Size = new System.Drawing.Size(564, 61);
             this.pnlSum.TabIndex = 279;
             // 
             // lblSum
@@ -2107,7 +2106,7 @@
             this.lblSum.Font = new System.Drawing.Font("宋体", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblSum.Location = new System.Drawing.Point(0, 0);
             this.lblSum.Name = "lblSum";
-            this.lblSum.Size = new System.Drawing.Size(634, 61);
+            this.lblSum.Size = new System.Drawing.Size(564, 61);
             this.lblSum.TabIndex = 279;
             this.lblSum.Text = "收款：";
             // 
@@ -2610,7 +2609,7 @@
             this.xtraTabPage2.Controls.Add(this.label8);
             this.xtraTabPage2.Controls.Add(this.textEdit1);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(659, 350);
+            this.xtraTabPage2.Size = new System.Drawing.Size(655, 282);
             this.xtraTabPage2.Text = "银行卡";
             this.xtraTabPage2.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
             // 
@@ -2754,7 +2753,7 @@
             this.xtraTabPage3.Controls.Add(this.label13);
             this.xtraTabPage3.Controls.Add(this.textEdit4);
             this.xtraTabPage3.Name = "xtraTabPage3";
-            this.xtraTabPage3.Size = new System.Drawing.Size(659, 350);
+            this.xtraTabPage3.Size = new System.Drawing.Size(655, 282);
             this.xtraTabPage3.Text = "会员卡";
             this.xtraTabPage3.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
             // 
@@ -2978,7 +2977,7 @@
             this.xtraTabPage4.Controls.Add(this.label3);
             this.xtraTabPage4.Controls.Add(this.edtGzAmount);
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(659, 350);
+            this.xtraTabPage4.Size = new System.Drawing.Size(655, 282);
             this.xtraTabPage4.Text = "挂帐支付";
             this.xtraTabPage4.Paint += new System.Windows.Forms.PaintEventHandler(this.xtraTabPage1_Paint);
             // 
@@ -3047,7 +3046,7 @@
             this.xtraTabPage8.Controls.Add(this.label7);
             this.xtraTabPage8.Controls.Add(this.edtZfb);
             this.xtraTabPage8.Name = "xtraTabPage8";
-            this.xtraTabPage8.Size = new System.Drawing.Size(659, 350);
+            this.xtraTabPage8.Size = new System.Drawing.Size(655, 282);
             this.xtraTabPage8.Text = "支付宝";
             // 
             // label4
@@ -3107,7 +3106,7 @@
             this.xtraTabPage9.Controls.Add(this.label22);
             this.xtraTabPage9.Controls.Add(this.edtWx);
             this.xtraTabPage9.Name = "xtraTabPage9";
-            this.xtraTabPage9.Size = new System.Drawing.Size(659, 350);
+            this.xtraTabPage9.Size = new System.Drawing.Size(655, 282);
             this.xtraTabPage9.Text = "微信支付";
             // 
             // label21
@@ -3244,7 +3243,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvjs)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxWm)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edtRoom.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ppmRePrint)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
@@ -3433,7 +3431,6 @@
         private System.Windows.Forms.Button btnDec;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnOrder;
-        private System.Windows.Forms.PictureBox pbxWm;
         private DevExpress.XtraTab.XtraTabControl xtraCoupon;
         private DevExpress.XtraTab.XtraTabPage xtp1;
         private System.Windows.Forms.Panel pnlyh;
@@ -3515,5 +3512,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn amount;
         private System.Windows.Forms.DataGridViewTextBoxColumn dishstatus;
         private System.Windows.Forms.Button BtnBackAll;
+        private System.Windows.Forms.Button btnClearnTable;
     }
 }

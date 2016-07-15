@@ -82,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="WebServiceReference.dll.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

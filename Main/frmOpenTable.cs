@@ -101,7 +101,7 @@ namespace Main
 
         private void edtRoom_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if(e.KeyChar==13)
+            if (e.KeyChar == 13)
             {
                 button2_Click(button2, e);
             }
@@ -113,7 +113,7 @@ namespace Main
             edtUserid.Focus();
             if (Globals.cjSetting.Status == null)
                 Globals.cjSetting.Status = "0";
-            if(Globals.cjSetting.Status.Equals("1"))
+            if (Globals.cjSetting.Status.Equals("1"))
             {
                 lblcj.Visible = true;
                 edtCj.Visible = true;
@@ -135,14 +135,14 @@ namespace Main
 
         private void button27_Click(object sender, EventArgs e)
         {
-            if(edtUserid.Text.ToString().Length<=0)
+            if (edtUserid.Text.ToString().Length <= 0)
             {
                 Warning("请输入服务员编号...");
                 edtUserid.Focus();
                 edtUserid.SelectAll();
                 return;
             }
-            if(edtRoom.Text.ToString().Length<=0)
+            if (edtRoom.Text.ToString().Length <= 0)
             {
                 Warning("请输入台号...");
                 edtRoom.Focus();
@@ -151,16 +151,16 @@ namespace Main
             }
             int manNum = strtointdef0(edtmanNum.Text);
             int womanNum = strtointdef0(edtwomanNum.Text);
-            if((manNum+womanNum)<=0)
+            if ((manNum + womanNum) <= 0)
             {
                 Warning("请输入正确的就餐人数...");
                 edtwomanNum.Focus();
                 edtRoom.SelectAll();
                 return;
             }
-            if(strtointdef0(edtCj.Text)>0)
+            if (strtointdef0(edtCj.Text) > 0)
             {
-                if (strtointdef0(edtCj.Text)>1000)
+                if (strtointdef0(edtCj.Text) > 1000)
                 {
                     Warning("请输入正确的餐具数量...");
                     edtCj.Focus();
@@ -183,19 +183,21 @@ namespace Main
             if (bthCheck1.Checked)
                 ageperiod = "1";
             if (bthCheck2.Checked)
-                ageperiod = ageperiod+"2";
+                ageperiod = ageperiod + "2";
             if (bthCheck3.Checked)
                 ageperiod = ageperiod + "3";
             if (bthCheck4.Checked)
                 ageperiod = ageperiod + "4";
-            if (!RestClient.setorder(edtRoom.Text.ToString(), edtUserid.Text, manNum, womanNum, ageperiod, ref orderid))
+            var openTableResult = RestClient.setorder(edtRoom.Text, edtUserid.Text, ref orderid, manNum, womanNum, ageperiod);
+            if (!string.IsNullOrEmpty(openTableResult))
             {
-                Warning("开台失败,1！");
+                Warning(openTableResult);
                 return;
             }
+
             Globals.CurrOrderInfo.orderid = orderid;
             Globals.CurrOrderInfo.userid = edtUserid.Text;
-            IniPos.setPosIniVlaue(Application.StartupPath, "ORDERCJ", orderid,edtCj.Text);
+            IniPos.setPosIniVlaue(Application.StartupPath, "ORDERCJ", orderid, edtCj.Text);
             openRm(sender, e);
             Close();
             //开台成功

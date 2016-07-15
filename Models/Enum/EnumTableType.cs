@@ -14,8 +14,16 @@
         /// </summary>
         Room = 1,
         /// <summary>
-        /// 外卖。
+        /// 外卖台。
         /// </summary>
-        Takeout,
+        Takeout = 2,
+        /// <summary>
+        /// 咖啡模式外卖台。
+        /// </summary>
+        CFTakeout = 3,
+        /// <summary>
+        /// 咖啡模式餐台。
+        /// </summary>
+        CFTable = 4,
     }
 }

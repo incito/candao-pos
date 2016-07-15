@@ -16,7 +16,7 @@ namespace CanDao.Pos.UI.Library.View
             InitializeComponent();
             DataContext = new NormalWindowViewModel { OwnerWindow = this };
             if (RestClient.BackDishReasonList != null)
-                SelectorCtrl.Source = RestClient.BackDishReasonList.Select(t => new AllowSelectInfo { Name = t }).ToList();
+                SelectorCtrl.ItemsSource = RestClient.BackDishReasonList.Select(t => new AllowSelectInfo { Name = t }).ToList();
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace CanDao.Pos.UI.Library.View
         /// </summary>
         public string SelectedReason
         {
-            get { return SelectorCtrl.SelectInfo; }
+            get { return SelectorCtrl.SelectedInfo; }
         }
     }
 }

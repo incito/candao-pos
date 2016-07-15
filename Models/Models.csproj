@@ -87,6 +87,7 @@
     <Compile Include="Enum\EnumDishSalePeriodsType.cs" />
     <Compile Include="Enum\EnumOddAccuracy.cs" />
     <Compile Include="Enum\EnumOddModel.cs" />
+    <Compile Include="Enum\EnumOpenTableResult.cs" />
     <Compile Include="Enum\EnumPrintStatus.cs" />
     <Compile Include="Enum\EnumRightType.cs" />
     <Compile Include="Enum\EnumSystemDataType.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Request\BillingTipRequest.cs" />
     <Compile Include="Request\GetDishSaleRequest.cs" />
     <Compile Include="Request\GetSystemSetDataRequest.cs" />
+    <Compile Include="Request\GetTableByTypeRequest.cs" />
     <Compile Include="Request\SetCouponFavorRequest.cs" />
     <Compile Include="Response\AuthorizeLoginResponse.cs" />
     <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />

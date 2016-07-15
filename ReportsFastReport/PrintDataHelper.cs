@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using Common;
 using Models;
@@ -50,9 +51,8 @@ namespace ReportsFastReport
 
             var num = GetJObjectDecimal(dataJObj, "dishnum");
             var unit = GetJObjectString(dataJObj, "dishunit");
-            unit = InternationaHelper.FilterSeparatorFlag(unit);
             var dishName = GetJObjectString(dataJObj, "title");
-            dishName = InternationaHelper.FilterSeparatorFlag(dishName);
+            dishName = GetDishNameWithUnit(dishName, unit);
 
             var priceType = Convert.ToInt32(dataJObj["pricetype"]);
             if (priceType == 1) //1是赠菜。
@@ -62,10 +62,34 @@ namespace ReportsFastReport
             {
                 DishName = dishName,
                 Amount = GetJObjectDecimal(dataJObj, "amount"),
-                DishNumUnit = string.Format("{0}{1}", num, unit),
+                DishNumUnit = num.ToString(CultureInfo.InvariantCulture),
                 DishPrice = GetJObjectDecimal(dataJObj, "orderprice")
             };
             return item;
+        }
+
+        /// <summary>
+        /// 组合菜品和单位。
+        /// </summary>
+        /// <param name="dishName">菜名。</param>
+        /// <param name="dishUnit">菜单位。</param>
+        /// <returns></returns>
+        private static string GetDishNameWithUnit(string dishName, string dishUnit)
+        {
+            if (!InternationaHelper.HasInternationaFlag(dishName) && !InternationaHelper.HasInternationaFlag(dishUnit))//当菜名和单位都不包含中英文的时候，直接处理。
+                return string.Format("{0}({1})", dishName, dishUnit);
+
+            var names = InternationaHelper.SplitBySeparatorFlag(dishName);
+            var units = InternationaHelper.SplitBySeparatorFlag(dishUnit);
+
+            var result = string.Format("{0}({1})", names[0], units[0]);
+            if (names.Count > 1 || units.Count > 1)
+            {
+                var name = names.Count > 1 ? names[1] : "";
+                var unit = units.Count > 1 ? units[1] : units[0];
+                result += string.Format("\n{0}({1})", name, unit);
+            }
+            return result;
         }
 
         private static string GetJObjectString(JObject jObj, string key, string defaultValue = "")

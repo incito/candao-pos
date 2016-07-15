@@ -1,23 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using Library;
-using Common;
-using System.IO;
 using System.Linq;
-using System.Threading;
-using Models;
-using WebServiceReference;
-using ReportsFastReport;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using CanDao.Pos.UI.Library.View;
+using Common;
 using KYPOS.Dishes;
+using Library;
+using Library.UserControls;
+using Models;
+using Newtonsoft.Json.Linq;
+using WebServiceReference;
 
 namespace Main
 {
@@ -31,8 +25,8 @@ namespace Main
         private int downx = 0;
         private int downy = 0;
         private DataView dv = null;
-        private Library.UserControls.ucDish[] btntables;
-        private Library.UserControls.ucDish[] btnTypetables;
+        private ucDish[] btntables;
+        private ucDish[] btnTypetables;
 
         private const int rowcount = 4;
         private int btnWidth = 126;
@@ -45,8 +39,12 @@ namespace Main
         public event ShoppingChange shoppingChange;
         public event Accounts accounts;
         public event Action OrderRemarkChanged;
-        private Library.UserControls.ucDish selectbtn = null;
-        private bool iswm = true;
+        /// <summary>
+        /// 挂单事件。
+        /// </summary>
+        public event Action PutOrderEvent;
+        private ucDish selectbtn = null;
+        public bool iswm = true;
         private string menuid = "";
         private int dishcount_type = 0;//分类中的菜品数量
         private int pagecount_type = 0;//一个分类中的菜品有多少页
@@ -65,7 +63,7 @@ namespace Main
                 showTypeNum();
             }
             catch { }
-            showbtnOrderText();
+            ShowbtnOrderText();
         }
 
         private void OnShoppingChange()
@@ -79,22 +77,13 @@ namespace Main
             if (shoppingChange != null)
                 shoppingChange(this, new EventArgs());
 
-            showbtnOrderText();
+            ShowbtnOrderText();
         }
 
-        public void showbtnOrderText()
+        public void ShowbtnOrderText()
         {
-            if (!iswm)
-            {
-                if (Globals.ShoppTable.Rows.Count <= 0)
-                {
-                    btnOrder.Text = "        结帐";
-                }
-                else
-                {
-                    btnOrder.Text = "        下单";
-                }
-            }
+            btnOrder.Text = Globals.ShoppTable.Rows.Count <= 0 ? "        结帐" : "        下单";
+            btnGd.Enabled = Globals.ShoppTable.Rows.Count > 0;//不允许挂空订单。
             showTypeNum();
             CheckBtnRemarkOrderStatus();
         }
@@ -109,12 +98,6 @@ namespace Main
         {
             edtPy.Focus();
 
-        }
-
-        private void button26_Click(object sender, EventArgs e)
-        {
-            SendKeys.Send(((Button)sender).Text);
-            SendKeys.Flush();
         }
 
         private void frmPettyCash_Load(object sender, EventArgs e)
@@ -270,34 +253,34 @@ namespace Main
         }
         private void setBtnFocus()
         {
-            Common.Globals.SetButton(button12);
-            Common.Globals.SetButton(button11);
-            Common.Globals.SetButton(button10);
-            Common.Globals.SetButton(button9);
-            Common.Globals.SetButton(button8);
-            Common.Globals.SetButton(button7);
-            Common.Globals.SetButton(button6);
-            Common.Globals.SetButton(button5);
-            Common.Globals.SetButton(button4);
-            Common.Globals.SetButton(button3);
-            Common.Globals.SetButton(button2);
-            Common.Globals.SetButton(button13);
-            Common.Globals.SetButton(button14);
-            Common.Globals.SetButton(button15);
-            Common.Globals.SetButton(button16);
-            Common.Globals.SetButton(button17);
-            Common.Globals.SetButton(button18);
-            Common.Globals.SetButton(button19);
-            Common.Globals.SetButton(button20);
-            Common.Globals.SetButton(button22);
-            Common.Globals.SetButton(button23);
-            Common.Globals.SetButton(button24);
-            Common.Globals.SetButton(button25);
-            Common.Globals.SetButton(button26);
-            Common.Globals.SetButton(btnOrder);
-            Common.Globals.SetButton(button28);
-            Common.Globals.SetButton(button29);
-            Common.Globals.SetButton(button30);
+            Globals.SetButton(button12);
+            Globals.SetButton(button11);
+            Globals.SetButton(button10);
+            Globals.SetButton(button9);
+            Globals.SetButton(button8);
+            Globals.SetButton(button7);
+            Globals.SetButton(button6);
+            Globals.SetButton(button5);
+            Globals.SetButton(button4);
+            Globals.SetButton(button3);
+            Globals.SetButton(button2);
+            Globals.SetButton(button13);
+            Globals.SetButton(button14);
+            Globals.SetButton(button15);
+            Globals.SetButton(button16);
+            Globals.SetButton(button17);
+            Globals.SetButton(button18);
+            Globals.SetButton(button19);
+            Globals.SetButton(button20);
+            Globals.SetButton(button22);
+            Globals.SetButton(button23);
+            Globals.SetButton(button24);
+            Globals.SetButton(button25);
+            Globals.SetButton(button26);
+            Globals.SetButton(btnOrder);
+            Globals.SetButton(button28);
+            Globals.SetButton(button29);
+            Globals.SetButton(button30);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -311,7 +294,9 @@ namespace Main
             }
             Globals.ShoppTable.Clear();
             showTypeNum();
-            showbtnOrderText();
+            ShowbtnOrderText();
+            //通知调用页更新页面
+            OnShoppingChange();
         }
 
         private void button27_Click(object sender, EventArgs e)
@@ -324,17 +309,27 @@ namespace Main
                     return;
                 }
             }
-            else
+
+            if (Globals.ShoppTable.Rows.Count > 0)
             {
-                if (Globals.ShoppTable.Rows.Count > 0)
+                if (!AskQuestion(Globals.CurrTableInfo.tableName + "确定下单吗?"))
                 {
-                    if (!AskQuestion(Globals.CurrTableInfo.tableName + "确定下单吗?"))
-                    {
-                        return;
-                    }
+                    return;
                 }
             }
-            ///转到结帐页 //如果是堂食，就是下单
+
+            if (iswm)
+            {
+                var result = bookorder();
+                if (!string.IsNullOrEmpty(result))
+                {
+                    Warning(result);
+                    return;
+                }
+                Warning("下单成功。");
+            }
+
+            //转到结帐页 //如果是堂食，就是下单
             OnAccounts(0);
         }
 
@@ -357,7 +352,7 @@ namespace Main
         }
         private void getTypeBtns()
         {
-            btnTypetables = new Library.UserControls.ucDish[10];
+            btnTypetables = new ucDish[10];
             btnTypetables[0] = btnType1;
             btnTypetables[1] = btnType2;
             btnTypetables[2] = btnType3;
@@ -384,8 +379,8 @@ namespace Main
                 btnTypetables[i].lbl2.MouseUp += ucTable1_MouseUp;
                 btnTypetables[i].lblNo.MouseLeave += ucTable1_MouseLeave;
                 btnTypetables[i].lbl2.MouseLeave += ucTable1_MouseLeave;
-                btnTypetables[i].lblNo.Font = new System.Drawing.Font("Tahoma", 13F);
-                btnTypetables[i].lbl2.Font = new System.Drawing.Font("Tahoma", 10F);
+                btnTypetables[i].lblNo.Font = new Font("Tahoma", 13F);
+                btnTypetables[i].lbl2.Font = new Font("Tahoma", 10F);
                 btnTypetables[i].lbl2.ForeColor = Color.Black;
                 btnTypetables[i].lblNo.TextAlign = ContentAlignment.TopLeft;
                 btnTypetables[i].lblNo.Height = 20;
@@ -617,7 +612,7 @@ namespace Main
         }
         private void CreateBtnArr()
         {
-            btntables = new Library.UserControls.ucDish[btncount];
+            btntables = new ucDish[btncount];
             JObject ja = null;
             string tableid = "";
             string tableName = "";
@@ -631,7 +626,7 @@ namespace Main
             int personnum = 0;
             for (int i = 0; i <= btntables.Length - 1; i++)
             {
-                btntables[i] = new Library.UserControls.ucDish();
+                btntables[i] = new ucDish();
                 btntables[i].lblNo.Click += new EventHandler(ucTable1_Click);
                 btntables[i].lbl2.Click += new EventHandler(ucTable1_Click);
                 //btntables[i].MouseDown += ucTable1_MouseDown;
@@ -651,7 +646,7 @@ namespace Main
                 tabletype = ja["dishtype"].ToString();
                 orderstatus = 0;// int.Parse(ja["status"].ToString());
                 btntables[i].lblNo.Text = tableNo;*/
-                btntables[i].lblNo.Font = new System.Drawing.Font("Tahoma", 12F);
+                btntables[i].lblNo.Font = new Font("Tahoma", 12F);
                 btntables[i].lbl2.Font = ucTable1.lbl2.Font;//; btntables[i].lblNo.Font;
                 btntables[i].lbl2.ForeColor = Color.Black;
                 btntables[i].lblNo.ForeColor = Color.White;
@@ -696,8 +691,8 @@ namespace Main
 
         private void ucTable1_Load(object sender, EventArgs e)
         {
-            ((Library.UserControls.ucDish)sender).lblNo.Click += new EventHandler(ucTable1_Click);
-            ((Library.UserControls.ucDish)sender).lbl2.Click += new EventHandler(ucTable1_Click);
+            ((ucDish)sender).lblNo.Click += new EventHandler(ucTable1_Click);
+            ((ucDish)sender).lbl2.Click += new EventHandler(ucTable1_Click);
         }
         private void addDish(JObject ja)
         {
@@ -726,7 +721,7 @@ namespace Main
             dishinfo.Memberprice = 0;
             dishinfo.Level = "0";
 
-             
+
             try
             {
                 dishinfo.Level = ja["level"].ToString();
@@ -833,7 +828,7 @@ namespace Main
                         }
                     }
                 }
-                else if(dishinfo.Title.Contains("临时菜"))
+                else if (dishinfo.Title.Contains("临时菜"))
                 {
                     dishinfo.Ordertype = 0;
                     dishinfo.Primarydishtype = 0;
@@ -881,10 +876,10 @@ namespace Main
             {
                 dishinfo.Title = string.Format("({0}){1}", customDishes.Model.DishesName, dishinfo.Title);
                 dishinfo.DishName = dishinfo.Title;
-                dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount)*float.Parse(customDishes.Model.Price);
+                dishinfo.Dishnum = float.Parse(customDishes.Model.DishesCount) * float.Parse(customDishes.Model.Price);
                 dishinfo.Taste = customDishes.Model.DishesName;
                 //dishinfo.Price = float.Parse(customDishes.Model.Price);
-                dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString())*dishinfo.Price;
+                dishinfo.Amount = decimal.Parse(dishinfo.Dishnum.ToString()) * dishinfo.Price;
 
                 dishinfo.Ordertype = 0;
                 dishinfo.Primarydishtype = 0;
@@ -936,73 +931,47 @@ namespace Main
 
         private void ucTable1_MouseDown(object sender, MouseEventArgs e)
         {
-            ((Library.UserControls.ucDish)((Label)sender).Parent).BorderStyle = BorderStyle.Fixed3D;
+            ((ucDish)((Label)sender).Parent).BorderStyle = BorderStyle.Fixed3D;
         }
 
         private void ucTable1_MouseUp(object sender, MouseEventArgs e)
         {
-            ((Library.UserControls.ucDish)((Label)sender).Parent).BorderStyle = BorderStyle.FixedSingle;
+            ((ucDish)((Label)sender).Parent).BorderStyle = BorderStyle.FixedSingle;
         }
 
         private void ucTable1_MouseLeave(object sender, EventArgs e)
         {
-            ((Library.UserControls.ucDish)((Label)sender).Parent).BorderStyle = BorderStyle.FixedSingle;
+            ((ucDish)((Label)sender).Parent).BorderStyle = BorderStyle.FixedSingle;
         }
 
         private void btnGd_Click(object sender, EventArgs e)
         {
-            if (Globals.ShoppTable.Rows.Count <= 0)
-                return;
             TGzInfo gzinfo = new TGzInfo();
             if (!frmWMInfo.ShowWMInfo(out gzinfo))
             {
                 return;
+            }
 
-                //if (!AskQuestion("确定要挂帐吗?"))
-                //{
-                //    return;
-                // }
-            }
-            //挂帐 开台/下单/（关台，不结账）
-            setOrder(gzinfo);
-            //保存挂帐人信息到数据库
-            string settleorderorderid = Globals.CurrOrderInfo.orderid;
-        }
-        private void setOrder(TGzInfo gzinfo)
-        {
-            //getTakeOutTable
-            string orderid = "";
-            if (!RestClient.setorder(Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, ref orderid))
-            {
-                Warning("开外卖台失败！");
-                return;
-            }
-            try
-            {
-                Thread.Sleep(1000);
-            }
-            catch { }
-            Globals.CurrOrderInfo.orderid = orderid;
-            Globals.CurrTableInfo.tableid = RestClient.getTakeOutTableID();
             if (!bookOrder())
             {
                 return;
             }
-            RestClient.putOrder(Globals.CurrTableInfo.tableNo, orderid, gzinfo);
+            RestClient.putOrder(Globals.CurrTableInfo.tableNo, Globals.CurrOrderInfo.orderid, gzinfo);
             Globals.ShoppTable.Clear();
             try
             {
-                RestClient.caleTableAmount(Globals.UserInfo.UserID, orderid);
+                RestClient.caleTableAmount(Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid);
             }
-            catch { }
-            Warning("挂单成功,单号：" + orderid);
-            //挂完单，把台关掉，再清掉购物车开新单
-            //
+            catch (Exception ex)
+            {
+                AllLog.Instance.E("挂单时计算实收异常。" + ex.Message);
+            }
+            Warning("挂单成功,单号：" + Globals.CurrOrderInfo.orderid);
+            OnPutOrderEvent();
         }
 
         private bool bookOrder()
         {
-            //下单
             var result = bookorder();
             if (!string.IsNullOrEmpty(result))
             {
@@ -1015,10 +984,7 @@ namespace Main
 
         private string bookorder()
         {
-            //下单
-            //public static String bookorder = HTTP + URL_HOST + "/newspicyway/padinterface/bookorder.json";
-        
-            return RestClient.bookorder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, 1, 0, Globals.OrderRemark);
+            return RestClient.BookOrder(Globals.ShoppTable, Globals.CurrTableInfo.tableNo, Globals.UserInfo.UserID, Globals.CurrOrderInfo.orderid, 1, 0, true, Globals.OrderRemark);
         }
 
         private void btnType1_Load(object sender, EventArgs e)
@@ -1027,7 +993,7 @@ namespace Main
         }
         private void btnType1_Click(object sender, EventArgs e)
         {
-            selectbtn = (Library.UserControls.ucDish)((Label)sender).Parent;
+            selectbtn = (ucDish)((Label)sender).Parent;
             selectSource = ((JObject)selectbtn.lbl2.Tag)["itemid"].ToString();
             setSelectTypeColor();
             pagecount_type = 0;
@@ -1063,8 +1029,7 @@ namespace Main
         }
         public void hideGz()
         {
-            ///堂食开台下单，如果有已点把按钮显示为下单
-            iswm = false;
+            //堂食开台下单，如果有已点把按钮显示为下单
             btnGd.Visible = false;
         }
         private void setSelectTypeColor()
@@ -1072,7 +1037,7 @@ namespace Main
 
             for (int i = 0; i <= btnTypetables.Length - 1; i++)
             {
-                btnTypetables[i].BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(150)))), ((int)(((byte)(128)))));
+                btnTypetables[i].BackColor = Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(150)))), ((int)(((byte)(128)))));
                 btnTypetables[i].ForeColor = Color.Black;
                 if (btnTypetables[i].Equals(selectbtn))
                 {
@@ -1223,6 +1188,15 @@ namespace Main
             Globals.OrderRemark = orderRemark;
             if (OrderRemarkChanged != null)
                 OrderRemarkChanged();
+        }
+
+        /// <summary>
+        /// 触发挂单事件。
+        /// </summary>
+        private void OnPutOrderEvent()
+        {
+            if (PutOrderEvent != null)
+                PutOrderEvent();
         }
     }
 }

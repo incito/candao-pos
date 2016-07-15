@@ -19,20 +19,26 @@ namespace Library.UserControls
             TableInfo = tableInfo;
             lbTableName.Text = tableInfo.TableNo;
             lbCusNum.Text = string.Format("{0}人桌", tableInfo.PeopleNumber);
+
             switch (tableInfo.TableStatus)
             {
                 case EnumTableStatus.Idle:
+                    PnlMain.BackColor = Color.White;
                     BackColor = Color.White;
                     plInfo.Visible = false;
                     break;
                 case EnumTableStatus.Dinner:
+                    PnlMain.BackColor = Color.LightSalmon;
                     BackColor = Color.LightSalmon;
                     plInfo.Visible = true;
                     UpdateTimeView();
                     lbAmount.Text = tableInfo.Amount.HasValue ? tableInfo.Amount.Value.ToString("F0") : "0";
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+            }
+            
+            if (tableInfo.TableType == EnumTableType.CFTable)
+            {
+                BackColor = Color.Blue;
             }
         }
 

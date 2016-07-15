@@ -12,13 +12,14 @@ using Common;
 using Models;
 using WebServiceReference;
 using System.Runtime.InteropServices;
+using Models.Enum;
 using ReportsFastReport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Main
 {
-    
+
     public partial class frmQueryBill : frmBase
     {
         [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -26,8 +27,8 @@ namespace Main
         private int downx = 0;
         private int downy = 0;
         private DataTable dtOrder = null;
-        private DataView dv=null;
-        private frmAllTable frmtable=null;
+        private DataView dv = null;
+        private frmAllTable frmtable = null;
 
         public static void ShowQueryBill(frmAllTable frmtable, bool isForcedEndWorkModel)
         {
@@ -107,7 +108,7 @@ namespace Main
         {
 
         }
-        public  void getAllBill()
+        public void getAllBill()
         {
             //
             JArray jrOrder = null;
@@ -215,8 +216,9 @@ namespace Main
                 {
                     dv.RowFilter = "orderid like '%" + tbxBill.Text + "%'";
                 }
-                
-            }catch
+
+            }
+            catch
             { }
         }
         private void edtTableNo_EditValueChanged(object sender, EventArgs e)
@@ -242,7 +244,7 @@ namespace Main
         {
             try
             {
-                if(dgvBill.RowCount<=0)
+                if (dgvBill.RowCount <= 0)
                 {
                     return;
                 }
@@ -272,7 +274,7 @@ namespace Main
 
         private void btnRePrintClear_Click(object sender, EventArgs e)
         {
-           //
+            //
             ReportPrint.PrintClearMachine();
         }
 
@@ -305,8 +307,11 @@ namespace Main
                     string errStr = "";
                     if (RestClient.rebackorder(Globals.UserInfo.UserID, orderid, ref errStr))
                     {
-                        //frmPosMain.ShowPosMain(errStr, 9);
-                        frmtable.frmpos.ShowFrm(errStr, 9);
+                        DataRow dr = (dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
+                        var tableType = (EnumTableType)Convert.ToInt32(dr["tabletype"]);
+                        var tableName = dr["tablename"].ToString();
+                        var tableInfo = new TableInfo(tableName, tableType, orderid);
+                        frmtable.frmpos.ShowFrm(tableInfo, 9);
                     }
                     else
                     {
@@ -356,8 +361,11 @@ namespace Main
                     string errStr = "";
                     if (RestClient.accountsorder(Globals.UserInfo.UserID, orderid, ref errStr))
                     {
-                        //frmPosMain.ShowPosMain(errStr, 9);
-                        frmtable.frmpos.ShowFrm(errStr, 8);
+                        DataRow dr = (dgvBill.SelectedRows[0].DataBoundItem as DataRowView).Row;
+                        var tableType = (EnumTableType)Convert.ToInt32(dr["tabletype"]);
+                        var tableName = dr["tablename"].ToString();
+                        var tableInfo = new TableInfo(tableName, tableType, orderid);
+                        frmtable.frmpos.ShowFrm(tableInfo, 8);
                     }
                     else
                     {
@@ -389,7 +397,7 @@ namespace Main
 
         private void btnCheck1_Click(object sender, EventArgs e)
         {
-            string tag=((DevExpress.XtraEditors.CheckButton)sender).Tag.ToString();
+            string tag = ((DevExpress.XtraEditors.CheckButton)sender).Tag.ToString();
             string filter = "";
             try
             {
@@ -417,8 +425,8 @@ namespace Main
             }
             finally
             {
-                if (dgvBill.RowCount>0)
-                  dgvBill.Rows[dgvBill.RowCount-1].Selected = true; 
+                if (dgvBill.RowCount > 0)
+                    dgvBill.Rows[dgvBill.RowCount - 1].Selected = true;
                 dv = null;
                 dv = new DataView(dtOrder);
                 dv.RowFilter = filter;
