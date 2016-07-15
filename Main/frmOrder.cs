@@ -316,17 +316,17 @@ namespace Main
                 {
                     return;
                 }
-            }
 
-            if (iswm)
-            {
-                var result = bookorder();
-                if (!string.IsNullOrEmpty(result))
+                if (iswm)
                 {
-                    Warning(result);
-                    return;
+                    var result = bookorder();
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        Warning(result);
+                        return;
+                    }
+                    Warning("下单成功。");
                 }
-                Warning("下单成功。");
             }
 
             //转到结帐页 //如果是堂食，就是下单
