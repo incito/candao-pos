@@ -24,6 +24,12 @@ namespace CanDaoCD.Pos.VIPManage.Views
         public UcVipSelectView()
         {
             InitializeComponent();
+            this.Loaded += UcVipSelectView_Loaded;
+           
+        }
+
+        void UcVipSelectView_Loaded(object sender, RoutedEventArgs e)
+        {
             TexSelectNum.Focus();
         }
     }

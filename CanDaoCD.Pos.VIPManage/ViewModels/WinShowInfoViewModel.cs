@@ -21,7 +21,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
 
         #region 属性
         /// <summary>
-        /// 内部虚拟Id
+        /// 绑定卡手机号
         /// </summary>
         public string InsideId
         {
@@ -65,21 +65,20 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         {
             if (!string.IsNullOrEmpty(_insideId))
             {
-                TCandaoRetBase ret2 = CanDaoMemberClient.VipChangeCard(Globals.branch_id, Model.CardNum, _insideId);
+                TCandaoRetBase ret2 = CanDaoMemberClient.VipInsertCard(Globals.branch_id, Model.CardNum, _insideId);
                 if (!ret2.Ret)
                 {
-                    Model.ShowInfo = string.Format("会员卡绑定失败：{0}", ret2.Retinfo);
+                    Model.ShowInfo = string.Format("新增实体卡失败：{0}", ret2.Retinfo);
                     return;
                 }
                 else
                 {
-                    OWindowManage.ShowMessageWindow("会员卡绑定成功！", false);
+                    OWindowManage.ShowMessageWindow("新增实体卡成功！", false);
                 }
             }
-            else if(!string.IsNullOrEmpty(VipChangeInfo.TelNum))
+            else if(!string.IsNullOrEmpty(VipChangeInfo.CardNum))
             {
-                VipChangeInfo.CardNum = Model.CardNum;
-                TCandaoRetBase ret = CanDaoMemberClient.VipChangeInfo(Globals.branch_id, VipChangeInfo);
+                TCandaoRetBase ret = CanDaoMemberClient.VipChangeCardNum(Globals.branch_id, VipChangeInfo.CardNum, Model.CardNum);
                 if (!ret.Ret)
                 {
                     OWindowManage.ShowMessageWindow("会员卡修改失败：" + ret.Retinfo, false);
@@ -112,7 +111,14 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                 TCandaoRetBase ret = CanDaoMemberClient.VipCheckCard(Globals.branch_id, Model.CardNum);
                 if (ret.Ret)//会员卡判断
                 {
-                    Model.ShowInfo = string.Format("会员卡序列号：{0}，确认绑定该实体会员卡吗？", Model.CardNum);
+                    if (!string.IsNullOrEmpty(_insideId))
+                    {
+                        Model.ShowInfo = string.Format("会员卡序列号：{0}，确认新增该实体会员卡吗？", Model.CardNum);
+                    }
+                    else
+                    {
+                        Model.ShowInfo = string.Format("确定将会员卡号[{0}]修改为：[{1}]吗？",VipChangeInfo.CardNum, Model.CardNum);
+                    }
                     Model.IsEnableBtn = true;
                 }
                 else

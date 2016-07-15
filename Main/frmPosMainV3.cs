@@ -1319,15 +1319,16 @@ namespace Main
             try
             {
 
+                //因DataServer发送在没有手环的时候回连续发送一天会影响网络，所以暂时屏蔽
 
-                if (string.IsNullOrEmpty(aer))
-                {
-                    aer = Globals.CurrTableInfo.tableNo;
-                }
+                //if (string.IsNullOrEmpty(aer))
+                //{
+                //    aer = Globals.CurrTableInfo.tableNo;
+                //}
 
-                //发   服务员|台号|帐单号
-                string msg = String.Format("{0}|17|0|{1}|{2}|{3}", Globals.CurrOrderInfo.userid, aer, Globals.CurrTableInfo.tableNo, Guid.NewGuid().ToString("N"));
-                RestClient.broadcastmsg(2011, msg);
+                ////发   服务员|台号|帐单号
+                //string msg = String.Format("{0}|17|0|{1}|{2}|{3}", Globals.CurrOrderInfo.userid, aer, Globals.CurrTableInfo.tableNo, Guid.NewGuid().ToString("N"));
+                //RestClient.broadcastmsg(2011, msg);
             }
             catch { }
         }

@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
+using CanDaoCD.Pos.Common.Operates.Systems;
 using Common;
 using Models;
 using Models.Enum;
@@ -143,10 +144,13 @@ namespace WebServiceReference
         /// <returns></returns>
         public static string GetMacAddr()
         {
-            string mac = GetMacByWMI();
-            if (string.IsNullOrEmpty(mac))
-                mac = GetMacByNetworkInterface();
-            return mac;
+            //string mac = GetMacByWMI();
+            //if (string.IsNullOrEmpty(mac))
+            //    mac = GetMacByNetworkInterface();
+            //return mac;
+
+            //替换为获取主板ID+CPUID+BiosID的MD5值
+            return MachineManage.GetMachineId();
         }
 
         /// <summary>

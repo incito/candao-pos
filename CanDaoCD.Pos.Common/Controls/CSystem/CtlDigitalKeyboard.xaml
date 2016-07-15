@@ -20,17 +20,22 @@
                 <Setter Property="MinHeight" Value="60"/>
             </Style>
         </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="75*"></ColumnDefinition>
+            <ColumnDefinition Width="25*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+         
         </Grid.ColumnDefinitions>
         <Button Content="1" Grid.Row="0" Grid.Column="0" Command="{Binding InputCmd}" CommandParameter="1"/>
         <Button Content="2" Grid.Row="0" Grid.Column="1" Command="{Binding InputCmd}" CommandParameter="2" />
@@ -43,8 +48,15 @@
         <Button Content="9" Grid.Row="2" Grid.Column="2" Command="{Binding InputCmd}" CommandParameter="9"/>
         <Button Content="00" Grid.Row="3" Grid.Column="0"  Command="{Binding InputCmd}" CommandParameter="00"/>
         <Button Content="0" Grid.Row="3" Grid.Column="1" Command="{Binding InputCmd}" CommandParameter="0"/>
-        <Button Content="." Grid.Row="3" Grid.Column="2" Command="{Binding InputCmd}" CommandParameter="."/>
-        <Button Content="&lt;-" Grid.Row="0" Grid.Column="3" Command="{Binding InputCmd}" CommandParameter="Back"/>
-        <Button Content="确定" Grid.Row="1" Grid.RowSpan="3" Grid.Column="3" Command="{Binding InputCmd}" CommandParameter="Enter" Height="183"/>
+            <Button Content="." Grid.Row="3" Grid.Column="2" Command="{Binding InputCmd}" CommandParameter="."/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25*"></RowDefinition>
+                <RowDefinition Height="75*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Content="&lt;-" Grid.Row="0" Command="{Binding InputCmd}" CommandParameter="Back"/>
+            <Button Content="确定" Grid.Row="1" Command="{Binding InputCmd}" CommandParameter="Enter"/>
+            </Grid>
     </Grid>
 </UserControl>

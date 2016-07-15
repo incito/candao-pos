@@ -1194,43 +1194,49 @@ namespace WebServiceReference
         }
 
         /// <summary>
-        /// 修改会员实体卡号
+        /// 新增会员实体卡号
         /// </summary>
         /// <param name="branch_id"></param>
         /// <param name="cardno">实体卡</param>
         /// <param name="insideId">虚拟卡Id</param>
         /// <returns></returns>
-        public static TCandaoRetBase VipChangeCard(string branch_id, string cardno, string insideId)
+        public static TCandaoRetBase VipInsertCard(string branch_id, string cardno, string insideId,string level="0")
         {
             TCandaoRetBase ret = new TCandaoRetBase();
             try
             {
                 ret.Ret = true;
-                string address = String.Format("http://{0}/member/memberManager/bindingCard.json",
+                string address = String.Format("http://{0}/member/rest/memberCardService/bindingCardService",
                     WebServiceReference.Candaomemberserver);
                 StringWriter sw = new StringWriter();
                 JsonWriter writer = new JsonTextWriter(sw);
                 writer.WriteStartObject();
-                writer.WritePropertyName("tenant_id");
-                writer.WriteValue("");
                 writer.WritePropertyName("entity_cardNo");
                 writer.WriteValue(cardno);
-                writer.WritePropertyName("cardno");
+                writer.WritePropertyName("mobile");
                 writer.WriteValue(insideId);
                 writer.WritePropertyName("branch_id");
                 writer.WriteValue(branch_id);
+                writer.WritePropertyName("level");
+                writer.WriteValue(level);
                 writer.WriteEndObject();
                 writer.Flush();
-                AllLog.Instance.I(string.Format("【VipChangeCard】 reqeust：{0}。", sw));
+                AllLog.Instance.I(string.Format("【VipInsertCard】 reqeust：{0}。", sw));
                 String jsonResult = RestClient.Post_Rest(address, sw);
-                AllLog.Instance.I(string.Format("【VipChangeCard】 result：{0}。", jsonResult));
+                AllLog.Instance.I(string.Format("【VipInsertCard】 result：{0}。", jsonResult));
+
+                if (jsonResult.Equals("0"))
+                {
+                    ret.Ret = false;
+                    ret.Retinfo = "会员服务器连接异常，请联系管理员！";
+                    return ret;
+                }
+
                 JObject ja = null;
-
                 ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
-
-                ret.Retcode = ja["code"].ToString();
+                ret.Retcode = ja["retcode"].ToString();
                 ret.Ret = ret.Retcode.Equals("0");
-                ret.Retinfo = ja["msg"].ToString();
+                ret.Retinfo = ja["retInfo"].ToString();
                 return ret;
             }
             catch
@@ -1312,7 +1318,7 @@ namespace WebServiceReference
                         cInfo.TraceCode = card["TraceCode"].ToString();
                         cInfo.CardType = (int) card["card_type"];
                         cInfo.CardLevel = (int) card["level"];
-                        cInfo.CardLevelName = card["level"].ToString();
+                        cInfo.CardLevelName = card["level_name"].ToString();
                         cInfo.CardState = int.Parse(card["status"].ToString());
                         info.CardInfos.Add(cInfo);
                     }
@@ -1332,7 +1338,7 @@ namespace WebServiceReference
         /// </summary>
         /// <param name="changeInfo"></param>
         /// <returns></returns>
-        public static TCandaoRetBase VipChangeInfo(string branch_id, MVipChangeInfo changeInfo)
+        public static TCandaoRetBase VipChangeInfo(string branch_id, MVipChangeInfo changeInfo,string newTelNum="")
         {
             TCandaoRetBase ret = new TCandaoRetBase();
             try
@@ -1349,8 +1355,8 @@ namespace WebServiceReference
                 writer.WriteValue("");
                 writer.WritePropertyName("mobile");
                 writer.WriteValue(changeInfo.TelNum);
-                writer.WritePropertyName("cardno");
-                writer.WriteValue(changeInfo.CardNum);
+                writer.WritePropertyName("new_mobile");
+                writer.WriteValue(newTelNum);
                 writer.WritePropertyName("password");
                 writer.WriteValue(changeInfo.Password);
                 writer.WritePropertyName("name");
@@ -1379,7 +1385,7 @@ namespace WebServiceReference
 
                 ret.Retcode = ja["retcode"].ToString();
                 ret.Ret = ret.Retcode.Equals("0");
-                ret.Retinfo = ja["retinfo"].ToString();
+                ret.Retinfo = ja["retInfo"].ToString();
                 return ret;
             }
             catch(Exception ex)
@@ -1390,6 +1396,60 @@ namespace WebServiceReference
             }
         }
 
+        /// <summary>
+        /// 修改会员卡号
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="cardNum"></param>
+        /// <param name="newCardNum"></param>
+        /// <returns></returns>
+        public static TCandaoRetBase VipChangeCardNum(string branch_id, string cardNum,string newCardNum)
+        {
+            TCandaoRetBase ret = new TCandaoRetBase();
+            try
+            {
+                ret.Ret = true;
+                string address = String.Format("http://{0}/member/rest/memberCardService/cardNoByModify",
+                    WebServiceReference.Candaomemberserver);
+                StringWriter sw = new StringWriter();
+                JsonWriter writer = new JsonTextWriter(sw);
+                writer.WriteStartObject();
+                writer.WritePropertyName("branch_id");
+                writer.WriteValue(branch_id);
+                writer.WritePropertyName("securitycode");
+                writer.WriteValue("");
+                writer.WritePropertyName("cardno");
+                writer.WriteValue(cardNum);
+                writer.WritePropertyName("new_cardno");
+                writer.WriteValue(newCardNum);
+                writer.WriteEndObject();
+                writer.Flush();
+                AllLog.Instance.I(string.Format("【VipChangeCardNum】{0}-{1}-{2}。", branch_id, cardNum, newCardNum));
+                String jsonResult = RestClient.Post_Rest(address, sw);
+                AllLog.Instance.I(string.Format("【VipChangeCardNum】 result：{0}。", jsonResult));
+
+                if (jsonResult.Equals("0"))
+                {
+                    ret.Ret = false;
+                    ret.Retinfo = "会员服务器连接异常，请联系管理员！";
+                    return ret;
+                }
+
+                JObject ja = null;
+                ja = (JObject)JsonConvert.DeserializeObject(jsonResult);
+
+                ret.Retcode = ja["retcode"].ToString();
+                ret.Ret = ret.Retcode.Equals("0");
+                ret.Retinfo = ja["retInfo"].ToString();
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                ret.Ret = false;
+                ret.Retinfo = ex.Message;
+                return ret;
+            }
+        }
 
     }
 }

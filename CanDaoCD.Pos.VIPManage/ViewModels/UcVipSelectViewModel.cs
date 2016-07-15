@@ -175,6 +175,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     Model.Integral = _vipInfo.CardInfos[0].Integral.ToString();
                     Model.Balance = _vipInfo.CardInfos[0].Balance.ToString();
                     Model.CardNum = _vipInfo.CardInfos[0].CardNum;
+                    Model.CardType = _vipInfo.CardInfos[0].CardType;
                     switch (_vipInfo.CardInfos[0].CardState)
                     {
                         case 0:
@@ -206,7 +207,17 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     OWindowManage.ShowMessageWindow(
                         string.Format("会员查询错误：{0}", _vipInfo.ResultInfo), false);
 
-                    Model.Cleanup();
+                    Model.TelNum = "";
+                    Model.CardType = 0;
+                    Model.Balance = "";
+                    Model.Integral = "";
+                    Model.Birthday = "";
+                    Model.CardLevel = "";
+                    Model.CardNum = "";
+                    Model.CardState = "";
+                    Model.UserName = "";
+                    Model.Sex = "";
+
                     IsOper = false; //禁用操作区域
                 }
             }
@@ -221,59 +232,87 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         /// </summary>
         private void ModifyCardNumHandel()
         {
-            _winShowInfo = new WinShowInfoViewModel();
-
-            var vipChangeInfo=new MVipChangeInfo();
-            vipChangeInfo.TelNum = Model.TelNum;
-            vipChangeInfo.CardNum = Model.CardNum;
-
-            _winShowInfo.VipChangeInfo = vipChangeInfo;
-
-            var window = _winShowInfo.GetShoWindow();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            _winShowInfo.Model.Title = "修改卡号-请刷卡";
-
-            if (window.ShowDialog() == true)
+            try
             {
-                Model.CardNum = _winShowInfo.Model.CardNum;
+                if (Model.CardType != 1)
+                {
+                    OWindowManage.ShowMessageWindow(
+                      string.Format("该会员未绑定实体卡，不能进行修改。"), false);
+                    return;
+                }
+
+                _winShowInfo = new WinShowInfoViewModel();
+
+                var vipChangeInfo = new MVipChangeInfo();
+                vipChangeInfo.TelNum = Model.TelNum;
+                vipChangeInfo.CardNum = Model.CardNum;
+
+                _winShowInfo.VipChangeInfo = vipChangeInfo;
+
+                var window = _winShowInfo.GetShoWindow();
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+                _winShowInfo.Model.Title = "修改卡号-请刷卡";
+
+                if (window.ShowDialog() == true)
+                {
+                    Model.CardNum = _winShowInfo.Model.CardNum;
+                }
             }
+            catch (Exception ex)
+            {
+                OWindowManage.ShowMessageWindow(
+                      string.Format("修改卡号失败：{0}",ex.Message), false);
+                return;
+            }
+           
         }
+
         /// <summary>
         /// 修改会员信息
         /// </summary>
         private void ModifyInfoHandel()
         {
-            var vipChangeInfo=new MVipChangeInfo();
-            vipChangeInfo.TelNum = Model.TelNum;
-            vipChangeInfo.CardNum = Model.CardNum;
-            vipChangeInfo.Birthday = Model.Birthday;
-            vipChangeInfo.VipName = Model.UserName;
+            try
+            {
+                var vipChangeInfo = new MVipChangeInfo();
+                vipChangeInfo.TelNum = Model.TelNum;
+                vipChangeInfo.CardNum = Model.CardNum;
+                vipChangeInfo.Birthday = Model.Birthday;
+                vipChangeInfo.VipName = Model.UserName;
 
-            if (Model.Sex.Equals("男"))
-            {
-                vipChangeInfo.Sex = 0;
-            }
-            else
-            {
-                vipChangeInfo.Sex = 1;  
-            }
-
-            var modifyVipInfo = new UcVipModifyVipInfoViewModel(vipChangeInfo);
-            if (OWindowManage.ShowPopupWindow(modifyVipInfo.GetUserCtl()))
-            {
-                Model.UserName = modifyVipInfo.Model.UserName;
-                Model.Birthday = modifyVipInfo.Model.Birthday.ToString("yyyy-MM-dd");
-                if (modifyVipInfo.Model.SexNan)
+                if (Model.Sex.Equals("男"))
                 {
-                    Model.Sex = "男";
+                    vipChangeInfo.Sex = 0;
                 }
                 else
                 {
-                    Model.Sex = "女";
+                    vipChangeInfo.Sex = 1;
+                }
+
+                var modifyVipInfo = new UcVipModifyVipInfoViewModel(vipChangeInfo);
+                if (OWindowManage.ShowPopupWindow(modifyVipInfo.GetUserCtl()))
+                {
+                    Model.UserName = modifyVipInfo.Model.UserName;
+                    Model.Birthday = modifyVipInfo.Model.Birthday.ToString("yyyy-MM-dd");
+                    if (modifyVipInfo.Model.SexNan)
+                    {
+                        Model.Sex = "男";
+                    }
+                    else
+                    {
+                        Model.Sex = "女";
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                OWindowManage.ShowMessageWindow(
+                    string.Format("修改会员信息失败：{0}", ex.Message), false);
+                return;
+            }
         }
+
         /// <summary>
         /// 会员挂失
         /// </summary>
@@ -281,18 +320,30 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         {
 
         }
+
         /// <summary>
         /// 修改手机号码
         /// </summary>
         private void ModifyTelNumHandel()
         {
-            var vipChangeInfo = new MVipChangeInfo();
-            vipChangeInfo.TelNum = Model.TelNum;
-
-            var modifyTelNum = new UcVipModifyTelNumViewModel(vipChangeInfo);
-            if (OWindowManage.ShowPopupWindow(modifyTelNum.GetUserCtl()))
+            try
             {
-                Model.TelNum = modifyTelNum.Model.NTelNum;
+
+
+                var vipChangeInfo = new MVipChangeInfo();
+                vipChangeInfo.TelNum = Model.TelNum;
+
+                var modifyTelNum = new UcVipModifyTelNumViewModel(vipChangeInfo);
+                if (OWindowManage.ShowPopupWindow(modifyTelNum.GetUserCtl()))
+                {
+                    Model.TelNum = modifyTelNum.Model.NTelNum;
+                }
+            }
+            catch (Exception ex)
+            {
+                OWindowManage.ShowMessageWindow(
+                    string.Format("修改手机号码失败：{0}", ex.Message), false);
+                return;
             }
         }
 
@@ -315,23 +366,33 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         }
 
         /// <summary>
-        /// 绑定卡
+        /// 新增实体卡
         /// </summary>
         private void BindingCardHandel()
         {
-            _winShowInfo = new WinShowInfoViewModel();
-            _winShowInfo.InsideId = Model.CardNum;
-            var window = _winShowInfo.GetShoWindow();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            _winShowInfo.Model.Title = "绑定实体卡-请刷卡";
-
-            if (window.ShowDialog() == true)
+            try
             {
-                Model.CardNum = _winShowInfo.Model.CardNum;
+
+                _winShowInfo = new WinShowInfoViewModel();
+                _winShowInfo.InsideId = Model.TelNum;
+                var window = _winShowInfo.GetShoWindow();
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+                _winShowInfo.Model.Title = "新增实体卡-请刷卡";
+
+                if (window.ShowDialog() == true)
+                {
+                    Model.CardNum = _winShowInfo.Model.CardNum;
+                }
+            }
+            catch (Exception ex)
+            {
+                OWindowManage.ShowMessageWindow(
+                    string.Format("新增实体卡失败：{0}", ex.Message), false);
+                return;
             }
         }
-      
+
         /// <summary>
         /// 会员注销
         /// </summary>

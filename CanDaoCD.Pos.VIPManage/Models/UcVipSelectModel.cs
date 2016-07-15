@@ -16,6 +16,7 @@ namespace CanDaoCD.Pos.VIPManage.Models
         #region 字段
 
         private string _selectNum;
+        private int _cardType;
 
         private string _cardNum;
         private string _telNum;
@@ -159,6 +160,18 @@ namespace CanDaoCD.Pos.VIPManage.Models
             }
         }
 
+        /// <summary>
+        /// 卡类型{0:虚拟卡，1：实体卡，2：微会员}
+        /// </summary>
+        public int CardType
+        {
+            get { return _cardType; }
+            set
+            {
+                _cardType = value;
+                RaisePropertyChanged(() => CardType);
+            }
+        }
         #endregion
     }
 }

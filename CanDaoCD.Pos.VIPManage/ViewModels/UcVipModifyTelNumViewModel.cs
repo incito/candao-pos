@@ -146,8 +146,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     return;
                 }
 
-                VipChangeInfo.TelNum = Model.NTelNum;
-                TCandaoRetBase ret = CanDaoMemberClient.VipChangeInfo(Globals.branch_id, VipChangeInfo);
+                TCandaoRetBase ret = CanDaoMemberClient.VipChangeInfo(Globals.branch_id, VipChangeInfo, Model.NTelNum);
                 if (ret.Ret)
                 {
                     OWindowManage.ShowMessageWindow("手机号码变更成功!", false);
