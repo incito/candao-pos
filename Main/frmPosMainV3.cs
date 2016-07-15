@@ -748,6 +748,8 @@ namespace Main
             }
             btnRePrintCust.Enabled = true;
             btnOrder2.Enabled = true;
+            btnAdd.Enabled = true;
+            btnDec.Enabled = true;
             lblAmount2.ForeColor = Color.Red;
             //pnlCash.Enabled = true;
             //如果订单已结算就不能结算了
