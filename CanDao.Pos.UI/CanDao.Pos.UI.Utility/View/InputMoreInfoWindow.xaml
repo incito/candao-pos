@@ -1,34 +1,36 @@
-﻿<dx:DXWindow x:Class="CanDao.Pos.UI.Utility.View.InputMoreInfoWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-             xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
-             Width="650" Height="320"
-             WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False"
-             Loaded="InputMoreInfoWindow_OnLoaded">
-    <dx:DXWindow.Resources>
+﻿<controls:PosBaseWindow x:Class="CanDao.Pos.UI.Utility.View.InputMoreInfoWindow"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+                        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
+                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+                        Width="650" Height="320"
+                        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False"
+                        Loaded="InputMoreInfoWindow_OnLoaded">
+    <controls:PosBaseWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </dx:DXWindow.Resources>
-    <dxlc:LayoutControl Orientation="Vertical">
-        <dxlc:LayoutGroup VerticalAlignment="Top" Margin="10">
-            <TextBlock FontSize="20" Text="{Binding Title}" HorizontalAlignment="Left"/>
-            <TextBlock Text="{Binding RemainLetterNum,StringFormat=还可以输入{0}字}" HorizontalAlignment="Right"/>
-        </dxlc:LayoutGroup>
+    </controls:PosBaseWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock FontSize="18" Text="{Binding Title}" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding RemainLetterNum,StringFormat=还可以输入{0}字}" HorizontalAlignment="Right"/>
 
-        <TextBox x:Name="TbMoreInfo" Text="{Binding InputInfo, UpdateSourceTrigger=PropertyChanged}" FontSize="20" MaxLength="{Binding MaxInputLetterCount}"/>
-
-        <dxlc:LayoutGroup VerticalAlignment="Bottom">
-            <dxe:ButtonEdit Width="150" Height="45" HorizontalAlignment="Left" FontSize="20" >
-                <dxe:ButtonInfo Content="清空" Command="{Binding ClearCmd}"/>
-            </dxe:ButtonEdit>
-
-            <view:WindowButtonOperControl HorizontalAlignment="Right" VerticalAlignment="Bottom" />
-        </dxlc:LayoutGroup>
-    </dxlc:LayoutControl>
-</dx:DXWindow>
+        <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="TbMoreInfo" Text="{Binding InputInfo, UpdateSourceTrigger=PropertyChanged}" FontSize="16" MaxLength="{Binding MaxInputLetterCount}"/>
+        <Button Grid.Row="2" Grid.Column="0" Content="清空" Command="{Binding ClearCmd}" HorizontalAlignment="Left" Width="100" Height="35"/>
+        <view:WindowButtonOperControl Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+    </Grid>
+</controls:PosBaseWindow>

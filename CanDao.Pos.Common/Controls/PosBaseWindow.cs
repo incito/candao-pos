@@ -18,7 +18,7 @@ namespace CanDao.Pos.Common.Controls
         }
 
         public static readonly DependencyProperty CloseBtnTextProperty =
-            DependencyProperty.Register("CloseBtnText", typeof(string), typeof(PosBaseWindow), new PropertyMetadata("返回"));
+            DependencyProperty.Register("CloseBtnText", typeof(string), typeof(PosBaseWindow), new PropertyMetadata("关闭"));
 
 
 

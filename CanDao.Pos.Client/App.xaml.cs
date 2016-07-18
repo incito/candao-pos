@@ -252,6 +252,11 @@ namespace CanDao.Pos.Client
             {
                 AllLog.Instance.I("异步获取忌口设置...");
                 var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+                if (service == null)
+                {
+                    AllLog.Instance.E("创建IRestaurantService服务失败。");
+                    return;
+                }
 
                 var result = service.GetSystemSetData(EnumSystemDataType.JI_KOU_SPECIAL);
                 AllLog.Instance.I("异步获取忌口设置完成。");

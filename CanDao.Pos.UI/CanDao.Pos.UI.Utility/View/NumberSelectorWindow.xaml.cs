@@ -9,11 +9,24 @@ namespace CanDao.Pos.UI.Utility.View
     /// </summary>
     public partial class NumberSelectorWindow
     {
-        public NumberSelectorWindow(string title, decimal num, decimal maxNum = 0)
+        public NumberSelectorWindow(string title, decimal num, decimal maxNum = 0, bool allowDot = true)
         {
             InitializeComponent();
             DataContext = new NumberSelectorWndVm(title, num, maxNum) { OwnerWindow = this };
+            AllowInputDot = allowDot;
         }
+
+        /// <summary>
+        /// 是否允许输入小数点。
+        /// </summary>
+        public bool AllowInputDot
+        {
+            get { return (bool)GetValue(AllowInputDotProperty); }
+            set { SetValue(AllowInputDotProperty, value); }
+        }
+
+        public static readonly DependencyProperty AllowInputDotProperty =
+            DependencyProperty.Register("AllowInputDot", typeof(bool), typeof(NumberSelectorWindow), new PropertyMetadata(true));
 
         /// <summary>
         /// 输入的数量。

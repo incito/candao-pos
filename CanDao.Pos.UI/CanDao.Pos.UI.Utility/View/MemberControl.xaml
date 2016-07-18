@@ -19,17 +19,9 @@
         <viewModel:MemberControlVm/>
     </UserControl.DataContext>
     <StackPanel Orientation="Horizontal">
-        <dxe:ButtonEdit Height="60" Margin="5,0,0,0">
-            <dxe:ButtonInfo Content="会员查询" Command="{Binding OperCmd}" CommandParameter="Query"/>
-        </dxe:ButtonEdit>
-        <dxe:ButtonEdit Height="60" Margin="10,0,0,0">
-            <dxe:ButtonInfo Content="会员储值" Command="{Binding OperCmd}" CommandParameter="Storage"/>
-        </dxe:ButtonEdit>
-        <dxe:ButtonEdit Height="60" Margin="10,0,0,0" Visibility="{Binding ., Source={x:Static com:Globals.IsYazuoMember}, Converter={StaticResource Bool2CollapsedCvt}}">
-            <dxe:ButtonInfo Content="会员注册" Command="{Binding OperCmd}" CommandParameter="Regist"/>
-        </dxe:ButtonEdit>
-        <dxe:ButtonEdit Height="60" Margin="10,0,0,0" Visibility="{Binding ., Source={x:Static com:Globals.IsYazuoMember}, Converter={StaticResource Bool2VisibilityCvt}}">
-            <dxe:ButtonInfo Content="会员激活" Command="{Binding OperCmd}" CommandParameter="Active"/>
-        </dxe:ButtonEdit>
+        <Button Content="会员查询" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Query"/>
+        <Button Content="会员储值" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Storage"/>
+        <Button Content="会员注册" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Regist" Visibility="{Binding ., Source={x:Static com:Globals.IsYazuoMember}, Converter={StaticResource Bool2CollapsedCvt}}"/>
+        <Button Content="会员激活" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Active" Visibility="{Binding ., Source={x:Static com:Globals.IsYazuoMember}, Converter={StaticResource Bool2VisibilityCvt}}"/>
     </StackPanel>
 </UserControl>

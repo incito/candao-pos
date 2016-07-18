@@ -41,7 +41,7 @@
                     <Button Content="登录" Command="{Binding ConfirmCmd}" Width="118" Height="40" Margin="10,0"/>
                     <Button Content="取消" Command="{Binding CancelCmd}" Width="118" Height="40" Margin="10,0"/>
                 </StackPanel>
-                <view:InputNumberControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Margin="0,30"/>
+                <view:InputNumberControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Margin="0,30" ShowConfirmBtn="True"/>
             </Grid>
         </Border>
     </Grid>

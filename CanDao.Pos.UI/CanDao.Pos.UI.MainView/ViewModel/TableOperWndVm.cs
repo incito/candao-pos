@@ -829,7 +829,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             else
             {
                 //增加选择数量的窗口
-                var numWnd = new NumberSelectorWindow("请输入优惠券使用数量", 1);
+                var numWnd = new NumberSelectorWindow("请输入优惠券使用数量", 1, 0, false);
                 if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                     return;
 

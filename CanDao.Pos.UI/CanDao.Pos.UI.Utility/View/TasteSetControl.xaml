@@ -11,7 +11,7 @@
         <viewModel:TasteSetControlVm/>
     </UserControl.DataContext>
     <StackPanel>
-        <TextBlock Text="选择口味" FontSize="18" FontWeight="Bold" VerticalAlignment="Top"/>
+        <TextBlock Text="选择口味" FontSize="18" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <Border Height="2" Background="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
         <ListBox ItemsSource="{Binding DishTasteInfos}" MaxWidth="{Binding ActualWidth, ElementName=Ctrl}">
             <ListBox.ItemsPanel>

@@ -13,12 +13,8 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <dxlc:LayoutGroup Orientation="Horizontal" Margin="10">
-        <dxe:ButtonEdit Width="150" Height="45" HorizontalAlignment="Stretch" FontSize="20" >
-            <dxe:ButtonInfo Content="确定" Command="{Binding ConfirmCmd}"/>
-        </dxe:ButtonEdit>
-        <dxe:ButtonEdit Width="150" Height="45" HorizontalAlignment="Stretch" FontSize="20" Margin="10,0,0,0">
-            <dxe:ButtonInfo Content="取消" Command="{Binding CancelCmd}"/>
-        </dxe:ButtonEdit>
-    </dxlc:LayoutGroup>
+    <StackPanel Orientation="Horizontal" Margin="10">
+        <Button Content="确定" Command="{Binding ConfirmCmd}" Width="120" Height="40" />
+        <Button Content="取消" Command="{Binding CancelCmd}" Width="120" Height="40" />
+    </StackPanel>
 </UserControl>
