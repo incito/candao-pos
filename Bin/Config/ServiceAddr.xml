@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Address>
+  <!--Java后台接口-->
+  <JavaServerApi>
+    <AuthorizeLogin Addr="/newspicyway/padinterface/login.json"/><!--授权登录-->
+    <GetUserRight Addr="/newspicyway/padinterface/userrights.json"/><!--获取用户权限-->
+    <GetAllTableInfos Addr="/newspicyway/padinterface/querytables.json"/><!--获取所有餐桌信息-->
+    <GetSystemSetData Addr="/newspicyway/padinterface/getSystemSetData.json"/><!--获取系统设置-->
+    <VerifyUser Addr="/newspicyway/padinterface/verifyuser.json"/><!--验证用户是否存在-->
+    <OpenTable Addr="/newspicyway/padinterface/setorder.json"/><!--餐桌开台-->
+    <GetOrderInvoice Addr="/newspicyway/padinterface/findInvoiceByOrderid.json"/><!--获取订单发票-->
+    <UpdateOrderInvoice Addr="/newspicyway/padinterface/updateInvoice.json"/><!--更新发票信息-->
+    <EndWorkSyncData Addr="/newspicyway/padinterface/jdesyndata.json"/><!--结业后通知后台同步数据-->
+    <GetDishGroupInfos Addr="/newspicyway/padinterface/getMenuColumn.json"/><!--获取菜品分类信息-->
+    <GetCouponInfos Addr="/newspicyway/padinterface/getPreferentialList.json"/><!--获取优惠券信息-->
+    <CalcDiscountAmount Addr="/newspicyway/padinterface/usePreferentialItem.json"/><!--计算折扣类优惠券的优惠金额-->
+    <OrderDish Addr="/newspicyway/padinterface/bookorderList.json"/><!--菜品下单-->
+    <GetMenuComboDish Addr="/newspicyway/padinterface/getMenuCombodish.json"/><!--获取套餐内菜品-->
+    <PayTheBill Addr="/newspicyway/padinterface/settleorder.json"/><!--结账-->
+    <GetAllBankInfo Addr="/newspicyway/bankinterface/getallbank.json"/><!--获取所有银行-->
+    <GetAllOnCpyAccountInfo Addr="/newspicyway/padinterface/getCooperationUnit.json"/><!--获取所有可挂账单位-->
+    <GetTradeTime Addr="/newspicyway/padinterface/getOpenEndTime.json"/><!--获取营业时间-->
+    <CheckTheLastEndWork Addr="/newspicyway/padinterface/isYesterdayEndWork.json"/><!--检测上一次是否结业-->
+    <GetAllUnclearnPosInfoes Addr="/newspicyway/padinterface/findUncleanPosList.json"/><!--获取所有未结业POS信息-->
+    <GetOrderMemberInfo Addr="/newspicyway/member/GetOrderMember.json"/><!--获取订单会员信息-->
+    <GetReportTipInfo Addr="/newspicyway/tip/tipList.json"/><!--获取小费统计信息-->
+    <GetReportDishInfo Addr="/newspicyway/padinterface/getItemSellDetail.json"/><!--获取品项销售统计信息-->
+    <GetBranchInfo Addr="/newspicyway/padinterface/getbranchinfo.json"/><!--获取分店店铺信息-->
+    <MemberLogin Addr="/newspicyway/member/MemberLogin.json"/><!--餐道会员登入-->
+    <MemberLogout Addr="/newspicyway/member/MemberLogout.json"/><!--餐道会员登出-->
+    <AddMemberSaleInfo Addr="/newspicyway/member/AddOrderMember.json"/><!--添加会员消费信息-->
+    <CancelOrder Addr="/newspicyway/padinterface/cleantable.json"/><!--取消账单-->
+    <AntiSettlementOrder Addr="/newspicyway/padinterface/rebacksettleorder.json"/><!--反结算账单-->
+    <BackDish Addr="/newspicyway/padinterface/discarddish.json"/><!--退菜-->
+    <UpdateDishWeigh Addr="/newspicyway/padinterface/updateDishWeight.json"/><!--更新菜品重量-->
+    <TipBill Addr="/newspicyway/tip/tipBilling.json"/><!--小费结算-->
+  </JavaServerApi>
+  <!--Delephi接口-->
+  <DataServerApi>
+    <RestaurantOpened Addr="/datasnap/rest/TServerMethods1/OpenUp/"/><!--店铺开业，分查询是否开业和开业-->
+    <PettyCashInput Addr="/datasnap/rest/TServerMethods1/InputTellerCash/"/><!--零找金，分查询是否输入过零找金和输入零找金-->
+    <GetTableDishInfos Addr="/datasnap/rest/TServerMethods1/GetOrder/"/><!--获取餐桌菜单上的所有菜品信息-->
+    <GetDinnerWareInfo Addr="/datasnap/rest/TServerMethods1/getCJFood/"/><!--获取餐具的数据-->
+    <GetAllDishInfos Addr="/datasnap/rest/TServerMethods1/getAllWmFood/"/><!--获取所有菜品信息-->
+    <GetDishStatus Addr="/datasnap/rest/TServerMethods1/getFoodStatus/"/><!--获取菜品的状态，是否估清-->
+    <GetFavorable Addr="/datasnap/rest/TServerMethods1/getFavorale/"/><!--获取优惠信息-->
+    <Clearner Addr="/datasnap/rest/TServerMethods1/clearMachine/"/><!--清机-->
+    <EndWork Addr="/datasnap/rest/TServerMethods1/endWork/"/><!--结业-->
+    <SaveCouponInfo Addr="/datasnap/rest/TServerMethods1/saveOrderPreferential/"/><!--保存优惠券信息-->
+    <BroadcastMsg Addr="/datasnap/rest/TServerMethods1/broadcastmsg/"/><!--广播消息-->
+    <GetBackDishInfo Addr="/datasnap/rest/TServerMethods1/getBackDishInfo/"/><!--退菜-->
+    <GetPrintOrderInfo Addr="/datasnap/rest/TServerMethods1/getOrderInfo/"/><!--获取打印用订单信息-->
+    <GetClearPosInfo Addr="/datasnap/rest/TServerMethods1/getClearMachineData/"/><!--获取打印用清机单信息-->
+    <CheckAntiSettleOrder Addr="/datasnap/rest/TServerMethods1/rebackorder/"/><!--检测是否允许反结算账单-->
+    <SetMemberPrice Addr="/datasnap/rest/TServerMethods1/setMemberPrice/"/><!--设置成会员价-->
+    <SetNormalPrice Addr="/datasnap/rest/TServerMethods1/setMemberPrice2/"/><!--设置成正常价-->
+    <GetMemberPrintPayInfo Addr="/datasnap/rest/TServerMethods1/getMemberSaleInfo/"/><!--获取会员消费打印信息-->
+    <OpenCash Addr="/datasnap/rest/TServerMethods1/OpenCash/"/><!--开钱箱-->
+    <QueryOrderInfo Addr="/datasnap/rest/TServerMethods1/getAllOrderInfo2/"/><!--账单查询-->
+    <GetFishPotDish Addr="/datasnap/rest/TServerMethods1/getGroupDetail/"/><!--获取鱼锅信息-->
+  </DataServerApi>
+  <!--云接口-->
+  <CloudServerApi>
+    <QueryCanDao Addr="/member/memberManager/findByParams"/><!--餐道会员查询-->
+    <StorageCanDao Addr="/member/deal/StoreCardDeposit.json"/><!--餐道会员储值-->
+    <ModifyPwdCanDao Addr="/member/memberManager/MemberEdit.json"/><!--修改密码-->
+    <SendVerifyCode Addr="/member/memberManager/sendAccountByMobile"/><!--发送验证码-->
+    <MobileRepeatCheck Addr="/member/memberManager/validateTbMemberManager"/><!--验证手机号是否重复-->
+    <RegistCanDao Addr="/member/memberManager/save.json"/><!--餐道会员会员注册-->
+    <ReportLossCanDao Addr="/member/deal/CardLose.json"/><!--餐道会员会员挂失-->
+    <CancelCanDao Addr="/member/memberManager/delete.json"/><!--餐道会员会员注销-->
+    <SaleCanDao Addr="/member/deal/MemberSale.json"/><!--餐道会员会员消费-->
+  </CloudServerApi>
+</Address>

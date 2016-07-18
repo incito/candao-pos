@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="04/03/2016 23:40:24" ReportInfo.Modified="04/04/2016 00:51:25" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
+  <Dictionary>
+    <TableDataSource Name="tb_main" ReferenceName="tb_main" DataType="System.Int32" Enabled="true">
+      <Column Name="classNo" Alias="清机单号" DataType="System.String"/>
+      <Column Name="posID" Alias="POS编号" DataType="System.String"/>
+      <Column Name="operatorID" Alias="操作员编号" DataType="System.String"/>
+      <Column Name="operatorName" Alias="操作员姓名" DataType="System.String"/>
+      <Column Name="SignInTime" Alias="签到时间" DataType="System.DateTime"/>
+      <Column Name="SignOutTime" Alias="签退时间" DataType="System.DateTime"/>
+      <Column Name="prettyCash" Alias="备用金" DataType="System.Decimal"/>
+      <Column Name="lastNonTable" Alias="前班未结台数" DataType="System.Int32"/>
+      <Column Name="lastNonDeposit" Alias="前班未结押金" DataType="System.Decimal"/>
+      <Column Name="tBeginPeople" Alias="本班开单人数" DataType="System.Int32"/>
+      <Column Name="tBeginTableTotal" Alias="本班开台总数" DataType="System.Int32"/>
+      <Column Name="tNonClosingTable" Alias="本班未结台数" DataType="System.Int32"/>
+      <Column Name="tNonClosingMoney" Alias="本班未结金额" DataType="System.Decimal"/>
+      <Column Name="tNonClosingDeposit" Alias="本班未退押金" DataType="System.Decimal"/>
+      <Column Name="tClosingTable" Alias="本班已结台数" DataType="System.Int32"/>
+      <Column Name="tClosingPeople" Alias="本班已结人数" DataType="System.Int32"/>
+      <Column Name="tPresentedMoney" Alias="本班赠单金额" DataType="System.Decimal"/>
+      <Column Name="tRFoodMoney" Alias="本班退菜金额" DataType="System.Decimal"/>
+      <Column Name="itemMoney" Alias="品项消费" DataType="System.Decimal"/>
+      <Column Name="serviceMoney" Alias="服务费" DataType="System.Decimal"/>
+      <Column Name="roomMoney" Alias="包房费" DataType="System.Decimal"/>
+      <Column Name="lowConsComp" Alias="最低消费补齐" DataType="System.Decimal"/>
+      <Column Name="preferenceMoney" Alias="优惠金额" DataType="System.Decimal"/>
+      <Column Name="accountsReceivableSubtotal" Alias="应收小计" DataType="System.Decimal"/>
+      <Column Name="removeMoney" Alias="抹零金额" DataType="System.Decimal"/>
+      <Column Name="ratedPreferenceMoney" Alias="定额优惠金额" DataType="System.Decimal"/>
+      <Column Name="accountsReceivableTotal" Alias="应收合计" DataType="System.Decimal"/>
+      <Column Name="includedMoneyTotal" Alias="计入收入合计" DataType="System.Decimal"/>
+      <Column Name="noIncludedMoneyTotal" Alias="不计入收入合计" DataType="System.Decimal"/>
+      <Column Name="TotalMoney" Alias="合计" DataType="System.Decimal"/>
+      <Column Name="tableware" Alias="餐具" DataType="System.Decimal"/>
+      <Column Name="drinks" Alias="酒水" DataType="System.Decimal"/>
+      <Column Name="drinksSmokeNoodle" Alias="酒水烟汤面" DataType="System.Decimal"/>
+      <Column Name="todayTurnover" Alias="本日营业总额" DataType="System.Decimal"/>
+      <Column Name="PrintTime" Alias="打印时间" DataType="System.DateTime"/>
+      <Column Name="WorkDateTime" Alias="营业时间" DataType="System.DateTime"/>
+    </TableDataSource>
+    <TableDataSource Name="tb_sett" ReferenceName="tb_sett" DataType="System.Int32" Enabled="true">
+      <Column Name="itemDesc" Alias="结算类别描述" DataType="System.String"/>
+      <Column Name="payamount" Alias="金额" DataType="System.Decimal"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="72.1" PaperHeight="296.9" RawPaperSize="136" LeftMargin="2.5" TopMargin="0" RightMargin="2.5" BottomMargin="0" FirstPageSource="15" OtherPagesSource="15">
+    <ReportTitleBand Name="ReportTitle1" Width="253.64" Height="376.11" Border.Lines="Bottom" Border.Style="Dash">
+      <TextObject Name="Text2" Width="255.15" Height="18.9" Text="结班" HorzAlign="Center" Font="黑体, 11pt, style=Bold"/>
+      <RichObject Name="Rich1" Top="15.12" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b5\'a5\'ba\'c5\b0\'a3\'ba[tb_main.\'c7\'e5\'bb\'fa\'b5\'a5\'ba\'c5]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich2" Top="30.24" Width="122.85" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18 POS\b0\lang2052\'a3\'ba[tb_main.POS\'b1\'e0\'ba\'c5]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich3" Left="122.85" Top="30.35" Width="132.3" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b2\'d9\'d7\'f7\'d4\'b1\b0\'a3\'ba[tb_main.\'b2\'d9\'d7\'f7\'d4\'b1\'b1\'e0\'ba\'c5]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <LineObject Name="Line1" Top="45.74" Width="255.15" Border.Style="Dash"/>
+      <RichObject Name="Rich4" Top="46.25" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'c7\'a9\'b5\'bd\'ca\'b1\'bc\'e4\b0\'a3\'ba[tb_main.\'c7\'a9\'b5\'bd\'ca\'b1\'bc\'e4]\f1\fs17\par&#13;&#10;}&#13;&#10;" Format="Custom" Format.Format="yyyy-MM-dd HH:mm:ss"/>
+      <RichObject Name="Rich5" Top="61.24" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'c7\'a9\'cd\'cb\'ca\'b1\'bc\'e4\b0\'a3\'ba[tb_main.\'c7\'a9\'cd\'cb\'ca\'b1\'bc\'e4]\f1\fs17\par&#13;&#10;}&#13;&#10;" Format="Custom" Format.Format="yyyy-MM-dd HH:mm:ss"/>
+      <RichObject Name="Rich6" Top="76.36" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b1\'b8\'d3\'c3\'bd\'f0\b0\'a3\'ba[tb_main.\'b1\'b8\'d3\'c3\'bd\'f0]\f1\fs17\par&#13;&#10;}&#13;&#10;" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="," Format.NegativePattern="1"/>
+      <LineObject Name="Line2" Top="91.48" Width="255.15" Border.Style="Dash"/>
+      <RichObject Name="Rich7" Top="92.61" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'c7\'b0\'b0\'e0\'ce\'b4\'bd\'e1\'cc\'a8\'ca\'fd\b0\'a3\'ba[tb_main.\'c7\'b0\'b0\'e0\'ce\'b4\'bd\'e1\'cc\'a8\'ca\'fd]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich8" Top="107.73" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'c7\'b0\'b0\'e0\'ce\'b4\'bd\'e1\'d1\'ba\'bd\'f0\b0\'a3\'ba[tb_main.\'c7\'b0\'b0\'e0\'ce\'b4\'bd\'e1\'d1\'ba\'bd\'f0]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich9" Top="122.85" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b1\'be\'b0\'e0\'bf\'aa\'b5\'a5\'c8\'cb\'ca\'fd\'a3\'ba\b0 [tb_main.\'b1\'be\'b0\'e0\'bf\'aa\'b5\'a5\'c8\'cb\'ca\'fd]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich10" Top="137.97" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b1\'be\'b0\'e0\'bf\'aa\'cc\'a8\'d7\'dc\'ca\'fd\b0\'a3\'ba[tb_main.\'b1\'be\'b0\'e0\'bf\'aa\'cc\'a8\'d7\'dc\'ca\'fd]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich11" Top="153.09" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b1\'be\'b0\'e0\'ce\'b4\'bd\'e1\'cc\'a8\'ca\'fd\b0\'a3\'ba[tb_main.\'b1\'be\'b0\'e0\'ce\'b4\'bd\'e1\'cc\'a8\'ca\'fd]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich12" Top="168.21" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b1\'be\'b0\'e0\'ce\'b4\'bd\'e1\'bd\'f0\'b6\'ee\b0\'a3\'ba[tb_main.\'b1\'be\'b0\'e0\'ce\'b4\'bd\'e1\'bd\'f0\'b6\'ee]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich13" Top="198.45" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b1\'be\'b0\'e0\'d2\'d1\'bd\'e1\'cc\'a8\'ca\'fd\b0\'a3\'ba[tb_main.\'b1\'be\'b0\'e0\'d2\'d1\'bd\'e1\'cc\'a8\'ca\'fd]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich14" Top="183.33" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b1\'be\'b0\'e0\'ce\'b4\'cd\'cb\'d1\'ba\'bd\'f0\b0\'a3\'ba[tb_main.\'b1\'be\'b0\'e0\'ce\'b4\'cd\'cb\'d1\'ba\'bd\'f0]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich15" Top="213.57" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b1\'be\'b0\'e0\'d2\'d1\'bd\'e1\'c8\'cb\'ca\'fd\b0\'a3\'ba[tb_main.\'b1\'be\'b0\'e0\'d2\'d1\'bd\'e1\'c8\'cb\'ca\'fd]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich16" Top="228.69" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b1\'be\'b0\'e0\'cd\'cb\'b2\'cb\'bd\'f0\'b6\'ee\b0\'a3\'ba[tb_main.\'b1\'be\'b0\'e0\'cd\'cb\'b2\'cb\'bd\'f0\'b6\'ee]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <LineObject Name="Line3" Top="243.81" Width="255.15" Border.Style="Dash"/>
+      <RichObject Name="Rich17" Top="245.7" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'c6\'b7\'cf\'ee\'cf\'fb\'b7\'d1\b0\'a3\'ba[tb_main.\'c6\'b7\'cf\'ee\'cf\'fb\'b7\'d1]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich18" Top="260.82" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b7\'fe\'ce\'f1\'b7\'d1\b0\'a3\'ba[tb_main.\'b7\'fe\'ce\'f1\'b7\'d1]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich19" Top="276.05" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b0\'fc\'b7\'bf\'b7\'d1\b0\'a3\'ba[tb_main.\'b0\'fc\'b7\'bf\'b7\'d1]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich20" Top="291.17" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'d3\'c5\'bb\'dd\'bd\'f0\'b6\'ee\b0\'a3\'ba[tb_main.\'d3\'c5\'bb\'dd\'bd\'f0\'b6\'ee]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <LineObject Name="Line4" Top="306.94" Width="255.15" Border.Style="Dash"/>
+      <RichObject Name="Rich21" Top="308.07" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'d3\'a6\'ca\'d5\'d0\'a1\'bc\'c6\b0\'a3\'ba[tb_main.\'d3\'a6\'ca\'d5\'d0\'a1\'bc\'c6]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <LineObject Name="Line5" Top="324.32" Width="255.15" Border.Style="Dash"/>
+      <RichObject Name="Rich22" Top="325.08" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'c4\'a8\'c1\'e3\'bd\'f0\'b6\'ee\b0\'a3\'ba[tb_main.\'c4\'a8\'c1\'e3\'bd\'f0\'b6\'ee]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich23" Top="340.2" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b6\'a8\'b6\'ee\'d3\'c5\'bb\'dd\'bd\'f0\'b6\'ee\b0\'a3\'ba[tb_main.\'b6\'a8\'b6\'ee\'d3\'c5\'bb\'dd\'bd\'f0\'b6\'ee]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <LineObject Name="Line6" Top="356.08" Width="255.15" Border.Style="Dash"/>
+      <RichObject Name="Rich24" Top="357.21" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'d3\'a6\'ca\'d5\'ba\'cf\'bc\'c6\b0\'a3\'ba[tb_main.\'d3\'a6\'ca\'d5\'ba\'cf\'bc\'c6]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="378.78" Width="253.64" Height="19.66" Border.Lines="Top, Bottom" Border.Style="Dash" CanGrow="true" DataSource="tb_sett">
+      <TextObject Name="Text1" Width="141.75" Height="18.9" Text="[tb_sett.结算类别描述]" Font="宋体, 9pt"/>
+      <TextObject Name="Text3" Left="141.75" Width="113.4" Height="18.9" Text="[tb_sett.结算类别描述]" Font="宋体, 9pt"/>
+    </DataBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="401.1" Width="253.64" Height="30.24">
+      <RichObject Name="Rich26" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'bc\'c6\'c8\'eb\'ca\'d5\'c8\'eb\'ba\'cf\'bc\'c6\b0\'a3\'ba[tb_main.\'bc\'c6\'c8\'eb\'ca\'d5\'c8\'eb\'ba\'cf\'bc\'c6]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich27" Top="15.12" Width="255.15" Height="15.12" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs18\lang2052\'b2\'bb\'bc\'c6\'c8\'eb\'ca\'d5\'c8\'eb\'ba\'cf\'bc\'c6\b0\'a3\'ba[tb_main.\'b2\'bb\'bc\'c6\'c8\'eb\'ca\'d5\'c8\'eb\'ba\'cf\'bc\'c6]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+    </ReportSummaryBand>
+  </ReportPage>
+</Report>

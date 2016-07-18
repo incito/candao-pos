@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <!--Java后台服务地址-->
+  <JavaServer value="10.66.21.5:8080"/>
+  <!--Delephi后台服务地址-->
+  <DataServer value="127.0.0.1:8081"/>
+  <!--大数据服务地址-->
+  <BigData value="10.66.21.84:8080"/>
+  <!--餐道云服务地址-->
+  <CloudServer value="10.66.21.6:8080"/>
+  <!--会员系统。0：雅座，1：餐道-->
+  <MemberSystem value="1"/>
+  <!--分店电话-->
+  <BranchTelephone value="02866668888"/>
+  <!--外卖台名称-->
+  <TakeoutTableName value="外卖105"/>
+  <!--Pos编号-->
+  <PosId value="001"/>
+  <!--钱箱IP地址-->
+  <OpenCashIp value="127.0.0.1"/>
+  <!--保存优惠券-->
+  <SaveCoupon value="true"/>
+  <!--会员系统。0：雅座，1：餐道-->
+  <MemberSystem value="1"/>
+  <!--是否打印开发票小票。0：不打印，1：打印-->
+  <PrintInvoice value="true"/>
+  <!--反结算原因，通过 ; 号区分，注意是英文的符号。-->
+  <ResettlementReason value="结错帐;用错优惠;用错会员;客人投诉"/>
+  <!--赠菜原因，多个原因通过分号分割。-->
+  <DishGiftReasons value="大客户;长得帅;明星人物"/>
+  <!--退菜原因，多个原因通过分号分割。-->
+  <BackDishReasons value="客户要求;菜品质量;用餐服务"/>
+</configuration>

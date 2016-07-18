@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Images.xaml"/>
+        <ResourceDictionary Source="Converter.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <DataTemplate x:Key="DishPayamountBeWeighTemplate">
+        <Image Source="{StaticResource CanDaoPosImageBeWeigh}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DishPayamountNormalTemplate">
+        <TextBlock Text="{Binding RowData.Row.PayAmount}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="RowIndexDataTemplate">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
+            <TextBlock FontSize="10" Text="{Binding Path=RowHandle.Value, Converter={StaticResource IndexCountCvt}}" TextAlignment="Center" VerticalAlignment="Center" />
+        </StackPanel>
+    </DataTemplate>
+
+</ResourceDictionary>

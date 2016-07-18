@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                    xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+    <Style TargetType="ToggleButton" x:Key="DietTogBtnStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Bd" Background="White" BorderBrush="Gray" BorderThickness="1.5">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="Gray"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="{x:Type view:AllowMultSelectorControl}">
+        <Setter Property="ItemViewerTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <ToggleButton Content="{Binding Name}" IsChecked="{Binding IsSelected}" Style="{StaticResource DietTogBtnStyle}" Margin="5" FontSize="20" MinWidth="70" MinHeight="35"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type view:AllowMultSelectorControl}">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"/>
+                        <Border Height="2" Background="Gray" HorizontalAlignment="Stretch"/>
+                        <ItemsControl ItemsSource="{TemplateBinding ItemsSource}"
+                                      MaxWidth="{TemplateBinding ActualWidth}"
+                                      ItemTemplate="{TemplateBinding ItemViewerTemplate}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        <dxe:TextEdit x:Name="PART_TbOtherInfo" EditValue="{TemplateBinding OtherInfo}"
+                                  NullText="{TemplateBinding NullText}"
+                                  Focusable="False" Height="30"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

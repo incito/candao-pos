@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="05/12/2016 23:02:37" ReportInfo.Modified="05/13/2016 17:19:15" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
+  <Dictionary>
+    <TableDataSource Name="tb_main" ReferenceName="tb_main" DataType="System.Int32" Enabled="true">
+      <Column Name="ReportTitle" Alias="交易标题" DataType="System.String"/>
+      <Column Name="CardNo" Alias="卡号" DataType="System.String"/>
+      <Column Name="BranchId" Alias="商户号" DataType="System.String"/>
+      <Column Name="Terminal" Alias="终端号" DataType="System.String"/>
+      <Column Name="UserId" Alias="收银员" DataType="System.String"/>
+      <Column Name="BatchNo" Alias="主机流水" DataType="System.String"/>
+      <Column Name="TradeTime" Alias="交易时间" DataType="System.DateTime"/>
+      <Column Name="BranchName" Alias="商户名称" DataType="System.String"/>
+      <Column Name="OrderId" Alias="流水号" DataType="System.String"/>
+      <Column Name="Score" Alias="积分增减" DataType="System.Decimal"/>
+      <Column Name="StoredPay" Alias="储值消费" DataType="System.Decimal"/>
+      <Column Name="Coupons" Alias="券消费" DataType="System.Decimal"/>
+      <Column Name="ScoreBalance" Alias="积分余额" DataType="System.Decimal"/>
+      <Column Name="StoredBalance" Alias="储值余额" DataType="System.Decimal"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="72.1" PaperHeight="296.9" RawPaperSize="136" LeftMargin="0" TopMargin="0" RightMargin="0" BottomMargin="0" FirstPageSource="15" OtherPagesSource="15">
+    <ReportTitleBand Name="ReportTitle1" Width="272.54" Height="302.4">
+      <TextObject Name="Text1" Width="274.05" Height="18.9" Text="交易凭条" HorzAlign="Center" Font="宋体, 12pt, style=Bold"/>
+      <RichObject Name="Rich1" Top="18.9" Width="274.05" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\qc\b\f0\fs18 ----[tb_main.\'bd\'bb\'d2\'d7\'b1\'ea\'cc\'e2]----\fs17\lang2052\par&#13;&#10;}&#13;&#10;"/>
+      <TextObject Name="Text2" Top="37.8" Width="94.5" Height="18.9" Text="卡号：" VertAlign="Center" Font="宋体, 8pt"/>
+      <TextObject Name="Text3" Top="56.7" Width="94.5" Height="18.9" Text="交易类型：" VertAlign="Center" Font="宋体, 8pt"/>
+      <TextObject Name="Text4" Left="94.5" Top="56.7" Width="170.1" Height="18.9" Text="会员消费" HorzAlign="Right" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+      <TextObject Name="Text5" Top="75.6" Width="94.5" Height="18.9" Text="商户号：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text6" Left="94.5" Top="75.6" Width="170.1" Height="18.9" Text="[tb_main.商户号]" HorzAlign="Right" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text9" Top="113.4" Width="94.5" Height="18.9" Text="主机流水号：" VertAlign="Center" Font="宋体, 9pt"/>
+      <RichObject Name="Rich2" Left="160.65" Top="94.5" Width="103.95" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\qr\f0\fs18\lang2052\'ca\'d5\'d2\'f8\'d4\'b1\'a3\'ba[tb_main.\'ca\'d5\'d2\'f8\'d4\'b1]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich3" Top="94.5" Width="160.65" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\f0\fs18\lang2052\'d6\'d5\'b6\'cb\'ba\'c5\'a3\'ba[tb_main.\'d6\'d5\'b6\'cb\'ba\'c5]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <TextObject Name="Text7" Left="94.5" Top="113.4" Width="170.1" Height="18.9" Text="[tb_main.主机流水]" HorzAlign="Right" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text10" Top="132.3" Width="94.5" Height="18.9" Text="交易日期：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text8" Left="94.5" Top="132.3" Width="170.1" Height="18.9" Text="[tb_main.交易时间]" Format="Date" Format.Format="D" HorzAlign="Right" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text11" Top="151.2" Width="94.5" Height="18.9" Text="交易时间：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text12" Left="94.5" Top="151.2" Width="170.1" Height="18.9" Text="[tb_main.交易时间]" Format="Time" Format.Format="T" HorzAlign="Right" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text13" Top="170.1" Width="94.5" Height="18.9" Text="消费商户：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text14" Left="94.5" Top="170.1" Width="170.1" Height="18.9" Text="[tb_main.商户名称]" HorzAlign="Right" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text15" Top="189" Width="94.5" Height="18.9" Text="MIS流水号：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text16" Left="94.5" Top="189" Width="170.1" Height="18.9" Text="[tb_main.流水号]" HorzAlign="Right" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text17" Top="207.9" Width="94.5" Height="18.9" Text="本次积分增减：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text18" Left="94.5" Top="207.9" Width="170.1" Height="18.9" Text="[tb_main.积分增减]" Format="Number" Format.UseLocale="true" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text19" Top="226.8" Width="94.5" Height="18.9" Text="本次储值消费：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text20" Left="94.5" Top="226.8" Width="170.1" Height="18.9" Text="[tb_main.储值消费]" Format="Number" Format.UseLocale="true" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text21" Top="245.7" Width="94.5" Height="18.9" Text="本次券消费：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text22" Left="94.5" Top="245.7" Width="170.1" Height="18.9" Text="[tb_main.券消费]" Format="Number" Format.UseLocale="true" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text23" Top="264.6" Width="94.5" Height="18.9" Text="本次积分余额：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text24" Left="94.5" Top="264.6" Width="170.1" Height="18.9" Text="[tb_main.积分余额]" Format="Number" Format.UseLocale="true" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text25" Top="283.5" Width="94.5" Height="18.9" Text="本次储值余额：" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text26" Left="94.5" Top="283.5" Width="170.1" Height="18.9" Text="[tb_main.储值余额]" Format="Number" Format.UseLocale="true" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 9pt" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text28" Left="94.5" Top="37.8" Width="170.1" Height="18.9" Text="[tb_main.卡号]" HorzAlign="Right" Font="宋体, 9pt"/>
+    </ReportTitleBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="305.07" Width="272.54" Height="28.35">
+      <TextObject Name="Text27" Top="9.45" Width="94.5" Height="18.9" Text="客户签名：" HorzAlign="Right" VertAlign="Center" Font="宋体, 9pt"/>
+      <LineObject Name="Line1" Left="94.5" Top="26.45" Width="170.1"/>
+    </ReportSummaryBand>
+  </ReportPage>
+</Report>

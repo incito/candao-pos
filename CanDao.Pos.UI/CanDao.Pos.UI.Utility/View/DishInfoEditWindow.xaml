@@ -1,0 +1,61 @@
+﻿<dx:DXWindow x:Class="CanDao.Pos.UI.Utility.View.DishInfoEditWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
+             Title="{Binding WndTitle}" Width="530" Height="300"
+             WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False"
+             Loaded="DishInfoEditWindow_OnLoaded">
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Height" Value="35"/>
+            </Style>
+            <Style TargetType="dxe:TextEdit">
+                <Setter Property="Height" Value="35"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="VerticalAlignment"  Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Width" Value="88"/>
+                <Setter Property="Height" Value="45"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="菜品名称："/>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DishName}" IsEnabled="{Binding AllowEditDishName}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="菜品单价："/>
+            <dxe:TextEdit Grid.Row="1" Grid.Column="1" Text="{Binding DishPrice}" IsEnabled="{Binding AllowEditDishPrice}" MaskType="Numeric"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="菜品数量："/>
+            <dxe:TextEdit x:Name="TbDishNum" Grid.Row="2" Grid.Column="1" EditValue="{Binding DishNum, UpdateSourceTrigger=PropertyChanged}" MaskType="Numeric" MaskUseAsDisplayFormat="True" DisplayFormatString="#" Mask="n0"/>
+            <Button Grid.Row="3" Grid.Column="0" Content="确定" Command="{Binding ConfirmCmd}"/>
+            <Button Grid.Row="3" Grid.Column="1" Content="取消" Command="{Binding CancelCmd}"/>
+        </Grid>
+        <view:InputHelperDotControl Grid.Column="1"/>
+    </Grid>
+    </dx:DXWindow>

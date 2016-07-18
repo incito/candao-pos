@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2EE5104A-0B22-497E-8ADE-A83A420C83D8}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CanDao.Pos.Model</RootNamespace>
+    <AssemblyName>CanDao.Pos.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BackDishInfo.cs" />
+    <Compile Include="BankInfo.cs" />
+    <Compile Include="BaseNotifyObject.cs" />
+    <Compile Include="BillPayInfo.cs" />
+    <Compile Include="BranchInfo.cs" />
+    <Compile Include="CouponCategory.cs" />
+    <Compile Include="CouponInfo.cs" />
+    <Compile Include="DishSimpleInfo.cs" />
+    <Compile Include="Enum\EnumBackDishType.cs" />
+    <Compile Include="Enum\EnumBillPayType.cs" />
+    <Compile Include="Enum\EnumBookOrderResult.cs" />
+    <Compile Include="Enum\EnumBroadcastMsgType.cs" />
+    <Compile Include="Enum\EnumChargeType.cs" />
+    <Compile Include="Enum\EnumFishPotType.cs" />
+    <Compile Include="Enum\EnumGender.cs" />
+    <Compile Include="Enum\EnumHandCouponType.cs" />
+    <Compile Include="Enum\EnumMemberSystem.cs" />
+    <Compile Include="Enum\EnumOddAccuracy.cs" />
+    <Compile Include="Enum\EnumOddModel.cs" />
+    <Compile Include="Enum\EnumOfferType.cs" />
+    <Compile Include="Enum\EnumOpenTableResult.cs" />
+    <Compile Include="Enum\EnumOrderType.cs" />
+    <Compile Include="Enum\EnumPrintOrderType.cs" />
+    <Compile Include="Enum\EnumQueryOrderStatus.cs" />
+    <Compile Include="Enum\EnumStatisticsPeriodsType.cs" />
+    <Compile Include="GiftDishInfo.cs" />
+    <Compile Include="MemberInfo.cs" />
+    <Compile Include="MenuDishGroupInfo.cs" />
+    <Compile Include="MenuDishInfo.cs" />
+    <Compile Include="MenuComboDishInfo.cs" />
+    <Compile Include="MenuComboFullInfo.cs" />
+    <Compile Include="MenuFishPotFullInfo.cs" />
+    <Compile Include="PrintInvoiceInfo.cs" />
+    <Compile Include="PrintMemberPayInfo.cs" />
+    <Compile Include="PrintMemberStoredInfo.cs" />
+    <Compile Include="PrintPayDetail.cs" />
+    <Compile Include="PrintOrderDishInfo.cs" />
+    <Compile Include="PrintOrderInfo.cs" />
+    <Compile Include="QueryOrderInfo.cs" />
+    <Compile Include="ReportDataBase.cs" />
+    <Compile Include="ReportStatisticInfo.cs" />
+    <Compile Include="Request\AddOrderMemberSaleInfoRequest.cs" />
+    <Compile Include="Request\AntiSettlementOrderRequest.cs" />
+    <Compile Include="Request\BackAllDishRequest.cs" />
+    <Compile Include="Request\CancelOrderRequest.cs" />
+    <Compile Include="Request\CanDaoMemberBaseRequest.cs" />
+    <Compile Include="Request\CanDaoMemberCheckMobileRepeatRequest.cs" />
+    <Compile Include="Request\CanDaoMemberLoginLogoutRequest.cs" />
+    <Compile Include="Request\CanDaoMemberModifyPasswordRequest.cs" />
+    <Compile Include="Request\CanDaoMemberQueryRequest.cs" />
+    <Compile Include="Request\CanDaoMemberRegistRequest.cs" />
+    <Compile Include="Request\CanDaoMemberReportLossRequest.cs" />
+    <Compile Include="Request\CanDaoMemberSaleRequest.cs" />
+    <Compile Include="Request\CanDaoMemberStorageRequest.cs" />
+    <Compile Include="Request\GetInvoiceInfoRequest.cs" />
+    <Compile Include="Request\GetOrderMemberInfoRequest.cs" />
+    <Compile Include="Request\SendVerifyCodeRequest.cs" />
+    <Compile Include="Request\TipSettlementRequest.cs" />
+    <Compile Include="Request\UpdateDishWeightRequest.cs" />
+    <Compile Include="Request\UpdateInvoiceRequest.cs" />
+    <Compile Include="Response\CanDaoMemberBaseResponse.cs" />
+    <Compile Include="Response\CanDaoMemberSaleResponse.cs" />
+    <Compile Include="Response\GetBranchInfoResponse.cs" />
+    <Compile Include="Response\GetClearPosInfoResponse.cs" />
+    <Compile Include="Response\GetFishPotDishResponse.cs" />
+    <Compile Include="Response\GetMemberPayInfoResponse.cs" />
+    <Compile Include="Response\GetOrderMemberInfoResponse.cs" />
+    <Compile Include="Response\GetPrintOrderInfoResponse.cs" />
+    <Compile Include="Response\GetReportStatisticInfoBase.cs" />
+    <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
+    <Compile Include="Response\CanDaoMemberQueryResponse.cs" />
+    <Compile Include="Response\CanDaoMemberStorageResponse.cs" />
+    <Compile Include="Response\MenuSingleAllDishDataResponse.cs" />
+    <Compile Include="Response\PrintOrderInfoResponse.cs" />
+    <Compile Include="Response\QueryOrderInfoResponse.cs" />
+    <Compile Include="Response\ReportDishInfoResponse.cs" />
+    <Compile Include="Response\ReportTipInfoResponse.cs" />
+    <Compile Include="Response\SendVerifyCodeResponse.cs" />
+    <Compile Include="PrintOrderFullInfo.cs" />
+    <Compile Include="UnclearMachineInfo.cs" />
+    <Compile Include="OnCompanyAccountInfo.cs" />
+    <Compile Include="OrderDishInfo.cs" />
+    <Compile Include="Enum\EnumCouponType.cs" />
+    <Compile Include="Enum\EnumDishStatus.cs" />
+    <Compile Include="Enum\EnumDishType.cs" />
+    <Compile Include="Enum\EnumOrderStatus.cs" />
+    <Compile Include="Enum\EnumRightType.cs" />
+    <Compile Include="Enum\EnumSystemDataType.cs" />
+    <Compile Include="Enum\EnumTableStatus.cs" />
+    <Compile Include="Enum\EnumTableType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Request\AuthorizeLoginRequest.cs" />
+    <Compile Include="Request\BackDishRequest.cs" />
+    <Compile Include="Request\CalcDiscountAmountRequest.cs" />
+    <Compile Include="Request\ClearnerRequest.cs" />
+    <Compile Include="Request\DishDetailRequest.cs" />
+    <Compile Include="Request\EndWorkRequest.cs" />
+    <Compile Include="Request\EndWorkSyncDataRequest.cs" />
+    <Compile Include="Request\GetAllDishInfoRequest.cs" />
+    <Compile Include="Request\CouponInfoRequest.cs" />
+    <Compile Include="Request\GetMenuComboDishRequest.cs" />
+    <Compile Include="Request\GetOrderInvoiceRequest.cs" />
+    <Compile Include="Request\GetSystemSetDataRequest.cs" />
+    <Compile Include="Request\GetUserRightRequest.cs" />
+    <Compile Include="Request\OpenTableRequest.cs" />
+    <Compile Include="Request\OrderDishRequest.cs" />
+    <Compile Include="Request\PayBillRequest.cs" />
+    <Compile Include="Request\SaveCouponInfoRequest.cs" />
+    <Compile Include="Request\VerifyUserRequest.cs" />
+    <Compile Include="Response\AuthorizeLoginResponse.cs" />
+    <Compile Include="Response\CalcDiscountAmountResponse.cs" />
+    <Compile Include="Response\CheckWhetherEndWorkResponse.cs" />
+    <Compile Include="Response\FavorableResponse.cs" />
+    <Compile Include="Response\CouponInfoResponse.cs" />
+    <Compile Include="Response\GetBackDishInfoResponse.cs" />
+    <Compile Include="Response\GetBankInfoResponse.cs" />
+    <Compile Include="Response\GetMenuComboDishResponse.cs" />
+    <Compile Include="Response\GetMenuDishInfoResponse.cs" />
+    <Compile Include="Response\GetDinnerWareInfoResponse.cs" />
+    <Compile Include="Response\GetMenuDishGroupInfoResponse.cs" />
+    <Compile Include="Response\GetFavorableResponse.cs" />
+    <Compile Include="Response\GetOnCompanyAccountResponse.cs" />
+    <Compile Include="Response\GetOrderDishListResponse.cs" />
+    <Compile Include="Response\GetOrderInvoiceResponse.cs" />
+    <Compile Include="Response\GetSystemSetDataResponse.cs" />
+    <Compile Include="Response\GetTradeTimeResponse.cs" />
+    <Compile Include="Response\OpenTableResponse.cs" />
+    <Compile Include="Response\RestBaseResponse.cs" />
+    <Compile Include="Response\JavaResponse.cs" />
+    <Compile Include="Response\TableFullInfoResponse.cs" />
+    <Compile Include="Response\TableInfoResponse.cs" />
+    <Compile Include="Response\VerifyUserResponse.cs" />
+    <Compile Include="ServiceInterfaceInfo.cs" />
+    <Compile Include="SystemSetData.cs" />
+    <Compile Include="TableFullInfo.cs" />
+    <Compile Include="TableInfo.cs" />
+    <Compile Include="TradeTime.cs" />
+    <Compile Include="UsedCouponInfo.cs" />
+    <Compile Include="UserInfo.cs" />
+    <Compile Include="UserRight.cs" />
+    <Compile Include="WorkFlowInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

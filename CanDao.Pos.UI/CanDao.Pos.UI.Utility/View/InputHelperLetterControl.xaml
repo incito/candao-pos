@@ -1,0 +1,191 @@
+﻿<UserControl x:Class="CanDao.Pos.UI.Utility.View.InputHelperLetterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModel="clr-namespace:CanDao.Pos.UI.Utility.ViewModel"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <viewModel:InputHelperControlVm />
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!--<RepeatButton Grid.Row="1" Grid.Column="0" Content="4" Command="{Binding InputCmd}" CommandParameter="D4" Interval="100"/>-->
+        <Grid Visibility="{Binding IsNumber, Converter={StaticResource Bool2VisibilityCvt}}" Grid.ColumnSpan="3" Grid.RowSpan="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <dxe:ButtonEdit Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="1" Command="{Binding InputCmd}" CommandParameter="1"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="0" Grid.Column="1" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="2" Command="{Binding InputCmd}" CommandParameter="2"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="0" Grid.Column="2" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="3" Command="{Binding InputCmd}" CommandParameter="3"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="1" Grid.Column="0" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="4" Command="{Binding InputCmd}" CommandParameter="4"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="1" Grid.Column="1" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="5" Command="{Binding InputCmd}" CommandParameter="5"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="1" Grid.Column="2" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="6" Command="{Binding InputCmd}" CommandParameter="6"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="2" Grid.Column="0" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="7" Command="{Binding InputCmd}" CommandParameter="7"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="2" Grid.Column="1" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="8" Command="{Binding InputCmd}" CommandParameter="8"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="2" Grid.Column="2" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="9" Command="{Binding InputCmd}" CommandParameter="9"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="3" Grid.Column="0" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="00" Command="{Binding InputCmd}" CommandParameter="00"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="3" Grid.Column="1" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="0" Command="{Binding InputCmd}" CommandParameter="0"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="3" Grid.Column="2" Style="{StaticResource NumberBtnStyle}">
+                <dxe:ButtonInfo Content="." Command="{Binding InputCmd}" CommandParameter="."/>
+            </dxe:ButtonEdit>
+        </Grid>
+        <Grid Visibility="{Binding IsLetter, Converter={StaticResource Bool2VisibilityCvt}}" Grid.ColumnSpan="3" Grid.RowSpan="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <dxe:ButtonEdit Grid.Row="0" Grid.Column="0" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="A" Command="{Binding InputCmd}" CommandParameter="A"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="0" Grid.Column="1" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="B" Command="{Binding InputCmd}" CommandParameter="B"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="0" Grid.Column="2" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="C" Command="{Binding InputCmd}" CommandParameter="C"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="0" Grid.Column="3" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="D" Command="{Binding InputCmd}" CommandParameter="D"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="0" Grid.Column="4" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="E" Command="{Binding InputCmd}" CommandParameter="E"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="0" Grid.Column="5" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="F" Command="{Binding InputCmd}" CommandParameter="F"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="1" Grid.Column="0" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="G" Command="{Binding InputCmd}" CommandParameter="G"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="1" Grid.Column="1" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="H" Command="{Binding InputCmd}" CommandParameter="H"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="1" Grid.Column="2" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="I" Command="{Binding InputCmd}" CommandParameter="I"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="1" Grid.Column="3" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="J" Command="{Binding InputCmd}" CommandParameter="K"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="1" Grid.Column="4" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="K" Command="{Binding InputCmd}" CommandParameter="K"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="1" Grid.Column="5" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="L" Command="{Binding InputCmd}" CommandParameter="L"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="2" Grid.Column="0" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="M" Command="{Binding InputCmd}" CommandParameter="M"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="2" Grid.Column="1" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="N" Command="{Binding InputCmd}" CommandParameter="N"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="2" Grid.Column="2" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="O" Command="{Binding InputCmd}" CommandParameter="O"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="2" Grid.Column="3" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="P" Command="{Binding InputCmd}" CommandParameter="P"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="2" Grid.Column="4" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="Q" Command="{Binding InputCmd}" CommandParameter="Q"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="2" Grid.Column="5" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="R" Command="{Binding InputCmd}" CommandParameter="R"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="3" Grid.Column="0" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="S" Command="{Binding InputCmd}" CommandParameter="S"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="3" Grid.Column="1" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="T" Command="{Binding InputCmd}" CommandParameter="T"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="3" Grid.Column="2" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="U" Command="{Binding InputCmd}" CommandParameter="U"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="3" Grid.Column="3" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="V" Command="{Binding InputCmd}" CommandParameter="V"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="3" Grid.Column="4" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="W" Command="{Binding InputCmd}" CommandParameter="W"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="3" Grid.Column="5" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="X" Command="{Binding InputCmd}" CommandParameter="X"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="4" Grid.Column="0" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="Y" Command="{Binding InputCmd}" CommandParameter="Y"/>
+            </dxe:ButtonEdit>
+            <dxe:ButtonEdit Grid.Row="4" Grid.Column="1" Style="{StaticResource LetterBtnStyle}">
+                <dxe:ButtonInfo Content="Z" Command="{Binding InputCmd}" CommandParameter="Z"/>
+            </dxe:ButtonEdit>
+        </Grid>
+        <dxe:ButtonEdit Grid.Row="0" Grid.Column="3" Style="{StaticResource NumberBtnStyle}">
+            <dxe:ButtonInfo Content="回退" Command="{Binding InputCmd}" CommandParameter="Back"/>
+        </dxe:ButtonEdit>
+        <dxe:ButtonEdit Grid.Row="1" Grid.Column="3" Style="{StaticResource NumberBtnStyle}" Visibility="{Binding IsNumber, Converter={StaticResource Bool2VisibilityCvt}}">
+            <dxe:ButtonInfo Content="字母" Command="{Binding InputCmd}" CommandParameter="Letter"/>
+        </dxe:ButtonEdit>
+        <dxe:ButtonEdit Grid.Row="1" Grid.Column="3" Style="{StaticResource NumberBtnStyle}" Visibility="{Binding IsLetter, Converter={StaticResource Bool2VisibilityCvt}}">
+            <dxe:ButtonInfo Content="数字" Command="{Binding InputCmd}" CommandParameter="Num"/>
+        </dxe:ButtonEdit>
+        <dxe:ButtonEdit Grid.Row="2" Grid.Column="3" Grid.RowSpan="2" Style="{StaticResource NumberBtnStyle}">
+            <dxe:ButtonInfo Command="{Binding InputCmd}" CommandParameter="Enter">
+                <dxe:ButtonInfo.Content>
+                    <TextBlock><Run>确</Run><LineBreak/><LineBreak/><Run>定</Run></TextBlock>
+                </dxe:ButtonInfo.Content>
+            </dxe:ButtonInfo>
+        </dxe:ButtonEdit>
+    </Grid>
+</UserControl>

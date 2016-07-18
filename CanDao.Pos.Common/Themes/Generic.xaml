@@ -1,0 +1,115 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:view="clr-namespace:CanDao.Pos.Common.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/CanDao.Pos.Common;component/Styles/Brushes.xaml"/>
+        <ResourceDictionary Source="/CanDao.Pos.Common;component/Styles/Button.xaml"/>
+        <ResourceDictionary Source="/CanDao.Pos.Common;component/Styles/Images.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="{x:Type view:PosBaseWindow}">
+        <Setter Property="WindowStyle" Value="None"/>
+        <Setter Property="ResizeMode" Value="NoResize"/>
+        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBg}"/>
+        <Setter Property="AllowsTransparency" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type view:PosBaseWindow}">
+                    <Border  CornerRadius="{TemplateBinding WindowCornerRadius}" BorderBrush="Gray" BorderThickness="1" Background="{TemplateBinding Background}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="58"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border x:Name="PART_Title" Background="{StaticResource CanDaoPosColorSelected}">
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{StaticResource CanDaoPosImageLog}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="79" Margin="20,0,0,0"/>
+                                    <Button x:Name="PART_CloseBtn" Grid.Column="1" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"
+                                            Style="{StaticResource NoBorderBtnStyle}" Content="{TemplateBinding CloseBtnText}" IsEnabled="{TemplateBinding CloseBtnEnable}"/>
+                                </Grid>
+                            </Border>
+                            <Border Grid.Row="1">
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type view:SwitchItemViewer}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type view:SwitchItemViewer}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter x:Name="PART_ImageHost"
+                                          Content="{TemplateBinding SelectedItem}"
+                                          ContentTemplate="{TemplateBinding ItemViewerTemplate}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          IsHitTestVisible="False"
+                                          Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type view:SwitchListBox}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type view:SwitchListBox}">
+                    <ListBox x:Name="PART_ListBox"
+                             ItemsSource="{TemplateBinding GroupedItemsSource}"
+                             SelectedItem="{TemplateBinding SelectedItem}"
+                             ItemsPanel="{TemplateBinding ItemsPanel}"
+                             ItemTemplate="{TemplateBinding ItemTemplate}"
+                             ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                             BorderThickness="{TemplateBinding BorderThickness}"
+                             BorderBrush="{TemplateBinding BorderBrush}"
+                             Background="{TemplateBinding Background}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type view:GroupSelector}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type view:GroupSelector}">
+                    <ListBox x:Name="PART_Selector"
+                             ItemsSource="{TemplateBinding GroupedItemsSource}"
+                             SelectedItem="{TemplateBinding SelectedItem}"
+                             ItemsPanel="{TemplateBinding ItemsPanel}"
+                             ItemTemplate="{TemplateBinding ItemTemplate}"
+                             ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                             BorderThickness="{TemplateBinding BorderThickness}"
+                             BorderBrush="{TemplateBinding BorderBrush}"
+                             Background="{TemplateBinding Background}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

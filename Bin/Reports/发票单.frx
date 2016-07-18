@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="04/14/2016 11:40:36" ReportInfo.Modified="04/14/2016 11:52:27" ReportInfo.CreatorVersion="2014.4.8.0" PrintSettings.ShowDialog="false">
+  <Dictionary>
+    <TableDataSource Name="tb_main" ReferenceName="tb_main" DataType="System.Int32" Enabled="true">
+      <Column Name="TableName" Alias="桌号" DataType="System.String"/>
+      <Column Name="OrderId" Alias="订单号" DataType="System.String"/>
+      <Column Name="InvoiceAmount" Alias="发票金额" DataType="System.Decimal"/>
+      <Column Name="InvoiceTitle" Alias="发票抬头" DataType="System.String"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="72.1" PaperHeight="296.9" RawPaperSize="136" LeftMargin="2.5" TopMargin="0" RightMargin="2.5" FirstPageSource="15" OtherPagesSource="15">
+    <ReportTitleBand Name="ReportTitle1" Width="253.64" Height="170.1">
+      <TextObject Name="Text1" Width="255.15" Height="28.35" Text="开发票" HorzAlign="Center" VertAlign="Center" Font="宋体, 18pt, style=Bold"/>
+      <RichObject Name="Rich1" Top="28.35" Width="264.6" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs24\lang2052\'d7\'c0\'ba\'c5\b0\'a3\'ba[tb_main.\'d7\'c0\'ba\'c5]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich2" Top="47.25" Width="264.6" Height="18.9" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs24\lang2052\'d5\'cb\'b5\'a5\'ba\'c5\b0\'a3\'ba[tb_main.\'b6\'a9\'b5\'a5\'ba\'c5]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich3" Top="75.6" Width="264.6" Height="28.35" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs32\lang2052\'b7\'a2\'c6\'b1\'bd\'f0\'b6\'ee\b0\'a3\'ba[tb_main.\'b7\'a2\'c6\'b1\'bd\'f0\'b6\'ee]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+      <RichObject Name="Rich4" Top="103.95" Width="264.6" Height="28.35" CanGrow="true" CanBreak="false" Text="{\rtf1\ansi\ansicpg936\deff0\nouicompat\deflang1033\deflangfe2052{\fonttbl{\f0\fnil\fcharset134 \'cb\'ce\'cc\'e5;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.10586}\viewkind4\uc1 &#13;&#10;\pard\b\f0\fs32\lang2052\'b7\'a2\'c6\'b1\'cc\'a7\'cd\'b7\b0\'a3\'ba[tb_main.\'b7\'a2\'c6\'b1\'cc\'a7\'cd\'b7]\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
+    </ReportTitleBand>
+  </ReportPage>
+</Report>

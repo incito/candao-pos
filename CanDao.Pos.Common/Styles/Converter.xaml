@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converter="clr-namespace:CanDao.Pos.Common.Converter">
+    <BooleanToVisibilityConverter x:Key="Bool2VisibilityCvt"/>
+    <converter:IndexCountConverter x:Key="IndexCountCvt"/>
+    <converter:BooleanToCollapsedConverter x:Key="Bool2CollapsedCvt"/>
+    <converter:BooleanRevertConverter x:Key="BoolRevertCvt"/>
+    <converter:EnumGenderToCheckedConverter x:Key="Gender2CheckedCvt"/>
+    <converter:OfferTypeToVisiblityConverter x:Key="OfferType2VisibilityCvt"/>
+    <converter:OfferTypeToCheckedConverter x:Key="OfferType2CheckedCvt"/>
+    <converter:PayTypeToCheckedConverter x:Key="PayType2CheckedCvt"/>
+    <converter:ZeroToNullStringConverter x:Key="Zero2NullStringCvt"/>
+    <converter:StringToVisibleConverter x:Key="Strinig2VisibleCvt"/>
+    <converter:CountToVisibleConverter x:Key="Count2VisibleCvt"/>
+    <converter:CountAddOneConverter x:Key="CountAdd1Cvt"/>
+</ResourceDictionary>

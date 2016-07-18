@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<InterfaceInfo>
+  <Item Name="IAccountService" DllName="CanDao.Pos.ServiceImpl.dll" ClassName="CanDao.Pos.ServiceImpl.AccountServiceImpl"/>
+  <Item Name="IRestaurantService" DllName="CanDao.Pos.ServiceImpl.dll" ClassName="CanDao.Pos.ServiceImpl.RestaurantServiceImpl"/>
+  <Item Name="IOrderService" DllName="CanDao.Pos.ServiceImpl.dll" ClassName="CanDao.Pos.ServiceImpl.OrderServiceImpl"/>
+  <Item Name="IMemberService" DllName="CanDao.Pos.ServiceImpl.dll" ClassName="CanDao.Pos.ServiceImpl.MemberServiceImpl"/>
+</InterfaceInfo>

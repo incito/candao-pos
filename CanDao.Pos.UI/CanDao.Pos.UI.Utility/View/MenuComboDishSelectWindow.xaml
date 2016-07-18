@@ -1,0 +1,79 @@
+﻿<dx:DXWindow x:Class="CanDao.Pos.UI.Utility.View.MenuComboDishSelectWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:controls="clr-namespace:CanDao.Pos.UI.Utility.Controls"
+             Width="860" Height="768" Title="选择套餐窗口"
+             WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WndLoadCmd}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <dx:DXWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </dx:DXWindow.Resources>
+    <dxlc:LayoutControl Orientation="Vertical" Padding="0">
+        <view:WindowTitleOperControl VerticalAlignment="Top"/>
+
+        <dxlc:LayoutGroup VerticalAlignment="Top" Height="590">
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <ScrollViewer x:Name="SvList" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <dxlc:LayoutGroup Orientation="Vertical" VerticalAlignment="Top">
+                        <TextBlock Text="{Binding Data.ComboSelfInfo.DishName}" FontSize="18" FontWeight="Bold" VerticalAlignment="Top"/>
+                        <Border Height="2" HorizontalAlignment="Stretch" Background="CadetBlue" VerticalAlignment="Top"/>
+                        <ItemsControl ItemsSource="{Binding Data.ComboDishInfos}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="500">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="0,0,0,2" BorderBrush="Coral">
+                                        <view:ComboSelectorControl />
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ItemsControl ItemsSource="{Binding Data.SingleDishInfos}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="600">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Height="35">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="FontSize" Value="16"/>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <TextBlock Text="{Binding DishName}"/>
+                                        <TextBlock Text="{Binding DishCount, StringFormat=（{0}}"/>
+                                        <TextBlock Text="{Binding Unit, StringFormat={}{0}）}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </dxlc:LayoutGroup>
+                </ScrollViewer>
+                <controls:DietSetControl x:Name="DietSetCtrl" VerticalAlignment="Bottom"/>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup VerticalAlignment="Top" HorizontalAlignment="Right">
+                <view:InputHelperStripControl Width="60"/>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>
+        
+        <dxlc:LayoutGroup>
+            <dxlc:LayoutGroup VerticalAlignment="Center" Visibility="{Binding NeedPageUpDown, Converter={StaticResource Bool2VisibilityCvt}}">
+                <dxe:ButtonEdit Width="120" Height="40">
+                    <dxe:ButtonInfo Content="上翻" Command="{Binding PageUpCmd}"/>
+                </dxe:ButtonEdit>
+                <dxe:ButtonEdit Margin="20,0,0,0" Width="120" Height="40">
+                    <dxe:ButtonInfo Content="下翻" Command="{Binding PageDownCmd}"/>
+                </dxe:ButtonEdit>
+            </dxlc:LayoutGroup>
+            <view:WindowButtonOperControl HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</dx:DXWindow>

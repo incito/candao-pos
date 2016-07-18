@@ -1,0 +1,46 @@
+﻿<dx:DXWindow x:Class="CanDao.Pos.UI.Utility.View.AntiSettlementReasonSelectorWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
+             Width="640" Height="480" Title="选择反结原因窗口"
+             WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False"
+             x:Name="MainWnd">
+    <dx:DXWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </dx:DXWindow.Resources>
+    <dxlc:LayoutControl Orientation="Vertical" Padding="0">
+        <view:WindowTitleOperControl VerticalAlignment="Top"/>
+
+        <TextBlock  Text="请选择反结原因：" FontSize="28" Margin="10" VerticalAlignment="Top"/>
+        <dxe:TextEdit EditValue="{Binding SelectedReason, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontSize="20" Height="30"/>
+        <ItemsControl ItemsSource="{Binding ., Source={x:Static common:SystemConfigCache.ResettlementReasonList}}" Margin="10,5,5,5">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <RadioButton Content="{Binding .}" FontSize="20" Margin="5" GroupName="Reason">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding DataContext.ReasonListCheckedCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <view:WindowButtonOperControl HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+    </dxlc:LayoutControl>
+</dx:DXWindow>

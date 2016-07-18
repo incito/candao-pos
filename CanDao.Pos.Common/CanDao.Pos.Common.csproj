@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{01E063C3-700A-4A8F-8DA7-64C5E5863384}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CanDao.Pos.Common</RootNamespace>
+    <AssemblyName>CanDao.Pos.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.Core.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.Grid.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.Grid.v13.1.Core, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.LayoutControl.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="JunLan.Common.Base">
+      <HintPath>..\Bin\Lib\JunLan.Common.Base.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Lib\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Lib\System.Net.Http.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Bin\Lib\System.Net.Http.Formatting.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AllLog.cs" />
+    <Compile Include="BaseNotifyObject.cs" />
+    <Compile Include="BaseViewModel.cs" />
+    <Compile Include="ClientLog.cs" />
+    <Compile Include="Controls\GroupSelector.cs" />
+    <Compile Include="Controls\PosBaseWindow.cs" />
+    <Compile Include="Controls\SwitchItemViewer.cs" />
+    <Compile Include="Controls\SwitchListBox.cs" />
+    <Compile Include="Converter\BooleanRevertConverter.cs" />
+    <Compile Include="Converter\BooleanToCollapsedConverter.cs" />
+    <Compile Include="Converter\CountAddOneConverter.cs" />
+    <Compile Include="Converter\CountToVisibleConverter.cs" />
+    <Compile Include="Converter\EnumGenderToCheckedConverter.cs" />
+    <Compile Include="Converter\IndexCountConverter.cs" />
+    <Compile Include="Converter\OfferTypeToCheckedConverter.cs" />
+    <Compile Include="Converter\OfferTypeToVisiblityConverter.cs" />
+    <Compile Include="Converter\PayTypeToCheckedConverter.cs" />
+    <Compile Include="Converter\StringToVisibleConverter.cs" />
+    <Compile Include="Converter\ZeroToNullStringConverter.cs" />
+    <Compile Include="ErrLog.cs" />
+    <Compile Include="ExceptionHelper.cs" />
+    <Compile Include="Globals.cs" />
+    <Compile Include="HttpHelper.cs" />
+    <Compile Include="InfoLog.cs" />
+    <Compile Include="IniFileHelper.cs" />
+    <Compile Include="InternationaHelper.cs" />
+    <Compile Include="JsonHelper.cs" />
+    <Compile Include="LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MD5Encrypt.cs" />
+    <Compile Include="MessageDialog.xaml.cs">
+      <DependentUpon>MessageDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NetwrokHelper.cs" />
+    <Compile Include="NormalWindowViewModel.cs" />
+    <Compile Include="NotifyDialog.cs" />
+    <Compile Include="NotifyWindow.cs" />
+    <Compile Include="PosIni.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="RestHttpHelper.cs" />
+    <Compile Include="ServiceAddrCache.cs" />
+    <Compile Include="Simulation.cs" />
+    <Compile Include="SoftKeyboardHelper.cs" />
+    <Compile Include="StringEncodingHelper.cs" />
+    <Compile Include="SystemConfigCache.cs" />
+    <Compile Include="TaskService.cs" />
+    <Compile Include="TemplateSelector\DishPayamountTemplateSelector.cs" />
+    <Compile Include="WindowHelper.cs" />
+    <Compile Include="WorkFlowService.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\CanDaoLog1.png" />
+    <Resource Include="Images\CanDaoLog2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="BaseDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Brushes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Converter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\CustomerDataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Images.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\CanDaoPosSplash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CanDao.Pos.Model\CanDao.Pos.Model.csproj">
+      <Project>{2ee5104a-0b22-497e-8ade-a83a420c83d8}</Project>
+      <Name>CanDao.Pos.Model</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Takeout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Return.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Clear.png" />
+    <Resource Include="Images\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\EndWork.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Order.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Add.png" />
+    <Resource Include="Images\Down.png" />
+    <Resource Include="Images\Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Clear32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Left.png" />
+    <Resource Include="Images\Right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Free.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ChangeShift_Dis.png" />
+    <Resource Include="Images\ChangeShift_Normal.png" />
+    <Resource Include="Images\ChangeShift_Press.png" />
+    <Resource Include="Images\EndWork_Dis.png" />
+    <Resource Include="Images\EndWork_Normal.png" />
+    <Resource Include="Images\EndWork_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Retry_Down.png" />
+    <Resource Include="Images\Retry_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Print128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ToBeWeigh.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Reduce.png" />
+    <Resource Include="Images\SelectNum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Add1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Logo1.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
