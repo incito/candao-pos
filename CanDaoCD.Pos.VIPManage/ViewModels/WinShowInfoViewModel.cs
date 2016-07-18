@@ -115,9 +115,13 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
                     {
                         Model.ShowInfo = string.Format("会员卡序列号：{0}，确认新增该实体会员卡吗？", Model.CardNum);
                     }
-                    else
+                    else if(!string.IsNullOrEmpty(VipChangeInfo.CardNum))
                     {
                         Model.ShowInfo = string.Format("确定将会员卡号[{0}]修改为：[{1}]吗？",VipChangeInfo.CardNum, Model.CardNum);
+                    }
+                    else
+                    {
+                        Model.ShowInfo = string.Format("会员卡序列号：{0}，确认绑定该实体会员卡吗？", Model.CardNum);
                     }
                     Model.IsEnableBtn = true;
                 }
