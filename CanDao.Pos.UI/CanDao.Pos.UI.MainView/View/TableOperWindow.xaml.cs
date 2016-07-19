@@ -23,34 +23,6 @@ namespace CanDao.Pos.UI.MainView.View
             DataContext = new TableOperTakeoutWndVm(tableName) { OwnerWindow = this };
         }
 
-        public void DishListPageUp()
-        {
-            DishListGc.Focus();
-            Keyboard.Press(Key.PageUp);
-            Keyboard.Release(Key.PageUp);
-        }
-
-        public void DishListPageDowm()
-        {
-            DishListGc.Focus();
-            Keyboard.Press(Key.PageDown);
-            Keyboard.Release(Key.PageDown);
-        }
-
-        public void CouponListPageUp()
-        {
-            CouponListGc.Focus();
-            Keyboard.Press(Key.PageUp);
-            Keyboard.Release(Key.PageUp);
-        }
-
-        public void CouponListPageDown()
-        {
-            CouponListGc.Focus();
-            Keyboard.Press(Key.PageDown);
-            Keyboard.Release(Key.PageDown);
-        }
-
         private void UIElement_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)

@@ -13,4 +13,5 @@
     <converter:StringToVisibleConverter x:Key="Strinig2VisibleCvt"/>
     <converter:CountToVisibleConverter x:Key="Count2VisibleCvt"/>
     <converter:CountAddOneConverter x:Key="CountAdd1Cvt"/>
+    <converter:CountToCollapsedConverter x:Key="Count2CollapsedCvt"/>
 </ResourceDictionary>

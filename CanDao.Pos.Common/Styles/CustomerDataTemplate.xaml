@@ -10,7 +10,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="DishPayamountNormalTemplate">
-        <TextBlock Text="{Binding RowData.Row.PayAmount}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBlock Text="{Binding PayAmount}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
     </DataTemplate>
 
     <DataTemplate x:Key="RowIndexDataTemplate">

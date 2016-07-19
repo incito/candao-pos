@@ -87,6 +87,7 @@
     <Compile Include="Converter\BooleanRevertConverter.cs" />
     <Compile Include="Converter\BooleanToCollapsedConverter.cs" />
     <Compile Include="Converter\CountAddOneConverter.cs" />
+    <Compile Include="Converter\CountToCollapsedConverter.cs" />
     <Compile Include="Converter\CountToVisibleConverter.cs" />
     <Compile Include="Converter\EnumGenderToCheckedConverter.cs" />
     <Compile Include="Converter\IndexCountConverter.cs" />

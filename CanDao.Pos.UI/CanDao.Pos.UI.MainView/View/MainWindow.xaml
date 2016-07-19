@@ -19,6 +19,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:PosBaseWindow.Resources>
+    <controls:PosBaseWindow.TitleContent>
+        <view:MemberControl />
+    </controls:PosBaseWindow.TitleContent>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

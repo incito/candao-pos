@@ -58,7 +58,7 @@
             </Border>
 
             <Border Grid.Row="1" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Margin="16,10,16,16" HorizontalAlignment="Center">
-                <controls:GroupSelector x:Name="DishGroupSelector" ItemsSource="{Binding OrderDishInfos}" SelectedItem="{Binding SelectedOrderDish}" ItemCountEachGroup="2">
+                <controls:GroupSelector x:Name="DishGroupSelector" ItemsSource="{Binding OrderDishInfos}" SelectedItem="{Binding SelectedOrderDish}" ItemCountEachGroup="20">
                     <controls:GroupSelector.Template>
                         <ControlTemplate TargetType="controls:GroupSelector">
                             <DataGrid x:Name="PART_Selector" AutoGenerateColumns="False" FontSize="14" CanUserResizeColumns="False" CanUserAddRows="False" SelectionUnit="FullRow"

@@ -15,6 +15,7 @@ using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
 using CanDao.Pos.UI.Utility.ViewModel;
+using DevExpress.Xpf.Editors.Helpers;
 using JunLan.Common.Base;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
@@ -90,6 +91,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         public ObservableCollection<CouponCategory> CouponCategories { get; private set; }
 
         /// <summary>
+        /// 当前优惠券分类下的优惠券集合。
+        /// </summary>
+        public ObservableCollection<CouponInfo> CouponInfos { get; private set; }
+
+        /// <summary>
         /// 选择的优惠分类。
         /// </summary>
         private CouponCategory _selectedCouponCategory;
@@ -107,10 +113,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _selectedCouponCategory = value;
                 RaisePropertiesChanged("SelectedCouponCategory");
 
+                CouponInfos.Clear();
                 if (value.CouponInfos == null || !value.CouponInfos.Any())
                 {
                     InfoLog.Instance.I("开始获取\"{0}\"优惠券...", value.CategoryName);
                     TaskService.Start(value.CategoryType, GetCouponCategoriesProcess, GetCouponCategoriesComplete);
+                }
+                else
+                {
+                    value.CouponInfos.ForEach(CouponInfos.Add);
                 }
             }
         }
@@ -540,17 +551,23 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             TableOperWindow wnd = (TableOperWindow)OwnerWindow;
             switch ((string)param)
             {
-                case "DishUp":
-                    wnd.DishListPageUp();
+                case "DishPreGroup":
+                    wnd.DishGroupSelector.PreviousGroup();
                     break;
-                case "DishDown":
-                    wnd.DishListPageDowm();
+                case "DishNextGroup":
+                    wnd.DishGroupSelector.NextGroup();
                     break;
-                case "CouponUp":
-                    wnd.CouponListPageUp();
+                case "CouponPreGroup":
+                    wnd.CouponGroupSelector.PreviousGroup();
                     break;
-                case "CouponDown":
-                    wnd.CouponListPageDown();
+                case "CouponNextGroup":
+                    wnd.CouponGroupSelector.NextGroup();
+                    break;
+                case "CouponListPreGroup":
+                    wnd.GsCouponList.PreviousGroup();
+                    break;
+                case "CouponListNextGroup":
+                    wnd.GsCouponList.NextGroup();
                     break;
             }
         }
@@ -563,9 +580,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             switch (param as string)
             {
-                case "More":
-                    IsPrintMoreOpened = !IsPrintMoreOpened;
-                    break;
                 case "PreSettlement":
                     IsPrintMoreOpened = false;
                     GetTableDishInfo(null);
@@ -627,6 +641,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             switch (param as string)
             {
+                case "More":
+                    IsPrintMoreOpened = !IsPrintMoreOpened;
+                    break;
                 case "CancelOrder":
                     CancelOrderAsync();
                     break;
@@ -899,6 +916,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void InitCouponCategories()
         {
+            CouponInfos = new ObservableCollection<CouponInfo>();
             CouponCategories = new ObservableCollection<CouponCategory>();
             var coupon = new CouponCategory { CategoryName = "特价", CategoryType = "01" };
             CouponCategories.Add(coupon);
@@ -1673,7 +1691,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("结束获取\"{0}\"优惠券。优惠券个数：{1}", SelectedCouponCategory.CategoryName, result.Item2 != null ? result.Item2.Count : 0);
             if (result.Item2 != null)
-                result.Item2.ForEach(SelectedCouponCategory.CouponInfos.Add);
+                result.Item2.ForEach(t =>
+                {
+                    SelectedCouponCategory.CouponInfos.Add(t);
+                    CouponInfos.Add(t);
+                });
         }
 
         /// <summary>

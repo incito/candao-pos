@@ -24,7 +24,7 @@ namespace CanDao.Pos.Client
         public App()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            ThemeManager.ApplicationThemeName = "Office2010Blue";
+            //ThemeManager.ApplicationThemeName = "Office2010Blue";
         }
 
         private void App_OnStartup(object sender, StartupEventArgs e)

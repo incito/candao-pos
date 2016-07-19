@@ -1,13 +1,15 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace CanDao.Pos.Common.Controls
 {
-
+    /// <summary>
+    /// 基础窗体自定义控件类。
+    /// </summary>
     public class PosBaseWindow : Window
     {
-
         /// <summary>
         /// 关闭按钮文本。
         /// </summary>
@@ -20,8 +22,6 @@ namespace CanDao.Pos.Common.Controls
         public static readonly DependencyProperty CloseBtnTextProperty =
             DependencyProperty.Register("CloseBtnText", typeof(string), typeof(PosBaseWindow), new PropertyMetadata("关闭"));
 
-
-
         public CornerRadius WindowCornerRadius
         {
             get { return (CornerRadius)GetValue(WindowCornerRadiusProperty); }
@@ -30,6 +30,19 @@ namespace CanDao.Pos.Common.Controls
 
         public static readonly DependencyProperty WindowCornerRadiusProperty =
             DependencyProperty.Register("WindowCornerRadius", typeof(CornerRadius), typeof(PosBaseWindow), new PropertyMetadata(new CornerRadius(0)));
+
+
+        /// <summary>
+        /// 标题中间部分内容控件。
+        /// </summary>
+        public Object TitleContent
+        {
+            get { return (Object)GetValue(TitleContentProperty); }
+            set { SetValue(TitleContentProperty, value); }
+        }
+
+        public static readonly DependencyProperty TitleContentProperty =
+            DependencyProperty.Register("TitleContent", typeof(Object), typeof(PosBaseWindow), new PropertyMetadata(null));
 
         /// <summary>
         /// 关闭按钮是否可用。

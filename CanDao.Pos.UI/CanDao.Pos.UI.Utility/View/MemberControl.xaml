@@ -4,7 +4,6 @@
              xmlns:com="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:viewModel="clr-namespace:CanDao.Pos.UI.Utility.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="64" d:DesignWidth="600">
@@ -19,9 +18,9 @@
         <viewModel:MemberControlVm/>
     </UserControl.DataContext>
     <StackPanel Orientation="Horizontal">
-        <Button Content="会员查询" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Query"/>
-        <Button Content="会员储值" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Storage"/>
-        <Button Content="会员注册" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Regist" Visibility="{Binding ., Source={x:Static com:Globals.IsYazuoMember}, Converter={StaticResource Bool2CollapsedCvt}}"/>
-        <Button Content="会员激活" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Active" Visibility="{Binding ., Source={x:Static com:Globals.IsYazuoMember}, Converter={StaticResource Bool2VisibilityCvt}}"/>
+        <Button Content="会员查询" Style="{StaticResource NoBorderBtnStyle}" FontSize="20" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Query"/>
+        <Button Content="会员储值" Style="{StaticResource NoBorderBtnStyle}" FontSize="20" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Storage"/>
+        <Button Content="会员注册" Style="{StaticResource NoBorderBtnStyle}" FontSize="20" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Regist" Visibility="{Binding ., Source={x:Static com:Globals.IsYazuoMember}, Converter={StaticResource Bool2CollapsedCvt}}"/>
+        <Button Content="会员激活" Style="{StaticResource NoBorderBtnStyle}" FontSize="20" Height="60" Width="100" Command="{Binding OperCmd}" CommandParameter="Active" Visibility="{Binding ., Source={x:Static com:Globals.IsYazuoMember}, Converter={StaticResource Bool2VisibilityCvt}}"/>
     </StackPanel>
 </UserControl>

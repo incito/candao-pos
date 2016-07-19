@@ -22,16 +22,19 @@ namespace CanDao.Pos.Common.TemplateSelector
         /// </summary>
         public DataTemplate ToBeWeighTemplate { get; set; }
 
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if(item == null)
+            var parent = ((ContentPresenter) container).Parent;
+            var element = parent as FrameworkElement;
+            if(element == null)
                 return NormalTemplate;
 
-            var data = ((EditGridCellData)item).RowData.Row;
-            if (data == null || !(data is OrderDishInfo))
+            var data = element.DataContext as OrderDishInfo;
+            if (data == null)
                 return NormalTemplate;
 
-            var dishStatus = ((OrderDishInfo)data).DishStatus;
+            var dishStatus = data.DishStatus;
             switch (dishStatus)
             {
                 case EnumDishStatus.Normal:
