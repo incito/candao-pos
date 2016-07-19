@@ -15,8 +15,6 @@
         </ResourceDictionary>
     </dx:DXWindow.Resources>
     <dxlc:LayoutControl Orientation="Vertical" Padding="0">
-        <view:WindowTitleOperControl VerticalAlignment="Top"/>
-
         <dxlc:LayoutGroup>
             <dxlc:LayoutGroup Orientation="Vertical">
                 <dxlc:LayoutItem Label="手机号：" FontSize="25" Margin="2" IsEnabled="False">

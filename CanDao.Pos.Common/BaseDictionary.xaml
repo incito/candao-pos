@@ -104,15 +104,20 @@
     </Style>
 
     <Style TargetType="ToggleButton" x:Key="DietTogBtnStyle">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBg}"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="Bd" Background="White" BorderBrush="Gray" BorderThickness="1.5">
-                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="Gray" BorderThickness="1.5">
+                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="Gray"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource CanDaoPosColorSelected}"/>
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

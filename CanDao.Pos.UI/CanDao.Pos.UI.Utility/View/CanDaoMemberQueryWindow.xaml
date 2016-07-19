@@ -17,7 +17,6 @@
         </ResourceDictionary>
     </dx:DXWindow.Resources>
     <dxlc:LayoutControl Orientation="Vertical" Padding="0">
-        <view:WindowTitleOperControl VerticalAlignment="Top"/>
 
         <dxlc:LayoutGroup Header="会员信息">
             <dxlc:LayoutGroup Orientation="Vertical">

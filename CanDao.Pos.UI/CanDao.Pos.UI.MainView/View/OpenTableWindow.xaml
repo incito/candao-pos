@@ -1,53 +1,71 @@
-﻿<dx:DXWindow x:Class="CanDao.Pos.UI.MainView.View.OpenTableWindow"
+﻿<controls:PosBaseWindow x:Class="CanDao.Pos.UI.MainView.View.OpenTableWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
-             Width="630" ShowIcon="False" Title="餐台开台"
-             WindowStartupLocation="CenterOwner" ResizeMode="NoResize" ShowInTaskbar="False" SizeToContent="Height">
-    <dx:DXWindow.Resources>
+             xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+             xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
+             Width="650" CloseBtnText="餐台开台" CloseBtnEnable="False" ShowInTaskbar="False" SizeToContent="Height" MaxHeight="768">
+    <controls:PosBaseWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </dx:DXWindow.Resources>
-    <dxlc:LayoutControl Padding="5">
-        <dxlc:LayoutGroup Orientation="Vertical" Margin="5">
-            <dxlc:LayoutItem Label="服务员编号：" FontSize="20" LabelHorizontalAlignment="Right">
-                <dxe:TextEdit EditValue="{Binding WaiterId}"/>
-            </dxlc:LayoutItem>
-            <dxlc:LayoutItem Label="桌号：" FontSize="20" LabelHorizontalAlignment="Right">
-                <dxe:TextEdit EditValue="{Binding TableName}" IsEnabled="False"/>
-            </dxlc:LayoutItem>
-            <dxlc:LayoutItem Label="就餐人数（男）：" FontSize="20" LabelHorizontalAlignment="Right">
-                <dxe:TextEdit EditValue="{Binding MaleCustomer, UpdateSourceTrigger=PropertyChanged}" SelectAllOnGotFocus="True"/>
-            </dxlc:LayoutItem>
-            <dxlc:LayoutItem Label="就餐人数（女）：" FontSize="20" LabelHorizontalAlignment="Right">
-                <dxe:TextEdit EditValue="{Binding FemaleCustomer, UpdateSourceTrigger=PropertyChanged}"/>
-            </dxlc:LayoutItem>
-            <dxlc:LayoutItem Label="餐具：" FontSize="20" LabelHorizontalAlignment="Right" Visibility="{Binding IsDinnerWareEnable, Converter={StaticResource Bool2VisibilityCvt}}">
-                <dxe:TextEdit EditValue="{Binding DinnerWareCount}"/>
-            </dxlc:LayoutItem>
-            <dxlc:LayoutGroup VerticalAlignment="Top" Height="45">
-                <ToggleButton Content="儿童" FontSize="20" Margin="3" IsChecked="{Binding HasChild}"/>
-                <ToggleButton Content="青年" FontSize="20"  Margin="3" IsChecked="{Binding HasYoung}"/>
-                <ToggleButton Content="中年" FontSize="20"  Margin="3" IsChecked="{Binding HasMiddleAge}"/>
-                <ToggleButton Content="老年" FontSize="20"  Margin="3" IsChecked="{Binding HasOld}"/>
-            </dxlc:LayoutGroup>
-            <dxlc:LayoutGroup Margin="0,10,0,0">
-                <dxe:ButtonEdit HorizontalAlignment="Left" Width="150">
-                    <dxe:ButtonInfo Content="确定开台" Command="{Binding ConfirmCmd}"/>
-                </dxe:ButtonEdit>
-                <dxe:ButtonEdit HorizontalAlignment="Right" Width="150">
-                    <dxe:ButtonInfo Content="取消" Command="{Binding CancelCmd}"/>
-                </dxe:ButtonEdit>
-            </dxlc:LayoutGroup>
-        </dxlc:LayoutGroup>
-        <dxlc:LayoutGroup>
-            <view:InputNumberControl VerticalAlignment="Bottom" Width="260" Height="260"/>
-        </dxlc:LayoutGroup>
-    </dxlc:LayoutControl>
-</dx:DXWindow>
+    </controls:PosBaseWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="85,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="服务员编号：" />
+            <toolkit:WatermarkTextBox Grid.Row="0" Grid.Column="1" Text="{Binding WaiterId}" Watermark="服务员编号：" VerticalContentAlignment="Center" Height="30" Margin="0,10"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="桌号："/>
+            <toolkit:WatermarkTextBox Grid.Row="1" Grid.Column="1" Text="{Binding TableName}" IsEnabled="False" VerticalContentAlignment="Center" Height="30" Margin="0,10"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="就餐人数（男）："/>
+            <toolkit:WatermarkTextBox Grid.Row="2" Grid.Column="1" Text="{Binding MaleCustomer, UpdateSourceTrigger=PropertyChanged}" Watermark="就餐人数（男）：" VerticalContentAlignment="Center" Height="30" Margin="0,10"/>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="就餐人数（女）："/>
+            <toolkit:WatermarkTextBox Grid.Row="3" Grid.Column="1" Text="{Binding FemaleCustomer, UpdateSourceTrigger=PropertyChanged}" Watermark="就餐人数（女）：" VerticalContentAlignment="Center" Height="30" Margin="0,10"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="餐具："/>
+            <toolkit:WatermarkTextBox Grid.Row="4" Grid.Column="1" Text="{Binding DinnerWareCount}" Visibility="{Binding IsDinnerWareEnable, Converter={StaticResource Bool2VisibilityCvt}}" VerticalContentAlignment="Center" Height="30" Margin="0,10"/>
+        </Grid>
+        
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ToggleButton Content="儿童" Style="{StaticResource DietTogBtnStyle}" FontSize="20" Margin="3" IsChecked="{Binding HasChild}"/>
+            <ToggleButton Grid.Row="0" Grid.Column="1" Content="青年" Style="{StaticResource DietTogBtnStyle}" FontSize="20"  Margin="3" IsChecked="{Binding HasYoung}"/>
+            <ToggleButton Grid.Row="1" Grid.Column="0" Content="中年" Style="{StaticResource DietTogBtnStyle}" FontSize="20"  Margin="3" IsChecked="{Binding HasMiddleAge}"/>
+            <ToggleButton Grid.Row="1" Grid.Column="1" Content="老年" Style="{StaticResource DietTogBtnStyle}" FontSize="20"  Margin="3" IsChecked="{Binding HasOld}"/>
+            <Button Content="确认开台" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ConfirmCmd}"/>
+            <Button Content="取消" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding CancelCmd}"/>
+
+            <view:InputNumberControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="2" Width="260" Height="260"/>
+        </Grid>
+
+    </Grid>
+</controls:PosBaseWindow>

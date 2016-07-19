@@ -69,9 +69,7 @@
                 <Label Content="上月"/>
             </RadioButton>
         </StackPanel>
-        <dxe:ButtonEdit Grid.Row="0" Grid.Column="1">
-            <dxe:ButtonInfo Content="打印" Command="{Binding PrintCmd}"/>
-        </dxe:ButtonEdit>
+        <Button Grid.Row="0" Grid.Column="1" Content="打印" Width="50" Command="{Binding PrintCmd}"/>
 
         <dxg:GridControl x:Name="DcTipView" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding Data.DataSource}">
             <i:Interaction.Triggers>

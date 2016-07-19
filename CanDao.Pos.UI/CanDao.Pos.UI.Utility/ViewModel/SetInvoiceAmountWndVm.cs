@@ -4,7 +4,7 @@ using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.ReportPrint;
 
-namespace CanDao.Pos.UI.MainView.ViewModel
+namespace CanDao.Pos.UI.Utility.ViewModel
 {
     public class SetInvoiceAmountWndVm : NormalWindowViewModel
     {

@@ -6,8 +6,6 @@ using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
-using CanDao.Pos.UI.Utility.View;
-using DevExpress.Xpf.Editors.Helpers;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -122,9 +120,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return;
             }
 
-            result.Item2.Add(new OnCompanyAccountInfo() { Id = "1", Name = "ABCDEFG", NameFirstLetter = "abcdefg" });
-            result.Item2.Add(new OnCompanyAccountInfo() { Id = "2", Name = "你好", NameFirstLetter = "nh" });
-            result.Item2.Add(new OnCompanyAccountInfo() { Id = "3", Name = "我爱你", NameFirstLetter = "wai" });
             Globals.OnCompanyInfos = result.Item2;
             FilterCompany();
         }
@@ -141,7 +136,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (string.IsNullOrEmpty(FilterLetter))
                 Globals.OnCompanyInfos.ForEach(CompanyInfos.Add);
             else
-                Globals.OnCompanyInfos.Where(t => t.NameFirstLetter.ToLower().Contains(FilterLetter.ToLower())).ForEach(CompanyInfos.Add);
+                Globals.OnCompanyInfos.Where(t => t.NameFirstLetter.ToLower().Contains(FilterLetter.ToLower())).ToList().ForEach(CompanyInfos.Add);
         }
     }
 }

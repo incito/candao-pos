@@ -1,7 +1,7 @@
 ﻿using CanDao.Pos.Model;
-using CanDao.Pos.UI.MainView.ViewModel;
+using CanDao.Pos.UI.Utility.ViewModel;
 
-namespace CanDao.Pos.UI.MainView.View
+namespace CanDao.Pos.UI.Utility.View
 {
     /// <summary>
     /// 设置发票金额窗口。

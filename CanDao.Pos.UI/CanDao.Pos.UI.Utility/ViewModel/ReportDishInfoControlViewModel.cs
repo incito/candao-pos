@@ -17,7 +17,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (service == null)
                 return new Tuple<string, ReportStatisticInfo>("创建IRestaurantService服务失败。", null);
 
-            return service.GetReportDishInfo((EnumStatisticsPeriodsType) arg);
+            return service.GetReportDishInfo((EnumStatisticsPeriodsType)arg);
         }
 
         protected override void PrintReport()

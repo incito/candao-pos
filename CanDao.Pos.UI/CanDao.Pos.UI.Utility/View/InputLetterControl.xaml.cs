@@ -34,7 +34,7 @@ namespace CanDao.Pos.UI.Utility.View
         }
 
         public static readonly DependencyProperty ItemSizeProperty =
-            DependencyProperty.Register("ItemSize", typeof(double), typeof(InputLetterControl), new PropertyMetadata(0d));
+            DependencyProperty.Register("ItemSize", typeof(double), typeof(InputLetterControl), new PropertyMetadata(40d));
 
 
     }

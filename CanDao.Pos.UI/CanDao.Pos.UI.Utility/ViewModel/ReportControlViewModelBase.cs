@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using CanDao.Pos.Common;
+using CanDao.Pos.Common.Controls;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using DevExpress.Xpf.Grid;
@@ -66,6 +68,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
         }
 
+        /// <summary>
+        /// 分组控件。
+        /// </summary>
+        public GroupSelector GsCtrl { get; set; }
+
         #endregion
 
         #region Command
@@ -90,6 +97,16 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// </summary>
         public ICommand StatisticCheckedCmd { get; private set; }
 
+        /// <summary>
+        /// 上一组命令。
+        /// </summary>
+        public ICommand PreGroupCmd { get; private set; }
+
+        /// <summary>
+        /// 下一组命令。
+        /// </summary>
+        public ICommand NextGroupCmd { get; private set; }
+
         #endregion
 
         #region Command Methods
@@ -109,7 +126,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <param name="arg"></param>
         private void EndSorting(object arg)
         {
-            _gridSortInfo = ((GridControl)arg).SortInfo.First();
+            //_gridSortInfo = ((DataGrid)arg).Columns.
         }
 
         /// <summary>
@@ -142,6 +159,28 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             StatisticsPeriodsType = (EnumStatisticsPeriodsType)Enum.Parse(typeof(EnumStatisticsPeriodsType), (string)arg);
         }
 
+        protected virtual void PreGroup(object arg)
+        {
+            if (GsCtrl != null)
+                GsCtrl.PreviousGroup();
+        }
+
+        protected virtual bool CanPreGroup(object arg)
+        {
+            return GsCtrl == null || GsCtrl.CanPreviousGroup;
+        }
+
+        protected virtual void NextGroup(object arg)
+        {
+            if (GsCtrl != null)
+                GsCtrl.NextGroup();
+        }
+
+        protected virtual bool CanNextGroup(object arg)
+        {
+            return GsCtrl == null || GsCtrl.CanNextGruop;
+        }
+
         #endregion
 
         #region Protected Methods
@@ -152,6 +191,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             EndSortingCmd = CreateDelegateCommand(EndSorting);
             PrintCmd = CreateDelegateCommand(Print);
             StatisticCheckedCmd = CreateDelegateCommand(StatisticChecked);
+            PreGroupCmd = CreateDelegateCommand(PreGroup, CanPreGroup);
+            NextGroupCmd = CreateDelegateCommand(NextGroup, CanNextGroup);
         }
 
         /// <summary>
@@ -243,7 +284,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <summary>
         /// 打印报表。
         /// </summary>
-        protected virtual void PrintReport() { } 
+        protected virtual void PrintReport() { }
 
         #endregion
     }

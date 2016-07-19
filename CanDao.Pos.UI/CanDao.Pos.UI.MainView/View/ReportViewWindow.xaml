@@ -1,50 +1,42 @@
-﻿<dx:DXWindow x:Class="CanDao.Pos.UI.MainView.View.ReportViewWindow"
+﻿<controls:PosBaseWindow x:Class="CanDao.Pos.UI.MainView.View.ReportViewWindow"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"  
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             Title="报表查看窗口" Height="680" Width="900"
-             WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+             xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+             CloseBtnText="报表窗口" Height="680" Width="900" ShowInTaskbar="False"
              x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding DataContext.WndLoadCmd, ElementName=MainWnd}" CommandParameter="Load"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <dx:DXWindow.Resources>
+    <controls:PosBaseWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </dx:DXWindow.Resources>
+    </controls:PosBaseWindow.Resources>
 
-    <dxlc:LayoutControl Orientation="Vertical" Padding="0">
-        <view:WindowTitleOperControl VerticalAlignment="Top"/>
-        <dx:DXTabControl Margin="5">
-            <dx:DXTabItem>
-                <dx:DXTabItem.Header>
-                    <TextBlock Text="品项销售明细" FontSize="20" FontWeight="Bold" Height="40"/>
-                </dx:DXTabItem.Header>
-                <dx:DXTabItem.Content>
-                    <view:ReportDishInfoControl/>
-                </dx:DXTabItem.Content>
-            </dx:DXTabItem>
-            <dx:DXTabItem>
-                <dx:DXTabItem.Header>
-                    <TextBlock Text="小费统计明细" FontSize="20" FontWeight="Bold" Height="40"/>
-                </dx:DXTabItem.Header>
-                <dx:DXTabItem.Content>
-                    <view:ReportTipInfoControl/>
-                </dx:DXTabItem.Content>
-            </dx:DXTabItem>
-            <dx:DXTabControl.View>
-                <dx:TabControlScrollView HeaderLocation="Left" HeaderOrientation="Horizontal" />
-            </dx:DXTabControl.View>
-        </dx:DXTabControl>
-    </dxlc:LayoutControl>
-</dx:DXWindow>
+    <TabControl TabStripPlacement="Left" Margin="10">
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Text="品项销售明细" FontSize="20" FontWeight="Bold" Height="40"/>
+            </TabItem.Header>
+            <TabItem.Content>
+                <view:ReportDishInfoControl/>
+            </TabItem.Content>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Text="小费统计明细" FontSize="20" FontWeight="Bold" Height="40"/>
+            </TabItem.Header>
+            <TabItem.Content>
+                <view:ReportTipInfoControl/>
+            </TabItem.Content>
+        </TabItem>
+    </TabControl>
+</controls:PosBaseWindow>

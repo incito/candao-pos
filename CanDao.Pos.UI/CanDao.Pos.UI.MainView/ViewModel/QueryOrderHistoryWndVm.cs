@@ -8,6 +8,7 @@ using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.ReportPrint;
+using CanDao.Pos.UI.MainView.View;
 using DevExpress.Xpf.Editors.Helpers;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
@@ -158,6 +159,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "ReprintClearn":
                     ReportPrintHelper.PrintClearPosReport(Globals.UserInfo.UserName);
                     break;
+                case "PreGroup":
+                    ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.PreviousGroup();
+                    break;
+                case "NextGroup":
+                    ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.NextGroup();
+                    break;
                 case "PayBill":
                     break;
                 case "AntiPayBill":
@@ -181,6 +188,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
                 case "PayBill":
                     enable = SelectedOrder != null && !SelectedOrder.HasBeenPaied;
+                    break;
+                case "PreGroup":
+                    enable = ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.CanPreviousGroup;
+                    break;
+                case "NextGroup":
+                    enable = ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.CanNextGruop;
                     break;
             }
             return enable;

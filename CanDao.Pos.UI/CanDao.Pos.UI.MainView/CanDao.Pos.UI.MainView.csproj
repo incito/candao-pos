@@ -38,8 +38,9 @@
     <Reference Include="DevExpress.Xpf.Grid.v13.1.Core, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.LayoutControl.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="Engine.Wpf.Toolkit">
-      <HintPath>..\..\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
+    <Reference Include="Engine.Wpf.Toolkit, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\NewPos\CanDao.Pos.Client\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="JunLan.Common.Base">
       <HintPath>..\..\Bin\Lib\JunLan.Common.Base.dll</HintPath>
@@ -81,7 +82,6 @@
     <Compile Include="ViewModel\OrderDishWndVm.cs" />
     <Compile Include="ViewModel\QueryOrderHistoryWndVm.cs" />
     <Compile Include="ViewModel\RestaurantOpeningWndVm.cs" />
-    <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
     <Compile Include="ViewModel\TableOperNormalWndVm.cs" />
     <Compile Include="ViewModel\TableOperTakeoutWndVm.cs" />
     <Compile Include="ViewModel\TableOperWndVm.cs" />
@@ -102,9 +102,6 @@
     </Compile>
     <Compile Include="View\RestaurantOpeningWindow.xaml.cs">
       <DependentUpon>RestaurantOpeningWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\SetInvoiceAmountWindow.xaml.cs">
-      <DependentUpon>SetInvoiceAmountWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TableOperWindow.xaml.cs">
       <DependentUpon>TableOperWindow.xaml</DependentUpon>
@@ -174,10 +171,6 @@
     <Page Include="View\RestaurantOpeningWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\SetInvoiceAmountWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\TableOperWindow.xaml">
       <SubType>Designer</SubType>

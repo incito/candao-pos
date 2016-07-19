@@ -98,9 +98,9 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding OperCmd}" CommandParameter="OrderDishPreGroup"/>
-                    <TextBlock Text="{Binding SelectedGroupIndex, ElementName=DishGroupSelector, Converter={StaticResource CountAdd1Cvt}}"/>
+                    <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=DishGroupSelector}"/>
                     <TextBlock Text="/"/>
-                    <TextBlock Text="{Binding GroupCount, ElementName=DishGroupSelector}"></TextBlock>
+                    <TextBlock Text="{Binding GroupCount, ElementName=DishGroupSelector}"/>
                     <Button Style="{StaticResource BtnRightStyle}" Command="{Binding OperCmd}" CommandParameter="OrderDishNextGroup"/>
                 </StackPanel>
             </Grid>
@@ -136,7 +136,7 @@
                     </controls:GroupSelector.ItemTemplate>
                     <controls:GroupSelector.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
-                            
+
                         </Style>
                     </controls:GroupSelector.ItemContainerStyle>
                 </controls:GroupSelector>

@@ -2,9 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModel="clr-namespace:CanDao.Pos.UI.Utility.ViewModel"
-             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding ControlLoadCmd}"/>
@@ -17,9 +16,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <viewModel:ReportDishInfoControlViewModel/>
-    </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -65,31 +61,33 @@
                 <Label Content="上月"/>
             </RadioButton>
         </StackPanel>
-        <dxe:ButtonEdit Grid.Row="0" Grid.Column="1">
-            <dxe:ButtonInfo Content="打印" Command="{Binding PrintCmd}"/>
-        </dxe:ButtonEdit>
+        <Button Grid.Row="0" Grid.Column="1" Content="打印" Width="50" Command="{Binding PrintCmd}"/>
 
-        <dxg:GridControl x:Name="DcDishView" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding DataSource}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="EndSorting">
-                    <i:InvokeCommandAction Command="{Binding EndSortingCmd}" CommandParameter="{Binding ., ElementName=DcDishView}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <dxg:GridControl.Columns>
-                <dxg:GridColumn Header="品项名称" VisibleIndex="1" FieldName="Name">
-                    <dxg:GridColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding RowData.Row.Name}" VerticalAlignment="Center" TextWrapping="Wrap"/>
-                        </DataTemplate>
-                    </dxg:GridColumn.CellTemplate>
-                </dxg:GridColumn>
-                <dxg:GridColumn Header="销售数量" VisibleIndex="2" FieldName="Count"  />
-                <dxg:GridColumn Header="销售金额" VisibleIndex="3" FieldName="Amount"
-                                EditSettings="{dxe:SpinSettings HorizontalContentAlignment=Right, MaskType=Numeric, Mask=c, MaskUseAsDisplayFormat=True, MinValue=0}"/>
-            </dxg:GridControl.Columns>
-            <dxg:GridControl.View>
-                <dxg:TableView Style="{StaticResource TableViewNavRowStyle}" AutoWidth="True"/>
-            </dxg:GridControl.View>
-        </dxg:GridControl>
+        <controls:GroupSelector x:Name="GsDish" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding DataSource}" ItemCountEachGroup="10">
+            <controls:GroupSelector.Template>
+                <ControlTemplate TargetType="controls:GroupSelector">
+                    <DataGrid x:Name="DgView" ItemsSource="{TemplateBinding GroupedItemsSource}" AutoGenerateColumns="False" MinRowHeight="28">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Sorting">
+                                <i:InvokeCommandAction Command="{Binding EndSortingCmd}" CommandParameter="{Binding ., ElementName=DgView}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="品项名称" Width="200" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="销售数量" Width="100" Binding="{Binding Count}"/>
+                            <DataGridTextColumn Header="销售金额" Width="100" Binding="{Binding Amount}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ControlTemplate>
+            </controls:GroupSelector.Template>
+        </controls:GroupSelector>
+
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding PreGroupCmd}"/>
+            <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsDish}"/>
+            <TextBlock Text="/"/>
+            <TextBlock Text="{Binding GroupCount, ElementName=GsDish}"/>
+            <Button Style="{StaticResource BtnRightStyle}" Command="{Binding NextGroupCmd}" CommandParameter="OrderDishNextGroup"/>
+        </StackPanel>
     </Grid>
 </UserControl>

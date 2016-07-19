@@ -211,5 +211,53 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style TargetType="Button" x:Key="ChangeShiftBtnStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Image x:Name="ImgN"  Visibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{StaticResource CanDaoPosImageChangeShiftNor}"/>
+                        <Image x:Name="ImgP" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{StaticResource CanDaoPosImageChangeShiftPress}"/>
+                        <Image x:Name="ImgD" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{StaticResource CanDaoPosImageChangeShiftDis}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="ImgP" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="ImgD" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="Button" x:Key="EndWorkBtnStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Image x:Name="ImgN"  Visibility="Visible" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{StaticResource CanDaoPosImageEndWorkNor}"/>
+                        <Image x:Name="ImgP" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{StaticResource CanDaoPosImageEndWorkPress}"/>
+                        <Image x:Name="ImgD" Visibility="Collapsed"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{StaticResource CanDaoPosImageEndWorkDis}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="ImgP" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ImgN" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="ImgD" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>
