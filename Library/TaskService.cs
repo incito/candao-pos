@@ -1,4 +1,5 @@
 ﻿using System;
+using CanDaoCD.Pos.Common.Controls.CSystem;
 using Common;
 
 namespace Library
@@ -18,20 +19,28 @@ namespace Library
         public static void Start(object param, Func<object, object> processHandler, Action<object> complateHandler = null, string infoMsg = "处理中...")
         {
             TaskBase taskBase = new TaskBase();
-            frmWarning frmMsg = null;
+            AsynWindow asynWindow = null;
+            //frmWarning frmMsg = null;
 
             if (!string.IsNullOrEmpty(infoMsg))
             {
                 taskBase.BeforeProcessAction = delegate
                 {
-                    frmMsg = new frmWarning(infoMsg);
-                    frmMsg.ShowDialog();
+                    asynWindow=new AsynWindow();
+                    asynWindow.SetShowText(infoMsg);
+                    asynWindow.ShowDialog();
+                    //frmMsg = new frmWarning(infoMsg);
+                    //frmMsg.ShowDialog();
                 };
 
                 taskBase.AfterProcessAction = delegate
                 {
-                    if (frmMsg != null)
-                        frmMsg.Dispose();
+                    //if (frmMsg != null)
+                    //    frmMsg.Dispose();
+                    if (asynWindow != null)
+                    {
+                        asynWindow.DialogResult =true;
+                    }
                 };
             }
             taskBase.Start(param, processHandler, complateHandler);

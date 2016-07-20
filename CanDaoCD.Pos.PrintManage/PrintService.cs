@@ -43,7 +43,7 @@ namespace CanDaoCD.Pos.PrintManage
                {
                    if (_printManage._isInit)
                    {
-                       if (OWindowManage.ShowMessageWindow("请先将复写卡插入到复写卡打印机，再尝试。", true))
+                       if (OWindowManage.ShowMessageWindow("请先将复写卡插入到复写卡打印机，再此尝试？", true))
                        {
                            CardCheck();
                        }
@@ -54,10 +54,17 @@ namespace CanDaoCD.Pos.PrintManage
                    }
                    else
                    {
-                       var ErrorString = "打印机连接错误，请检查打印机是否连接正常！";
-                       OWindowManage.ShowMessageWindow(
-                                 string.Format("{0}", ErrorString), false);
-                       return false;
+                       var ErrorString = "打印机连接错误，请检查打印机是否连接正常。再次尝试？";
+                       if (OWindowManage.ShowMessageWindow(
+                           string.Format("{0}", ErrorString), true))
+                       {
+                           CardCheck();
+                       }
+                       else
+                       {
+                           return false;
+                       }
+                    
                    }
                }
                return true;
@@ -80,14 +87,14 @@ namespace CanDaoCD.Pos.PrintManage
                model.Add(vipNum);
                model.Add(vipName);
 
-               model.Add("0.00");
-               model.Add("0.00元");
+               model.Add("0");
+               model.Add("0元");
 
-               model.Add("0.00");
-               model.Add("0.00元");
+               model.Add("0");
+               model.Add("0元");
 
-               model.Add("0.00");
-               model.Add("0.00元");
+               model.Add("0");
+               model.Add("0元");
 
                AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
                asyncLoadServer.Init();

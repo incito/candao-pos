@@ -2262,6 +2262,7 @@ namespace Main
         }
         private void querymember()
         {
+           
             try
             {
                 QueryMemberCard();
@@ -2356,6 +2357,11 @@ namespace Main
         {
             if (e.KeyChar == 13)
             {
+                if (string.IsNullOrEmpty(edtMemberCard.Text))
+                {
+                    Warning("请输入会员卡号或者会员手机号码");
+                    return;
+                }
                 querymember();
             }
         }
@@ -4997,6 +5003,11 @@ namespace Main
 
         private void btnFind_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(edtMemberCard.Text))
+            {
+                Warning("请输入会员卡号或者会员手机号码");
+                return;
+            }
             LoginVIP();
         }
 
@@ -5252,9 +5263,9 @@ namespace Main
                                     isok = true;
                                 }
                             }
-                            catch
+                            catch(Exception ex)
                             {
-                                Warning("会员积分，结算失败!");
+                                Warning("会员结算失败:"+ex.Message);
                             }
                         }
                         else

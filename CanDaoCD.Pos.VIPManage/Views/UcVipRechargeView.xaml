@@ -76,7 +76,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-              <RowDefinition Height="30*"></RowDefinition>
+              <RowDefinition Height="25*"></RowDefinition>
             <RowDefinition Height="70*"></RowDefinition>
         </Grid.RowDefinitions>
         <cSystem:LoadingWait x:Name="_loading"  Visibility="Collapsed"/>
@@ -91,7 +91,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition Height="24"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <ListBox x:Name="LbData" ItemsSource="{Binding ListBoxInfos}"></ListBox>
+                    <ListBox x:Name="LbData" ItemsSource="{Binding ListBoxInfos}" Height="75" Width="635"></ListBox>
                     <TextBlock FontSize="12" Grid.Row="1" Text="当前选择项:" HorizontalAlignment="Left"></TextBlock>
                     <TextBlock FontSize="12" x:Name="TexSelect" Grid.Row="1" Text="" HorizontalAlignment="Center" Foreground="Blue"></TextBlock>
                 </Grid>

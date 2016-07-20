@@ -31,8 +31,9 @@ namespace CanDaoCD.Pos.SystemConfig.Views
 
             this.DataContext = viewModel;
             viewModel.InitContor(this);
-        }
 
+          
+        }
         #region 事件
 
         public Action EnterAction;

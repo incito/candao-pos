@@ -26,8 +26,8 @@ namespace CanDaoCD.Pos.VIPManage.Models
         private string _birthday;
         private string _sex;
 
-        private string _integral;
-        private string _balance;
+        private string _integral="0";
+        private string _balance="0";
         private string _cardState;
 
         #endregion

@@ -98,7 +98,7 @@
                     </EventTrigger>
                 </Grid.Triggers>
             </Grid>
-            <TextBlock x:Name="TbShowText" FontSize="14" Text="窗体加载中" Foreground="White" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
+            <TextBlock x:Name="TbShowText" FontSize="14" Text="正在处理中... ..." Foreground="White" HorizontalAlignment="Center" Margin="0,20,0,0"></TextBlock>
         </StackPanel>
         
         <Grid Background="Black" Opacity="0.2"></Grid>

@@ -93,6 +93,6 @@
         
         
         <Separator Grid.Row="4" BorderBrush="Black" BorderThickness="2" Margin="5,0,5,0"></Separator>
-        <Button Grid.Row="5" Width="262" Height="37" Content="打印" Background="#009DD9" Command="{Binding PrintCommand}"></Button>
+        <Button Grid.Row="5" Width="262" Height="37" Content="打印" Background="#009DD9" Command="{Binding PrintCommand}" Focusable="False"></Button>
     </Grid>
 </UserControl>

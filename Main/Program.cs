@@ -76,8 +76,7 @@ namespace Main
                         return;
                 }
 
-            ReportPrint.Init();
-
+         
             GetOddSettingAsync();
             GetDietSettingAsync();
 
@@ -101,17 +100,6 @@ namespace Main
                 //        return;
                 //    }
                 //}
-
-                ReportPrint.Init();
-                frmStart.frm.setMsg("获取系统设置...");
-                try
-                {
-                    RestClient.getSystemSetData(out Globals.roundinfo);
-                }
-                catch
-                {
-                    // ignored
-                }
 
                 frmStart.frm.setMsg("获取营业时间...");
                 IRestaurantService service = new RestaurantServiceImpl();

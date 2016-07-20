@@ -435,7 +435,7 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
             datestr = string.Format("{0:hh:mm}", date);
             memberstoreinfo.Time = datestr;
             memberstoreinfo.Store = storeCardbalance;
-            memberstoreinfo.Point = "0"; // ret.Integral.ToString();//ret.Giftamount.ToString();
+            memberstoreinfo.Point = SelectModel.Integral;//ret.Giftamount.ToString();
             memberstoreinfo.Amount = Model.RechargeValue;
             ReportsFastReport.ReportPrint.PrintMemberStore(memberstoreinfo);
         }
@@ -488,15 +488,23 @@ namespace CanDaoCD.Pos.VIPManage.ViewModels
         /// </summary>
         private void SetPageInfo()
         {
-            var width = _userControl.ActualWidth - 80;
-            var height = _userControl.ActualHeight;
-            int rowNum = (int) width/70;
+            var width = 635;
+            var height = 75;
+
+            //行
+            int rowNum = (int) height/70;
             rowNum = rowNum > 0 ? rowNum : 1;
-            int colNum = (int) height/70;
+            
+            //列
+            int colNum = (int)width / 70;
             colNum = colNum > 0 ? colNum : 1;
+
             _page = 1;
-            _pageSize = rowNum - 1;
+
+            //每页数量
+            _pageSize = colNum*rowNum;
             _pageSize = _pageSize > 0 ? _pageSize : 1;
+
             ContentShow();
 
         }
