@@ -160,6 +160,7 @@ namespace CanDao.Pos.ServiceImpl
                 CouponType = (EnumCouponType)response.type,
                 Discount = response.discount ?? 0m,
                 HandCouponType = Convert2HandCounCouponType(response.free_reason),
+                IsUncommonlyUsed = response.status == "2",
             };
         }
 

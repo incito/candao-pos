@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Timers;
 using System.Windows.Input;
-using System.Windows.Markup;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
@@ -16,8 +16,7 @@ using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
 using CanDao.Pos.UI.Utility.ViewModel;
-using DevExpress.Xpf.Editors.Helpers;
-using JunLan.Common.Base;
+using Timer = System.Timers.Timer;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -53,6 +52,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private bool _isUserInputCash;
 
+        /// <summary>
+        /// 优惠券长按定时器。
+        /// </summary>
+        private Timer _couponLongPressTimer;
+
+        /// <summary>
+        /// 长按定时器的触发间隔（1秒）
+        /// </summary>
+        private const int LongPressTimerSecond = 1;
+
+        /// <summary>
+        /// 是否是长按优惠券处理模式，当是该模式时，优惠券弹起事件里不处理。
+        /// </summary>
+        private bool _isLongPressModel;
+
         #endregion
 
         #region Constructor
@@ -61,6 +75,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             _tableInfo = tableInfo;
             InitCouponCategories();
+            InitCouponLongPressTimer();
             SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
             _curOddModel = Globals.OddModel;
         }
@@ -108,9 +123,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             get { return _selectedCouponCategory; }
             set
             {
-                if (_selectedCouponCategory == value)
-                    return;
-
                 _selectedCouponCategory = value;
                 RaisePropertiesChanged("SelectedCouponCategory");
 
@@ -526,9 +538,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         public ICommand OperCmd { get; private set; }
 
         /// <summary>
-        /// 选择优惠券命令。
+        /// 优惠券按下时命令。
         /// </summary>
-        public ICommand SelectCouponCmd { get; private set; }
+        public ICommand CouponMouseDownCmd { get; private set; }
+
+        /// <summary>
+        /// 优惠券弹起时命令。
+        /// </summary>
+        public ICommand CouponMouseUpCmd { get; private set; }
 
         /// <summary>
         /// 现金输入控件获取或失去焦点命令。
@@ -752,22 +769,41 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 选择优惠券命令的执行方法。
+        /// 现金控件获取或失去焦点命令时执行。
         /// </summary>
         /// <param name="param"></param>
-        private void SelectCoupon(object param)
+        private void CashControlFocus(object param)
         {
+            _isUserInputCash = Convert.ToBoolean(param);
+        }
+
+        private void CouponMouseDown(object arg)
+        {
+            var coupon = (CouponInfo)((CouponInfo)arg).Clone();
+            _curSelectedCouponInfo = coupon;
+
+            _isLongPressModel = false;
+            _couponLongPressTimer.Start();
+        }
+
+        private void CouponMouseUp(object arg)
+        {
+            _couponLongPressTimer.Stop();
+            if (_isLongPressModel)
+                return;
+
             if (Data.TotalAmount <= 0)
             {
                 MessageDialog.Warning("还未下单，不能使用优惠。", OwnerWindow);
                 return;
             }
 
-            var coupon = (CouponInfo)((CouponInfo)param).Clone();
-            _curSelectedCouponInfo = coupon;
-            if (coupon.CouponType == EnumCouponType.HandFree)//手工优惠类特殊处理。
+            if (_curSelectedCouponInfo == null)
+                return;
+
+            if (_curSelectedCouponInfo.CouponType == EnumCouponType.HandFree)//手工优惠类特殊处理。
             {
-                switch (coupon.HandCouponType)
+                switch (_curSelectedCouponInfo.HandCouponType)
                 {
                     case EnumHandCouponType.FreeDish:
                         var giftDishWnd = new SelectGiftDishWindow(Data);
@@ -775,9 +811,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         {
                             foreach (var giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
                             {
-                                coupon.Name = string.Format("赠菜：{0}", giftDishInfo.DishName);
-                                coupon.FreeAmount = giftDishInfo.DishPrice;
-                                AddCouponInfoAsUsed(coupon, giftDishInfo.SelectGiftNum, false);
+                                _curSelectedCouponInfo.Name = string.Format("赠菜：{0}", giftDishInfo.DishName);
+                                _curSelectedCouponInfo.FreeAmount = giftDishInfo.DishPrice;
+                                AddCouponInfoAsUsed(_curSelectedCouponInfo, giftDishInfo.SelectGiftNum, false);
                             }
                         }
                         break;
@@ -795,7 +831,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         var amountSelectWnd = new OfferTypeSelectWindow(EnumOfferType.Amount);
                         if (WindowHelper.ShowDialog(amountSelectWnd, OwnerWindow))
                         {
-                            AddCouponInfoAsUsed(coupon, 1, false, amountSelectWnd.Amount);
+                            AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, amountSelectWnd.Amount);
                         }
                         break;
                     case null:
@@ -806,12 +842,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            if (coupon.IsDiscount) //折扣类处理流程。
+            if (_curSelectedCouponInfo.IsDiscount) //折扣类处理流程。
             {
-                if (!MessageDialog.Quest(string.Format("确定使用{0}？", coupon.Name)))
+                if (!MessageDialog.Quest(string.Format("确定使用{0}？", _curSelectedCouponInfo.Name)))
                     return;
 
-                InfoLog.Instance.I("开始折扣类优惠券：{0}计算接口。", coupon.Name);
+                InfoLog.Instance.I("开始折扣类优惠券：{0}计算接口。", _curSelectedCouponInfo.Name);
                 TaskService.Start(0m, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");//优惠券折扣时，自定义折扣为0。
             }
             else
@@ -821,28 +857,28 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                     return;
 
-                if (coupon.FreeAmount == 999999 || coupon.DebitAmount == -1) //特殊券。
+                if (_curSelectedCouponInfo.FreeAmount == 999999 || _curSelectedCouponInfo.DebitAmount == -1) //特殊券。
                 {
 
                 }
                 else
                 {
-                    if (coupon.FreeAmount > 0 || coupon.DebitAmount > 0)
+                    if (_curSelectedCouponInfo.FreeAmount > 0 || _curSelectedCouponInfo.DebitAmount > 0)
                     {
-                        if (coupon.CouponType == EnumCouponType.Member)
+                        if (_curSelectedCouponInfo.CouponType == EnumCouponType.Member)
                         {
 
                         }
                         else
                         {
-                            AddCouponInfoAsUsed(coupon, Convert.ToInt32(numWnd.InputNum), false);
+                            AddCouponInfoAsUsed(_curSelectedCouponInfo, Convert.ToInt32(numWnd.InputNum), false);
                             //while (num-- > 0)
                             //{
                             //    AddCouponInfoAsUsed(coupon, 1, false);
                             //}
                         }
                     }
-                    else if (coupon.FreeAmount <= 0 && coupon.DebitAmount <= 0)
+                    else if (_curSelectedCouponInfo.FreeAmount <= 0 && _curSelectedCouponInfo.DebitAmount <= 0)
                     {
 
                     }
@@ -850,17 +886,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             InfoLog.Instance.I("开始保存优惠券到使用列表...");
-            var arg = new Tuple<string, List<UsedCouponInfo>>(Data.OrderId, Data.UsedCouponInfos.ToList());
-            TaskService.Start(arg, SaveCouponInfoProcess, SaveCouponInfoComplete);
-        }
-
-        /// <summary>
-        /// 现金控件获取或失去焦点命令时执行。
-        /// </summary>
-        /// <param name="param"></param>
-        private void CashControlFocus(object param)
-        {
-            _isUserInputCash = Convert.ToBoolean(param);
+            var param = new Tuple<string, List<UsedCouponInfo>>(Data.OrderId, Data.UsedCouponInfos.ToList());
+            TaskService.Start(param, SaveCouponInfoProcess, SaveCouponInfoComplete);
         }
 
         /// <summary>
@@ -872,7 +899,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!(param is ExCommandParameter))
                 return;
 
-            var args = ((ExCommandParameter) param).EventArgs as KeyEventArgs;
+            var args = ((ExCommandParameter)param).EventArgs as KeyEventArgs;
             if (args == null)
                 return;
 
@@ -891,9 +918,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             DataGridPageOperCmd = CreateDelegateCommand(DataGridPageOper);
             PrintCmd = CreateDelegateCommand(Print, CanPrint);
             OperCmd = CreateDelegateCommand(Oper, CanOper);
-            SelectCouponCmd = CreateDelegateCommand(SelectCoupon);
             CashControlFocusCmd = CreateDelegateCommand(CashControlFocus);
             EnterPayCmd = CreateDelegateCommand(EnterPay);
+            CouponMouseDownCmd = CreateDelegateCommand(CouponMouseDown);
+            CouponMouseUpCmd = CreateDelegateCommand(CouponMouseUp);
         }
 
         #endregion
@@ -906,24 +934,65 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void InitCouponCategories()
         {
             CouponInfos = new ObservableCollection<CouponInfo>();
-            CouponCategories = new ObservableCollection<CouponCategory>();
-            var coupon = new CouponCategory { CategoryName = "特价", CategoryType = "01" };
-            CouponCategories.Add(coupon);
-            coupon = new CouponCategory { CategoryName = "折扣", CategoryType = "02" };
-            CouponCategories.Add(coupon);
-            coupon = new CouponCategory { CategoryName = "代金券", CategoryType = "03" };
-            CouponCategories.Add(coupon);
-            coupon = new CouponCategory { CategoryName = "礼品券", CategoryType = "04" };
-            CouponCategories.Add(coupon);
-            coupon = new CouponCategory { CategoryName = "团购", CategoryType = "05" };
-            CouponCategories.Add(coupon);
-            coupon = new CouponCategory { CategoryName = "会员", CategoryType = "88" };
-            CouponCategories.Add(coupon);
-            coupon = new CouponCategory { CategoryName = "其他优惠", CategoryType = "00" };
-            CouponCategories.Add(coupon);
-            coupon = new CouponCategory { CategoryName = "合作单位", CategoryType = "08" };
-            CouponCategories.Add(coupon);
+            CouponCategories = new ObservableCollection<CouponCategory>
+            {
+                new CouponCategory {CategoryName = "团购", CategoryType = "05"},
+                new CouponCategory {CategoryName = "特价", CategoryType = "01"},
+                new CouponCategory {CategoryName = "折扣", CategoryType = "02"},
+                new CouponCategory {CategoryName = "代金券", CategoryType = "03"},
+                new CouponCategory {CategoryName = "礼品券", CategoryType = "04"},
+                new CouponCategory {CategoryName = "会员", CategoryType = "88"},
+                new CouponCategory {CategoryName = "其他优惠", CategoryType = "00"},
+                new CouponCategory {CategoryName = "合作单位", CategoryType = "08"},
+                new CouponCategory {CategoryName = "不常用", CategoryType = "-1"}
+            };
             SelectedCouponCategory = CouponCategories.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 初始化优惠券长按定时器。
+        /// </summary>
+        private void InitCouponLongPressTimer()
+        {
+            _couponLongPressTimer = new Timer(LongPressTimerSecond * 1000);
+            _couponLongPressTimer.Elapsed += CouponLongPressTimerOnElapsed;
+        }
+
+        private void CouponLongPressTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            _couponLongPressTimer.Stop();
+            _isLongPressModel = true;
+            OwnerWindow.Dispatcher.BeginInvoke((Action)delegate
+            {
+                var msg = "";
+                if (_curSelectedCouponInfo.IsUncommonlyUsed)
+                    msg = string.Format("恢复\"{0}\"为常用优惠{1}（恢复后可在对应分类查看、使用）", _curSelectedCouponInfo.Name, Environment.NewLine);
+                else
+                    msg = string.Format("设置\"{0}\"为不常用优惠{1}（设置后可在不常用优惠分类查看、使用）", _curSelectedCouponInfo.Name,
+                        Environment.NewLine);
+
+                if (!MessageDialog.Quest(msg, OwnerWindow))
+                    return;
+
+                var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+                if (service == null)
+                {
+                    ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                    MessageDialog.Warning("创建IRestaurantService服务失败。");
+                    return;
+                }
+
+                var result = service.SetCouponFavor(_curSelectedCouponInfo.CouponId, _curSelectedCouponInfo.IsUncommonlyUsed);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    ErrLog.Instance.E(result);
+                    MessageDialog.Warning(result);
+                    return;
+                }
+
+                NotifyDialog.Notify("设置优惠券偏好成功。");
+                SelectedCouponCategory = SelectedCouponCategory;//触发优惠券的重新获取。
+            });
         }
 
         /// <summary>
@@ -1835,7 +1904,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 disrate = discount.ToString(CultureInfo.InvariantCulture),
                 userid = Globals.UserInfo.UserName,
-                machineno = PCInfoHelper.MACAddr,
+                machineno = MachineManage.GetMachineId(),
                 orderid = Data.OrderId,
                 type = GetCouponTypeString(_curSelectedCouponInfo.CouponType),
                 preferentialAmt = (Data.TotalDebitAmount + Data.TotalFreeAmount).ToString(CultureInfo.InvariantCulture),

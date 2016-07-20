@@ -104,5 +104,10 @@
         /// 优免原因。
         /// </summary>
         public string free_reason { get; set; }
+
+        /// <summary>
+        /// 优惠券状态。
+        /// </summary>
+        public string status { get; set; }
     }
 }

@@ -99,6 +99,7 @@
     <Compile Include="Request\GetInvoiceInfoRequest.cs" />
     <Compile Include="Request\GetOrderMemberInfoRequest.cs" />
     <Compile Include="Request\SendVerifyCodeRequest.cs" />
+    <Compile Include="Request\SetCouponFavorRequest.cs" />
     <Compile Include="Request\TipSettlementRequest.cs" />
     <Compile Include="Request\UpdateDishWeightRequest.cs" />
     <Compile Include="Request\UpdateInvoiceRequest.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Response\ReportTipInfoResponse.cs" />
     <Compile Include="Response\SendVerifyCodeResponse.cs" />
     <Compile Include="PrintOrderFullInfo.cs" />
+    <Compile Include="Response\SetCouponFavorResponse.cs" />
     <Compile Include="UnclearMachineInfo.cs" />
     <Compile Include="OnCompanyAccountInfo.cs" />
     <Compile Include="OrderDishInfo.cs" />

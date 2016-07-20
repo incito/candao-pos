@@ -166,5 +166,13 @@ namespace CanDao.Pos.IService
         /// <param name="userId">查询用户Id。</param>
         /// <returns>Items正常则为null，否则为错误信息，Item2为返回的账单集合。</returns>
         Tuple<string, List<QueryOrderInfo>> QueryOrderInfos(string userId);
+
+        /// <summary>
+        /// 设置优惠券偏爱。
+        /// </summary>
+        /// <param name="couponId">优惠券Id。</param>
+        /// <param name="isCommonlyUsed">是否常用</param>
+        /// <returns></returns>
+        string SetCouponFavor(string couponId, bool isCommonlyUsed);
     }
 }

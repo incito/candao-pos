@@ -82,6 +82,11 @@ namespace CanDao.Pos.Model
         public EnumHandCouponType? HandCouponType { get; set; }
 
         /// <summary>
+        /// 是否是不常用优惠。
+        /// </summary>
+        public bool IsUncommonlyUsed { get; set; }
+
+        /// <summary>
         /// 是否是折扣类优惠券。
         /// </summary>
         public bool IsDiscount

@@ -27,7 +27,7 @@
     </controls:PosBaseWindow.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="360"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <!--左侧部分-->
@@ -41,7 +41,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Border Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Height="59" Margin="16,16,16,0" HorizontalAlignment="Center">
+            <Border Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Height="59" Margin="10,10,10,0" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -64,7 +64,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="1" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Margin="16,10,16,16" HorizontalAlignment="Center">
+            <Border Grid.Row="1" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Margin="10" HorizontalAlignment="Center">
                 <controls:GroupSelector x:Name="DishGroupSelector" ItemsSource="{Binding Data.DishInfos}"  SelectedItem="{Binding SelectedOrderDish}" ItemCountEachGroup="10">
                     <controls:GroupSelector.Template>
                         <ControlTemplate TargetType="controls:GroupSelector">
@@ -97,7 +97,7 @@
                 </controls:GroupSelector>
             </Border>
 
-            <Grid Grid.Row="2"  Margin="16,0">
+            <Grid Grid.Row="2"  Margin="10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -115,7 +115,7 @@
                 </StackPanel>
             </Grid>
             
-            <Border Grid.Row="3" Margin="16,5" BorderBrush="{StaticResource CanDaoPosColorFg}">
+            <Border Grid.Row="3" Margin="10,5" BorderBrush="{StaticResource CanDaoPosColorFg}">
                 <Grid TextBlock.FontSize="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -126,7 +126,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="4" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Margin="16,10,16,16" HorizontalAlignment="Center">
+            <Border Grid.Row="4" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Margin="10" HorizontalAlignment="Center">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -181,7 +181,7 @@
                 </Grid>
             </Border>
 
-            <Grid Grid.Row="5"  Margin="16,0">
+            <Grid Grid.Row="5"  Margin="10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -198,12 +198,12 @@
                 </StackPanel>
             </Grid>
             
-            <StackPanel Grid.Row="6" Margin="16,0" Orientation="Horizontal">
-                <Button Content="预结单" Command="{Binding PrintCmd}" CommandParameter="PreSettlement" Width="70" Height="40"/>
-                <Button Content="反结" Command="{Binding OperCmd}" CommandParameter="Resettlement" Width="70" Height="40"/>
-                <Button Content="点菜" Command="{Binding OperCmd}" CommandParameter="Order" Width="70" Height="40"/>
-                <Button Content="弹钱箱" Command="{Binding OperCmd}" CommandParameter="OpenCashBox" Width="70" Height="40"/>
-                <Button x:Name="BtnMore" Content="更多" Command="{Binding OperCmd}" CommandParameter="More" Width="70" Height="40"/>
+            <StackPanel Grid.Row="6" Margin="10,0" Orientation="Horizontal">
+                <Button Content="预结单" Command="{Binding PrintCmd}" CommandParameter="PreSettlement" Width="65" Height="40"/>
+                <Button Content="反结" Command="{Binding OperCmd}" CommandParameter="Resettlement" Width="65" Height="40"/>
+                <Button Content="点菜" Command="{Binding OperCmd}" CommandParameter="Order" Width="65" Height="40"/>
+                <Button Content="弹钱箱" Command="{Binding OperCmd}" CommandParameter="OpenCashBox" Width="65" Height="40"/>
+                <Button x:Name="BtnMore" Content="更多" Command="{Binding OperCmd}" CommandParameter="More" Width="65" Height="40"/>
                 <Popup IsOpen="{Binding IsPrintMoreOpened}" PlacementTarget="{Binding ElementName=BtnMore}" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
                     <Border Background="{StaticResource CanDaoPosColorBg2}">
                         <StackPanel >
@@ -249,7 +249,10 @@
                                     <Border CornerRadius="5" Width="130" Height="50" Margin="5" Background="{Binding Color}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseDown">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.SelectCouponCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
+                                                <i:InvokeCommandAction Command="{Binding DataContext.CouponMouseDownCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="MouseUp">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.CouponMouseUpCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                         <TextBlock Text="{Binding Name}" TextWrapping="Wrap" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>

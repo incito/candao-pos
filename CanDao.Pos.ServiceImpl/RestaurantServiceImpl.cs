@@ -447,5 +447,25 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, List<QueryOrderInfo>>(string.Format("账单查询失败：{0}", ex.MyMessage()), null);
             }
         }
+
+        public string SetCouponFavor(string couponId, bool isCommonlyUsed)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("SetCouponFavor");
+            if (string.IsNullOrEmpty(addr))
+                return "账单查询地址为空。";
+
+            try
+            {
+                var request = new SetCouponFavorRequest { preferential = couponId, operationtype = isCommonlyUsed ? "0" : "1" };
+                var result = HttpHelper.HttpPost<SetCouponFavorResponse>(addr, request);
+                if (!result.IsSuccess)
+                    return !string.IsNullOrEmpty(result.msg) ? result.msg : "设置优惠券偏好失败。";
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return string.Format("设置优惠券偏好异常：{0}", ex.MyMessage());
+            }
+        }
     }
 }
