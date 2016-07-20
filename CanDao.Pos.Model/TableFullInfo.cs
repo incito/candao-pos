@@ -63,7 +63,19 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 优免总金额。
         /// </summary>
-        public decimal TotalFreeAmount { get; set; }
+        private decimal _totalFreeAmount;
+        /// <summary>
+        /// 优免总金额。
+        /// </summary>
+        public decimal TotalFreeAmount
+        {
+            get { return _totalFreeAmount; }
+            set
+            {
+                _totalFreeAmount = value;
+                RaisePropertyChanged("TotalFreeAmount");
+            }
+        }
 
         /// <summary>
         /// 总挂账金额。

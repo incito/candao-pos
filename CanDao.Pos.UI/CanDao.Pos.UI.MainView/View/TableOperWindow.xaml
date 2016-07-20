@@ -32,6 +32,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -101,7 +102,7 @@
                     <Button Style="{StaticResource BtnAddStyle}" Command="{Binding OperCmd}" CommandParameter="DishCountIncrease"/>
                     <Button Style="{StaticResource BtnReduceStyle}" Command="{Binding OperCmd}" CommandParameter="DishCountReduce"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding GroupCount,ElementName=DishGroupSelector, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
                     <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="DishPreGroup"/>
                     <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=DishGroupSelector}"/>
                     <TextBlock Text="/"/>
@@ -109,8 +110,19 @@
                     <Button Style="{StaticResource BtnRightStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="DishNextGruop"/>
                 </StackPanel>
             </Grid>
+            
+            <Border Grid.Row="3" Margin="16,5" BorderBrush="{StaticResource CanDaoPosColorFg}">
+                <Grid TextBlock.FontSize="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="小费：" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Data.TipAmount}" HorizontalAlignment="Right"/>
+                </Grid>
+            </Border>
 
-            <Border Grid.Row="3" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Margin="16,10,16,16" HorizontalAlignment="Center">
+            <Border Grid.Row="4" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Margin="16,10,16,16" HorizontalAlignment="Center">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -137,7 +149,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <!--账单金额和小费金额-->
-                        <Grid>
+                        <Grid TextBlock.Foreground="Gray">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
@@ -148,8 +160,8 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="账单金额：" HorizontalAlignment="Right"/>
                             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Data.TotalAmount}" HorizontalAlignment="Left"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="小费：" HorizontalAlignment="Right"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Data.TipAmount}" HorizontalAlignment="Left"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="优惠金额：" HorizontalAlignment="Right"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Data.TotalFreeAmount}" HorizontalAlignment="Left"/>
                         </Grid>
 
                         <!--应收金额-->
@@ -159,13 +171,13 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="应收金额：" Foreground="DarkViolet" FontSize="18" HorizontalAlignment="Right"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Data.PaymentAmount}" FontSize="18" HorizontalAlignment="Left"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Data.PaymentAmount}" Foreground="DarkViolet" FontSize="18" HorizontalAlignment="Left"/>
                         </Grid>
                     </Grid>
                 </Grid>
             </Border>
 
-            <Grid Grid.Row="4"  Margin="16,0">
+            <Grid Grid.Row="5"  Margin="16,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -173,7 +185,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Button Style="{StaticResource BtnReduceStyle}" Command="{Binding OperCmd}" CommandParameter="CouponRemove"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding GroupCount,ElementName=CouponGroupSelector, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
                     <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="CouponPreGroup"/>
                     <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=CouponGroupSelector}"/>
                     <TextBlock Text="/"/>
@@ -182,13 +194,13 @@
                 </StackPanel>
             </Grid>
             
-            <StackPanel Grid.Row="5" Margin="16,0" Orientation="Horizontal">
+            <StackPanel Grid.Row="6" Margin="16,0" Orientation="Horizontal">
                 <Button Content="预结单" Command="{Binding PrintCmd}" CommandParameter="PreSettlement" Width="65" Height="40"/>
                 <Button Content="反结" Command="{Binding OperCmd}" CommandParameter="Resettlement" Width="65" Height="40"/>
                 <Button Content="点菜" Command="{Binding OperCmd}" CommandParameter="Order" Width="65" Height="40"/>
-                <Button Content="点菜" Command="{Binding OperCmd}" CommandParameter="OpenCashBox" Width="65" Height="40"/>
+                <Button Content="弹钱箱" Command="{Binding OperCmd}" CommandParameter="OpenCashBox" Width="65" Height="40"/>
                 <Button x:Name="BtnMore" Content="更多" Command="{Binding OperCmd}" CommandParameter="More" Width="65" Height="40"/>
-                <Popup IsOpen="{Binding IsPrintMoreOpened}" PlacementTarget="{Binding ElementName=BtnPrintMore}" Placement="Right" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
+                <Popup IsOpen="{Binding IsPrintMoreOpened}" PlacementTarget="{Binding ElementName=BtnMore}" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
                     <StackPanel>
                         <Button Content="重印账单" Command="{Binding PrintCmd}" CommandParameter="ReprintBill" Width="65" Height="40"/>
                         <Button Content="重印客用单" Command="{Binding PrintCmd}" CommandParameter="ReprintCustomUseBill" Width="65" Height="40"/>
@@ -209,26 +221,18 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ListBox ItemsSource="{Binding CouponCategories}" SelectedItem="{Binding SelectedCouponCategory}">
+            <ListBox ItemsSource="{Binding CouponCategories}" DisplayMemberPath="CategoryName" SelectedItem="{Binding SelectedCouponCategory}" FontSize="18" BorderThickness="0">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border CornerRadius="5" Margin="2">
-                            <TextBlock Text="{Binding CategoryName}" FontSize="18" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
             </ListBox>
 
-            <controls:GroupSelector Grid.Row="1" x:Name="GsCouponList" ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}" ItemCountEachGroup="10">
+            <controls:GroupSelector Grid.Row="1" x:Name="GsCouponList" ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}" ItemCountEachGroup="16">
                 <controls:GroupSelector.Template>
                     <ControlTemplate TargetType="controls:GroupSelector">
-                        <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False" IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}"
-                                          Height="195" SizeChanged="FrameworkElement_OnSizeChanged">
+                        <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False" IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}" SizeChanged="FrameworkElement_OnSizeChanged">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal"/>
@@ -236,7 +240,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border CornerRadius="5" Width="100" Height="55" Margin="5" Background="{Binding Color}">
+                                    <Border CornerRadius="5" Width="130" Height="50" Margin="5" Background="{Binding Color}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="MouseDown">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.SelectCouponCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
@@ -287,7 +291,7 @@
                 </TabItem>
                 
                 <TabItem Header="银行卡">
-                    <Grid Margin="10,10,300,10">
+                    <Grid Margin="0,0,300,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
@@ -308,7 +312,7 @@
                 </TabItem>
                 
                 <TabItem Header="会员卡">
-                    <Grid Margin="10,10,300,10">
+                    <Grid Margin="0,0,300,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
@@ -343,7 +347,7 @@
                 </TabItem>
                 
                 <TabItem Header="挂账支付">
-                    <Grid Margin="10,10,300,10">
+                    <Grid Margin="0,0,300,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>

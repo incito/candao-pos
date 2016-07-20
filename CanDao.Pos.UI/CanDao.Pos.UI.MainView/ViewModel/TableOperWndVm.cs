@@ -114,15 +114,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 RaisePropertiesChanged("SelectedCouponCategory");
 
                 CouponInfos.Clear();
-                if (value.CouponInfos == null || !value.CouponInfos.Any())
-                {
-                    InfoLog.Instance.I("开始获取\"{0}\"优惠券...", value.CategoryName);
-                    TaskService.Start(value.CategoryType, GetCouponCategoriesProcess, GetCouponCategoriesComplete);
-                }
-                else
-                {
-                    value.CouponInfos.ForEach(CouponInfos.Add);
-                }
+                InfoLog.Instance.I("开始获取\"{0}\"优惠券...", value.CategoryName);
+                TaskService.Start(value.CategoryType, GetCouponCategoriesProcess, GetCouponCategoriesComplete);
+
+                //不缓存优惠券，每次都重新获取。
+                //if (value.CouponInfos == null || !value.CouponInfos.Any())
+                //{
+                //    InfoLog.Instance.I("开始获取\"{0}\"优惠券...", value.CategoryName);
+                //    TaskService.Start(value.CategoryType, GetCouponCategoriesProcess, GetCouponCategoriesComplete);
+                //}
+                //else
+                //{
+                //    value.CouponInfos.ForEach(CouponInfos.Add);
+                //}
             }
         }
 

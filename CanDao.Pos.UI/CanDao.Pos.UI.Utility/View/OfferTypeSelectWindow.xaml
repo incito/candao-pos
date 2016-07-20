@@ -14,14 +14,30 @@
         </ResourceDictionary>
     </controls:PosBaseWindow.Resources>
     <StackPanel>
-        <StackPanel Orientation="Horizontal" Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Amount_Both}" Margin="0,3">
-            <RadioButton Content="优免" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" IsChecked="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Amount}"/>
-            <toolkit:DoubleUpDown Text="{Binding AmountString, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Amount}" ShowButtonSpinner="False" Watermark="请输入优免金额" FontSize="18" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Discount_Both}" Margin="0,3">
-            <RadioButton Content="折扣" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" IsChecked="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Discount}"/>
-            <toolkit:DoubleUpDown Text="{Binding DiscountString, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Discount}" ShowButtonSpinner="False" Watermark="请输入折扣率(8.5折输入85)" FontSize="18" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
-        </StackPanel>
+        <Grid Margin="10,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <RadioButton Content="优免" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="0,3"
+                         IsChecked="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Amount}"
+                         Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Amount_Both}"/>
+            <toolkit:DoubleUpDown Grid.Row="0" Grid.Column="1" Margin="0,3" ShowButtonSpinner="False" Watermark="请输入优免金额" FontSize="18" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                  Text="{Binding AmountString, UpdateSourceTrigger=PropertyChanged}"
+                                  IsEnabled="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Amount}"
+                                  Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Amount_Both}"/>
+            <RadioButton Grid.Row="1" Grid.Column="0" Content="折扣" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20"
+                         IsChecked="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Discount}"
+                         Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Discount_Both}"/>
+            <toolkit:DoubleUpDown Grid.Row="1" Grid.Column="1"  ShowButtonSpinner="False" Watermark="请输入折扣率(8.5折输入85)" FontSize="18" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                  Text="{Binding DiscountString, UpdateSourceTrigger=PropertyChanged}"
+                                  IsEnabled="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Discount}"
+                                  Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Discount_Both}"/>
+        </Grid>
         <view:InputNumberControl Width="200" Height="200"/>
         <view:WindowButtonOperControl HorizontalAlignment="Right" VerticalAlignment="Bottom" />
     </StackPanel>

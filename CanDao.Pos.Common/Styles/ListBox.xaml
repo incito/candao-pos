@@ -1,0 +1,81 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Brushes.xaml"/>
+        <ResourceDictionary Source="Converter.xaml"/>
+        <ResourceDictionary Source="Images.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+    <Style TargetType="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="MinWidth" Value="60"/>
+        <!-- 设置控件模板 -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}" CornerRadius="15" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <ContentPresenter TextBlock.Foreground="{TemplateBinding Foreground}" Margin="10,5"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="BorderBrush" Value="{StaticResource CanDaoPosColorSelected}"/>
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorSelected}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" Value="{StaticResource CanDaoPosColorDisable}"/>
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorDisable}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LbOrderStyle" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="MinWidth" Value="60"/>
+        <!-- 设置控件模板 -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}"  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="10">
+                        <Border SnapsToDevicePixels="True" ClipToBounds="True" CornerRadius="15" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter TextBlock.Foreground="{TemplateBinding Foreground}" Margin="10"/>
+                        </Border>
+                        <Ellipse x:Name="EpCnt" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                 Fill="{StaticResource CanDaoPosColorSelected}" Margin="0,-5,-5,0"
+                                 Visibility="{Binding SelectDishCount, Converter={StaticResource Count2CollapsedCvt}}"/>
+                        <TextBlock x:Name="TbCnt" Visibility="Collapsed" FontSize="16" Text="{Binding SelectDishCount}" Foreground="{StaticResource CanDaoPosColorFg}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="BorderBrush" Value="{StaticResource CanDaoPosColorSelected}"/>
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorSelected}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter TargetName="TbCnt" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding SelectDishCount}" Value="0">
+                            <Setter TargetName="EpCnt" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" Value="{StaticResource CanDaoPosColorDisable}"/>
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorDisable}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

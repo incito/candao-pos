@@ -432,6 +432,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 string taste = null;
                 string diet = null;
+                SelectedDish.SelectedCount = 1;//设定点菜数量为1。
                 if (SelectedDish.Tastes != null && SelectedDish.Tastes.Any())//有口味则弹出口味设置窗口
                 {
                     var dishSimpleInfo = new DishSimpleInfo
@@ -447,9 +448,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                     taste = tasteDietWnd.SelectedTaste;
                     diet = tasteDietWnd.SelectedDiet;
+                    SelectedDish.SelectedCount = tasteDietWnd.DishNum;
                 }
 
-                SelectedDish.SelectedCount = 1;//设定点菜数量为1。
                 AddDishInfo(SelectedDish, taste, diet);
             }
         }
