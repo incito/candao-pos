@@ -199,19 +199,21 @@
             </Grid>
             
             <StackPanel Grid.Row="6" Margin="16,0" Orientation="Horizontal">
-                <Button Content="预结单" Command="{Binding PrintCmd}" CommandParameter="PreSettlement" Width="65" Height="40"/>
-                <Button Content="反结" Command="{Binding OperCmd}" CommandParameter="Resettlement" Width="65" Height="40"/>
-                <Button Content="点菜" Command="{Binding OperCmd}" CommandParameter="Order" Width="65" Height="40"/>
-                <Button Content="弹钱箱" Command="{Binding OperCmd}" CommandParameter="OpenCashBox" Width="65" Height="40"/>
-                <Button x:Name="BtnMore" Content="更多" Command="{Binding OperCmd}" CommandParameter="More" Width="65" Height="40"/>
+                <Button Content="预结单" Command="{Binding PrintCmd}" CommandParameter="PreSettlement" Width="70" Height="40"/>
+                <Button Content="反结" Command="{Binding OperCmd}" CommandParameter="Resettlement" Width="70" Height="40"/>
+                <Button Content="点菜" Command="{Binding OperCmd}" CommandParameter="Order" Width="70" Height="40"/>
+                <Button Content="弹钱箱" Command="{Binding OperCmd}" CommandParameter="OpenCashBox" Width="70" Height="40"/>
+                <Button x:Name="BtnMore" Content="更多" Command="{Binding OperCmd}" CommandParameter="More" Width="70" Height="40"/>
                 <Popup IsOpen="{Binding IsPrintMoreOpened}" PlacementTarget="{Binding ElementName=BtnMore}" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
-                    <StackPanel>
-                        <Button Content="重印账单" Command="{Binding PrintCmd}" CommandParameter="ReprintBill" Width="65" Height="40"/>
-                        <Button Content="重印客用单" Command="{Binding PrintCmd}" CommandParameter="ReprintCustomUseBill" Width="65" Height="40"/>
-                        <Button Content="交易凭条" Command="{Binding PrintCmd}" CommandParameter="PrintTransactionSlip" Width="65" Height="40"/>
-                        <Button Content="取消订单" Command="{Binding OperCmd}" CommandParameter="CancelOrder" Width="65" Height="40"/>
-                        <Button Content="零头不处理" Command="{Binding OperCmd}" CommandParameter="KeepOdd" Width="65" Height="40"/>
-                    </StackPanel>
+                    <Border Background="{StaticResource CanDaoPosColorBg2}">
+                        <StackPanel >
+                            <Button Content="重印账单" Command="{Binding PrintCmd}" CommandParameter="ReprintBill" Width="90" Height="40" Margin="3"/>
+                            <Button Content="重印客用单" Command="{Binding PrintCmd}" CommandParameter="ReprintCustomUseBill" Width="90" Height="40" Margin="3"/>
+                            <Button Content="交易凭条" Command="{Binding PrintCmd}" CommandParameter="PrintTransactionSlip" Width="90" Height="40" Margin="3"/>
+                            <Button Content="取消订单" Command="{Binding OperCmd}" CommandParameter="CancelOrder" Width="90" Height="40" Margin="3"/>
+                            <Button Content="零头不处理" Command="{Binding OperCmd}" CommandParameter="KeepOdd" Width="90" Height="40" Margin="3"/>
+                        </StackPanel>
+                    </Border>
                 </Popup>
             </StackPanel>
         </Grid>

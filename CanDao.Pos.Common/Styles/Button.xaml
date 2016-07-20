@@ -25,6 +25,9 @@
                             <Setter Property="Background" Value="{StaticResource CanDaoPosColorSelected}"/>
                             <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
