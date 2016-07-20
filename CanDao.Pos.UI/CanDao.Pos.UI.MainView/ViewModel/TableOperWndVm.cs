@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
+using System.Windows.Markup;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
@@ -534,6 +535,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand CashControlFocusCmd { get; private set; }
 
+        /// <summary>
+        /// 回车支付命令。
+        /// </summary>
+        public ICommand EnterPayCmd { get; private set; }
+
         #endregion
 
         #region Command Methods
@@ -679,46 +685,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         GetTableDishInfo(null);
                     break;
                 case "DishCountReduce":
-                    if (SelectedOrderDish == null)
-                        return;
-
-                    if (SelectedOrderDish.IsComboDish)
-                    {
-                        MessageDialog.Warning("请选择套餐主体退整个套餐。");
-                        return;
-                    }
-
-                    if (SelectedOrderDish.IsFishPotDish && SelectedOrderDish.IsPot)//选中了鱼锅的锅。
-                    {
-                        MessageDialog.Warning("请选择鱼锅主体退整个鱼锅。");
-                        return;
-                    }
-
-                    var backDishReasonWnd = new BackDishReasonSelectWindow();
-                    if (!WindowHelper.ShowDialog(backDishReasonWnd, OwnerWindow))
-                        return;
-
-                    if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)// 称重
-                    {
-                        var weightWnd = new NumberSelectorWindow("请输入称重数量", SelectedOrderDish.DishNum, SelectedOrderDish.DishNum);
-                        if (!WindowHelper.ShowDialog(weightWnd, OwnerWindow))
-                            return;
-
-                        //调用更新菜品重量的接口。
-                        MessageDialog.Warning(weightWnd.InputNum.ToString(CultureInfo.InvariantCulture));
-                        return;
-                    }
-
-                    var numWnd = new NumberSelectorWindow("请输入退菜数量", SelectedOrderDish.DishNum, SelectedOrderDish.DishNum);
-                    if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
-                        return;
-
-                    var authorizeWnd = new AuthorizationWindow(EnumRightType.BackDish);
-                    if (WindowHelper.ShowDialog(authorizeWnd, OwnerWindow))
-                        TaskService.Start(numWnd.InputNum, GetBackDishInfoProcess, GetBackDishInfoComplete, "获取退菜信息...");
-                    break;
-                case "PayBill":
-                    PayTheBill();
+                    BackDish();
                     break;
                 case "SelectBank":
                     var wnd = new SelectBankWindow(SelectedBankInfo);
@@ -896,6 +863,23 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _isUserInputCash = Convert.ToBoolean(param);
         }
 
+        /// <summary>
+        /// 回车支付。
+        /// </summary>
+        /// <param name="param"></param>
+        private void EnterPay(object param)
+        {
+            if (!(param is ExCommandParameter))
+                return;
+
+            var args = ((ExCommandParameter) param).EventArgs as KeyEventArgs;
+            if (args == null)
+                return;
+
+            if (args.Key == Key.Enter)
+                PayTheBill();
+        }
+
         #endregion
 
         #region Protected Method
@@ -909,6 +893,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             OperCmd = CreateDelegateCommand(Oper, CanOper);
             SelectCouponCmd = CreateDelegateCommand(SelectCoupon);
             CashControlFocusCmd = CreateDelegateCommand(CashControlFocus);
+            EnterPayCmd = CreateDelegateCommand(EnterPay);
         }
 
         #endregion
@@ -1016,6 +1001,50 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             jdeDebitAmountWf.NextWorkFlowInfo = new WorkFlowInfo(null, PrintSettlementReportAndInvoice);//打印和开发票
 
             WorkFlowService.Start(param, payBillWorkFlow);
+        }
+
+        /// <summary>
+        /// 退菜执行方法。
+        /// </summary>
+        private void BackDish()
+        {
+            if (SelectedOrderDish == null)
+                return;
+
+            if (SelectedOrderDish.IsComboDish)
+            {
+                MessageDialog.Warning("请选择套餐主体退整个套餐。");
+                return;
+            }
+
+            if (SelectedOrderDish.IsFishPotDish && SelectedOrderDish.IsPot) //选中了鱼锅的锅。
+            {
+                MessageDialog.Warning("请选择鱼锅主体退整个鱼锅。");
+                return;
+            }
+
+            var backDishReasonWnd = new BackDishReasonSelectWindow();
+            if (!WindowHelper.ShowDialog(backDishReasonWnd, OwnerWindow))
+                return;
+
+            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed) // 称重
+            {
+                var weightWnd = new NumberSelectorWindow("请输入称重数量", SelectedOrderDish.DishNum, SelectedOrderDish.DishNum);
+                if (!WindowHelper.ShowDialog(weightWnd, OwnerWindow))
+                    return;
+
+                //调用更新菜品重量的接口。
+                MessageDialog.Warning(weightWnd.InputNum.ToString(CultureInfo.InvariantCulture));
+                return;
+            }
+
+            var numWnd = new NumberSelectorWindow("请输入退菜数量", SelectedOrderDish.DishNum, SelectedOrderDish.DishNum);
+            if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
+                return;
+
+            var authorizeWnd = new AuthorizationWindow(EnumRightType.BackDish);
+            if (WindowHelper.ShowDialog(authorizeWnd, OwnerWindow))
+                TaskService.Start(numWnd.InputNum, GetBackDishInfoProcess, GetBackDishInfoComplete, "获取退菜信息...");
         }
 
         /// <summary>

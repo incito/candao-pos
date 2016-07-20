@@ -41,6 +41,7 @@
     <Reference Include="Engine.Wpf.Toolkit, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\NewPos\CanDao.Pos.Client\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JunLan.Common.Base">
       <HintPath>..\..\Bin\Lib\JunLan.Common.Base.dll</HintPath>

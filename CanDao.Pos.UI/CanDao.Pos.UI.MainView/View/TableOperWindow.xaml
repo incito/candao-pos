@@ -6,11 +6,15 @@
              xmlns:templateSelector="clr-namespace:CanDao.Pos.Common.TemplateSelector;assembly=CanDao.Pos.Common"
              xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
              xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
+             xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
              Height="768" Width="1024" ShowInTaskbar="False"
              x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding GetTableDishInfoCmd}" CommandParameter="Load"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="KeyDown">
+            <common:ExInvokeCommandAction  Command="{Binding EnterPayCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <controls:PosBaseWindow.Resources>
@@ -232,7 +236,7 @@
             <controls:GroupSelector Grid.Row="1" x:Name="GsCouponList" ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}" ItemCountEachGroup="16">
                 <controls:GroupSelector.Template>
                     <ControlTemplate TargetType="controls:GroupSelector">
-                        <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False" IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}" SizeChanged="FrameworkElement_OnSizeChanged">
+                        <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False" IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal"/>
@@ -265,105 +269,116 @@
 
             <TabControl Grid.Row="3" FontSize="18" IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
                 <TabItem Header="现金支付">
-                    <Grid Margin="10,10,300,10">
+                    <Grid Margin="10,10,300,10" VerticalAlignment="Top">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="2*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="金额：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <toolkit:DoubleUpDown Grid.Row="0" Grid.Column="1" Minimum="0" Text="{Binding CashAmount, UpdateSourceTrigger=PropertyChanged}" Watermark="请输入现金金额" ShowButtonSpinner="False" SelectAllOnGotFocus="True" VerticalAlignment="Center" HorizontalContentAlignment="Left">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="GotFocus">
-                                    <i:InvokeCommandAction Command="{Binding CashControlFocusCmd}" CommandParameter="true"/>
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="LostFocus">
-                                    <i:InvokeCommandAction Command="{Binding CashControlFocusCmd}" CommandParameter="false"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </toolkit:DoubleUpDown>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="找零：" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,10,0,0"/>
-                        <toolkit:DoubleUpDown Grid.Row="1" Grid.Column="1" Text="{Binding ChargeAmount}" ShowButtonSpinner="False" IsEnabled="False" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                        <Border BorderBrush="{StaticResource CanDaoPosColorBg}" BorderThickness="2" Height="85">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="实收：" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="30"/>
+                                <toolkit:DoubleUpDown Grid.Row="0" Grid.Column="1" Minimum="0" FontSize="30" Text="{Binding CashAmount, UpdateSourceTrigger=PropertyChanged}" Watermark="现金金额" ShowButtonSpinner="False" SelectAllOnGotFocus="True" VerticalAlignment="Center" HorizontalContentAlignment="Left">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="GotFocus">
+                                            <i:InvokeCommandAction Command="{Binding CashControlFocusCmd}" CommandParameter="true"/>
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="LostFocus">
+                                            <i:InvokeCommandAction Command="{Binding CashControlFocusCmd}" CommandParameter="false"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </toolkit:DoubleUpDown>
+                            </Grid>
+                        </Border>
+                        <Grid Grid.Row="1" Height="60">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="找零：" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,10,0,0" FontSize="24"/>
+                            <TextBlock Grid.Column="1" Text="{Binding ChargeAmount}" VerticalAlignment="Center" Margin="0,10,0,0" FontSize="24" HorizontalAlignment="Left"/>
+                        </Grid>
                     </Grid>
                 </TabItem>
-                
+
                 <TabItem Header="银行卡">
-                    <Grid Margin="0,0,300,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Content="选择银行" Command="{Binding OperCmd}" CommandParameter="SelectBank"/>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedBankInfo.Name}" IsEnabled="False" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="银行卡号：" HorizontalAlignment="Right"/>
-                        <toolkit:WatermarkTextBox Grid.Row="1" Grid.Column="1" Text="{Binding BankCard}" Watermark="请输入银行卡号" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="金额：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <toolkit:DoubleUpDown Grid.Row="2" Grid.Column="1" Minimum="0" Text="{Binding BankAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="请输入刷卡金额" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
-                    </Grid>
+                    <StackPanel Margin="10,10,300,10">
+                        <Grid Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding SelectedBankInfo.Name}" IsEnabled="False" VerticalAlignment="Center" Height="40"/>
+                            <Button Grid.Column="1" Content="选择银行" Command="{Binding OperCmd}" CommandParameter="SelectBank" Width="75" Height="40"/>
+                        </Grid>
+                        <controls:WatermarkTextBox Text="{Binding BankCard}" Watermark="银行卡号：" VerticalAlignment="Center" Margin="0,5" Height="40" VerticalContentAlignment="Center"/>
+                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding BankAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="金额：" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="40" VerticalAlignment="Center" Margin="0,5"/>
+                    </StackPanel>
                 </TabItem>
                 
                 <TabItem Header="会员卡">
-                    <Grid Margin="0,0,300,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="会员卡号：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <toolkit:WatermarkTextBox Grid.Row="0" Grid.Column="1" Text="{Binding MemberCardNo, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsMemberLogin, Converter={StaticResource BoolRevertCvt}}" Watermark="请输入会员卡号" VerticalAlignment="Center"/>
-                        <Button Grid.Row="0" Grid.Column="2" Content="登录" Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2CollapsedCvt}}" Command="{Binding OperCmd}" CommandParameter="MemberLogin" VerticalAlignment="Center"/>
-                        <Button Grid.Row="0" Grid.Column="2" Content="退出" Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2VisibilityCvt}}" Command="{Binding OperCmd}" CommandParameter="MemberLogout" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="储值金额：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding Data.MemberInfo.StoredBalance}" Foreground="Blue" FontSize="18"/>
-                            <TextBlock Text="{Binding Data.MemberInfo.CardLevel, StringFormat=({0})}" Foreground="Blue" FontSize="18"/>
-                        </StackPanel>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="积分余额：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Data.MemberInfo.Integral}" Foreground="Blue" FontSize="18" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="储值消费：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <toolkit:DoubleUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Minimum="0" Text="{Binding MemberAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="请输入储值消费金额" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0"/>
-                        <TextBlock Grid.Row="4" Grid.Column="0" Text="积分消费：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <toolkit:DoubleUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Minimum="0" Text="{Binding IntegralAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="请输入积分消费金额" HorizontalContentAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0"/>
-                        <TextBlock Grid.Row="5" Grid.Column="0" Text="会员密码：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <toolkit:WatermarkTextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"  Text="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged}" Watermark="请输入会员消费密码" VerticalContentAlignment="Center"/>
-                    </Grid>
+                    <StackPanel Margin="10,10,300,10">
+                        <Grid Height="40" Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <controls:WatermarkTextBox Text="{Binding MemberCardNo, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsMemberLogin, Converter={StaticResource BoolRevertCvt}}" Watermark="请输入会员卡号" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="40"/>
+                            <Button Grid.Row="0" Grid.Column="1" Content="登录" Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2CollapsedCvt}}" Command="{Binding OperCmd}" CommandParameter="MemberLogin" VerticalAlignment="Center" Width="40" Height="40"/>
+                            <Button Grid.Row="0" Grid.Column="1" Content="退出" Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2VisibilityCvt}}" Command="{Binding OperCmd}" CommandParameter="MemberLogout" VerticalAlignment="Center" Width="40" Height="40"/>
+                        </Grid>
+                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding MemberAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="刷卡金额：" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="0,5" Height="40"/>
+                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding IntegralAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="使用积分：" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="0,5" Height="40"/>
+                        <controls:WatermarkTextBox Text="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged}" Watermark="会员密码：" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,5" Height="40"/>
+                        <Grid HorizontalAlignment="Left" TextBlock.Foreground="{StaticResource CanDaoPosColorSelected}" TextBlock.FontSize="16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="储值金额：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <StackPanel Grid.Row="0"  Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Data.MemberInfo.StoredBalance}"/>
+                                <TextBlock Text="{Binding Data.MemberInfo.CardLevel, StringFormat=({0})}"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="积分余额：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Data.MemberInfo.Integral}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
                 </TabItem>
                 
                 <TabItem Header="挂账支付">
-                    <Grid Margin="0,0,300,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="挂账单位：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <toolkit:WatermarkTextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedOnCmpAccInfo.Name}" Watermark="请选择挂账单位" VerticalAlignment="Center"/>
-                        <Button Grid.Row="0" Grid.Column="2" Content="选择" Command="{Binding OperCmd}" CommandParameter="SelectOnAccountCompany" VerticalAlignment="Center" Width="50"/>
+                    <StackPanel Margin="10,10,300,10">
+                        <Grid Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <controls:WatermarkTextBox Text="{Binding SelectedOnCmpAccInfo.Name}" Watermark="请选择挂账单位" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="40"/>
+                            <Button Grid.Row="0" Grid.Column="1" Content="选择" Command="{Binding OperCmd}" CommandParameter="SelectOnAccountCompany" VerticalAlignment="Center" Width="50" Height="40"/>
+                        </Grid>
+                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding DebitAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="挂账金额" HorizontalContentAlignment="Left" VerticalAlignment="Center" Height="40" Margin="0,5"/>
+                    </StackPanel>
+                </TabItem>
+                
+                <TabItem Header="支付宝">
+                    <StackPanel Margin="10,10,300,10">
+                        <controls:WatermarkTextBox Text="{Binding AlipayNo, UpdateSourceTrigger=PropertyChanged}" Watermark="支付宝号：" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,5" Height="40" FontSize="18"/>
+                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding AlipayAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="金额：" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="0,5" Height="40" FontSize="18"/>
+                    </StackPanel>
+                </TabItem>
 
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="挂账金额：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <toolkit:DoubleUpDown Grid.Row="1" Grid.Column="1" Minimum="0" Text="{Binding DebitAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="请输入挂账金额" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
-                    </Grid>
+                <TabItem Header="微信">
+                    <StackPanel Margin="10,10,300,10">
+                        <controls:WatermarkTextBox Text="{Binding WechatNo, UpdateSourceTrigger=PropertyChanged}" Watermark="微信号：" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,5" Height="40" FontSize="18"/>
+                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding WechatAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="金额：" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="0,5" Height="40" FontSize="18"/>
+                    </StackPanel>
                 </TabItem>
             </TabControl>
             <view:InputHelperLetterControl Grid.Row="3"  HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="300" Margin="0,35,0,0"/>

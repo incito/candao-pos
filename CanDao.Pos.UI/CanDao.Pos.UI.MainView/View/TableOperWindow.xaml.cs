@@ -22,16 +22,5 @@ namespace CanDao.Pos.UI.MainView.View
             InitializeComponent();
             DataContext = new TableOperTakeoutWndVm(tableName) { OwnerWindow = this };
         }
-
-        private void UIElement_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                ((TableOperWndVm)DataContext).OperCmd.Execute("PayBill");
-        }
-
-        private void FrameworkElement_OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            
-        }
     }
 }

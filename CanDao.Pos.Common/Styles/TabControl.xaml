@@ -8,13 +8,12 @@
     <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="TextBlock.FontSize" Value="16" />
-        <Setter Property="TextBlock.FontWeight" Value="Bold" />
         <Setter Property="Padding" Value="10,5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
                     <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}" CornerRadius="15" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                        <ContentPresenter x:Name="Cp" ContentSource="Header" Focusable="False" Margin="{TemplateBinding Padding}" 
+                        <ContentPresenter x:Name="Cp" ContentSource="Header" Margin="{TemplateBinding Padding}" 
                                           HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
                                           RecognizesAccessKey="True" 
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 

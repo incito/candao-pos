@@ -42,6 +42,11 @@
     <Reference Include="DevExpress.Xpf.Grid.v13.1.Core, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.LayoutControl.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="Engine.Wpf.Toolkit, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\NewPos\CanDao.Pos.Client\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JunLan.Common.Base">
       <HintPath>..\Bin\Lib\JunLan.Common.Base.dll</HintPath>
       <Private>False</Private>
@@ -65,6 +70,11 @@
     </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\NewPos\CanDao.Pos.Client\Bin\Lib\System.Windows.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -80,10 +90,10 @@
     <Compile Include="BaseNotifyObject.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="ClientLog.cs" />
-    <Compile Include="Controls\GroupSelector.cs" />
+    <Compile Include="Controls\DoubleUpDown\Implementation\DoubleUpDown.cs" />
+    <Compile Include="Controls\GroupSelector\Implementation\GroupSelector.cs" />
     <Compile Include="Controls\PosBaseWindow.cs" />
-    <Compile Include="Controls\SwitchItemViewer.cs" />
-    <Compile Include="Controls\SwitchListBox.cs" />
+    <Compile Include="Controls\WatermarkTextBox\Implementation\WatermarkTextBox.cs" />
     <Compile Include="Converter\BooleanRevertConverter.cs" />
     <Compile Include="Converter\BooleanToCollapsedConverter.cs" />
     <Compile Include="Converter\CountAddOneConverter.cs" />
@@ -98,6 +108,8 @@
     <Compile Include="Converter\ZeroToNullStringConverter.cs" />
     <Compile Include="ErrLog.cs" />
     <Compile Include="ExceptionHelper.cs" />
+    <Compile Include="ExCommandParameter.cs" />
+    <Compile Include="ExInvokeCommandAction.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HttpHelper.cs" />
     <Compile Include="InfoLog.cs" />
@@ -155,6 +167,22 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="BaseDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DoubleUpDown\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GroupSelector\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PosBaseWindow\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\WatermarkTextBox\Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -283,6 +311,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Logo1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\PosBaseWindow\Implementation\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
