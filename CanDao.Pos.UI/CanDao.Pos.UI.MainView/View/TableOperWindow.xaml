@@ -114,8 +114,8 @@
                     <Button Style="{StaticResource BtnRightStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="DishNextGruop"/>
                 </StackPanel>
             </Grid>
-            
-            <Border Grid.Row="3" Margin="10,5" BorderBrush="{StaticResource CanDaoPosColorFg}">
+
+            <Border Grid.Row="3" Margin="10,5" BorderBrush="{StaticResource CanDaoPosColorFg}" Visibility="{Binding HasTip, Converter={StaticResource Bool2VisibilityCvt}}">
                 <Grid TextBlock.FontSize="16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>

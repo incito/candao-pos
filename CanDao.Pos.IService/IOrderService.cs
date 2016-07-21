@@ -212,6 +212,13 @@ namespace CanDao.Pos.IService
         string CancelOrder(string tableNo);
 
         /// <summary>
+        /// 咖啡模式的清台。
+        /// </summary>
+        /// <param name="tableNo">餐台名。</param>
+        /// <returns>清台成功返回null，否则返回错误信息。</returns>
+        string ClearTableCf(string tableNo);
+
+        /// <summary>
         /// 反结算账单。
         /// </summary>
         /// <param name="userName">反结算用户。</param>

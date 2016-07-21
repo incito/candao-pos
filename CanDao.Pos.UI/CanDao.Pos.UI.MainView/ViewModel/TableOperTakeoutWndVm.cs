@@ -70,7 +70,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             WorkFlowService.Start(null, curWf);
-            _eventWait.WaitOne(ClosingWaitTimeoutSecond * 1000);
+            _eventWait.WaitOne(ClosingWaitTimeoutSecond * 1000);//等待同步锁的释放，主要是等待_cancelArgs.Cancel是否取消关闭窗口的状态
         }
 
         private object OpenTableProcess(object param)
@@ -137,6 +137,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             Data.OrderId = null;//设定订单id为空以后，调用GetTableDishInfo命令执行方法时就会自动开台。
             Data.DishInfos.Clear();//清空左侧外卖菜品列表。
             GetTableDishInfoCmd.Execute(null);
+        }
+
+        protected override void BackAllDishFailedProcess()
+        {
+            _eventWait.Set();//释放同步锁，关闭窗口。
         }
 
         /// <summary>

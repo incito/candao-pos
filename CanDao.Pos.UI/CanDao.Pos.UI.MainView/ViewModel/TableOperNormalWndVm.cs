@@ -37,7 +37,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         protected override void BackAllDishSuccessProcess()
         {
-            GetTableDishInfo(null);
+            GetTableDishInfoAsync();//整单退菜完成后重新获取餐桌明细。
         }
 
         protected override Tuple<bool, object> CancelOrderComplete(object param)
@@ -57,9 +57,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 InfoLog.Instance.I("广播清台消息给PAD...");
                 var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
                 if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Pad);
+                    ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
             });
-            MessageDialog.Warning("取消账单完成。");
+            NotifyDialog.Notify("取消账单完成。");
             CloseWindow(true);
             return null;
         }

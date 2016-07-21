@@ -514,6 +514,24 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
+        public string ClearTableCf(string tableNo)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("ClearTableCf");
+            if (string.IsNullOrEmpty(addr))
+                return "清台的地址为空。";
+
+            try
+            {
+                var request = new CancelOrderRequest { tableNo = tableNo };
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                return !response.IsSuccess ? "清台失败。" : null;
+            }
+            catch (Exception ex)
+            {
+                return string.Format("清台失败：{0}", ex.MyMessage());
+            }
+        }
+
         public string AntiSettlementOrder(string userName, string orderId, string reason)
         {
             var addr = ServiceAddrCache.GetServiceAddr("AntiSettlementOrder");
