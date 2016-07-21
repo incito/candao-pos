@@ -958,6 +958,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _couponLongPressTimer.Elapsed += CouponLongPressTimerOnElapsed;
         }
 
+        /// <summary>
+        /// 长按定时器触发时执行。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="elapsedEventArgs"></param>
         private void CouponLongPressTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             _couponLongPressTimer.Stop();
@@ -982,6 +987,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return;
                 }
 
+                InfoLog.Instance.I("开始设置优惠券的偏好。");
                 var result = service.SetCouponFavor(_curSelectedCouponInfo.CouponId, _curSelectedCouponInfo.IsUncommonlyUsed);
                 if (!string.IsNullOrEmpty(result))
                 {
@@ -990,6 +996,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return;
                 }
 
+                InfoLog.Instance.I("设置优惠券偏好成功。");
                 NotifyDialog.Notify("设置优惠券偏好成功。");
                 SelectedCouponCategory = SelectedCouponCategory;//触发优惠券的重新获取。
             });
