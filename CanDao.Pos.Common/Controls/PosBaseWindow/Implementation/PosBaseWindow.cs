@@ -31,7 +31,6 @@ namespace CanDao.Pos.Common.Controls
         public static readonly DependencyProperty WindowCornerRadiusProperty =
             DependencyProperty.Register("WindowCornerRadius", typeof(CornerRadius), typeof(PosBaseWindow), new PropertyMetadata(new CornerRadius(0)));
 
-
         /// <summary>
         /// 标题中间部分内容控件。
         /// </summary>

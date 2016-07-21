@@ -166,6 +166,7 @@ namespace CanDao.Pos.Model
             TableStatus = tableInfo.TableStatus;
             OrderId = tableInfo.OrderId;
             BeginTime = tableInfo.BeginTime;
+            TableType = tableInfo.TableType;
         }
     }
 }

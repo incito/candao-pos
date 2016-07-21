@@ -147,6 +147,14 @@ namespace CanDao.Pos.Model
             get { return TableType == EnumTableType.CFTable; }
         }
 
+        /// <summary>
+        /// 是否是外卖台。
+        /// </summary>
+        public bool IsTakeoutTable
+        {
+            get { return TableType == EnumTableType.CFTakeout || TableType == EnumTableType.Takeout; }
+        }
+
         public void CloneData(TableInfo srcInfo)
         {
             if(TableId != srcInfo.TableId)

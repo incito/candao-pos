@@ -36,11 +36,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Core.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Grid.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Grid.v13.1.Core, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.LayoutControl.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Engine.Wpf.Toolkit, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -93,7 +88,8 @@
     <Compile Include="ClientLog.cs" />
     <Compile Include="Controls\DoubleUpDown\Implementation\DoubleUpDown.cs" />
     <Compile Include="Controls\GroupSelector\Implementation\GroupSelector.cs" />
-    <Compile Include="Controls\PosBaseWindow.cs" />
+    <Compile Include="Controls\PosBaseWindow\Implementation\PosBaseWindow.cs" />
+    <Compile Include="Controls\PosMsgWindow\Implementation\PosMsgWindow.cs" />
     <Compile Include="Controls\WatermarkTextBox\Implementation\WatermarkTextBox.cs" />
     <Compile Include="Converter\BooleanRevertConverter.cs" />
     <Compile Include="Converter\BooleanToCollapsedConverter.cs" />
@@ -183,6 +179,10 @@
     <Page Include="Controls\PosBaseWindow\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\PosMsgWindow\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\WatermarkTextBox\Themes\Generic.xaml">
       <SubType>Designer</SubType>
@@ -314,9 +314,7 @@
   <ItemGroup>
     <Resource Include="Images\Logo1.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\PosBaseWindow\Implementation\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

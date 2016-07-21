@@ -86,7 +86,7 @@
     <Compile Include="Request\AddOrderMemberSaleInfoRequest.cs" />
     <Compile Include="Request\AntiSettlementOrderRequest.cs" />
     <Compile Include="Request\BackAllDishRequest.cs" />
-    <Compile Include="Request\CancelOrderRequest.cs" />
+    <Compile Include="Request\ClearTableRequest.cs" />
     <Compile Include="Request\CanDaoMemberBaseRequest.cs" />
     <Compile Include="Request\CanDaoMemberCheckMobileRepeatRequest.cs" />
     <Compile Include="Request\CanDaoMemberLoginLogoutRequest.cs" />

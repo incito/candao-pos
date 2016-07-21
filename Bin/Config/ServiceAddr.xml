@@ -31,7 +31,7 @@
     <MemberLogin Addr="/newspicyway/member/MemberLogin.json"/><!--餐道会员登入-->
     <MemberLogout Addr="/newspicyway/member/MemberLogout.json"/><!--餐道会员登出-->
     <AddMemberSaleInfo Addr="/newspicyway/member/AddOrderMember.json"/><!--添加会员消费信息-->
-    <CancelOrder Addr="/newspicyway/padinterface/cleantable.json"/><!--取消账单-->
+    <ClearTable Addr="/newspicyway/padinterface/cleantable.json"/><!--清台-->
     <ClearTableCf Addr="/newspicyway/padinterface/cleanTableSimply.json"/><!--咖啡模式的清台-->
     <AntiSettlementOrder Addr="/newspicyway/padinterface/rebacksettleorder.json"/><!--反结算账单-->
     <BackDish Addr="/newspicyway/padinterface/discarddish.json"/><!--退菜-->
@@ -64,6 +64,8 @@
     <OpenCash Addr="/datasnap/rest/TServerMethods1/OpenCash/"/><!--开钱箱-->
     <QueryOrderInfo Addr="/datasnap/rest/TServerMethods1/getAllOrderInfo2/"/><!--账单查询-->
     <GetFishPotDish Addr="/datasnap/rest/TServerMethods1/getGroupDetail/"/><!--获取鱼锅信息-->
+    <CancelOrder Addr="/datasnap/rest/TServerMethods1/cancelOrder/"/>
+    <!--外卖取消账单-->
   </DataServerApi>
   <!--云接口-->
   <CloudServerApi>

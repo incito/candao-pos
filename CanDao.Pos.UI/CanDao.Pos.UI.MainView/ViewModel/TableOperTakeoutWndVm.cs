@@ -105,31 +105,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _tableInfo.OrderId = result.Item2;
             if (Data == null)
                 Data = new TableFullInfo();
-            Data.TableName = _tableInfo.TableName;
-            Data.OrderId = _tableInfo.OrderId;
+            Data.CloneDataFromTableInfo(_tableInfo);
 
             WindowHelper.ShowDialog(new OrderDishWindow(_tableInfo), OwnerWindow);
             GetTableDishInfoAsync();
-        }
-
-        protected override Tuple<bool, object> CancelOrderComplete(object param)
-        {
-            var result = (string)param;
-            if (!string.IsNullOrEmpty(result))
-            {
-                var msg = string.Format("取消外卖台账单失败：{0}", result);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg, OwnerWindow);
-                _eventWait.Set();
-                return null;
-            }
-
-            InfoLog.Instance.I("外卖台取消账单成功。");
-            if (_cancelArgs != null)
-                _cancelArgs.Cancel = false;//取消阻止关闭，即关闭窗口。
-
-            _eventWait.Set();
-            return null;
         }
 
         protected override void DosomethingAfterSettlement()
@@ -145,6 +124,46 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
+        /// 取消订单命令的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object CancelOrderProcess(object param)
+        {
+            InfoLog.Instance.I("开始取消账单...");
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            return service.CancelOrder(Globals.UserInfo.UserName, Data.OrderId, Data.TableNo);
+        }
+
+        /// <summary>
+        /// 取消订单命令执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private Tuple<bool, object> CancelOrderComplete(object param)
+        {
+            var result = (string) param;
+            if (!string.IsNullOrEmpty(result))
+            {
+                var msg = string.Format("取消外卖台账单失败：{0}", result);
+                ErrLog.Instance.E("取消账单失败：{0}", result);
+                MessageDialog.Warning(result);
+                _eventWait.Set();
+                return null;
+            }
+
+            InfoLog.Instance.I("外卖台取消账单成功。");
+            if (_cancelArgs != null)
+                _cancelArgs.Cancel = false;//取消阻止关闭，即关闭窗口。
+
+            _eventWait.Set();
+            return null;
+        }
+
+        /// <summary>
         /// 根据餐桌名生成餐桌信息。
         /// </summary>
         /// <param name="tableName">餐桌名。</param>
@@ -156,6 +175,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 TableName = tableName,
                 TableNo = tableName,
                 TableStatus = EnumTableStatus.Idle,
+                TableType = EnumTableType.Takeout,
             };
         }
     }

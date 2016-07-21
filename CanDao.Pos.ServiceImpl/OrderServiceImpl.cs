@@ -496,7 +496,25 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        public string CancelOrder(string tableNo)
+        public string ClearTable(string tableNo)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("ClearTable");
+            if (string.IsNullOrEmpty(addr))
+                return "清台的地址为空。";
+
+            try
+            {
+                var request = new ClearTableRequest { tableNo = tableNo };
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                return !response.IsSuccess ? "清台失败。" : null;
+            }
+            catch (Exception ex)
+            {
+                return string.Format("清台失败：{0}", ex.MyMessage());
+            }
+        }
+
+        public string CancelOrder(string userId, string orderId, string tableNo)
         {
             var addr = ServiceAddrCache.GetServiceAddr("CancelOrder");
             if (string.IsNullOrEmpty(addr))
@@ -504,9 +522,12 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new CancelOrderRequest { tableNo = tableNo };
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return !response.IsSuccess ? "取消账单失败。" : null;
+                var request = new List<string> { userId, orderId, tableNo };
+                var response = RestHttpHelper.HttpGet<RestBaseResponse>(addr, request);
+                if (!string.IsNullOrEmpty(response.Item1))
+                    return response.Item1;
+
+                return !response.Item2.IsSuccess ? "取消账单失败。" : null;
             }
             catch (Exception ex)
             {
@@ -522,7 +543,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new CancelOrderRequest { tableNo = tableNo };
+                var request = new ClearTableRequest { tableNo = tableNo };
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
                 return !response.IsSuccess ? "清台失败。" : null;
             }

@@ -1194,7 +1194,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!MessageDialog.Quest(string.Format("确定要取消桌号：{0}的帐单吗?", _tableInfo.TableName)))
                 return;
 
-            WorkFlowService.Start(null, new WorkFlowInfo(CancelOrderProcess, CancelOrderComplete, "取消账单中..."));
+            WorkFlowService.Start(null, new WorkFlowInfo(ClearTableProcess, ClearTableComplete, "取消账单中..."));
         }
 
         /// <summary>
@@ -2106,22 +2106,49 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 取消
+        /// 清台的执行方法。
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        protected object CancelOrderProcess(object param)
+        private object ClearTableProcess(object param)
         {
-            InfoLog.Instance.I("开始取消账单...");
+            InfoLog.Instance.I("开始清台...");
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            return service.CancelOrder(_tableInfo.TableName);
+            return service.ClearTable(_tableInfo.TableName);
         }
 
-        protected virtual Tuple<bool, object> CancelOrderComplete(object param)
+        /// <summary>
+        /// 清台执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private Tuple<bool, object> ClearTableComplete(object param)
         {
+            var result = (string)param;
+            if (!string.IsNullOrEmpty(result))
+            {
+                var msg = string.Format("账单取消失败“{0}", result);
+                ErrLog.Instance.E(msg);
+                MessageDialog.Warning(msg, OwnerWindow);
+                return null;
+            }
+
+            InfoLog.Instance.I("取消账单完成。");
+            if (!Data.IsTakeoutTable)
+            {
+                ThreadPool.QueueUserWorkItem(t =>
+                {
+                    InfoLog.Instance.I("广播清台消息给PAD...");
+                    var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
+                    if (!string.IsNullOrEmpty(errMsg))
+                        ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
+                });
+            }
+            NotifyDialog.Notify("取消账单完成。", OwnerWindow.Owner);
+            CloseWindow(true);
             return null;
         }
 

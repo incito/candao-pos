@@ -205,11 +205,20 @@ namespace CanDao.Pos.IService
         string SetNormalPrice(string orderId);
 
         /// <summary>
-        /// 取消账单。
+        /// 清台。
         /// </summary>
         /// <param name="tableNo">餐台名。</param>
-        /// <returns>取消成功返回null，否则返回错误信息。</returns>
-        string CancelOrder(string tableNo);
+        /// <returns>清台成功返回null，否则返回错误信息。</returns>
+        string ClearTable(string tableNo);
+
+        /// <summary>
+        /// 取消账单。
+        /// </summary>
+        /// <param name="userId">用户ID。</param>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="tableNo">餐台名。</param>
+        /// <returns>清台成功返回null，否则返回错误信息。</returns>
+        string CancelOrder(string userId, string orderId, string tableNo);
 
         /// <summary>
         /// 咖啡模式的清台。
