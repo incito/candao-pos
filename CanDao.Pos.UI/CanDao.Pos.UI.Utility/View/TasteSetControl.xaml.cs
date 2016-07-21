@@ -9,7 +9,7 @@ namespace CanDao.Pos.UI.Utility.View
     /// </summary>
     public partial class TasteSetControl
     {
-        private List<AllowSelectInfo> _tasteInfos;
+        private List<string> _tasteInfos;
 
         public TasteSetControl()
         {
@@ -19,7 +19,7 @@ namespace CanDao.Pos.UI.Utility.View
         /// <summary>
         /// 获取或设置口味集合。
         /// </summary>
-        public List<AllowSelectInfo> TasteInfos
+        public List<string> TasteInfos
         {
             get { return _tasteInfos; }
             set
@@ -34,10 +34,7 @@ namespace CanDao.Pos.UI.Utility.View
         /// </summary>
         public string SelectedTaste
         {
-            get
-            {
-                return ((TasteSetControlVm)DataContext).SelectedTaste;
-            }
+            get { return ((TasteSetControlVm)DataContext).SelectedTaste; }
         }
     }
 }

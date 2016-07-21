@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using CanDao.Pos.Common;
-using CanDao.Pos.UI.MainView.ViewModel;
+﻿using CanDao.Pos.UI.MainView.ViewModel;
 
 namespace CanDao.Pos.UI.MainView.View
 {
@@ -13,12 +11,6 @@ namespace CanDao.Pos.UI.MainView.View
         {
             InitializeComponent();
             DataContext = new MainWndVm(isForcedEndWork) { OwnerWindow = this };
-        }
-
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
-        {
-            if (!MessageDialog.Quest("确定要退出系统吗？"))
-                e.Cancel = true;
         }
     }
 }

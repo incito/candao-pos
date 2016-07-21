@@ -13,31 +13,24 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     {
         public TasteSetControlVm()
         {
-            DishTasteInfos = new ObservableCollection<AllowSelectInfo>();
+            DishTasteInfos = new ObservableCollection<string>();
         }
 
         /// <summary>
         /// 菜品口味集合。
         /// </summary>
-        public ObservableCollection<AllowSelectInfo> DishTasteInfos { get; private set; }
+        public ObservableCollection<string> DishTasteInfos { get; private set; }
 
         /// <summary>
         /// 选择的口味。
         /// </summary>
-        public string SelectedTaste
-        {
-            get
-            {
-                var item = DishTasteInfos.FirstOrDefault(t => t.IsSelected);
-                return item != null ? item.Name : null;
-            }
-        }
+        public string SelectedTaste { get; set; }
 
         /// <summary>
         /// 初始化口味。
         /// </summary>
         /// <param name="tasteInfos"></param>
-        public void InitDishTasteInfos(List<AllowSelectInfo> tasteInfos)
+        public void InitDishTasteInfos(List<string> tasteInfos)
         {
             if (tasteInfos != null)
                 tasteInfos.ForEach(DishTasteInfos.Add);

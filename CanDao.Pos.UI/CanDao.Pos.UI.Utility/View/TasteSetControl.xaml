@@ -7,23 +7,29 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="Ctrl">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <UserControl.DataContext>
         <viewModel:TasteSetControlVm/>
     </UserControl.DataContext>
     <StackPanel>
         <TextBlock Text="选择口味" FontSize="18" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <Border Height="2" Background="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-        <ItemsControl ItemsSource="{Binding DishTasteInfos}" MaxWidth="{Binding ActualWidth, ElementName=Ctrl}">
-            <ItemsControl.ItemsPanel>
+        <ListBox ItemContainerStyle="{StaticResource LbNormalStyle}"
+                 SelectedItem="{Binding SelectedTaste}"
+                 ItemsSource="{Binding DishTasteInfos}"
+                 MaxWidth="{Binding ActualWidth, ElementName=Ctrl}"
+                 FontSize="16">
+            <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <RadioButton Content="{Binding Name}" FontSize="18" IsChecked="{Binding IsSelected, Mode=TwoWay}" GroupName="TasteGroup"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+            </ListBox.ItemsPanel>
+        </ListBox>
     </StackPanel>
 </UserControl>

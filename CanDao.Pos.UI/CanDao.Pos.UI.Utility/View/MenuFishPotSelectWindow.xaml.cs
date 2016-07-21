@@ -14,7 +14,7 @@ namespace CanDao.Pos.UI.Utility.View
         {
             InitializeComponent();
             DataContext = new MenuFishPotSelectWndVm(info) { OwnerWindow = this };
-            TasteSetCtrl.TasteInfos = info.FishPotSelfInfo.Tastes.Select(t => new AllowSelectInfo(t)).ToList();
+            TasteSetCtrl.TasteInfos = info.FishPotSelfInfo.Tastes.ToList();
         }
 
         public MenuFishPotFullInfo FishPotFullInfo

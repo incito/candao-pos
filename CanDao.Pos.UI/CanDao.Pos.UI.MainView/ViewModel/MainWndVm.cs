@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Timers;
@@ -110,7 +111,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
-
         /// <summary>
         /// 刷新剩余时间。
         /// </summary>
@@ -138,9 +138,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Command
 
         /// <summary>
-        /// 加载命令。
+        /// 窗口加载时执行命令。
         /// </summary>
-        public ICommand LoadCmd { get; private set; }
+        public ICommand WindowLoadCmd { get; private set; }
+
+
+        public ICommand WindowClosingCmd { get; private set; }
+
+        /// <summary>
+        /// 窗口关闭时执行命令。
+        /// </summary>
+        public ICommand WindowClosedCmd { get; private set; }
 
         /// <summary>
         /// 选择餐桌命令。
@@ -162,10 +170,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Command Methods
 
         /// <summary>
-        /// 加载命令的执行方法。
+        /// 窗口加载命令的执行方法。
         /// </summary>
         /// <param name="param"></param>
-        private void Load(object param)
+        private void WindowLoad(object param)
         {
             if (!IsInDesignMode)
             {
@@ -191,6 +199,30 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         Globals.DinnerWareInfo = result2.Item2;
                     });
                 }
+            }
+        }
+
+        /// <summary>
+        /// 窗口关闭时执行命令的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        private void WindowClosing(object param)
+        {
+            ExCommandParameter cmdParam = (ExCommandParameter)param;
+            if (!MessageDialog.Quest("确定要退出系统吗？"))
+                ((CancelEventArgs)cmdParam.EventArgs).Cancel = true;
+        }
+
+        /// <summary>
+        /// 窗口关闭后命令的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        private void WindowClosed(object param)
+        {
+            if (_refreshTimer != null)//释放刷新定时器。
+            {
+                _refreshTimer.Stop();
+                _refreshTimer.Dispose();
             }
         }
 
@@ -265,7 +297,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected override void InitCommand()
         {
             base.InitCommand();
-            LoadCmd = CreateDelegateCommand(Load);
+            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
+            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
+            WindowClosedCmd = CreateDelegateCommand(WindowClosed);
             SelectTableCmd = CreateDelegateCommand(SelectTable);
             GetAllTableInfoCmd = CreateDelegateCommand(GetAllTableInfos);
             OperCmd = CreateDelegateCommand(OperMethod);
