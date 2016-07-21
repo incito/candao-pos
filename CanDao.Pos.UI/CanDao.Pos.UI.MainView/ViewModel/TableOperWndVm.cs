@@ -735,6 +735,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     InfoLog.Instance.I("清除优惠券。");
                     ClearUsedCouponInfo();
                     break;
+                case "ClearTable":
+                    MessageDialog.Warning("清台功能");
+                    break;
+                case "BackAllDish":
+                    var wf = GenerateBackAllDishWf();
+                    WorkFlowService.Start(null, wf);
+                    break;
             }
         }
 
@@ -763,6 +770,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return SelectedUsedCouponInfo != null;
                 case "CouponClear":
                     return Data != null && Data.UsedCouponInfos.Any();
+                case "BackAllDish":
+                    return Data != null && Data.OrderStatus == EnumOrderStatus.Ordered && Data.DishInfos.Any();
                 default:
                     return true;
             }
@@ -1266,6 +1275,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
+        /// 生成整单退菜工作流。
+        /// </summary>
+        /// <returns></returns>
+        protected WorkFlowInfo GenerateBackAllDishWf()
+        {
+            return new WorkFlowInfo(BackAllDishProcess, BackAllDishComplete, "整桌退菜中...");
+        }
+
+        /// <summary>
         /// 执行结账的方法。
         /// </summary>
         /// <param name="param"></param>
@@ -1278,6 +1296,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
                 return "创建IOrderService服务失败。";
+
+            if (Data.TableType == EnumTableType.CFTable || Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout)//咖啡台和外卖都走咖啡结账模式，后台处理是结账后打单。
+                return service.PayTheBillCf(args.Item1, args.Item2, args.Item3);
 
             return service.PayTheBill(args.Item1, args.Item2, args.Item3);
         }
@@ -1402,7 +1423,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("设置会员价完成。");
             InfoLog.Instance.I("从新获取餐台所有信息...");
-            var result = orderService.GetTableDishInfoes(_tableInfo.TableName, Globals.UserInfo.UserName);
+
+            var result = new Tuple<string, TableFullInfo>("未赋值", null);
+            if (Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout)
+                result = orderService.GetTableDishInfoByOrderId(_tableInfo.OrderId, Globals.UserInfo.UserName);
+            else
+                result = orderService.GetTableDishInfoes(_tableInfo.TableName, Globals.UserInfo.UserName);
+
             if (!string.IsNullOrEmpty(result.Item1))
                 return string.Format("获取餐台明细失败：{0}", result.Item1);
 
@@ -1707,6 +1734,49 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             return new Tuple<bool, object>(true, null);
+        }
+
+        private object BackAllDishProcess(object param)
+        {
+            InfoLog.Instance.I("开始外卖台整桌退菜...");
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            return service.BackAllDish(Data.OrderId, Data.TableName, Globals.UserInfo.UserName);
+        }
+
+        protected virtual Tuple<bool, object> BackAllDishComplete(object arg)
+        {
+            var result = (string)arg;
+            if (!string.IsNullOrEmpty(result))
+            {
+                var msg = string.Format("桌台{0}整桌退菜失败：{1}", Data.TableNo, result);
+                ErrLog.Instance.E(msg);
+                MessageDialog.Warning(msg, OwnerWindow);
+                BackAllDishFailedProcess();
+                return null;
+            }
+
+            BackAllDishSuccessProcess();
+            InfoLog.Instance.I("桌台{0}整桌退菜成功：{1}", Data.TableNo, result);
+            return new Tuple<bool, object>(true, null);
+        }
+
+        /// <summary>
+        /// 退菜失败的处理。
+        /// </summary>
+        protected virtual void BackAllDishFailedProcess()
+        {
+
+        }
+
+        /// <summary>
+        /// 退菜成功的处理。
+        /// </summary>
+        protected virtual void BackAllDishSuccessProcess()
+        {
+            
         }
 
         /// <summary>

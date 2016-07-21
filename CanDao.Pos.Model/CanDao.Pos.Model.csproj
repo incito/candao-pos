@@ -98,6 +98,7 @@
     <Compile Include="Request\CanDaoMemberStorageRequest.cs" />
     <Compile Include="Request\GetInvoiceInfoRequest.cs" />
     <Compile Include="Request\GetOrderMemberInfoRequest.cs" />
+    <Compile Include="Request\GetTableByTypeRequest.cs" />
     <Compile Include="Request\SendVerifyCodeRequest.cs" />
     <Compile Include="Request\SetCouponFavorRequest.cs" />
     <Compile Include="Request\TipSettlementRequest.cs" />

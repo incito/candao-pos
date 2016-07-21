@@ -121,7 +121,9 @@ namespace CanDao.Pos.Common
         /// <returns></returns>
         private static T HttpOper<T>(string uri, object data, HttpType type, bool useJsonHeaderFlag)
         {
+            InfoLog.Instance.I("URL：{0}。Request ：{1}", uri, data.ToJson());
             var content = HttpOper(uri, data, type, useJsonHeaderFlag);
+            InfoLog.Instance.I("URL：{0}。Result：{1}", uri, content.ReadAsStringAsync().Result);
             return content.ReadAsAsync<T>().Result;
         }
 

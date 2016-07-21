@@ -135,6 +135,28 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
+        public Tuple<string, List<TableInfo>> GetTableInfoByType(List<EnumTableType> tableTypes)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("GetTableInfoByTableType");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, List<TableInfo>>("获取所有餐桌信息接口地址为空。", null);
+
+            try
+            {
+                var request = new GetTableByTypeRequest { tableType = tableTypes.Select(t => ((int)t).ToString()).ToList() };
+                var result = HttpHelper.HttpPost<List<TableInfoResponse>>(addr, request);
+                var dataList = new List<TableInfo>();
+                if (result != null && result.Any())
+                    dataList = result.Select(DataConverter.ToTableInfo).ToList();
+                return new Tuple<string, List<TableInfo>>(null, dataList);
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E(ex);
+                return new Tuple<string, List<TableInfo>>(ex.MyMessage(), null);
+            }
+        }
+
         public Tuple<string, string> OpenTable(OpenTableRequest request)
         {
             string addr = ServiceAddrCache.GetServiceAddr("OpenTable");

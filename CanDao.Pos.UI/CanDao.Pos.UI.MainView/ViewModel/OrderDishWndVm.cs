@@ -359,7 +359,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 });
             }
 
-
+            if (Data.TableType == EnumTableType.CFTable || Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout) //咖啡台和外卖模式都走咖啡模式的下单。
+                return service.OrderDishCf(Data.OrderId, Data.TableName, OrderRemark, OrderDishInfos.ToList());
             return service.OrderDish(Data.OrderId, Data.TableName, OrderRemark, OrderDishInfos.ToList());
         }
 

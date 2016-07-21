@@ -207,6 +207,7 @@
                 <Popup IsOpen="{Binding IsPrintMoreOpened}" PlacementTarget="{Binding ElementName=BtnMore}" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
                     <Border Background="{StaticResource CanDaoPosColorBg2}">
                         <StackPanel >
+                            <Button Content="整单退菜" Command="{Binding OperCmd}" CommandParameter="BackAllDish" Width="90" Height="40" Margin="3"/>
                             <Button Content="重印账单" Command="{Binding PrintCmd}" CommandParameter="ReprintBill" Width="90" Height="40" Margin="3"/>
                             <Button Content="重印客用单" Command="{Binding PrintCmd}" CommandParameter="ReprintCustomUseBill" Width="90" Height="40" Margin="3"/>
                             <Button Content="交易凭条" Command="{Binding PrintCmd}" CommandParameter="PrintTransactionSlip" Width="90" Height="40" Margin="3"/>
@@ -227,7 +228,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ListBox ItemsSource="{Binding CouponCategories}" DisplayMemberPath="CategoryName" SelectedItem="{Binding SelectedCouponCategory}" FontSize="18" BorderThickness="0">
+            <ListBox ItemsSource="{Binding CouponCategories}" DisplayMemberPath="CategoryName" SelectedItem="{Binding SelectedCouponCategory}" FontSize="18" BorderThickness="0"
+                     IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal"/>
@@ -235,10 +237,12 @@
                 </ListBox.ItemsPanel>
             </ListBox>
 
-            <controls:GroupSelector Grid.Row="1" x:Name="GsCouponList" ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}" ItemCountEachGroup="16">
+            <controls:GroupSelector Grid.Row="1" x:Name="GsCouponList" ItemCountEachGroup="16"
+                                    ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}"
+                                    IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
                 <controls:GroupSelector.Template>
                     <ControlTemplate TargetType="controls:GroupSelector">
-                        <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False" IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
+                        <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal"/>
@@ -394,8 +398,13 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
                     <TextBlock Text="{Binding SettlementInfo}" TextWrapping="Wrap" FontSize="18" VerticalAlignment="Top"/>
-                    <TextBlock Grid.Row="1" Text="{Binding Data.OrderInvoiceTitle, StringFormat=开发票：{0}}" VerticalAlignment="Bottom" FontSize="12" Visibility="{Binding Data.OrderInvoiceTitle, Converter={StaticResource Strinig2VisibleCvt}}"/>
+                    <Button Grid.Row="0" Grid.Column="1" Content="清台" Width="60" Command="{Binding OperCmd}" CommandParameter="ClearTable" Visibility="{Binding Data.IsCoffeeTable, Converter={StaticResource Bool2VisibilityCvt}}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Data.OrderInvoiceTitle, StringFormat=开发票：{0}}" VerticalAlignment="Bottom" FontSize="12" Visibility="{Binding Data.OrderInvoiceTitle, Converter={StaticResource Strinig2VisibleCvt}}"/>
                 </Grid>
             </Border>
         </Grid>

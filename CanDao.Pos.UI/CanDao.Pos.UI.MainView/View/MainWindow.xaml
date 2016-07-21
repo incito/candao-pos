@@ -37,8 +37,9 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border x:Name="Bd" CornerRadius="2" Width="120" Height="70" Margin="5"
-                                Background="{StaticResource CanDaoPosColorFg}"
-                                IsEnabled="{Binding TableEnable}">
+                            BorderBrush="{StaticResource CanDaoPosColorFg}" BorderThickness="2"
+                            Background="{StaticResource CanDaoPosColorFg}"
+                            IsEnabled="{Binding TableEnable}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDown">
                                 <i:InvokeCommandAction Command="{Binding DataContext.SelectTableCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
@@ -71,6 +72,10 @@
                         <DataTrigger Binding="{Binding TableStatus}" Value="Dinner">
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource CanDaoPosColorSelected}"/>
                             <Setter TargetName="TbInfo" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TableType}" Value="CFTable">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="Blue"/>
+                            <!--<Setter TargetName="Bd" Property="IsEnabled" Value="False"/>-->
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>

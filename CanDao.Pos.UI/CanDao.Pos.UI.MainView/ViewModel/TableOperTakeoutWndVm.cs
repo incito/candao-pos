@@ -21,7 +21,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <summary>
         /// 关闭窗口时处理的超时时间（秒），默认30秒。
         /// </summary>
-        private const int ClosingWaitTimeoutSecond = 30;
+        private const int ClosingWaitTimeoutSecond = 15;
 
         /// <summary>
         /// 窗口关闭时取消事件参数。
@@ -64,10 +64,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return;
 
                 InfoLog.Instance.I("外卖台有已点菜品，进行整桌退菜...");
-                var backDishWf = new WorkFlowInfo(BackAllDishProcess, BackAllDishComplete, "整桌退菜中...")
-                {
-                    NextWorkFlowInfo = curWf
-                };
+                var backDishWf = GenerateBackAllDishWf();
+                backDishWf.NextWorkFlowInfo = curWf;
                 curWf = backDishWf;
             }
 
@@ -112,32 +110,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             WindowHelper.ShowDialog(new OrderDishWindow(_tableInfo), OwnerWindow);
             GetTableDishInfoAsync();
-        }
-
-        private object BackAllDishProcess(object param)
-        {
-            InfoLog.Instance.I("开始外卖台整桌退菜...");
-            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (service == null)
-                return "创建IOrderService服务失败。";
-
-            return service.BackAllDish(Data.OrderId, Data.TableName, Globals.UserInfo.UserName);
-        }
-
-        private Tuple<bool, object> BackAllDishComplete(object arg)
-        {
-            var result = (string)arg;
-            if (!string.IsNullOrEmpty(result))
-            {
-                var msg = string.Format("外卖台整桌退菜失败：{0}", result);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg, OwnerWindow);
-                _eventWait.Set();
-                return null;
-            }
-
-            InfoLog.Instance.I("外卖台整桌退菜成功。");
-            return new Tuple<bool, object>(true, null);
         }
 
         protected override Tuple<bool, object> CancelOrderComplete(object param)

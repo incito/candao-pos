@@ -62,6 +62,13 @@ namespace CanDao.Pos.IService
         Tuple<string, List<TableInfo>> GetAllTableInfoes();
 
         /// <summary>
+        /// 获取指定类型的餐桌信息。
+        /// </summary>
+        /// <param name="tableTypes">餐台类型集合。</param>
+        /// <returns>Item1全部正常则为null，否则为错误信息，Item2为餐桌信息集合。</returns>
+        Tuple<string, List<TableInfo>> GetTableInfoByType(List<EnumTableType> tableTypes);
+
+        /// <summary>
         /// 开台。
         /// </summary>
         /// <param name="request">开台请求类。</param>

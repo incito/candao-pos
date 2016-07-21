@@ -139,6 +139,14 @@ namespace CanDao.Pos.Model
         /// </summary>
         public string WaiterId { get; set; }
 
+        /// <summary>
+        /// 获取是否是咖啡台。
+        /// </summary>
+        public bool IsCoffeeTable
+        {
+            get { return TableType == EnumTableType.CFTable; }
+        }
+
         public void CloneData(TableInfo srcInfo)
         {
             if(TableId != srcInfo.TableId)

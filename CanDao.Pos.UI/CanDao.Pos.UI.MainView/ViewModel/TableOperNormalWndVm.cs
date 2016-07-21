@@ -35,6 +35,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             GetTableDishInfoAsync();
         }
 
+        protected override void BackAllDishSuccessProcess()
+        {
+            GetTableDishInfo(null);
+        }
+
         protected override Tuple<bool, object> CancelOrderComplete(object param)
         {
             var result = (string) param;

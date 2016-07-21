@@ -207,12 +207,12 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="赠菜" Command="{Binding OperCmd}" CommandParameter="Free" Width="80" Height="30" Margin="3,0"/>
-                        <Button Content="全单备注" Command="{Binding OperCmd}" CommandParameter="OrderRemark" Width="80" Height="30" Margin="3,0"/>
+                        <Button Content="赠菜" Command="{Binding OperCmd}" CommandParameter="Free" Width="80" Height="40" Margin="3,0"/>
+                        <Button Content="全单备注" Command="{Binding OperCmd}" CommandParameter="OrderRemark" Width="80" Height="40" Margin="3,0"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="下单" Command="{Binding OperCmd}" CommandParameter="Order" Width="80" Height="30" Margin="3,0"/>
-                        <Button Content="清空" Command="{Binding OperCmd}" CommandParameter="Empty" Width="80" Height="30" Margin="3,0"/>
+                        <Button Content="下单" Command="{Binding OperCmd}" CommandParameter="Order" Width="90" Height="40" Margin="3,0"/>
+                        <Button Content="清空" Command="{Binding OperCmd}" CommandParameter="Empty" Width="90" Height="40" Margin="3,0"/>
                     </StackPanel>
                 </Grid>
             </Grid>

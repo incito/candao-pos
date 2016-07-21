@@ -347,7 +347,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return new Tuple<string, List<TableInfo>>("创建IRestaurantService服务失败。", null);
 
-            return service.GetAllTableInfoes();
+            var request = new List<EnumTableType>
+            {
+                EnumTableType.Room,
+                EnumTableType.Outside,
+                EnumTableType.CFTable
+            };
+            return service.GetTableInfoByType(request);
         }
 
         /// <summary>

@@ -17,5 +17,13 @@
         /// 外卖。
         /// </summary>
         Takeout,
+        /// <summary>
+        /// 咖啡模式外卖台。
+        /// </summary>
+        CFTakeout = 3,
+        /// <summary>
+        /// 咖啡模式餐台。
+        /// </summary>
+        CFTable = 4,
     }
 }

@@ -15,8 +15,10 @@
     <GetCouponInfos Addr="/newspicyway/padinterface/getPreferentialList.json"/><!--获取优惠券信息-->
     <CalcDiscountAmount Addr="/newspicyway/padinterface/usePreferentialItem.json"/><!--计算折扣类优惠券的优惠金额-->
     <OrderDish Addr="/newspicyway/padinterface/bookorderList.json"/><!--菜品下单-->
+    <OrderDishCf Addr="/newspicyway/padinterface/placeOrder.json"/><!--菜品下单（咖啡）-->
     <GetMenuComboDish Addr="/newspicyway/padinterface/getMenuCombodish.json"/><!--获取套餐内菜品-->
     <PayTheBill Addr="/newspicyway/padinterface/settleorder.json"/><!--结账-->
+    <PayTheBillCf Addr="/newspicyway/padinterface/checkout.json"/><!--咖啡模式结账-->
     <GetAllBankInfo Addr="/newspicyway/bankinterface/getallbank.json"/><!--获取所有银行-->
     <GetAllOnCpyAccountInfo Addr="/newspicyway/padinterface/getCooperationUnit.json"/><!--获取所有可挂账单位-->
     <GetTradeTime Addr="/newspicyway/padinterface/getOpenEndTime.json"/><!--获取营业时间-->
@@ -35,12 +37,14 @@
     <UpdateDishWeigh Addr="/newspicyway/padinterface/updateDishWeight.json"/><!--更新菜品重量-->
     <TipBill Addr="/newspicyway/tip/tipBilling.json"/><!--小费结算-->
     <SetCouponFavor Addr="/newspicyway/padinterface/setPreferentialFavor.json"/><!--设置不常用优惠-->
+    <GetTableInfoByTableType Addr="/newspicyway/padinterface/getTableByType.json"/><!--根据餐桌类型获取餐桌信息-->
   </JavaServerApi>
   <!--Delephi接口-->
   <DataServerApi>
     <RestaurantOpened Addr="/datasnap/rest/TServerMethods1/OpenUp/"/><!--店铺开业，分查询是否开业和开业-->
     <PettyCashInput Addr="/datasnap/rest/TServerMethods1/InputTellerCash/"/><!--零找金，分查询是否输入过零找金和输入零找金-->
     <GetTableDishInfos Addr="/datasnap/rest/TServerMethods1/GetOrder/"/><!--获取餐桌菜单上的所有菜品信息-->
+    <GetTableDishInfoByOrderId Addr="/datasnap/rest/TServerMethods1/GetOrderByOrderid/"/><!--获取餐桌菜单上的所有菜品信息-->
     <GetDinnerWareInfo Addr="/datasnap/rest/TServerMethods1/getCJFood/"/><!--获取餐具的数据-->
     <GetAllDishInfos Addr="/datasnap/rest/TServerMethods1/getAllWmFood/"/><!--获取所有菜品信息-->
     <GetDishStatus Addr="/datasnap/rest/TServerMethods1/getFoodStatus/"/><!--获取菜品的状态，是否估清-->

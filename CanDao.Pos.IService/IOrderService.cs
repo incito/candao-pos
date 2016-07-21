@@ -21,6 +21,14 @@ namespace CanDao.Pos.IService
         Tuple<string, TableFullInfo> GetTableDishInfoes(string tableName, string userName);
 
         /// <summary>
+        /// 根据订单号获取餐台所有菜品信息。
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="userName">当前用户名。</param>
+        /// <returns></returns>
+        Tuple<string, TableFullInfo> GetTableDishInfoByOrderId(string orderId, string userName);
+
+        /// <summary>
         /// 获取订单发票抬头。
         /// </summary>
         /// <param name="orderId">订单id。</param>
@@ -100,6 +108,16 @@ namespace CanDao.Pos.IService
         string OrderDish(string orderId, string tableNo, string orderRemark, List<OrderDishInfo> dishInfos);
 
         /// <summary>
+        /// 咖啡模式菜品下单。（后台处理逻辑是下单不打厨打单）
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="tableNo">餐台号。</param>
+        /// <param name="orderRemark">全单备注。</param>
+        /// <param name="dishInfos">点的菜集合。</param>
+        /// <returns>下单成功返回null，否则返回错误信息。</returns>
+        string OrderDishCf(string orderId, string tableNo, string orderRemark, List<OrderDishInfo> dishInfos);
+
+        /// <summary>
         /// 获取退菜的菜品信息。
         /// </summary>
         /// <param name="orderid">订单号。</param>
@@ -133,10 +151,19 @@ namespace CanDao.Pos.IService
         /// 结账。
         /// </summary>
         /// <param name="orderId">订单号。</param>
+        /// <param name="userId">收银员编号。</param>
+        /// <param name="payInfos">付款方式集合。</param>
+        /// <returns></returns>
+        string PayTheBill(string orderId, string userId, List<BillPayInfo> payInfos);
+
+        /// <summary>
+        /// 咖啡结账。（即结账后打印厨打单）
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
         /// <param name="tableNo">餐桌号。</param>
         /// <param name="payInfos">付款方式集合。</param>
         /// <returns></returns>
-        string PayTheBill(string orderId, string tableNo, List<BillPayInfo> payInfos);
+        string PayTheBillCf(string orderId, string tableNo, List<BillPayInfo> payInfos);
 
         /// <summary>
         /// 获取打印用的订单全信息。
