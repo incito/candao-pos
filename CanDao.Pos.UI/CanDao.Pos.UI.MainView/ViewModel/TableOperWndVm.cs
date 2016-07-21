@@ -1006,7 +1006,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
 
                 InfoLog.Instance.I("设置优惠券偏好成功。");
-                NotifyDialog.Notify("设置优惠券偏好成功。");
+                NotifyDialog.Notify("设置优惠券偏好成功。", OwnerWindow);
                 SelectedCouponCategory = SelectedCouponCategory;//触发优惠券的重新获取。
             });
         }

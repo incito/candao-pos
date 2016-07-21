@@ -64,7 +64,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="1" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Margin="10" HorizontalAlignment="Center">
+            <Border Grid.Row="1" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Margin="10" HorizontalAlignment="Center">
                 <controls:GroupSelector x:Name="DishGroupSelector" ItemsSource="{Binding Data.DishInfos}"  SelectedItem="{Binding SelectedOrderDish}" ItemCountEachGroup="10">
                     <controls:GroupSelector.Template>
                         <ControlTemplate TargetType="controls:GroupSelector">
@@ -126,7 +126,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="4" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Width="378" Margin="10" HorizontalAlignment="Center">
+            <Border Grid.Row="4" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Margin="10" HorizontalAlignment="Center">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>

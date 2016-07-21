@@ -286,8 +286,27 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Report"://报表
                     WindowHelper.ShowDialog(new ReportViewWindow(), OwnerWindow);
                     break;
+                case "PreGroup":
+                    ((MainWindow)OwnerWindow).GsTables.PreviousGroup();
+                    break;
+                case "NextGroup":
+                    ((MainWindow)OwnerWindow).GsTables.NextGroup();
+                    break;
             }
             SetRefreshTimerStatus(true);
+        }
+
+        private bool CanOper(object param)
+        {
+            switch ((string)param)
+            {
+                case "PreGroup":
+                    return ((MainWindow)OwnerWindow).GsTables.CanPreviousGroup;
+                case "NextGroup":
+                    return ((MainWindow)OwnerWindow).GsTables.CanNextGruop;
+                default:
+                    return true;
+            }
         }
 
         #endregion
@@ -302,7 +321,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             WindowClosedCmd = CreateDelegateCommand(WindowClosed);
             SelectTableCmd = CreateDelegateCommand(SelectTable);
             GetAllTableInfoCmd = CreateDelegateCommand(GetAllTableInfos);
-            OperCmd = CreateDelegateCommand(OperMethod);
+            OperCmd = CreateDelegateCommand(OperMethod, CanOper);
         }
 
         #endregion

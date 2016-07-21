@@ -59,7 +59,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 if (!string.IsNullOrEmpty(errMsg))
                     ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
             });
-            NotifyDialog.Notify("取消账单完成。");
+            NotifyDialog.Notify("取消账单完成。", OwnerWindow.Owner);
             CloseWindow(true);
             return null;
         }

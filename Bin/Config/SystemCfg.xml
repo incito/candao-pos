@@ -13,7 +13,7 @@
   <!--分店电话-->
   <BranchTelephone value="02866668888"/>
   <!--外卖台名称-->
-  <TakeoutTableName value="外卖105"/>
+  <TakeoutTableName value="JLOut"/>
   <!--Pos编号-->
   <PosId value="001"/>
   <!--钱箱IP地址-->
