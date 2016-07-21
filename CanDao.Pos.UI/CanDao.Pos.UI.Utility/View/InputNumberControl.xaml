@@ -37,7 +37,7 @@
         <Button Grid.Row="2" Grid.Column="2" Content="9" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="9"/>
         <Button Grid.Row="3" Grid.Column="0" Content="." Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="."/>
         <Button Grid.Row="3" Grid.Column="1" Content="0" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="0"/>
-        <Button Grid.Row="3" Grid.Column="2" Content="C" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="Clear"/>
+        <Button Grid.Row="3" Grid.Column="2" Content="&lt;-" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="Back"/>
         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="确定" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="Enter" Width="Auto" Visibility="{Binding ShowConfirmBtn, Converter={StaticResource Bool2VisibilityCvt}, ElementName=Ctrl}"/>
     </Grid>
 </UserControl>
