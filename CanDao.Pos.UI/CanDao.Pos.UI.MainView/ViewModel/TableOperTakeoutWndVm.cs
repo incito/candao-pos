@@ -34,6 +34,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             HasTip = false;
         }
 
+        public TableOperTakeoutWndVm(TableInfo tableInfo)
+            : base(tableInfo)
+        {
+            HasTip = false;
+        }
+
         protected override void GetTableDishInfo(object param)
         {
             if (IsInDesignMode)

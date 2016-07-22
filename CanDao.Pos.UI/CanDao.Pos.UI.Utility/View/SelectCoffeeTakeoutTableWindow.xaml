@@ -1,0 +1,45 @@
+﻿<controls:PosMsgWindow x:Class="CanDao.Pos.UI.Utility.View.SelectCoffeeTakeoutTableWindow"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+                       Title="备注桌号" Width="500" Height="460"
+                       ShowInTaskbar="False" x:Name="Ctrl">
+    <controls:PosMsgWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </controls:PosMsgWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <controls:GroupSelector x:Name="GsCfTakeout"
+                                FontSize="20"
+                                ItemsSource="{Binding CoffeeTakeoutTables}"
+                                SelectedItem="{Binding SelectedTable}"
+                                ItemCountEachGroup="20"
+                                ItemContainerStyle="{StaticResource LbNormalStyle}">
+            <controls:GroupSelector.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" Width="480" />
+                </ItemsPanelTemplate>
+            </controls:GroupSelector.ItemsPanel>
+            <controls:GroupSelector.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding TableName}" Margin="3"/>
+                </DataTemplate>
+            </controls:GroupSelector.ItemTemplate>
+        </controls:GroupSelector>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding GroupCount,ElementName=GsCfTakeout, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
+            <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding GroupCmd}" CommandParameter="PreGroup"/>
+            <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsCfTakeout}"/>
+            <TextBlock Text="/"/>
+            <TextBlock Text="{Binding GroupCount, ElementName=GsCfTakeout}"/>
+            <Button Style="{StaticResource BtnRightStyle}" Command="{Binding GroupCmd}" CommandParameter="NextGroup"/>
+        </StackPanel>
+    </Grid>
+</controls:PosMsgWindow>

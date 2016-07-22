@@ -64,7 +64,11 @@
     <Compile Include="CommonHelper.cs" />
     <Compile Include="CommonServiceHelper.cs" />
     <Compile Include="Controls\AllowMultSelectorControl.cs" />
+    <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
     <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
+    <Compile Include="View\SelectCoffeeTakeoutTableWindow.xaml.cs">
+      <DependentUpon>SelectCoffeeTakeoutTableWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SetInvoiceAmountWindow.xaml.cs">
       <DependentUpon>SetInvoiceAmountWindow.xaml</DependentUpon>
     </Compile>
@@ -226,6 +230,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SelectCoffeeTakeoutTableWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

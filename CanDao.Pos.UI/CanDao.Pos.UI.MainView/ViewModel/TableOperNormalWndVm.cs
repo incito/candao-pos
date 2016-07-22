@@ -4,7 +4,6 @@ using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.UI.MainView.View;
-using CanDao.Pos.UI.Utility;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {

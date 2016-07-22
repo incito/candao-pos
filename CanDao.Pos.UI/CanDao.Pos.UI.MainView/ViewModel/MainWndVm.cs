@@ -271,7 +271,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             switch ((string)param)
             {
                 case "Takeout"://外卖
-                    WindowHelper.ShowDialog(new TableOperWindow(SystemConfigCache.TakeoutTableName), OwnerWindow);
+                    TakeoutTable();
                     break;
                 case "QueryOrderHistory"://账单历史
                     WindowHelper.ShowDialog(new QueryOrderHistoryWindow(), OwnerWindow);
@@ -294,6 +294,65 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
             }
             SetRefreshTimerStatus(true);
+        }
+
+        private void TakeoutTable()
+        {
+            InfoLog.Instance.I("开始外卖...");
+            if (!Globals.UserRight.AllowCash)
+            {
+                InfoLog.Instance.I("当前用户没有收银权限：{0}", Globals.UserInfo.UserName);
+                MessageDialog.Warning("您没有收银权限！");
+                return;
+            }
+
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+            {
+                ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                MessageDialog.Warning("创建IRestaurantService服务失败。");
+                return;
+            }
+
+            InfoLog.Instance.I("开始获取咖啡外卖台...");
+            var result = service.GetTableInfoByType(new List<EnumTableType> { EnumTableType.CFTakeout });//查询咖啡模式外卖台
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("咖啡外卖桌台获取失败：{0}", result.Item1);
+                MessageDialog.Warning(result.Item1);
+                return;
+            }
+
+            if (result.Item2 != null && result.Item2.Any())
+            {
+                InfoLog.Instance.I("获取咖啡外卖台结束。咖啡外卖台个数：{0}", result.Item2.Count);
+                var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
+                if (WindowHelper.ShowDialog(selectTableWnd, OwnerWindow))//选择了咖啡外卖就走咖啡外卖桌台，如果没有选择则走配置文件的外卖。
+                {
+                    InfoLog.Instance.I("选择了\"{0}\"咖啡外卖台", selectTableWnd.SelectedTable.TableName);
+                    WindowHelper.ShowDialog(new TableOperWindow(selectTableWnd.SelectedTable), OwnerWindow);
+                    return;
+                }
+            }
+
+            InfoLog.Instance.I("没有选择咖啡外卖台，开始获取普通外卖台...");
+            result = service.GetTableInfoByType(new List<EnumTableType> { EnumTableType.Takeout });//查询普通外卖台
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("普通外卖桌台获取失败：{0}", result.Item1);
+                MessageDialog.Warning(result.Item1);
+                return;
+            }
+
+            if (result.Item2 == null || !result.Item2.Any())
+            {
+                InfoLog.Instance.I("没有获取到普通外卖台，可能后台未配置。");
+                MessageDialog.Warning("后台没有配置外卖台。");
+                return;
+            }
+
+            InfoLog.Instance.I("获取到普通外卖台：{0}", result.Item2.First().TableName);
+            WindowHelper.ShowDialog(new TableOperWindow(result.Item2.First()), OwnerWindow);
         }
 
         private bool CanOper(object param)
