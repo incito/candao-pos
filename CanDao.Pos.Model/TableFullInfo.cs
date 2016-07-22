@@ -168,5 +168,26 @@ namespace CanDao.Pos.Model
             BeginTime = tableInfo.BeginTime;
             TableType = tableInfo.TableType;
         }
+
+        public void CloneData(TableFullInfo info)
+        {
+            MemberInfo = info.MemberInfo;
+            MemberNo = info.MemberNo;
+            OrderInvoiceTitle = info.OrderInvoiceTitle;
+            OrderStatus = info.OrderStatus;
+            PaymentAmount = info.PaymentAmount;
+            TipAmount = info.TipAmount;
+            TotalAmount = info.TotalAmount;
+            TableStatus = info.TableStatus;
+
+            DishInfos.Clear();
+            if (info.DishInfos != null && info.DishInfos.Any())
+            {
+                foreach (var dishInfo in info.DishInfos)
+                {
+                    DishInfos.Add(dishInfo);
+                }
+            }
+        }
     }
 }

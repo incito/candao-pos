@@ -1935,8 +1935,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (result.Item2 == null)
                 return "没有获取到该餐台的账单信息。";
 
-            Data = result.Item2;
-            MemberCardNo = Data.MemberNo;
+            OwnerWindow.Dispatcher.Invoke((Action)delegate
+            {
+                if (Data == null)
+                    Data = result.Item2;
+                else
+                    Data.CloneData(result.Item2);
+                MemberCardNo = Data.MemberNo;
+            });
 
             if (!string.IsNullOrEmpty(MemberCardNo))//走会员登录的流程。
             {

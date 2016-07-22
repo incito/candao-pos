@@ -307,7 +307,7 @@ namespace CanDao.Pos.ServiceImpl
                     case EnumBookOrderResult.DishUpdating:
                         return "菜品正在更新，请重启POS后再试。";
                     default:
-                        return "下单发生错误，请联系技术人员。";
+                        return string.Format("下单发生错误，{0}，请联系技术人员。", result.msg);
                 }
             }
             catch (Exception ex)

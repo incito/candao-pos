@@ -41,11 +41,6 @@ namespace CanDao.Pos.Common.Controls
         #region Properties
 
         /// <summary>
-        /// 内部包含的Selector控件。
-        /// </summary>
-        protected Selector InnerSelector { get; private set; }
-
-        /// <summary>
         /// 获取是否可以跳转到第一组。
         /// </summary>
         public Boolean CanFirstGruop

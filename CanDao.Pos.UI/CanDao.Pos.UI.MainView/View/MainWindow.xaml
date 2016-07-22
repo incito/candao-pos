@@ -5,7 +5,8 @@
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                         xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
                         xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
-                        CloseBtnText="退出系统" Height="768" Width="1024" WindowStartupLocation="CenterScreen"
+                        CloseBtnText="退出系统" Height="768" Width="1024"
+                        WindowStartupLocation="CenterScreen" WindowState="Maximized"
                         x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

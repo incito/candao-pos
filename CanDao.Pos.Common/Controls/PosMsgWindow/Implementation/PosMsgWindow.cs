@@ -84,6 +84,18 @@ namespace CanDao.Pos.Common.Controls
             CancelBtn = GetTemplateChild("PART_CancelBtn") as Button;
             if (CancelBtn != null)
                 CancelBtn.Click += CancelBtnOnClick;
+
+            var titleCtrl = GetTemplateChild("PART_Title") as Border;
+            if (titleCtrl != null)
+            {
+                titleCtrl.MouseLeftButtonDown += TitleCtrlOnMouseLeftButtonDown;
+                titleCtrl.CornerRadius = new CornerRadius(WindowCornerRadius.TopLeft, WindowCornerRadius.TopRight, 0, 0);
+            }
+        }
+
+        private void TitleCtrlOnMouseLeftButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        {
+            DragMove();
         }
 
         protected  virtual void CancelBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
