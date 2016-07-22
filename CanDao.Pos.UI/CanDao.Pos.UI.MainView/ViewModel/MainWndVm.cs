@@ -518,7 +518,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
 
                 //更新餐桌开台持续时间
-                Tables.ForEach(t => t.UpdateDinnerDuration());
+                Tables.Where(t => t.TableStatus == EnumTableStatus.Dinner).ForEach(t => t.UpdateDinnerDuration());
             }
             catch (Exception ex)
             {

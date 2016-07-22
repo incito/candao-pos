@@ -2658,6 +2658,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
         }
 
+        /// <summary>
+        /// 结算后的一些处理。
+        /// </summary>
         protected virtual void DosomethingAfterSettlement()
         {
 
