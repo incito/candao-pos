@@ -67,6 +67,7 @@
     <Compile Include="ViewModel\DishWeightWndVm.cs" />
     <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
     <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
+    <Compile Include="ViewModel\SysPrinterListVm.cs" />
     <Compile Include="View\DishWeightWindow.xaml.cs">
       <DependentUpon>DishWeightWindow.xaml</DependentUpon>
     </Compile>
@@ -212,6 +213,9 @@
     </Compile>
     <Compile Include="View\StatusControl.xaml.cs">
       <DependentUpon>StatusControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SysPrinterList.xaml.cs">
+      <DependentUpon>SysPrinterList.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TasteSetControl.xaml.cs">
       <DependentUpon>TasteSetControl.xaml</DependentUpon>
@@ -374,6 +378,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\StatusControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SysPrinterList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

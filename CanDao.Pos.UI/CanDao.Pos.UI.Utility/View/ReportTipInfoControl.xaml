@@ -95,7 +95,7 @@
             <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsDish}"/>
             <TextBlock Text="/"/>
             <TextBlock Text="{Binding GroupCount, ElementName=GsTipInfoes}"/>
-            <Button Style="{StaticResource BtnRightStyle}" Command="{Binding NextGroupCmd}" CommandParameter="OrderDishNextGroup"/>
+            <Button Style="{StaticResource BtnRightStyle}" Command="{Binding NextGroupCmd}"/>
         </StackPanel>
     </Grid>
 </UserControl>

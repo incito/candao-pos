@@ -14,4 +14,5 @@
     <converter:CountToVisibleConverter x:Key="Count2VisibleCvt"/>
     <converter:CountAddOneConverter x:Key="CountAdd1Cvt"/>
     <converter:CountToCollapsedConverter x:Key="Count2CollapsedCvt"/>
+    <converter:PrinterStatusToColorConverter x:Key="PrinterStatus2ColorCvt"/>
 </ResourceDictionary>

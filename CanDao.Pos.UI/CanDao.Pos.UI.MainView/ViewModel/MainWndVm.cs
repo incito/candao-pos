@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
@@ -224,6 +225,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _refreshTimer.Stop();
                 _refreshTimer.Dispose();
             }
+            Application.Current.Shutdown(1);//尝试解决有时候退出主窗口程序依然在运行的问题。
         }
 
         /// <summary>
@@ -286,7 +288,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Report"://报表
                     WindowHelper.ShowDialog(new ReportViewWindow(), OwnerWindow);
                     break;
-                case "System":
+                case "System"://系统
+                    WindowHelper.ShowDialog(new SystemSettingWindow(), OwnerWindow);
                     break;
                 case "PreGroup":
                     ((MainWindow)OwnerWindow).GsTables.PreviousGroup();
@@ -298,6 +301,41 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             SetRefreshTimerStatus(true);
         }
 
+        private bool CanOper(object param)
+        {
+            switch ((string)param)
+            {
+                case "PreGroup":
+                    return ((MainWindow)OwnerWindow).GsTables.CanPreviousGroup;
+                case "NextGroup":
+                    return ((MainWindow)OwnerWindow).GsTables.CanNextGruop;
+                default:
+                    return true;
+            }
+        }
+
+        #endregion
+
+        #region Proptected Methods
+
+        protected override void InitCommand()
+        {
+            base.InitCommand();
+            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
+            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
+            WindowClosedCmd = CreateDelegateCommand(WindowClosed);
+            SelectTableCmd = CreateDelegateCommand(SelectTable);
+            GetAllTableInfoCmd = CreateDelegateCommand(GetAllTableInfos);
+            OperCmd = CreateDelegateCommand(OperMethod, CanOper);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// 点击外卖按钮时处理外卖。
+        /// </summary>
         private void TakeoutTable()
         {
             InfoLog.Instance.I("开始外卖...");
@@ -356,38 +394,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             InfoLog.Instance.I("获取到普通外卖台：{0}", result.Item2.First().TableName);
             WindowHelper.ShowDialog(new TableOperWindow(result.Item2.First()), OwnerWindow);
         }
-
-        private bool CanOper(object param)
-        {
-            switch ((string)param)
-            {
-                case "PreGroup":
-                    return ((MainWindow)OwnerWindow).GsTables.CanPreviousGroup;
-                case "NextGroup":
-                    return ((MainWindow)OwnerWindow).GsTables.CanNextGruop;
-                default:
-                    return true;
-            }
-        }
-
-        #endregion
-
-        #region Proptected Methods
-
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
-            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
-            WindowClosedCmd = CreateDelegateCommand(WindowClosed);
-            SelectTableCmd = CreateDelegateCommand(SelectTable);
-            GetAllTableInfoCmd = CreateDelegateCommand(GetAllTableInfos);
-            OperCmd = CreateDelegateCommand(OperMethod, CanOper);
-        }
-
-        #endregion
-
-        #region Private Methods
 
         /// <summary>
         /// 定时刷新执行方法。

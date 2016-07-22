@@ -398,7 +398,18 @@ namespace CanDao.Pos.ServiceImpl
             return item;
         }
 
+        internal static PrintStatusInfo ToPrintStatusInfo(PrinterStatusInfoResponse response)
+        {
+            return new PrintStatusInfo
+            {
+                PrintIp = response.ip,
+                PrintName = response.name,
+                PrintStatus = (EnumPrintStatus)response.status,
+                PrintStatusDes = response.statusTitle,
+            };
+        }
 
+        #region Private Method
 
         private static MenuDishInfo ToMenuDishInfo(FishPotDishResponse response)
         {
@@ -692,5 +703,7 @@ namespace CanDao.Pos.ServiceImpl
                 return null;
             }
         }
+
+        #endregion
     }
 }

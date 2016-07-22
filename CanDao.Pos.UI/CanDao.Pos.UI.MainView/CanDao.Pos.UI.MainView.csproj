@@ -100,6 +100,9 @@
     <Compile Include="View\RestaurantOpeningWindow.xaml.cs">
       <DependentUpon>RestaurantOpeningWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\SystemSettingWindow.xaml.cs">
+      <DependentUpon>SystemSettingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\TableOperWindow.xaml.cs">
       <DependentUpon>TableOperWindow.xaml</DependentUpon>
     </Compile>
@@ -168,6 +171,10 @@
     <Page Include="View\RestaurantOpeningWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SystemSettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\TableOperWindow.xaml">
       <SubType>Designer</SubType>

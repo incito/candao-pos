@@ -39,6 +39,7 @@
     <TipBill Addr="/newspicyway/tip/tipBilling.json"/><!--小费结算-->
     <SetCouponFavor Addr="/newspicyway/padinterface/setPreferentialFavor.json"/><!--设置不常用优惠-->
     <GetTableInfoByTableType Addr="/newspicyway/padinterface/getTableByType.json"/><!--根据餐桌类型获取餐桌信息-->
+    <GetPrinterList Addr="/newspicyway/pos/printerlist.json"/><!--获取打印机状态列表-->
   </JavaServerApi>
   <!--Delephi接口-->
   <DataServerApi>

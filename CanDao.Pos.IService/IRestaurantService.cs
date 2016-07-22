@@ -181,5 +181,12 @@ namespace CanDao.Pos.IService
         /// <param name="isCommonlyUsed">是否常用</param>
         /// <returns></returns>
         string SetCouponFavor(string couponId, bool isCommonlyUsed);
+
+        /// <summary>
+        /// 获取打印机状态集合。
+        /// </summary>
+        /// <returns></returns>
+        Tuple<string, List<PrintStatusInfo>> GetPrinterStatusInfo();
+
     }
 }

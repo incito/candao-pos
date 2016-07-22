@@ -489,5 +489,33 @@ namespace CanDao.Pos.ServiceImpl
                 return string.Format("设置优惠券偏好异常：{0}", ex.MyMessage());
             }
         }
+
+        public Tuple<string, List<PrintStatusInfo>> GetPrinterStatusInfo()
+        {
+            try
+            {
+                var addr = ServiceAddrCache.GetServiceAddr("GetPrinterList");
+                if (string.IsNullOrEmpty(addr))
+                    return new Tuple<string, List<PrintStatusInfo>>("打印机状态获取地址为空。", null);
+
+                var response = HttpHelper.HttpGet<GetPrinterStatusResponse>(addr);
+                if (!response.isSuccess)
+                {
+                    var msg = !string.IsNullOrEmpty(response.errorMsg) ? response.errorMsg : "获取打印机状态信息失败。";
+                    AllLog.Instance.E(msg);
+                    return new Tuple<string, List<PrintStatusInfo>>(msg, null);
+                }
+
+                var list = new List<PrintStatusInfo>();
+                if (response.data != null && response.data.Any())
+                    list = response.data.Select(DataConverter.ToPrintStatusInfo).ToList();
+                return new Tuple<string, List<PrintStatusInfo>>(null, list);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, List<PrintStatusInfo>>(ex.Message, null);
+            }
+        }
+
     }
 }

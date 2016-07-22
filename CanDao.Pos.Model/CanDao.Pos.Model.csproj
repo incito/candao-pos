@@ -65,6 +65,7 @@
     <Compile Include="Enum\EnumOpenTableResult.cs" />
     <Compile Include="Enum\EnumOrderType.cs" />
     <Compile Include="Enum\EnumPrintOrderType.cs" />
+    <Compile Include="Enum\EnumPrintStatus.cs" />
     <Compile Include="Enum\EnumQueryOrderStatus.cs" />
     <Compile Include="Enum\EnumStatisticsPeriodsType.cs" />
     <Compile Include="GiftDishInfo.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="PrintPayDetail.cs" />
     <Compile Include="PrintOrderDishInfo.cs" />
     <Compile Include="PrintOrderInfo.cs" />
+    <Compile Include="PrintStatusInfo.cs" />
     <Compile Include="QueryOrderInfo.cs" />
     <Compile Include="ReportDataBase.cs" />
     <Compile Include="ReportStatisticInfo.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Response\GetFishPotDishResponse.cs" />
     <Compile Include="Response\GetMemberPayInfoResponse.cs" />
     <Compile Include="Response\GetOrderMemberInfoResponse.cs" />
+    <Compile Include="Response\GetPrinterStatusResponse.cs" />
     <Compile Include="Response\GetPrintOrderInfoResponse.cs" />
     <Compile Include="Response\GetReportStatisticInfoBase.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />

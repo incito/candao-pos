@@ -101,6 +101,7 @@
     <Compile Include="Converter\OfferTypeToCheckedConverter.cs" />
     <Compile Include="Converter\OfferTypeToVisiblityConverter.cs" />
     <Compile Include="Converter\PayTypeToCheckedConverter.cs" />
+    <Compile Include="Converter\PrinterStatusToColorConverter.cs" />
     <Compile Include="Converter\StringToVisibleConverter.cs" />
     <Compile Include="Converter\ZeroToNullStringConverter.cs" />
     <Compile Include="ErrLog.cs" />
@@ -318,7 +319,9 @@
   <ItemGroup>
     <Resource Include="Images\Logo1.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Alert.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
