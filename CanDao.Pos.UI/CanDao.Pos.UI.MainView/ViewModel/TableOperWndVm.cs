@@ -736,60 +736,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 点击加菜时执行。
-        /// </summary>
-        private void AddDish()
-        {
-            if (SelectedOrderDish == null)
-                return;
-
-            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
-            {
-                DishWeight();
-                return;
-            }
-
-            if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
-                GetTableDishInfoAsync();
-        }
-
-        /// <summary>
-        /// 菜品称重。
-        /// </summary>
-        /// <returns></returns>
-        private void DishWeight()
-        {
-            InfoLog.Instance.I("选中的菜时称重菜品，弹出称重窗体...");
-            var dishWeightWnd = new DishWeightWindow();
-            if (WindowHelper.ShowDialog(dishWeightWnd, OwnerWindow))
-            {
-                InfoLog.Instance.I("菜品\"{0}\"称重数量：{1}", SelectedOrderDish.DishName, dishWeightWnd.DishWeightNum);
-                var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-                if (service == null)
-                {
-                    ErrLog.Instance.E("创建IOrderService服务失败。");
-                    MessageDialog.Warning("创建IOrderService服务失败。");
-                    return;
-                }
-
-                InfoLog.Instance.I("开始调用菜品称重接口...");
-                var result = service.UpdateDishWeight(Data.TableNo, SelectedOrderDish.DishId,
-                    SelectedOrderDish.PrimaryKey, dishWeightWnd.DishWeightNum);
-                if (!string.IsNullOrEmpty(result))
-                {
-                    ErrLog.Instance.E("菜品\"{0}\"称重失败：{1}", SelectedOrderDish.DishName, result);
-                    MessageDialog.Warning(result);
-                    return;
-                }
-
-                var msg = string.Format("菜品\"{0}\"称重成功。", SelectedOrderDish.DishName);
-                InfoLog.Instance.I(msg);
-                NotifyDialog.Notify(msg, OwnerWindow);
-                GetTableDishInfoAsync();
-            }
-        }
-
-        /// <summary>
         /// 是否操作命令可用的执行方法。
         /// </summary>
         /// <param name="param"></param>
@@ -1169,6 +1115,60 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var authorizeWnd = new AuthorizationWindow(EnumRightType.BackDish);
             if (WindowHelper.ShowDialog(authorizeWnd, OwnerWindow))
                 TaskService.Start(numWnd.InputNum, GetBackDishInfoProcess, GetBackDishInfoComplete, "获取退菜信息...");
+        }
+
+        /// <summary>
+        /// 点击加菜时执行。
+        /// </summary>
+        private void AddDish()
+        {
+            if (SelectedOrderDish == null)
+                return;
+
+            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
+            {
+                DishWeight();
+                return;
+            }
+
+            if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
+                GetTableDishInfoAsync();
+        }
+
+        /// <summary>
+        /// 菜品称重。
+        /// </summary>
+        /// <returns></returns>
+        private void DishWeight()
+        {
+            InfoLog.Instance.I("选中的菜时称重菜品，弹出称重窗体...");
+            var dishWeightWnd = new DishWeightWindow();
+            if (WindowHelper.ShowDialog(dishWeightWnd, OwnerWindow))
+            {
+                InfoLog.Instance.I("菜品\"{0}\"称重数量：{1}", SelectedOrderDish.DishName, dishWeightWnd.DishWeightNum);
+                var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+                if (service == null)
+                {
+                    ErrLog.Instance.E("创建IOrderService服务失败。");
+                    MessageDialog.Warning("创建IOrderService服务失败。");
+                    return;
+                }
+
+                InfoLog.Instance.I("开始调用菜品称重接口...");
+                var result = service.UpdateDishWeight(Data.TableNo, SelectedOrderDish.DishId,
+                    SelectedOrderDish.PrimaryKey, dishWeightWnd.DishWeightNum);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    ErrLog.Instance.E("菜品\"{0}\"称重失败：{1}", SelectedOrderDish.DishName, result);
+                    MessageDialog.Warning(result);
+                    return;
+                }
+
+                var msg = string.Format("菜品\"{0}\"称重成功。", SelectedOrderDish.DishName);
+                InfoLog.Instance.I(msg);
+                NotifyDialog.Notify(msg, OwnerWindow);
+                GetTableDishInfoAsync();
+            }
         }
 
         /// <summary>

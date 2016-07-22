@@ -286,6 +286,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Report"://报表
                     WindowHelper.ShowDialog(new ReportViewWindow(), OwnerWindow);
                     break;
+                case "System":
+                    break;
                 case "PreGroup":
                     ((MainWindow)OwnerWindow).GsTables.PreviousGroup();
                     break;

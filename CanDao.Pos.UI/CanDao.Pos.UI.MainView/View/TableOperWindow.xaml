@@ -72,7 +72,7 @@
                                       ItemsSource="{TemplateBinding GroupedItemsSource}"
                                       SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="菜单名称" Width="140" CanUserReorder="False" IsReadOnly="True">
+                                    <DataGridTemplateColumn Header="菜单名称" Width="120" CanUserReorder="False" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <WrapPanel Width="140" VerticalAlignment="Center">
@@ -85,7 +85,7 @@
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="数量" Width="50" Binding="{Binding DishNum}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="单位" Width="70" Binding="{Binding DishUnit}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn Header="小计" Width="100" IsReadOnly="True" >
+                                    <DataGridTemplateColumn Header="小计" Width="90" IsReadOnly="True" >
                                         <DataGridTemplateColumn.CellTemplateSelector>
                                             <templateSelector:DishPayamountTemplateSelector  NormalTemplate="{StaticResource DishPayamountNormalTemplate}" ToBeWeighTemplate="{StaticResource DishPayamountBeWeighTemplate}"/>
                                         </DataGridTemplateColumn.CellTemplateSelector>
@@ -147,6 +147,7 @@
                             </ControlTemplate>
                         </controls:GroupSelector.Template>
                     </controls:GroupSelector>
+                    
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -197,7 +198,7 @@
                     <Button Style="{StaticResource BtnRightStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="CouponNextGroup"/>
                 </StackPanel>
             </Grid>
-            
+
             <StackPanel Grid.Row="6" Margin="10,0" Orientation="Horizontal">
                 <Button Content="预结单" Command="{Binding PrintCmd}" CommandParameter="PreSettlement" Width="65" Height="40"/>
                 <Button Content="反结" Command="{Binding OperCmd}" CommandParameter="Resettlement" Width="65" Height="40"/>
@@ -276,7 +277,7 @@
                 <Button Style="{StaticResource BtnRightStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="CouponListNextGruop"/>
             </StackPanel>
 
-            <TabControl Grid.Row="3" FontSize="18" IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
+            <TabControl Grid.Row="3" FontSize="18" IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}" ItemContainerStyle="{StaticResource TbItemSettlementStyle}">
                 <TabItem Header="现金支付">
                     <Grid Margin="10,10,300,10" VerticalAlignment="Top">
                         <Grid.RowDefinitions>
@@ -327,7 +328,7 @@
                         <toolkit:DoubleUpDown Minimum="0" Text="{Binding BankAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="金额：" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="40" VerticalAlignment="Center" Margin="0,5"/>
                     </StackPanel>
                 </TabItem>
-                
+
                 <TabItem Header="会员卡">
                     <StackPanel Margin="10,10,300,10">
                         <Grid Height="40" Margin="0,5">
@@ -361,7 +362,7 @@
                         </Grid>
                     </StackPanel>
                 </TabItem>
-                
+
                 <TabItem Header="挂账支付">
                     <StackPanel Margin="10,10,300,10">
                         <Grid Margin="0,5">
@@ -375,7 +376,7 @@
                         <toolkit:DoubleUpDown Minimum="0" Text="{Binding DebitAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="挂账金额" HorizontalContentAlignment="Left" VerticalAlignment="Center" Height="40" Margin="0,5"/>
                     </StackPanel>
                 </TabItem>
-                
+
                 <TabItem Header="支付宝">
                     <StackPanel Margin="10,10,300,10">
                         <controls:WatermarkTextBox Text="{Binding AlipayNo, UpdateSourceTrigger=PropertyChanged}" Watermark="支付宝号：" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,5" Height="40" FontSize="18"/>

@@ -144,6 +144,7 @@
                 <Button Content="清机" Command="{Binding OperCmd}" CommandParameter="Clearner" Width="100"/>
                 <Button Content="结业" Command="{Binding OperCmd}" CommandParameter="EndWork" Width="100"/>
                 <Button Content="报表" Command="{Binding OperCmd}" CommandParameter="Report" Width="100"/>
+                <Button Content="系统" Command="{Binding OperCmd}" CommandParameter="System" Width="100"/>
             </StackPanel>
 
         </Grid>

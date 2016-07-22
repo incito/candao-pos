@@ -1,7 +1,6 @@
 ﻿<UserControl x:Class="CanDao.Pos.UI.Utility.View.ReportDishInfoControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewModel="clr-namespace:CanDao.Pos.UI.Utility.ViewModel"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common">
     <i:Interaction.Triggers>
@@ -24,7 +23,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
@@ -61,28 +59,38 @@
                 <Label Content="上月"/>
             </RadioButton>
         </StackPanel>
+        
         <Button Grid.Row="0" Grid.Column="1" Content="打印" Width="50" Command="{Binding PrintCmd}"/>
 
-        <controls:GroupSelector x:Name="GsDish" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding DataSource}" ItemCountEachGroup="10">
+        <controls:GroupSelector x:Name="GsDish"
+                                Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                                ItemsSource="{Binding DataSource}"
+                                ItemCountEachGroup="15">
             <controls:GroupSelector.Template>
                 <ControlTemplate TargetType="controls:GroupSelector">
-                    <DataGrid x:Name="DgView" ItemsSource="{TemplateBinding GroupedItemsSource}" AutoGenerateColumns="False" MinRowHeight="28">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Sorting">
-                                <i:InvokeCommandAction Command="{Binding EndSortingCmd}" CommandParameter="{Binding ., ElementName=DgView}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
+                    <DataGrid x:Name="PART_Selector"
+                              FontSize="14" MinRowHeight="28"
+                              AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False" SelectionUnit="FullRow"
+                              ItemsSource="{TemplateBinding GroupedItemsSource}"
+                              SelectedItem="{TemplateBinding SelectedItem}">
+                        <DataGrid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                            </Style>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="品项名称" Width="200" Binding="{Binding Name}"/>
-                            <DataGridTextColumn Header="销售数量" Width="100" Binding="{Binding Count}"/>
-                            <DataGridTextColumn Header="销售金额" Width="100" Binding="{Binding Amount}"/>
+                            <DataGridTextColumn Header="品项名称" Width="420" Binding="{Binding Name}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="销售数量" Width="150" Binding="{Binding Count}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="销售金额" Width="150" Binding="{Binding Amount}" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ControlTemplate>
             </controls:GroupSelector.Template>
         </controls:GroupSelector>
 
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="2" Grid.Column="1"
+                    Orientation="Horizontal" HorizontalAlignment="Right"
+                    Visibility="{Binding GroupCount,ElementName=GsDish, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
             <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding PreGroupCmd}"/>
             <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsDish}"/>
             <TextBlock Text="/"/>
