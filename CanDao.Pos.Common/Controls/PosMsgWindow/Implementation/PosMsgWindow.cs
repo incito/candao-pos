@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -10,8 +9,8 @@ namespace CanDao.Pos.Common.Controls
     /// </summary>
     public class PosMsgWindow : Window
     {
-        protected Button _closeBtn;
-        protected Button _cancelBtn;
+        protected Button CloseBtn;
+        protected Button CancelBtn;
 
         static PosMsgWindow()
         {
@@ -30,7 +29,6 @@ namespace CanDao.Pos.Common.Controls
         public static readonly DependencyProperty CloseBtnTextProperty =
             DependencyProperty.Register("CloseBtnText", typeof(string), typeof(PosMsgWindow), new PropertyMetadata("确认"));
 
-
         /// <summary>
         /// 关闭按钮文本。
         /// </summary>
@@ -43,7 +41,6 @@ namespace CanDao.Pos.Common.Controls
         public static readonly DependencyProperty CancelBtnTextProperty =
             DependencyProperty.Register("CancelBtnText", typeof(string), typeof(PosMsgWindow), new PropertyMetadata("关闭"));
 
-
         public CornerRadius WindowCornerRadius
         {
             get { return (CornerRadius)GetValue(WindowCornerRadiusProperty); }
@@ -52,6 +49,15 @@ namespace CanDao.Pos.Common.Controls
 
         public static readonly DependencyProperty WindowCornerRadiusProperty =
             DependencyProperty.Register("WindowCornerRadius", typeof(CornerRadius), typeof(PosMsgWindow), new PropertyMetadata(new CornerRadius(0)));
+
+        public bool CloseBtnEnable
+        {
+            get { return (bool)GetValue(CloseBtnEnableProperty); }
+            set { SetValue(CloseBtnEnableProperty, value); }
+        }
+
+        public static readonly DependencyProperty CloseBtnEnableProperty =
+            DependencyProperty.Register("CloseBtnEnable", typeof(bool), typeof(PosMsgWindow), new PropertyMetadata(true));
 
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -71,13 +77,13 @@ namespace CanDao.Pos.Common.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            _closeBtn = GetTemplateChild("PART_CloseBtn") as Button;
-            if (_closeBtn != null)
-                _closeBtn.Click += CloseBtnOnClick;
+            CloseBtn = GetTemplateChild("PART_CloseBtn") as Button;
+            if (CloseBtn != null)
+                CloseBtn.Click += CloseBtnOnClick;
 
-            _cancelBtn = GetTemplateChild("PART_CancelBtn") as Button;
-            if (_cancelBtn != null)
-                _cancelBtn.Click += CancelBtnOnClick;
+            CancelBtn = GetTemplateChild("PART_CancelBtn") as Button;
+            if (CancelBtn != null)
+                CancelBtn.Click += CancelBtnOnClick;
         }
 
         protected  virtual void CancelBtnOnClick(object sender, RoutedEventArgs routedEventArgs)

@@ -66,7 +66,7 @@ namespace CanDao.Pos.Common
 
         private void MessageDialog_OnLoaded(object sender, RoutedEventArgs e)
         {
-            _cancelBtn.Visibility = BoxButton == MessageBoxButton.OKCancel ? Visibility.Visible : Visibility.Collapsed;
+            CancelBtn.Visibility = BoxButton == MessageBoxButton.OKCancel ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

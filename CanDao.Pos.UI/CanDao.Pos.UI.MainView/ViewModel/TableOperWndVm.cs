@@ -689,17 +689,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     CalculatePaymentAmount();
                     break;
                 case "DishCountIncrease":
-                    if (SelectedOrderDish == null)
-                        return;
-
-                    if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
-                    {
-                        // 称重
-                        return;
-                    }
-
-                    if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
-                        GetTableDishInfoAsync();
+                    AddDish();
                     break;
                 case "DishCountReduce":
                     BackDish();
@@ -742,6 +732,60 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     var wf = GenerateBackAllDishWf();
                     WorkFlowService.Start(null, wf);
                     break;
+            }
+        }
+
+        /// <summary>
+        /// 点击加菜时执行。
+        /// </summary>
+        private void AddDish()
+        {
+            if (SelectedOrderDish == null)
+                return;
+
+            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
+            {
+                DishWeight();
+                return;
+            }
+
+            if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
+                GetTableDishInfoAsync();
+        }
+
+        /// <summary>
+        /// 菜品称重。
+        /// </summary>
+        /// <returns></returns>
+        private void DishWeight()
+        {
+            InfoLog.Instance.I("选中的菜时称重菜品，弹出称重窗体...");
+            var dishWeightWnd = new DishWeightWindow();
+            if (WindowHelper.ShowDialog(dishWeightWnd, OwnerWindow))
+            {
+                InfoLog.Instance.I("菜品\"{0}\"称重数量：{1}", SelectedOrderDish.DishName, dishWeightWnd.DishWeightNum);
+                var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+                if (service == null)
+                {
+                    ErrLog.Instance.E("创建IOrderService服务失败。");
+                    MessageDialog.Warning("创建IOrderService服务失败。");
+                    return;
+                }
+
+                InfoLog.Instance.I("开始调用菜品称重接口...");
+                var result = service.UpdateDishWeight(Data.TableNo, SelectedOrderDish.DishId,
+                    SelectedOrderDish.PrimaryKey, dishWeightWnd.DishWeightNum);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    ErrLog.Instance.E("菜品\"{0}\"称重失败：{1}", SelectedOrderDish.DishName, result);
+                    MessageDialog.Warning(result);
+                    return;
+                }
+
+                var msg = string.Format("菜品\"{0}\"称重成功。", SelectedOrderDish.DishName);
+                InfoLog.Instance.I(msg);
+                NotifyDialog.Notify(msg, OwnerWindow);
+                GetTableDishInfoAsync();
             }
         }
 
@@ -1096,6 +1140,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (SelectedOrderDish == null)
                 return;
 
+            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
+            {
+                DishWeight();
+                return;
+            }
+
             if (SelectedOrderDish.IsComboDish)
             {
                 MessageDialog.Warning("请选择套餐主体退整个套餐。");
@@ -1111,17 +1161,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var backDishReasonWnd = new BackDishReasonSelectWindow();
             if (!WindowHelper.ShowDialog(backDishReasonWnd, OwnerWindow))
                 return;
-
-            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed) // 称重
-            {
-                var weightWnd = new NumberSelectorWindow("请输入称重数量", SelectedOrderDish.DishNum, SelectedOrderDish.DishNum);
-                if (!WindowHelper.ShowDialog(weightWnd, OwnerWindow))
-                    return;
-
-                //调用更新菜品重量的接口。
-                MessageDialog.Warning(weightWnd.InputNum.ToString(CultureInfo.InvariantCulture));
-                return;
-            }
 
             var numWnd = new NumberSelectorWindow("请输入退菜数量", SelectedOrderDish.DishNum, SelectedOrderDish.DishNum);
             if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))

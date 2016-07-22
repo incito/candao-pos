@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
@@ -595,6 +596,30 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception ex)
             {
                 return string.Format("小费结算失败：{0}", ex.MyMessage());
+            }
+        }
+
+        public string UpdateDishWeight(string tableNo, string dishId, string primaryKey, decimal dishNum)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("UpdateDishWeigh");
+            if (string.IsNullOrEmpty(addr))
+                return "菜品称重地址为空。";
+
+            try
+            {
+                var request = new UpdateDishWeightRequest
+                {
+                    tableNo = tableNo,
+                    dishid = dishId,
+                    dishnum = dishNum.ToString(CultureInfo.InvariantCulture),
+                    primarykey = primaryKey,
+                };
+                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                return result.IsSuccess ? null : string.IsNullOrEmpty(result.msg) ? "更新菜品称重数量失败。" : string.Format("更新菜品称重数量失败：{0}", result.msg);
+            }
+            catch (Exception ex)
+            {
+                return string.Format("更新菜品称重数量失败：{0}", ex.MyMessage());
             }
         }
     }
