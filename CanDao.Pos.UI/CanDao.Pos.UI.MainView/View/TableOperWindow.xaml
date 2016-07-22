@@ -145,7 +145,7 @@
                     <controls:GroupSelector x:Name="CouponGroupSelector"
                                             ItemsSource="{Binding Data.UsedCouponInfos}"
                                             SelectedItem="{Binding SelectedUsedCouponInfo}"
-                                            ItemCountEachGroup="5">
+                                            ItemCountEachGroup="3">
                         <controls:GroupSelector.Template>
                             <ControlTemplate TargetType="controls:GroupSelector">
                                 <DataGrid x:Name="PART_Selector"

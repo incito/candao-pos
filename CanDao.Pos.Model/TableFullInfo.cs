@@ -90,7 +90,19 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 会员号。
         /// </summary>
-        public string MemberNo { get; set; }
+        private string _memberNo;
+        /// <summary>
+        /// 会员号。
+        /// </summary>
+        public string MemberNo
+        {
+            get { return _memberNo; }
+            set
+            {
+                _memberNo = value;
+                RaisePropertyChanged("MemberNo");
+            }
+        }
 
         /// <summary>
         /// 订单发票抬头。如果为null则不开发票。
@@ -146,6 +158,7 @@ namespace CanDao.Pos.Model
         /// 会员信息。
         /// </summary>
         private MemberInfo _memberInfo;
+
         /// <summary>
         /// 会员信息。
         /// </summary>
@@ -171,6 +184,7 @@ namespace CanDao.Pos.Model
 
         public void CloneData(TableFullInfo info)
         {
+            OrderId = info.OrderId;
             MemberInfo = info.MemberInfo;
             MemberNo = info.MemberNo;
             OrderInvoiceTitle = info.OrderInvoiceTitle;
