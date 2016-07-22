@@ -121,7 +121,7 @@
                     <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=DishGroupSelector}"/>
                     <TextBlock Text="/"/>
                     <TextBlock Text="{Binding GroupCount, ElementName=DishGroupSelector}"/>
-                    <Button Style="{StaticResource BtnRightStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="DishNextGruop"/>
+                    <Button Style="{StaticResource BtnRightStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="DishNextGroup"/>
                 </StackPanel>
             </Grid>
 

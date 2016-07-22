@@ -599,6 +599,28 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
+        private bool CanDataGridPageOper(object param)
+        {
+            TableOperWindow wnd = (TableOperWindow)OwnerWindow;
+            switch ((string)param)
+            {
+                case "DishPreGroup":
+                    return wnd.DishGroupSelector.CanPreviousGroup;
+                case "DishNextGroup":
+                    return wnd.DishGroupSelector.CanNextGruop;
+                case "CouponPreGroup":
+                    return wnd.CouponGroupSelector.CanPreviousGroup;
+                case "CouponNextGroup":
+                    return wnd.CouponGroupSelector.CanNextGruop;
+                case "CouponListPreGroup":
+                    return wnd.GsCouponList.CanPreviousGroup;
+                case "CouponListNextGroup":
+                    return wnd.GsCouponList.CanNextGruop;
+                default:
+                    return true;
+            }
+        }
+
         /// <summary>
         /// 打印命令执行方法。
         /// </summary>
@@ -914,7 +936,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             base.InitCommand();
             GetTableDishInfoCmd = CreateDelegateCommand(GetTableDishInfo);
-            DataGridPageOperCmd = CreateDelegateCommand(DataGridPageOper);
+            DataGridPageOperCmd = CreateDelegateCommand(DataGridPageOper, CanDataGridPageOper);
             PrintCmd = CreateDelegateCommand(Print, CanPrint);
             OperCmd = CreateDelegateCommand(Oper, CanOper);
             CashControlFocusCmd = CreateDelegateCommand(CashControlFocus);
