@@ -34,6 +34,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private readonly Timer _refreshTimer;
 
+        /// <summary>
+        /// 打印机检测间隔（秒）。
+        /// </summary>
+        private const int PrinterCheckTimerInterval = 10;
+
+        /// <summary>
+        /// 打印机检测定时器。
+        /// </summary>
+        private readonly Timer _printerCheckTimer;
+
+        /// <summary>
+        /// 下一次警告间隔时间（分）。
+        /// </summary>
+        private const int NextMaxWarningInterval = 10;
+
         #endregion
 
         #region Constructor
@@ -50,6 +65,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             _refreshTimer = new Timer(1000) { Enabled = true };
             _refreshTimer.Elapsed += RefreshTimer_Elapsed;
+
+            _printerCheckTimer = new Timer(PrinterCheckTimerInterval * 1000);
+            _printerCheckTimer.Elapsed += PrinterCheckTimerOnElapsed;
         }
 
         #endregion
@@ -134,6 +152,23 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public bool IsForcedEndWorkModel { get; set; }
 
+        /// <summary>
+        /// 是否有打印机错误。
+        /// </summary>
+        private bool _hasPrinterError;
+        /// <summary>
+        /// 是否有打印机错误。
+        /// </summary>
+        public bool HasPrinterError
+        {
+            get { return _hasPrinterError; }
+            set
+            {
+                _hasPrinterError = value;
+                RaisePropertyChanged("HasPrinterError");
+            }
+        }
+
         #endregion
 
         #region Command
@@ -179,6 +214,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!IsInDesignMode)
             {
                 GetAllTableInfoesAsync();
+                ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
 
                 if (Globals.IsDinnerWareEnable)
                 {
@@ -396,6 +432,52 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
+        /// 检测打印机状态。
+        /// </summary>
+        private void CheckPrinterStatus()
+        {
+            _printerCheckTimer.Stop();
+            InfoLog.Instance.I("开始检测打印机状态...");
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+            {
+                ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                OwnerWindow.Dispatcher.Invoke((Action)delegate { MessageDialog.Warning("创建IRestaurantService服务失败。"); });
+                _printerCheckTimer.Start();
+                return;
+            }
+
+            var result = service.GetPrinterStatusInfo();
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("检测打印机状态错误：{0}", result.Item1);
+                OwnerWindow.Dispatcher.Invoke((Action)delegate { MessageDialog.Warning(result.Item1); });
+                _printerCheckTimer.Start();
+                return;
+            }
+
+            var errPrintCount = result.Item2.Count(t => t.PrintStatus != EnumPrintStatus.Normal);
+            HasPrinterError = errPrintCount > 0;
+            if (HasPrinterError)
+            {
+                var errMsg = string.Format("检测到{0}个打印机异常，请到\"系统\">\"打印机列表\"查看并修复。", errPrintCount);
+                OwnerWindow.Dispatcher.Invoke((Action)delegate
+                {
+                    var wnd = new PrinterErrorInfoWindow(errMsg, NextMaxWarningInterval);
+                    if (WindowHelper.ShowDialog(wnd, OwnerWindow))
+                    {
+                        if (wnd.IsCheckedNoWarning)
+                            _printerCheckTimer.Interval = NextMaxWarningInterval * 60 * 1000;
+                        else
+                            _printerCheckTimer.Interval = PrinterCheckTimerInterval * 1000;
+                    }
+                });
+            }
+
+            _printerCheckTimer.Start();
+        }
+
+        /// <summary>
         /// 定时刷新执行方法。
         /// </summary>
         /// <param name="sender"></param>
@@ -446,6 +528,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 SetRefreshTimerStatus(true);
             }
+        }
+
+        /// <summary>
+        /// 打印机检测定时器触发时执行。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="elapsedEventArgs"></param>
+        private void PrinterCheckTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            CheckPrinterStatus();
         }
 
         /// <summary>

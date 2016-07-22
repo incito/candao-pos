@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using System.Windows.Data;
+﻿using System.Windows.Data;
+using System.Windows.Media;
 using CanDao.Pos.Model.Enum;
 
 namespace CanDao.Pos.Common.Converter

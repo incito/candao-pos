@@ -116,7 +116,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         {
             RemainingTimes = RefreshIntervalsSecond - 1;
             _refreshTimer.Stop();
-            TaskService.Start(null, GetPrinterStatusProcess, GetPrinterStatusComplete, "获取打印机状态中...");
+            OwnerCtrl.Dispatcher.BeginInvoke((Action)delegate
+            {
+                TaskService.Start(null, GetPrinterStatusProcess, GetPrinterStatusComplete, "获取打印机状态中...");
+            });
         }
 
         /// <summary>
@@ -180,7 +183,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         }
 
         /// <summary>
-        /// 
+        /// 获取打印状态列表执行方法。
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
@@ -194,6 +197,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             return service.GetPrinterStatusInfo();
         }
 
+        /// <summary>
+        /// 获取打印机状态列表执行完成。
+        /// </summary>
+        /// <param name="param"></param>
         private void GetPrinterStatusComplete(object param)
         {
             var result = (Tuple<string, List<PrintStatusInfo>>)param;
@@ -201,6 +208,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 ErrLog.Instance.E("获取打印机列表时错误：{0}", result.Item1);
                 MessageDialog.Warning(result.Item1);
+                _refreshTimer.Start();
                 return;
             }
 

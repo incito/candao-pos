@@ -71,6 +71,9 @@
     <Compile Include="View\DishWeightWindow.xaml.cs">
       <DependentUpon>DishWeightWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\PrinterErrorInfoWindow.xaml.cs">
+      <DependentUpon>PrinterErrorInfoWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SelectCoffeeTakeoutTableWindow.xaml.cs">
       <DependentUpon>SelectCoffeeTakeoutTableWindow.xaml</DependentUpon>
     </Compile>
@@ -242,6 +245,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\DishWeightWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PrinterErrorInfoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

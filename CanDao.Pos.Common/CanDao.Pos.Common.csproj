@@ -103,6 +103,7 @@
     <Compile Include="Converter\PayTypeToCheckedConverter.cs" />
     <Compile Include="Converter\PrinterStatusToColorConverter.cs" />
     <Compile Include="Converter\StringToVisibleConverter.cs" />
+    <Compile Include="Converter\SysBorderBrushConverter.cs" />
     <Compile Include="Converter\ZeroToNullStringConverter.cs" />
     <Compile Include="ErrLog.cs" />
     <Compile Include="ExceptionHelper.cs" />
