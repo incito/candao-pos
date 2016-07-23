@@ -64,12 +64,11 @@
     <Compile Include="CommonHelper.cs" />
     <Compile Include="CommonServiceHelper.cs" />
     <Compile Include="Controls\AllowMultSelectorControl.cs" />
-    <Compile Include="ViewModel\DishWeightWndVm.cs" />
     <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
     <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
     <Compile Include="ViewModel\SysPrinterListVm.cs" />
-    <Compile Include="View\DishWeightWindow.xaml.cs">
-      <DependentUpon>DishWeightWindow.xaml</DependentUpon>
+    <Compile Include="View\NumInputWindow.xaml.cs">
+      <DependentUpon>NumInputWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\PrinterErrorInfoWindow.xaml.cs">
       <DependentUpon>PrinterErrorInfoWindow.xaml</DependentUpon>
@@ -175,9 +174,6 @@
     <Compile Include="View\MenuFishPotSelectWindow.xaml.cs">
       <DependentUpon>MenuFishPotSelectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\NumberSelectorWindow.xaml.cs">
-      <DependentUpon>NumberSelectorWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\OfferTypeSelectWindow.xaml.cs">
       <DependentUpon>OfferTypeSelectWindow.xaml</DependentUpon>
     </Compile>
@@ -244,7 +240,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DishWeightWindow.xaml">
+    <Page Include="View\NumInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -329,10 +325,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MenuFishPotSelectWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\NumberSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -261,6 +261,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _refreshTimer.Stop();
                 _refreshTimer.Dispose();
             }
+
+            if (_printerCheckTimer != null) //释放打印机状态定时器。
+            {
+                _printerCheckTimer.Stop();
+                _printerCheckTimer.Dispose();
+            }
+
             Application.Current.Shutdown(1);//尝试解决有时候退出主窗口程序依然在运行的问题。
         }
 

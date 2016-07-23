@@ -874,7 +874,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             else
             {
                 //增加选择数量的窗口
-                var numWnd = new NumberSelectorWindow("请输入优惠券使用数量", 1, 0, false);
+                var numWnd = new NumInputWindow("优惠券使用数量：", "优惠券数量", 0, false);
                 if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                     return;
 
@@ -1130,7 +1130,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!WindowHelper.ShowDialog(backDishReasonWnd, OwnerWindow))
                 return;
 
-            var numWnd = new NumberSelectorWindow("请输入退菜数量", SelectedOrderDish.DishNum, SelectedOrderDish.DishNum);
+            var numWnd = new NumInputWindow("请输入退菜数量：", "退菜数量：", SelectedOrderDish.DishNum);
             if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                 return;
 
@@ -1164,10 +1164,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void DishWeight()
         {
             InfoLog.Instance.I("选中的菜时称重菜品，弹出称重窗体...");
-            var dishWeightWnd = new DishWeightWindow();
+            //var dishWeightWnd = new DishWeightWindow();
+            var dishWeightWnd = new NumInputWindow("请输入称重数量：", "称重数量：", 0);
             if (WindowHelper.ShowDialog(dishWeightWnd, OwnerWindow))
             {
-                InfoLog.Instance.I("菜品\"{0}\"称重数量：{1}", SelectedOrderDish.DishName, dishWeightWnd.DishWeightNum);
+                InfoLog.Instance.I("菜品\"{0}\"称重数量：{1}", SelectedOrderDish.DishName, dishWeightWnd.InputNum);
                 var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
                 if (service == null)
                 {
@@ -1178,7 +1179,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                 InfoLog.Instance.I("开始调用菜品称重接口...");
                 var result = service.UpdateDishWeight(Data.TableNo, SelectedOrderDish.DishId,
-                    SelectedOrderDish.PrimaryKey, dishWeightWnd.DishWeightNum);
+                    SelectedOrderDish.PrimaryKey, dishWeightWnd.InputNum);
                 if (!string.IsNullOrEmpty(result))
                 {
                     ErrLog.Instance.E("菜品\"{0}\"称重失败：{1}", SelectedOrderDish.DishName, result);

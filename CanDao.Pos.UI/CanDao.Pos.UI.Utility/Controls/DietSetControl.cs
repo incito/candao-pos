@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Windows.Controls;
 using CanDao.Pos.Common;
 
 namespace CanDao.Pos.UI.Utility.Controls

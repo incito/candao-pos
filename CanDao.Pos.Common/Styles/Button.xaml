@@ -60,16 +60,6 @@
         <Setter Property="Focusable" Value="False"/>
     </Style>
 
-    <Style x:Key="BtnReturnStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Image Source="Images/Return.png"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style x:Key="BtnAddStyle" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
