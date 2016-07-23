@@ -19,10 +19,10 @@
                 <ControlTemplate TargetType="{x:Type view:AllowMultSelectorControl}">
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"/>
-                        <Border Height="2" Background="Gray" HorizontalAlignment="Stretch"/>
                         <ItemsControl ItemsSource="{TemplateBinding ItemsSource}"
                                       MaxWidth="{TemplateBinding ActualWidth}"
-                                      ItemTemplate="{TemplateBinding ItemViewerTemplate}">
+                                      ItemTemplate="{TemplateBinding ItemViewerTemplate}"
+                                      Margin="0,5">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal"/>

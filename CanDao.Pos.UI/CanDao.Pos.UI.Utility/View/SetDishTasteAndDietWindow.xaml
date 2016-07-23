@@ -5,6 +5,7 @@
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:controls="clr-namespace:CanDao.Pos.UI.Utility.Controls"
              xmlns:controls1="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+             xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
              Width="750" SizeToContent="Height" CloseBtnText="设置菜品信息" ShowInTaskbar="False">
     <controls1:PosBaseWindow.Resources>
         <ResourceDictionary>
@@ -27,14 +28,14 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding DishInfo.DishName}" FontSize="18" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding DishInfo.DishName}" FontSize="18" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding DishInfo.DishUnit}" FontSize="18" VerticalAlignment="Center"/>
+            </StackPanel>
             <TextBlock Grid.Column="1" Text="{Binding DishInfo.DishPrice, StringFormat={}{0}元}" FontSize="18" VerticalAlignment="Center"/>
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,30,0">
                 <Button Command="{Binding SetDishNumCmd}" Margin="3" Style="{StaticResource SelectNumBtnStyle}"/>
-                <Button Command="{Binding DishNumSubCmd}" Margin="3" Style="{StaticResource ReduceBtnStyle}"/>
-                <dxe:TextEdit IsEnabled="False" Text="{Binding DishNum}" Width="60" FontSize="18"/>
-                <TextBlock Text="{Binding DishInfo.DishUnit}" VerticalAlignment="Center" MaxWidth="50"/>
-                <Button Command="{Binding DishNumAddCmd}" Margin="3" Style="{StaticResource AddBtnStyle}"/>
+                <toolkit:DoubleUpDown Text="{Binding DishNum}" Width="120" Minimum="0" FontSize="18"/>
             </StackPanel>
         </Grid>
 

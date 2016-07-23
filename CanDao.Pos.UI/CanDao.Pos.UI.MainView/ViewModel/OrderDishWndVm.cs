@@ -242,6 +242,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Remark":
                     RemarkSelectedDish();
                     break;
+                case "ClearFilter":
+                    FilterMenuGroup = null;
+                    break;
                 case "OrderDishPreGroup":
                     OwnerWindow.DishGroupSelector.PreviousGroup();
                     break;

@@ -19,12 +19,11 @@
     </UserControl.DataContext>
     <StackPanel>
         <TextBlock Text="选择口味" FontSize="18" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <Border Height="2" Background="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
         <ListBox ItemContainerStyle="{StaticResource LbNormalStyle}"
                  SelectedItem="{Binding SelectedTaste}"
                  ItemsSource="{Binding DishTasteInfos}"
                  MaxWidth="{Binding ActualWidth, ElementName=Ctrl}"
-                 FontSize="16" BorderThickness="0">
+                 FontSize="16" BorderThickness="0" Margin="0,5">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"/>

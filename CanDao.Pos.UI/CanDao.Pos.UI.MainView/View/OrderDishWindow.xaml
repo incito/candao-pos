@@ -152,7 +152,10 @@
                 </Grid.RowDefinitions>
                 <view:InputLetterControl Grid.Row="0" Height="85" ItemSize="41" ItemMargin="2"/>
 
-                <toolkit:WatermarkTextBox Text="{Binding FilterMenuGroup, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Watermark="输入菜品首字母" Margin="3" Height="30" VerticalContentAlignment="Center"/>
+                <DockPanel Grid.Row="1">
+                    <Button DockPanel.Dock="Right" Content="C" Width="40" Height="40" FontSize="18" Command="{Binding OperCmd}" CommandParameter="ClearFilter"/>
+                    <toolkit:WatermarkTextBox Text="{Binding FilterMenuGroup, UpdateSourceTrigger=PropertyChanged}" Watermark="输入菜品首字母" Margin="3" Height="30" VerticalContentAlignment="Center"/>
+                </DockPanel>
 
                 <controls:GroupSelector x:Name="MenuDishGroupSelector"  Grid.Row="2" ItemsSource="{Binding MenuDishes}" ItemCountEachGroup="20" Margin="-2,0">
                     <controls:GroupSelector.Template>

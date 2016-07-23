@@ -3,6 +3,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Styles/Brushes.xaml"/>
         <ResourceDictionary Source="Styles/Button.xaml"/>
+        <ResourceDictionary Source="Styles/ButtonSpinner.xaml"/>
         <ResourceDictionary Source="Styles/Converter.xaml"/>
         <ResourceDictionary Source="Styles/CustomerDataTemplate.xaml"/>
         <ResourceDictionary Source="Styles/DataGrid.xaml"/>
