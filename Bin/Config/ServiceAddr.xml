@@ -80,5 +80,13 @@
     <ReportLossCanDao Addr="/member/deal/CardLose.json"/><!--餐道会员会员挂失-->
     <CancelCanDao Addr="/member/memberManager/delete.json"/><!--餐道会员会员注销-->
     <SaleCanDao Addr="/member/deal/MemberSale.json"/><!--餐道会员会员消费-->
+
+    <VipChangeCardNum Addr="/member/rest/memberCardService/cardNoByModify" /><!--修改会员卡号-->
+    <VipChangeInfo Addr="/member/rest/memberService/memberEditService" /><!--修改会员基本信息-->
+    <VipQuery Addr="/member/rest/memberCardService/getCardNoByMobile" /><!--会员查询(一户多卡)-->
+    <VipInsertCard Addr="/member/rest/memberCardService/bindingCardService" /><!--新增会员实体卡号-->
+    <VipCheckCard Addr="/member/memberManager/byUserTouse.json" /><!--判断会员实体卡-->
+    <VipChangePsw Addr="/member/memberManager/MemberEdit.json" /><!--会员密码修改（新）-->
+    <GetCouponList Addr="/member/preferential/posPreferentialList" /><!--获取优惠列表-->
   </CloudServerApi>
 </Address>

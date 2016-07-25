@@ -1,0 +1,141 @@
+﻿<cSystem:UserControlBase x:Class="CanDao.Pos.VIPManage.Views.UcVipRechargeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+             xmlns:cSystem="clr-namespace:CanDao.Pos.Common.Controls.CSystem;assembly=CanDao.Pos.Common"
+             xmlns:controls1="clr-namespace:CanDao.Pos.ResourceService.Controls;assembly=CanDao.Pos.ResourceService"
+             mc:Ignorable="d" 
+             Height="510" Width="760" Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/CanDao.Pos.ResourceService;component/DictionaryServer.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+        </Style>
+        
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="{x:Type ListBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border Background="{TemplateBinding Panel.Background}" BorderBrush="Black" BorderThickness="1">
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled">
+                                <WrapPanel IsItemsHost="True" />
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate >
+                        <TextBlock Text="{Binding Title}" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Width" Value="60"></Setter>
+            <Setter Property="Height" Value="60"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="FontSize" Value="12"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+            <!-- 设置控件模板 -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Width="60" Height="60" x:Name="bd" BorderBrush="Black" BorderThickness="1" Background="#F0F0F0" CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                             TextBlock.Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="Red"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+            </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+              <RowDefinition Height="25*"></RowDefinition>
+            <RowDefinition Height="70*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <cSystem:LoadingWait x:Name="_loading"  Visibility="Collapsed"/>
+        <GroupBox x:Name="GbOperate" BorderBrush="#F0F0F0" Foreground="Black" FontSize="20" Header="优惠方式">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="80"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="24"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="LbData" ItemsSource="{Binding ListBoxInfos}" Height="75" Width="635"></ListBox>
+                    <TextBlock FontSize="12" Grid.Row="1" Text="当前选择项:" HorizontalAlignment="Left"></TextBlock>
+                    <TextBlock FontSize="12" x:Name="TexSelect" Grid.Row="1" Text="" HorizontalAlignment="Center" Foreground="Blue"></TextBlock>
+                </Grid>
+
+                <controls1:CtlImageButton Style="{DynamicResource ImgButton}" x:Name="BtnTrunUp" Margin="5" VerticalAlignment="Top" Width="66" Height="40" Grid.Column="1" DefaultImage="{DynamicResource TurnUp}" Command="{Binding TrunUpCommand}" Visibility="{Binding Model.IsUp, Converter={StaticResource BoolToVisibilityConverter},ConverterParameter={x:Static Visibility.Collapsed}}"></controls1:CtlImageButton>
+                <controls1:CtlImageButton Style="{DynamicResource ImgButton}" x:Name="BtnTrunDown" Margin="5" VerticalAlignment="Bottom" Width="66" Height="40" Grid.Column="1" DefaultImage="{DynamicResource TurnDown}" Command="{Binding TrunDownCommand}" Visibility="{Binding Model.IsDown, Converter={StaticResource BoolToVisibilityConverter},ConverterParameter={x:Static Visibility.Collapsed}}"></controls1:CtlImageButton>
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Text="手机号/会员卡号：" Grid.Column="0" Grid.Row="0"/>
+                <TextBlock Text="付款类型：" Grid.Column="0"  Grid.Row="1"/>
+                <TextBlock Text="储值金额：" Grid.Column="0" Grid.Row="2"/>
+                <TextBlock Text="赠送：" Grid.Column="0" Grid.Row="3"/>
+                <TextBlock Text="{Binding Model.CardBalance}" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="4"/>
+
+                <TextBox x:Name="TexNum" Grid.Column="1" Grid.Row="0" Text="{Binding Model.TelNum}" IsEnabled="{Binding Model.IsEnabledNum}" ></TextBox>
+                <RadioButton HorizontalAlignment="Left" VerticalAlignment="Center" Content="现金" Grid.Column="1" Grid.Row="1" Margin="10" IsChecked="{Binding Model.IsCash}" GroupName="PayType"/>
+                <RadioButton HorizontalAlignment="Right" VerticalAlignment="Center" Content="银行卡" Grid.Column="1" Grid.Row="1" Margin="10" IsChecked="{Binding Model.IsBankCard}" GroupName="PayType"/>
+                <TextBox x:Name="TexRecharge" Grid.Column="1" Grid.Row="2" Text="{Binding Model.RechargeValue}" TextChanged="TexRecharge_OnTextChanged" MaxLength="7"></TextBox>
+                <TextBlock Grid.Column="1" Grid.Row="3" IsEnabled="False" Text="{Binding Model.GiveValue}" HorizontalAlignment="Left"></TextBlock>
+
+                <Button x:Name="BtnReg" Style="{DynamicResource ColBtn}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="133" Height="50" Grid.Column="0" Grid.Row="5" Content="确定充值" Command="{Binding SureCommand}"/>
+                <Button x:Name="BtnCancel" Style="{DynamicResource ColBtn}" Margin="0,0,20,0" HorizontalAlignment="Right" Width="133" Height="50" Grid.Column="1" Grid.Row="5" Content="取消" Command="{Binding CloseCommand}"/>
+            </Grid>
+            <cSystem:CtlDigitalKeyboard x:Name="Keyboard" Grid.Column="1"  Height="250" VerticalAlignment="Top" Width="310" />
+        </Grid>
+    </Grid>
+</cSystem:UserControlBase>
+

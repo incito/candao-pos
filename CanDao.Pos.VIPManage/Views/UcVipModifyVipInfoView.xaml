@@ -1,0 +1,82 @@
+﻿<cSystem:UserControlBase x:Class="CanDao.Pos.VIPManage.Views.UcVipModifyVipInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cSystem="clr-namespace:CanDao.Pos.Common.Controls.CSystem;assembly=CanDao.Pos.Common"
+             mc:Ignorable="d" 
+             Height="510" Width="760" Background="White">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        
+        <Style TargetType="{x:Type PasswordBox}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"></RowDefinition>
+            <RowDefinition Height="80*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+           <ColumnDefinition></ColumnDefinition>
+           <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="会员卡号："></TextBlock>
+            <TextBox x:Name="TexCardNum" Text="{Binding Model.CardNum}" IsEnabled="False" Width="280"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+            <TextBlock Text="电话号码："></TextBlock>
+            <TextBox Text="{Binding Model.TelNum}" IsEnabled="False" Width="110"/>
+            <TextBlock Text="姓名："></TextBlock>
+            <TextBox Text="{Binding Model.OUserName}" IsEnabled="False" Width="100"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40*"></ColumnDefinition>
+                <ColumnDefinition Width="60*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Text="姓名：" Grid.Column="0" Grid.Row="0"/>
+            <TextBlock Text="性别：" Grid.Column="0"  Grid.Row="1"/>
+            <TextBlock Text="生日：" Grid.Column="0" Grid.Row="2"/>
+            
+
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Model.UserName,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <RadioButton Content="男" HorizontalAlignment="Left" GroupName="Xb" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding Model.SexNan}" Width="50"></RadioButton>
+            <RadioButton Content="女" HorizontalAlignment="Center" GroupName="Xb" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding Model.SexNv}" Width="50"></RadioButton>
+            <DatePicker x:Name="DpBirthday" Grid.Column="1" Grid.Row="2" SelectedDateFormat="Long" VerticalAlignment="Center" SelectedDate="{Binding Model.Birthday}"></DatePicker>
+
+            <Button x:Name="BtnReg" Style="{DynamicResource ColBtn}" Margin="16,5,0,5" HorizontalAlignment="Left" Width="133" Height="50" Grid.Column="0" Grid.Row="5" Content="确定" Command="{Binding SureCommand}"/>
+            <Button x:Name="BtnCancel" Style="{DynamicResource ColBtn}" Margin="0,0,20,0" HorizontalAlignment="Right" Width="133" Height="50" Grid.Column="1" Grid.Row="5" Content="取消" Command="{Binding CloseCommand}"/>
+        </Grid>
+        <cSystem:CtlDigitalKeyboard x:Name="Keyboard" Grid.Row="1" Grid.Column="1"  Height="250" VerticalAlignment="Top" Width="310" />
+    </Grid>
+</cSystem:UserControlBase>
+

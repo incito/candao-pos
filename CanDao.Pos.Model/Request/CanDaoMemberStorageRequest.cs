@@ -24,5 +24,7 @@
         /// 支付方式。
         /// </summary>
         public string ChargeType { get; set; }
+        public string preferential_id { get; set; }
+        public string giveValue { get; set; }
     }
 }

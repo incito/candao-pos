@@ -17,6 +17,11 @@ namespace CanDao.Pos.Common
         /// <returns>如果连通返回true，否则返回false。</returns>
         public static bool DetectNetworkConnection(string ipAddr)
         {
+            if (ipAddr.Contains("/newspicyway"))
+            {
+                var temp = ipAddr.Replace("/newspicyway", "");
+                ipAddr = temp;
+            }
             Ping pingSender = new Ping();
             PingOptions options = new PingOptions {DontFragment = true};
             byte[] buffer = Encoding.UTF8.GetBytes("");

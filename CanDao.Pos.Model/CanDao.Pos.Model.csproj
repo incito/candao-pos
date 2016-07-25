@@ -31,6 +31,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -98,6 +116,7 @@
     <Compile Include="Request\CanDaoMemberReportLossRequest.cs" />
     <Compile Include="Request\CanDaoMemberSaleRequest.cs" />
     <Compile Include="Request\CanDaoMemberStorageRequest.cs" />
+    <Compile Include="Request\CanDaoVipQueryRequest.cs" />
     <Compile Include="Request\GetInvoiceInfoRequest.cs" />
     <Compile Include="Request\GetOrderMemberInfoRequest.cs" />
     <Compile Include="Request\GetTableByTypeRequest.cs" />
@@ -109,8 +128,11 @@
     <Compile Include="Request\UpdateInvoiceRequest.cs" />
     <Compile Include="Response\CanDaoMemberBaseResponse.cs" />
     <Compile Include="Response\CanDaoMemberSaleResponse.cs" />
+    <Compile Include="Response\CanDaoVipBaseResponse.cs" />
+    <Compile Include="Response\CanDaoVipQueryResponse.cs" />
     <Compile Include="Response\GetBranchInfoResponse.cs" />
     <Compile Include="Response\GetClearPosInfoResponse.cs" />
+    <Compile Include="Response\GetCouponListResponse.cs" />
     <Compile Include="Response\GetFishPotDishResponse.cs" />
     <Compile Include="Response\GetMemberPayInfoResponse.cs" />
     <Compile Include="Response\GetOrderMemberInfoResponse.cs" />
@@ -128,6 +150,7 @@
     <Compile Include="Response\SendVerifyCodeResponse.cs" />
     <Compile Include="PrintOrderFullInfo.cs" />
     <Compile Include="Response\SetCouponFavorResponse.cs" />
+    <Compile Include="Response\VipCheckCardResponse.cs" />
     <Compile Include="UnclearMachineInfo.cs" />
     <Compile Include="OnCompanyAccountInfo.cs" />
     <Compile Include="OrderDishInfo.cs" />
