@@ -65,8 +65,9 @@
     <OpenCash Addr="/datasnap/rest/TServerMethods1/OpenCash/"/><!--开钱箱-->
     <QueryOrderInfo Addr="/datasnap/rest/TServerMethods1/getAllOrderInfo2/"/><!--账单查询-->
     <GetFishPotDish Addr="/datasnap/rest/TServerMethods1/getGroupDetail/"/><!--获取鱼锅信息-->
-    <CancelOrder Addr="/datasnap/rest/TServerMethods1/cancelOrder/"/>
-    <!--外卖取消账单-->
+    <CancelOrder Addr="/datasnap/rest/TServerMethods1/cancelOrder/"/><!--外卖取消账单-->
+    <SetTakeoutOrderOnAccount Addr="/datasnap/rest/TServerMethods1/putOrder/"/><!--外卖挂单-->
+    <SetOrderTakeout Addr="/datasnap/rest/TServerMethods1/wmOrder/"/><!--设置订单为外卖单。-->
   </DataServerApi>
   <!--云接口-->
   <CloudServerApi>

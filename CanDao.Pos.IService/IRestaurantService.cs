@@ -188,5 +188,13 @@ namespace CanDao.Pos.IService
         /// <returns></returns>
         Tuple<string, List<PrintStatusInfo>> GetPrinterStatusInfo();
 
+        /// <summary>
+        /// 设置外卖订单挂账。
+        /// </summary>
+        /// <param name="tableNo">外卖桌号。</param>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="cmpInfo">外卖挂账单单位信息。</param>
+        /// <returns></returns>
+        string SetTakeoutOrderOnAccount(string tableNo, string orderId, SetTakeoutOrderOnAccountRequest cmpInfo);
     }
 }

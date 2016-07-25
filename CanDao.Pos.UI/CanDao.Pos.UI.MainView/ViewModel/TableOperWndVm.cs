@@ -700,8 +700,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     ResettlementSync();
                     break;
                 case "Order":
-                    if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
-                        GetTableDishInfoAsync();
+                    OrderDish();
                     break;
                 case "OpenCashBox":
                     OpenCashBoxAsync();
@@ -1098,6 +1097,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             jdeDebitAmountWf.NextWorkFlowInfo = new WorkFlowInfo(null, PrintSettlementReportAndInvoice);//打印和开发票
 
             WorkFlowService.Start(param, payBillWorkFlow);
+        }
+
+        /// <summary>
+        /// 点菜。
+        /// </summary>
+        protected void OrderDish()
+        {
+            var orderWnd = new OrderDishWindow(Data);
+            if (WindowHelper.ShowDialog(orderWnd, OwnerWindow))
+            {
+                if (orderWnd.IsOrderHanged)
+                    CloseWindow(true);
+                else
+                    GetTableDishInfoAsync();
+            }
         }
 
         /// <summary>

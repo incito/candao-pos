@@ -6,7 +6,7 @@
                          xmlns:controls="clr-namespace:CanDao.Pos.UI.Utility.Controls"
                          xmlns:controls1="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                          xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
-                         Width="860" SizeToContent="Height" MaxHeight="768"
+                         Width="550" SizeToContent="Height" MaxHeight="768"
                         Title="{Binding Data.FishPotSelfInfo.DishName}"
                         CloseBtnText="" CancelBtnText=""
                         ShowInTaskbar="False">
@@ -61,6 +61,9 @@
         
         <controls:DietSetControl x:Name="DietSetCtrl" Grid.Row="4" Grid.Column="0"/>
         
-        <view:WindowButtonOperControl Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,10">
+            <Button Content="取消" Command="{Binding CancelCmd}" Width="100" Height="40"/>
+            <Button Content="添加" Command="{Binding ConfirmCmd}" Width="100" Height="40"/>
+        </StackPanel>
     </Grid>
 </controls1:PosMsgWindow>
