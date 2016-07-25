@@ -64,7 +64,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Image Source="Images/Return.png"/>
+                    <Image Source="../Images/Return.png"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -175,7 +175,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Image Source="Images/Clear32.png"/>
+                    <Image Source="../Images/Clear32.png"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

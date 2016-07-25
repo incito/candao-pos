@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{98F33740-D8B6-44FD-BF0B-73928F26FE72}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CanDao.Pos.VIPManage</RootNamespace>
+    <AssemblyName>CanDao.Pos.VIPManage</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\UcVipModifyTelNumModel.cs" />
+    <Compile Include="Models\UcVipModifyVipInfoModel.cs" />
+    <Compile Include="Models\UcVipModifyPswModel.cs" />
+    <Compile Include="Models\UcVipRechargeModel.cs" />
+    <Compile Include="Models\UcVipRegModel.cs" />
+    <Compile Include="Models\UcVipSelectModel.cs" />
+    <Compile Include="Models\WinShowInfoModel.cs" />
+    <Compile Include="Operates\ButtonSend.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ViewModels\UcVipModifyVipInfoViewModel.cs" />
+    <Compile Include="ViewModels\UcVipModifyTelNumViewModel.cs" />
+    <Compile Include="ViewModels\UcVipModifyPswViewModel.cs" />
+    <Compile Include="ViewModels\UcVipRechargeViewModel.cs" />
+    <Compile Include="ViewModels\UcVipRegViewModel.cs" />
+    <Compile Include="ViewModels\UcVipSelectViewModel.cs" />
+    <Compile Include="ViewModels\WinShowInfoViewModel.cs" />
+    <Compile Include="Views\UcVipModifyVipInfoView.xaml.cs">
+      <DependentUpon>UcVipModifyVipInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UcVipModifyTelNumView.xaml.cs">
+      <DependentUpon>UcVipModifyTelNumView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UcVipModifyPswView.xaml.cs">
+      <DependentUpon>UcVipModifyPswView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UcVipRechargeView.xaml.cs">
+      <DependentUpon>UcVipRechargeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UcVipRegView.xaml.cs">
+      <DependentUpon>UcVipRegView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UcVipSelectView.xaml.cs">
+      <DependentUpon>UcVipSelectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinShowInfoView.xaml.cs">
+      <DependentUpon>WinShowInfoView.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Views\UcVipModifyVipInfoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UcVipModifyTelNumView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UcVipModifyPswView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UcVipRechargeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UcVipRegView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UcVipSelectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WinShowInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CanDao.Pos.Common\CanDao.Pos.Common.csproj">
+      <Project>{01e063c3-700a-4a8f-8da7-64c5e5863384}</Project>
+      <Name>CanDao.Pos.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDao.Pos.IService\CanDao.Pos.IService.csproj">
+      <Project>{0e0d337b-01ab-482c-9f6b-f274500288ab}</Project>
+      <Name>CanDao.Pos.IService</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDao.Pos.Model\CanDao.Pos.Model.csproj">
+      <Project>{2ee5104a-0b22-497e-8ade-a83a420c83d8}</Project>
+      <Name>CanDao.Pos.Model</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDao.Pos.ReportPrint\CanDao.Pos.ReportPrint.csproj">
+      <Project>{d4541853-9955-454a-9d02-05391d3c3604}</Project>
+      <Name>CanDao.Pos.ReportPrint</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDao.Pos.ResourceService\CanDao.Pos.ResourceService.csproj">
+      <Project>{8b73af41-0061-4213-9ec0-318986d1c408}</Project>
+      <Name>CanDao.Pos.ResourceService</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

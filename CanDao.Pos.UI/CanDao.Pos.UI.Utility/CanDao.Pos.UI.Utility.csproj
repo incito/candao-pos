@@ -31,16 +31,51 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Core.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Grid.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Grid.v13.1.Core, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.LayoutControl.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="Engine.Wpf.Toolkit, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DevExpress.Data.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\NewPos\CanDao.Pos.Client\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\Bin\Lib\DevExpress.Data.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Lib\DevExpress.Xpf.Core.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Lib\DevExpress.Xpf.Grid.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v13.1.Core, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Lib\DevExpress.Xpf.Grid.v13.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Lib\DevExpress.Xpf.LayoutControl.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\Lib\DevExpress.Xpf.Mvvm.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="Engine.Wpf.Toolkit">
+      <HintPath>..\..\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JunLan.Common.Base">
@@ -69,10 +104,6 @@
       <DependentUpon>SetInvoiceAmountWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\AllowMultSelectorCtrlVm.cs" />
-    <Compile Include="ViewModel\CanDaoMemberModifyPwdWndVm.cs" />
-    <Compile Include="ViewModel\CanDaoMemberQueryWndVm.cs" />
-    <Compile Include="ViewModel\CanDaoMemberRegistrationWndVm.cs" />
-    <Compile Include="ViewModel\CanDaoMemberStorageWndVm.cs" />
     <Compile Include="ViewModel\DishInfoEditWndVm.cs" />
     <Compile Include="ViewModel\InputMoreInfoWndVm.cs" />
     <Compile Include="ViewModel\MemberControlVm.cs" />
@@ -96,18 +127,6 @@
     <Compile Include="View\BackDishReasonSelectWindow.xaml.cs">
       <DependentUpon>BackDishReasonSelectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\CanDaoMemberModifyPwdWindow.xaml.cs">
-      <DependentUpon>CanDaoMemberModifyPwdWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\CanDaoMemberQueryWindow.xaml.cs">
-      <DependentUpon>CanDaoMemberQueryWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\CanDaoMemberRegistrationWindow.xaml.cs">
-      <DependentUpon>CanDaoMemberRegistrationWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\CanDaoMemberStorageWindow.xaml.cs">
-      <DependentUpon>CanDaoMemberStorageWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ComboSelectorControl.xaml.cs">
       <DependentUpon>ComboSelectorControl.xaml</DependentUpon>
     </Compile>
@@ -122,9 +141,6 @@
       <DependentUpon>InputNumberControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\InputHelperControlVm.cs" />
-    <Compile Include="View\InputHelperDotControl.xaml.cs">
-      <DependentUpon>InputHelperDotControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -237,22 +253,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\CanDaoMemberModifyPwdWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\CanDaoMemberQueryWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\CanDaoMemberRegistrationWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\CanDaoMemberStorageWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\ComboSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -266,10 +266,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\InputNumberControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\InputHelperDotControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -393,6 +389,11 @@
     <ProjectReference Include="..\..\CanDao.Pos.ReportPrint\CanDao.Pos.ReportPrint.csproj">
       <Project>{d4541853-9955-454a-9d02-05391d3c3604}</Project>
       <Name>CanDao.Pos.ReportPrint</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CanDao.Pos.VIPManage\CanDao.Pos.VIPManage.csproj">
+      <Project>{98f33740-d8b6-44fd-bf0b-73928f26fe72}</Project>
+      <Name>CanDao.Pos.VIPManage</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

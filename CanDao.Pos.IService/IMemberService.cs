@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using CanDao.Pos.Common.Models.VipModels;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
@@ -100,5 +102,60 @@ namespace CanDao.Pos.IService
         /// <param name="userId">打印的用户id。</param>
         /// <returns></returns>
         Tuple<string, PrintMemberPayInfo> GetMemberPrintPayInfo(string orderId, string userId);
+
+        /// <summary>
+        /// 会员查询（一户多卡查询）
+        /// </summary>
+        /// <param name="selectNum"></param>
+        /// <returns></returns>
+        Tuple<string, MVipInfo> VipQuery(CanDaoVipQueryRequest selectNum);
+        /// <summary>
+        /// 修改卡号
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="cardNum"></param>
+        /// <param name="newCardNum"></param>
+        /// <returns></returns>
+        string VipChangeCardNum(string branch_id, string cardNum, string newCardNum);
+        /// <summary>
+        /// 修改会员基本信息
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="changeInfo"></param>
+        /// <param name="newTelNum"></param>
+        /// <returns></returns>
+        string VipChangeInfo(string branch_id, MVipChangeInfo changeInfo, string newTelNum = "");
+        /// <summary>
+        /// 新增实体卡
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="cardno"></param>
+        /// <param name="insideId"></param>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        string VipInsertCard(string branch_id, string cardno, string insideId, string level = "0");
+        /// <summary>
+        /// 检查实体卡是否存在
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="cardno"></param>
+        /// <returns></returns>
+        string VipCheckCard(string branch_id, string cardno);
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="cardno"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        string VipChangePsw(string branch_id, string cardno, string password);
+        /// <summary>
+        /// 获取优惠券
+        /// </summary>
+        /// <param name="branch_id"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        Tuple<string, List<MVipCoupon>> GetCouponList(string branch_id, string currentPage = "", string pageSize = "");
     }
 }

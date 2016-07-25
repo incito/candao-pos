@@ -3,4 +3,5 @@
   &lt;Assembly Path="E:\Code\NewPos\CanDao.Pos.Client\Bin\Lib\Newtonsoft.Json.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Web.Extensions.dll" /&gt;&#xD;
   &lt;Assembly Path="E:\Code\GitSource\candao-pos\Bin\Lib\JunLan.Common.Base.dll" /&gt;&#xD;
+  &lt;Assembly Path="E:\Jobs\Code\candao-pos\Bin\Lib\JunLan.Common.Base.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

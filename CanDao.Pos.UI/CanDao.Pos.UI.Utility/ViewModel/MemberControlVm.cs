@@ -3,7 +3,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using CanDao.Pos.Common;
+using CanDao.Pos.Common.Operates;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.VIPManage.ViewModels;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -20,17 +22,20 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         private void OperMethod(object arg)
         {
-            var wnd = WindowHelper.FindVisualTreeRoot(OwnerCtrl) as Window;
+          
             switch (arg as string)
             {
                 case "Query":
-                    WindowHelper.ShowDialog(new CanDaoMemberQueryWindow(), wnd);
+                    var query = new UcVipSelectViewModel();
+                    OWindowManage.ShowPopupWindow(query.GetUserCtl());
                     break;
                 case "Storage":
-                    WindowHelper.ShowDialog(new CanDaoMemberQueryWindow(), wnd);
+                    var recharge = new UcVipRechargeViewModel();
+                    OWindowManage.ShowPopupWindow(recharge.GetUserCtl());
                     break;
                 case "Regist":
-                    WindowHelper.ShowDialog(new CanDaoMemberRegistrationWindow(), wnd);
+                    var regist = new UcVipRegViewModel();
+                    OWindowManage.ShowPopupWindow(regist.GetUserCtl());
                     break;
                 case "Active":
                     MessageDialog.Warning("激活");

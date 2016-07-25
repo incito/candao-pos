@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <!--Java后台服务地址-->
   <JavaServer value="10.66.21.5:8080"/>
   <!--Delephi后台服务地址-->
-  <DataServer value="127.0.0.1:8081"/>
+  <DataServer value="10.66.19.33:8081"/>
   <!--大数据服务地址-->
   <BigData value="10.66.21.84:8080"/>
   <!--餐道云服务地址-->
-  <CloudServer value="10.66.21.6:8080"/>
+  <CloudServer value="10.66.21.84:8088"/>
   <!--会员系统。0：雅座，1：餐道-->
   <MemberSystem value="1"/>
   <!--分店电话-->

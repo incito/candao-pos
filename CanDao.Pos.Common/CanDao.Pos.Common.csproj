@@ -35,6 +35,25 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Data.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.Core.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
@@ -42,9 +61,8 @@
     <Reference Include="DevExpress.Xpf.Grid.v13.1.Core, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.LayoutControl.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="Engine.Wpf.Toolkit, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\NewPos\CanDao.Pos.Client\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
+    <Reference Include="Engine.Wpf.Toolkit">
+      <HintPath>..\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JunLan.Common.Base">
@@ -90,9 +108,53 @@
     <Compile Include="AllLog.cs" />
     <Compile Include="BaseNotifyObject.cs" />
     <Compile Include="BaseViewModel.cs" />
+    <Compile Include="Classes\Mvvms\IMessenger.cs" />
+    <Compile Include="Classes\Mvvms\MessageBase.cs" />
+    <Compile Include="Classes\Mvvms\Messenger.cs" />
+    <Compile Include="Classes\Mvvms\ObservableObject.cs" />
+    <Compile Include="Classes\Mvvms\PropertyChangedMessage.cs" />
+    <Compile Include="Classes\Mvvms\PropertyChangedMessageBase.cs" />
+    <Compile Include="Classes\Mvvms\RelayCommand.cs" />
+    <Compile Include="Classes\Mvvms\RelayCommandT.cs" />
+    <Compile Include="Classes\Mvvms\ViewModelBase.cs" />
+    <Compile Include="Classes\Mvvms\WeakAction.cs" />
+    <Compile Include="Classes\Mvvms\WeakActionT.cs" />
+    <Compile Include="Classes\Mvvms\WeakFunc.cs" />
+    <Compile Include="Classes\Mvvms\WeakFuncT.cs" />
     <Compile Include="ClientLog.cs" />
+    <Compile Include="Controls\CSystem\AsynWindow.xaml.cs">
+      <DependentUpon>AsynWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\CtlDigitalKeyboard.xaml.cs">
+      <DependentUpon>CtlDigitalKeyboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\CtlDigitalKeyboardAcross.xaml.cs">
+      <DependentUpon>CtlDigitalKeyboardAcross.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\DigitalInputKeyboard.xaml.cs">
+      <DependentUpon>DigitalInputKeyboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\DigitalInputKeyboardVm.cs" />
+    <Compile Include="Controls\CSystem\LoadingWait.xaml.cs">
+      <DependentUpon>LoadingWait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\UserControlBase.cs" />
+    <Compile Include="Controls\CSystem\WMessage.xaml.cs">
+      <DependentUpon>WMessage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\WPopup.xaml.cs">
+      <DependentUpon>WPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CSystem\WUserCheck.xaml.cs">
+      <DependentUpon>WUserCheck.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DoubleUpDown\Implementation\DoubleUpDown.cs" />
     <Compile Include="Controls\GroupSelector\Implementation\GroupSelector.cs" />
+    <Compile Include="Controls\NewControl\CtDigitalTextBox.cs" />
+    <Compile Include="Controls\NewControl\CtEnterTextBox.cs" />
+    <Compile Include="Controls\NewControl\UcPageList.xaml.cs">
+      <DependentUpon>UcPageList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PosBaseWindow.cs" />
     <Compile Include="Controls\WatermarkTextBox\Implementation\WatermarkTextBox.cs" />
     <Compile Include="Converter\BooleanRevertConverter.cs" />
@@ -125,10 +187,23 @@
     <Compile Include="MessageDialog.xaml.cs">
       <DependentUpon>MessageDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\MListBoxInfo.cs" />
+    <Compile Include="Models\MSystemConfig.cs" />
+    <Compile Include="Models\VipModels\MVipCoupon.cs" />
+    <Compile Include="Models\VipModels\MVipCardInfo.cs" />
+    <Compile Include="Models\VipModels\MVipChangeInfo.cs" />
+    <Compile Include="Models\VipModels\MVipInfo.cs" />
     <Compile Include="NetwrokHelper.cs" />
     <Compile Include="NormalWindowViewModel.cs" />
     <Compile Include="NotifyDialog.cs" />
     <Compile Include="NotifyWindow.cs" />
+    <Compile Include="Operates\AsyncLoadServer.cs" />
+    <Compile Include="Operates\FileOperate\OXmlOperate.cs" />
+    <Compile Include="Operates\OCheckFormat.cs" />
+    <Compile Include="Operates\OKeyBoardPre.cs" />
+    <Compile Include="Operates\OWindowManage.cs" />
+    <Compile Include="Operates\Simulation.cs" />
+    <Compile Include="Operates\Systems\MachineManage.cs" />
     <Compile Include="PosIni.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -143,6 +218,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="PublicValues\PvSystemConfig.cs" />
     <Compile Include="RestHttpHelper.cs" />
     <Compile Include="ServiceAddrCache.cs" />
     <Compile Include="Simulation.cs" />
@@ -172,6 +248,38 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\CSystem\AsynWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\CtlDigitalKeyboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\CtlDigitalKeyboardAcross.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\DigitalInputKeyboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\LoadingWait.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\WMessage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\WPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CSystem\WUserCheck.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\DoubleUpDown\Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -179,6 +287,10 @@
     <Page Include="Controls\GroupSelector\Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NewControl\UcPageList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\PosBaseWindow\Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -240,6 +352,11 @@
     <ProjectReference Include="..\CanDao.Pos.Model\CanDao.Pos.Model.csproj">
       <Project>{2ee5104a-0b22-497e-8ade-a83a420c83d8}</Project>
       <Name>CanDao.Pos.Model</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CanDao.Pos.ResourceService\CanDao.Pos.ResourceService.csproj">
+      <Project>{8b73af41-0061-4213-9ec0-318986d1c408}</Project>
+      <Name>CanDao.Pos.ResourceService</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

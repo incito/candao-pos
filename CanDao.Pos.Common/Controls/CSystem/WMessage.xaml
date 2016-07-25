@@ -1,0 +1,31 @@
+﻿<Window x:Class="CanDao.Pos.Common.Controls.CSystem.WMessage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:CanDao.Pos.ResourceService.Controls;assembly=CanDao.Pos.ResourceService"
+        Title="WMessage" Height="280" Width="550" Background="#F0F0F0" WindowStyle="None" AllowsTransparency="True">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/CanDao.Pos.ResourceService;component/DictionaryServer.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+    </Window.Resources>
+    <Border BorderBrush="#0072c6" BorderThickness="1">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="70"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Background="#FFC080">
+            <Image Source="{DynamicResource Logo}" HorizontalAlignment="Left"></Image>
+        </Grid>
+        <TextBox x:Name="TexMessage" IsEnabled="False" Grid.Row="1" TextWrapping="Wrap" Foreground="Red" Text="确认消息" FontSize="24"></TextBox>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
+            <controls:CtlImageButton x:Name="BtnOk" Style="{DynamicResource ImgButton}" HorizontalAlignment="Right" Margin="0,0,20,0" Click="BtnOk_OnClick" DefaultImage="{DynamicResource ImgOk}"></controls:CtlImageButton>
+            <controls:CtlImageButton x:Name="BtnClose" Style="{DynamicResource ImgButton}" HorizontalAlignment="Right" Margin="0,0,20,0" Click="BtnClose_Click" DefaultImage="{DynamicResource ImgClose}"></controls:CtlImageButton>
+        </StackPanel>
+     
+    </Grid>
+    </Border>
+</Window>

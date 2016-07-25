@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CanDao.Pos.Common;
+using CanDao.Pos.Common.Models.VipModels;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
@@ -279,6 +280,59 @@ namespace CanDao.Pos.ServiceImpl
                 CardLevel = response.CardLevel,
                 Integral = response.IntegralOverall,
             };
+        }
+
+        /// <summary>
+        /// 转换会员对象
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        internal static MVipInfo ToVipInfo(CanDaoVipQueryResponse response)
+        {
+            var info = new MVipInfo();
+            info.VipName = response.name;
+            info.Sex = int.Parse(response.gender);
+            info.Birthday = response.birthday;
+            info.Address = response.member_address;
+            info.Creattime = response.createtime;
+            info.TelNum = response.mobile;
+
+            foreach (var card in response.result)
+            {
+                var cInfo = new MVipCardInfo();
+                cInfo.CardNum = card.MCard;
+                cInfo.Balance = float.Parse(card.StoreCardBalance);
+                cInfo.Integral = decimal.Parse(card.IntegralOverall);
+                cInfo.CouponBalance = float.Parse(card.CouponsOverall);
+                cInfo.TraceCode = card.TraceCode;
+                cInfo.CardType = int.Parse(card.card_type);
+                cInfo.CardLevel = int.Parse(card.level);
+                cInfo.CardLevelName = card.level_name;
+                cInfo.CardState = int.Parse(card.status);
+                info.CardInfos.Add(cInfo);
+            }
+
+            return info;
+        }
+        /// <summary>
+        /// 转换成优惠券列表
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        internal static List<MVipCoupon> ToCouponList(GetCouponListResponse response)
+        {
+            var mVipCoupons=new List<MVipCoupon>();
+            foreach (var coupon in response.datas)
+            {
+                var info = new MVipCoupon();
+                info.Id = coupon.id;
+                info.CouponType = coupon.type;
+                info.DealValue = coupon.dealValue;
+                info.PresentValu = coupon.presentValue;
+                mVipCoupons.Add(info);
+            }
+
+            return mVipCoupons;
         }
 
         internal static MenuComboFullInfo ToMenuComboFullInfo(MenuComboDishMainResponse response)
