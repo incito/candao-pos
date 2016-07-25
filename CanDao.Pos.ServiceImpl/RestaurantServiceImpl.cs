@@ -135,6 +135,28 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
+        public Tuple<string, List<TableInfo>> GetTableInfoByType(List<EnumTableType> tableTypes)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("GetTableInfoByTableType");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, List<TableInfo>>("获取所有餐桌信息接口地址为空。", null);
+
+            try
+            {
+                var request = new GetTableByTypeRequest { tableType = tableTypes.Select(t => ((int)t).ToString()).ToList() };
+                var result = HttpHelper.HttpPost<List<TableInfoResponse>>(addr, request);
+                var dataList = new List<TableInfo>();
+                if (result != null && result.Any())
+                    dataList = result.Select(DataConverter.ToTableInfo).ToList();
+                return new Tuple<string, List<TableInfo>>(null, dataList);
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E(ex);
+                return new Tuple<string, List<TableInfo>>(ex.MyMessage(), null);
+            }
+        }
+
         public Tuple<string, string> OpenTable(OpenTableRequest request)
         {
             string addr = ServiceAddrCache.GetServiceAddr("OpenTable");
@@ -467,5 +489,33 @@ namespace CanDao.Pos.ServiceImpl
                 return string.Format("设置优惠券偏好异常：{0}", ex.MyMessage());
             }
         }
+
+        public Tuple<string, List<PrintStatusInfo>> GetPrinterStatusInfo()
+        {
+            try
+            {
+                var addr = ServiceAddrCache.GetServiceAddr("GetPrinterList");
+                if (string.IsNullOrEmpty(addr))
+                    return new Tuple<string, List<PrintStatusInfo>>("打印机状态获取地址为空。", null);
+
+                var response = HttpHelper.HttpGet<GetPrinterStatusResponse>(addr);
+                if (!response.isSuccess)
+                {
+                    var msg = !string.IsNullOrEmpty(response.errorMsg) ? response.errorMsg : "获取打印机状态信息失败。";
+                    AllLog.Instance.E(msg);
+                    return new Tuple<string, List<PrintStatusInfo>>(msg, null);
+                }
+
+                var list = new List<PrintStatusInfo>();
+                if (response.data != null && response.data.Any())
+                    list = response.data.Select(DataConverter.ToPrintStatusInfo).ToList();
+                return new Tuple<string, List<PrintStatusInfo>>(null, list);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, List<PrintStatusInfo>>(ex.Message, null);
+            }
+        }
+
     }
 }

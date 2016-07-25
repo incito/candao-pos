@@ -55,11 +55,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Core.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Grid.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.Grid.v13.1.Core, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpf.LayoutControl.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Engine.Wpf.Toolkit">
       <HintPath>..\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
@@ -152,6 +147,8 @@
     <Compile Include="Controls\GroupSelector\Implementation\GroupSelector.cs" />
     <Compile Include="Controls\NewControl\CtDigitalTextBox.cs" />
     <Compile Include="Controls\NewControl\CtEnterTextBox.cs" />
+    <Compile Include="Controls\PosBaseWindow\Implementation\PosBaseWindow.cs" />
+    <Compile Include="Controls\PosMsgWindow\Implementation\PosMsgWindow.cs" />
     <Compile Include="Controls\NewControl\UcPageList.xaml.cs">
       <DependentUpon>UcPageList.xaml</DependentUpon>
     </Compile>
@@ -167,7 +164,9 @@
     <Compile Include="Converter\OfferTypeToCheckedConverter.cs" />
     <Compile Include="Converter\OfferTypeToVisiblityConverter.cs" />
     <Compile Include="Converter\PayTypeToCheckedConverter.cs" />
+    <Compile Include="Converter\PrinterStatusToColorConverter.cs" />
     <Compile Include="Converter\StringToVisibleConverter.cs" />
+    <Compile Include="Converter\SysBorderBrushConverter.cs" />
     <Compile Include="Converter\ZeroToNullStringConverter.cs" />
     <Compile Include="ErrLog.cs" />
     <Compile Include="ExceptionHelper.cs" />
@@ -296,6 +295,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\PosMsgWindow\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\WatermarkTextBox\Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -313,6 +316,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ButtonSpinner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -336,7 +343,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\RadioButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\TabControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ToggleButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -432,7 +447,7 @@
     <Resource Include="Images\Logo1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\PosBaseWindow\Implementation\" />
+    <Resource Include="Images\Alert.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

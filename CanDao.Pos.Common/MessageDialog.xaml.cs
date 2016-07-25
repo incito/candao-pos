@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Input;
 
 namespace CanDao.Pos.Common
 {
@@ -11,7 +10,6 @@ namespace CanDao.Pos.Common
         public MessageDialog()
         {
             InitializeComponent();
-            MessageDialogResult = MessageBoxResult.Cancel;
             DataContext = this;
         }
 
@@ -27,30 +25,9 @@ namespace CanDao.Pos.Common
         public static readonly DependencyProperty InfoMsgProperty =
             DependencyProperty.Register("InfoMsg", typeof(string), typeof(MessageDialog), new PropertyMetadata("处理中..."));
 
-        /// <summary>
-        /// 消息提示框结果。
-        /// </summary>
-        public MessageBoxResult MessageDialogResult { get; set; }
+        public MessageBoxButton BoxButton { get; set; }
 
-        private MessageBoxButton _boxButton;
-
-        public MessageBoxButton BoxButton
-        {
-            get { return _boxButton; }
-            set
-            {
-                _boxButton = value;
-                BtnCancel.Visibility = Visibility.Collapsed;
-                switch (value)
-                {
-                    case MessageBoxButton.OKCancel:
-                        BtnCancel.Visibility = Visibility.Visible;
-                        break;
-                }
-            }
-        }
-
-        public static MessageBoxResult Show(string message, MessageBoxButton btn, Window ownerWindow = null)
+        public static bool? Show(string message, MessageBoxButton btn, Window ownerWindow = null)
         {
             var dialog = new MessageDialog { InfoMsg = message, BoxButton = btn };
             if (!Equals(Application.Current.MainWindow, dialog))
@@ -63,7 +40,7 @@ namespace CanDao.Pos.Common
                 dialog.ShowInTaskbar = true;
             }
             dialog.ShowDialog();
-            return dialog.MessageDialogResult;
+            return dialog.DialogResult;
         }
 
         /// <summary>
@@ -74,7 +51,7 @@ namespace CanDao.Pos.Common
         /// <returns>确定返回true，取消返回false。</returns>
         public static bool Quest(string message, Window ownerWindow = null)
         {
-            return Show(message, MessageBoxButton.OKCancel, ownerWindow) != MessageBoxResult.Cancel;
+            return Show(message, MessageBoxButton.OKCancel, ownerWindow) == true;
         }
 
         /// <summary>
@@ -87,31 +64,9 @@ namespace CanDao.Pos.Common
             Show(message, MessageBoxButton.OK, ownerWindow);
         }
 
-        private void ButtonConfirm_Click(object sender, RoutedEventArgs e)
+        private void MessageDialog_OnLoaded(object sender, RoutedEventArgs e)
         {
-            MessageDialogResult = MessageBoxResult.OK;
-            Close();
-        }
-
-        private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
-        {
-            MessageDialogResult = MessageBoxResult.Cancel;
-            Close();
-        }
-
-        private void MessageDialog_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Enter:
-                    MessageDialogResult = MessageBoxResult.OK;
-                    Close();
-                    break;
-                case Key.Escape:
-                    MessageDialogResult = MessageBoxResult.Cancel;
-                    Close();
-                    break;
-            }
+            CancelBtn.Visibility = BoxButton == MessageBoxButton.OKCancel ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

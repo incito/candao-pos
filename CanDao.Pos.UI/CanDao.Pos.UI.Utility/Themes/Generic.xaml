@@ -6,24 +6,6 @@
         <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
-    <Style TargetType="ToggleButton" x:Key="DietTogBtnStyle">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="Bd" Background="White" BorderBrush="Gray" BorderThickness="1.5">
-                        <ContentPresenter Content="{TemplateBinding Content}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="Gray"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
     <Style TargetType="{x:Type view:AllowMultSelectorControl}">
         <Setter Property="ItemViewerTemplate">
             <Setter.Value>
@@ -37,10 +19,10 @@
                 <ControlTemplate TargetType="{x:Type view:AllowMultSelectorControl}">
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"/>
-                        <Border Height="2" Background="Gray" HorizontalAlignment="Stretch"/>
                         <ItemsControl ItemsSource="{TemplateBinding ItemsSource}"
                                       MaxWidth="{TemplateBinding ActualWidth}"
-                                      ItemTemplate="{TemplateBinding ItemViewerTemplate}">
+                                      ItemTemplate="{TemplateBinding ItemViewerTemplate}"
+                                      Margin="0,5">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal"/>

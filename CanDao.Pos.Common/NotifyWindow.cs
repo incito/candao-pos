@@ -3,12 +3,11 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using CanDao.Pos.Common.Controls;
-using DevExpress.Xpf.Core;
 using Timer = System.Timers.Timer;
 
 namespace CanDao.Pos.Common
 {
-    internal class NotifyWindow : PosBaseWindow
+    internal class NotifyWindow : PosMsgWindow
     {
         /// <summary>
         /// 正在显示的窗口个数。
@@ -67,6 +66,8 @@ namespace CanDao.Pos.Common
             Height = WndHeight;
             WindowStartupLocation = WindowStartupLocation.Manual;
             Owner = ownerWindow ?? Application.Current.MainWindow;
+            CancelBtnText = "";
+            CloseBtnText = "";
             Point point = GetMainWindowBottomRight();
             Top = point.Y - 10 - WndHeight * (_showingCount + 1);//多个通知窗口同时显示，则依次往上叠加。
             Left = point.X - 10 - WndWidth;
@@ -126,7 +127,7 @@ namespace CanDao.Pos.Common
             if (wnd.WindowState != WindowState.Maximized)
                 return wnd.RestoreBounds.BottomRight;
             else
-                return new Point(wnd.GetRealWidth() - 10, wnd.GetRealHeight() - 10);
+                return new Point(wnd.ActualWidth - 10, wnd.ActualHeight - 10);
         }
     }
 }

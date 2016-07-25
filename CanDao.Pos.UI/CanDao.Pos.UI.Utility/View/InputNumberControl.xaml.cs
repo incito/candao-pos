@@ -21,5 +21,18 @@ namespace CanDao.Pos.UI.Utility.View
 
         public static readonly DependencyProperty ShowConfirmBtnProperty =
             DependencyProperty.Register("ShowConfirmBtn", typeof(bool), typeof(InputNumberControl), new PropertyMetadata(false));
+
+        /// <summary>
+        /// 是否显示小数点。
+        /// </summary>
+        public bool ShowDot
+        {
+            get { return (bool)GetValue(ShowDotProperty); }
+            set { SetValue(ShowDotProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowDotProperty =
+            DependencyProperty.Register("ShowDot", typeof(bool), typeof(InputNumberControl), new PropertyMetadata(true));
+
     }
 }

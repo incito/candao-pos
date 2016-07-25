@@ -14,7 +14,10 @@ namespace CanDao.Pos.UI.MainView.View
         public TableOperWindow(TableInfo tableInfo)
         {
             InitializeComponent();
-            DataContext = new TableOperNormalWndVm(tableInfo) { OwnerWindow = this };
+            if (tableInfo.IsTakeoutTable)
+                DataContext = new TableOperTakeoutWndVm(tableInfo) { OwnerWindow = this };
+            else
+                DataContext = new TableOperNormalWndVm(tableInfo) { OwnerWindow = this };
         }
 
         public TableOperWindow(string tableName)

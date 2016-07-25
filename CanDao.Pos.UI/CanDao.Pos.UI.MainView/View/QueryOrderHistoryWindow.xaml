@@ -20,13 +20,13 @@
     </controls:PosBaseWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -38,7 +38,7 @@
             <TextBox Grid.Column="1" Text="{Binding FilterOrderId, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="200"/>
             <TextBlock Grid.Column="2" Text="桌号：" FontSize="18"/>
             <TextBox Grid.Column="3" Text="{Binding FilterTableNo, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="120"/>
-            <view:InputHelperStripControl Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+            <view:InputHelperStripControl Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" AllowDot="False"/>
         </Grid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">

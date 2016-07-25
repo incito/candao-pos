@@ -21,7 +21,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <summary>
         /// 关闭窗口时处理的超时时间（秒），默认30秒。
         /// </summary>
-        private const int ClosingWaitTimeoutSecond = 30;
+        private const int ClosingWaitTimeoutSecond = 15;
 
         /// <summary>
         /// 窗口关闭时取消事件参数。
@@ -30,6 +30,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         public TableOperTakeoutWndVm(string tableName)
             : base(GenerateTableInfo(tableName))
+        {
+            HasTip = false;
+        }
+
+        public TableOperTakeoutWndVm(TableInfo tableInfo)
+            : base(tableInfo)
         {
             HasTip = false;
         }
@@ -64,15 +70,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return;
 
                 InfoLog.Instance.I("外卖台有已点菜品，进行整桌退菜...");
-                var backDishWf = new WorkFlowInfo(BackAllDishProcess, BackAllDishComplete, "整桌退菜中...")
-                {
-                    NextWorkFlowInfo = curWf
-                };
+                var backDishWf = GenerateBackAllDishWf();
+                backDishWf.NextWorkFlowInfo = curWf;
                 curWf = backDishWf;
             }
 
             WorkFlowService.Start(null, curWf);
-            _eventWait.WaitOne(ClosingWaitTimeoutSecond * 1000);
+            _eventWait.WaitOne(ClosingWaitTimeoutSecond * 1000);//等待同步锁的释放，主要是等待_cancelArgs.Cancel是否取消关闭窗口的状态
         }
 
         private object OpenTableProcess(object param)
@@ -107,47 +111,52 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _tableInfo.OrderId = result.Item2;
             if (Data == null)
                 Data = new TableFullInfo();
-            Data.TableName = _tableInfo.TableName;
-            Data.OrderId = _tableInfo.OrderId;
+            Data.CloneDataFromTableInfo(_tableInfo);
 
             WindowHelper.ShowDialog(new OrderDishWindow(_tableInfo), OwnerWindow);
             GetTableDishInfoAsync();
         }
 
-        private object BackAllDishProcess(object param)
+        protected override void DosomethingAfterSettlement()
         {
-            InfoLog.Instance.I("开始外卖台整桌退菜...");
+            Data.OrderId = null;//设定订单id为空以后，调用GetTableDishInfo命令执行方法时就会自动开台。
+            Data.DishInfos.Clear();//清空左侧外卖菜品列表。
+            GetTableDishInfoCmd.Execute(null);
+        }
+
+        protected override void BackAllDishFailedProcess()
+        {
+            _eventWait.Set();//释放同步锁，关闭窗口。
+        }
+
+        /// <summary>
+        /// 取消订单命令的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object CancelOrderProcess(object param)
+        {
+            InfoLog.Instance.I("开始取消账单...");
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            return service.BackAllDish(Data.OrderId, Data.TableName, Globals.UserInfo.UserName);
+            return service.CancelOrder(Globals.UserInfo.UserName, Data.OrderId, Data.TableNo);
         }
 
-        private Tuple<bool, object> BackAllDishComplete(object arg)
+        /// <summary>
+        /// 取消订单命令执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private Tuple<bool, object> CancelOrderComplete(object param)
         {
-            var result = (string)arg;
-            if (!string.IsNullOrEmpty(result))
-            {
-                var msg = string.Format("外卖台整桌退菜失败：{0}", result);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg, OwnerWindow);
-                _eventWait.Set();
-                return null;
-            }
-
-            InfoLog.Instance.I("外卖台整桌退菜成功。");
-            return new Tuple<bool, object>(true, null);
-        }
-
-        protected override Tuple<bool, object> CancelOrderComplete(object param)
-        {
-            var result = (string)param;
+            var result = (string) param;
             if (!string.IsNullOrEmpty(result))
             {
                 var msg = string.Format("取消外卖台账单失败：{0}", result);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg, OwnerWindow);
+                ErrLog.Instance.E("取消账单失败：{0}", result);
+                MessageDialog.Warning(result);
                 _eventWait.Set();
                 return null;
             }
@@ -158,13 +167,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             _eventWait.Set();
             return null;
-        }
-
-        protected override void DosomethingAfterSettlement()
-        {
-            Data.OrderId = null;//设定订单id为空以后，调用GetTableDishInfo命令执行方法时就会自动开台。
-            Data.DishInfos.Clear();//清空左侧外卖菜品列表。
-            GetTableDishInfoCmd.Execute(null);
         }
 
         /// <summary>
@@ -179,6 +181,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 TableName = tableName,
                 TableNo = tableName,
                 TableStatus = EnumTableStatus.Idle,
+                TableType = EnumTableType.Takeout,
             };
         }
     }

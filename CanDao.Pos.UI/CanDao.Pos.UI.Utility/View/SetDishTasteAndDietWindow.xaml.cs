@@ -17,7 +17,7 @@ namespace CanDao.Pos.UI.Utility.View
             var vm = new SetDishTasteAndDietWndVm(dishSimpleInfo, allowInputDishNum) { OwnerWindow = this };
             if (tasteList != null)
             {
-                TasteSetCtrl.TasteInfos = tasteList.Select(t => new AllowSelectInfo(t)).ToList();
+                TasteSetCtrl.TasteInfos = tasteList.ToList();
                 vm.HasTasteInfos = tasteList.Any();
             }
             DataContext = vm;

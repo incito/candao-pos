@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
@@ -32,6 +34,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private readonly Timer _refreshTimer;
 
+        /// <summary>
+        /// 打印机检测间隔（秒）。
+        /// </summary>
+        private const int PrinterCheckTimerInterval = 10;
+
+        /// <summary>
+        /// 打印机检测定时器。
+        /// </summary>
+        private readonly Timer _printerCheckTimer;
+
+        /// <summary>
+        /// 下一次警告间隔时间（分）。
+        /// </summary>
+        private const int NextMaxWarningInterval = 10;
+
         #endregion
 
         #region Constructor
@@ -48,6 +65,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             _refreshTimer = new Timer(1000) { Enabled = true };
             _refreshTimer.Elapsed += RefreshTimer_Elapsed;
+
+            _printerCheckTimer = new Timer(PrinterCheckTimerInterval * 1000);
+            _printerCheckTimer.Elapsed += PrinterCheckTimerOnElapsed;
         }
 
         #endregion
@@ -110,7 +130,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
-
         /// <summary>
         /// 刷新剩余时间。
         /// </summary>
@@ -133,14 +152,39 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public bool IsForcedEndWorkModel { get; set; }
 
+        /// <summary>
+        /// 是否有打印机错误。
+        /// </summary>
+        private bool _hasPrinterError;
+        /// <summary>
+        /// 是否有打印机错误。
+        /// </summary>
+        public bool HasPrinterError
+        {
+            get { return _hasPrinterError; }
+            set
+            {
+                _hasPrinterError = value;
+                RaisePropertyChanged("HasPrinterError");
+            }
+        }
+
         #endregion
 
         #region Command
 
         /// <summary>
-        /// 加载命令。
+        /// 窗口加载时执行命令。
         /// </summary>
-        public ICommand LoadCmd { get; private set; }
+        public ICommand WindowLoadCmd { get; private set; }
+
+
+        public ICommand WindowClosingCmd { get; private set; }
+
+        /// <summary>
+        /// 窗口关闭时执行命令。
+        /// </summary>
+        public ICommand WindowClosedCmd { get; private set; }
 
         /// <summary>
         /// 选择餐桌命令。
@@ -162,14 +206,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Command Methods
 
         /// <summary>
-        /// 加载命令的执行方法。
+        /// 窗口加载命令的执行方法。
         /// </summary>
         /// <param name="param"></param>
-        private void Load(object param)
+        private void WindowLoad(object param)
         {
             if (!IsInDesignMode)
             {
                 GetAllTableInfoesAsync();
+                ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
 
                 if (Globals.IsDinnerWareEnable)
                 {
@@ -192,6 +237,38 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     });
                 }
             }
+        }
+
+        /// <summary>
+        /// 窗口关闭时执行命令的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        private void WindowClosing(object param)
+        {
+            ExCommandParameter cmdParam = (ExCommandParameter)param;
+            if (!MessageDialog.Quest("确定要退出系统吗？"))
+                ((CancelEventArgs)cmdParam.EventArgs).Cancel = true;
+        }
+
+        /// <summary>
+        /// 窗口关闭后命令的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        private void WindowClosed(object param)
+        {
+            if (_refreshTimer != null)//释放刷新定时器。
+            {
+                _refreshTimer.Stop();
+                _refreshTimer.Dispose();
+            }
+
+            if (_printerCheckTimer != null) //释放打印机状态定时器。
+            {
+                _printerCheckTimer.Stop();
+                _printerCheckTimer.Dispose();
+            }
+
+            Application.Current.Shutdown(1);//尝试解决有时候退出主窗口程序依然在运行的问题。
         }
 
         /// <summary>
@@ -239,7 +316,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             switch ((string)param)
             {
                 case "Takeout"://外卖
-                    WindowHelper.ShowDialog(new TableOperWindow(SystemConfigCache.TakeoutTableName), OwnerWindow);
+                    TakeoutTable();
                     break;
                 case "QueryOrderHistory"://账单历史
                     WindowHelper.ShowDialog(new QueryOrderHistoryWindow(), OwnerWindow);
@@ -254,8 +331,30 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Report"://报表
                     WindowHelper.ShowDialog(new ReportViewWindow(), OwnerWindow);
                     break;
+                case "System"://系统
+                    WindowHelper.ShowDialog(new SystemSettingWindow(), OwnerWindow);
+                    break;
+                case "PreGroup":
+                    ((MainWindow)OwnerWindow).GsTables.PreviousGroup();
+                    break;
+                case "NextGroup":
+                    ((MainWindow)OwnerWindow).GsTables.NextGroup();
+                    break;
             }
             SetRefreshTimerStatus(true);
+        }
+
+        private bool CanOper(object param)
+        {
+            switch ((string)param)
+            {
+                case "PreGroup":
+                    return ((MainWindow)OwnerWindow).GsTables.CanPreviousGroup;
+                case "NextGroup":
+                    return ((MainWindow)OwnerWindow).GsTables.CanNextGruop;
+                default:
+                    return true;
+            }
         }
 
         #endregion
@@ -265,15 +364,125 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected override void InitCommand()
         {
             base.InitCommand();
-            LoadCmd = CreateDelegateCommand(Load);
+            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
+            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
+            WindowClosedCmd = CreateDelegateCommand(WindowClosed);
             SelectTableCmd = CreateDelegateCommand(SelectTable);
             GetAllTableInfoCmd = CreateDelegateCommand(GetAllTableInfos);
-            OperCmd = CreateDelegateCommand(OperMethod);
+            OperCmd = CreateDelegateCommand(OperMethod, CanOper);
         }
 
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// 点击外卖按钮时处理外卖。
+        /// </summary>
+        private void TakeoutTable()
+        {
+            InfoLog.Instance.I("开始外卖...");
+            if (!Globals.UserRight.AllowCash)
+            {
+                InfoLog.Instance.I("当前用户没有收银权限：{0}", Globals.UserInfo.UserName);
+                MessageDialog.Warning("您没有收银权限！");
+                return;
+            }
+
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+            {
+                ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                MessageDialog.Warning("创建IRestaurantService服务失败。");
+                return;
+            }
+
+            InfoLog.Instance.I("开始获取咖啡外卖台...");
+            var result = service.GetTableInfoByType(new List<EnumTableType> { EnumTableType.CFTakeout });//查询咖啡模式外卖台
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("咖啡外卖桌台获取失败：{0}", result.Item1);
+                MessageDialog.Warning(result.Item1);
+                return;
+            }
+
+            if (result.Item2 != null && result.Item2.Any())
+            {
+                InfoLog.Instance.I("获取咖啡外卖台结束。咖啡外卖台个数：{0}", result.Item2.Count);
+                var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
+                if (WindowHelper.ShowDialog(selectTableWnd, OwnerWindow))//选择了咖啡外卖就走咖啡外卖桌台，如果没有选择则走配置文件的外卖。
+                {
+                    InfoLog.Instance.I("选择了\"{0}\"咖啡外卖台", selectTableWnd.SelectedTable.TableName);
+                    WindowHelper.ShowDialog(new TableOperWindow(selectTableWnd.SelectedTable), OwnerWindow);
+                    return;
+                }
+            }
+
+            InfoLog.Instance.I("没有选择咖啡外卖台，开始获取普通外卖台...");
+            result = service.GetTableInfoByType(new List<EnumTableType> { EnumTableType.Takeout });//查询普通外卖台
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("普通外卖桌台获取失败：{0}", result.Item1);
+                MessageDialog.Warning(result.Item1);
+                return;
+            }
+
+            if (result.Item2 == null || !result.Item2.Any())
+            {
+                InfoLog.Instance.I("没有获取到普通外卖台，可能后台未配置。");
+                MessageDialog.Warning("后台没有配置外卖台。");
+                return;
+            }
+
+            InfoLog.Instance.I("获取到普通外卖台：{0}", result.Item2.First().TableName);
+            WindowHelper.ShowDialog(new TableOperWindow(result.Item2.First()), OwnerWindow);
+        }
+
+        /// <summary>
+        /// 检测打印机状态。
+        /// </summary>
+        private void CheckPrinterStatus()
+        {
+            _printerCheckTimer.Stop();
+            InfoLog.Instance.I("开始检测打印机状态...");
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+            {
+                ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                OwnerWindow.Dispatcher.Invoke((Action)delegate { MessageDialog.Warning("创建IRestaurantService服务失败。"); });
+                _printerCheckTimer.Start();
+                return;
+            }
+
+            var result = service.GetPrinterStatusInfo();
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("检测打印机状态错误：{0}", result.Item1);
+                OwnerWindow.Dispatcher.Invoke((Action)delegate { MessageDialog.Warning(result.Item1); });
+                _printerCheckTimer.Start();
+                return;
+            }
+
+            var errPrintCount = result.Item2.Count(t => t.PrintStatus != EnumPrintStatus.Normal);
+            HasPrinterError = errPrintCount > 0;
+            if (HasPrinterError)
+            {
+                var errMsg = string.Format("检测到{0}个打印机异常，请到\"系统\">\"打印机列表\"查看并修复。", errPrintCount);
+                OwnerWindow.Dispatcher.Invoke((Action)delegate
+                {
+                    var wnd = new PrinterErrorInfoWindow(errMsg, NextMaxWarningInterval);
+                    if (WindowHelper.ShowDialog(wnd, OwnerWindow))
+                    {
+                        if (wnd.IsCheckedNoWarning)
+                            _printerCheckTimer.Interval = NextMaxWarningInterval * 60 * 1000;
+                        else
+                            _printerCheckTimer.Interval = PrinterCheckTimerInterval * 1000;
+                    }
+                });
+            }
+
+            _printerCheckTimer.Start();
+        }
 
         /// <summary>
         /// 定时刷新执行方法。
@@ -316,7 +525,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
 
                 //更新餐桌开台持续时间
-                Tables.ForEach(t => t.UpdateDinnerDuration());
+                Tables.Where(t => t.TableStatus == EnumTableStatus.Dinner).ForEach(t => t.UpdateDinnerDuration());
             }
             catch (Exception ex)
             {
@@ -326,6 +535,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 SetRefreshTimerStatus(true);
             }
+        }
+
+        /// <summary>
+        /// 打印机检测定时器触发时执行。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="elapsedEventArgs"></param>
+        private void PrinterCheckTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            CheckPrinterStatus();
         }
 
         /// <summary>
@@ -347,7 +566,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return new Tuple<string, List<TableInfo>>("创建IRestaurantService服务失败。", null);
 
-            return service.GetAllTableInfoes();
+            var request = new List<EnumTableType>
+            {
+                EnumTableType.Room,
+                EnumTableType.Outside,
+                EnumTableType.CFTable
+            };
+            return service.GetTableInfoByType(request);
         }
 
         /// <summary>

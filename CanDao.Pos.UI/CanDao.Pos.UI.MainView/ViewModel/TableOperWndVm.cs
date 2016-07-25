@@ -599,6 +599,28 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
+        private bool CanDataGridPageOper(object param)
+        {
+            TableOperWindow wnd = (TableOperWindow)OwnerWindow;
+            switch ((string)param)
+            {
+                case "DishPreGroup":
+                    return wnd.DishGroupSelector.CanPreviousGroup;
+                case "DishNextGroup":
+                    return wnd.DishGroupSelector.CanNextGruop;
+                case "CouponPreGroup":
+                    return wnd.CouponGroupSelector.CanPreviousGroup;
+                case "CouponNextGroup":
+                    return wnd.CouponGroupSelector.CanNextGruop;
+                case "CouponListPreGroup":
+                    return wnd.GsCouponList.CanPreviousGroup;
+                case "CouponListNextGroup":
+                    return wnd.GsCouponList.CanNextGruop;
+                default:
+                    return true;
+            }
+        }
+
         /// <summary>
         /// 打印命令执行方法。
         /// </summary>
@@ -609,7 +631,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 case "PreSettlement":
                     IsPrintMoreOpened = false;
-                    GetTableDishInfo(null);
+                    GetTableDishInfoAsync();
                     ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.UserName);
                     break;
                 case "ReprintBill":
@@ -679,7 +701,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
                 case "Order":
                     if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
-                        GetTableDishInfo(null);
+                        GetTableDishInfoAsync();
                     break;
                 case "OpenCashBox":
                     OpenCashBoxAsync();
@@ -689,17 +711,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     CalculatePaymentAmount();
                     break;
                 case "DishCountIncrease":
-                    if (SelectedOrderDish == null)
-                        return;
-
-                    if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
-                    {
-                        // 称重
-                        return;
-                    }
-
-                    if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
-                        GetTableDishInfo(null);
+                    AddDish();
                     break;
                 case "DishCountReduce":
                     BackDish();
@@ -735,6 +747,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     InfoLog.Instance.I("清除优惠券。");
                     ClearUsedCouponInfo();
                     break;
+                case "ClearTable":
+                    ClearCoffeeTable();
+                    break;
+                case "BackAllDish":
+                    var wf = GenerateBackAllDishWf();
+                    WorkFlowService.Start(null, wf);
+                    break;
             }
         }
 
@@ -763,6 +782,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return SelectedUsedCouponInfo != null;
                 case "CouponClear":
                     return Data != null && Data.UsedCouponInfos.Any();
+                case "BackAllDish":
+                    return Data != null && Data.OrderStatus == EnumOrderStatus.Ordered && Data.DishInfos.Any();
                 default:
                     return true;
             }
@@ -853,7 +874,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             else
             {
                 //增加选择数量的窗口
-                var numWnd = new NumberSelectorWindow("请输入优惠券使用数量", 1, 0, false);
+                var numWnd = new NumInputWindow("优惠券使用数量：", "优惠券数量", 0, false);
                 if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                     return;
 
@@ -915,7 +936,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             base.InitCommand();
             GetTableDishInfoCmd = CreateDelegateCommand(GetTableDishInfo);
-            DataGridPageOperCmd = CreateDelegateCommand(DataGridPageOper);
+            DataGridPageOperCmd = CreateDelegateCommand(DataGridPageOper, CanDataGridPageOper);
             PrintCmd = CreateDelegateCommand(Print, CanPrint);
             OperCmd = CreateDelegateCommand(Oper, CanOper);
             CashControlFocusCmd = CreateDelegateCommand(CashControlFocus);
@@ -958,6 +979,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _couponLongPressTimer.Elapsed += CouponLongPressTimerOnElapsed;
         }
 
+        /// <summary>
+        /// 长按定时器触发时执行。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="elapsedEventArgs"></param>
         private void CouponLongPressTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             _couponLongPressTimer.Stop();
@@ -982,6 +1008,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return;
                 }
 
+                InfoLog.Instance.I("开始设置优惠券的偏好。");
                 var result = service.SetCouponFavor(_curSelectedCouponInfo.CouponId, _curSelectedCouponInfo.IsUncommonlyUsed);
                 if (!string.IsNullOrEmpty(result))
                 {
@@ -990,7 +1017,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return;
                 }
 
-                NotifyDialog.Notify("设置优惠券偏好成功。");
+                InfoLog.Instance.I("设置优惠券偏好成功。");
+                NotifyDialog.Notify("设置优惠券偏好成功。", OwnerWindow);
                 SelectedCouponCategory = SelectedCouponCategory;//触发优惠券的重新获取。
             });
         }
@@ -1054,7 +1082,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 curStepWf.NextWorkFlowInfo = saleMemberWf;
                 curStepWf = saleMemberWf;
 
-                if (Data.TipAmount > 0)
+                if (HasTip && Data.TipAmount > 0)
                 {
                     var tipSettlementWf = new WorkFlowInfo(TipSettlementProcess, TipSettlementComplete, "小费结算中...");
                     curStepWf.NextWorkFlowInfo = tipSettlementWf;
@@ -1080,6 +1108,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (SelectedOrderDish == null)
                 return;
 
+            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
+            {
+                DishWeight();
+                return;
+            }
+
             if (SelectedOrderDish.IsComboDish)
             {
                 MessageDialog.Warning("请选择套餐主体退整个套餐。");
@@ -1096,24 +1130,83 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!WindowHelper.ShowDialog(backDishReasonWnd, OwnerWindow))
                 return;
 
-            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed) // 称重
-            {
-                var weightWnd = new NumberSelectorWindow("请输入称重数量", SelectedOrderDish.DishNum, SelectedOrderDish.DishNum);
-                if (!WindowHelper.ShowDialog(weightWnd, OwnerWindow))
-                    return;
-
-                //调用更新菜品重量的接口。
-                MessageDialog.Warning(weightWnd.InputNum.ToString(CultureInfo.InvariantCulture));
-                return;
-            }
-
-            var numWnd = new NumberSelectorWindow("请输入退菜数量", SelectedOrderDish.DishNum, SelectedOrderDish.DishNum);
+            var numWnd = new NumInputWindow("请输入退菜数量：", "退菜数量：", SelectedOrderDish.DishNum);
             if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                 return;
 
             var authorizeWnd = new AuthorizationWindow(EnumRightType.BackDish);
             if (WindowHelper.ShowDialog(authorizeWnd, OwnerWindow))
                 TaskService.Start(numWnd.InputNum, GetBackDishInfoProcess, GetBackDishInfoComplete, "获取退菜信息...");
+        }
+
+        /// <summary>
+        /// 点击加菜时执行。
+        /// </summary>
+        private void AddDish()
+        {
+            if (SelectedOrderDish == null)
+                return;
+
+            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
+            {
+                DishWeight();
+                return;
+            }
+
+            if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
+                GetTableDishInfoAsync();
+        }
+
+        /// <summary>
+        /// 菜品称重。
+        /// </summary>
+        /// <returns></returns>
+        private void DishWeight()
+        {
+            InfoLog.Instance.I("选中的菜时称重菜品，弹出称重窗体...");
+            //var dishWeightWnd = new DishWeightWindow();
+            var dishWeightWnd = new NumInputWindow("请输入称重数量：", "称重数量：", 0);
+            if (WindowHelper.ShowDialog(dishWeightWnd, OwnerWindow))
+            {
+                InfoLog.Instance.I("菜品\"{0}\"称重数量：{1}", SelectedOrderDish.DishName, dishWeightWnd.InputNum);
+                var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+                if (service == null)
+                {
+                    ErrLog.Instance.E("创建IOrderService服务失败。");
+                    MessageDialog.Warning("创建IOrderService服务失败。");
+                    return;
+                }
+
+                InfoLog.Instance.I("开始调用菜品称重接口...");
+                var result = service.UpdateDishWeight(Data.TableNo, SelectedOrderDish.DishId,
+                    SelectedOrderDish.PrimaryKey, dishWeightWnd.InputNum);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    ErrLog.Instance.E("菜品\"{0}\"称重失败：{1}", SelectedOrderDish.DishName, result);
+                    MessageDialog.Warning(result);
+                    return;
+                }
+
+                var msg = string.Format("菜品\"{0}\"称重成功。", SelectedOrderDish.DishName);
+                InfoLog.Instance.I(msg);
+                NotifyDialog.Notify(msg, OwnerWindow);
+                GetTableDishInfoAsync();
+            }
+        }
+
+        /// <summary>
+        /// 清台功能。
+        /// </summary>
+        private void ClearCoffeeTable()
+        {
+            var questMsg = "确定要清台吗？";
+            if (!Data.HasBeenPaied && Data.DishInfos.Any())
+                questMsg += "清台后已点菜品将全部清空。";
+
+            if (!MessageDialog.Quest(questMsg))
+                return;
+
+            TaskService.Start(null, ClearCoffeeTableProcess, ClearCoffeeTableComplete, "清台执行中...");
         }
 
         /// <summary>
@@ -1163,7 +1256,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!MessageDialog.Quest(string.Format("确定要取消桌号：{0}的帐单吗?", _tableInfo.TableName)))
                 return;
 
-            WorkFlowService.Start(null, new WorkFlowInfo(CancelOrderProcess, CancelOrderComplete, "取消账单中..."));
+            WorkFlowService.Start(null, new WorkFlowInfo(ClearTableProcess, ClearTableComplete, "取消账单中..."));
         }
 
         /// <summary>
@@ -1259,6 +1352,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
+        /// 生成整单退菜工作流。
+        /// </summary>
+        /// <returns></returns>
+        protected WorkFlowInfo GenerateBackAllDishWf()
+        {
+            return new WorkFlowInfo(BackAllDishProcess, BackAllDishComplete, "整桌退菜中...");
+        }
+
+        /// <summary>
         /// 执行结账的方法。
         /// </summary>
         /// <param name="param"></param>
@@ -1271,6 +1373,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
                 return "创建IOrderService服务失败。";
+
+            if (Data.TableType == EnumTableType.CFTable || Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout)//咖啡台和外卖都走咖啡结账模式，后台处理是结账后打单。
+                return service.PayTheBillCf(args.Item1, args.Item2, args.Item3);
 
             return service.PayTheBill(args.Item1, args.Item2, args.Item3);
         }
@@ -1395,7 +1500,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("设置会员价完成。");
             InfoLog.Instance.I("从新获取餐台所有信息...");
-            var result = orderService.GetTableDishInfoes(_tableInfo.TableName, Globals.UserInfo.UserName);
+
+            var result = new Tuple<string, TableFullInfo>("未赋值", null);
+            if (Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout)
+                result = orderService.GetTableDishInfoByOrderId(_tableInfo.OrderId, Globals.UserInfo.UserName);
+            else
+                result = orderService.GetTableDishInfoes(_tableInfo.TableName, Globals.UserInfo.UserName);
+
             if (!string.IsNullOrEmpty(result.Item1))
                 return string.Format("获取餐台明细失败：{0}", result.Item1);
 
@@ -1425,7 +1536,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("设置会员价成功，完成整个会员登录流程。");
             IsMemberLogin = true;
-            GetTableDishInfo(null);
+            GetTableDishInfoAsync();
             return new Tuple<bool, object>(true, null);
         }
 
@@ -1474,7 +1585,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             IsMemberLogin = false;
             Data.MemberInfo = null;
             MemberCardNo = null;
-            GetTableDishInfo(null);
+            GetTableDishInfoAsync();
             return null;
         }
 
@@ -1599,7 +1710,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("反结算账单：{0}完成。", Data.OrderId);
             _tableInfo.TableStatus = EnumTableStatus.Dinner;//将餐桌状态设置成就餐，调用GetTableDishInfo获取餐桌信息时就不会弹出开台窗口了。
-            GetTableDishInfo(null);
+            GetTableDishInfoAsync();
             return null;
         }
 
@@ -1632,20 +1743,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private Tuple<bool, object> PrintSettlementReportAndInvoice(object arg)
         {
-            //异步执行广播。
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                InfoLog.Instance.I("广播结算消息给PAD...");
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Pad, Data.OrderId);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Pad);
-
-                InfoLog.Instance.I("广播结算指令给手环...");
-                var msg = string.Format("{0}|{1}|{2}", Data.WaiterId, Data.TableName, Data.OrderId);
-                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
+            if (Data.TableType == EnumTableType.Outside || Data.TableType == EnumTableType.Room)
+                BroadcastSettlementMsgAsync();
+            else if (Data.TableType == EnumTableType.CFTable)
+                BroadcastCoffeeSettlementMsgAsyc();
 
             InfoLog.Instance.I("开始打印结账单...");
             ReportPrintHelper.PrintSettlementReport(Data.OrderId, Globals.UserInfo.UserName);
@@ -1668,6 +1769,57 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             InfoLog.Instance.I("结束整个结账流程，关闭窗口。");
             DosomethingAfterSettlement();
             return null;
+        }
+
+        /// <summary>
+        /// 异步发送结算广播消息。
+        /// </summary>
+        private void BroadcastSettlementMsgAsync()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                InfoLog.Instance.I("广播结算消息给PAD...");
+                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Pad, Data.OrderId);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Pad);
+
+                InfoLog.Instance.I("广播结算指令给手环...");
+                var msg = string.Format("{0}|{1}|{2}", Data.WaiterId, Data.TableName, Data.OrderId);
+                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
+            });
+        }
+
+        /// <summary>
+        /// 异步发送咖啡模式结账广播消息。
+        /// </summary>
+        private void BroadcastCoffeeSettlementMsgAsyc()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
+                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
+            });
+        }
+
+        /// <summary>
+        /// 异步发送清台广播消息。
+        /// </summary>
+        private void BroadcastClearTableMsgAsync()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
+                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
+                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播手环结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
+            });
         }
 
         /// <summary>
@@ -1702,6 +1854,90 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             return new Tuple<bool, object>(true, null);
         }
 
+        private object BackAllDishProcess(object param)
+        {
+            InfoLog.Instance.I("开始桌台{0}整桌退菜...", Data.TableNo);
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            return service.BackAllDish(Data.OrderId, Data.TableName, Globals.UserInfo.UserName);
+        }
+
+        protected virtual Tuple<bool, object> BackAllDishComplete(object arg)
+        {
+            var result = (string)arg;
+            if (!string.IsNullOrEmpty(result))
+            {
+                var msg = string.Format("桌台{0}整桌退菜失败：{1}", Data.TableNo, result);
+                ErrLog.Instance.E(msg);
+                MessageDialog.Warning(msg, OwnerWindow);
+                BackAllDishFailedProcess();
+                return null;
+            }
+
+            BackAllDishSuccessProcess();
+            InfoLog.Instance.I("桌台{0}整桌退菜成功：{1}", Data.TableNo, result);
+            return new Tuple<bool, object>(true, null);
+        }
+
+        /// <summary>
+        /// 咖啡模式清台执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object ClearCoffeeTableProcess(object param)
+        {
+            InfoLog.Instance.I("开始咖啡模式清台...");
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            if (!Data.HasBeenPaied && Data.DishInfos.Any())//未结账且有菜品，则先整单退菜。
+            {
+                var result = (string)BackAllDishProcess(null);
+                if (!string.IsNullOrEmpty(result))
+                    return result;
+            }
+            return service.ClearTableCf(_tableInfo.TableName);
+        }
+
+        /// <summary>
+        /// 咖啡模式清台执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private void ClearCoffeeTableComplete(object param)
+        {
+            var result = (string)param;
+            if (!string.IsNullOrEmpty(result))
+            {
+                var msg = string.Format("咖啡模式清台失败“{0}", result);
+                ErrLog.Instance.E(msg);
+                MessageDialog.Warning(msg, OwnerWindow);
+                return;
+            }
+
+            BroadcastClearTableMsgAsync();
+            CloseWindow(true);
+        }
+
+        /// <summary>
+        /// 退菜失败的处理。
+        /// </summary>
+        protected virtual void BackAllDishFailedProcess()
+        {
+
+        }
+
+        /// <summary>
+        /// 退菜成功的处理。
+        /// </summary>
+        protected virtual void BackAllDishSuccessProcess()
+        {
+
+        }
+
         /// <summary>
         /// 获取餐台菜品信息执行方法。
         /// </summary>
@@ -1722,8 +1958,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (result.Item2 == null)
                 return "没有获取到该餐台的账单信息。";
 
-            Data = result.Item2;
-            MemberCardNo = Data.MemberNo;
+            OwnerWindow.Dispatcher.Invoke((Action)delegate
+            {
+                if (Data == null)
+                    Data = result.Item2;
+                else
+                    Data.CloneData(result.Item2);
+                MemberCardNo = Data.MemberNo;
+            });
 
             if (!string.IsNullOrEmpty(MemberCardNo))//走会员登录的流程。
             {
@@ -1932,22 +2174,49 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 取消
+        /// 清台的执行方法。
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        protected object CancelOrderProcess(object param)
+        private object ClearTableProcess(object param)
         {
-            InfoLog.Instance.I("开始取消账单...");
+            InfoLog.Instance.I("开始清台...");
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            return service.CancelOrder(_tableInfo.TableName);
+            return service.ClearTable(_tableInfo.TableName);
         }
 
-        protected virtual Tuple<bool, object> CancelOrderComplete(object param)
+        /// <summary>
+        /// 清台执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private Tuple<bool, object> ClearTableComplete(object param)
         {
+            var result = (string)param;
+            if (!string.IsNullOrEmpty(result))
+            {
+                var msg = string.Format("账单取消失败“{0}", result);
+                ErrLog.Instance.E(msg);
+                MessageDialog.Warning(msg, OwnerWindow);
+                return null;
+            }
+
+            InfoLog.Instance.I("取消账单完成。");
+            if (!Data.IsTakeoutTable)
+            {
+                ThreadPool.QueueUserWorkItem(t =>
+                {
+                    InfoLog.Instance.I("广播清台消息给PAD...");
+                    var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
+                    if (!string.IsNullOrEmpty(errMsg))
+                        ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
+                });
+            }
+            NotifyDialog.Notify("取消账单完成。", OwnerWindow.Owner);
+            CloseWindow(true);
             return null;
         }
 
@@ -2212,7 +2481,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 settlementInfo.Add(string.Format("找零：{0:f2}", ChargeAmount));
 
             //小费当前计算规则：只能从现金扣除，
-            if (Data.TipAmount > 0)//有小费金额的时候才计算小费实收。
+            if (HasTip && Data.TipAmount > 0)//有小费金额的时候才计算小费实收。
             {
                 var realyPayment = Data.PaymentAmount - Data.TipAmount;//真实的应收=明面行应收-小费金额。
                 var tipPayment = Data.TotalAlreadyPayment - realyPayment;//小费实付金额=付款总额-真实应收。
@@ -2390,6 +2659,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
         }
 
+        /// <summary>
+        /// 结算后的一些处理。
+        /// </summary>
         protected virtual void DosomethingAfterSettlement()
         {
 

@@ -10,21 +10,26 @@
         /// <summary>
         /// 结算指令（PAD）
         /// </summary>
-        Settlement2Pad = 1002,//结算指令广播给PAD。
+        Settlement2Pad = 1002,
 
         /// <summary>
         /// 清台指令。
         /// </summary>
-        ClearTable = 1005, //清台指令。
+        ClearTable = 1005, 
 
         /// <summary>
         /// 下单指令。
         /// </summary>
-        OrderDish = 2201,//下单指令。
+        OrderDish = 2201,
 
         /// <summary>
         /// 结算指令（手环）
         /// </summary>
-        Settlement2Wristband = 2002, //结算指令广播给手环
+        Settlement2Wristband = 2002, 
+
+        /// <summary>
+        /// 咖啡模式下结账指定（PAD）
+        /// </summary>
+        Settlement2PadCf = 2501,
     }
 }

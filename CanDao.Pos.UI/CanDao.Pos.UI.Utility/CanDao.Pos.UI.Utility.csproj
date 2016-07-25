@@ -99,7 +99,18 @@
     <Compile Include="CommonHelper.cs" />
     <Compile Include="CommonServiceHelper.cs" />
     <Compile Include="Controls\AllowMultSelectorControl.cs" />
+    <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
     <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
+    <Compile Include="ViewModel\SysPrinterListVm.cs" />
+    <Compile Include="View\NumInputWindow.xaml.cs">
+      <DependentUpon>NumInputWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PrinterErrorInfoWindow.xaml.cs">
+      <DependentUpon>PrinterErrorInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SelectCoffeeTakeoutTableWindow.xaml.cs">
+      <DependentUpon>SelectCoffeeTakeoutTableWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SetInvoiceAmountWindow.xaml.cs">
       <DependentUpon>SetInvoiceAmountWindow.xaml</DependentUpon>
     </Compile>
@@ -179,9 +190,6 @@
     <Compile Include="View\MenuFishPotSelectWindow.xaml.cs">
       <DependentUpon>MenuFishPotSelectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\NumberSelectorWindow.xaml.cs">
-      <DependentUpon>NumberSelectorWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\OfferTypeSelectWindow.xaml.cs">
       <DependentUpon>OfferTypeSelectWindow.xaml</DependentUpon>
     </Compile>
@@ -221,6 +229,9 @@
     <Compile Include="View\StatusControl.xaml.cs">
       <DependentUpon>StatusControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\SysPrinterList.xaml.cs">
+      <DependentUpon>SysPrinterList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\TasteSetControl.xaml.cs">
       <DependentUpon>TasteSetControl.xaml</DependentUpon>
     </Compile>
@@ -242,6 +253,18 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NumInputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PrinterErrorInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SelectCoffeeTakeoutTableWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -301,10 +324,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\NumberSelectorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\OfferTypeSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -354,6 +373,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\StatusControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SysPrinterList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

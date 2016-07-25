@@ -7,6 +7,11 @@ namespace CanDao.Pos.Common
 {
     public class WindowHelper
     {
+        /// <summary>
+        /// 当前有效窗体。
+        /// </summary>
+        public static Window CurActiveWindow { get; set; }
+
         public static DependencyObject FindVisualTreeRoot(DependencyObject initial)
         {
             DependencyObject current = initial;

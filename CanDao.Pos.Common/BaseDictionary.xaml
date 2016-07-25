@@ -3,12 +3,15 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Styles/Brushes.xaml"/>
         <ResourceDictionary Source="Styles/Button.xaml"/>
+        <ResourceDictionary Source="Styles/ButtonSpinner.xaml"/>
         <ResourceDictionary Source="Styles/Converter.xaml"/>
         <ResourceDictionary Source="Styles/CustomerDataTemplate.xaml"/>
         <ResourceDictionary Source="Styles/DataGrid.xaml"/>
         <ResourceDictionary Source="Styles/Images.xaml"/>
         <ResourceDictionary Source="Styles/ListBox.xaml"/>
+        <ResourceDictionary Source="Styles/RadioButton.xaml"/>
         <ResourceDictionary Source="Styles/TabControl.xaml"/>
+        <ResourceDictionary Source="Styles/ToggleButton.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="Grid">
@@ -18,74 +21,6 @@
     <Style TargetType="TextBlock">
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-    </Style>
-    
-    <Style x:Key="RbBtnStyle" TargetType="RadioButton">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="FontSize" Value="20"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="10,0,0,0"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type RadioButton}">
-                    <BulletDecorator Background="Transparent">
-                        <Border x:Name="bd"  HorizontalAlignment="Center" Background="White" CornerRadius="5">
-                            <Border.OpacityMask>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="Black" Offset="0"/>
-                                    <GradientStop Color="White" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.OpacityMask>
-                            <ContentPresenter Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                    </BulletDecorator>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="bd" Property="Background" Value="gray" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="false">
-                            <Setter TargetName="bd" Property="Background" Value="{x:Null}" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="true">
-                            <Setter TargetName="bd" Property="Background" Value="#FF606060" />
-                        </Trigger>
-
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="IsChecked" Value="False"/>
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="bd" Property="Background" Value="LawnGreen" />
-                        </MultiTrigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="ToggleButton" x:Key="DietTogBtnStyle">
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBg}"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="Gray" BorderThickness="1.5">
-                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource CanDaoPosColorSelected}"/>
-                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
     
 </ResourceDictionary>

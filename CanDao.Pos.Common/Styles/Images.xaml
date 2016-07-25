@@ -33,5 +33,6 @@
     <BitmapImage x:Key="CanDaoPosImageUp" UriSource="/CanDao.Pos.Common;component/Images/Up.png"/>
     <BitmapImage x:Key="CanDaoPosImageLeft" UriSource="/CanDao.Pos.Common;component/Images/Left.png"/>
     <BitmapImage x:Key="CanDaoPosImageRight" UriSource="/CanDao.Pos.Common;component/Images/Right.png"/>
+    <BitmapImage x:Key="CanDaoPosImageAlert" UriSource="/CanDao.Pos.Common;component/Images/Alert.png"/>
 
 </ResourceDictionary>

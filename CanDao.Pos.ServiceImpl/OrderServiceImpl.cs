@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
@@ -24,6 +25,21 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, TableFullInfo>("获取餐桌所有菜品信息接口地址为空。", null);
 
             List<string> param = new List<string> { tableName, userName };
+            return GetTableInfoProcess(addr, param);
+        }
+
+        public Tuple<string, TableFullInfo> GetTableDishInfoByOrderId(string orderId, string userName)
+        {
+            string addr = ServiceAddrCache.GetServiceAddr("GetTableDishInfoByOrderId");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, TableFullInfo>("获取餐桌所有菜品信息接口地址为空。", null);
+
+            List<string> param = new List<string> { orderId, userName };
+            return GetTableInfoProcess(addr, param);
+        }
+
+        private static Tuple<string, TableFullInfo> GetTableInfoProcess(string addr, List<string> param)
+        {
             var result = RestHttpHelper.HttpGet<GetOrderDishListResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, TableFullInfo>(result.Item1, null);
@@ -255,13 +271,33 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "菜品下单地址为空。";
 
+            var request = DataConverter.ToOrderDishRequest(orderId, tableNo, orderRemark, dishInfos);
+            return OrderDishProcess(addr, request);
+        }
+
+        public string OrderDishCf(string orderId, string tableNo, string orderRemark, List<OrderDishInfo> dishInfos)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("OrderDishCf");
+            if (string.IsNullOrEmpty(addr))
+                return "菜品下单地址为空。";
+
+            var request = DataConverter.ToOrderDishRequest(orderId, tableNo, orderRemark, dishInfos);
+            return OrderDishProcess(addr, request);
+        }
+
+        /// <summary>
+        /// 下单的执行方法。
+        /// </summary>
+        /// <param name="addr"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private static string OrderDishProcess(string addr, OrderDishRequest request)
+        {
             try
             {
-                var request = DataConverter.ToOrderDishRequest(orderId, tableNo, orderRemark, dishInfos);
-                var msg = request.ToJson();
-                InfoLog.Instance.I(msg);
+                InfoLog.Instance.I("下单的请求Json：{0}", request.ToJson());
                 var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                var enumResult = (EnumBookOrderResult) Convert.ToInt32(result.result);
+                var enumResult = (EnumBookOrderResult)Convert.ToInt32(result.result);
                 switch (enumResult)
                 {
                     case EnumBookOrderResult.Success:
@@ -271,7 +307,7 @@ namespace CanDao.Pos.ServiceImpl
                     case EnumBookOrderResult.DishUpdating:
                         return "菜品正在更新，请重启POS后再试。";
                     default:
-                        return "下单发生错误，请联系技术人员。";
+                        return string.Format("下单发生错误，{0}，请联系技术人员。", result.msg);
                 }
             }
             catch (Exception ex)
@@ -333,9 +369,24 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "获取结账地址为空。";
 
+            var request = DataConverter.ToPayBillRequest(orderId, userId, payInfos);
+            return PayTheBillProcess(addr, request);
+        }
+
+        public string PayTheBillCf(string orderId, string userId, List<BillPayInfo> payInfos)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("PayTheBillCf");
+            if (string.IsNullOrEmpty(addr))
+                return "获取结账地址为空。";
+
+            var request = DataConverter.ToPayBillRequest(orderId, userId, payInfos);
+            return PayTheBillProcess(addr, request);
+        }
+
+        private static string PayTheBillProcess(string addr, PayBillRequest request)
+        {
             try
             {
-                var request = DataConverter.ToPayBillRequest(orderId, userId, payInfos);
                 var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
                 return result.IsSuccess ? null : "结账失败";
             }
@@ -446,7 +497,25 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        public string CancelOrder(string tableNo)
+        public string ClearTable(string tableNo)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("ClearTable");
+            if (string.IsNullOrEmpty(addr))
+                return "清台的地址为空。";
+
+            try
+            {
+                var request = new ClearTableRequest { tableNo = tableNo };
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                return !response.IsSuccess ? "清台失败。" : null;
+            }
+            catch (Exception ex)
+            {
+                return string.Format("清台失败：{0}", ex.MyMessage());
+            }
+        }
+
+        public string CancelOrder(string userId, string orderId, string tableNo)
         {
             var addr = ServiceAddrCache.GetServiceAddr("CancelOrder");
             if (string.IsNullOrEmpty(addr))
@@ -454,13 +523,34 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new CancelOrderRequest { tableNo = tableNo };
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return !response.IsSuccess ? "取消账单失败。" : null;
+                var request = new List<string> { userId, orderId, tableNo };
+                var response = RestHttpHelper.HttpGet<RestBaseResponse>(addr, request);
+                if (!string.IsNullOrEmpty(response.Item1))
+                    return response.Item1;
+
+                return !response.Item2.IsSuccess ? "取消账单失败。" : null;
             }
             catch (Exception ex)
             {
                 return string.Format("取消账单失败：{0}", ex.MyMessage());
+            }
+        }
+
+        public string ClearTableCf(string tableNo)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("ClearTableCf");
+            if (string.IsNullOrEmpty(addr))
+                return "清台的地址为空。";
+
+            try
+            {
+                var request = new ClearTableRequest { tableNo = tableNo };
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                return !response.IsSuccess ? "清台失败。" : null;
+            }
+            catch (Exception ex)
+            {
+                return string.Format("清台失败：{0}", ex.MyMessage());
             }
         }
 
@@ -506,6 +596,30 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception ex)
             {
                 return string.Format("小费结算失败：{0}", ex.MyMessage());
+            }
+        }
+
+        public string UpdateDishWeight(string tableNo, string dishId, string primaryKey, decimal dishNum)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("UpdateDishWeigh");
+            if (string.IsNullOrEmpty(addr))
+                return "菜品称重地址为空。";
+
+            try
+            {
+                var request = new UpdateDishWeightRequest
+                {
+                    tableNo = tableNo,
+                    dishid = dishId,
+                    dishnum = dishNum.ToString(CultureInfo.InvariantCulture),
+                    primarykey = primaryKey,
+                };
+                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                return result.IsSuccess ? null : string.IsNullOrEmpty(result.msg) ? "更新菜品称重数量失败。" : string.Format("更新菜品称重数量失败：{0}", result.msg);
+            }
+            catch (Exception ex)
+            {
+                return string.Format("更新菜品称重数量失败：{0}", ex.MyMessage());
             }
         }
     }

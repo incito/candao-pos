@@ -3,7 +3,7 @@
     /// <summary>
     /// 取消账单的请求类。
     /// </summary>
-    public class CancelOrderRequest
+    public class ClearTableRequest
     {
         /// <summary>
         /// 桌台号。

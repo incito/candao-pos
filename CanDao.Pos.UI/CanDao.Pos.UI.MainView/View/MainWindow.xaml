@@ -4,11 +4,19 @@
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                         xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
-                        CloseBtnText="退出系统" Height="768" Width="1024" WindowState="Maximized"
-                        Closing="MainWindow_OnClosing" x:Name="MainWnd">
+                        xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
+                        CloseBtnText="退出系统" Height="768" Width="1024"
+                        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+                        x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding LoadCmd}"/>
+            <i:InvokeCommandAction Command="{Binding WindowLoadCmd}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding WindowClosedCmd}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <common:ExInvokeCommandAction Command="{Binding WindowClosingCmd}" CommandParameter="{Binding ElementName=MainWnd}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <controls:PosBaseWindow.Resources>
@@ -27,57 +35,95 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ItemsControl ItemsSource="{Binding Tables}" Margin="3">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border x:Name="Bd" CornerRadius="2" Width="120" Height="70" Margin="5"
-                                Background="{StaticResource CanDaoPosColorFg}"
-                                IsEnabled="{Binding TableEnable}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseDown">
-                                <i:InvokeCommandAction Command="{Binding DataContext.SelectTableCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <Grid Margin="3">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding TableName}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding PeopleNumber, StringFormat={}{0}人桌}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Grid x:Name="TbInfo" Grid.Row="2" Visibility="Collapsed">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{Binding DinnerDuration}" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <Border Grid.Column="1" Width="2" VerticalAlignment="Stretch" Background="Black"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Amount}" FontSize="16" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                            </Grid>
-                        </Grid>
-                    </Border>
-                    <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding TableEnable}" Value="False">
-                            <Setter TargetName="Bd" Property="Background" Value="LightGreen"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding TableStatus}" Value="Dinner">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource CanDaoPosColorSelected}"/>
-                            <Setter TargetName="TbInfo" Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <controls:GroupSelector x:Name="GsTables" ItemsSource="{Binding Tables}" ItemCountEachGroup="30">
+            <controls:GroupSelector.Template>
+                <ControlTemplate TargetType="controls:GroupSelector">
+                    <ItemsControl x:Name="PART_Selector" 
+                                  ItemsSource="{TemplateBinding GroupedItemsSource}"
+                                  Margin="3"
+                                  Focusable="False">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border x:Name="Bd" CornerRadius="2" Width="180" Height="85" Margin="5"
+                                        BorderBrush="{StaticResource CanDaoPosColorFg}" BorderThickness="2"
+                                        Background="{StaticResource CanDaoPosColorFg}"
+                                        IsEnabled="{Binding TableEnable}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDown">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.SelectTableCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="{Binding TableName}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Row="1" Text="{Binding PeopleNumber, StringFormat={}{0}人桌}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Grid x:Name="TbInfo" Grid.Row="2" Visibility="Collapsed">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding DinnerDuration}" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Amount, StringFormat=¥{0}}" FontSize="16" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        </Grid>
 
-        <Grid Grid.Row="1" Margin="10">
+                                        <Polygon  x:Name="BtnPolygon"
+                                                  Grid.Row="0" Grid.RowSpan="3" Grid.Column="0"
+                                                  Points="90,0 120,0 120,30" HorizontalAlignment="Right"
+                                                  Fill="{StaticResource CanDaoPosColorFg}"/>
+                                        <TextBlock x:Name="TbStatus"
+                                                   Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" 
+                                                   Foreground="{StaticResource CanDaoPosColorFg}"
+                                                   Visibility="Collapsed"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                                                   FontSize="12"
+                                                   Margin="0,2,2,0"/>
+                                    </Grid>
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding TableEnable}" Value="False">
+                                        <Setter TargetName="Bd" Property="Background" Value="LightGreen"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TableStatus}" Value="Dinner">
+                                        <Setter TargetName="BtnPolygon" Property="Fill" Value="{StaticResource CanDaoPosColorSelected}"/>
+                                        <Setter TargetName="TbStatus" Property="Text" Value="开"/>
+                                        <Setter TargetName="TbStatus" Property="Visibility" Value="Visible"/>
+                                        <Setter TargetName="TbInfo" Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TableType}" Value="CFTable">
+                                        <Setter TargetName="Bd" Property="BorderBrush" Value="Blue"/>
+                                        <!--<Setter TargetName="BtnPolygon" Property="Fill" Value="{StaticResource CanDaoPosColorSelected}"/>
+                                        <Setter TargetName="TbStatus" Property="Text" Value="咖"/>
+                                        <Setter TargetName="TbStatus" Property="Visibility" Value="Visible"/>-->
+                                        <!--<Setter TargetName="Bd" Property="IsEnabled" Value="False"/>-->
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ControlTemplate>
+            </controls:GroupSelector.Template>
+        </controls:GroupSelector>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding GroupCount,ElementName=GsTables, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
+            <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding OperCmd}" CommandParameter="PreGroup"/>
+            <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsTables}"/>
+            <TextBlock Text="/"/>
+            <TextBlock Text="{Binding GroupCount, ElementName=GsTables}"/>
+            <Button Style="{StaticResource BtnRightStyle}" Command="{Binding OperCmd}" CommandParameter="NextGroup"/>
+        </StackPanel>
+        
+        <Grid Grid.Row="2" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -99,10 +145,14 @@
                 <Button Content="清机" Command="{Binding OperCmd}" CommandParameter="Clearner" Width="100"/>
                 <Button Content="结业" Command="{Binding OperCmd}" CommandParameter="EndWork" Width="100"/>
                 <Button Content="报表" Command="{Binding OperCmd}" CommandParameter="Report" Width="100"/>
+                <Border BorderBrush="{Binding HasPrinterError, Converter={StaticResource SysBorderBrushCvt}}"
+                        BorderThickness="2" Width="100">
+                    <Button Content="系统" Command="{Binding OperCmd}" CommandParameter="System"/>
+                </Border>
             </StackPanel>
 
         </Grid>
-        
-        <view:StatusControl Grid.Row="2" Height="30"/>
+
+        <view:StatusControl Grid.Row="3" Height="30"/>
     </Grid>
 </controls:PosBaseWindow>

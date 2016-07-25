@@ -83,6 +83,7 @@
     <Compile Include="Enum\EnumOpenTableResult.cs" />
     <Compile Include="Enum\EnumOrderType.cs" />
     <Compile Include="Enum\EnumPrintOrderType.cs" />
+    <Compile Include="Enum\EnumPrintStatus.cs" />
     <Compile Include="Enum\EnumQueryOrderStatus.cs" />
     <Compile Include="Enum\EnumStatisticsPeriodsType.cs" />
     <Compile Include="GiftDishInfo.cs" />
@@ -98,13 +99,14 @@
     <Compile Include="PrintPayDetail.cs" />
     <Compile Include="PrintOrderDishInfo.cs" />
     <Compile Include="PrintOrderInfo.cs" />
+    <Compile Include="PrintStatusInfo.cs" />
     <Compile Include="QueryOrderInfo.cs" />
     <Compile Include="ReportDataBase.cs" />
     <Compile Include="ReportStatisticInfo.cs" />
     <Compile Include="Request\AddOrderMemberSaleInfoRequest.cs" />
     <Compile Include="Request\AntiSettlementOrderRequest.cs" />
     <Compile Include="Request\BackAllDishRequest.cs" />
-    <Compile Include="Request\CancelOrderRequest.cs" />
+    <Compile Include="Request\ClearTableRequest.cs" />
     <Compile Include="Request\CanDaoMemberBaseRequest.cs" />
     <Compile Include="Request\CanDaoMemberCheckMobileRepeatRequest.cs" />
     <Compile Include="Request\CanDaoMemberLoginLogoutRequest.cs" />
@@ -117,6 +119,7 @@
     <Compile Include="Request\CanDaoVipQueryRequest.cs" />
     <Compile Include="Request\GetInvoiceInfoRequest.cs" />
     <Compile Include="Request\GetOrderMemberInfoRequest.cs" />
+    <Compile Include="Request\GetTableByTypeRequest.cs" />
     <Compile Include="Request\SendVerifyCodeRequest.cs" />
     <Compile Include="Request\SetCouponFavorRequest.cs" />
     <Compile Include="Request\TipSettlementRequest.cs" />
@@ -132,6 +135,7 @@
     <Compile Include="Response\GetFishPotDishResponse.cs" />
     <Compile Include="Response\GetMemberPayInfoResponse.cs" />
     <Compile Include="Response\GetOrderMemberInfoResponse.cs" />
+    <Compile Include="Response\GetPrinterStatusResponse.cs" />
     <Compile Include="Response\GetPrintOrderInfoResponse.cs" />
     <Compile Include="Response\GetReportStatisticInfoBase.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />

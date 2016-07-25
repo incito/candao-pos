@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
-using DevExpress.Xpf.Grid;
 
 namespace CanDao.Pos.Common.TemplateSelector
 {

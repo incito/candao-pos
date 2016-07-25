@@ -4,12 +4,10 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
-using DevExpress.Xpf.Editors.Helpers;
 
 namespace CanDao.Pos.ReportPrint
 {
@@ -53,7 +51,12 @@ namespace CanDao.Pos.ReportPrint
 
                 var couponDb = CreateCouponsDb();
                 if (tableFullInfo.UsedCouponInfos != null && tableFullInfo.UsedCouponInfos.Any())
-                    tableFullInfo.UsedCouponInfos.ForEach(t => AddObject2DataTable(couponDb, t));
+                {
+                    foreach (var usedCouponInfo in tableFullInfo.UsedCouponInfos)
+                    {
+                        AddObject2DataTable(couponDb, usedCouponInfo);
+                    }
+                }
 
                 var dic = GetPresettlementDic(tableFullInfo, result.Item2.OrderInfo.FreeAmount);
                 var settlementDb = GenerateSettlementDb(dic);

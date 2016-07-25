@@ -86,7 +86,19 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 该餐桌订单号。
         /// </summary>
-        public string OrderId { get; set; }
+        private string _orderId;
+        /// <summary>
+        /// 该餐桌订单号。
+        /// </summary>
+        public string OrderId
+        {
+            get { return _orderId; }
+            set
+            {
+                _orderId = value;
+                RaisePropertyChanged("OrderId");
+            }
+        }
 
         public decimal MinPrice { get; set; }
 
@@ -121,6 +133,7 @@ namespace CanDao.Pos.Model
         /// 应收金额。
         /// </summary>
         private decimal? _amount;
+
         /// <summary>
         /// 应收金额。
         /// </summary>
@@ -138,6 +151,22 @@ namespace CanDao.Pos.Model
         /// 这个餐桌的服务员id。
         /// </summary>
         public string WaiterId { get; set; }
+
+        /// <summary>
+        /// 获取是否是咖啡台。
+        /// </summary>
+        public bool IsCoffeeTable
+        {
+            get { return TableType == EnumTableType.CFTable; }
+        }
+
+        /// <summary>
+        /// 是否是外卖台。
+        /// </summary>
+        public bool IsTakeoutTable
+        {
+            get { return TableType == EnumTableType.CFTakeout || TableType == EnumTableType.Takeout; }
+        }
 
         public void CloneData(TableInfo srcInfo)
         {

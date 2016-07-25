@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <!--Java后台服务地址-->
   <JavaServer value="10.66.21.5:8080"/>
@@ -13,7 +13,7 @@
   <!--分店电话-->
   <BranchTelephone value="02866668888"/>
   <!--外卖台名称-->
-  <TakeoutTableName value="外卖105"/>
+  <TakeoutTableName value="JLOut"/>
   <!--Pos编号-->
   <PosId value="001"/>
   <!--钱箱IP地址-->

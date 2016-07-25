@@ -59,6 +59,7 @@
     <Reference Include="JunLan.Common.Base">
       <HintPath>..\..\Bin\Lib\JunLan.Common.Base.dll</HintPath>
       <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -116,6 +117,9 @@
     </Compile>
     <Compile Include="View\RestaurantOpeningWindow.xaml.cs">
       <DependentUpon>RestaurantOpeningWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SystemSettingWindow.xaml.cs">
+      <DependentUpon>SystemSettingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TableOperWindow.xaml.cs">
       <DependentUpon>TableOperWindow.xaml</DependentUpon>
@@ -185,6 +189,10 @@
     <Page Include="View\RestaurantOpeningWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SystemSettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\TableOperWindow.xaml">
       <SubType>Designer</SubType>

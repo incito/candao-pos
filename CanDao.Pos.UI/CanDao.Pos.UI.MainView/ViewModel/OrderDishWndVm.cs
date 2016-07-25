@@ -242,6 +242,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Remark":
                     RemarkSelectedDish();
                     break;
+                case "ClearFilter":
+                    FilterMenuGroup = null;
+                    break;
                 case "OrderDishPreGroup":
                     OwnerWindow.DishGroupSelector.PreviousGroup();
                     break;
@@ -359,7 +362,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 });
             }
 
-
+            InfoLog.Instance.I("开始执行下单任务...");
+            if (Data.TableType == EnumTableType.CFTable || Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout) //咖啡台和外卖模式都走咖啡模式的下单。
+                return service.OrderDishCf(Data.OrderId, Data.TableName, OrderRemark, OrderDishInfos.ToList());
             return service.OrderDish(Data.OrderId, Data.TableName, OrderRemark, OrderDishInfos.ToList());
         }
 
@@ -372,12 +377,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var result = (string)obj;
             if (!string.IsNullOrEmpty(result))
             {
+                ErrLog.Instance.E(result);
                 MessageDialog.Warning(result, OwnerWindow);
                 return;
             }
 
             var type = (OrderType == EnumOrderType.Free) ? "赠菜" : "下单";
-            NotifyDialog.Notify(string.Format("桌号\"{0}\"{1}成功。", Data.TableName, type), OwnerWindow.Owner);
+            var msg = string.Format("桌号\"{0}\"{1}成功。", Data.TableName, type);
+            InfoLog.Instance.I(msg);
+            NotifyDialog.Notify(msg, OwnerWindow.Owner);
             CommonHelper.BroadcastMessage(EnumBroadcastMsgType.OrderDish, Data.OrderId);
             OwnerWindow.DialogResult = true;
         }
