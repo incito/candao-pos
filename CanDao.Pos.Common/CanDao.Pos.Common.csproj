@@ -152,7 +152,6 @@
     <Compile Include="Controls\NewControl\UcPageList.xaml.cs">
       <DependentUpon>UcPageList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PosBaseWindow.cs" />
     <Compile Include="Controls\WatermarkTextBox\Implementation\WatermarkTextBox.cs" />
     <Compile Include="Converter\BooleanRevertConverter.cs" />
     <Compile Include="Converter\BooleanToCollapsedConverter.cs" />
