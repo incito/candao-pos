@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
+using CanDao.Pos.Model.Reports;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
 
@@ -187,6 +189,47 @@ namespace CanDao.Pos.IService
         /// </summary>
         /// <returns></returns>
         Tuple<string, List<PrintStatusInfo>> GetPrinterStatusInfo();
+
+        /// <summary>
+        /// 获取营业明细（品类、金额）
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        Tuple<string, List<MCategory>> GetItemForList(string beginTime, string endTime);
+
+        /// <summary>
+        /// 获取营业明细(团购券)
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        Tuple<string, List<MHangingMoney>> GetGrouponForList(string beginTime, string endTime);
+
+        /// <summary>
+        /// 获取营业明细
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        Tuple<string, MBusinessDataDetail> GetDayReportList(string beginTime, string endTime, string userName);
+
+        /// <summary>
+        /// 获取营业明细（获取挂账单位）
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        Tuple<string, List<MHangingMoney>> GetGzdwForList(string beginTime, string endTime);
+
+        /// <summary>
+        /// 获取小费总额
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        Tuple<string, string> GetTipMoney(string beginTime, string endTime);
+
 
     }
 }

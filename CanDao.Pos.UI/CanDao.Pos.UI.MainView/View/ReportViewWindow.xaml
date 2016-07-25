@@ -35,5 +35,13 @@
                 <view:ReportTipInfoControl/>
             </TabItem.Content>
         </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Text="营业数据明细" FontSize="20" FontWeight="Bold" Height="40"/>
+            </TabItem.Header>
+            <TabItem.Content>
+                <view:UcBusinessDataDetailsView/>
+            </TabItem.Content>
+        </TabItem>
     </TabControl>
 </controls:PosBaseWindow>
