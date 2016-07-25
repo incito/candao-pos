@@ -21,7 +21,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
-                <ResourceDictionary Source="/CanDao.Pos.UI.MainView;component/MyDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:PosBaseWindow.Resources>
@@ -409,21 +408,31 @@
             </TabControl>
             <view:InputHelperLetterControl Grid.Row="3"  HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="300" Margin="0,35,0,0"/>
 
-            <Border Grid.Row="4" Background="{Binding Data.HasBeenPaied, Converter={StaticResource OrderStatus2ColorCvt}}" Height="70">
-                <Grid Margin="5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding SettlementInfo}" TextWrapping="Wrap" FontSize="18" VerticalAlignment="Top"/>
-                    <Button Grid.Row="0" Grid.Column="1" Content="清台" Width="60" Command="{Binding OperCmd}" CommandParameter="ClearTable" Visibility="{Binding Data.IsCoffeeTable, Converter={StaticResource Bool2VisibilityCvt}}"/>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Data.OrderInvoiceTitle, StringFormat=开发票：{0}}" VerticalAlignment="Bottom" FontSize="12" Visibility="{Binding Data.OrderInvoiceTitle, Converter={StaticResource Strinig2VisibleCvt}}"/>
-                </Grid>
-            </Border>
+            <Grid Grid.Row="4" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border x:Name="BdSettInfo" 
+                        CornerRadius="3"
+                        Background="{StaticResource CanDaoPosColorSelected}"
+                        TextBlock.Foreground="{StaticResource CanDaoPosColorFg}"
+                        MinHeight="40" MaxHeight="80">
+                    <TextBlock Text="{Binding SettlementInfo}"
+                               MaxWidth="{Binding ActualWidth, ElementName=BdSettInfo}"
+                               TextWrapping="Wrap" FontSize="18" 
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                </Border>
+                <Button Grid.Row="0" Grid.Column="1"
+                        Content="清台" Width="60" 
+                        Command="{Binding OperCmd}" CommandParameter="ClearTable"
+                        Visibility="{Binding Data.IsCoffeeTable, Converter={StaticResource Bool2VisibilityCvt}}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Data.OrderInvoiceTitle, StringFormat=开发票：{0}}" VerticalAlignment="Bottom" FontSize="12" Visibility="{Binding Data.OrderInvoiceTitle, Converter={StaticResource Strinig2VisibleCvt}}"/>
+            </Grid>
         </Grid>
     </Grid>
 </controls:PosBaseWindow>

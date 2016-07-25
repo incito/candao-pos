@@ -20,8 +20,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (IsInDesignMode)
                 return;
 
-            Data = new TableFullInfo { TableName = _tableInfo.TableName };//为了在左上角显示出桌台名称。
-
             if (_tableInfo.TableStatus == EnumTableStatus.Idle)
             {
                 if (WindowHelper.ShowDialog(new OpenTableWindow(_tableInfo), OwnerWindow))

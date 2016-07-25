@@ -74,7 +74,7 @@ namespace CanDao.Pos.IService
             try
             {
                 ServiceInterfaceInfo info = _serviceInterfaceDic[interfaceName];
-                AllLog.Instance.D("CreateObject {0} : {1} - {2}", info.Name, info.DllName, info.ClassName);
+                InfoLog.Instance.D("CreateObject {0} : {1} - {2}", info.Name, info.DllName, info.ClassName);
 
                 string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, info.DllName);
                 Assembly assembly = Assembly.LoadFrom(dllPath);
@@ -112,7 +112,7 @@ namespace CanDao.Pos.IService
             string file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, CfgFile);
             if (!File.Exists(file))
             {
-                AllLog.Instance.F("服务接口配置文件不存在！{0}", file);
+                ErrLog.Instance.F("服务接口配置文件不存在！{0}", file);
                 return;
             }
 

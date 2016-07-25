@@ -96,13 +96,7 @@ namespace CanDao.Pos.UI.Utility.Controls
 
         // Using a DependencyProperty as the backing store for OtherInfo.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OtherInfoProperty =
-            DependencyProperty.Register("OtherInfo", typeof(string), typeof(AllowMultSelectorControl), new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnOtherInfoChanged, null, false, UpdateSourceTrigger.PropertyChanged));
-
-        private static void OnOtherInfoChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var ctrl = (AllowMultSelectorControl)d;
-            AllLog.Instance.E(ctrl.ToString());
-        }
+            DependencyProperty.Register("OtherInfo", typeof(string), typeof(AllowMultSelectorControl), new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, null, false, UpdateSourceTrigger.PropertyChanged));
 
         public override void OnApplyTemplate()
         {

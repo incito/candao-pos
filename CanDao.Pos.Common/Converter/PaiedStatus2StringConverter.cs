@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace CanDao.Pos.UI.MainView.Converter
+namespace CanDao.Pos.Common.Converter
 {
     /// <summary>
     /// 支付状态转成字符串。

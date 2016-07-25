@@ -78,6 +78,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             InitCouponLongPressTimer();
             SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
             _curOddModel = Globals.OddModel;
+            Data = new TableFullInfo();
+            Data.CloneDataFromTableInfo(tableInfo);
         }
 
         #endregion

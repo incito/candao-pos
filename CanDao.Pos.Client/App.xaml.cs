@@ -68,7 +68,9 @@ namespace CanDao.Pos.Client
             }
             catch (Exception)
             {
-                MessageDialog.Warning("不可恢复的WPF窗体线程异常，应用程序将退出！");
+                var msg = "不可恢复的WPF窗体线程异常，应用程序将退出！";
+                ErrLog.Instance.F(msg);
+                MessageDialog.Warning(msg);
             }
         }
 
@@ -250,18 +252,18 @@ namespace CanDao.Pos.Client
         {
             ThreadPool.QueueUserWorkItem(t =>
             {
-                AllLog.Instance.I("异步获取忌口设置...");
+                InfoLog.Instance.I("异步获取忌口设置...");
                 var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
                 if (service == null)
                 {
-                    AllLog.Instance.E("创建IRestaurantService服务失败。");
+                    ErrLog.Instance.E("创建IRestaurantService服务失败。");
                     return;
                 }
 
                 var result = service.GetSystemSetData(EnumSystemDataType.JI_KOU_SPECIAL);
-                AllLog.Instance.I("异步获取忌口设置完成。");
+                InfoLog.Instance.I("异步获取忌口设置完成。");
                 if (!string.IsNullOrEmpty(result.Item1))
-                    AllLog.Instance.E("异步获取忌口设置信息时错误：{0}", result.Item1);
+                    ErrLog.Instance.E("异步获取忌口设置信息时错误：{0}", result.Item1);
                 else
                 {
                     lock (_syncObj)
