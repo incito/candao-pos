@@ -552,7 +552,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void GetAllTableInfoesAsync()
         {
-            TaskService.Start(null, GetAllTableInfoProcess, GetAllTableInfoComplete, "加载所有餐桌信息...");
+            var info = Tables.Any() ? "" : "加载所有餐桌信息...";
+            TaskService.Start(null, GetAllTableInfoProcess, GetAllTableInfoComplete, info);
         }
 
         /// <summary>

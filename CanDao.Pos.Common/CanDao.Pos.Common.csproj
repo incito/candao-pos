@@ -147,6 +147,12 @@
     <Compile Include="Controls\GroupSelector\Implementation\GroupSelector.cs" />
     <Compile Include="Controls\NewControl\CtDigitalTextBox.cs" />
     <Compile Include="Controls\NewControl\CtEnterTextBox.cs" />
+    <Compile Include="Controls\NewControl\CtTextChange.xaml.cs">
+      <DependentUpon>CtTextChange.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NewControl\WTimeSelect.xaml.cs">
+      <DependentUpon>WTimeSelect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PosBaseWindow\Implementation\PosBaseWindow.cs" />
     <Compile Include="Controls\PosMsgWindow\Implementation\PosMsgWindow.cs" />
     <Compile Include="Controls\NewControl\UcPageList.xaml.cs">
@@ -286,7 +292,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\NewControl\CtTextChange.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\NewControl\UcPageList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\NewControl\WTimeSelect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
