@@ -757,8 +757,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     ClearCoffeeTable();
                     break;
                 case "BackAllDish":
-                    var wf = GenerateBackAllDishWf();
-                    WorkFlowService.Start(null, wf);
+                    BackAllOrderDish();
                     break;
             }
         }
@@ -1216,6 +1215,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var authorizeWnd = new AuthorizationWindow(EnumRightType.BackDish);
             if (WindowHelper.ShowDialog(authorizeWnd, OwnerWindow))
                 TaskService.Start(numWnd.InputNum, GetBackDishInfoProcess, GetBackDishInfoComplete, "获取退菜信息...");
+        }
+
+        /// <summary>
+        /// 整单退菜。
+        /// </summary>
+        private void BackAllOrderDish()
+        {
+            var authorizeWnd = new AuthorizationWindow(EnumRightType.BackDish);
+            if (WindowHelper.ShowDialog(authorizeWnd, OwnerWindow))
+                WorkFlowService.Start(null, GenerateBackAllDishWf());
         }
 
         /// <summary>
