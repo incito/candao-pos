@@ -75,7 +75,7 @@ namespace CanDao.Pos.IService
         Tuple<string, decimal> CalcDiscountAmount(CalcDiscountAmountRequest request);
 
         /// <summary>
-        /// 保存优惠券。
+        /// 保存优惠券使用列表。
         /// </summary>
         /// <param name="orderId">订单号。</param>
         /// <param name="userName">当前登录用户Id。</param>

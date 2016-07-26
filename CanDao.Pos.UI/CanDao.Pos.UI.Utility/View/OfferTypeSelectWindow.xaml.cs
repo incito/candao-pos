@@ -1,4 +1,6 @@
-﻿using CanDao.Pos.Model.Enum;
+﻿using System.Windows;
+using CanDao.Pos.Common;
+using CanDao.Pos.Model.Enum;
 using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility.View
@@ -11,10 +13,15 @@ namespace CanDao.Pos.UI.Utility.View
         public OfferTypeSelectWindow(EnumOfferType allowOffType)
         {
             InitializeComponent();
-            DataContext = new OfferTypeSelectWndVm(allowOffType)
-            {
-                OwnerWindow = this,
-            };
+            DataContext = new OfferTypeSelectWndVm(allowOffType) { OwnerWindow = this };
+        }
+
+        /// <summary>
+        /// 选中的优惠类型，优免或折扣。
+        /// </summary>
+        public EnumOfferType SelectedOfferType
+        {
+            get { return ((OfferTypeSelectWndVm)DataContext).SelectedOfferType; }
         }
 
         /// <summary>
@@ -31,6 +38,18 @@ namespace CanDao.Pos.UI.Utility.View
         public decimal Amount
         {
             get { return ((OfferTypeSelectWndVm)DataContext).Amount; }
+        }
+
+        protected override void CloseBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
+        {
+            var msg = ((OfferTypeSelectWndVm)DataContext).CheckInputValid();
+            if (!string.IsNullOrEmpty(msg))
+            {
+                MessageDialog.Warning(msg);
+                return;
+            }
+
+            base.CloseBtnOnClick(sender, routedEventArgs);
         }
     }
 }

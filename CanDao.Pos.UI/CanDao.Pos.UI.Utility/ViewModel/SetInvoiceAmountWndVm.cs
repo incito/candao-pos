@@ -11,6 +11,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public SetInvoiceAmountWndVm(TableFullInfo tableFullInfo)
         {
             Data = tableFullInfo;
+            InvoiceAmount = Data.TotalAmount;
         }
 
         public TableFullInfo Data { get; set; }

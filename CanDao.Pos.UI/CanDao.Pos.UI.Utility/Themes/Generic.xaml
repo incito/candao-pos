@@ -10,7 +10,7 @@
         <Setter Property="ItemViewerTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <ToggleButton Content="{Binding Name}" IsChecked="{Binding IsSelected}" Style="{StaticResource DietTogBtnStyle}" Margin="5" FontSize="20" MinWidth="70" MinHeight="35"/>
+                    <ToggleButton Content="{Binding Name}" IsChecked="{Binding IsSelected}" Margin="5" FontSize="20" MinWidth="70" MinHeight="35"/>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -18,7 +18,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type view:AllowMultSelectorControl}">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"
+                                   Background="{StaticResource CanDaoPosColorSelected}"
+                                   Foreground="{StaticResource CanDaoPosColorFg}"/>
                         <ItemsControl ItemsSource="{TemplateBinding ItemsSource}"
                                       MaxWidth="{TemplateBinding ActualWidth}"
                                       ItemTemplate="{TemplateBinding ItemViewerTemplate}"

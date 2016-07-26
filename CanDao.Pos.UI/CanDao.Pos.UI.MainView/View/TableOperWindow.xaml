@@ -431,7 +431,11 @@
                         Content="清台" Width="60" 
                         Command="{Binding OperCmd}" CommandParameter="ClearTable"
                         Visibility="{Binding Data.IsCoffeeTable, Converter={StaticResource Bool2VisibilityCvt}}"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Data.OrderInvoiceTitle, StringFormat=开发票：{0}}" VerticalAlignment="Bottom" FontSize="12" Visibility="{Binding Data.OrderInvoiceTitle, Converter={StaticResource Strinig2VisibleCvt}}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                           Text="{Binding Data.OrderInvoiceTitle, StringFormat=开发票：{0}}"
+                           VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                           FontSize="16" FontWeight="Bold"
+                           Visibility="{Binding Data.OrderInvoiceTitle, Converter={StaticResource Strinig2VisibleCvt}}"/>
             </Grid>
         </Grid>
     </Grid>

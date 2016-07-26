@@ -31,9 +31,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding TableName, StringFormat=桌号：{0}}" FontWeight="Bold" FontSize="24" Foreground="{StaticResource CanDaoPosColorSelected }"/>
-            <toolkit:WatermarkTextBox Grid.Row="1" Grid.Column="0" Text="{Binding WaiterId}" Watermark="服务员编号：" VerticalContentAlignment="Center" Height="30" Margin="0,5"/>
-            <toolkit:WatermarkTextBox Grid.Row="2" Grid.Column="0" Text="{Binding MaleCustomer, UpdateSourceTrigger=PropertyChanged}" Watermark="就餐人数（男）：" VerticalContentAlignment="Center" Height="30" Margin="0,5"/>
-            <toolkit:WatermarkTextBox Grid.Row="3" Grid.Column="0" Text="{Binding FemaleCustomer, UpdateSourceTrigger=PropertyChanged}" Watermark="就餐人数（女）：" VerticalContentAlignment="Center" Height="30" Margin="0,5"/>
+            <controls:WatermarkTextBox Grid.Row="1" Grid.Column="0" Text="{Binding WaiterId}" Watermark="服务员编号：" VerticalContentAlignment="Center" Height="30" Margin="0,5"/>
+            <controls:WatermarkTextBox Grid.Row="2" Grid.Column="0" Text="{Binding MaleCustomer, UpdateSourceTrigger=PropertyChanged}" Watermark="就餐人数（男）：" VerticalContentAlignment="Center" Height="30" Margin="0,5"/>
+            <controls:WatermarkTextBox Grid.Row="3" Grid.Column="0" Text="{Binding FemaleCustomer, UpdateSourceTrigger=PropertyChanged}" Watermark="就餐人数（女）：" VerticalContentAlignment="Center" Height="30" Margin="0,5"/>
             <TextBox Grid.Row="4" Grid.Column="0" Text="{Binding DinnerWareCount, StringFormat=餐具数量：{0}}" IsEnabled="False" Visibility="{Binding IsDinnerWareEnable, Converter={StaticResource Bool2VisibilityCvt}}" VerticalContentAlignment="Center" Height="30" Margin="0,5"/>
             <view:InputNumberControl Grid.Row="0" Grid.RowSpan="5" Grid.Column="1" Width="260" Height="260"/>
         </Grid>
@@ -49,10 +49,10 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <ToggleButton Content="儿童" Style="{StaticResource DietTogBtnStyle}" FontSize="20" Margin="3" IsChecked="{Binding HasChild}"/>
-            <ToggleButton Grid.Row="0" Grid.Column="1" Content="青年" Style="{StaticResource DietTogBtnStyle}" FontSize="20"  Margin="3" IsChecked="{Binding HasYoung}"/>
-            <ToggleButton Grid.Row="0" Grid.Column="2" Content="中年" Style="{StaticResource DietTogBtnStyle}" FontSize="20"  Margin="3" IsChecked="{Binding HasMiddleAge}"/>
-            <ToggleButton Grid.Row="0" Grid.Column="3" Content="老年" Style="{StaticResource DietTogBtnStyle}" FontSize="20"  Margin="3" IsChecked="{Binding HasOld}"/>
+            <ToggleButton Content="儿童" FontSize="20" Margin="3" IsChecked="{Binding HasChild}"/>
+            <ToggleButton Grid.Row="0" Grid.Column="1" Content="青年" FontSize="20"  Margin="3" IsChecked="{Binding HasYoung}"/>
+            <ToggleButton Grid.Row="0" Grid.Column="2" Content="中年" FontSize="20"  Margin="3" IsChecked="{Binding HasMiddleAge}"/>
+            <ToggleButton Grid.Row="0" Grid.Column="3" Content="老年" FontSize="20"  Margin="3" IsChecked="{Binding HasOld}"/>
             <Button Content="确认开台" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5" Command="{Binding ConfirmCmd}"/>
             <Button Content="取消" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"  Margin="0,5" Command="{Binding CancelCmd}"/>
 

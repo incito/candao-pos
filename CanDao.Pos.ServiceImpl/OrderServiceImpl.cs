@@ -218,8 +218,13 @@ namespace CanDao.Pos.ServiceImpl
                 jsonStr
             };
 
-            var result = RestHttpHelper.HttpGet(addr, param);
-            Console.WriteLine(result);
+            var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return result.Item1;
+
+            if (!result.Item2.IsSuccess)
+                return !string.IsNullOrEmpty(result.Item2.Info) ? result.Item2.Info : "保存优惠券使用列表失败。";
+
             return null;
         }
 

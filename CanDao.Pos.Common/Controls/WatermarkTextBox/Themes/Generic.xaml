@@ -57,7 +57,7 @@
 
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <MultiTrigger>
+                        <!--<MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsFocused" Value="False" />
                                 <Condition Property="Text" Value="" />
@@ -65,7 +65,10 @@
                             <MultiTrigger.Setters>
                                 <Setter Property="Visibility" TargetName="PART_WatermarkHost" Value="Visible" />
                             </MultiTrigger.Setters>
-                        </MultiTrigger>
+                        </MultiTrigger>-->
+                        <Trigger Property="Text" Value="">
+                            <Setter Property="Visibility" TargetName="PART_WatermarkHost" Value="Visible" />
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="MouseOverVisual" Property="Opacity" Value="1" />
                         </Trigger>

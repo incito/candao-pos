@@ -601,6 +601,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
+        /// <summary>
+        /// 菜单列表操作命令是否可用的判断方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         private bool CanDataGridPageOper(object param)
         {
             TableOperWindow wnd = (TableOperWindow)OwnerWindow;
@@ -799,6 +804,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _isUserInputCash = Convert.ToBoolean(param);
         }
 
+        /// <summary>
+        /// 优惠券鼠标按下命令的执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
         private void CouponMouseDown(object arg)
         {
             var coupon = (CouponInfo)((CouponInfo)arg).Clone();
@@ -808,6 +817,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _couponLongPressTimer.Start();
         }
 
+        /// <summary>
+        /// 优惠券鼠标弹起命令的执行方法。
+        /// </summary>
         private void CouponMouseUp(object arg)
         {
             _couponLongPressTimer.Stop();
@@ -823,48 +835,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (_curSelectedCouponInfo == null)
                 return;
 
-            if (_curSelectedCouponInfo.CouponType == EnumCouponType.HandFree)//手工优惠类特殊处理。
+            if (_curSelectedCouponInfo.CouponType == EnumCouponType.HandFree) //手工优惠类特殊处理。
             {
-                switch (_curSelectedCouponInfo.HandCouponType)
-                {
-                    case EnumHandCouponType.FreeDish:
-                        var giftDishWnd = new SelectGiftDishWindow(Data);
-                        if (WindowHelper.ShowDialog(giftDishWnd, OwnerWindow))
-                        {
-                            foreach (var giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
-                            {
-                                _curSelectedCouponInfo.Name = string.Format("赠菜：{0}", giftDishInfo.DishName);
-                                _curSelectedCouponInfo.FreeAmount = giftDishInfo.DishPrice;
-                                AddCouponInfoAsUsed(_curSelectedCouponInfo, giftDishInfo.SelectGiftNum, false);
-                            }
-                        }
-                        break;
-                    case EnumHandCouponType.Discount:
-                        InfoLog.Instance.I("选择手工优惠折扣类优惠券，弹出折扣输入窗口...");
-                        var diacountSelectWnd = new OfferTypeSelectWindow(EnumOfferType.Discount);
-                        if (WindowHelper.ShowDialog(diacountSelectWnd, OwnerWindow))
-                        {
-                            InfoLog.Instance.I("选择折扣率：{0}，开始调用接口计算折扣金额...", diacountSelectWnd.Discount);
-                            TaskService.Start(diacountSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");//优惠券折扣时，自定义折扣为0。
-                        }
-                        break;
-                    case EnumHandCouponType.Amount:
-                        InfoLog.Instance.I("选择手工优惠优免类优惠券，弹出优免金额输入窗口...");
-                        var amountSelectWnd = new OfferTypeSelectWindow(EnumOfferType.Amount);
-                        if (WindowHelper.ShowDialog(amountSelectWnd, OwnerWindow))
-                        {
-                            AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, amountSelectWnd.Amount);
-                        }
-                        break;
-                    case null:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-                return;
+                if (!CouponHandFreeProcess())
+                    return;
             }
-
-            if (_curSelectedCouponInfo.IsDiscount) //折扣类处理流程。
+            else if (_curSelectedCouponInfo.IsDiscount) //折扣类处理流程。
             {
                 if (!MessageDialog.Quest(string.Format("确定使用{0}？", _curSelectedCouponInfo.Name)))
                     return;
@@ -874,14 +850,23 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             else
             {
-                //增加选择数量的窗口
-                var numWnd = new NumInputWindow("优惠券使用数量：", "优惠券数量", 0, false);
-                if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
-                    return;
-
-                if (_curSelectedCouponInfo.FreeAmount == 999999 || _curSelectedCouponInfo.DebitAmount == -1) //特殊券。
+                if (_curSelectedCouponInfo.BillAmount == 999999) //特殊优惠券。
                 {
+                    var amountSelectWnd = new OfferTypeSelectWindow(EnumOfferType.Amount);
+                    if (!WindowHelper.ShowDialog(amountSelectWnd, OwnerWindow))
+                        return;
 
+                    var debitAmount = amountSelectWnd.Amount;//挂账金额、
+                    if (debitAmount > Data.PaymentAmount)
+                    {
+                        MessageDialog.Warning(string.Format("挂账金额不能大于剩余应收金额（{0}）。", Data.PaymentAmount));
+                        return;
+                    }
+
+                    _curSelectedCouponInfo.BillAmount = debitAmount;
+                    _curSelectedCouponInfo.FreeAmount = 0;
+                    _curSelectedCouponInfo.Amount = debitAmount;
+                    AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
                 }
                 else
                 {
@@ -893,23 +878,101 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         }
                         else
                         {
+                            //增加选择数量的窗口
+                            var numWnd = new NumInputWindow("优惠券使用数量：", "优惠券数量", 0, false);
+                            if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
+                                return;
+
                             AddCouponInfoAsUsed(_curSelectedCouponInfo, Convert.ToInt32(numWnd.InputNum), false);
-                            //while (num-- > 0)
-                            //{
-                            //    AddCouponInfoAsUsed(coupon, 1, false);
-                            //}
                         }
                     }
-                    else if (_curSelectedCouponInfo.FreeAmount <= 0 && _curSelectedCouponInfo.DebitAmount <= 0)
+                    else if (_curSelectedCouponInfo.BillAmount <= 0 && _curSelectedCouponInfo.DebitAmount <= 0)
                     {
+                        //如果都是0，则弹出窗口输入金额
+                        var offSelectWnd = new OfferTypeSelectWindow(EnumOfferType.Both);
+                        if (!WindowHelper.ShowDialog(offSelectWnd, OwnerWindow))
+                            return;
 
+                        if (offSelectWnd.SelectedOfferType == EnumOfferType.Amount)
+                        {
+                            if (offSelectWnd.Amount > Data.PaymentAmount)
+                            {
+                                MessageDialog.Warning("优免金额不能大于应收金额。");
+                                return;
+                            }
+
+                            _curSelectedCouponInfo.BillAmount = offSelectWnd.Amount;
+                            _curSelectedCouponInfo.FreeAmount = offSelectWnd.Amount;
+                            AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, offSelectWnd.Amount);
+                        }
+                        else if (offSelectWnd.SelectedOfferType == EnumOfferType.Discount)
+                        {
+                            TaskService.Start(offSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
+                        }
                     }
                 }
             }
 
+            SaveCouponInfo();
+        }
+
+        /// <summary>
+        /// 保存优惠券信息。
+        /// </summary>
+        private void SaveCouponInfo()
+        {
             InfoLog.Instance.I("开始保存优惠券到使用列表...");
             var param = new Tuple<string, List<UsedCouponInfo>>(Data.OrderId, Data.UsedCouponInfos.ToList());
             TaskService.Start(param, SaveCouponInfoProcess, SaveCouponInfoComplete);
+        }
+
+        /// <summary>
+        /// 手工优免类优惠券处理方式。
+        /// </summary>
+        private bool CouponHandFreeProcess()
+        {
+            var result = false;
+            switch (_curSelectedCouponInfo.HandCouponType)
+            {
+                case EnumHandCouponType.FreeDish:
+                    InfoLog.Instance.I("选择手工优惠赠菜类优惠券，弹出赠菜选择窗口...");
+                    var giftDishWnd = new SelectGiftDishWindow(Data);
+                    if (WindowHelper.ShowDialog(giftDishWnd, OwnerWindow))
+                    {
+                        foreach (var giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
+                        {
+                            _curSelectedCouponInfo.Name = string.Format("赠菜：{0}", giftDishInfo.DishName);
+                            _curSelectedCouponInfo.FreeAmount = giftDishInfo.DishPrice;
+                            AddCouponInfoAsUsed(_curSelectedCouponInfo, giftDishInfo.SelectGiftNum, false);
+                        }
+                        result = true;
+                    }
+                    break;
+                case EnumHandCouponType.Discount:
+                    InfoLog.Instance.I("选择手工优惠折扣类优惠券，弹出折扣输入窗口...");
+                    var diacountSelectWnd = new OfferTypeSelectWindow(EnumOfferType.Discount);
+                    if (WindowHelper.ShowDialog(diacountSelectWnd, OwnerWindow))
+                    {
+                        InfoLog.Instance.I("选择折扣率：{0}，开始调用接口计算折扣金额...", diacountSelectWnd.Discount);
+                        TaskService.Start(diacountSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
+                        result = true;
+                    }
+                    break;
+                case EnumHandCouponType.Amount:
+                    InfoLog.Instance.I("选择手工优惠优免类优惠券，弹出优免金额输入窗口...");
+                    var amountSelectWnd = new OfferTypeSelectWindow(EnumOfferType.Amount);
+                    if (WindowHelper.ShowDialog(amountSelectWnd, OwnerWindow))
+                    {
+                        AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, amountSelectWnd.Amount);
+                        result = true;
+                    }
+                    break;
+                case null:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            return result;
         }
 
         /// <summary>
@@ -2187,6 +2250,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("结束折扣类优惠券\"{0}\"计算，结果：{1}。", _curSelectedCouponInfo.Name, result.Item2);
             AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, true, result.Item2);
+
+            SaveCouponInfo();
         }
 
         /// <summary>
@@ -2515,7 +2580,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="coupon">使用的优惠券。</param>
         /// <param name="usedCount">使用优惠券数量。</param>
         /// <param name="isDiscount">是否是折扣类优惠券。</param>
-        /// <param name="freeAmount">单个优惠券优免金额。（只有当折扣类的优惠券才需要传入数值）</param>
+        /// <param name="freeAmount">单个优惠券优免金额。（当折扣类的优惠券或者手动输入优免金额的就需要传入数值）</param>
         private void AddCouponInfoAsUsed(CouponInfo coupon, int usedCount, bool isDiscount, decimal? freeAmount = null)
         {
             var usedCouponInfo = new UsedCouponInfo
@@ -2527,7 +2592,24 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 DebitAmount = coupon.DebitAmount * usedCount,
                 FreeAmount = freeAmount ?? coupon.FreeAmount ?? 0 * usedCount, //优免金额 = 单个优惠券优免金额 * 数量。(如果单个优惠券优免金额为null，则取优惠券的优免金额，如果还是null，则取0）
             };
+
+            if (usedCouponInfo.DebitAmount > Data.PaymentAmount)
+            {
+                if (!MessageDialog.Quest("挂账金额大于应收金额，确定使用该优惠券？"))
+                    return;
+            }
+
+            var tempFreeAmount = Math.Max(0, Data.PaymentAmount - usedCouponInfo.DebitAmount);//最大能优免的金额=应收金额-挂账金额且大于0。
+            usedCouponInfo.FreeAmount = Math.Min(tempFreeAmount, usedCouponInfo.FreeAmount);//实际优免金额不能大于最大能优免的金额。
             usedCouponInfo.BillAmount = Math.Round((usedCouponInfo.DebitAmount + usedCouponInfo.FreeAmount) * usedCouponInfo.Count * -1, 2);
+
+            if (!isDiscount)
+            {
+                var hasDiscountCoupon = Data.UsedCouponInfos.Any(t => t.IsDiscount);
+                if (hasDiscountCoupon)
+                    MessageDialog.Warning("帐单已选择过折扣类优惠，请注意选择使用优惠的顺序！");
+            }
+
             AddUsedCouponInfo(usedCouponInfo);
         }
 

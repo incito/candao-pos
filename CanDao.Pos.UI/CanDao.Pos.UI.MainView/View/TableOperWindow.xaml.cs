@@ -1,8 +1,5 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using CanDao.Pos.Model;
+﻿using CanDao.Pos.Model;
 using CanDao.Pos.UI.MainView.ViewModel;
-using Keyboard = CanDao.Pos.Common.Keyboard;
 
 namespace CanDao.Pos.UI.MainView.View
 {

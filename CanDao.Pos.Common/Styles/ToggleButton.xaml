@@ -5,7 +5,7 @@
         <ResourceDictionary Source="Images.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="ToggleButton" x:Key="DietTogBtnStyle">
+    <Style TargetType="ToggleButton">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="{StaticResource CanDaoPosColorBg}"/>

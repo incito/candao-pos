@@ -12,8 +12,8 @@
   <MemberSystem value="1"/>
   <!--分店电话-->
   <BranchTelephone value="02866668888"/>
-  <!--外卖台名称-->
-  <TakeoutTableName value="JLOut"/>
+  <!--外卖台名称（现在从接口获取，这个配置先不用）-->
+  <!--<TakeoutTableName value="JLOut"/>-->
   <!--Pos编号-->
   <PosId value="001"/>
   <!--钱箱IP地址-->
