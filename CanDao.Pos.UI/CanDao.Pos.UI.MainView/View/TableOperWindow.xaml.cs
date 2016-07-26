@@ -1,4 +1,6 @@
-﻿using CanDao.Pos.Model;
+﻿using System;
+using System.ComponentModel;
+using CanDao.Pos.Model;
 using CanDao.Pos.UI.MainView.ViewModel;
 
 namespace CanDao.Pos.UI.MainView.View

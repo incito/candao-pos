@@ -47,15 +47,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (Data == null || string.IsNullOrEmpty(Data.OrderId))
                 TaskService.Start(null, OpenTableProcess, OpenTableComplete, "外卖台开台中...");
-
-            if (OwnerWindow != null)
-            {
-                OwnerWindow.Closing -= OwnerWindowOnClosing;//解决多次触发GetTableDishInfo方法导致事件重复添加。
-                OwnerWindow.Closing += OwnerWindowOnClosing;
-            }
         }
 
-        private void OwnerWindowOnClosing(object sender, CancelEventArgs e)
+        protected override void OnWindowClosing(CancelEventArgs e)
         {
             if (OwnerWindow.DialogResult == true)//为true表示正常关闭，不做后续处理。
                 return;

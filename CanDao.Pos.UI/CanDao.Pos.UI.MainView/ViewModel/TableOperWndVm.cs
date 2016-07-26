@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -559,6 +560,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand EnterPayCmd { get; private set; }
 
+        /// <summary>
+        /// 窗口关闭时事件命令。
+        /// </summary>
+        public ICommand WindowClosingCmd { get; private set; }
+
+        /// <summary>
+        /// 窗口已关闭事件命令。
+        /// </summary>
+        public ICommand WindowClosedCmd { get; private set; }
+
         #endregion
 
         #region Command Methods
@@ -920,6 +931,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void SaveCouponInfo()
         {
+            if(SystemConfigCache.SaveCoupon)
+
             InfoLog.Instance.I("开始保存优惠券到使用列表...");
             var param = new Tuple<string, List<UsedCouponInfo>>(Data.OrderId, Data.UsedCouponInfos.ToList());
             TaskService.Start(param, SaveCouponInfoProcess, SaveCouponInfoComplete);
@@ -991,6 +1004,20 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 PayTheBill();
         }
 
+        private void WindowClosing(object param)
+        {
+            if (!(param is ExCommandParameter))
+                return;
+
+            var args = ((ExCommandParameter)param).EventArgs as CancelEventArgs;
+            OnWindowClosing(args);
+        }
+
+        private void WindowClosed(object param)
+        {
+            OnWindowClosed();
+        }
+
         #endregion
 
         #region Protected Method
@@ -1006,6 +1033,25 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             EnterPayCmd = CreateDelegateCommand(EnterPay);
             CouponMouseDownCmd = CreateDelegateCommand(CouponMouseDown);
             CouponMouseUpCmd = CreateDelegateCommand(CouponMouseUp);
+            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
+            WindowClosedCmd = CreateDelegateCommand(WindowClosed);
+        }
+
+        /// <summary>
+        /// 窗口正在关闭时事件的虚方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        protected virtual void OnWindowClosing(CancelEventArgs arg)
+        {
+            
+        }
+
+        /// <summary>
+        /// 窗口已经关闭事件的虚方法。
+        /// </summary>
+        protected virtual void OnWindowClosed()
+        {
+            
         }
 
         #endregion

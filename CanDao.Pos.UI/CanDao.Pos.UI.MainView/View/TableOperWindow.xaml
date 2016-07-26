@@ -16,6 +16,12 @@
         <i:EventTrigger EventName="KeyDown">
             <common:ExInvokeCommandAction  Command="{Binding EnterPayCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <common:ExInvokeCommandAction  Command="{Binding WindowClosingCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction  Command="{Binding WindowClosedCmd}"/>
+        </i:EventTrigger>
     </i:Interaction.Triggers>
     <controls:PosBaseWindow.Resources>
         <ResourceDictionary>
