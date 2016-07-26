@@ -33,7 +33,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public UserLoginWndVm()
         {
             _rightType = EnumRightType.Login;
-            //Password = "123456";
+            Password = "123456";
         }
 
         #endregion

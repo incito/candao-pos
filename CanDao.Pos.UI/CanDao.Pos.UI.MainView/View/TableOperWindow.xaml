@@ -261,7 +261,7 @@
 
             <controls:GroupSelector Grid.Row="1" x:Name="GsCouponList" ItemCountEachGroup="16"
                                     ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}"
-                                    IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
+                                    IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}" Margin="-10,5,10,328" Grid.RowSpan="3">
                 <controls:GroupSelector.Template>
                     <ControlTemplate TargetType="controls:GroupSelector">
                         <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False">
