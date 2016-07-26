@@ -10,7 +10,6 @@ using CanDao.Pos.Model.Request;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
-using DevExpress.Xpf.Core;
 
 namespace CanDao.Pos.Client
 {
