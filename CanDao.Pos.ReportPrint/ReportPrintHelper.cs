@@ -607,7 +607,7 @@ namespace CanDao.Pos.ReportPrint
             if (!File.Exists(file))
             {
                 ErrLog.Instance.E(msg + "文件缺失。");
-                MessageDialog.Warning(msg);
+                MessageDialog.Warning(msg + "文件缺失。");
                 return false;
             }
 

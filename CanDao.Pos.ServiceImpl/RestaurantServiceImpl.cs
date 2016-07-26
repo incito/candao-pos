@@ -568,7 +568,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
-                var response = HttpHelper.HttpPost<List<CategoryResponse>>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<List<CategoryResponse>>(parmAddr, null, true);
                 var result = DataConverter.ToCategory(response);
                 return new Tuple<string, List<MCategory>>(null, result);
 
@@ -589,25 +589,26 @@ namespace CanDao.Pos.ServiceImpl
         public Tuple<string, List<MHangingMoney>> GetGrouponForList(string beginTime, string endTime)
         {
             string msg = " 获取营业明细(团购券)";
+            var resList = new List<MHangingMoney>();
 
             var addr = ServiceAddrCache.GetServiceAddr("GetGrouponForList");
             if (string.IsNullOrEmpty(addr))
             {
                 ErrLog.Instance.E(msg + "地址为空。");
-                return new Tuple<string, List<MHangingMoney>>(msg + "地址为空。", null);
+                return new Tuple<string, List<MHangingMoney>>(msg + "地址为空。", resList);
             }
             try
             {
-                string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
-                var response = HttpHelper.HttpPost<List<GrouponResponse>>(parmAddr, null, true);
-                var result = DataConverter.ToGroupon(response);
-                return new Tuple<string, List<MHangingMoney>>(null, result);
+                string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}&shiftid=-1&bankcardno=-1&settlementWay=5&type=-1", addr, beginTime, endTime);
+                var response = HttpHelper.HttpGet<List<GrouponResponse>>(parmAddr, null, true);
+                resList = DataConverter.ToGroupon(response);
+                return new Tuple<string, List<MHangingMoney>>(null, resList);
 
             }
             catch (Exception exp)
             {
                 ErrLog.Instance.E(msg + "时异常。", exp);
-                return new Tuple<string, List<MHangingMoney>>(exp.MyMessage(), null);
+                return new Tuple<string, List<MHangingMoney>>(exp.MyMessage(), resList);
             }
         }
 
@@ -629,8 +630,11 @@ namespace CanDao.Pos.ServiceImpl
             }
             try
             {
-                string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
-                var response = HttpHelper.HttpPost<List<DataDetailResponse>>(parmAddr, null, true);
+                var request = new Dictionary<string, string>();
+                request.Add("beginTime", beginTime);
+                request.Add("endTime", endTime);
+
+                var response = HttpHelper.HttpGet<List<DataDetailResponse>>(addr, request, true);
                 if (response.Count > 0)
                 {
                     dataDetail.StartTime = DateTime.Parse(beginTime);
@@ -701,25 +705,26 @@ namespace CanDao.Pos.ServiceImpl
         public Tuple<string, List<MHangingMoney>> GetGzdwForList(string beginTime, string endTime)
         {
             string msg = " 获取营业明细(获取挂账单位)";
+            var resList = new List<MHangingMoney>();
 
             var addr = ServiceAddrCache.GetServiceAddr("GetGzdwForList");
             if (string.IsNullOrEmpty(addr))
             {
                 ErrLog.Instance.E(msg + "地址为空。");
-                return new Tuple<string, List<MHangingMoney>>(msg + "地址为空。", null);
+                return new Tuple<string, List<MHangingMoney>>(msg + "地址为空。", resList);
             }
             try
             {
-                string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
-                var response = HttpHelper.HttpPost<List<GzdwResponse>>(parmAddr, null, true);
-                var result = DataConverter.ToGzdw(response);
-                return new Tuple<string, List<MHangingMoney>>(null, result);
+                string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}&billName=0&clearStatus=0", addr, beginTime, endTime);
+                var response = HttpHelper.HttpGet<List<GzdwResponse>>(parmAddr, null, true);
+                resList = DataConverter.ToGzdw(response);
+                return new Tuple<string, List<MHangingMoney>>(null, resList);
 
             }
             catch (Exception exp)
             {
                 ErrLog.Instance.E(msg + "时异常。", exp);
-                return new Tuple<string, List<MHangingMoney>>(exp.MyMessage(), null);
+                return new Tuple<string, List<MHangingMoney>>(exp.MyMessage(), resList);
             }
         }
 
@@ -742,7 +747,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
-                var response = HttpHelper.HttpPost<TipMoneyResponse>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<TipMoneyResponse>(parmAddr, null, true);
                 return new Tuple<string, string>(null, response.tipMoney);
 
             }

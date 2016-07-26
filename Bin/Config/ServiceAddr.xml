@@ -41,11 +41,11 @@
     <GetTableInfoByTableType Addr="/newspicyway/padinterface/getTableByType.json"/><!--根据餐桌类型获取餐桌信息-->
     <GetPrinterList Addr="/newspicyway/pos/printerlist.json"/><!--获取打印机状态列表-->
 
-<GetItemForList Addr="/itemDetail/getItemForList.json"/><!-- 获取营业明细（品类、金额）-->
-<GetGrouponForList Addr="/preferentialAnalysisCharts/findPreferential.json"/><!--获取营业明细(团购券)-->
-<GetDayReportList Addr="/daliyReports/getDayReportList.json"/><!-- 获取营业明细（其它）-->
-<GetGzdwForList Addr="/gisterBill/getBillCount.json"/><!--获取营业明细（获取挂账单位）-->
-<GetTipMoney Addr="/tip/tipListByTime.json"/><!--获取小费总额-->
+<GetItemForList Addr="/newspicyway/itemDetail/getItemForList.json"/><!-- 获取营业明细（品类、金额）-->
+<GetGrouponForList Addr="/newspicyway/preferentialAnalysisCharts/findPreferential.json"/><!--获取营业明细(团购券)-->
+<GetDayReportList Addr="/newspicyway/daliyReports/getDayReportList.json"/><!-- 获取营业明细（其它）-->
+<GetGzdwForList Addr="/newspicyway/gisterBill/getBillCount.json"/><!--获取营业明细（获取挂账单位）-->
+<GetTipMoney Addr="/newspicyway/tip/tipListByTime.json"/><!--获取小费总额-->
   </JavaServerApi>
   <!--Delephi接口-->
   <DataServerApi>
