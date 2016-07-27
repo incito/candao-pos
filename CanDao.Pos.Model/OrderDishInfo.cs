@@ -52,6 +52,11 @@ namespace CanDao.Pos.Model
         public string DishId { get; set; }
 
         /// <summary>
+        /// 关键菜品Id。套餐和鱼锅内部的菜以这个字段标识它们的主体菜。
+        /// </summary>
+        public string RelateDishId { get; set; }
+
+        /// <summary>
         /// 唯一标示。
         /// </summary>
         public string PrimaryKey { get; set; }
@@ -118,6 +123,11 @@ namespace CanDao.Pos.Model
         /// 下单类型。
         /// </summary>
         public EnumOrderType OrderType { get; set; }
+
+        /// <summary>
+        /// 是否是主菜。
+        /// </summary>
+        public bool IsMaster { get; set; }
 
         /// <summary>
         /// 是否是套餐内的菜。

@@ -712,7 +712,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     IsPrintMoreOpened = !IsPrintMoreOpened;
                     break;
                 case "CancelOrder":
-                    CancelOrderAsync();
+                    CancelOrder();
                     break;
                 case "Resettlement":
                     ResettlementSync();
@@ -727,10 +727,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     _curOddModel = EnumOddModel.None;
                     CalculatePaymentAmount();
                     break;
-                case "DishCountIncrease":
+                case "AddDish":
                     AddDish();
                     break;
-                case "DishCountReduce":
+                case "BackDish":
                     BackDish();
                     break;
                 case "SelectBank":
@@ -931,9 +931,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void SaveCouponInfo()
         {
-            if(SystemConfigCache.SaveCoupon)
+            if (SystemConfigCache.SaveCoupon)
 
-            InfoLog.Instance.I("开始保存优惠券到使用列表...");
+                InfoLog.Instance.I("开始保存优惠券到使用列表...");
             var param = new Tuple<string, List<UsedCouponInfo>>(Data.OrderId, Data.UsedCouponInfos.ToList());
             TaskService.Start(param, SaveCouponInfoProcess, SaveCouponInfoComplete);
         }
@@ -1043,7 +1043,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="arg"></param>
         protected virtual void OnWindowClosing(CancelEventArgs arg)
         {
-            
+
         }
 
         /// <summary>
@@ -1051,7 +1051,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         protected virtual void OnWindowClosed()
         {
-            
+
         }
 
         #endregion
@@ -1246,21 +1246,47 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (SelectedOrderDish.IsFishPotDish && SelectedOrderDish.IsPot) //选中了鱼锅的锅。
             {
-                MessageDialog.Warning("请选择鱼锅主体退整个鱼锅。");
-                return;
+                if (!MessageDialog.Quest("选择鱼锅锅底退菜会退掉整个鱼锅，确定继续退菜？"))
+                    return;
+
+                InfoLog.Instance.I("选择了鱼锅锅底退菜，已经操作确认，即将退整个鱼锅...");
             }
 
             var backDishReasonWnd = new BackDishReasonSelectWindow();
             if (!WindowHelper.ShowDialog(backDishReasonWnd, OwnerWindow))
                 return;
 
-            var numWnd = new NumInputWindow("请输入退菜数量：", "退菜数量：", SelectedOrderDish.DishNum);
-            if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
+            InfoLog.Instance.I("选择退菜原因：\"{0}\"。", backDishReasonWnd.SelectedReason);
+            bool allowInputBackNum = !(SelectedOrderDish.IsPot || (SelectedOrderDish.IsMaster && SelectedOrderDish.DishType == EnumDishType.FishPot));//鱼锅和套餐， 那不用输入数量
+
+            var backDishNum = SelectedOrderDish.DishNum;
+            if (allowInputBackNum)
+            {
+                var numWnd = new NumInputWindow("请输入退菜数量：", "退菜数量：", SelectedOrderDish.DishNum);
+                if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
+                    return;
+
+                backDishNum = numWnd.InputNum;
+                InfoLog.Instance.I("输入退菜数量：\"{0}\"。", numWnd.InputNum);
+            }
+
+            var wnd = new AuthorizationWindow(EnumRightType.BackDish);
+            if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
                 return;
 
-            var authorizeWnd = new AuthorizationWindow(EnumRightType.BackDish);
-            if (WindowHelper.ShowDialog(authorizeWnd, OwnerWindow))
-                TaskService.Start(numWnd.InputNum, GetBackDishInfoProcess, GetBackDishInfoComplete, "获取退菜信息...");
+            InfoLog.Instance.I("退菜授权人：\"{0}\"", Globals.Authorizer.UserName);
+            var param = new BackDishComboInfo
+            {
+                AuthorizerUser = Globals.Authorizer.UserName,
+                BackDishNum = backDishNum,
+                BackDishReason = backDishReasonWnd.SelectedReason,
+                DishInfo = SelectedOrderDish,
+                OrderId = Data.OrderId,
+                TableNo = Data.TableNo,
+                Waiter = Globals.UserInfo.UserName
+            };
+
+            TaskService.Start(param, BackDishProess, BackDishComplete, "退菜处理中，请稍后...");
         }
 
         /// <summary>
@@ -1298,7 +1324,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void DishWeight()
         {
             InfoLog.Instance.I("选中的菜时称重菜品，弹出称重窗体...");
-            //var dishWeightWnd = new DishWeightWindow();
             var dishWeightWnd = new NumInputWindow("请输入称重数量：", "称重数量：", 0);
             if (WindowHelper.ShowDialog(dishWeightWnd, OwnerWindow))
             {
@@ -1379,7 +1404,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <summary>
         /// 取消账单。
         /// </summary>
-        private void CancelOrderAsync()
+        private void CancelOrder()
         {
             if (Data.DishInfos.Any())
             {
@@ -1493,6 +1518,521 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             return new WorkFlowInfo(BackAllDishProcess, BackAllDishComplete, "整桌退菜中...");
         }
+
+        /// <summary>
+        /// 异步发送结算广播消息。
+        /// </summary>
+        private void BroadcastSettlementMsgAsync()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                InfoLog.Instance.I("广播结算消息给PAD...");
+                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Pad, Data.OrderId);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Pad);
+
+                InfoLog.Instance.I("广播结算指令给手环...");
+                var msg = string.Format("{0}|{1}|{2}", Data.WaiterId, Data.TableName, Data.OrderId);
+                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
+            });
+        }
+
+        /// <summary>
+        /// 异步发送咖啡模式结账广播消息。
+        /// </summary>
+        private void BroadcastCoffeeSettlementMsgAsyc()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
+                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
+            });
+        }
+
+        /// <summary>
+        /// 异步发送清台广播消息。
+        /// </summary>
+        private void BroadcastClearTableMsgAsync()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
+                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
+                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播手环结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
+            });
+        }
+
+        /// <summary>
+        /// 获取优惠券类型对应字符串。
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private string GetCouponTypeString(EnumCouponType type)
+        {
+            return ((int)type).ToString().PadLeft(type != EnumCouponType.Member ? 2 : 4, '0');
+        }
+
+        /// <summary>
+        /// 计算账单的应收金额。
+        /// </summary>
+        private void CalculatePaymentAmount()
+        {
+            if (Data == null)
+                return;
+
+            var paymentAmount = Data.TotalAmount - Data.TotalFreeAmount - Data.TotalDebitAmount; //应收=总额-优免-挂账
+            paymentAmount = Math.Max(0, paymentAmount);//应收必须大于0
+            paymentAmount += Data.TipAmount;//应收需要再加上小费金额。
+            var amount = ProcessOdd(paymentAmount, _curOddModel, Globals.OddAccuracy);
+            Data.AdjustmentAmount = paymentAmount - amount;
+            Data.PaymentAmount = Math.Max(0, amount); //应付金额不能小于0
+
+            if (_curOddModel == EnumOddModel.Rounding)
+                RoundingAmount = Math.Abs(Data.AdjustmentAmount);
+            else if (_curOddModel == EnumOddModel.Wipe)
+                WipeOddAmount = Data.AdjustmentAmount;
+
+            GenerateSettlementInfo();
+        }
+
+        /// <summary>
+        /// 处理零头。
+        /// </summary>
+        /// <param name="amount">待处理的金额。</param>
+        /// <param name="oddModel">零头处理方式。</param>
+        /// <param name="oddAccuracy">零头处理精度。</param>
+        /// <returns></returns>
+        private decimal ProcessOdd(decimal amount, EnumOddModel oddModel, EnumOddAccuracy oddAccuracy)
+        {
+            switch (oddModel)
+            {
+                case EnumOddModel.None:
+                    return amount;
+                case EnumOddModel.Rounding:
+                    switch (oddAccuracy)
+                    {
+                        case EnumOddAccuracy.Fen:
+                            return Math.Round(amount, 1, MidpointRounding.AwayFromZero);
+                        case EnumOddAccuracy.Jiao:
+                            return Math.Round(amount, 0, MidpointRounding.AwayFromZero);
+                        case EnumOddAccuracy.Yuan:
+                            return Math.Round(amount / 10, 0, MidpointRounding.AwayFromZero) * 10;
+                        default:
+                            throw new ArgumentOutOfRangeException("oddAccuracy", oddAccuracy, null);
+                    }
+                case EnumOddModel.Wipe:
+                    switch (oddAccuracy)
+                    {
+                        case EnumOddAccuracy.Fen:
+                            return Math.Floor(amount * 10) / 10;
+                        case EnumOddAccuracy.Jiao:
+                            return Math.Floor(amount);
+                        case EnumOddAccuracy.Yuan:
+                            return Math.Floor(amount / 10) * 10;
+                        default:
+                            throw new ArgumentOutOfRangeException("oddAccuracy", oddAccuracy, null);
+                    }
+                default:
+                    throw new ArgumentOutOfRangeException("oddModel", oddModel, null);
+            }
+        }
+
+        /// <summary>
+        /// 生成收款信息。
+        /// </summary>
+        private void GenerateSettlementInfo()
+        {
+            if (Data.HasBeenPaied)
+            {
+                SettlementInfo = "已结账";
+                return;
+            }
+
+            if (!_isUserInputCash)//当不是用户输入现金时才更新现金金额。
+                CashAmount = Math.Max(0, Data.PaymentAmount - BankAmount - AlipayAmount - IntegralAmount - MemberAmount - WechatAmount - DebitAmount);
+
+            var settlementInfo = new List<string>();
+
+            if (Data.TotalDebitAmount != 0)
+                settlementInfo.Add(string.Format("挂账：{0:f2}", Data.TotalDebitAmount));
+
+            if (Data.TotalFreeAmount != 0)
+                settlementInfo.Add(string.Format("优免：{0:f2}", Data.TotalFreeAmount));
+
+            if (Data.AdjustmentAmount != 0)
+            {
+                if (Globals.OddModel == EnumOddModel.Rounding)
+                    settlementInfo.Add(string.Format("舍{1}：{0:f2}", Math.Abs(Data.AdjustmentAmount), Data.AdjustmentAmount > 0 ? "去" : "入"));
+                else
+                    settlementInfo.Add(string.Format("抹零：{0:f2}", Data.AdjustmentAmount));
+            }
+
+            //支付部分
+            if (CashAmount > 0)
+                settlementInfo.Add(string.Format("现金：{0:f2}", CashAmount));
+
+            if (BankAmount > 0)
+                settlementInfo.Add(string.Format("银行卡：{0:f2}", BankAmount));
+
+            if (MemberAmount > 0)
+                settlementInfo.Add(string.Format("会员消费：{0:f2}", MemberAmount));
+
+            if (IntegralAmount > 0)
+                settlementInfo.Add(string.Format("会员积分：{0:f2}", IntegralAmount));
+
+            if (DebitAmount > 0)
+                settlementInfo.Add(string.Format("挂账：{0:f2}", DebitAmount));
+
+            if (AlipayAmount > 0)
+                settlementInfo.Add(string.Format("支付宝：{0:f2}", AlipayAmount));
+
+            if (WechatAmount > 0)
+                settlementInfo.Add(string.Format("微信支付：{0:f2}", WechatAmount));
+
+            Data.TotalAlreadyPayment = CashAmount + BankAmount + MemberAmount + IntegralAmount + DebitAmount + AlipayAmount + WechatAmount; //付款总额=各种付款方式总和。
+            var remainderAmount = Data.PaymentAmount - Data.TotalAlreadyPayment;//剩余金额=应付金额-付款总额。
+            if (remainderAmount > 0)
+            {
+                ChargeAmount = 0;
+                settlementInfo.Add(Data.TotalAlreadyPayment > 0 ? string.Format("还需再收：{0:f2}", remainderAmount) : string.Format("需收款：{0:f2}", remainderAmount));
+            }
+            ChargeAmount = Math.Abs(remainderAmount);
+            if (ChargeAmount > 0)
+                settlementInfo.Add(string.Format("找零：{0:f2}", ChargeAmount));
+
+            //小费当前计算规则：只能从现金扣除，
+            if (HasTip && Data.TipAmount > 0)//有小费金额的时候才计算小费实收。
+            {
+                var realyPayment = Data.PaymentAmount - Data.TipAmount;//真实的应收=明面行应收-小费金额。
+                var tipPayment = Data.TotalAlreadyPayment - realyPayment;//小费实付金额=付款总额-真实应收。
+                tipPayment = Math.Max(0, tipPayment);//小费实付金额不能小于0。
+                tipPayment = Math.Min(CashAmount, tipPayment);//小费实付金额不能大于现金。
+                TipPaymentAmount = tipPayment;
+            }
+
+            SettlementInfo = string.Format("收款：{0}", string.Join("，", settlementInfo));
+        }
+
+        /// <summary>
+        /// 添加一个优惠券到使用优惠券列表。
+        /// </summary>
+        /// <param name="coupon">使用的优惠券。</param>
+        /// <param name="usedCount">使用优惠券数量。</param>
+        /// <param name="isDiscount">是否是折扣类优惠券。</param>
+        /// <param name="freeAmount">单个优惠券优免金额。（当折扣类的优惠券或者手动输入优免金额的就需要传入数值）</param>
+        private void AddCouponInfoAsUsed(CouponInfo coupon, int usedCount, bool isDiscount, decimal? freeAmount = null)
+        {
+            var usedCouponInfo = new UsedCouponInfo
+            {
+                CouponInfo = coupon,
+                IsDiscount = isDiscount,
+                Name = coupon.Name,
+                Count = usedCount,
+                DebitAmount = coupon.DebitAmount * usedCount,
+                FreeAmount = freeAmount ?? coupon.FreeAmount ?? 0 * usedCount, //优免金额 = 单个优惠券优免金额 * 数量。(如果单个优惠券优免金额为null，则取优惠券的优免金额，如果还是null，则取0）
+            };
+
+            if (usedCouponInfo.DebitAmount > Data.PaymentAmount)
+            {
+                if (!MessageDialog.Quest("挂账金额大于应收金额，确定使用该优惠券？"))
+                    return;
+            }
+
+            var tempFreeAmount = Math.Max(0, Data.PaymentAmount - usedCouponInfo.DebitAmount);//最大能优免的金额=应收金额-挂账金额且大于0。
+            usedCouponInfo.FreeAmount = Math.Min(tempFreeAmount, usedCouponInfo.FreeAmount);//实际优免金额不能大于最大能优免的金额。
+            usedCouponInfo.BillAmount = Math.Round((usedCouponInfo.DebitAmount + usedCouponInfo.FreeAmount) * usedCouponInfo.Count * -1, 2);
+
+            if (!isDiscount)
+            {
+                var hasDiscountCoupon = Data.UsedCouponInfos.Any(t => t.IsDiscount);
+                if (hasDiscountCoupon)
+                    MessageDialog.Warning("帐单已选择过折扣类优惠，请注意选择使用优惠的顺序！");
+            }
+
+            AddUsedCouponInfo(usedCouponInfo);
+        }
+
+        /// <summary>
+        /// 检测账单是否允许结账。
+        /// </summary>
+        /// <returns>允许结账则返回null，否则返回错误信息。</returns>
+        private string CheckTheBillAllowPay()
+        {
+            if (Data.DishInfos.Any(t => t.DishStatus == EnumDishStatus.ToBeWeighed))
+                return "还有未称重菜品。";
+
+            if (Data.TipAmount > 0)//当有小费的时候，应付金额要扣除小费部分，因为允许客户不给小费。
+            {
+                if (Data.PaymentAmount - Data.TipAmount - Data.TotalAlreadyPayment > 0m)
+                    return "还有未收金额。";
+            }
+            else
+            {
+                if (Data.PaymentAmount - Data.TotalAlreadyPayment > 0m)
+                    return "还有未收金额。";
+            }
+
+            if (ChargeAmount > 100)
+                return "找零金额不能大于100。";
+
+            if (MemberAmount > 0 && string.IsNullOrEmpty(MemberCardNo))
+                return "使用会员储值请先登录会员。";
+
+            if (IntegralAmount > 0 && string.IsNullOrEmpty(MemberCardNo))
+                return "使用会员积分请先登录会员。";
+
+            if (DebitAmount > 0 && SelectedOnCmpAccInfo == null)
+                return "使用挂账金额请先选择挂账单位。";
+
+            if (AlipayAmount > 0 && string.IsNullOrEmpty(AlipayNo))
+                return "使用支付宝支付请输入支付宝账号。";
+
+            if (WechatAmount > 0 && string.IsNullOrEmpty(WechatNo))
+                return "使用微信支付请先输入微信账号。";
+
+            return null;
+        }
+
+        /// <summary>
+        /// 生成账单结算信息集合。
+        /// </summary>
+        /// <returns></returns>
+        private List<BillPayInfo> GenerateBillPayInfos()
+        {
+            int bankId = SelectedBankInfo != null ? SelectedBankInfo.Id : 0;
+            var list = new List<BillPayInfo>
+            {
+                new BillPayInfo(CashAmount - ChargeAmount, EnumBillPayType.Cash),
+                new BillPayInfo(BankAmount, EnumBillPayType.BankCard, BankCardNo, bankId.ToString()),
+                new BillPayInfo(MemberAmount, EnumBillPayType.MemberCard, "", MemberCardNo),
+                new BillPayInfo(IntegralAmount, EnumBillPayType.MemberIntegral, "", MemberCardNo),
+                new BillPayInfo(AlipayAmount, EnumBillPayType.Alipay, AlipayNo),
+                new BillPayInfo(WechatAmount, EnumBillPayType.Wechat, WechatNo)
+            };
+
+            var onAcc = SelectedOnCmpAccInfo != null ? SelectedOnCmpAccInfo.Name : "";
+            var cmpId = SelectedOnCmpAccInfo != null ? SelectedOnCmpAccInfo.Id : "";
+            list.Add(new BillPayInfo(DebitAmount, EnumBillPayType.OnCompanyAccount, onAcc) { CouponDetailId = cmpId });
+
+            if (RoundingAmount > 0)
+                list.Add(new BillPayInfo(RoundingAmount, EnumBillPayType.Rounding));
+            if (WipeOddAmount > 0)
+                list.Add(new BillPayInfo(WipeOddAmount, EnumBillPayType.RemoveOdd));
+
+            foreach (var usedCouponInfo in Data.UsedCouponInfos)
+            {
+                //雅座会员的优惠券需要特殊处理。
+
+                if (usedCouponInfo.FreeAmount > 0)
+                {
+                    var payInfo = new BillPayInfo(usedCouponInfo.FreeAmount, EnumBillPayType.FreeAmount, usedCouponInfo.Name, usedCouponInfo.CouponInfo.PartnerName)
+                    {
+                        CouponNum = usedCouponInfo.Count,
+                        CouponId = usedCouponInfo.CouponInfo.CouponId,
+                        CouponDetailId = usedCouponInfo.CouponInfo.RuleId
+                    };
+                    list.Add(payInfo);
+                }
+                if (usedCouponInfo.DebitAmount > 0)
+                {
+                    var payInfo = new BillPayInfo(usedCouponInfo.DebitAmount, EnumBillPayType.OnAccount, usedCouponInfo.Name, usedCouponInfo.CouponInfo.PartnerName)
+                    {
+                        CouponNum = usedCouponInfo.Count,
+                        CouponId = usedCouponInfo.CouponInfo.CouponId,
+                        CouponDetailId = usedCouponInfo.CouponInfo.RuleId
+                    };
+                    list.Add(payInfo);
+                }
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// 添加一个优惠信息。
+        /// </summary>
+        /// <param name="item">添加的优惠券信息。</param>
+        private void AddUsedCouponInfo(UsedCouponInfo item)
+        {
+            if (item == null || Data == null)
+                return;
+
+            Data.UsedCouponInfos.Add(item);
+            Data.TotalDebitAmount = Data.UsedCouponInfos.Sum(t => t.DebitAmount * t.Count);
+            Data.TotalFreeAmount = Data.UsedCouponInfos.Sum(t => t.FreeAmount * t.Count);
+
+            CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
+        }
+
+        /// <summary>
+        /// 移除一个优惠券。
+        /// </summary>
+        /// <param name="item">移除的优惠券信息。</param>
+        private void RemoveUsedCouponInfo(UsedCouponInfo item)
+        {
+            if (item == null || Data == null)
+                return;
+
+            Data.UsedCouponInfos.Remove(item);
+            Data.TotalDebitAmount = Data.UsedCouponInfos.Sum(t => t.DebitAmount * t.Count);
+            Data.TotalFreeAmount = Data.UsedCouponInfos.Sum(t => t.FreeAmount * t.Count);
+
+            CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
+        }
+
+        /// <summary>
+        /// 清除优惠券。
+        /// </summary>
+        /// <param name="Data"></param>
+        private void ClearUsedCouponInfo()
+        {
+            if (Data == null)
+                return;
+
+            Data.UsedCouponInfos.Clear();
+            Data.TotalDebitAmount = 0m;
+            Data.TotalFreeAmount = 0m;
+
+            CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
+        }
+
+        /// <summary>
+        /// 结算后的一些处理。
+        /// </summary>
+        protected virtual void DosomethingAfterSettlement()
+        {
+
+        }
+
+        #region Process Methods
+
+        #region 反结算
+
+        private object CheckOrderCanResettlementProcess(object arg)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            var param = (Tuple<string, string>)arg;
+            return service.CheckCanAntiSettlement(param.Item1, param.Item2);
+        }
+
+        private Tuple<bool, object> CheckOrderCanResettlementComplete(object arg)
+        {
+            var result = arg as string;
+            if (!string.IsNullOrEmpty(result))
+            {
+                ErrLog.Instance.E("检测账单是否允许反结算失败：{0}", result);
+                MessageDialog.Warning(result, OwnerWindow);
+                return null;
+            }
+
+            InfoLog.Instance.I("结束检测账单是否允许反结算。");
+            InfoLog.Instance.I("弹出选择反结算原因选择窗口，选择反结算原因...");
+            var wnd = new AntiSettlementReasonSelectorWindow();
+            if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
+            {
+                InfoLog.Instance.I("取消选择反结算原因，退出反结算流程。");
+                return null;
+            }
+
+            _antiSettlementReason = wnd.SelectedReason;
+            InfoLog.Instance.I("结束选择反结算原因：{0}", wnd.SelectedReason);
+            InfoLog.Instance.I("开始反结算授权...");
+            if (!WindowHelper.ShowDialog(new AuthorizationWindow(EnumRightType.AntiSettlement), OwnerWindow))
+            {
+                InfoLog.Instance.I("反结算授权失败，退出反结算流程。");
+                return null;
+            }
+
+            InfoLog.Instance.I("反结算授权成功，开始会员系统反结算...");
+            return new Tuple<bool, object>(true, Data.OrderId);
+        }
+
+        /// <summary>
+        /// 餐道会员反结算执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private object CanDaoMemberResettlementProcess(object arg)
+        {
+            var orderId = arg as string;
+            InfoLog.Instance.I("开始获取订单：\"{0}\"的会员信息...", orderId);
+            var orderService = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (orderService == null)
+            {
+                var msg = "创建IOrderService服务失败。";
+                ErrLog.Instance.E(msg);
+                return msg;
+            }
+
+            var result = orderService.GetOrderMemberInfo(orderId);
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("获取订单会员信息失败：{0}", result.Item1);
+                return result.Item1;
+            }
+
+            if (!result.Item2.IsSuccess)//没有获取到订单的会员信息。
+            {
+                InfoLog.Instance.I("没有获取到订单的会员信息。");
+                return null;
+            }
+
+            InfoLog.Instance.I("结束获取订单会员信息，交易号：{0}，卡号：{1}", result.Item2.serial, result.Item2.cardno);
+            var memberService = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+            if (memberService == null)
+            {
+                var msg = "创建IMemberService服务失败。";
+                ErrLog.Instance.E(msg);
+                return msg;
+            }
+
+            InfoLog.Instance.I("开始会员消费反结算...");
+
+            return null;
+        }
+
+        /// <summary>
+        /// 餐道会员反结算执行完成。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private Tuple<bool, object> CanDaoMemberResettlementComplete(object arg)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 雅座会员反结算执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private object YaZuoMemberResettlementProcess(object arg)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 雅座会员反结算执行完成。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private Tuple<bool, object> YaZuoMemberResettlementComplete(object arg)
+        {
+            return null;
+        }
+
+        #endregion
 
         /// <summary>
         /// 执行结账的方法。
@@ -1906,57 +2446,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 异步发送结算广播消息。
-        /// </summary>
-        private void BroadcastSettlementMsgAsync()
-        {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                InfoLog.Instance.I("广播结算消息给PAD...");
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Pad, Data.OrderId);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Pad);
-
-                InfoLog.Instance.I("广播结算指令给手环...");
-                var msg = string.Format("{0}|{1}|{2}", Data.WaiterId, Data.TableName, Data.OrderId);
-                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
-        }
-
-        /// <summary>
-        /// 异步发送咖啡模式结账广播消息。
-        /// </summary>
-        private void BroadcastCoffeeSettlementMsgAsyc()
-        {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
-        }
-
-        /// <summary>
-        /// 异步发送清台广播消息。
-        /// </summary>
-        private void BroadcastClearTableMsgAsync()
-        {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
-                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
-                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播手环结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
-        }
-
-        /// <summary>
         /// 小费结算执行方法。
         /// </summary>
         /// <param name="arg"></param>
@@ -1988,6 +2477,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             return new Tuple<bool, object>(true, null);
         }
 
+        /// <summary>
+        /// 整单退菜的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         private object BackAllDishProcess(object param)
         {
             InfoLog.Instance.I("开始桌台{0}整桌退菜...", Data.TableNo);
@@ -1998,6 +2492,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             return service.BackAllDish(Data.OrderId, Data.TableName, Globals.UserInfo.UserName);
         }
 
+        /// <summary>
+        /// 整单退菜执行完成。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         protected virtual Tuple<bool, object> BackAllDishComplete(object arg)
         {
             var result = (string)arg;
@@ -2013,6 +2512,40 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             BackAllDishSuccessProcess();
             InfoLog.Instance.I("桌台{0}整桌退菜成功：{1}", Data.TableNo, result);
             return new Tuple<bool, object>(true, null);
+        }
+
+        /// <summary>
+        /// 退菜的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object BackDishProess(object param)
+        {
+            InfoLog.Instance.I("开始桌台{0}退菜...", Data.TableNo);
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            return service.BackDish((BackDishComboInfo)param);
+        }
+
+        /// <summary>
+        /// 退菜执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        public void BackDishComplete(object param)
+        {
+            var result = (string)param;
+            if (!string.IsNullOrEmpty(result))
+            {
+                ErrLog.Instance.E("退菜失败。{0}", result);
+                MessageDialog.Warning(result);
+                return;
+            }
+
+            InfoLog.Instance.I("退菜成功。");
+            NotifyDialog.Notify("退菜成功", OwnerWindow);
+            GetTableDishInfoAsync();
         }
 
         /// <summary>
@@ -2254,6 +2787,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (allowInputBackNum)
             {
+                var numWnd = new NumInputWindow("请输入退菜数量：", "退菜数量：", SelectedOrderDish.DishNum);
+                if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
+                    return;
+
                 //输入退菜数量
             }
 
@@ -2356,469 +2893,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             return null;
         }
 
-        #region 反结算
-
-        private object CheckOrderCanResettlementProcess(object arg)
-        {
-            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (service == null)
-                return "创建IOrderService服务失败。";
-
-            var param = (Tuple<string, string>)arg;
-            return service.CheckCanAntiSettlement(param.Item1, param.Item2);
-        }
-
-        private Tuple<bool, object> CheckOrderCanResettlementComplete(object arg)
-        {
-            var result = arg as string;
-            if (!string.IsNullOrEmpty(result))
-            {
-                ErrLog.Instance.E("检测账单是否允许反结算失败：{0}", result);
-                MessageDialog.Warning(result, OwnerWindow);
-                return null;
-            }
-
-            InfoLog.Instance.I("结束检测账单是否允许反结算。");
-            InfoLog.Instance.I("弹出选择反结算原因选择窗口，选择反结算原因...");
-            var wnd = new AntiSettlementReasonSelectorWindow();
-            if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
-            {
-                InfoLog.Instance.I("取消选择反结算原因，退出反结算流程。");
-                return null;
-            }
-
-            _antiSettlementReason = wnd.SelectedReason;
-            InfoLog.Instance.I("结束选择反结算原因：{0}", wnd.SelectedReason);
-            InfoLog.Instance.I("开始反结算授权...");
-            if (!WindowHelper.ShowDialog(new AuthorizationWindow(EnumRightType.AntiSettlement), OwnerWindow))
-            {
-                InfoLog.Instance.I("反结算授权失败，退出反结算流程。");
-                return null;
-            }
-
-            InfoLog.Instance.I("反结算授权成功，开始会员系统反结算...");
-            return new Tuple<bool, object>(true, Data.OrderId);
-        }
-
-        /// <summary>
-        /// 餐道会员反结算执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private object CanDaoMemberResettlementProcess(object arg)
-        {
-            var orderId = arg as string;
-            InfoLog.Instance.I("开始获取订单：\"{0}\"的会员信息...", orderId);
-            var orderService = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (orderService == null)
-            {
-                var msg = "创建IOrderService服务失败。";
-                ErrLog.Instance.E(msg);
-                return msg;
-            }
-
-            var result = orderService.GetOrderMemberInfo(orderId);
-            if (!string.IsNullOrEmpty(result.Item1))
-            {
-                ErrLog.Instance.E("获取订单会员信息失败：{0}", result.Item1);
-                return result.Item1;
-            }
-
-            if (!result.Item2.IsSuccess)//没有获取到订单的会员信息。
-            {
-                InfoLog.Instance.I("没有获取到订单的会员信息。");
-                return null;
-            }
-
-            InfoLog.Instance.I("结束获取订单会员信息，交易号：{0}，卡号：{1}", result.Item2.serial, result.Item2.cardno);
-            var memberService = ServiceManager.Instance.GetServiceIntance<IMemberService>();
-            if (memberService == null)
-            {
-                var msg = "创建IMemberService服务失败。";
-                ErrLog.Instance.E(msg);
-                return msg;
-            }
-
-            InfoLog.Instance.I("开始会员消费反结算...");
-
-            return null;
-        }
-
-        /// <summary>
-        /// 餐道会员反结算执行完成。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private Tuple<bool, object> CanDaoMemberResettlementComplete(object arg)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// 雅座会员反结算执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private object YaZuoMemberResettlementProcess(object arg)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// 雅座会员反结算执行完成。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private Tuple<bool, object> YaZuoMemberResettlementComplete(object arg)
-        {
-            return null;
-        }
-
-
-
         #endregion
-
-        /// <summary>
-        /// 获取优惠券类型对应字符串。
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private string GetCouponTypeString(EnumCouponType type)
-        {
-            return ((int)type).ToString().PadLeft(type != EnumCouponType.Member ? 2 : 4, '0');
-        }
-
-        /// <summary>
-        /// 计算账单的应收金额。
-        /// </summary>
-        private void CalculatePaymentAmount()
-        {
-            if (Data == null)
-                return;
-
-            var paymentAmount = Data.TotalAmount - Data.TotalFreeAmount - Data.TotalDebitAmount; //应收=总额-优免-挂账
-            paymentAmount = Math.Max(0, paymentAmount);//应收必须大于0
-            paymentAmount += Data.TipAmount;//应收需要再加上小费金额。
-            var amount = ProcessOdd(paymentAmount, _curOddModel, Globals.OddAccuracy);
-            Data.AdjustmentAmount = paymentAmount - amount;
-            Data.PaymentAmount = Math.Max(0, amount); //应付金额不能小于0
-
-            if (_curOddModel == EnumOddModel.Rounding)
-                RoundingAmount = Math.Abs(Data.AdjustmentAmount);
-            else if (_curOddModel == EnumOddModel.Wipe)
-                WipeOddAmount = Data.AdjustmentAmount;
-
-            GenerateSettlementInfo();
-        }
-
-        /// <summary>
-        /// 处理零头。
-        /// </summary>
-        /// <param name="amount">待处理的金额。</param>
-        /// <param name="oddModel">零头处理方式。</param>
-        /// <param name="oddAccuracy">零头处理精度。</param>
-        /// <returns></returns>
-        private decimal ProcessOdd(decimal amount, EnumOddModel oddModel, EnumOddAccuracy oddAccuracy)
-        {
-            switch (oddModel)
-            {
-                case EnumOddModel.None:
-                    return amount;
-                case EnumOddModel.Rounding:
-                    switch (oddAccuracy)
-                    {
-                        case EnumOddAccuracy.Fen:
-                            return Math.Round(amount, 1, MidpointRounding.AwayFromZero);
-                        case EnumOddAccuracy.Jiao:
-                            return Math.Round(amount, 0, MidpointRounding.AwayFromZero);
-                        case EnumOddAccuracy.Yuan:
-                            return Math.Round(amount / 10, 0, MidpointRounding.AwayFromZero) * 10;
-                        default:
-                            throw new ArgumentOutOfRangeException("oddAccuracy", oddAccuracy, null);
-                    }
-                case EnumOddModel.Wipe:
-                    switch (oddAccuracy)
-                    {
-                        case EnumOddAccuracy.Fen:
-                            return Math.Floor(amount * 10) / 10;
-                        case EnumOddAccuracy.Jiao:
-                            return Math.Floor(amount);
-                        case EnumOddAccuracy.Yuan:
-                            return Math.Floor(amount / 10) * 10;
-                        default:
-                            throw new ArgumentOutOfRangeException("oddAccuracy", oddAccuracy, null);
-                    }
-                default:
-                    throw new ArgumentOutOfRangeException("oddModel", oddModel, null);
-            }
-        }
-
-        /// <summary>
-        /// 生成收款信息。
-        /// </summary>
-        private void GenerateSettlementInfo()
-        {
-            if (Data.HasBeenPaied)
-            {
-                SettlementInfo = "已结账";
-                return;
-            }
-
-            if (!_isUserInputCash)//当不是用户输入现金时才更新现金金额。
-                CashAmount = Math.Max(0, Data.PaymentAmount - BankAmount - AlipayAmount - IntegralAmount - MemberAmount - WechatAmount - DebitAmount);
-
-            var settlementInfo = new List<string>();
-
-            if (Data.TotalDebitAmount != 0)
-                settlementInfo.Add(string.Format("挂账：{0:f2}", Data.TotalDebitAmount));
-
-            if (Data.TotalFreeAmount != 0)
-                settlementInfo.Add(string.Format("优免：{0:f2}", Data.TotalFreeAmount));
-
-            if (Data.AdjustmentAmount != 0)
-            {
-                if (Globals.OddModel == EnumOddModel.Rounding)
-                    settlementInfo.Add(string.Format("舍{1}：{0:f2}", Math.Abs(Data.AdjustmentAmount), Data.AdjustmentAmount > 0 ? "去" : "入"));
-                else
-                    settlementInfo.Add(string.Format("抹零：{0:f2}", Data.AdjustmentAmount));
-            }
-
-            //支付部分
-            if (CashAmount > 0)
-                settlementInfo.Add(string.Format("现金：{0:f2}", CashAmount));
-
-            if (BankAmount > 0)
-                settlementInfo.Add(string.Format("银行卡：{0:f2}", BankAmount));
-
-            if (MemberAmount > 0)
-                settlementInfo.Add(string.Format("会员消费：{0:f2}", MemberAmount));
-
-            if (IntegralAmount > 0)
-                settlementInfo.Add(string.Format("会员积分：{0:f2}", IntegralAmount));
-
-            if (DebitAmount > 0)
-                settlementInfo.Add(string.Format("挂账：{0:f2}", DebitAmount));
-
-            if (AlipayAmount > 0)
-                settlementInfo.Add(string.Format("支付宝：{0:f2}", AlipayAmount));
-
-            if (WechatAmount > 0)
-                settlementInfo.Add(string.Format("微信支付：{0:f2}", WechatAmount));
-
-            Data.TotalAlreadyPayment = CashAmount + BankAmount + MemberAmount + IntegralAmount + DebitAmount + AlipayAmount + WechatAmount; //付款总额=各种付款方式总和。
-            var remainderAmount = Data.PaymentAmount - Data.TotalAlreadyPayment;//剩余金额=应付金额-付款总额。
-            if (remainderAmount > 0)
-            {
-                ChargeAmount = 0;
-                settlementInfo.Add(Data.TotalAlreadyPayment > 0 ? string.Format("还需再收：{0:f2}", remainderAmount) : string.Format("需收款：{0:f2}", remainderAmount));
-            }
-            ChargeAmount = Math.Abs(remainderAmount);
-            if (ChargeAmount > 0)
-                settlementInfo.Add(string.Format("找零：{0:f2}", ChargeAmount));
-
-            //小费当前计算规则：只能从现金扣除，
-            if (HasTip && Data.TipAmount > 0)//有小费金额的时候才计算小费实收。
-            {
-                var realyPayment = Data.PaymentAmount - Data.TipAmount;//真实的应收=明面行应收-小费金额。
-                var tipPayment = Data.TotalAlreadyPayment - realyPayment;//小费实付金额=付款总额-真实应收。
-                tipPayment = Math.Max(0, tipPayment);//小费实付金额不能小于0。
-                tipPayment = Math.Min(CashAmount, tipPayment);//小费实付金额不能大于现金。
-                TipPaymentAmount = tipPayment;
-            }
-
-            SettlementInfo = string.Format("收款：{0}", string.Join("，", settlementInfo));
-        }
-
-        /// <summary>
-        /// 添加一个优惠券到使用优惠券列表。
-        /// </summary>
-        /// <param name="coupon">使用的优惠券。</param>
-        /// <param name="usedCount">使用优惠券数量。</param>
-        /// <param name="isDiscount">是否是折扣类优惠券。</param>
-        /// <param name="freeAmount">单个优惠券优免金额。（当折扣类的优惠券或者手动输入优免金额的就需要传入数值）</param>
-        private void AddCouponInfoAsUsed(CouponInfo coupon, int usedCount, bool isDiscount, decimal? freeAmount = null)
-        {
-            var usedCouponInfo = new UsedCouponInfo
-            {
-                CouponInfo = coupon,
-                IsDiscount = isDiscount,
-                Name = coupon.Name,
-                Count = usedCount,
-                DebitAmount = coupon.DebitAmount * usedCount,
-                FreeAmount = freeAmount ?? coupon.FreeAmount ?? 0 * usedCount, //优免金额 = 单个优惠券优免金额 * 数量。(如果单个优惠券优免金额为null，则取优惠券的优免金额，如果还是null，则取0）
-            };
-
-            if (usedCouponInfo.DebitAmount > Data.PaymentAmount)
-            {
-                if (!MessageDialog.Quest("挂账金额大于应收金额，确定使用该优惠券？"))
-                    return;
-            }
-
-            var tempFreeAmount = Math.Max(0, Data.PaymentAmount - usedCouponInfo.DebitAmount);//最大能优免的金额=应收金额-挂账金额且大于0。
-            usedCouponInfo.FreeAmount = Math.Min(tempFreeAmount, usedCouponInfo.FreeAmount);//实际优免金额不能大于最大能优免的金额。
-            usedCouponInfo.BillAmount = Math.Round((usedCouponInfo.DebitAmount + usedCouponInfo.FreeAmount) * usedCouponInfo.Count * -1, 2);
-
-            if (!isDiscount)
-            {
-                var hasDiscountCoupon = Data.UsedCouponInfos.Any(t => t.IsDiscount);
-                if (hasDiscountCoupon)
-                    MessageDialog.Warning("帐单已选择过折扣类优惠，请注意选择使用优惠的顺序！");
-            }
-
-            AddUsedCouponInfo(usedCouponInfo);
-        }
-
-        /// <summary>
-        /// 检测账单是否允许结账。
-        /// </summary>
-        /// <returns>允许结账则返回null，否则返回错误信息。</returns>
-        private string CheckTheBillAllowPay()
-        {
-            if (Data.DishInfos.Any(t => t.DishStatus == EnumDishStatus.ToBeWeighed))
-                return "还有未称重菜品。";
-
-            if (Data.TipAmount > 0)//当有小费的时候，应付金额要扣除小费部分，因为允许客户不给小费。
-            {
-                if (Data.PaymentAmount - Data.TipAmount - Data.TotalAlreadyPayment > 0m)
-                    return "还有未收金额。";
-            }
-            else
-            {
-                if (Data.PaymentAmount - Data.TotalAlreadyPayment > 0m)
-                    return "还有未收金额。";
-            }
-
-            if (ChargeAmount > 100)
-                return "找零金额不能大于100。";
-
-            if (MemberAmount > 0 && string.IsNullOrEmpty(MemberCardNo))
-                return "使用会员储值请先登录会员。";
-
-            if (IntegralAmount > 0 && string.IsNullOrEmpty(MemberCardNo))
-                return "使用会员积分请先登录会员。";
-
-            if (DebitAmount > 0 && SelectedOnCmpAccInfo == null)
-                return "使用挂账金额请先选择挂账单位。";
-
-            if (AlipayAmount > 0 && string.IsNullOrEmpty(AlipayNo))
-                return "使用支付宝支付请输入支付宝账号。";
-
-            if (WechatAmount > 0 && string.IsNullOrEmpty(WechatNo))
-                return "使用微信支付请先输入微信账号。";
-
-            return null;
-        }
-
-        /// <summary>
-        /// 生成账单结算信息集合。
-        /// </summary>
-        /// <returns></returns>
-        private List<BillPayInfo> GenerateBillPayInfos()
-        {
-            int bankId = SelectedBankInfo != null ? SelectedBankInfo.Id : 0;
-            var list = new List<BillPayInfo>
-            {
-                new BillPayInfo(CashAmount - ChargeAmount, EnumBillPayType.Cash),
-                new BillPayInfo(BankAmount, EnumBillPayType.BankCard, BankCardNo, bankId.ToString()),
-                new BillPayInfo(MemberAmount, EnumBillPayType.MemberCard, "", MemberCardNo),
-                new BillPayInfo(IntegralAmount, EnumBillPayType.MemberIntegral, "", MemberCardNo),
-                new BillPayInfo(AlipayAmount, EnumBillPayType.Alipay, AlipayNo),
-                new BillPayInfo(WechatAmount, EnumBillPayType.Wechat, WechatNo)
-            };
-
-            var onAcc = SelectedOnCmpAccInfo != null ? SelectedOnCmpAccInfo.Name : "";
-            var cmpId = SelectedOnCmpAccInfo != null ? SelectedOnCmpAccInfo.Id : "";
-            list.Add(new BillPayInfo(DebitAmount, EnumBillPayType.OnCompanyAccount, onAcc) { CouponDetailId = cmpId });
-
-            if (RoundingAmount > 0)
-                list.Add(new BillPayInfo(RoundingAmount, EnumBillPayType.Rounding));
-            if (WipeOddAmount > 0)
-                list.Add(new BillPayInfo(WipeOddAmount, EnumBillPayType.RemoveOdd));
-
-            foreach (var usedCouponInfo in Data.UsedCouponInfos)
-            {
-                //雅座会员的优惠券需要特殊处理。
-
-                if (usedCouponInfo.FreeAmount > 0)
-                {
-                    var payInfo = new BillPayInfo(usedCouponInfo.FreeAmount, EnumBillPayType.FreeAmount, usedCouponInfo.Name, usedCouponInfo.CouponInfo.PartnerName)
-                    {
-                        CouponNum = usedCouponInfo.Count,
-                        CouponId = usedCouponInfo.CouponInfo.CouponId,
-                        CouponDetailId = usedCouponInfo.CouponInfo.RuleId
-                    };
-                    list.Add(payInfo);
-                }
-                if (usedCouponInfo.DebitAmount > 0)
-                {
-                    var payInfo = new BillPayInfo(usedCouponInfo.DebitAmount, EnumBillPayType.OnAccount, usedCouponInfo.Name, usedCouponInfo.CouponInfo.PartnerName)
-                    {
-                        CouponNum = usedCouponInfo.Count,
-                        CouponId = usedCouponInfo.CouponInfo.CouponId,
-                        CouponDetailId = usedCouponInfo.CouponInfo.RuleId
-                    };
-                    list.Add(payInfo);
-                }
-            }
-
-            return list;
-        }
-
-        /// <summary>
-        /// 添加一个优惠信息。
-        /// </summary>
-        /// <param name="item">添加的优惠券信息。</param>
-        private void AddUsedCouponInfo(UsedCouponInfo item)
-        {
-            if (item == null || Data == null)
-                return;
-
-            Data.UsedCouponInfos.Add(item);
-            Data.TotalDebitAmount = Data.UsedCouponInfos.Sum(t => t.DebitAmount * t.Count);
-            Data.TotalFreeAmount = Data.UsedCouponInfos.Sum(t => t.FreeAmount * t.Count);
-
-            CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
-        }
-
-        /// <summary>
-        /// 移除一个优惠券。
-        /// </summary>
-        /// <param name="item">移除的优惠券信息。</param>
-        private void RemoveUsedCouponInfo(UsedCouponInfo item)
-        {
-            if (item == null || Data == null)
-                return;
-
-            Data.UsedCouponInfos.Remove(item);
-            Data.TotalDebitAmount = Data.UsedCouponInfos.Sum(t => t.DebitAmount * t.Count);
-            Data.TotalFreeAmount = Data.UsedCouponInfos.Sum(t => t.FreeAmount * t.Count);
-
-            CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
-        }
-
-        /// <summary>
-        /// 清除优惠券。
-        /// </summary>
-        /// <param name="Data"></param>
-        private void ClearUsedCouponInfo()
-        {
-            if (Data == null)
-                return;
-
-            Data.UsedCouponInfos.Clear();
-            Data.TotalDebitAmount = 0m;
-            Data.TotalFreeAmount = 0m;
-
-            CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
-        }
-
-        /// <summary>
-        /// 结算后的一些处理。
-        /// </summary>
-        protected virtual void DosomethingAfterSettlement()
-        {
-
-        }
 
         #endregion
     }

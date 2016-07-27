@@ -60,6 +60,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackDishComboInfo.cs" />
     <Compile Include="BackDishInfo.cs" />
     <Compile Include="BankInfo.cs" />
     <Compile Include="BaseNotifyObject.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Request\AddOrderMemberSaleInfoRequest.cs" />
     <Compile Include="Request\AntiSettlementOrderRequest.cs" />
     <Compile Include="Request\BackAllDishRequest.cs" />
+    <Compile Include="Request\BackFishPotDishRequest.cs" />
     <Compile Include="Request\ClearTableRequest.cs" />
     <Compile Include="Request\CanDaoMemberBaseRequest.cs" />
     <Compile Include="Request\CanDaoMemberCheckMobileRepeatRequest.cs" />

@@ -130,13 +130,9 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 退菜。
         /// </summary>
-        /// <param name="orderid">订单号。</param>
-        /// <param name="tableNo">餐台号。</param>
-        /// <param name="authorizerId">退菜授权人Id。</param>
-        /// <param name="userId">收银员Id。</param>
-        /// <param name="backDishInfo">退菜的菜品信息。</param>
+        /// <param name="backDishComInfo">退菜组合信息。</param>
         /// <returns>退菜成功返回null，否则返回错误信息。</returns>
-        string BackDish(string orderid, string tableNo, string authorizerId, string userId, BackDishInfo backDishInfo);
+        string BackDish(BackDishComboInfo backDishComInfo);
 
         /// <summary>
         /// 退整桌菜。
