@@ -1,4 +1,4 @@
-﻿<cSystem:UserControlBase x:Class="CanDao.Pos.VIPManage.Views.UcVipRechargeView"
+﻿<controls:PosBaseWindow x:Class="CanDao.Pos.VIPManage.Views.UcVipRechargeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,7 +8,7 @@
              xmlns:controls1="clr-namespace:CanDao.Pos.ResourceService.Controls;assembly=CanDao.Pos.ResourceService"
              mc:Ignorable="d" 
              Height="510" Width="760" Background="White">
-    <UserControl.Resources>
+    <controls:PosBaseWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/CanDao.Pos.ResourceService;component/DictionaryServer.xaml"/>
@@ -73,10 +73,10 @@
             </Setter>
         </Style>
             </ResourceDictionary>
-    </UserControl.Resources>
+    </controls:PosBaseWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
-              <RowDefinition Height="25*"></RowDefinition>
+              <RowDefinition Height="30*"></RowDefinition>
             <RowDefinition Height="70*"></RowDefinition>
         </Grid.RowDefinitions>
         <cSystem:LoadingWait x:Name="_loading"  Visibility="Collapsed"/>
@@ -137,5 +137,7 @@
             <cSystem:CtlDigitalKeyboard x:Name="Keyboard" Grid.Column="1"  Height="250" VerticalAlignment="Top" Width="310" />
         </Grid>
     </Grid>
-</cSystem:UserControlBase>
+</controls:PosBaseWindow>
+
+
 

@@ -4,6 +4,7 @@
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+                        xmlns:views="clr-namespace:CanDao.Pos.SystemConfig.Views;assembly=CanDao.Pos.SystemConfig"
                         Height="680" Width="900" ShowInTaskbar="False">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -23,7 +24,7 @@
                 <TextBlock Text="启动打印复写卡" FontSize="20" FontWeight="Bold" Height="40"/>
             </TabItem.Header>
             <TabItem.Content>
-                <TextBlock Text="把复写卡控件写在这里" FontSize="34" Foreground="Red"/>
+                <views:UcCopyPrintView/>
             </TabItem.Content>
         </TabItem>
         <TabItem>
@@ -49,7 +50,7 @@
                 <TextBlock Text="钱箱密码验证" FontSize="20" FontWeight="Bold" Height="40"/>
             </TabItem.Header>
             <TabItem.Content>
-                <TextBlock Text="钱箱密码控件写在这里" FontSize="34" Foreground="Red"/>
+                <views:UCCashboxView/>
             </TabItem.Content>
         </TabItem>
     </TabControl>

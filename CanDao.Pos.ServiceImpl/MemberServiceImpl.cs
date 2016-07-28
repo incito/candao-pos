@@ -430,8 +430,8 @@ namespace CanDao.Pos.ServiceImpl
             {
 
                 var parm = new Dictionary<string, object>();
-                parm.Add("entity_cardNo", insideId);
-                parm.Add("mobile", cardno);
+                parm.Add("entity_cardNo", cardno);
+                parm.Add("mobile", insideId);
                 parm.Add("branch_id", branch_id);
                 parm.Add("level", level);
 

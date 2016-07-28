@@ -63,7 +63,7 @@ namespace CanDao.Pos.UI.Utility
 
             if (result.Item2.Any())
             {
-                var localMac = PCInfoHelper.MACAddr;
+                var localMac = MachineManage.GetMachineId();
                 var thisMachineNoClearList = result.Item2.Where(t => t.MachineFlag.Equals(localMac)).ToList();
                 var otherMachineNoClear = result.Item2.Any(t => !t.MachineFlag.Equals(localMac));//是否有其他机器未清机。
 
@@ -93,7 +93,7 @@ namespace CanDao.Pos.UI.Utility
             if (!WindowHelper.ShowDialog(wnd))
                 return false;
 
-            var request = new ClearnerRequest { UserId = Globals.UserInfo.UserName, UserName = Globals.UserInfo.FullName, Mac = PCInfoHelper.MACAddr, Authorizer = Globals.Authorizer.FullName };
+            var request = new ClearnerRequest { UserId = Globals.UserInfo.UserName, UserName = Globals.UserInfo.FullName, Mac = MachineManage.GetMachineId(), Authorizer = Globals.Authorizer.FullName };
             _clearPosSuccess = false;
             var workFlowClear = new WorkFlowInfo(ClearnerProcess, ClearnerComplete, "清机中...");
             WorkFlowService.Start(request, workFlowClear);

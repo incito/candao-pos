@@ -18,7 +18,7 @@ namespace CanDao.Pos.VIPManage.Views
     /// <summary>
     /// UcVipLogOff.xaml 的交互逻辑
     /// </summary>
-    public partial class UcVipModifyTelNumView : UserControlBase
+    public partial class UcVipModifyTelNumView 
     {
         public UcVipModifyTelNumView()
         {

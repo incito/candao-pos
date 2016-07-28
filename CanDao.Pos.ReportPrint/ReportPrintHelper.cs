@@ -8,6 +8,7 @@ using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
+using CanDao.Pos.Model.Reports;
 
 namespace CanDao.Pos.ReportPrint
 {
@@ -580,6 +581,133 @@ namespace CanDao.Pos.ReportPrint
                 ReportPrintingWindow.Instance.Hide();
             }
         }
+
+        #region 营业明细表打印
+
+        /// <summary>
+        /// 打印营业报表明细。
+        /// </summary>
+        /// <param name="fullInfo"></param>
+        public static bool PrintBusinessDataDetail(MBusinessDataDetail businessDataDetail)
+        {
+            string msg = "打印营业报表明细";
+            DataTable mainDb;
+            DataTable detailDb;
+            DataTable jsDb;
+            DataTable yhDb;
+            ToBusinessDataDetailTabel(businessDataDetail, out mainDb, out detailDb, out jsDb, out yhDb);
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(mainDb);
+            ds.Tables.Add(detailDb);
+            ds.Tables.Add(jsDb);
+            ds.Tables.Add(yhDb);
+
+            var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\BusinessDataDetail.frx");
+            if (!File.Exists(file))
+            {
+                ErrLog.Instance.E(msg + "文件缺失。");
+                MessageDialog.Warning(msg + "文件缺失。");
+                return false;
+            }
+
+            InfoLog.Instance.I("开始"+msg);
+            FastReportHelper.Print(file, ds);
+            InfoLog.Instance.I("结束"+msg);
+            return true;
+
+       
+        }
+
+        /// <summary>
+        /// 创建营业明细Table
+        /// </summary>
+        /// <param name="businessDataDetail"></param>
+        /// <param name="oMainTable"></param>
+        /// <param name="oCategoryTable"></param>
+        private static void ToBusinessDataDetailTabel(MBusinessDataDetail businessDataDetail, out DataTable oMainTable,
+            out DataTable oCategoryTable, out DataTable oJsTable, out DataTable oYhTable)
+        {
+            oMainTable = new DataTable();
+            oCategoryTable = new DataTable();
+
+            var mainTable = new DataTable("tb_main");
+            DataColumn dc = CreateDataColumn(typeof(DateTime), "起始时间", "StartTime", DateTime.MinValue);
+            mainTable.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(DateTime), "结束时间", "EndTime", DateTime.MinValue);
+            mainTable.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(DateTime), "当前时间", "CurrentTime", DateTime.MinValue);
+            mainTable.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(string), "操作员", "UserName", "");
+            mainTable.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(string), "开台数", "kaitaishu", "");
+            mainTable.Columns.Add(dc);
+
+            dc = CreateDataColumn(typeof(string), "应收合计", "shouldamount", "");
+            mainTable.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(string), "优惠合计", "discountamount", "");
+            mainTable.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(string), "实收合计", "paidinamount", "");
+            mainTable.Columns.Add(dc);
+            dc = CreateDataColumn(typeof(string), "小费", "xiaofei", "");
+            mainTable.Columns.Add(dc);
+
+            AddObject2DataTable(mainTable, businessDataDetail);
+            oMainTable = mainTable;
+
+            var categoryTable = new DataTable("tb_data");
+
+            DataColumn tempColumn = CreateDataColumn(typeof(string), "品项", "DishName", "");
+            categoryTable.Columns.Add(tempColumn);
+            tempColumn = CreateDataColumn(typeof(decimal), "金额", "money", 0m);
+            categoryTable.Columns.Add(tempColumn);
+
+            if (businessDataDetail.Categories != null)
+            {
+                businessDataDetail.Categories.ForEach(t => AddObject2DataTable(categoryTable, t));
+                oCategoryTable = categoryTable;
+            }
+
+            var jsTable = new DataTable("tb_js");
+            DataColumn jsColumn = CreateDataColumn(typeof(string), "结算方式", "jsName", "");
+            jsTable.Columns.Add(jsColumn);
+            jsColumn = CreateDataColumn(typeof(decimal), "结算金额", "money", 0m);
+            jsTable.Columns.Add(jsColumn);
+
+            jsTable.Rows.Add("现金", businessDataDetail.money);
+            foreach (var hang in businessDataDetail.HangingMonies)
+            {
+                jsTable.Rows.Add(hang.HangingName, hang.HangingMoney);
+            }
+            jsTable.Rows.Add("微信", businessDataDetail.weixin);
+            jsTable.Rows.Add("支付宝", businessDataDetail.zhifubao);
+            jsTable.Rows.Add("刷工行卡", businessDataDetail.icbc);
+            jsTable.Rows.Add("刷他行卡", businessDataDetail.otherbank);
+            jsTable.Rows.Add("会员储值消费净值", businessDataDetail.merbervaluenet);
+
+
+
+            oJsTable = jsTable;
+
+            var yhTable = new DataTable("tb_yh");
+            DataColumn yhColumn = CreateDataColumn(typeof(string), "优惠方式", "yhName", "");
+            yhTable.Columns.Add(yhColumn);
+            yhColumn = CreateDataColumn(typeof(decimal), "优惠金额", "money", 0m);
+            yhTable.Columns.Add(yhColumn);
+
+            yhTable.Rows.Add("优免", businessDataDetail.bastfree);
+            yhTable.Rows.Add("会员积分消费", businessDataDetail.integralconsum);
+            yhTable.Rows.Add("会员券消费", businessDataDetail.meberTicket);
+            yhTable.Rows.Add("折扣优惠", businessDataDetail.discountmoney);
+            yhTable.Rows.Add("抹零", businessDataDetail.malingincom);
+            yhTable.Rows.Add("赠送金额", businessDataDetail.give);
+            yhTable.Rows.Add("四舍五入", businessDataDetail.handervalue);
+            yhTable.Rows.Add("会员储值消费虚增", businessDataDetail.mebervalueadd);
+
+            oYhTable = yhTable;
+        }
+
+        #endregion
 
         #endregion
 

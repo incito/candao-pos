@@ -6,9 +6,12 @@ using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
+using CanDao.Pos.Model.Reports;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
 using JunLan.Common.Base;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using HttpHelper = CanDao.Pos.Common.HttpHelper;
 
 namespace CanDao.Pos.ServiceImpl
@@ -23,7 +26,8 @@ namespace CanDao.Pos.ServiceImpl
             string addr = ServiceAddrCache.GetServiceAddr("RestaurantOpened");
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, bool>("开业接口地址为空。", false);
-            List<string> param = new List<string> { "", "", PCInfoHelper.LocalIPAddr, "0" };//最后一个"0"是接口的CallType为1时是开业，为0时是检测是否开业。
+            List<string> param = new List<string> {"", "", PCInfoHelper.LocalIPAddr, "0"};
+                //最后一个"0"是接口的CallType为1时是开业，为0时是检测是否开业。
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, bool>(result.Item1, false);
@@ -36,7 +40,8 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "开业接口地址为空。";
 
-            List<string> param = new List<string> { userName, password, PCInfoHelper.LocalIPAddr, "1" };//最后一个"1"是接口的CallType为1时是开业，为0时是检测是否开业。
+            List<string> param = new List<string> {userName, password, PCInfoHelper.LocalIPAddr, "1"};
+                //最后一个"1"是接口的CallType为1时是开业，为0时是检测是否开业。
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return result.Item1;
@@ -49,7 +54,8 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, bool>("零找金接口地址为空。", false);
 
-            List<string> param = new List<string> { userName, PCInfoHelper.MACAddr, "0", "0" };//参数顺序：当前用户，机器标识，零找金额，查询或输入（0查询，1输入）
+            List<string> param = new List<string> {userName, MachineManage.GetMachineId(), "0", "0"};
+                //参数顺序：当前用户，机器标识，零找金额，查询或输入（0查询，1输入）
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, bool>(string.Format("检测是否输入零找金是错误：{0}", result.Item1), false);
@@ -62,7 +68,13 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "零找金接口地址为空。";
 
-            List<string> param = new List<string> { userName, PCInfoHelper.MACAddr, amount.ToString(CultureInfo.InvariantCulture), "1" };
+            List<string> param = new List<string>
+            {
+                userName,
+                MachineManage.GetMachineId(),
+                amount.ToString(CultureInfo.InvariantCulture),
+                "1"
+            };
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return result.Item1;
@@ -77,7 +89,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new GetSystemSetDataRequest { type = type.ToString("G") };
+                var request = new GetSystemSetDataRequest {type = type.ToString("G")};
                 var result = HttpHelper.HttpPost<GetSystemSetDataResponse>(addr, request);
                 if (result == null || !result.rows.Any())
                     return new Tuple<string, List<SystemSetData>>("返回系统设置值为空。", null);
@@ -98,7 +110,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, OrderDishInfo>("获取餐具信息地址为空。", null);
 
-            var param = new List<string> { userName };
+            var param = new List<string> {userName};
             var result = RestHttpHelper.HttpGet<GetDinnerWareInfoResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, OrderDishInfo>(result.Item1, null);
@@ -143,7 +155,10 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new GetTableByTypeRequest { tableType = tableTypes.Select(t => ((int)t).ToString()).ToList() };
+                var request = new GetTableByTypeRequest
+                {
+                    tableType = tableTypes.Select(t => ((int) t).ToString()).ToList()
+                };
                 var result = HttpHelper.HttpPost<List<TableInfoResponse>>(addr, request);
                 var dataList = new List<TableInfo>();
                 if (result != null && result.Any())
@@ -200,9 +215,9 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "清机地址为空。";
 
-            var mac = request.Mac ?? PCInfoHelper.MACAddr;
+            var mac = request.Mac ?? MachineManage.GetMachineId();
             var posId = request.PosId ?? SystemConfigCache.PosId;
-            var param = new List<string> { request.UserId, request.UserName, mac, posId, request.Authorizer };
+            var param = new List<string> {request.UserId, request.UserName, mac, posId, request.Authorizer};
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return "清机失败：" + result.Item1;
@@ -239,7 +254,7 @@ namespace CanDao.Pos.ServiceImpl
                 return "结业地址为空。";
 
             var ipAddr = request.IpAddress ?? PCInfoHelper.IPAddr;
-            var param = new List<string> { request.UserId, ipAddr };
+            var param = new List<string> {request.UserId, ipAddr};
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return "结业失败：" + result.Item1;
@@ -272,12 +287,14 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "广播消息地址为空。";
 
-            var param = new List<string> { Globals.UserInfo.UserName, msgId.ToString(), msg };
+            var param = new List<string> {Globals.UserInfo.UserName, msgId.ToString(), msg};
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return "广播消息失败：" + result.Item1;
 
-            return result.Item2.IsSuccess ? null : string.IsNullOrEmpty(result.Item2.Info) ? "广播消息失败" : result.Item2.Info;
+            return result.Item2.IsSuccess
+                ? null
+                : string.IsNullOrEmpty(result.Item2.Info) ? "广播消息失败" : result.Item2.Info;
         }
 
         public Tuple<string, List<BankInfo>> GetAllBankInfos()
@@ -289,7 +306,9 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var response = HttpHelper.HttpGet<List<GetBankInfoResponse>>(addr);
-                var result = response != null ? response.Select(DataConverter.ToBankInfo).ToList() : new List<BankInfo>();
+                var result = response != null
+                    ? response.Select(DataConverter.ToBankInfo).ToList()
+                    : new List<BankInfo>();
                 return new Tuple<string, List<BankInfo>>(null, result.OrderBy(t => t.SortIndex).ToList());
             }
             catch (Exception ex)
@@ -308,7 +327,9 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var response = HttpHelper.HttpPost<List<GetOnCompanyAccountResponse>>(addr, null);
-                var result = response != null ? response.Select(DataConverter.ToOnCpyAccInfo).ToList() : new List<OnCompanyAccountInfo>();
+                var result = response != null
+                    ? response.Select(DataConverter.ToOnCpyAccInfo).ToList()
+                    : new List<OnCompanyAccountInfo>();
                 return new Tuple<string, List<OnCompanyAccountInfo>>(null, result);
             }
             catch (Exception exp)
@@ -359,7 +380,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetClearPosInfo");
-                var list = new List<string> { userId, " ", SystemConfigCache.PosId };
+                var list = new List<string> {userId, " ", SystemConfigCache.PosId};
                 return RestHttpHelper.HttpGet<GetClearPosInfoResponse>(addr, list);
             }
             catch (Exception exp)
@@ -374,10 +395,12 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetReportTipInfo");
-                var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
+                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
                 var result = HttpHelper.HttpGet<GetReportStatisticInfoBase<ReportDishInfoResponse>>(addr, request);
                 if (!result.IsSuccess)
-                    return new Tuple<string, ReportStatisticInfo>(string.IsNullOrEmpty(result.msg) ? "获取品项销售统计信息失败。" : result.msg, null);
+                    return
+                        new Tuple<string, ReportStatisticInfo>(
+                            string.IsNullOrEmpty(result.msg) ? "获取品项销售统计信息失败。" : result.msg, null);
 
                 return new Tuple<string, ReportStatisticInfo>(null, DataConverter.ToReportStatisticInfo(result));
             }
@@ -392,10 +415,12 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetReportDishInfo");
-                var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
+                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
                 var result = HttpHelper.HttpGet<GetReportStatisticInfoBase<ReportDishInfoResponse>>(addr, request);
                 if (!result.IsSuccess)
-                    return new Tuple<string, ReportStatisticInfo>(string.IsNullOrEmpty(result.msg) ? "获取小费统计信息失败。" : result.msg, null);
+                    return
+                        new Tuple<string, ReportStatisticInfo>(
+                            string.IsNullOrEmpty(result.msg) ? "获取小费统计信息失败。" : result.msg, null);
 
                 return new Tuple<string, ReportStatisticInfo>(null, DataConverter.ToReportStatisticInfo(result));
             }
@@ -411,8 +436,9 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetBranchInfo");
                 var result = HttpHelper.HttpGet<GetBranchInfoResponse>(addr);
-                if (result.IsSuccess)//这个接口1是成功，0是失败。
-                    return new Tuple<string, BranchInfo>(string.IsNullOrEmpty(result.msg) ? "获取分店信息失败。" : result.msg, null);
+                if (result.IsSuccess) //这个接口1是成功，0是失败。
+                    return new Tuple<string, BranchInfo>(string.IsNullOrEmpty(result.msg) ? "获取分店信息失败。" : result.msg,
+                        null);
 
                 var data = DataConverter.ToBranchInfo(result.data);
                 return new Tuple<string, BranchInfo>(null, data);
@@ -431,14 +457,14 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new List<string> { cashIpAddr };
+                var param = new List<string> {cashIpAddr};
                 var response = RestHttpHelper.HttpGet(addr, param);
                 if (!string.IsNullOrEmpty(response.Item1))
                     return string.IsNullOrEmpty(response.Item1) ? "打开钱箱失败。" : response.Item1;
 
                 var jObj = response.Item2.DeserializeJObject();
                 var result = jObj["result"].ToString();
-                return !result.Trim('[', ']').Trim().Equals("\"1\"") ? "打开钱箱失败。" : null;//这里1标示成功。
+                return !result.Trim('[', ']').Trim().Equals("\"1\"") ? "打开钱箱失败。" : null; //这里1标示成功。
             }
             catch (Exception ex)
             {
@@ -454,7 +480,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new List<string> { userId };
+                var param = new List<string> {userId};
                 var result = RestHttpHelper.HttpGet<QueryOrderInfoResponse>(addr, param);
                 if (!string.IsNullOrEmpty(result.Item1))
                     return new Tuple<string, List<QueryOrderInfo>>(string.Format("账单查询失败：{0}", result.Item1), null);
@@ -478,7 +504,11 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new SetCouponFavorRequest { preferential = couponId, operationtype = isCommonlyUsed ? "0" : "1" };
+                var request = new SetCouponFavorRequest
+                {
+                    preferential = couponId,
+                    operationtype = isCommonlyUsed ? "0" : "1"
+                };
                 var result = HttpHelper.HttpPost<SetCouponFavorResponse>(addr, request);
                 if (!result.IsSuccess)
                     return !string.IsNullOrEmpty(result.msg) ? result.msg : "设置优惠券偏好失败。";
@@ -517,6 +547,218 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
+        #region 获取营业明细报表接口
+
+        /// <summary>
+        /// 获取营业明细（品类、金额）
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public Tuple<string, List<MCategory>> GetItemForList(string beginTime, string endTime)
+        {
+            string msg = "获取营业明细（品类、金额）";
+
+            var addr = ServiceAddrCache.GetServiceAddr("GetItemForList");
+            if (string.IsNullOrEmpty(addr))
+            {
+                ErrLog.Instance.E(msg + "地址为空。");
+                return new Tuple<string, List<MCategory>>(msg + "地址为空。", null);
+            }
+            try
+            {
+                string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
+                var response = HttpHelper.HttpGet<List<CategoryResponse>>(parmAddr, null, true);
+                var result = DataConverter.ToCategory(response);
+                return new Tuple<string, List<MCategory>>(null, result);
+
+            }
+            catch (Exception exp)
+            {
+                ErrLog.Instance.E(msg + "时异常。", exp);
+                return new Tuple<string, List<MCategory>>(exp.MyMessage(), null);
+            }
+        }
+
+        /// <summary>
+        /// 获取营业明细(团购券)
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public Tuple<string, List<MHangingMoney>> GetGrouponForList(string beginTime, string endTime)
+        {
+            string msg = " 获取营业明细(团购券)";
+            var resList = new List<MHangingMoney>();
+
+            var addr = ServiceAddrCache.GetServiceAddr("GetGrouponForList");
+            if (string.IsNullOrEmpty(addr))
+            {
+                ErrLog.Instance.E(msg + "地址为空。");
+                return new Tuple<string, List<MHangingMoney>>(msg + "地址为空。", resList);
+            }
+            try
+            {
+                string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}&shiftid=-1&bankcardno=-1&settlementWay=5&type=-1", addr, beginTime, endTime);
+                var response = HttpHelper.HttpGet<List<GrouponResponse>>(parmAddr, null, true);
+                resList = DataConverter.ToGroupon(response);
+                return new Tuple<string, List<MHangingMoney>>(null, resList);
+
+            }
+            catch (Exception exp)
+            {
+                ErrLog.Instance.E(msg + "时异常。", exp);
+                return new Tuple<string, List<MHangingMoney>>(exp.MyMessage(), resList);
+            }
+        }
+
+        /// <summary>
+        /// 获取营业明细
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public Tuple<string, MBusinessDataDetail> GetDayReportList(string beginTime, string endTime, string userName)
+        {
+            string msg = "获取营业明细(其它)";
+            var dataDetail = new MBusinessDataDetail();
+            var addr = ServiceAddrCache.GetServiceAddr("GetDayReportList");
+            if (string.IsNullOrEmpty(addr))
+            {
+                ErrLog.Instance.E(msg + "地址为空。");
+                return new Tuple<string, MBusinessDataDetail>(msg + "地址为空。", null);
+            }
+            try
+            {
+                var request = new Dictionary<string, string>();
+                request.Add("beginTime", beginTime);
+                request.Add("endTime", endTime);
+
+                var response = HttpHelper.HttpGet<List<DataDetailResponse>>(addr, request, true);
+                if (response.Count > 0)
+                {
+                    dataDetail.StartTime = DateTime.Parse(beginTime);
+                    dataDetail.EndTime = DateTime.Parse(endTime);
+                    dataDetail.CurrentTime = DateTime.Now;
+                    dataDetail.UserName = userName;
+                    dataDetail.kaitaishu = response[0].kaitaishu;
+
+                    dataDetail.bastfree = response[0].bastfree;
+                    dataDetail.integralconsum = response[0].integralconsum;
+                    dataDetail.meberTicket = response[0].meberTicket;
+                    dataDetail.discountmoney = response[0].discountmoney;
+                    dataDetail.malingincom = response[0].malingincom;
+                    dataDetail.give = response[0].give;
+                    dataDetail.handervalue = response[0].handervalue;
+
+                    if (dataDetail.handervalue.Equals("抹零"))
+                    {
+                        dataDetail.handervalue = "0"; //四舍五入为“0”
+                    }
+                    else if (string.IsNullOrEmpty(dataDetail.handervalue))
+                    {
+                        dataDetail.handervalue = "0";
+                        dataDetail.malingincom = "0";
+                    }
+                    else
+                    {
+                        dataDetail.malingincom = "0";
+                    }
+                    dataDetail.mebervalueadd = response[0].mebervalueadd;
+
+                    dataDetail.money = response[0].money;
+                    dataDetail.card = response[0].card;
+                    dataDetail.weixin = response[0].weixin;
+                    dataDetail.zhifubao = response[0].zhifubao;
+                    dataDetail.icbc = response[0].icbc;
+                    dataDetail.otherbank = response[0].otherbank;
+                    dataDetail.merbervaluenet = response[0].merbervaluenet;
+
+                    dataDetail.shouldamount = response[0].shouldamount;
+                    dataDetail.discountamount = response[0].discountamount;
+                    dataDetail.paidinamount = response[0].paidinamount;
+
+                    dataDetail.Categories = GetItemForList(beginTime, endTime).Item2; //获取品项列表
+
+                    dataDetail.HangingMonies = GetGrouponForList(beginTime, endTime).Item2; //获取团购列表
+
+                    dataDetail.HangingMonies.AddRange(GetGzdwForList(beginTime, endTime).Item2); //获取挂账列表
+
+                    dataDetail.xiaofei = GetTipMoney(beginTime, endTime).Item2; //获取消费
+                }
+                return new Tuple<string, MBusinessDataDetail>(null, dataDetail);
+
+            }
+            catch (Exception exp)
+            {
+                ErrLog.Instance.E(msg + "时异常。", exp);
+                return new Tuple<string, MBusinessDataDetail>(exp.MyMessage(), null);
+            }
+        }
+
+        /// <summary>
+        /// 获取营业明细（获取挂账单位）
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public Tuple<string, List<MHangingMoney>> GetGzdwForList(string beginTime, string endTime)
+        {
+            string msg = " 获取营业明细(获取挂账单位)";
+            var resList = new List<MHangingMoney>();
+
+            var addr = ServiceAddrCache.GetServiceAddr("GetGzdwForList");
+            if (string.IsNullOrEmpty(addr))
+            {
+                ErrLog.Instance.E(msg + "地址为空。");
+                return new Tuple<string, List<MHangingMoney>>(msg + "地址为空。", resList);
+            }
+            try
+            {
+                string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}&billName=0&clearStatus=0", addr, beginTime, endTime);
+                var response = HttpHelper.HttpGet<List<GzdwResponse>>(parmAddr, null, true);
+                resList = DataConverter.ToGzdw(response);
+                return new Tuple<string, List<MHangingMoney>>(null, resList);
+
+            }
+            catch (Exception exp)
+            {
+                ErrLog.Instance.E(msg + "时异常。", exp);
+                return new Tuple<string, List<MHangingMoney>>(exp.MyMessage(), resList);
+            }
+        }
+
+        /// <summary>
+        /// 获取小费总额
+        /// </summary>
+        /// <param name="beginTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public Tuple<string, string> GetTipMoney(string beginTime, string endTime)
+        {
+            string msg = "获取小费总额";
+
+            var addr = ServiceAddrCache.GetServiceAddr("GetTipMoney");
+            if (string.IsNullOrEmpty(addr))
+            {
+                ErrLog.Instance.E(msg + "地址为空。");
+                return new Tuple<string, string>(msg + "地址为空。", "0");
+            }
+            try
+            {
+                string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
+                var response = HttpHelper.HttpGet<TipMoneyResponse>(parmAddr, null, true);
+                return new Tuple<string, string>(null, response.tipMoney);
+
+            }
+            catch (Exception exp)
+            {
+                ErrLog.Instance.E(msg + "时异常。", exp);
+                return new Tuple<string, string>(exp.MyMessage(), "0");
+            }
+        }
+
+        #endregion
         public string SetTakeoutOrderOnAccount(string tableNo, string orderId, SetTakeoutOrderOnAccountRequest cmpInfo)
         {
             var addr = ServiceAddrCache.GetServiceAddr("SetTakeoutOrderOnAccount");

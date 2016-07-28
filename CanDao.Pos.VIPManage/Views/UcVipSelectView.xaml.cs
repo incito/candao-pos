@@ -18,7 +18,7 @@ namespace CanDao.Pos.VIPManage.Views
     /// <summary>
     /// UcVipSelect.xaml 的交互逻辑
     /// </summary>
-    public partial class UcVipSelectView : UserControlBase
+    public partial class UcVipSelectView 
     {
 
         public UcVipSelectView()

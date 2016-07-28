@@ -19,7 +19,7 @@ namespace CanDao.Pos.VIPManage.Views
     /// <summary>
     /// UcVipRechargeView.xaml 的交互逻辑
     /// </summary>
-    public partial class UcVipRechargeView : UserControlBase
+    public partial class UcVipRechargeView 
     {
         public Action<MListBoxInfo> SelectAction;
         public Action<string> TexRechargeAction;
@@ -57,15 +57,7 @@ namespace CanDao.Pos.VIPManage.Views
 
         #region 虚拟键盘绑定
 
-        public void Start()
-        {
-            this._loading.Visibility = Visibility.Visible;
-        }
-
-        public void stop()
-        {
-            this._loading.Visibility = Visibility.Collapsed;
-        }
+      
         #endregion
 
         private void TexRecharge_OnTextChanged(object sender, TextChangedEventArgs e)

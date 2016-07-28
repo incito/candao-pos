@@ -15,6 +15,11 @@ namespace CanDao.Pos.Model
         public string DishId { get; set; }
 
         /// <summary>
+        /// 临时菜名
+        /// </summary>
+        public string TempDishName { get; set; }
+
+        /// <summary>
         /// 菜品名称。
         /// </summary>
         public string DishName { get; set; }
@@ -71,11 +76,11 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 选择的个数。
         /// </summary>
-        private int _selectedCount;
+        private decimal _selectedCount;
         /// <summary>
         /// 选择的个数。
         /// </summary>
-        public int SelectedCount
+        public decimal SelectedCount
         {
             get { return _selectedCount; }
             set

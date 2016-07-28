@@ -75,6 +75,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Operates\DishesTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -149,6 +150,11 @@
     <ProjectReference Include="..\..\CanDao.Pos.ReportPrint\CanDao.Pos.ReportPrint.csproj">
       <Project>{d4541853-9955-454a-9d02-05391d3c3604}</Project>
       <Name>CanDao.Pos.ReportPrint</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CanDao.Pos.SystemConfig\CanDao.Pos.SystemConfig.csproj">
+      <Project>{fc4def0b-50e2-4f55-a183-c0959b61b50a}</Project>
+      <Name>CanDao.Pos.SystemConfig</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\CanDao.Pos.UI.Utility\CanDao.Pos.UI.Utility.csproj">

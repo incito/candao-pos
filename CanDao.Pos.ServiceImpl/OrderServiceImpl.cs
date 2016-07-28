@@ -165,8 +165,8 @@ namespace CanDao.Pos.ServiceImpl
             var addr = ServiceAddrCache.GetServiceAddr("GetCouponInfos");
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, List<CouponInfo>>("获取优惠券集合地址为空。", null);
-
-            var request = new CouponInfoRequest { machineno = PCInfoHelper.MACAddr, typeid = couponTypeId, userid = userName, orderid = "0" };
+            
+            var request = new CouponInfoRequest { machineno = MachineManage.GetMachineId(), typeid = couponTypeId, userid = userName, orderid = "0" };
             try
             {
                 var result = HttpHelper.HttpPost<List<CouponInfoResponse>>(addr, request);

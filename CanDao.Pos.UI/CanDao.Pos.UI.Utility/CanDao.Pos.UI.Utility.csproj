@@ -83,10 +83,16 @@
     <Compile Include="CommonHelper.cs" />
     <Compile Include="CommonServiceHelper.cs" />
     <Compile Include="Controls\AllowMultSelectorControl.cs" />
+    <Compile Include="Model\UcBusinessDataDetailsModel.cs" />
+    <Compile Include="Model\UCCashboxPswModel.cs" />
+    <Compile Include="Model\UcCustomDishesModel.cs" />
     <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
     <Compile Include="ViewModel\SelectTakeoutOnAccountCompanyVm.cs" />
     <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
     <Compile Include="ViewModel\SysPrinterListVm.cs" />
+    <Compile Include="ViewModel\UcBusinessDataDetailsViewModel.cs" />
+    <Compile Include="ViewModel\UCCashboxPswViewModel.cs" />
+    <Compile Include="ViewModel\UcCustomDishesViewModel.cs" />
     <Compile Include="View\NumInputWindow.xaml.cs">
       <DependentUpon>NumInputWindow.xaml</DependentUpon>
     </Compile>
@@ -222,6 +228,15 @@
     </Compile>
     <Compile Include="View\TasteSetControl.xaml.cs">
       <DependentUpon>TasteSetControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UcBusinessDataDetailsView.xaml.cs">
+      <DependentUpon>UcBusinessDataDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UCCashboxPswView.xaml.cs">
+      <DependentUpon>UCCashboxPswView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UcCustomDishesView.xaml.cs">
+      <DependentUpon>UcCustomDishesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserLoginWindow.xaml.cs">
       <DependentUpon>UserLoginWindow.xaml</DependentUpon>
@@ -376,6 +391,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\UcBusinessDataDetailsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\UCCashboxPswView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\UcCustomDishesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\UserLoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -404,6 +431,11 @@
     <ProjectReference Include="..\..\CanDao.Pos.ReportPrint\CanDao.Pos.ReportPrint.csproj">
       <Project>{d4541853-9955-454a-9d02-05391d3c3604}</Project>
       <Name>CanDao.Pos.ReportPrint</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CanDao.Pos.ResourceService\CanDao.Pos.ResourceService.csproj">
+      <Project>{8b73af41-0061-4213-9ec0-318986d1c408}</Project>
+      <Name>CanDao.Pos.ResourceService</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\CanDao.Pos.VIPManage\CanDao.Pos.VIPManage.csproj">

@@ -104,6 +104,9 @@
     <Compile Include="QueryOrderInfo.cs" />
     <Compile Include="ReportDataBase.cs" />
     <Compile Include="ReportStatisticInfo.cs" />
+    <Compile Include="Reports\MBusinessDataDetail.cs" />
+    <Compile Include="Reports\MCategory.cs" />
+    <Compile Include="Reports\MHangingMoney.cs" />
     <Compile Include="Request\AddOrderMemberSaleInfoRequest.cs" />
     <Compile Include="Request\AntiSettlementOrderRequest.cs" />
     <Compile Include="Request\BackAllDishRequest.cs" />
@@ -119,12 +122,15 @@
     <Compile Include="Request\CanDaoMemberSaleRequest.cs" />
     <Compile Include="Request\CanDaoMemberStorageRequest.cs" />
     <Compile Include="Request\CanDaoVipQueryRequest.cs" />
+    <Compile Include="Request\DataDetailResponse.cs" />
     <Compile Include="Request\GetInvoiceInfoRequest.cs" />
     <Compile Include="Request\GetOrderMemberInfoRequest.cs" />
     <Compile Include="Request\GetTableByTypeRequest.cs" />
+    <Compile Include="Request\GzdwResponse.cs" />
     <Compile Include="Request\SetTakeoutOrderOnAccountRequest.cs" />
     <Compile Include="Request\SendVerifyCodeRequest.cs" />
     <Compile Include="Request\SetCouponFavorRequest.cs" />
+    <Compile Include="Request\TipMoneyResponse.cs" />
     <Compile Include="Request\TipSettlementRequest.cs" />
     <Compile Include="Request\UpdateDishWeightRequest.cs" />
     <Compile Include="Request\UpdateInvoiceRequest.cs" />
@@ -132,6 +138,7 @@
     <Compile Include="Response\CanDaoMemberSaleResponse.cs" />
     <Compile Include="Response\CanDaoVipBaseResponse.cs" />
     <Compile Include="Response\CanDaoVipQueryResponse.cs" />
+    <Compile Include="Response\CategoryResponse.cs" />
     <Compile Include="Response\GetBranchInfoResponse.cs" />
     <Compile Include="Response\GetClearPosInfoResponse.cs" />
     <Compile Include="Response\GetCouponListResponse.cs" />
@@ -144,6 +151,7 @@
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\CanDaoMemberQueryResponse.cs" />
     <Compile Include="Response\CanDaoMemberStorageResponse.cs" />
+    <Compile Include="Response\GrouponResponse.cs" />
     <Compile Include="Response\MenuSingleAllDishDataResponse.cs" />
     <Compile Include="Response\PrintOrderInfoResponse.cs" />
     <Compile Include="Response\QueryOrderInfoResponse.cs" />

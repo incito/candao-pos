@@ -7,7 +7,7 @@
     {
         public CanDaoMemberModifyPasswordRequest()
         {
-            securitycode = "";
+            securityCode = "";
             member_avatar = "";
         }
 
@@ -15,7 +15,7 @@
 
         public string cardno { get; set; }
 
-        public string securitycode { get; set; }
+        public string securityCode { get; set; }
 
         public string mobile { get; set; }
 

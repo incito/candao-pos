@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using CanDao.Pos.Common;
+using CanDao.Pos.Common.Models;
+using CanDao.Pos.Common.Operates.FileOperate;
+using CanDao.Pos.Common.PublicValues;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
@@ -32,6 +36,13 @@ namespace CanDao.Pos.Client
             InfoLog.Instance.I("读取配置信息...");
             SystemConfigCache.LoadCfgFile();//它是系统级配置，必须最先初始化。
             ServiceAddrCache.LoadCfgFile();
+
+            //初始化复写卡打印和钱箱密码信息
+            if (File.Exists(PvSystemConfig.VSystemConfigFile))
+            {
+                PvSystemConfig.VSystemConfig =
+                    OXmlOperate.DeserializeFile<MSystemConfig>(PvSystemConfig.VSystemConfigFile);
+            }
 
             InfoLog.Instance.I("配置文件读取完毕。");
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;

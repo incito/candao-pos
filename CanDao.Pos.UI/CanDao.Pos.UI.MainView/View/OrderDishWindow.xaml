@@ -68,6 +68,7 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <WrapPanel Width="140" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding TempDishName, StringFormat=({0})}" Visibility="{Binding TempDishName, Converter={StaticResource Strinig2VisibleCvt}}"/>
                                                     <TextBlock Text="{Binding DishName}"/>
                                                     <TextBlock Text="{Binding Taste, StringFormat=({0})}" Visibility="{Binding Taste, Converter={StaticResource Strinig2VisibleCvt}}"/>
                                                     <TextBlock Text="{Binding Diet,StringFormat=({0})}" Visibility="{Binding Diet, Converter={StaticResource Strinig2VisibleCvt}}"/>

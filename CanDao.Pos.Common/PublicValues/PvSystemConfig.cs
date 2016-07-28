@@ -11,7 +11,7 @@ namespace CanDao.Pos.Common.PublicValues
        static PvSystemConfig()
        {
            VSystemConfig = new MSystemConfig();
-           VSystemConfigFile = AppDomain.CurrentDomain.BaseDirectory + @"config\SystemConfig.Data";
+           VSystemConfigFile = AppDomain.CurrentDomain.BaseDirectory + @"Config\SystemConfig.Data";
        }
 
        /// <summary>

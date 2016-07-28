@@ -12,6 +12,7 @@ using CanDao.Pos.Model.Request;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.UI.Utility.ViewModel;
 using DevExpress.Xpf.Editors.Helpers;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
@@ -455,28 +456,49 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             else if (SelectedDish.DishType == EnumDishType.Normal)//普通菜
             {
-                string taste = null;
-                string diet = null;
-                SelectedDish.SelectedCount = 1;//设定点菜数量为1。
-                if (SelectedDish.Tastes != null && SelectedDish.Tastes.Any())//有口味则弹出口味设置窗口
-                {
-                    var dishSimpleInfo = new DishSimpleInfo
-                    {
-                        DishName = SelectedDish.DishName,
-                        DishPrice = SelectedDish.Price ?? 0,
-                        DishUnit = SelectedDish.Unit,
-                        DishNum = 1,
-                    };
-                    var tasteDietWnd = new SetDishTasteAndDietWindow(SelectedDish.Tastes, dishSimpleInfo, true);
-                    if (!WindowHelper.ShowDialog(tasteDietWnd, OwnerWnd))
-                        return;
+              
 
-                    taste = tasteDietWnd.SelectedTaste;
-                    diet = tasteDietWnd.SelectedDiet;
-                    SelectedDish.SelectedCount = tasteDietWnd.DishNum;
+                //临时菜处理
+                if (SelectedDish.DishName.Contains("临时菜"))
+                {
+                    var customDishes = new UcCustomDishesViewModel();
+                    var wind = customDishes.GetWindow();
+                    if (wind.ShowDialog() == true)
+                    {
+                        SelectedDish.SelectedCount = decimal.Parse(customDishes.Model.DishesCount) * decimal.Parse(customDishes.Model.Price);
+                        SelectedDish.TempDishName = customDishes.Model.DishesName;
+                        AddTempDishInfo(SelectedDish);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    string taste = null;
+                    string diet = null;
+                    SelectedDish.SelectedCount = 1;//设定点菜数量为1。
+                    if (SelectedDish.Tastes != null && SelectedDish.Tastes.Any())//有口味则弹出口味设置窗口
+                    {
+                        var dishSimpleInfo = new DishSimpleInfo
+                        {
+                            DishName = SelectedDish.DishName,
+                            DishPrice = SelectedDish.Price ?? 0,
+                            DishUnit = SelectedDish.Unit,
+                            DishNum = 1,
+                        };
+                        var tasteDietWnd = new SetDishTasteAndDietWindow(SelectedDish.Tastes, dishSimpleInfo, true);
+                        if (!WindowHelper.ShowDialog(tasteDietWnd, OwnerWnd))
+                            return;
+
+                        taste = tasteDietWnd.SelectedTaste;
+                        diet = tasteDietWnd.SelectedDiet;
+                        SelectedDish.SelectedCount = tasteDietWnd.DishNum;
+                    }
+                    AddDishInfo(SelectedDish, taste, diet);
                 }
 
-                AddDishInfo(SelectedDish, taste, diet);
             }
         }
 
@@ -494,6 +516,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             else
                 OrderDishInfos.Add(Convert2OrderDishInfo(SelectedDish, taste, diet));
 
+            DoWhenDishChanged();
+        }
+        /// <summary>
+        /// 添加临时菜到菜单集合
+        /// </summary>
+        /// <param name="dishInfo"></param>
+        private void AddTempDishInfo(MenuDishInfo dishInfo)
+        {
+            var dish = Convert2OrderDishInfo(dishInfo, "", "");
+            dish.TempDishName = dishInfo.TempDishName;
+            OrderDishInfos.Add(dish);
             DoWhenDishChanged();
         }
 
@@ -521,9 +554,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (!string.IsNullOrEmpty(srcItem.Diet) && !srcItem.Diet.Equals(diet))
                 return false;
-
             return true;
         }
+
+
 
         /// <summary>
         /// 添加套餐菜。

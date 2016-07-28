@@ -8,6 +8,8 @@ using System.Threading;
 using System.Timers;
 using System.Windows.Input;
 using CanDao.Pos.Common;
+using CanDao.Pos.Common.Operates;
+using CanDao.Pos.Common.PublicValues;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
@@ -1424,6 +1426,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void OpenCashBoxAsync()
         {
+            //密码验证
+            if (PvSystemConfig.VSystemConfig.IsEnabledCheck)
+            {
+                var viewModel = new UCCashboxPswViewModel();
+                if (WindowHelper.ShowDialog(viewModel.GetUserCtl(),OwnerWindow) == false)
+                {
+                    return;
+                }
+            }
+         
             ThreadPool.QueueUserWorkItem(t =>
             {
                 InfoLog.Instance.I("开始打开钱箱...");

@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using CanDao.Pos.Common;
 using CanDao.Pos.Common.Classes.Mvvms;
 using CanDao.Pos.VIPManage.Models;
-using CanDao.Pos.Common.Controls.CSystem;
 using CanDao.Pos.VIPManage.Views;
 using CanDao.Pos.Common.Models;
 using CanDao.Pos.Common.Models.VipModels;
@@ -146,7 +145,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
         #region 公共方法
 
-        public UserControlBase GetUserCtl()
+        public UcVipRechargeView GetUserCtl()
         {
             _userControl = new UcVipRechargeView();
             _userControl.DataContext = this;
@@ -292,7 +291,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
                     try
                     {
-                        _userControl.Start();
+                      
                         if (Model.IsEnabledNum)
                         {
                             var request = new CanDaoMemberQueryRequest();
@@ -302,7 +301,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                             request.password = "";
                             var info = _memberService.QueryCanndao(request);
 
-                            if (!string.IsNullOrEmpty(info.Item1))
+                            if (string.IsNullOrEmpty(info.Item1))
                             {
                                 SelectModel.UserName = info.Item2.Name;
                                 if (info.Item2.Gender == 0)
@@ -352,7 +351,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                         requestStorage.giveValue = Model.GiveValue;
                         var ret = _memberService.StorageCanDao(requestStorage);
 
-                        if (!string.IsNullOrEmpty(ret.Item1))
+                        if (string.IsNullOrEmpty(ret.Item1))
                         {
                             _ret = ret.Item2;
                             Print();
@@ -370,7 +369,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     }
                     finally
                     {
-                        _userControl.stop();
+                     
                     }
                 }
             }
@@ -409,7 +408,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         {
             OWindowManage.ShowMessageWindow(
                 string.Format("储值成功,交易流水号:{0}", _ret.TraceCode), false);
-            CloseHandel();
+            _userControl.DialogResult = true;
         }
 
         #endregion
@@ -419,18 +418,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         /// </summary>
         private void CloseHandel()
         {
-            try
-            {
-                if (_userControl.UcClose != null)
-                {
-                    _userControl.UcClose();
-                }
-            }
-            catch
-            {
-
-            }
-
+            _userControl.DialogResult = false;
         }
 
         /// <summary>

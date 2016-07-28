@@ -27,15 +27,15 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 case "Query":
                     var query = new UcVipSelectViewModel();
-                    OWindowManage.ShowPopupWindow(query.GetUserCtl());
+                    WindowHelper.ShowDialog(query.GetUserCtl());
                     break;
                 case "Storage":
                     var recharge = new UcVipRechargeViewModel();
-                    OWindowManage.ShowPopupWindow(recharge.GetUserCtl());
+                    WindowHelper.ShowDialog(recharge.GetUserCtl());
                     break;
                 case "Regist":
                     var regist = new UcVipRegViewModel();
-                    OWindowManage.ShowPopupWindow(regist.GetUserCtl());
+                    WindowHelper.ShowDialog(regist.GetUserCtl());
                     break;
                 case "Active":
                     MessageDialog.Warning("激活");

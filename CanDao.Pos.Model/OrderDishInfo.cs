@@ -70,6 +70,22 @@ namespace CanDao.Pos.Model
         /// 菜品类型。
         /// </summary>
         public EnumDishType DishType { get; set; }
+        /// <summary>
+        /// 临时菜名称
+        /// </summary>
+        private string _tempDishName;
+        /// <summary>
+        /// 临时菜名称。
+        /// </summary>
+        public string TempDishName
+        {
+            get { return _tempDishName; }
+            set
+            {
+                _tempDishName = value;
+                RaisePropertyChanged("TempDishName");
+            }
+        }
 
         /// <summary>
         /// 菜品名称。
