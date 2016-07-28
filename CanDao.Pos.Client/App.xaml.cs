@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,6 +12,7 @@ using CanDao.Pos.Common.PublicValues;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
+using CanDao.Pos.Model.Response;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
@@ -100,13 +102,6 @@ namespace CanDao.Pos.Client
             if (!NetwrokHelper.DetectNetworkConnection(SystemConfigCache.JavaServer))
             {
                 var msg = string.Format("与后台服务器：\"{0}\"连接失败。{1}请检查服务器是否开机，网络是否正常！", SystemConfigCache.JavaServer, Environment.NewLine);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg);
-                return false;
-            }
-            if (!NetwrokHelper.DetectNetworkConnection(SystemConfigCache.DataServer))
-            {
-                var msg = string.Format("与DataServer服务器：\"{0}\"连接失败。{1}请检查服务器是否开机，网络是否正常！", SystemConfigCache.DataServer, Environment.NewLine);
                 ErrLog.Instance.E(msg);
                 MessageDialog.Warning(msg);
                 return false;

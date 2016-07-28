@@ -568,7 +568,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
-                var response = HttpHelper.HttpGet<List<CategoryResponse>>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<List<CategoryResponse>>(parmAddr, null);
                 var result = DataConverter.ToCategory(response);
                 return new Tuple<string, List<MCategory>>(null, result);
 
@@ -600,7 +600,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}&shiftid=-1&bankcardno=-1&settlementWay=5&type=-1", addr, beginTime, endTime);
-                var response = HttpHelper.HttpGet<List<GrouponResponse>>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<List<GrouponResponse>>(parmAddr, null);
                 resList = DataConverter.ToGroupon(response);
                 return new Tuple<string, List<MHangingMoney>>(null, resList);
 
@@ -634,7 +634,7 @@ namespace CanDao.Pos.ServiceImpl
                 request.Add("beginTime", beginTime);
                 request.Add("endTime", endTime);
 
-                var response = HttpHelper.HttpGet<List<DataDetailResponse>>(addr, request, true);
+                var response = HttpHelper.HttpGet<List<DataDetailResponse>>(addr, request);
                 if (response.Count > 0)
                 {
                     dataDetail.StartTime = DateTime.Parse(beginTime);
@@ -716,7 +716,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}&billName=0&clearStatus=0", addr, beginTime, endTime);
-                var response = HttpHelper.HttpGet<List<GzdwResponse>>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<List<GzdwResponse>>(parmAddr, null);
                 resList = DataConverter.ToGzdw(response);
                 return new Tuple<string, List<MHangingMoney>>(null, resList);
 
@@ -747,7 +747,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
-                var response = HttpHelper.HttpGet<TipMoneyResponse>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<TipMoneyResponse>(parmAddr, null);
                 return new Tuple<string, string>(null, response.tipMoney);
 
             }
