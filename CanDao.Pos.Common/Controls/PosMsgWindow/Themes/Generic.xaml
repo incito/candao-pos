@@ -26,37 +26,41 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="50"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="50"/>
                             </Grid.RowDefinitions>
-                            <Border x:Name="PART_Title" Background="{StaticResource CanDaoPosColorSelected}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="PART_Title"
+                                    Grid.Column="0" Grid.ColumnSpan="2"
+                                    Background="{StaticResource CanDaoPosColorSelected}">
                                 <Grid >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Button x:Name="PART_CancelBtn"
-                                            FontSize="18"
-                                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"
-                                            Style="{StaticResource NoBorderBtnStyle}"
-                                            Content="{TemplateBinding CancelBtnText}"/>
                                     <ContentControl Grid.Column="1" 
                                                     Content="{TemplateBinding Title}"
                                                     Foreground="{StaticResource CanDaoPosColorFg}"
                                                     HorizontalAlignment="Center" VerticalAlignment="Center" 
                                                     FontSize="18" FontWeight="Bold"/>
-                                    <Button x:Name="PART_CloseBtn"
-                                            Grid.Column="2"
-                                            FontSize="18"
-                                            HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"
-                                            Style="{StaticResource NoBorderBtnStyle}"
-                                            Content="{TemplateBinding CloseBtnText}"
-                                            IsEnabled="{TemplateBinding CloseBtnEnable}">
-                                    </Button>
                                 </Grid>
                             </Border>
-                            <Border Grid.Row="1">
+                            <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </Border>
+                            <Button  x:Name="PART_CancelBtn"
+                                     Grid.Row="2" Grid.Column="0"
+                                     FontSize="18"
+                                     VerticalAlignment="Center" Margin="20,0,0,0"
+                                     Content="取消"/>
+                            <Button x:Name="PART_CloseBtn"
+                                    Grid.Row="2" Grid.Column="1"
+                                    FontSize="18"
+                                    VerticalAlignment="Center" Margin="0,0,20,0"
+                                    Content="确定"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
