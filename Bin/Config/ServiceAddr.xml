@@ -41,11 +41,20 @@
     <GetTableInfoByTableType Addr="/newspicyway/padinterface/getTableByType.json"/><!--根据餐桌类型获取餐桌信息-->
     <GetPrinterList Addr="/newspicyway/pos/printerlist.json"/><!--获取打印机状态列表-->
 
-<GetItemForList Addr="/newspicyway/itemDetail/getItemForList.json"/><!-- 获取营业明细（品类、金额）-->
-<GetGrouponForList Addr="/newspicyway/preferentialAnalysisCharts/findPreferential.json"/><!--获取营业明细(团购券)-->
-<GetDayReportList Addr="/newspicyway/daliyReports/getDayReportList.json"/><!-- 获取营业明细（其它）-->
-<GetGzdwForList Addr="/newspicyway/gisterBill/getBillCount.json"/><!--获取营业明细（获取挂账单位）-->
-<GetTipMoney Addr="/newspicyway/tip/tipListByTime.json"/><!--获取小费总额-->
+    <GetItemForList Addr="/newspicyway/itemDetail/getItemForList.json"/><!-- 获取营业明细（品类、金额）-->
+    <GetGrouponForList Addr="/newspicyway/preferentialAnalysisCharts/findPreferential.json"/><!--获取营业明细(团购券)-->
+    <GetDayReportList Addr="/newspicyway/daliyReports/getDayReportList.json"/><!-- 获取营业明细（其它）-->
+    <GetGzdwForList Addr="/newspicyway/gisterBill/getBillCount.json"/><!--获取营业明细（获取挂账单位）-->
+    <GetTipMoney Addr="/newspicyway/tip/tipListByTime.json"/><!--获取小费总额-->
+
+    <PrintPay Addr="/print4POS/getOrderInfo"/><!--打印预结，结算，客用-->
+    <PrintClearMachine Addr="/print4POS/getClearMachineData"/><!--打印清机单-->
+    <PrintMemberSale Addr="/print4POS/getMemberSaleInfo"/><!-- 打印会员消费-->
+    <PrintMemberStore Addr="/print4POS/StoreCardToNewPos.json"/><!--打印会员储值-->
+    <PrintItemSell Addr="/print4POS/getItemSellDetail.json"/><!--打印品项销售统计报表-->
+    <PrintTip Addr="/print4POS/tipList.json"/><!--打印小费统计报表-->
+    <PrintBusinessDetail Addr="/print4POS/printBusinessDetail.json"/><!--打印营业报表明细-->
+    <PrintInvoice Addr="/print4POS/printInvoice.json"/><!--打印发票单-->
   </JavaServerApi>
   <!--Delephi接口-->
   <DataServerApi>

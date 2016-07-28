@@ -6,6 +6,8 @@ using CanDao.Pos.Common;
 using CanDao.Pos.Common.Operates;
 using CanDao.Pos.Common.PublicValues;
 using CanDao.Pos.ReportPrint.Operates;
+using CanDao.Pos.IService;
+using CanDao.Pos.Model.Request;
 
 namespace CanDao.Pos.ReportPrint
 {
@@ -84,6 +86,7 @@ namespace CanDao.Pos.ReportPrint
         {
             if (PvSystemConfig.VSystemConfig.IsEnabledPrint)
             {
+              
                 model = new List<string>();
                 model.Add(vipNum);
                 model.Add(vipName);
@@ -114,32 +117,38 @@ namespace CanDao.Pos.ReportPrint
         /// <summary>
         /// 消费打印
         /// </summary>
-        public static void PayPrint(string vipName, string vipNum, string lastRecharge, string recharge,
-            string nowRecharge, string oldIntegral, string integral, string nowIntegral)
+        public static void PayPrint(decimal oldIntegral, decimal lastRecharge,string cardno,string branchid)
         {
-
 
             if (PvSystemConfig.VSystemConfig.IsEnabledPrint)
             {
-                model = new List<string>();
-                model.Add(vipNum);
-                model.Add(vipName);
+                var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+                var vip = new CanDaoVipQueryRequest();
+                vip.cardno = cardno;
+                vip.branch_id = branchid;
 
-                model.Add(string.Format("{0}", oldIntegral));
-                model.Add(string.Format("{0}元", lastRecharge));
+                var receive = service.VipQuery(vip);
+                if (string.IsNullOrEmpty(receive.Item1))
+                {
+                    model = new List<string>();
+                    model.Add(receive.Item2.TelNum);
+                    model.Add(receive.Item2.VipName);
 
-                model.Add(string.Format("{0}", integral));
-                model.Add(string.Format("{0}元", recharge));
+                    model.Add(string.Format("{0}", oldIntegral));
+                    model.Add(string.Format("{0}元", lastRecharge));
 
-                model.Add(string.Format("{0}", nowIntegral));
-                model.Add(string.Format("{0}元", nowRecharge));
+                    model.Add(string.Format("{0}", receive.Item2.CardInfos[0].Integral - oldIntegral));
+                    model.Add(string.Format("{0}元", receive.Item2.CardInfos[0].Balance - lastRecharge));
 
+                    model.Add(string.Format("{0}", receive.Item2.CardInfos[0].Integral));
+                    model.Add(string.Format("{0}元", receive.Item2.CardInfos[0].Balance));
 
-                AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
-                asyncLoadServer.Init();
-                asyncLoadServer.Start(PatPrintR);
-                asyncLoadServer.SetMessage("正在打印复写卡，请稍等... ...");
-
+                    PatPrintR();
+                    //AsyncLoadServer asyncLoadServer = new AsyncLoadServer();
+                    //asyncLoadServer.Init();
+                    //asyncLoadServer.Start(PatPrintR);
+                    //asyncLoadServer.SetMessage("正在打印复写卡，请稍等... ...");
+                }
             }
         }
 

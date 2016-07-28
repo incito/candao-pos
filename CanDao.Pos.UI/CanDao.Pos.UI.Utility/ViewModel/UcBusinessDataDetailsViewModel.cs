@@ -209,21 +209,20 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 {
                     return;
                 }
-                var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-                var res2 = service.GetDayReportList(Model.StarTime, Model.EndTime, Globals.UserInfo.UserName);
-                if (string.IsNullOrEmpty(res2.Item1))
+                //var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+                //var res2 = service.GetDayReportList(Model.StarTime, Model.EndTime, Globals.UserInfo.UserName);
+                if (ReportPrintHelper.PrintBusinessDataDetail(Model.StarTime, Model.EndTime))
                 {
-                    if (ReportPrintHelper.PrintBusinessDataDetail(res2.Item2))
-                    {
-                        OWindowManage.ShowMessageWindow("打印成功！", false);
-                    }
+                    OWindowManage.ShowMessageWindow("打印成功！", false);
+                }
+                //if (string.IsNullOrEmpty(res2.Item1))
+                //{
+                //    if (ReportPrintHelper.PrintBusinessDataDetail(res2.Item2))
+                //    {
+                //        OWindowManage.ShowMessageWindow("打印成功！", false);
+                //    }
                       
-                }
-                else
-                {
-                    OWindowManage.ShowMessageWindow("打印失败：" + res2.Item1, false);
-                }
-
+                //}
             }
             catch (Exception ex)
             {

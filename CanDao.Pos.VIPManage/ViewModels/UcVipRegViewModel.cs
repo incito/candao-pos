@@ -248,11 +248,11 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 OWindowManage.ShowMessageWindow("验证码不能为空，请检查！", false);
                 return false;
             }
-            //if (!Model.Code.Equals(_receiveCode))
-            //{
-            //    OWindowManage.ShowMessageWindow("验证码错误！", false);
-            //    return false;
-            //}
+            if (!Model.Code.Equals(_receiveCode))
+            {
+                OWindowManage.ShowMessageWindow("验证码错误！", false);
+                return false;
+            }
             if (string.IsNullOrEmpty(Model.UserName))
             {
                 OWindowManage.ShowMessageWindow("姓名不能为空，请检查！", false);

@@ -28,61 +28,74 @@ namespace CanDao.Pos.ReportPrint
         public static bool PrintPresettlementReport(TableFullInfo tableFullInfo, string printUser)
         {
             ShowReportPrintingWindow();
-            InfoLog.Instance.I("开始获取预结单报表数据...");
-            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            var result = service.GetPrintOrderInfo(tableFullInfo.OrderId, printUser, EnumPrintOrderType.PreSettlement);
-            InfoLog.Instance.I("结束获取预结单报表数据。");
-            if (!string.IsNullOrEmpty(result.Item1))
-            {
-                var msg = string.Format("获取预结单报表数据错误：{0}", result.Item1);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg);
-                return false;
-            }
+            //InfoLog.Instance.I("开始获取预结单报表数据...");
+            //var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            //var result = service.GetPrintOrderInfo(tableFullInfo.OrderId, printUser, EnumPrintOrderType.PreSettlement);
+            //InfoLog.Instance.I("结束获取预结单报表数据。");
+            //if (!string.IsNullOrEmpty(result.Item1))
+            //{
+            //    var msg = string.Format("获取预结单报表数据错误：{0}", result.Item1);
+            //    ErrLog.Instance.E(msg);
+            //    MessageDialog.Warning(msg);
+            //    return false;
+            //}
 
             try
             {
-                InfoLog.Instance.I("开始准备预结单报表数据...");
-                var mainDb = CreateOrderMainDb();
-                AddObject2DataTable(mainDb, result.Item2.OrderInfo);
+                
+                //var mainDb = CreateOrderMainDb();
+                //AddObject2DataTable(mainDb, result.Item2.OrderInfo);
 
-                var dishesDb = CreateOrderDishDb();
-                if (result.Item2.OrderDishInfos != null)
-                    result.Item2.OrderDishInfos.ForEach(t => AddObject2DataTable(dishesDb, t));
+                //var dishesDb = CreateOrderDishDb();
+                //if (result.Item2.OrderDishInfos != null)
+                //    result.Item2.OrderDishInfos.ForEach(t => AddObject2DataTable(dishesDb, t));
 
-                var couponDb = CreateCouponsDb();
-                if (tableFullInfo.UsedCouponInfos != null && tableFullInfo.UsedCouponInfos.Any())
+                //var couponDb = CreateCouponsDb();
+                //if (tableFullInfo.UsedCouponInfos != null && tableFullInfo.UsedCouponInfos.Any())
+                //{
+                //    foreach (var usedCouponInfo in tableFullInfo.UsedCouponInfos)
+                //    {
+                //        AddObject2DataTable(couponDb, usedCouponInfo);
+                //    }
+                //}
+
+                //var dic = GetPresettlementDic(tableFullInfo, result.Item2.OrderInfo.FreeAmount);
+                //var settlementDb = GenerateSettlementDb(dic);
+
+                //var ds = new DataSet();
+                //ds.Tables.Add(mainDb);
+                //ds.Tables.Add(dishesDb);
+                //ds.Tables.Add(settlementDb);
+                //ds.Tables.Add(couponDb);
+
+                //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\预结单.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "预结单报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("结束准备预结单报表数据。");
+                //InfoLog.Instance.I("开始打印预结单报表...");
+                //FastReportHelper.Print(file, ds);
+
+               InfoLog.Instance.I("开始打印预结单报表...");
+               var res= ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                    .PrintPay(printUser, tableFullInfo.OrderId, EnumPrintPayType.BeforehandPay);
+                if (string.IsNullOrEmpty(res))
                 {
-                    foreach (var usedCouponInfo in tableFullInfo.UsedCouponInfos)
-                    {
-                        AddObject2DataTable(couponDb, usedCouponInfo);
-                    }
+                    InfoLog.Instance.I("结束打印预结单报表。");
+                    return true;
                 }
-
-                var dic = GetPresettlementDic(tableFullInfo, result.Item2.OrderInfo.FreeAmount);
-                var settlementDb = GenerateSettlementDb(dic);
-
-                var ds = new DataSet();
-                ds.Tables.Add(mainDb);
-                ds.Tables.Add(dishesDb);
-                ds.Tables.Add(settlementDb);
-                ds.Tables.Add(couponDb);
-
-                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\预结单.frx");
-                if (!File.Exists(file))
+                else
                 {
-                    var msg = "预结单报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印预结单失败：{0}", res));
                     return false;
                 }
-
-                InfoLog.Instance.I("结束准备预结单报表数据。");
-                InfoLog.Instance.I("开始打印预结单报表...");
-                FastReportHelper.Print(file, ds);
-                InfoLog.Instance.I("结束打印预结单报表。");
-
-                return true;
+              
             }
             catch (Exception exp)
             {
@@ -105,56 +118,70 @@ namespace CanDao.Pos.ReportPrint
         public static bool PrintSettlementReport(string orderId, string printUser)
         {
             ShowReportPrintingWindow();
-            InfoLog.Instance.I("开始获取结账单报表数据...");
-            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            var result = service.GetPrintOrderInfo(orderId, printUser, EnumPrintOrderType.Settlement);
-            InfoLog.Instance.I("结束获取结账单报表数据。");
-            if (!string.IsNullOrEmpty(result.Item1))
-            {
-                var msg = string.Format("获取结账单报表数据错误：{0}", result.Item1);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg);
-                return false;
-            }
+            //InfoLog.Instance.I("开始获取结账单报表数据...");
+            //var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            //var result = service.GetPrintOrderInfo(orderId, printUser, EnumPrintOrderType.Settlement);
+            //InfoLog.Instance.I("结束获取结账单报表数据。");
+            //if (!string.IsNullOrEmpty(result.Item1))
+            //{
+            //    var msg = string.Format("获取结账单报表数据错误：{0}", result.Item1);
+            //    ErrLog.Instance.E(msg);
+            //    MessageDialog.Warning(msg);
+            //    return false;
+            //}
 
             try
             {
                 InfoLog.Instance.I("开始准备结账单报表数据...");
-                var mainDb = CreateOrderMainDb();
-                AddObject2DataTable(mainDb, result.Item2.OrderInfo);
+                //var mainDb = CreateOrderMainDb();
+                //AddObject2DataTable(mainDb, result.Item2.OrderInfo);
 
-                var dishesDb = CreateOrderDishDb();
-                if (result.Item2.OrderDishInfos != null)
-                    result.Item2.OrderDishInfos.ForEach(t => AddObject2DataTable(dishesDb, t));
+                //var dishesDb = CreateOrderDishDb();
+                //if (result.Item2.OrderDishInfos != null)
+                //    result.Item2.OrderDishInfos.ForEach(t => AddObject2DataTable(dishesDb, t));
 
-                var payDetailDb = CeratePayDetailDb();
-                if (result.Item2.PayDetails != null)
-                    result.Item2.PayDetails.ForEach(t => AddObject2DataTable(payDetailDb, t));
+                //var payDetailDb = CeratePayDetailDb();
+                //if (result.Item2.PayDetails != null)
+                //    result.Item2.PayDetails.ForEach(t => AddObject2DataTable(payDetailDb, t));
 
-                var dic = GetSetttlementDic(result.Item2.OrderInfo);
-                var settlementDb = GenerateSettlementDb(dic);
+                //var dic = GetSetttlementDic(result.Item2.OrderInfo);
+                //var settlementDb = GenerateSettlementDb(dic);
 
-                var ds = new DataSet();
-                ds.Tables.Add(mainDb);
-                ds.Tables.Add(dishesDb);
-                ds.Tables.Add(payDetailDb);
-                ds.Tables.Add(settlementDb);
+                //var ds = new DataSet();
+                //ds.Tables.Add(mainDb);
+                //ds.Tables.Add(dishesDb);
+                //ds.Tables.Add(payDetailDb);
+                //ds.Tables.Add(settlementDb);
 
-                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\结账单.frx");
-                if (!File.Exists(file))
+                //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\结账单.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "结账单报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("结束准备结账单报表数据。");
+                //InfoLog.Instance.I("开始打印结账单报表...");
+                //FastReportHelper.Print(file, ds);
+                //InfoLog.Instance.I("结束打印结账单报表。");
+
+                //return true;
+                InfoLog.Instance.I("开始打印结账单报表...");
+                var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                     .PrintPay(printUser, orderId, EnumPrintPayType.Pay);
+                if (string.IsNullOrEmpty(res))
                 {
-                    var msg = "结账单报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
+                    InfoLog.Instance.I("结束打印结账单报表。");
+                    return true;
+                }
+                else
+                {
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印结账单失败：{0}", res));
                     return false;
                 }
-
-                InfoLog.Instance.I("结束准备结账单报表数据。");
-                InfoLog.Instance.I("开始打印结账单报表...");
-                FastReportHelper.Print(file, ds);
-                InfoLog.Instance.I("结束打印结账单报表。");
-
-                return true;
             }
             catch (Exception exp)
             {
@@ -177,47 +204,62 @@ namespace CanDao.Pos.ReportPrint
         public static bool PrintCustomUseBillReport(string orderId, string printUser)
         {
             ShowReportPrintingWindow();
-            InfoLog.Instance.I("开始获取客用单报表数据...");
-            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            var result = service.GetPrintOrderInfo(orderId, printUser, EnumPrintOrderType.CustomUse);
-            InfoLog.Instance.I("结束获取客用单报表数据。");
-            if (!string.IsNullOrEmpty(result.Item1))
-            {
-                var msg = string.Format("获取客用单报表数据错误：{0}", result.Item1);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg);
-                return false;
-            }
+            //InfoLog.Instance.I("开始获取客用单报表数据...");
+            //var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            //var result = service.GetPrintOrderInfo(orderId, printUser, EnumPrintOrderType.CustomUse);
+            //InfoLog.Instance.I("结束获取客用单报表数据。");
+            //if (!string.IsNullOrEmpty(result.Item1))
+            //{
+            //    var msg = string.Format("获取客用单报表数据错误：{0}", result.Item1);
+            //    ErrLog.Instance.E(msg);
+            //    MessageDialog.Warning(msg);
+            //    return false;
+            //}
 
             try
             {
-                InfoLog.Instance.I("开始准备客用单报表数据...");
-                var mainDb = CreateOrderMainDb();
-                AddObject2DataTable(mainDb, result.Item2.OrderInfo);
+                //InfoLog.Instance.I("开始准备客用单报表数据...");
+                //var mainDb = CreateOrderMainDb();
+                //AddObject2DataTable(mainDb, result.Item2.OrderInfo);
 
-                var dishesDb = CreateOrderDishDb();
-                if (result.Item2.OrderDishInfos != null)
-                    result.Item2.OrderDishInfos.ForEach(t => AddObject2DataTable(dishesDb, t));
+                //var dishesDb = CreateOrderDishDb();
+                //if (result.Item2.OrderDishInfos != null)
+                //    result.Item2.OrderDishInfos.ForEach(t => AddObject2DataTable(dishesDb, t));
 
-                var ds = new DataSet();
-                ds.Tables.Add(mainDb);
-                ds.Tables.Add(dishesDb);
+                //var ds = new DataSet();
+                //ds.Tables.Add(mainDb);
+                //ds.Tables.Add(dishesDb);
 
-                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\客用单.frx");
-                if (!File.Exists(file))
+                //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\客用单.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "客用单报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("结束准备客用单报表数据。");
+                //InfoLog.Instance.I("开始打印客用单报表...");
+                //FastReportHelper.Print(file, ds);
+                //InfoLog.Instance.I("结束打印客用单报表。");
+
+                //return true;
+
+                InfoLog.Instance.I("开始打印客用单报表...");
+                var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                     .PrintPay(printUser, orderId, EnumPrintPayType.CustomerUse);
+                if (string.IsNullOrEmpty(res))
                 {
-                    var msg = "客用单报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
+                    InfoLog.Instance.I("结束打印客用单报表。");
+                    return true;
+                }
+                else
+                {
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印客用单失败：{0}", res));
                     return false;
                 }
-
-                InfoLog.Instance.I("结束准备客用单报表数据。");
-                InfoLog.Instance.I("开始打印客用单报表...");
-                FastReportHelper.Print(file, ds);
-                InfoLog.Instance.I("结束打印客用单报表。");
-
-                return true;
             }
             catch (Exception exp)
             {
@@ -239,47 +281,62 @@ namespace CanDao.Pos.ReportPrint
         public static bool PrintClearPosReport(string userId)
         {
             ShowReportPrintingWindow();
-            InfoLog.Instance.I("开始获取清机报表数据...");
-            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-            var result = service.GetClearPosInfo(userId);
-            InfoLog.Instance.I("结束获取清机报表数据。");
-            if (!string.IsNullOrEmpty(result.Item1))
-            {
-                var msg = string.Format("获取清机报表数据错误：{0}", result.Item1);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg);
-                return false;
-            }
+            //InfoLog.Instance.I("开始获取清机报表数据...");
+            //var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            //var result = service.GetClearPosInfo(userId);
+            //InfoLog.Instance.I("结束获取清机报表数据。");
+            //if (!string.IsNullOrEmpty(result.Item1))
+            //{
+            //    var msg = string.Format("获取清机报表数据错误：{0}", result.Item1);
+            //    ErrLog.Instance.E(msg);
+            //    MessageDialog.Warning(msg);
+            //    return false;
+            //}
 
             try
             {
-                InfoLog.Instance.I("开始准备清机报表数据...");
-                var mainDb = CreateClearPosMainDb();
-                AddObject2DataTable(mainDb, result.Item2.OrderJson.Data.First());
+                //InfoLog.Instance.I("开始准备清机报表数据...");
+                //var mainDb = CreateClearPosMainDb();
+                //AddObject2DataTable(mainDb, result.Item2.OrderJson.Data.First());
 
-                var settDb = CreateClearPosSettlementDb();
-                if (result.Item2.JSJson != null && result.Item2.JSJson.Data != null)
-                    result.Item2.JSJson.Data.ForEach(t => AddObject2DataTable(settDb, t));
+                //var settDb = CreateClearPosSettlementDb();
+                //if (result.Item2.JSJson != null && result.Item2.JSJson.Data != null)
+                //    result.Item2.JSJson.Data.ForEach(t => AddObject2DataTable(settDb, t));
 
-                var ds = new DataSet();
-                ds.Tables.Add(mainDb);
-                ds.Tables.Add(settDb);
+                //var ds = new DataSet();
+                //ds.Tables.Add(mainDb);
+                //ds.Tables.Add(settDb);
 
-                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\清机单.frx");
-                if (!File.Exists(file))
+                //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\清机单.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "清机单报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("结束准备清机报表数据。");
+                //InfoLog.Instance.I("开始打印清机单...");
+                //FastReportHelper.Print(file, ds);
+                //InfoLog.Instance.I("结束打印清机单。");
+
+                //return true;
+
+                InfoLog.Instance.I("开始打印清机单报表...");
+                var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                     .PrintClearMachine(userId, "", SystemConfigCache.PosId);
+                if (string.IsNullOrEmpty(res))
                 {
-                    var msg = "清机单报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
+                    InfoLog.Instance.I("结束打印清机单报表。");
+                    return true;
+                }
+                else
+                {
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印清机单失败：{0}", res));
                     return false;
                 }
-
-                InfoLog.Instance.I("结束准备清机报表数据。");
-                InfoLog.Instance.I("开始打印清机单...");
-                FastReportHelper.Print(file, ds);
-                InfoLog.Instance.I("结束打印清机单。");
-
-                return true;
             }
             catch (Exception exp)
             {
@@ -303,28 +360,42 @@ namespace CanDao.Pos.ReportPrint
             ShowReportPrintingWindow();
             try
             {
-                InfoLog.Instance.I("开始准备打印发票单数据...");
-                var mainDb = CreateInvoiceMainDb();
-                AddObject2DataTable(mainDb, invoiceInfo);
+                //InfoLog.Instance.I("开始准备打印发票单数据...");
+                //var mainDb = CreateInvoiceMainDb();
+                //AddObject2DataTable(mainDb, invoiceInfo);
 
-                var ds = new DataSet();
-                ds.Tables.Add(mainDb);
+                //var ds = new DataSet();
+                //ds.Tables.Add(mainDb);
 
-                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\发票单.frx");
-                if (!File.Exists(file))
+                //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\发票单.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "发票单报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("结束准备打印发票单数据。");
+                //InfoLog.Instance.I("开始打印发票单...");
+                //FastReportHelper.Print(file, ds);
+                //InfoLog.Instance.I("结束打印发票单...");
+
+                //return true;
+                InfoLog.Instance.I("开始打印发票单...");
+                var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                     .PrintInvoice(invoiceInfo.OrderId, invoiceInfo.InvoiceAmount.ToString());
+                if (string.IsNullOrEmpty(res))
                 {
-                    var msg = "发票单报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
+                    InfoLog.Instance.I("结束打印发票单");
+                    return true;
+                }
+                else
+                {
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印发票单失败：{0}", res));
                     return false;
                 }
-
-                InfoLog.Instance.I("结束准备打印发票单数据。");
-                InfoLog.Instance.I("开始打印发票单...");
-                FastReportHelper.Print(file, ds);
-                InfoLog.Instance.I("结束打印发票单...");
-
-                return true;
             }
             catch (Exception ex)
             {
@@ -343,38 +414,52 @@ namespace CanDao.Pos.ReportPrint
         /// </summary>
         /// <param name="statisticInfo">品项销售统计信息。</param>
         /// <returns></returns>
-        public static bool PrintDishInfoStatisticReport(ReportStatisticInfo statisticInfo)
+        public static bool PrintDishInfoStatisticReport(int tag)
         {
             ShowReportPrintingWindow();
             try
             {
                 InfoLog.Instance.I("开始准备打印品项销售统计数据...");
-                var mainDb = CreateStatisticReportMainDb();
-                AddObject2DataTable(mainDb, statisticInfo);
+                //var mainDb = CreateStatisticReportMainDb();
+                //AddObject2DataTable(mainDb, statisticInfo);
 
-                var dataDb = CreateStatisticReportDataDb();
-                if (statisticInfo.DataSource != null)
-                    statisticInfo.DataSource.ForEach(t => AddObject2DataTable(dataDb, t));
+                //var dataDb = CreateStatisticReportDataDb();
+                //if (statisticInfo.DataSource != null)
+                //    statisticInfo.DataSource.ForEach(t => AddObject2DataTable(dataDb, t));
 
-                var ds = new DataSet();
-                ds.Tables.Add(mainDb);
-                ds.Tables.Add(dataDb);
+                //var ds = new DataSet();
+                //ds.Tables.Add(mainDb);
+                //ds.Tables.Add(dataDb);
 
-                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\品项统计.frx");
-                if (!File.Exists(file))
+                //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\品项统计.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "品项统计报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("结束准备打印品项销售统计数据。");
+                //InfoLog.Instance.I("开始打印品项销售统计单...");
+                //FastReportHelper.Print(file, ds);
+                //InfoLog.Instance.I("结束打印品项销售统计单。");
+
+                //return true;
+                InfoLog.Instance.I("开始打印品项销售统计报表...");
+                var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                     .PrintItemSell(tag.ToString());
+                if (string.IsNullOrEmpty(res))
                 {
-                    var msg = "品项统计报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
+                    InfoLog.Instance.I("结束打印品项销售统计报表");
+                    return true;
+                }
+                else
+                {
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印品项销售统计报表失败：{0}", res));
                     return false;
                 }
-
-                InfoLog.Instance.I("结束准备打印品项销售统计数据。");
-                InfoLog.Instance.I("开始打印品项销售统计单...");
-                FastReportHelper.Print(file, ds);
-                InfoLog.Instance.I("结束打印品项销售统计单。");
-
-                return true;
             }
             catch (Exception ex)
             {
@@ -393,38 +478,53 @@ namespace CanDao.Pos.ReportPrint
         /// </summary>
         /// <param name="statisticInfo">小费统计信息。</param>
         /// <returns></returns>
-        public static bool PrintTipInfoStatisticReport(ReportStatisticInfo statisticInfo)
+        public static bool PrintTipInfoStatisticReport(int tag)
         {
             ShowReportPrintingWindow();
             try
             {
-                InfoLog.Instance.I("开始准备打印小费统计数据...");
-                var mainDb = CreateStatisticReportMainDb();
-                AddObject2DataTable(mainDb, statisticInfo);
+                //InfoLog.Instance.I("开始准备打印小费统计数据...");
+                //var mainDb = CreateStatisticReportMainDb();
+                //AddObject2DataTable(mainDb, statisticInfo);
 
-                var dataDb = CreateStatisticReportDataDb();
-                if (statisticInfo.DataSource != null)
-                    statisticInfo.DataSource.ForEach(t => AddObject2DataTable(dataDb, t));
+                //var dataDb = CreateStatisticReportDataDb();
+                //if (statisticInfo.DataSource != null)
+                //    statisticInfo.DataSource.ForEach(t => AddObject2DataTable(dataDb, t));
 
-                var ds = new DataSet();
-                ds.Tables.Add(mainDb);
-                ds.Tables.Add(dataDb);
+                //var ds = new DataSet();
+                //ds.Tables.Add(mainDb);
+                //ds.Tables.Add(dataDb);
 
-                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\小费统计.frx");
-                if (!File.Exists(file))
+                //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\小费统计.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "小费统计报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("结束准备打印小费统计数据。");
+                //InfoLog.Instance.I("开始打印小费统计单...");
+                //FastReportHelper.Print(file, ds);
+                //InfoLog.Instance.I("结束打印小费统计单。");
+
+                //return true;
+
+                InfoLog.Instance.I("开始打印小费统计报表...");
+                var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                     .PrintTip(tag.ToString());
+                if (string.IsNullOrEmpty(res))
                 {
-                    var msg = "小费统计报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
+                    InfoLog.Instance.I("结束打印小费统计报表");
+                    return true;
+                }
+                else
+                {
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印小费统计报表失败：{0}", res));
                     return false;
                 }
-
-                InfoLog.Instance.I("结束准备打印小费统计数据。");
-                InfoLog.Instance.I("开始打印小费统计单...");
-                FastReportHelper.Print(file, ds);
-                InfoLog.Instance.I("结束打印小费统计单。");
-
-                return true;
             }
             catch (Exception ex)
             {
@@ -444,64 +544,82 @@ namespace CanDao.Pos.ReportPrint
         /// <param name="orderId">订单号。</param>
         /// <param name="printerUserId">打印用户id。</param>
         /// <returns></returns>
-        public static bool PrintMemberPayBillReport(string orderId, string printerUserId)
+        public static bool PrintMemberPayBillReport(TableFullInfo info, string printerUserId)
         {
             ShowReportPrintingWindow();
             try
             {
-                InfoLog.Instance.I("开始获取打印会员交易凭条数据...");
-                var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
-                var result = service.GetMemberPrintPayInfo(orderId, printerUserId);
-                InfoLog.Instance.I("结束获取打印会员交易凭条数据。");
-                if (!string.IsNullOrEmpty(result.Item1))
+                //InfoLog.Instance.I("开始获取打印会员交易凭条数据...");
+                //var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+                //var result = service.GetMemberPrintPayInfo(orderId, printerUserId);
+                //InfoLog.Instance.I("结束获取打印会员交易凭条数据。");
+                //if (!string.IsNullOrEmpty(result.Item1))
+                //{
+                //    var msg = string.Format("获取打印会员交易凭条数据错误：{0}", result.Item1);
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //result.Item2.ReportTitle = "商户联";
+                //var mainDb = CreateMemberPayBillMainDb();
+                //AddObject2DataTable(mainDb, result.Item2);
+
+                //var ds = new DataSet();
+                //ds.Tables.Add(mainDb);
+
+                //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\交易凭条_商.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "交易凭条商户联报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("开始打印交易凭条商户联...");
+                //FastReportHelper.Print(file, ds);
+                //InfoLog.Instance.I("结束打印交易凭条商户联。");
+
+                //result.Item2.ReportTitle = "客户联";
+                //var mainDbCus = CreateMemberPayBillMainDb();
+                //AddObject2DataTable(mainDbCus, result.Item2);
+
+                //var dsCus = new DataSet();
+                //dsCus.Tables.Add(mainDbCus);
+
+                //file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\交易凭条_客.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "交易凭条客户联报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("开始打印交易凭条客户联...");
+                //FastReportHelper.Print(file, dsCus);
+                //InfoLog.Instance.I("结束打印交易凭条客户联。");
+
+                //return true;
+
+                InfoLog.Instance.I("开始打印交易凭条...");
+                var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                     .PrintMemberSale(printerUserId,info.OrderId);
+                if (string.IsNullOrEmpty(res))
                 {
-                    var msg = string.Format("获取打印会员交易凭条数据错误：{0}", result.Item1);
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
+                    InfoLog.Instance.I("结束打印交易凭条");
+                    
+                    return true;
+                }
+                else
+                {
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印交易凭条失败：{0}", res));
                     return false;
                 }
-
-                result.Item2.ReportTitle = "商户联";
-                var mainDb = CreateMemberPayBillMainDb();
-                AddObject2DataTable(mainDb, result.Item2);
-
-                var ds = new DataSet();
-                ds.Tables.Add(mainDb);
-
-                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\交易凭条_商.frx");
-                if (!File.Exists(file))
-                {
-                    var msg = "交易凭条商户联报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
-                    return false;
-                }
-
-                InfoLog.Instance.I("开始打印交易凭条商户联...");
-                FastReportHelper.Print(file, ds);
-                InfoLog.Instance.I("结束打印交易凭条商户联。");
-
-                result.Item2.ReportTitle = "客户联";
-                var mainDbCus = CreateMemberPayBillMainDb();
-                AddObject2DataTable(mainDbCus, result.Item2);
-
-                var dsCus = new DataSet();
-                dsCus.Tables.Add(mainDbCus);
-
-                file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\交易凭条_客.frx");
-                if (!File.Exists(file))
-                {
-                    var msg = "交易凭条客户联报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
-                    return false;
-                }
-
-                InfoLog.Instance.I("开始打印交易凭条客户联...");
-                FastReportHelper.Print(file, dsCus);
-                InfoLog.Instance.I("结束打印交易凭条客户联。");
-
-                return true;
+                CopyReportHelper.PayPrint(info.MemberInfo.Integral, info.MemberInfo.StoredBalance, info.MemberNo,
+                    Globals.BranchInfo.BranchId);
             }
             catch (Exception ex)
             {
@@ -525,50 +643,65 @@ namespace CanDao.Pos.ReportPrint
             ShowReportPrintingWindow();
             try
             {
-                InfoLog.Instance.I("开始准备储值凭条商户联打印数据...");
-                info.ReportTitle = "商户联";
-                var mainDb = CreateMemberStoredMainDb();
-                AddObject2DataTable(mainDb, info);
+                //InfoLog.Instance.I("开始准备储值凭条商户联打印数据...");
+                //info.ReportTitle = "商户联";
+                //var mainDb = CreateMemberStoredMainDb();
+                //AddObject2DataTable(mainDb, info);
 
-                var ds = new DataSet();
-                ds.Tables.Add(mainDb);
+                //var ds = new DataSet();
+                //ds.Tables.Add(mainDb);
 
-                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\储值凭条_商.frx");
-                if (!File.Exists(file))
+                //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\储值凭条_商.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "储值凭条商户联报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //InfoLog.Instance.I("结束准备储值凭条商户联打印数据。");
+                //InfoLog.Instance.I("开始打印储值凭条商户联...");
+                //FastReportHelper.Print(file, ds);
+                //InfoLog.Instance.I("结束打印储值凭条商户联。");
+
+                //InfoLog.Instance.I("开始准备储值凭条客户联打印数据...");
+                //info.ReportTitle = "客户联";
+                //var mainDbCus = CreateMemberStoredMainDb();
+                //AddObject2DataTable(mainDbCus, info);
+
+                //file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\储值凭条_客.frx");
+                //if (!File.Exists(file))
+                //{
+                //    var msg = "储值凭条商户联报表模板文件缺失。";
+                //    ErrLog.Instance.E(msg);
+                //    MessageDialog.Warning(msg);
+                //    return false;
+                //}
+
+                //var dsCus = new DataSet();
+                //dsCus.Tables.Add(mainDbCus);
+
+                //InfoLog.Instance.I("结束准备储值凭条客户联打印数据。");
+                //InfoLog.Instance.I("开始打印储值凭条客户联...");
+                //FastReportHelper.Print(file, dsCus);
+                //InfoLog.Instance.I("结束打印储值凭条客户联。");
+                //return true;
+
+                InfoLog.Instance.I("开始打印储值凭条...");
+                var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                     .PrintMemberStore(info);
+                if (string.IsNullOrEmpty(res))
                 {
-                    var msg = "储值凭条商户联报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
+                    InfoLog.Instance.I("结束打印储值凭条");
+                    return true;
+                }
+                else
+                {
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印储值凭条失败：{0}", res));
                     return false;
                 }
-
-                InfoLog.Instance.I("结束准备储值凭条商户联打印数据。");
-                InfoLog.Instance.I("开始打印储值凭条商户联...");
-                FastReportHelper.Print(file, ds);
-                InfoLog.Instance.I("结束打印储值凭条商户联。");
-
-                InfoLog.Instance.I("开始准备储值凭条客户联打印数据...");
-                info.ReportTitle = "客户联";
-                var mainDbCus = CreateMemberStoredMainDb();
-                AddObject2DataTable(mainDbCus, info);
-
-                file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\储值凭条_客.frx");
-                if (!File.Exists(file))
-                {
-                    var msg = "储值凭条商户联报表模板文件缺失。";
-                    ErrLog.Instance.E(msg);
-                    MessageDialog.Warning(msg);
-                    return false;
-                }
-
-                var dsCus = new DataSet();
-                dsCus.Tables.Add(mainDbCus);
-
-                InfoLog.Instance.I("结束准备储值凭条客户联打印数据。");
-                InfoLog.Instance.I("开始打印储值凭条客户联...");
-                FastReportHelper.Print(file, dsCus);
-                InfoLog.Instance.I("结束打印储值凭条客户联。");
-                return true;
             }
             catch (Exception ex)
             {
@@ -588,34 +721,61 @@ namespace CanDao.Pos.ReportPrint
         /// 打印营业报表明细。
         /// </summary>
         /// <param name="fullInfo"></param>
-        public static bool PrintBusinessDataDetail(MBusinessDataDetail businessDataDetail)
+        public static bool PrintBusinessDataDetail(string starTime,string endTime)
         {
-            string msg = "打印营业报表明细";
-            DataTable mainDb;
-            DataTable detailDb;
-            DataTable jsDb;
-            DataTable yhDb;
-            ToBusinessDataDetailTabel(businessDataDetail, out mainDb, out detailDb, out jsDb, out yhDb);
+            //string msg = "打印营业报表明细";
+            //DataTable mainDb;
+            //DataTable detailDb;
+            //DataTable jsDb;
+            //DataTable yhDb;
+            //ToBusinessDataDetailTabel(businessDataDetail, out mainDb, out detailDb, out jsDb, out yhDb);
 
-            DataSet ds = new DataSet();
-            ds.Tables.Add(mainDb);
-            ds.Tables.Add(detailDb);
-            ds.Tables.Add(jsDb);
-            ds.Tables.Add(yhDb);
+            //DataSet ds = new DataSet();
+            //ds.Tables.Add(mainDb);
+            //ds.Tables.Add(detailDb);
+            //ds.Tables.Add(jsDb);
+            //ds.Tables.Add(yhDb);
 
-            var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\BusinessDataDetail.frx");
-            if (!File.Exists(file))
+            //var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Reports\BusinessDataDetail.frx");
+            //if (!File.Exists(file))
+            //{
+            //    ErrLog.Instance.E(msg + "文件缺失。");
+            //    MessageDialog.Warning(msg + "文件缺失。");
+            //    return false;
+            //}
+
+            //InfoLog.Instance.I("开始"+msg);
+            //FastReportHelper.Print(file, ds);
+            //InfoLog.Instance.I("结束"+msg);
+            //return true;
+            ShowReportPrintingWindow();
+            try
             {
-                ErrLog.Instance.E(msg + "文件缺失。");
-                MessageDialog.Warning(msg + "文件缺失。");
+                InfoLog.Instance.I("开始打印营业报表明细...");
+                var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
+                     .PrintBusinessDetail(starTime,endTime);
+                if (string.IsNullOrEmpty(res))
+                {
+                    InfoLog.Instance.I("结束打印营业报表明细");
+                    return true;
+                }
+                else
+                {
+                    ErrLog.Instance.E(res);
+                    MessageDialog.Warning(string.Format("打印营业报表明细失败：{0}", res));
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E("打印营业报表明细异常。", ex);
+                MessageDialog.Warning(string.Format("打印营业报表明细异常：{0}", ex.Message));
                 return false;
             }
-
-            InfoLog.Instance.I("开始"+msg);
-            FastReportHelper.Print(file, ds);
-            InfoLog.Instance.I("结束"+msg);
-            return true;
-
+            finally
+            {
+                ReportPrintingWindow.Instance.Hide();
+            }
        
         }
 

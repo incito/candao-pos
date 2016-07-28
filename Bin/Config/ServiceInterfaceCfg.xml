@@ -4,4 +4,5 @@
   <Item Name="IRestaurantService" DllName="CanDao.Pos.ServiceImpl.dll" ClassName="CanDao.Pos.ServiceImpl.RestaurantServiceImpl"/>
   <Item Name="IOrderService" DllName="CanDao.Pos.ServiceImpl.dll" ClassName="CanDao.Pos.ServiceImpl.OrderServiceImpl"/>
   <Item Name="IMemberService" DllName="CanDao.Pos.ServiceImpl.dll" ClassName="CanDao.Pos.ServiceImpl.MemberServiceImpl"/>
+  <Item Name="IPrintService" DllName="CanDao.Pos.ServiceImpl.dll" ClassName="CanDao.Pos.ServiceImpl.PrintServiceImpl"/>
 </InterfaceInfo>

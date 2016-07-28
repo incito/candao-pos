@@ -17,7 +17,7 @@ namespace CanDao.Pos.Common.Models.VipModels
         /// <summary>
         /// 余额
         /// </summary>
-        public float Balance { set; get; }
+        public decimal Balance { set; get; }
         /// <summary>
         /// 金额
         /// </summary>

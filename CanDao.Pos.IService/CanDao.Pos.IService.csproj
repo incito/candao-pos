@@ -61,6 +61,7 @@
     <Compile Include="IAccountService.cs" />
     <Compile Include="IMemberService.cs" />
     <Compile Include="IOrderService.cs" />
+    <Compile Include="IPrintService.cs" />
     <Compile Include="IRestaurantService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceManager.cs" />
