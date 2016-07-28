@@ -10,29 +10,44 @@
     <Style TargetType="{x:Type local:PosBaseWindow}">
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="ResizeMode" Value="NoResize"/>
-        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBg}"/>
+        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgGray}"/>
+        <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFgFont}"/>
         <Setter Property="AllowsTransparency" Value="True"/>
         <Setter Property="MaxHeight" Value="768"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:PosBaseWindow}">
-                    <Border  CornerRadius="{TemplateBinding WindowCornerRadius}" BorderBrush="Gray" BorderThickness="1" Background="{TemplateBinding Background}">
+                    <Border  CornerRadius="{TemplateBinding WindowCornerRadius}"
+                             BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1"
+                             Background="{TemplateBinding Background}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="58"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <Border x:Name="PART_Title" Background="{StaticResource CanDaoPosColorSelected}">
+                            <Border x:Name="PART_Title"
+                                    Background="{StaticResource CanDaoPosColorBgOrange}">
                                 <Grid >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Image Source="{StaticResource CanDaoPosImageLog}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="79" Margin="20,0,0,0"/>
-                                    <ContentControl Grid.Column="1" Content="{TemplateBinding TitleContent}" HorizontalAlignment="Left"/>
-                                    <Button x:Name="PART_CloseBtn" Grid.Column="2" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0"
-                                            Style="{StaticResource NoBorderBtnStyle}" Content="{TemplateBinding CloseBtnText}" IsEnabled="{TemplateBinding CloseBtnEnable}"/>
+                                    <Image Source="{StaticResource CanDaoPosImageLog}"
+                                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                                           Height="25" Width="79"
+                                           Margin="20,0,0,0"/>
+                                    <ContentControl Grid.Column="1"
+                                                    Content="{TemplateBinding TitleContent}"
+                                                    HorizontalAlignment="Left"/>
+                                    <Button x:Name="PART_CloseBtn" 
+                                            Grid.Column="2"
+                                            FontSize="18"
+                                            HorizontalAlignment="Right" VerticalAlignment="Center"
+                                            Margin="0,0,20,0"
+                                            Style="{StaticResource NoBorderBtnStyle}" 
+                                            Content="{TemplateBinding CloseBtnText}"
+                                            IsEnabled="{TemplateBinding CloseBtnEnable}"/>
                                 </Grid>
                             </Border>
                             <Border Grid.Row="1">

@@ -6,68 +6,54 @@
         <ResourceDictionary Source="/CanDao.Pos.Common;component/Styles/Button.xaml"/>
         <ResourceDictionary Source="/CanDao.Pos.Common;component/Styles/Images.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style TargetType="{x:Type local:PosMsgWindow}">
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="ResizeMode" Value="NoResize"/>
-        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBg}"/>
+        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgNormal}"/>
         <Setter Property="AllowsTransparency" Value="True"/>
         <Setter Property="Title" Value=""/>
-        <Setter Property="WindowCornerRadius" Value="2"/>
+        <Setter Property="WindowCornerRadius" Value="3"/>
         <Setter Property="MaxHeight" Value="768"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:PosMsgWindow}">
                     <Border CornerRadius="{TemplateBinding WindowCornerRadius}"
-                            BorderBrush="Gray" BorderThickness="1"
+                            BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1"
                             Background="{TemplateBinding Background}">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="38"/>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
                             <Border x:Name="PART_Title"
-                                    Grid.Column="0" Grid.ColumnSpan="2"
-                                    Background="{StaticResource CanDaoPosColorSelected}">
+                                    Grid.Column="0"
+                                    Background="{StaticResource CanDaoPosColorBgOrange}">
                                 <Grid >
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <ContentControl Grid.Column="1" 
+                                    <ContentControl Grid.Column="0" 
                                                     Content="{TemplateBinding Title}"
                                                     Foreground="{StaticResource CanDaoPosColorFg}"
                                                     HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                                    FontSize="18" FontWeight="Bold"/>
+                                                    FontSize="16"/>
+                                    <Button Grid.Column="1"
+                                            Content="X" 
+                                            Width="22" Height="22"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource NoBorderBtnStyle}"
+                                            IsCancel="True"/>
                                 </Grid>
                             </Border>
-                            <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Border Grid.Row="1" Grid.Column="0">
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </Border>
-                            <Button  x:Name="PART_CancelBtn"
-                                     Grid.Row="2" Grid.Column="0"
-                                     FontSize="18"
-                                     VerticalAlignment="Center" Margin="20,0,0,0"
-                                     Content="取消"/>
-                            <Button x:Name="PART_CloseBtn"
-                                    Grid.Row="2" Grid.Column="1"
-                                    FontSize="18"
-                                    VerticalAlignment="Center" Margin="0,0,20,0"
-                                    Content="确定"/>
                         </Grid>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="CloseBtnEnable" Value="False">
-                            <Setter TargetName="PART_CloseBtn" Property="Foreground" Value="LightGray"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

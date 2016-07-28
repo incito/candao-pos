@@ -5,7 +5,7 @@
                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                        xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
                        Width="650"  SizeToContent="Height" MaxHeight="768" ShowInTaskbar="False"
-                       CloseBtnText="" CancelBtnText="" Title="开台">
+                       Title="开台">
     <controls:PosMsgWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

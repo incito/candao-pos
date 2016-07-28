@@ -8,17 +8,27 @@
     <Style x:Key="BtnBaseStyle" TargetType="Button">
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Margin" Value="2"/>
-        <Setter Property="Background" Value="{StaticResource CanDaoPosColorFg}"/>
+        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgWhite}"/>
+        <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFgFont}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border CornerRadius="3" Background="{TemplateBinding Background}">
+                    <Border CornerRadius="3"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource CanDaoPosColorBgBorder}"
+                            BorderThickness="1">
                         <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorDisable}"/>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgDisable}"/>
                             <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Cursor" Value="Hand"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
@@ -26,7 +36,7 @@
                             <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="Gray"/>
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFgDisable}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -41,14 +51,29 @@
     <Style x:Key="NoBorderBtnStyle" TargetType="Button">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" Background="Transparent" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    <ContentPresenter Content="{TemplateBinding Content}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgDisable}"/>
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
+                        </MultiTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorSelected}"/>
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -74,7 +99,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border BorderBrush="#FFC0C0C0" BorderThickness="1">
+                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1">
                         <Image Source="{StaticResource CanDaoPosImageAdd}" UseLayoutRounding="True"/>
                     </Border>
                 </ControlTemplate>
@@ -86,7 +111,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border BorderBrush="#FFC0C0C0" BorderThickness="1">
+                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1">
                         <Image Source="{StaticResource CanDaoPosImageReduce}" UseLayoutRounding="True"/>
                     </Border>
                 </ControlTemplate>
@@ -100,7 +125,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border BorderBrush="#FFC0C0C0" BorderThickness="1">
+                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1">
                         <Image Source="{StaticResource CanDaoPosImageDown}"/>
                     </Border>
                 </ControlTemplate>
@@ -114,7 +139,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border BorderBrush="#FFC0C0C0" BorderThickness="1">
+                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1">
                         <Image Source="{StaticResource CanDaoPosImageUp}"/>
                     </Border>
                 </ControlTemplate>
@@ -126,7 +151,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border BorderBrush="#FFC0C0C0" BorderThickness="0">
+                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="0">
                         <Image Source="{StaticResource CanDaoPosImageLeft}" UseLayoutRounding="True"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -158,7 +183,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border BorderBrush="#FFC0C0C0" BorderThickness="0">
+                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="0">
                         <Image Source="{StaticResource CanDaoPosImageRight}" UseLayoutRounding="True"/>
                     </Border>
                     <ControlTemplate.Triggers>

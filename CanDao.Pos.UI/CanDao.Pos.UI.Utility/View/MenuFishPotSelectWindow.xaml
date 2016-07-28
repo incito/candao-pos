@@ -8,7 +8,6 @@
                          xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
                          Width="550" SizeToContent="Height" MaxHeight="768"
                         Title="{Binding Data.FishPotSelfInfo.DishName}"
-                        CloseBtnText="" CancelBtnText=""
                         ShowInTaskbar="False">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

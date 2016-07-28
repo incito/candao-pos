@@ -1,23 +1,34 @@
-﻿<controls:PosBaseWindow x:Class="CanDao.Pos.UI.MainView.View.RestaurantOpeningWindow"
-                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-                        Height="440" Width="650" CloseBtnText="开业大吉" WindowStartupLocation="CenterScreen">
-    <controls:PosBaseWindow.Resources>
+﻿<Window x:Class="CanDao.Pos.UI.MainView.View.RestaurantOpeningWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="275" Width="455"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" ResizeMode="NoResize">
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </controls:PosBaseWindow.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="2*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="{Binding DateTimeNow, StringFormat=今日：{0}}" FontSize="30" FontWeight="Bold"/>
-        <TextBlock Grid.Row="1" Text="恭祝：财源滚滚，生意兴隆" FontSize="30" FontWeight="Bold"/>
-        <Button Grid.Row="2" Content="开业" Command="{Binding ConfirmCmd}" VerticalAlignment="Center" FontSize="30" Height="80" Width="250"/>
-    </Grid>
-</controls:PosBaseWindow>
+    </Window.Resources>
+    <Border CornerRadius="3"
+            BorderThickness="1"
+            BorderBrush="{StaticResource CanDaoPosColorBgBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="财源滚滚，生意兴隆"
+                   FontSize="30"
+                   FontWeight="Bold"
+                   VerticalAlignment="Bottom"/>
+            <Button Grid.Row="1" 
+                Content="确认开业"
+                Command="{Binding ConfirmCmd}"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Height="45" Width="230"/>
+        </Grid>
+    </Border>
+</Window>

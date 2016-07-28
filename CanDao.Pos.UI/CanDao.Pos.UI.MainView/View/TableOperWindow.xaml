@@ -306,7 +306,7 @@
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Border BorderBrush="{StaticResource CanDaoPosColorBg}" BorderThickness="2" Height="85">
+                        <Border BorderBrush="{StaticResource CanDaoPosColorBg2}" BorderThickness="2" Height="85">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>

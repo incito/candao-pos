@@ -28,7 +28,6 @@ namespace CanDao.Pos.UI.Utility.View
             InputNumCtrl.ShowDot = allowDot;
 
             DataContext = this;
-            CloseBtnEnable = false;
         }
 
         #endregion
@@ -71,7 +70,7 @@ namespace CanDao.Pos.UI.Utility.View
             {
                 ErrLog.Instance.E("数字输入窗口里转换成数字失败。", ex);
             }
-            ctrl.CloseBtnEnable = ctrl.InputNum > 0;
+            //ctrl.CloseBtnEnable = ctrl.InputNum > 0;
         }
 
         #endregion
