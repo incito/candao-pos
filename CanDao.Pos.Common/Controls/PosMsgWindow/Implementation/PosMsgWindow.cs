@@ -36,6 +36,16 @@ namespace CanDao.Pos.Common.Controls
             DependencyProperty.Register("CloseBtnEnable", typeof(bool), typeof(PosMsgWindow), new PropertyMetadata(true));
 
 
+
+        public bool ShowCloseBtn
+        {
+            get { return (bool)GetValue(ShowCloseBtnProperty); }
+            set { SetValue(ShowCloseBtnProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowCloseBtnProperty =
+            DependencyProperty.Register("ShowCloseBtn", typeof(bool), typeof(PosMsgWindow), new PropertyMetadata(true));
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);

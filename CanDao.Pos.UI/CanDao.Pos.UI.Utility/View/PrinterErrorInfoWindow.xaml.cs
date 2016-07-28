@@ -1,4 +1,6 @@
-﻿namespace CanDao.Pos.UI.Utility.View
+﻿using System.Windows;
+
+namespace CanDao.Pos.UI.Utility.View
 {
     /// <summary>
     /// 打印机错误信息提示窗口。
@@ -18,6 +20,11 @@
         public bool IsCheckedNoWarning
         {
             get { return CbNoWarning.IsChecked != null && CbNoWarning.IsChecked.Value; }
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
         }
     }
 }

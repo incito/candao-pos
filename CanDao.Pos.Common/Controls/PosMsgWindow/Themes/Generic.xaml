@@ -5,6 +5,7 @@
         <ResourceDictionary Source="/CanDao.Pos.Common;component/Styles/Brushes.xaml"/>
         <ResourceDictionary Source="/CanDao.Pos.Common;component/Styles/Button.xaml"/>
         <ResourceDictionary Source="/CanDao.Pos.Common;component/Styles/Images.xaml"/>
+        <ResourceDictionary Source="/CanDao.Pos.Common;component/Styles/Converter.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:PosMsgWindow}">
@@ -46,6 +47,7 @@
                                             Width="22" Height="22"
                                             VerticalAlignment="Center"
                                             Style="{StaticResource NoBorderBtnStyle}"
+                                            Visibility="{TemplateBinding ShowCloseBtn, Converter={StaticResource Bool2VisibilityCvt}}"
                                             IsCancel="True"/>
                                 </Grid>
                             </Border>
