@@ -23,7 +23,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
-                <ResourceDictionary Source="/CanDao.Pos.UI.MainView;component/MyDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:PosBaseWindow.Resources>

@@ -1,12 +1,13 @@
-﻿<cSystem:UserControlBase x:Class="CanDao.Pos.VIPManage.Views.UcVipModifyVipInfoView"
+﻿<controls:PosBaseWindow x:Class="CanDao.Pos.VIPManage.Views.UcVipModifyVipInfoView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cSystem="clr-namespace:CanDao.Pos.Common.Controls.CSystem;assembly=CanDao.Pos.Common"
+             xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
              mc:Ignorable="d" 
              Height="510" Width="760" Background="White">
-    <UserControl.Resources>
+    <controls:PosBaseWindow.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="FontSize" Value="15"/>
@@ -26,7 +27,7 @@
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
         </Style>
-    </UserControl.Resources>
+    </controls:PosBaseWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"></RowDefinition>
@@ -78,5 +79,7 @@
         </Grid>
         <cSystem:CtlDigitalKeyboard x:Name="Keyboard" Grid.Row="1" Grid.Column="1"  Height="250" VerticalAlignment="Top" Width="310" />
     </Grid>
-</cSystem:UserControlBase>
+</controls:PosBaseWindow>
+
+
 

@@ -46,7 +46,7 @@ namespace CanDao.Pos.Common
         /// <summary>
         /// 外卖台餐台名称。
         /// </summary>
-        public static string TakeoutTableName { get; set; }
+        //public static string TakeoutTableName { get; set; }
 
         /// <summary>
         /// Pos编号。
@@ -100,7 +100,7 @@ namespace CanDao.Pos.Common
                     DataServer = GetElementValue(root.Element("DataServer"));
                     CloudServer = GetElementValue(root.Element("CloudServer"));
                     MemberSystem = GetElementInt(root.Element("MemberSystem"), 1);
-                    TakeoutTableName = GetElementValue(root.Element("TakeoutTableName"));
+                    //TakeoutTableName = GetElementValue(root.Element("TakeoutTableName"));
                     Globals.BranchTelephone = GetElementValue(root.Element("BranchTelephone"));
                     PosId = GetElementValue(root.Element("PosId"));
                     OpenCashIp = GetElementValue(root.Element("OpenCashIp"));

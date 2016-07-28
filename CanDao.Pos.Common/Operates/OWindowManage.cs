@@ -25,6 +25,7 @@ namespace CanDao.Pos.Common.Operates
             wPopup.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
             wPopup.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             wPopup.WindowStartupLocation= WindowStartupLocation.CenterScreen;
+         
             wPopup.SetShowUc(showUc);
             wPopup.IsDialog = true;//设置模态方式打开
             if (wPopup.ShowDialog() == true)

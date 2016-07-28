@@ -125,6 +125,7 @@
     <Compile Include="Request\GetOrderMemberInfoRequest.cs" />
     <Compile Include="Request\GetTableByTypeRequest.cs" />
     <Compile Include="Request\GzdwResponse.cs" />
+    <Compile Include="Request\SetTakeoutOrderOnAccountRequest.cs" />
     <Compile Include="Request\SendVerifyCodeRequest.cs" />
     <Compile Include="Request\SetCouponFavorRequest.cs" />
     <Compile Include="Request\TipMoneyResponse.cs" />

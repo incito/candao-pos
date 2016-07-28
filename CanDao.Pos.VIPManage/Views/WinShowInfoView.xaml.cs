@@ -16,7 +16,7 @@ namespace CanDao.Pos.VIPManage.Views
     /// <summary>
     /// WinShowInfo.xaml 的交互逻辑
     /// </summary>
-    public partial class WinShowInfoView : Window
+    public partial class WinShowInfoView 
     {
         public WinShowInfoView()
         {

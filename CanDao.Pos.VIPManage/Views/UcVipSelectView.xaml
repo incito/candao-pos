@@ -1,4 +1,4 @@
-﻿<cSystem:UserControlBase
+﻿<controls:PosBaseWindow
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,8 +8,8 @@
              xmlns:newControl="clr-namespace:CanDao.Pos.Common.Controls.NewControl;assembly=CanDao.Pos.Common"
              x:Class="CanDao.Pos.VIPManage.Views.UcVipSelectView" 
              mc:Ignorable="d" 
-             Height="510" Width="760" Background="White">
-    <UserControl.Resources>
+             Height="570" Width="760" Background="White">
+    <controls:PosBaseWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/CanDao.Pos.ResourceService;component/DictionaryServer.xaml"/>
@@ -29,7 +29,7 @@
             </Style>
 
         </ResourceDictionary>
-    </UserControl.Resources>
+    </controls:PosBaseWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="220"/>
@@ -111,5 +111,7 @@
             </Grid>
         </GroupBox>
     </Grid>
-</cSystem:UserControlBase>
+</controls:PosBaseWindow>
+
+
 

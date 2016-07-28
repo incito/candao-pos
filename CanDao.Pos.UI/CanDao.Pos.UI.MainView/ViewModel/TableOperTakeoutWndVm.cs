@@ -47,15 +47,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (Data == null || string.IsNullOrEmpty(Data.OrderId))
                 TaskService.Start(null, OpenTableProcess, OpenTableComplete, "外卖台开台中...");
-
-            if (OwnerWindow != null)
-            {
-                OwnerWindow.Closing -= OwnerWindowOnClosing;//解决多次触发GetTableDishInfo方法导致事件重复添加。
-                OwnerWindow.Closing += OwnerWindowOnClosing;
-            }
         }
 
-        private void OwnerWindowOnClosing(object sender, CancelEventArgs e)
+        protected override void OnWindowClosing(CancelEventArgs e)
         {
             if (OwnerWindow.DialogResult == true)//为true表示正常关闭，不做后续处理。
                 return;
@@ -91,20 +85,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             };
             var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
             if (service == null)
-                return new Tuple<string, string>("创建IRestaurantService服务失败。", null);
+                return "创建IRestaurantService服务失败。";
 
-            return service.OpenTable(request);
-        }
-
-        private void OpenTableComplete(object param)
-        {
-            var result = (Tuple<string, string>)param;
+            var result = service.OpenTable(request);
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("外卖开台失败：{0}", result.Item1);
-                MessageDialog.Warning(result.Item1, OwnerWindow);
-                CloseWindow(false);
-                return;
+                return result.Item1;
             }
 
             InfoLog.Instance.I("外卖开台完成，订单号：{0}", result.Item2);
@@ -113,8 +100,25 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 Data = new TableFullInfo();
             Data.CloneDataFromTableInfo(_tableInfo);
 
-            WindowHelper.ShowDialog(new OrderDishWindow(_tableInfo), OwnerWindow);
-            GetTableDishInfoAsync();
+            var orderService = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (orderService == null)
+                return "创建IOrderService服务失败。";
+
+            return orderService.SetOrderTakeoutOrder(result.Item2);
+        }
+
+        private void OpenTableComplete(object param)
+        {
+            var result = (string)param;
+            if (!string.IsNullOrEmpty(result))
+            {
+                ErrLog.Instance.E("设置订单为外卖单失败：{0}", result);
+                MessageDialog.Warning(result, OwnerWindow);
+                CloseWindow(false);
+                return;
+            }
+
+            OrderDish();
         }
 
         protected override void DosomethingAfterSettlement()

@@ -1,11 +1,13 @@
 ﻿using System.Linq;
-using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
+    /// <summary>
+    /// 鱼锅选择窗口VM。
+    /// </summary>
     public class MenuFishPotSelectWndVm : NormalWindowViewModel
     {
         #region Constructor
@@ -26,28 +28,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #endregion
 
-        #region Command
-
-        public ICommand WndLoadCmd { get; private set; }
-
-        #endregion
-
-        #region Command Methods
-
-        private void WindowLoad(object arg)
-        {
-
-        }
-
-        #endregion
-
         #region Protected Methods
-
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            WndLoadCmd = CreateDelegateCommand(WindowLoad);
-        }
 
         protected override void Confirm(object param)
         {

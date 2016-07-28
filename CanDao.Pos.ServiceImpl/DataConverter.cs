@@ -64,15 +64,17 @@ namespace CanDao.Pos.ServiceImpl
 
         internal static OrderDishInfo ToDishInfo(OrderDishDataResponse response)
         {
+            var dishName = InternationaHelper.GetBeforeSeparatorFlagData(response.title);
             return new OrderDishInfo
             {
                 DishDesc = response.itemdesc,
                 DishId = response.dishid,
-                DishName = InternationaHelper.GetBeforeSeparatorFlagData(response.title),
+                DishName = dishName,
                 DishNum = response.dishnum,
                 DishStatus = response.dishstatus != null ? (EnumDishStatus) response.dishstatus : EnumDishStatus.Normal,
                 DishType = (EnumDishType) response.dishtype,
                 DishUnit = InternationaHelper.GetBeforeSeparatorFlagData(response.dishunit),
+                TempDishName =dishName.Contains("临时菜")? response.avoid.Split('|')[2]:"",
                 SrcDishUnit = response.dishunit,
                 Price = response.orderprice ?? 0,
                 PrimaryKey = response.primarykey,
@@ -632,7 +634,7 @@ namespace CanDao.Pos.ServiceImpl
                 freeuser = dishInfo.FreeUserId,
                 freeauthorize = dishInfo.FreeAuthorizeId,
                 freereason = dishInfo.FreeReason,
-                taste = dishInfo.Taste,
+                taste =string.IsNullOrEmpty(dishInfo.TempDishName)?dishInfo.Taste:dishInfo.TempDishName,
                 sperequire = dishInfo.Diet,
             };
         }

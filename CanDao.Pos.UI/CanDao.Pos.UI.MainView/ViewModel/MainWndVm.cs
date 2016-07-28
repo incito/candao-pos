@@ -522,6 +522,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 else
                 {
                     RefreshRemainSecond--;
+                    SetRefreshTimerStatus(true);
                 }
 
                 //更新餐桌开台持续时间
@@ -530,10 +531,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             catch (Exception ex)
             {
                 ErrLog.Instance.E(ex);
-            }
-            finally
-            {
-                SetRefreshTimerStatus(true);
             }
         }
 
@@ -552,7 +549,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void GetAllTableInfoesAsync()
         {
-            TaskService.Start(null, GetAllTableInfoProcess, GetAllTableInfoComplete, "加载所有餐桌信息...");
+            var info = Tables.Any() ? "" : "加载所有餐桌信息...";
+            TaskService.Start(null, GetAllTableInfoProcess, GetAllTableInfoComplete, info);
         }
 
         /// <summary>

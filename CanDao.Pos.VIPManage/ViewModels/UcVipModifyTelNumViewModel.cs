@@ -94,7 +94,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
         #region 公共方法
 
-        public UserControlBase GetUserCtl()
+        public UcVipModifyTelNumView GetUserCtl()
         {
             _userControl = new UcVipModifyTelNumView();
             _userControl.DataContext = this;
@@ -189,18 +189,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
         /// <param name="state">状态</param>
         private void CloseStateHandel(bool state)
         {
-            try
-            {
-                if (_userControl.UcCloseaAction != null)
-                {
-                    _userControl.UcCloseaAction(state);
-                }
-            }
-            catch
-            {
-
-            }
-
+            _userControl.DialogResult = state;
+            
         }
         /// <summary>
         /// 检查输入项

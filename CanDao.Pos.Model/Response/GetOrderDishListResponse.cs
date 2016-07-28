@@ -77,5 +77,10 @@
         /// 是否是鱼锅锅底。
         /// </summary>
         public int ispot { get; set; }
+
+        /// <summary>
+        /// 临时菜
+        /// </summary>
+        public string avoid { set; get; }
     }
 }

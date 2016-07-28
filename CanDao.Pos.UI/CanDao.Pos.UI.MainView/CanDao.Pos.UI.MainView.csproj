@@ -75,10 +75,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converter\PaiedStatus2StringConverter.cs" />
-    <Compile Include="Converter\OrderStatusToColorConverter.cs" />
-    <Compile Include="Converter\QueryOrderStatusToCheckedConverter.cs" />
-    <Compile Include="Converter\TableStatusBackgroundConverter.cs" />
     <Compile Include="Operates\DishesTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -168,10 +164,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MyDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

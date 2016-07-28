@@ -131,7 +131,8 @@ namespace CanDao.Pos.UI.MainView.Operates
             }
             catch (Exception ex)
             {
-                AllLog.Instance.E(string.Format("订单信息同步异常："), ex);
+                ErrLog.Instance.E(string.Format("订单信息同步异常：{0}", ex));
+              
             }
         }
 

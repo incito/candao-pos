@@ -3,12 +3,15 @@ using System.Threading;
 using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
+using CanDao.Pos.UI.MainView.Operates;
 using CanDao.Pos.UI.MainView.View;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
     public class TableOperNormalWndVm : TableOperWndVm
     {
+        private DishesTimer _dishesTimer;
+
         public TableOperNormalWndVm(TableInfo tableInfo)
             : base(tableInfo)
         {
@@ -17,10 +20,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         protected override void GetTableDishInfo(object param)
         {
+         
             if (IsInDesignMode)
                 return;
-
-            Data = new TableFullInfo { TableName = _tableInfo.TableName };//为了在左上角显示出桌台名称。
 
             if (_tableInfo.TableStatus == EnumTableStatus.Idle)
             {
@@ -32,11 +34,30 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
             }
             GetTableDishInfoAsync();
+
+            //定时检查菜品信息是否一致
+            if (OwnerWindow.DialogResult == null)
+            {
+                _dishesTimer = new DishesTimer();
+                _dishesTimer.OrderID = _tableInfo.OrderId;
+                _dishesTimer.DataChangeAction = new Action(GetTableDishInfoAsync);
+                _dishesTimer.Start(Data.TotalAmount);
+            }
+          
         }
 
         protected override void BackAllDishSuccessProcess()
         {
             GetTableDishInfoAsync();//整单退菜完成后重新获取餐桌明细。
+        }
+
+        protected override void OnWindowClosed()
+        {
+            if (_dishesTimer != null)
+            {
+                _dishesTimer.stop();
+                _dishesTimer = null;
+            }
         }
 
         protected override void DosomethingAfterSettlement()

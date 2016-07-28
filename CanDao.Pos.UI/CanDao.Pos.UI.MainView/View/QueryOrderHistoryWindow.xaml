@@ -14,11 +14,10 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
-                <ResourceDictionary Source="/CanDao.Pos.UI.MainView;component/MyDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:PosBaseWindow.Resources>
-    <Grid>
+    <Grid Margin="0,10,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="Auto"/>

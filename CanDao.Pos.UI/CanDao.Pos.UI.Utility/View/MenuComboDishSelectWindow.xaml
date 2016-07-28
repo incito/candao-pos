@@ -22,10 +22,6 @@
     </controls1:PosBaseWindow.Resources>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -76,6 +72,5 @@
             
             <view:WindowButtonOperControl Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
         </Grid>
-        <view:InputHelperStripControl Grid.Column="1" Width="60"/>
     </Grid>
 </controls1:PosBaseWindow>

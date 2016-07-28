@@ -103,6 +103,7 @@
     <Compile Include="Model\UCCashboxPswModel.cs" />
     <Compile Include="Model\UcCustomDishesModel.cs" />
     <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
+    <Compile Include="ViewModel\SelectTakeoutOnAccountCompanyVm.cs" />
     <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
     <Compile Include="ViewModel\SysPrinterListVm.cs" />
     <Compile Include="ViewModel\UcBusinessDataDetailsViewModel.cs" />
@@ -116,6 +117,9 @@
     </Compile>
     <Compile Include="View\SelectCoffeeTakeoutTableWindow.xaml.cs">
       <DependentUpon>SelectCoffeeTakeoutTableWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SelectTakeoutOnAccountCompany.xaml.cs">
+      <DependentUpon>SelectTakeoutOnAccountCompany.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SetInvoiceAmountWindow.xaml.cs">
       <DependentUpon>SetInvoiceAmountWindow.xaml</DependentUpon>
@@ -280,6 +284,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SelectCoffeeTakeoutTableWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SelectTakeoutOnAccountCompany.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

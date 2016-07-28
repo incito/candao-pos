@@ -199,6 +199,14 @@ namespace CanDao.Pos.IService
         Tuple<string, List<MCategory>> GetItemForList(string beginTime, string endTime);
 
         /// <summary>
+        /// 设置外卖订单挂账。
+        /// </summary>
+        /// <param name="tableNo">外卖桌号。</param>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="cmpInfo">外卖挂账单单位信息。</param>
+        /// <returns></returns>
+        string SetTakeoutOrderOnAccount(string tableNo, string orderId, SetTakeoutOrderOnAccountRequest cmpInfo);
+        /// <summary>
         /// 获取营业明细(团购券)
         /// </summary>
         /// <param name="beginTime"></param>

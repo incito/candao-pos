@@ -72,7 +72,7 @@ namespace CanDao.Pos.Model
             get { return _totalFreeAmount; }
             set
             {
-                _totalFreeAmount = value;
+                _totalFreeAmount = Math.Round(value, 2);
                 RaisePropertyChanged("TotalFreeAmount");
             }
         }

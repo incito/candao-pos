@@ -2,6 +2,7 @@
 using System.Windows;
 
 using System.Windows.Input;
+using CanDao.Pos.Common.Controls;
 using CanDao.Pos.Common.Controls.CSystem;
 
 
@@ -10,7 +11,7 @@ namespace CanDao.Pos.UI.Utility.View
     /// <summary>
     /// UCCashboxPsw.xaml 的交互逻辑
     /// </summary>
-    public partial class UCCashboxPswView : UserControlBase
+    public partial class UCCashboxPswView 
     {
         public Action EnterAction { set; get; }
         

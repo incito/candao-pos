@@ -16,7 +16,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
-                <ResourceDictionary Source="/CanDao.Pos.UI.MainView;component/MyDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:PosBaseWindow.Resources>
@@ -69,6 +68,7 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <WrapPanel Width="140" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding TempDishName, StringFormat=({0})}" Visibility="{Binding TempDishName, Converter={StaticResource Strinig2VisibleCvt}}"/>
                                                     <TextBlock Text="{Binding DishName}"/>
                                                     <TextBlock Text="{Binding Taste, StringFormat=({0})}" Visibility="{Binding Taste, Converter={StaticResource Strinig2VisibleCvt}}"/>
                                                     <TextBlock Text="{Binding Diet,StringFormat=({0})}" Visibility="{Binding Diet, Converter={StaticResource Strinig2VisibleCvt}}"/>
@@ -154,7 +154,7 @@
 
                 <DockPanel Grid.Row="1">
                     <Button DockPanel.Dock="Right" Content="C" Width="40" Height="40" FontSize="18" Command="{Binding OperCmd}" CommandParameter="ClearFilter"/>
-                    <toolkit:WatermarkTextBox Text="{Binding FilterMenuGroup, UpdateSourceTrigger=PropertyChanged}" Watermark="输入菜品首字母" Margin="3" Height="30" VerticalContentAlignment="Center"/>
+                    <controls:WatermarkTextBox Text="{Binding FilterMenuGroup, UpdateSourceTrigger=PropertyChanged}" Watermark="输入菜品首字母" Margin="3" Height="30" VerticalContentAlignment="Center"/>
                 </DockPanel>
 
                 <controls:GroupSelector x:Name="MenuDishGroupSelector"  Grid.Row="2" ItemsSource="{Binding MenuDishes}" ItemCountEachGroup="20" Margin="-2,0">

@@ -24,7 +24,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
     {
         #region 字段
 
-        private UserControlBase _userControl;
+        private UcVipRegView _userControl;
 
         private WinShowInfoViewModel _winShowInfo;
 
@@ -132,9 +132,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
         {
             _winShowInfo= new WinShowInfoViewModel();
             var window = _winShowInfo.GetShoWindow();
-            window.Topmost = true;
-            window.WindowStartupLocation= WindowStartupLocation.CenterScreen;
-            if (window.ShowDialog()==true)
+
+            if (WindowHelper.ShowDialog(window, _userControl))
             {
                 Model.CardNum = _winShowInfo.Model.CardNum;
                 Model.IsShowCardBut = false;
@@ -164,45 +163,39 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     }
 
                     CopyReportHelper.CardCheck();
-                    //if (CopyReportHelper.CardCheck())//判断复写卡是否在位
-                    //{
-                        //调用注册接口
-                        var memberinfo = new CanDaoMemberRegistRequest();
-                        memberinfo.branch_id = Globals.BranchInfo.BranchId;
-                        memberinfo.securitycode = "";
-                        memberinfo.mobile = Model.TelNum;
-                        memberinfo.cardno = Model.CardNum;
-                        memberinfo.password = Model.Psw.Trim();
-                        memberinfo.name = Model.UserName.ToString();
 
-                        if (Model.SexNan)
-                        {
-                            memberinfo.gender = "0";
-                        }
-                        else
-                        {
-                            memberinfo.gender = "1";
-                        }
+                    //调用注册接口
+                    var memberinfo = new CanDaoMemberRegistRequest();
+                    memberinfo.branch_id = Globals.BranchInfo.BranchId;
+                    memberinfo.mobile = Model.TelNum;
+                    memberinfo.cardno = Model.CardNum;
+                    memberinfo.password = Model.Psw.Trim();
+                    memberinfo.name = Model.UserName;
 
-                        memberinfo.birthday = Model.Birthday.ToString("yyyy-MM-dd");
-                        memberinfo.tenant_id = "0";
-                        memberinfo.member_avatar = "";
+                    if (Model.SexNan)
+                    {
+                        memberinfo.gender = "0";
+                    }
+                    else
+                    {
+                        memberinfo.gender = "1";
+                    }
+
+                    memberinfo.birthday = Model.Birthday.ToString("yyyy-MM-dd");
+                    memberinfo.tenant_id = "";
+                    memberinfo.member_avatar = "";
                     memberinfo.channel = "0";
                     memberinfo.createuser = Globals.UserInfo.UserName;
-                        var ret = _memberService.Regist(memberinfo);
+                    var ret = _memberService.Regist(memberinfo);
 
-                        if (!string.IsNullOrEmpty(ret))
-                        {
-                            OWindowManage.ShowMessageWindow(string.Format("注册失败:{0}", ret), false);
-                        }
-                        else
-                        {
-                            Print();
-                            //OWindowManage.ShowMessageWindow(string.Format("会员注册成功!"), false);
-                    
-                            //CloseHandel();
-                        }
-                    //}
+                    if (!string.IsNullOrEmpty(ret))
+                    {
+                        OWindowManage.ShowMessageWindow(string.Format("注册失败:{0}", ret), false);
+                    }
+                    else
+                    {
+                        Print();
+                    }
                 }
             }
             catch (Exception ex)
@@ -211,6 +204,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
 
         }
+
         #region 异步
        
         private void Print()
@@ -226,7 +220,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         {
             OWindowManage.ShowMessageWindow(string.Format("会员注册成功!"), false);
 
-            CloseHandel();
+            _userControl.DialogResult = true;
         }
         #endregion
 
@@ -235,18 +229,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         /// </summary>
         private void CloseHandel()
         {
-            try
-            {
-                if (_userControl.UcClose != null)
-                {
-                    _userControl.UcClose();
-                }
-            }
-            catch
-            {
-
-            }
-
+            _userControl.DialogResult = false;
         }
 
         /// <summary>
@@ -265,11 +248,11 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 OWindowManage.ShowMessageWindow("验证码不能为空，请检查！", false);
                 return false;
             }
-            if (!Model.Code.Equals(_receiveCode))
-            {
-                OWindowManage.ShowMessageWindow("验证码错误！", false);
-                return false;
-            }
+            //if (!Model.Code.Equals(_receiveCode))
+            //{
+            //    OWindowManage.ShowMessageWindow("验证码错误！", false);
+            //    return false;
+            //}
             if (string.IsNullOrEmpty(Model.UserName))
             {
                 OWindowManage.ShowMessageWindow("姓名不能为空，请检查！", false);
@@ -299,7 +282,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         /// 获取用户控件
         /// </summary>
         /// <returns></returns>
-        public UserControlBase GetUserCtl()
+        public UcVipRegView GetUserCtl()
         {
             _userControl = new UcVipRegView();
             _userControl.DataContext = this;

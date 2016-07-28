@@ -24,7 +24,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <toolkit:WatermarkTextBox x:Name="TxtEditPettyCash" Watermark="零找金金额：" Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Height="54" Width="250" VerticalContentAlignment="Center"/>
+        <controls:WatermarkTextBox x:Name="TxtEditPettyCash" Watermark="零找金金额：" Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Height="54" Width="250" VerticalContentAlignment="Center"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="登录" Command="{Binding ConfirmCmd}" Width="118" Height="40" Margin="10,0"/>
             <Button Content="取消" Command="{Binding CancelCmd}" Width="118" Height="40" Margin="10,0"/>

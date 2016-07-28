@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using CanDao.Pos.Common;
+using CanDao.Pos.Common.Models;
+using CanDao.Pos.Common.Operates.FileOperate;
+using CanDao.Pos.Common.PublicValues;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
@@ -33,6 +37,13 @@ namespace CanDao.Pos.Client
             InfoLog.Instance.I("读取配置信息...");
             SystemConfigCache.LoadCfgFile();//它是系统级配置，必须最先初始化。
             ServiceAddrCache.LoadCfgFile();
+
+            //初始化复写卡打印和钱箱密码信息
+            if (File.Exists(PvSystemConfig.VSystemConfigFile))
+            {
+                PvSystemConfig.VSystemConfig =
+                    OXmlOperate.DeserializeFile<MSystemConfig>(PvSystemConfig.VSystemConfigFile);
+            }
 
             InfoLog.Instance.I("配置文件读取完毕。");
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
@@ -68,7 +79,9 @@ namespace CanDao.Pos.Client
             }
             catch (Exception)
             {
-                MessageDialog.Warning("不可恢复的WPF窗体线程异常，应用程序将退出！");
+                var msg = "不可恢复的WPF窗体线程异常，应用程序将退出！";
+                ErrLog.Instance.F(msg);
+                MessageDialog.Warning(msg);
             }
         }
 
@@ -250,18 +263,18 @@ namespace CanDao.Pos.Client
         {
             ThreadPool.QueueUserWorkItem(t =>
             {
-                AllLog.Instance.I("异步获取忌口设置...");
+                InfoLog.Instance.I("异步获取忌口设置...");
                 var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
                 if (service == null)
                 {
-                    AllLog.Instance.E("创建IRestaurantService服务失败。");
+                    ErrLog.Instance.E("创建IRestaurantService服务失败。");
                     return;
                 }
 
                 var result = service.GetSystemSetData(EnumSystemDataType.JI_KOU_SPECIAL);
-                AllLog.Instance.I("异步获取忌口设置完成。");
+                InfoLog.Instance.I("异步获取忌口设置完成。");
                 if (!string.IsNullOrEmpty(result.Item1))
-                    AllLog.Instance.E("异步获取忌口设置信息时错误：{0}", result.Item1);
+                    ErrLog.Instance.E("异步获取忌口设置信息时错误：{0}", result.Item1);
                 else
                 {
                     lock (_syncObj)

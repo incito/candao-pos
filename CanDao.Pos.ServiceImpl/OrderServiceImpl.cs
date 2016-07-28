@@ -218,8 +218,13 @@ namespace CanDao.Pos.ServiceImpl
                 jsonStr
             };
 
-            var result = RestHttpHelper.HttpGet(addr, param);
-            Console.WriteLine(result);
+            var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return result.Item1;
+
+            if (!result.Item2.IsSuccess)
+                return !string.IsNullOrEmpty(result.Item2.Info) ? result.Item2.Info : "保存优惠券使用列表失败。";
+
             return null;
         }
 
@@ -621,6 +626,23 @@ namespace CanDao.Pos.ServiceImpl
             {
                 return string.Format("更新菜品称重数量失败：{0}", ex.MyMessage());
             }
+        }
+
+        public string SetOrderTakeoutOrder(string orderId)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("SetOrderTakeout");
+            if (string.IsNullOrEmpty(addr))
+                return "设置订单为外卖单地址为空。";
+
+            var request = new List<string> { orderId };
+            var response = RestHttpHelper.HttpGet<RestBaseResponse>(addr, request);
+            if (!string.IsNullOrEmpty(response.Item1))
+                return response.Item1;
+
+            if (!response.Item2.IsSuccess)
+                return !string.IsNullOrEmpty(response.Item2.Info) ? response.Item2.Info : "设置订单为外卖单失败。";
+
+            return null;
         }
     }
 }

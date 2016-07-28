@@ -22,8 +22,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding WindowNotice, StringFormat=*{0}}" FontSize="18" Foreground="{StaticResource CanDaoPosColorSelected}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <toolkit:WatermarkTextBox Grid.Row="1" Watermark="员工编号：" Text="{Binding Account, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Height="45" Width="250" VerticalContentAlignment="Center"/>
-        <toolkit:WatermarkTextBox Grid.Row="2" Watermark="权限密码：" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Height="45" Width="250" VerticalContentAlignment="Center"/>
+        <controls:WatermarkTextBox Grid.Row="1" Watermark="员工编号：" Text="{Binding Account, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Height="45" Width="250" VerticalContentAlignment="Center"/>
+        <controls:WatermarkTextBox Grid.Row="2" Watermark="权限密码：" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Height="45" Width="250" VerticalContentAlignment="Center"/>
         <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="登录" Command="{Binding ConfirmCmd}" Width="118" Height="40" Margin="10,0"/>
             <Button Content="取消" Command="{Binding CancelCmd}" Width="118" Height="40" Margin="10,0"/>

@@ -16,4 +16,6 @@
     <converter:CountToCollapsedConverter x:Key="Count2CollapsedCvt"/>
     <converter:PrinterStatusToColorConverter x:Key="PrinterStatus2ColorCvt"/>
     <converter:SysBorderBrushConverter x:Key="SysBorderBrushCvt"/>
+    <converter:PaiedStatus2StringConverter x:Key="PaiedStatus2StringCvt"/>
+    <converter:QueryOrderStatusToCheckedConverter x:Key="OrderStatus2CheckedCvt"/>
 </ResourceDictionary> 

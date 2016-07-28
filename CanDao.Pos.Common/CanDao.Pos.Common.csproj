@@ -100,7 +100,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllLog.cs" />
+    <Compile Include="Converter\PaiedStatus2StringConverter.cs" />
+    <Compile Include="Converter\QueryOrderStatusToCheckedConverter.cs" />
+    <Compile Include="HttpLog.cs" />
     <Compile Include="BaseNotifyObject.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Classes\Mvvms\IMessenger.cs" />

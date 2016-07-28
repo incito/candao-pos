@@ -48,7 +48,7 @@ namespace CanDao.Pos.Common
             }
             catch (Exception ex)
             {
-                AllLog.Instance.E("打开软键盘时异常：", ex);
+                ErrLog.Instance.E("打开软键盘时异常：", ex);
                 return string.Format("打开软键盘时异常：{0}", ex.Message);
             }
         }
@@ -67,7 +67,7 @@ namespace CanDao.Pos.Common
             }
             catch (Exception ex)
             {
-                AllLog.Instance.E("关闭软键盘失败。", ex);
+                ErrLog.Instance.E("关闭软键盘失败。", ex);
                 return "关闭软键盘失败。";
             }
         }

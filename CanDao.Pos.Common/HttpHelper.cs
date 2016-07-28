@@ -33,7 +33,9 @@ namespace CanDao.Pos.Common
         /// <returns></returns>
         public static string HttpGet(string uri, Dictionary<string, string> param = null, bool useJsonHeaderFlag = false)
         {
-            return HttpOper(uri, param, HttpType.Get, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            var result = HttpOper(uri, param, HttpType.Get, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            HttpLog.Instance.D(result);
+            return result;
         }
 
         /// <summary>
@@ -58,7 +60,9 @@ namespace CanDao.Pos.Common
         /// <returns></returns>
         public static string HttpPost(string uri, object data, bool useJsonHeaderFlag = false)
         {
-            return HttpOper(uri, data, HttpType.Post, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            var result = HttpOper(uri, data, HttpType.Post, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            HttpLog.Instance.D(result);
+            return result;
         }
 
         /// <summary>
@@ -83,7 +87,9 @@ namespace CanDao.Pos.Common
         /// <returns></returns>
         public static string HttpPut(string uri, object data, bool useJsonHeaderFlag = false)
         {
-            return HttpOper(uri, data, HttpType.Put, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            var result = HttpOper(uri, data, HttpType.Put, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            HttpLog.Instance.D(result);
+            return result;
         }
 
         /// <summary>
@@ -107,7 +113,9 @@ namespace CanDao.Pos.Common
         /// <returns></returns>
         public static string HttpDelete(string uri, object data, bool useJsonHeaderFlag = false)
         {
-            return HttpOper(uri, data, HttpType.Delete, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            var result = HttpOper(uri, data, HttpType.Delete, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            HttpLog.Instance.D(result);
+            return result;
         }
 
         /// <summary>
@@ -121,9 +129,8 @@ namespace CanDao.Pos.Common
         /// <returns></returns>
         private static T HttpOper<T>(string uri, object data, HttpType type, bool useJsonHeaderFlag)
         {
-            InfoLog.Instance.I("URL：{0}。Request ：{1}", uri, data.ToJson());
             var content = HttpOper(uri, data, type, useJsonHeaderFlag);
-            InfoLog.Instance.I("URL：{0}。Result：{1}", uri, content.ReadAsStringAsync().Result);
+            HttpLog.Instance.D("URL：{0}。 Result：{1}", uri, content.ReadAsStringAsync().Result);
             return content.ReadAsAsync<T>().Result;
         }
 
@@ -139,6 +146,7 @@ namespace CanDao.Pos.Common
 
                 client.Timeout = new TimeSpan(0, 0, 0, 10, 0);//超时设置为10秒。
                 HttpResponseMessage response;
+                HttpLog.Instance.D("URL：{0}。 Request ：{1}", uri, data.ToJson());
                 switch (type)
                 {
                     case HttpType.Get:
@@ -170,6 +178,7 @@ namespace CanDao.Pos.Common
 
                 if (response.IsSuccessStatusCode)
                     return response.Content;
+
                 throw new HttpRequestException(response.StatusCode.ToString());
             }
         }

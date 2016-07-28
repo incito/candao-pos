@@ -15,27 +15,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         {
             AllowOfferType = allowOfferType;
             SelectedOfferType = AllowOfferType == EnumOfferType.Amount ? EnumOfferType.Amount : EnumOfferType.Discount;
-            switch (AllowOfferType)
-            {
-                case EnumOfferType.Amount:
-                    WndTitle = "优惠金额设置窗口";
-                    break;
-                case EnumOfferType.Discount:
-                    WndTitle = "折扣率设置窗口";
-                    break;
-                case EnumOfferType.Both:
-                    WndTitle = "优免金额或折扣率设置窗口";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
         }
 
         #endregion
 
         #region Properties
-
-        public string WndTitle { get; set; }
 
         /// <summary>
         /// 允许的优惠类型。
@@ -69,29 +53,13 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #endregion
 
-        #region Protected Methods
-
-        protected override void Confirm(object param)
-        {
-            var msg = CheckInputValid();
-            if (!string.IsNullOrEmpty(msg))
-            {
-                MessageDialog.Warning(msg, OwnerWindow);
-                return;
-            }
-
-            CloseWindow(true);
-        }
-
-        #endregion
-
-        #region Private Methods
+        #region Public Methods
 
         /// <summary>
         /// 检测输入有效性。
         /// </summary>
         /// <returns>输入数据有误则返回错误信息，全部正确则返回null。</returns>
-        private string CheckInputValid()
+        public string CheckInputValid()
         {
             Amount = Convert.ToDecimal(AmountString);
             Discount = Convert.ToDecimal(DiscountString);
@@ -113,5 +81,20 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #endregion
 
+        #region Protected Methods
+
+        protected override void Confirm(object param)
+        {
+            var msg = CheckInputValid();
+            if (!string.IsNullOrEmpty(msg))
+            {
+                MessageDialog.Warning(msg, OwnerWindow);
+                return;
+            }
+
+            CloseWindow(true);
+        }
+
+        #endregion
     }
 }

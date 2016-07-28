@@ -18,7 +18,7 @@ namespace CanDao.Pos.VIPManage.Views
     /// <summary>
     /// UcVipReg.xaml 的交互逻辑
     /// </summary>
-    public partial class UcVipRegView : UserControlBase
+    public partial class UcVipRegView 
     {
         public UcVipRegView()
         {

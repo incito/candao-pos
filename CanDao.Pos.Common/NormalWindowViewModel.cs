@@ -94,6 +94,7 @@ namespace CanDao.Pos.Common
         {
             if (OwnerWindow != null)
                 OwnerWindow.DialogResult = result;
+
         }
     }
 }

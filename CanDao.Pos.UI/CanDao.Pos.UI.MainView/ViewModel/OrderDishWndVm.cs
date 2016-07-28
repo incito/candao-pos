@@ -12,6 +12,7 @@ using CanDao.Pos.Model.Request;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.UI.Utility.ViewModel;
 using DevExpress.Xpf.Editors.Helpers;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
@@ -33,7 +34,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         #region Properties
 
-        public new OrderDishWindow OwnerWindow { get; set; }
+        public OrderDishWindow OwnerWnd
+        {
+            get { return (OrderDishWindow) OwnerWindow; }
+        }
 
         /// <summary>
         /// 餐台信息。
@@ -155,6 +159,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
+        /// <summary>
+        /// 是否订单被挂单了。
+        /// </summary>
+        public bool IsOrderHanged { get; set; }
+
         #endregion
 
         #region Command
@@ -222,6 +231,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Free":
                     FreeDish();
                     break;
+                case "Hang":
+                    HangTakeoutOrder();
+                    break;
                 case "Order":
                     OrderDish();
                     break;
@@ -236,7 +248,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
                 case "OrderRemark":
                     var orderRemarkWnd = new OrderRemarkWindow();
-                    if (WindowHelper.ShowDialog(orderRemarkWnd, OwnerWindow))
+                    if (WindowHelper.ShowDialog(orderRemarkWnd, OwnerWnd))
                         OrderRemark = orderRemarkWnd.SelectedDiet;
                     break;
                 case "Remark":
@@ -246,16 +258,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     FilterMenuGroup = null;
                     break;
                 case "OrderDishPreGroup":
-                    OwnerWindow.DishGroupSelector.PreviousGroup();
+                    OwnerWnd.DishGroupSelector.PreviousGroup();
                     break;
                 case "OrderDishNextGroup":
-                    OwnerWindow.DishGroupSelector.NextGroup();
+                    OwnerWnd.DishGroupSelector.NextGroup();
                     break;
                 case "MenuDishPreGroup":
-                    OwnerWindow.MenuDishGroupSelector.PreviousGroup();
+                    OwnerWnd.MenuDishGroupSelector.PreviousGroup();
                     break;
                 case "MenuDishNextGroup":
-                    OwnerWindow.MenuDishGroupSelector.NextGroup();
+                    OwnerWnd.MenuDishGroupSelector.NextGroup();
                     break;
             }
         }
@@ -274,17 +286,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Remark":
                     return SelectedOrderDish != null;
                 case "LastGroup":
-                    return OwnerWindow.LbDishGroup.CanPreviousGroup;
+                    return OwnerWnd.LbDishGroup.CanPreviousGroup;
                 case "NextGroup":
-                    return OwnerWindow.LbDishGroup.CanNextGruop;
+                    return OwnerWnd.LbDishGroup.CanNextGruop;
                 case "OrderDishPreGroup":
-                    return OwnerWindow.DishGroupSelector.CanPreviousGroup;
+                    return OwnerWnd.DishGroupSelector.CanPreviousGroup;
                 case "OrderDishNextGroup":
-                    return OwnerWindow.DishGroupSelector.CanNextGruop;
+                    return OwnerWnd.DishGroupSelector.CanNextGruop;
                 case "MenuDishPreGroup":
-                    return OwnerWindow.MenuDishGroupSelector.CanPreviousGroup;
+                    return OwnerWnd.MenuDishGroupSelector.CanPreviousGroup;
                 case "MenuDishNextGroup":
-                    return OwnerWindow.MenuDishGroupSelector.CanNextGruop;
+                    return OwnerWnd.MenuDishGroupSelector.CanNextGruop;
                 default:
                     return true;
             }
@@ -326,7 +338,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取所有菜品信息失败。" + result.Item1);
-                MessageDialog.Warning(result.Item1, OwnerWindow);
+                MessageDialog.Warning(result.Item1, OwnerWnd);
                 CloseWindow(false);
                 return;
             }
@@ -378,16 +390,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result))
             {
                 ErrLog.Instance.E(result);
-                MessageDialog.Warning(result, OwnerWindow);
+                MessageDialog.Warning(result, OwnerWnd);
                 return;
             }
 
             var type = (OrderType == EnumOrderType.Free) ? "赠菜" : "下单";
             var msg = string.Format("桌号\"{0}\"{1}成功。", Data.TableName, type);
             InfoLog.Instance.I(msg);
-            NotifyDialog.Notify(msg, OwnerWindow.Owner);
+            NotifyDialog.Notify(msg, OwnerWnd.Owner);
             CommonHelper.BroadcastMessage(EnumBroadcastMsgType.OrderDish, Data.OrderId);
-            OwnerWindow.DialogResult = true;
+            OwnerWnd.DialogResult = true;
         }
 
         /// <summary>
@@ -415,14 +427,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("检测菜品状态失败。" + result.Item1);
-                MessageDialog.Warning(result.Item1, OwnerWindow);
+                MessageDialog.Warning(result.Item1, OwnerWnd);
                 return;
             }
 
             if (!result.Item2)
             {
                 InfoLog.Instance.I("结束检测菜品状态，选择的菜品“{0}”已估清。", SelectedDish.DishName);
-                MessageDialog.Warning("选择的菜品已估清。", OwnerWindow);
+                MessageDialog.Warning("选择的菜品已估清。", OwnerWnd);
                 return;
             }
 
@@ -438,28 +450,49 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             else if (SelectedDish.DishType == EnumDishType.Normal)//普通菜
             {
-                string taste = null;
-                string diet = null;
-                SelectedDish.SelectedCount = 1;//设定点菜数量为1。
-                if (SelectedDish.Tastes != null && SelectedDish.Tastes.Any())//有口味则弹出口味设置窗口
-                {
-                    var dishSimpleInfo = new DishSimpleInfo
-                    {
-                        DishName = SelectedDish.DishName,
-                        DishPrice = SelectedDish.Price ?? 0,
-                        DishUnit = SelectedDish.Unit,
-                        DishNum = 1,
-                    };
-                    var tasteDietWnd = new SetDishTasteAndDietWindow(SelectedDish.Tastes, dishSimpleInfo, true);
-                    if (!WindowHelper.ShowDialog(tasteDietWnd, OwnerWindow))
-                        return;
+              
 
-                    taste = tasteDietWnd.SelectedTaste;
-                    diet = tasteDietWnd.SelectedDiet;
-                    SelectedDish.SelectedCount = tasteDietWnd.DishNum;
+                //临时菜处理
+                if (SelectedDish.DishName.Contains("临时菜"))
+                {
+                    var customDishes = new UcCustomDishesViewModel();
+                    var wind = customDishes.GetWindow();
+                    if (wind.ShowDialog() == true)
+                    {
+                        SelectedDish.SelectedCount = decimal.Parse(customDishes.Model.DishesCount) * decimal.Parse(customDishes.Model.Price);
+                        SelectedDish.TempDishName = customDishes.Model.DishesName;
+                        AddTempDishInfo(SelectedDish);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    string taste = null;
+                    string diet = null;
+                    SelectedDish.SelectedCount = 1;//设定点菜数量为1。
+                    if (SelectedDish.Tastes != null && SelectedDish.Tastes.Any())//有口味则弹出口味设置窗口
+                    {
+                        var dishSimpleInfo = new DishSimpleInfo
+                        {
+                            DishName = SelectedDish.DishName,
+                            DishPrice = SelectedDish.Price ?? 0,
+                            DishUnit = SelectedDish.Unit,
+                            DishNum = 1,
+                        };
+                        var tasteDietWnd = new SetDishTasteAndDietWindow(SelectedDish.Tastes, dishSimpleInfo, true);
+                        if (!WindowHelper.ShowDialog(tasteDietWnd, OwnerWnd))
+                            return;
+
+                        taste = tasteDietWnd.SelectedTaste;
+                        diet = tasteDietWnd.SelectedDiet;
+                        SelectedDish.SelectedCount = tasteDietWnd.DishNum;
+                    }
+                    AddDishInfo(SelectedDish, taste, diet);
                 }
 
-                AddDishInfo(SelectedDish, taste, diet);
             }
         }
 
@@ -477,6 +510,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             else
                 OrderDishInfos.Add(Convert2OrderDishInfo(SelectedDish, taste, diet));
 
+            DoWhenDishChanged();
+        }
+        /// <summary>
+        /// 添加临时菜到菜单集合
+        /// </summary>
+        /// <param name="dishInfo"></param>
+        private void AddTempDishInfo(MenuDishInfo dishInfo)
+        {
+            var dish = Convert2OrderDishInfo(dishInfo, "", "");
+            dish.TempDishName = dishInfo.TempDishName;
+            OrderDishInfos.Add(dish);
             DoWhenDishChanged();
         }
 
@@ -504,9 +548,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (!string.IsNullOrEmpty(srcItem.Diet) && !srcItem.Diet.Equals(diet))
                 return false;
-
             return true;
         }
+
+
 
         /// <summary>
         /// 添加套餐菜。
@@ -692,14 +737,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取套餐信息失败。" + result);
-                MessageDialog.Warning(result.Item1, OwnerWindow);
+                MessageDialog.Warning(result.Item1, OwnerWnd);
                 return;
             }
 
             InfoLog.Instance.I("结束获取套餐信息，弹出套餐选择窗口。");
             result.Item2.ComboSelfInfo = SelectedDish;
             var wnd = new MenuComboDishSelectWindow(result.Item2);
-            if (WindowHelper.ShowDialog(wnd, OwnerWindow))
+            if (WindowHelper.ShowDialog(wnd, OwnerWnd))
             {
                 AddComboDishInfo(wnd.ComboFullInfo, wnd.SelectedDiet);
             }
@@ -734,14 +779,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取鱼锅信息失败。" + result);
-                MessageDialog.Warning(result.Item1, OwnerWindow);
+                MessageDialog.Warning(result.Item1, OwnerWnd);
                 return;
             }
 
             InfoLog.Instance.I("结束获取鱼锅信息，弹出鱼锅选择窗口。");
             result.Item2.FishPotSelfInfo = SelectedDish;
             var wnd = new MenuFishPotSelectWindow(result.Item2);
-            if (WindowHelper.ShowDialog(wnd, OwnerWindow))
+            if (WindowHelper.ShowDialog(wnd, OwnerWnd))
             {
                 AddFishPotDishInfo(wnd.FishPotFullInfo, wnd.SelectedTaste, wnd.SelectedDiet);
             }
@@ -768,7 +813,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             if (!OrderDishInfos.Any())
             {
-                MessageDialog.Warning("请先选择菜品。", OwnerWindow);
+                MessageDialog.Warning("请先选择菜品。", OwnerWnd);
                 return;
             }
             if (!MessageDialog.Quest(string.Format("餐台【{0}】确定下单吗？", Data.TableName)))
@@ -785,20 +830,33 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             if (!OrderDishInfos.Any())
             {
-                MessageDialog.Warning("请先选择菜品。", OwnerWindow);
+                MessageDialog.Warning("请先选择菜品。", OwnerWnd);
                 return;
             }
 
             var reasonWnd = new DishGiftReasonSelectWindow();
-            if (!WindowHelper.ShowDialog(reasonWnd, OwnerWindow))
+            if (!WindowHelper.ShowDialog(reasonWnd, OwnerWnd))
                 return;
 
             var authorizeWnd = new AuthorizationWindow(EnumRightType.FreeDish);
-            if (!WindowHelper.ShowDialog(authorizeWnd, OwnerWindow))
+            if (!WindowHelper.ShowDialog(authorizeWnd, OwnerWnd))
                 return;
 
             OrderType = EnumOrderType.Free;
             TaskService.Start(reasonWnd.SelectedReason, OrderDishProcess, OrderDishComplete, null);
+        }
+
+        /// <summary>
+        /// 外卖挂单。
+        /// </summary>
+        private void HangTakeoutOrder()
+        {
+            var wnd = new SelectTakeoutOnAccountCompany(Data);
+            if (WindowHelper.ShowDialog(wnd, OwnerWnd))
+            {
+                CloseWindow(true);
+                IsOrderHanged = true;
+            }
         }
 
         /// <summary>
@@ -827,7 +885,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             };
             var allowInputDishNum = SelectedOrderDish.DishType == EnumDishType.Normal; //只有单品菜才允许直接修改数量。
             var wnd = new SetDishTasteAndDietWindow(null, dishSimpleInfo, allowInputDishNum);
-            if (WindowHelper.ShowDialog(wnd, OwnerWindow))
+            if (WindowHelper.ShowDialog(wnd, OwnerWnd))
             {
                 UpdateOrderDishNum(SelectedOrderDish, wnd.DishNum);
                 SelectedOrderDish.Diet = wnd.SelectedDiet;

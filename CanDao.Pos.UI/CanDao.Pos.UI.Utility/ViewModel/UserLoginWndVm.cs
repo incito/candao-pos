@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
@@ -19,6 +21,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// </summary>
         private readonly EnumRightType _rightType;
 
+        /// <summary>
+        /// 保存登录信息的文件名。
+        /// </summary>
+        private const string LoginInfoFileName = "LoginInfo.pos";
+
         #endregion
 
         #region Constructor
@@ -26,8 +33,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public UserLoginWndVm()
         {
             _rightType = EnumRightType.Login;
-            Account = "002";
-            Password = "123456";
+            //Password = "123456";
         }
 
         #endregion
@@ -68,12 +74,58 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
         }
 
+        /// <summary>
+        /// 是否保存登录信息。
+        /// </summary>
+        private bool _isSaveLoginInfo;
+        /// <summary>
+        /// 是否保存登录信息。
+        /// </summary>
+        public bool IsSaveLoginInfo
+        {
+            get { return _isSaveLoginInfo; }
+            set
+            {
+                _isSaveLoginInfo = value;
+                RaisePropertyChanged("IsSaveLoginInfo");
+            }
+        }
+
+        #endregion
+
+        #region Command
+
+        /// <summary>
+        /// 窗口加载事件命令。
+        /// </summary>
+        public ICommand WindowLoadCmd { get; private set; }
+
+        #endregion
+
+        #region Command Method
+
+        /// <summary>
+        /// 窗体加载事件命令的执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        private void WindowLoad(object arg)
+        {
+            LoadLoginInfo();
+        }
+
         #endregion
 
         #region Protected Methods
 
+        protected override void InitCommand()
+        {
+            base.InitCommand();
+            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
+        }
+
         protected override void Confirm(object param)
         {
+            SaveLoginInfo();
             TaskService.Start(new Tuple<string, string>(Account, Password), LoginProcess, LoginComplete, "授权验证中...");
         }
 
@@ -85,6 +137,54 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// 加载保存的登录信息。
+        /// </summary>
+        private void LoadLoginInfo()
+        {
+            InfoLog.Instance.I("读取保存登录信息文件...");
+            var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginInfoFileName);
+            if (!File.Exists(file))
+            {
+                InfoLog.Instance.I("登录信息文件不存在。");
+                IsSaveLoginInfo = false;
+                return;
+            }
+
+            try
+            {
+                var data = File.ReadAllText(file);
+                if (!string.IsNullOrEmpty(data))
+                {
+                    IsSaveLoginInfo = true;
+                    Account = data;
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E("读取登录信息文件时异常。", ex);
+            }
+        }
+
+        /// <summary>
+        /// 保存登录信息。
+        /// </summary>
+        private void SaveLoginInfo()
+        {
+            try
+            {
+                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginInfoFileName);
+                if (IsSaveLoginInfo)
+                    File.WriteAllText(file, Account);
+                else
+                    File.Delete(file);
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E("保存(删除)登录信息文件时异常。", ex);
+            }
+        }
 
         /// <summary>
         /// 执行授权登录方法。

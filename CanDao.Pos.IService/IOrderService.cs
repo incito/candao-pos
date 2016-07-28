@@ -75,7 +75,7 @@ namespace CanDao.Pos.IService
         Tuple<string, decimal> CalcDiscountAmount(CalcDiscountAmountRequest request);
 
         /// <summary>
-        /// 保存优惠券。
+        /// 保存优惠券使用列表。
         /// </summary>
         /// <param name="orderId">订单号。</param>
         /// <param name="userName">当前登录用户Id。</param>
@@ -253,5 +253,12 @@ namespace CanDao.Pos.IService
         /// <param name="dishNum">称重数量。</param>
         /// <returns></returns>
         string UpdateDishWeight(string tableNo, string dishId, string primaryKey, decimal dishNum);
+
+        /// <summary>
+        /// 设置订单为外卖单。
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        string SetOrderTakeoutOrder(string orderId);
     }
 }

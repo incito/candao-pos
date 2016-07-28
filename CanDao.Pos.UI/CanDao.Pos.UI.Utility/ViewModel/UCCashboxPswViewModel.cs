@@ -59,7 +59,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             else
             {
                 //验证确定关闭
-                _userControl.UcCloseaAction(true);
+                _userControl.DialogResult = true;
             }
 
         }
@@ -67,7 +67,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         #endregion
 
         #region 公共方法
-        public UserControlBase GetUserCtl()
+        public UCCashboxPswView GetUserCtl()
         {
             _userControl = new UCCashboxPswView();
             _userControl.DataContext = this;

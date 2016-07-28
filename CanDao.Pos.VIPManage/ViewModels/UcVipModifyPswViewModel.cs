@@ -81,7 +81,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
         #endregion
 
-        public UserControlBase GetUserCtl()
+        public UcVipModifyPswView GetUserCtl()
         {
             _userControl = new UcVipModifyPswView();
             _userControl.DataContext = this;
@@ -108,7 +108,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
 
                var res=_memberService.SendVerifyCode(response);
-               if (string.IsNullOrEmpty(res.Item1))
+               if (!string.IsNullOrEmpty(res.Item1))
                 {
                     OWindowManage.ShowMessageWindow("发送失败，请重试！", false);
                 }
@@ -132,8 +132,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 if (string.IsNullOrEmpty(res))
                 {
                     OWindowManage.ShowMessageWindow("修改成功!", false);
-                    CloseHandel();
 
+                    _userControl.DialogResult = true;
                 }
                 else
                 {
@@ -148,18 +148,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         /// </summary>
         private void CloseHandel()
         {
-            try
-            {
-                if (_userControl.UcClose != null)
-                {
-                    _userControl.UcClose();
-                }
-            }
-            catch
-            {
-
-            }
-
+            _userControl.DialogResult = false;
         }
 
         /// <summary>

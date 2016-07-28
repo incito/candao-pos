@@ -21,5 +21,13 @@ namespace CanDao.Pos.UI.MainView.View
             tableFullInfo.CloneDataFromTableInfo(info);
             DataContext = new OrderDishWndVm(tableFullInfo) { OwnerWindow = this };
         }
+
+        /// <summary>
+        /// 是否订单被挂单。
+        /// </summary>
+        public bool IsOrderHanged
+        {
+            get { return ((OrderDishWndVm) DataContext).IsOrderHanged; }
+        }
     }
 }

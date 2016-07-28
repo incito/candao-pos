@@ -298,7 +298,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 }
 
                 var modifyVipInfo = new UcVipModifyVipInfoViewModel(vipChangeInfo);
-                if (OWindowManage.ShowPopupWindow(modifyVipInfo.GetUserCtl()))
+
+                if (WindowHelper.ShowDialog(modifyVipInfo.GetUserCtl(),_userControl))
                 {
                     Model.UserName = modifyVipInfo.Model.UserName;
                     Model.Birthday = modifyVipInfo.Model.Birthday.ToString("yyyy-MM-dd");
@@ -341,9 +342,9 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 vipChangeInfo.TelNum = Model.TelNum;
 
                 var modifyTelNum = new UcVipModifyTelNumViewModel(vipChangeInfo);
-                if (OWindowManage.ShowPopupWindow(modifyTelNum.GetUserCtl()))
+                if(WindowHelper.ShowDialog(modifyTelNum.GetUserCtl(),_userControl))
                 {
-                    Model.TelNum = modifyTelNum.Model.NTelNum;
+                     Model.TelNum = modifyTelNum.Model.NTelNum;
                 }
             }
             catch (Exception ex)
@@ -360,7 +361,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
         private void ModifyPswHandel()
         {
             var veModel = new UcVipModifyPswViewModel(Model.TelNum);
-            OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
+
+            WindowHelper.ShowDialog(veModel.GetUserCtl(), _userControl);
         }
         /// <summary>
         /// 充值
@@ -368,8 +370,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         private void StoredValueHandel()
         {
             var veModel = new UcVipRechargeViewModel(Model);
-   
-            OWindowManage.ShowPopupWindow(veModel.GetUserCtl());
+            WindowHelper.ShowDialog(veModel.GetUserCtl(), null);
         }
 
         /// <summary>
@@ -387,7 +388,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
                 _winShowInfo.Model.Title = "新增实体卡-请刷卡";
 
-                if (window.ShowDialog() == true)
+                if (WindowHelper.ShowDialog(window,_userControl))
                 {
                     Model.CardNum = _winShowInfo.Model.CardNum;
                 }
@@ -442,7 +443,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         /// 获取用户控件
         /// </summary>
         /// <returns></returns>
-        public UserControlBase GetUserCtl()
+        public UcVipSelectView GetUserCtl()
         {
             _userControl = new UcVipSelectView();
             _userControl.DataContext = this;
