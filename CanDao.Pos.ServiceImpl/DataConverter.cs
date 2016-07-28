@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.Common.Models.VipModels;
@@ -70,6 +71,7 @@ namespace CanDao.Pos.ServiceImpl
                 DishDesc = response.itemdesc,
                 DishId = response.dishid,
                 DishName = dishName,
+                RelateDishId = response.relatedishid,
                 DishNum = response.dishnum,
                 DishStatus = response.dishstatus != null ? (EnumDishStatus) response.dishstatus : EnumDishStatus.Normal,
                 DishType = (EnumDishType) response.dishtype,
@@ -80,6 +82,7 @@ namespace CanDao.Pos.ServiceImpl
                 PrimaryKey = response.primarykey,
                 PayAmount = response.payamount ?? 0,
                 IsPot = Convert.ToBoolean(response.ispot),
+                IsMaster = response.ismaster == 1,
             };
         }
 
@@ -219,23 +222,43 @@ namespace CanDao.Pos.ServiceImpl
             };
         }
 
-        internal static BackDishRequest ToBackDishRequest(string orderid, string tableNo, string authorizerId,
-            string userId, BackDishInfo backDishInfo, string backReason = "")
+        internal static BackDishRequest ToBackDishRequest(string orderId, string tableNo, string authorizerId, string userId, OrderDishInfo dishInfo, decimal backDishNum, string backReason)
         {
-            return new BackDishRequest
+            if (dishInfo.DishType == EnumDishType.FishPot || dishInfo.IsFishPotDish)
             {
-                currenttableid = tableNo,
-                orderNo = orderid,
-                discardReason = backReason,
-                operationType = 2,
-                primarykey = backDishInfo.PrimaryKey,
-                sequence = 999999,
-                discardUserId = authorizerId,
-                userName = userId,
-                dishunit = backDishInfo.DishUnit,
-                actionType = ((int) EnumBackDishType.Single).ToString(),
-                //dishNum = backDishInfo.dish
-            };
+                return new BackFishPotDishRequest
+                {
+                    userName = userId,
+                    orderNo = orderId,
+                    dishNo = dishInfo.DishId,
+                    currenttableid = tableNo,
+                    discardReason = backReason,
+                    dishtype = ((int)dishInfo.DishType).ToString(),
+                    primarykey = dishInfo.PrimaryKey,
+                    discardUserId = authorizerId,
+                    dishunit = dishInfo.DishUnit,
+                    dishNum = backDishNum.ToString(CultureInfo.InvariantCulture),
+                    hotflag = dishInfo.IsPot ? "1" : "0",
+                    potdishid = dishInfo.IsPot ? dishInfo.RelateDishId : dishInfo.DishId
+                    //potdishid = dishInfo.DishId,
+                };
+            }
+            else
+            {
+                return new BackDishRequest
+                {
+                    userName = userId,
+                    orderNo = orderId,
+                    dishNo = dishInfo.DishId,
+                    currenttableid = tableNo,
+                    discardReason = backReason,
+                    dishtype = ((int)dishInfo.DishType).ToString(),
+                    primarykey = dishInfo.PrimaryKey,
+                    discardUserId = authorizerId,
+                    dishunit = dishInfo.DishUnit,
+                    dishNum = backDishNum.ToString(CultureInfo.InvariantCulture),
+                };
+            }
         }
 
         internal static PayBillRequest ToPayBillRequest(string orderId, string userId, List<BillPayInfo> payInfos)

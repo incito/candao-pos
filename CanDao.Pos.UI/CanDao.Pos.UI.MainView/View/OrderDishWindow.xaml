@@ -112,7 +112,7 @@
         <!--右侧部分-->
         <DockPanel Grid.Column="1">
             <DockPanel Height="70" DockPanel.Dock="Top">
-                <Button DockPanel.Dock="Left" Style="{StaticResource BtnLeftNoBorderStyle}" Command="{Binding OperCmd}" CommandParameter="LastGroup"/>
+                <Button DockPanel.Dock="Left" Style="{StaticResource BtnLeftNoBorderStyle}" Command="{Binding OperCmd}" CommandParameter="PreGroup"/>
                 <Button DockPanel.Dock="Right" Style="{StaticResource BtnRightStyle}"  Command="{Binding OperCmd}" CommandParameter="NextGroup"/>
                 <controls:GroupSelector x:Name="LbDishGroup" ItemsSource="{Binding DishGroups}" SelectedItem="{Binding SelectedMenuDishGroup, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemCountEachGroup="5">
                     <controls:GroupSelector.ItemsPanel>

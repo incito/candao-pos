@@ -8,7 +8,6 @@ using CanDao.Pos.Common;
 using CanDao.Pos.Common.Controls;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
-using DevExpress.Xpf.Grid;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -18,11 +17,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     public class ReportControlViewModelBase : BaseViewModel
     {
         #region Fields
-
-        /// <summary>
-        /// 排序规则。
-        /// </summary>
-        private GridSortInfo _gridSortInfo;
 
         #endregion
 
@@ -146,7 +140,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             Data.BranchId = Globals.BranchInfo.BranchId;
             Data.CurrentTime = DateTime.Now;
             Data.TotalAmount = Data.DataSource.Sum(t => t.Amount);
-            UpdateDataIndex();
             PrintReport();
         }
 
@@ -229,56 +222,12 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
 
             Data = result.Item2;
-            UpdateDataIndex();
 
             DataSource.Clear();
             if (result.Item2 != null)
                 result.Item2.DataSource.ForEach(DataSource.Add);
 
             return null;
-        }
-
-        /// <summary>
-        /// 更新统计数据的序号。
-        /// </summary>
-        private void UpdateDataIndex()
-        {
-            if (_gridSortInfo != null)
-            {
-                if (_gridSortInfo.SortOrder == ListSortDirection.Descending)
-                {
-                    switch (_gridSortInfo.FieldName)
-                    {
-                        case "Name":
-                            Data.DataSource = Data.DataSource.OrderByDescending(t => t.Name).ToList();
-                            break;
-                        case "Count":
-                            Data.DataSource = Data.DataSource.OrderByDescending(t => t.Count).ToList();
-                            break;
-                        case "Amount":
-                            Data.DataSource = Data.DataSource.OrderByDescending(t => t.Amount).ToList();
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (_gridSortInfo.FieldName)
-                    {
-                        case "Name":
-                            Data.DataSource = Data.DataSource.OrderBy(t => t.Name).ToList();
-                            break;
-                        case "Count":
-                            Data.DataSource = Data.DataSource.OrderBy(t => t.Count).ToList();
-                            break;
-                        case "Amount":
-                            Data.DataSource = Data.DataSource.OrderBy(t => t.Amount).ToList();
-                            break;
-                    }
-                }
-            }
-
-            var idx = 1;
-            Data.DataSource.ForEach(t => t.Index = idx++);
         }
 
         /// <summary>

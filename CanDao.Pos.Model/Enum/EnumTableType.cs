@@ -16,7 +16,7 @@
         /// <summary>
         /// 外卖。
         /// </summary>
-        Takeout,
+        Takeout = 2,
         /// <summary>
         /// 咖啡模式外卖台。
         /// </summary>

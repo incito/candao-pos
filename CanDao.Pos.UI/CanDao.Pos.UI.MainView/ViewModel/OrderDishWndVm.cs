@@ -257,6 +257,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "ClearFilter":
                     FilterMenuGroup = null;
                     break;
+                case "PreGroup":
+                    OwnerWnd.LbDishGroup.PreviousGroup();
+                    break;
+                case "NextGroup":
+                    OwnerWnd.LbDishGroup.NextGroup();
+                    break;
                 case "OrderDishPreGroup":
                     OwnerWnd.DishGroupSelector.PreviousGroup();
                     break;
@@ -285,7 +291,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "DishCountReduce":
                 case "Remark":
                     return SelectedOrderDish != null;
-                case "LastGroup":
+                case "PreGroup":
                     return OwnerWnd.LbDishGroup.CanPreviousGroup;
                 case "NextGroup":
                     return OwnerWnd.LbDishGroup.CanNextGruop;

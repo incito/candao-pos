@@ -55,7 +55,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Xpf.Mvvm.v13.1, Version=13.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Engine.Wpf.Toolkit">
       <HintPath>..\Bin\Lib\Engine.Wpf.Toolkit.dll</HintPath>
       <Private>False</Private>
@@ -100,10 +99,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindableBase.cs" />
     <Compile Include="Converter\PaiedStatus2StringConverter.cs" />
     <Compile Include="Converter\QueryOrderStatusToCheckedConverter.cs" />
+    <Compile Include="DelegateCommand.cs" />
     <Compile Include="HttpLog.cs" />
-    <Compile Include="BaseNotifyObject.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Classes\Mvvms\IMessenger.cs" />
     <Compile Include="Classes\Mvvms\MessageBase.cs" />

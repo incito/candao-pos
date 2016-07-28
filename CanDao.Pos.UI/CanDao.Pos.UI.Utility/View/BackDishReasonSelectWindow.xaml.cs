@@ -16,5 +16,13 @@ namespace CanDao.Pos.UI.Utility.View
             if (SystemConfigCache.BackDishReasonList != null && SystemConfigCache.BackDishReasonList.Any())
                 SelectorCtrl.ItemsSource = SystemConfigCache.BackDishReasonList.Select(t => new AllowSelectInfo(t)).ToList();
         }
+
+        /// <summary>
+        /// 选择的退菜原因。
+        /// </summary>
+        public string SelectedReason
+        {
+            get { return SelectorCtrl.SelectedInfo; }
+        }
     }
 }

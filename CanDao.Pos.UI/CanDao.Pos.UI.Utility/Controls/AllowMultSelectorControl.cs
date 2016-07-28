@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -100,7 +101,7 @@ namespace CanDao.Pos.UI.Utility.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            var tb = GetTemplateChild("PART_TbOtherInfo") as TextEdit;
+            var tb = GetTemplateChild("PART_TbOtherInfo") as TextBox;
             if (tb != null)
                 tb.MouseDown += TbOnMouseDown;
         }
@@ -140,7 +141,7 @@ namespace CanDao.Pos.UI.Utility.Controls
     /// <summary>
     /// 允许被选择的信息基类。
     /// </summary>
-    public class AllowSelectInfo : BaseNotifyObject
+    public class AllowSelectInfo : BindableBase
     {
         public AllowSelectInfo(string name)
         {

@@ -119,8 +119,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource BtnAddStyle}" Command="{Binding OperCmd}" CommandParameter="DishCountIncrease"/>
-                    <Button Style="{StaticResource BtnReduceStyle}" Command="{Binding OperCmd}" CommandParameter="DishCountReduce"/>
+                    <Button Style="{StaticResource BtnAddStyle}" Command="{Binding OperCmd}" CommandParameter="AddDish"/>
+                    <Button Style="{StaticResource BtnReduceStyle}" Command="{Binding OperCmd}" CommandParameter="BackDish"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding GroupCount,ElementName=DishGroupSelector, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
                     <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="DishPreGroup"/>
@@ -262,7 +262,7 @@
 
             <controls:GroupSelector Grid.Row="1" x:Name="GsCouponList" ItemCountEachGroup="16"
                                     ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}"
-                                    IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
+                                    IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}" Margin="-10,5,10,328" Grid.RowSpan="3">
                 <controls:GroupSelector.Template>
                     <ControlTemplate TargetType="controls:GroupSelector">
                         <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False">

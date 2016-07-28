@@ -26,11 +26,5 @@ namespace CanDao.Pos.UI.Utility.View
                     break;
             }
         }
-
-        private void UIElement_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            TextEdit element = (TextEdit)sender;
-            element.SelectAll();
-        }
     }
 }

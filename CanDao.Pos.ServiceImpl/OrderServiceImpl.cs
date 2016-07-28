@@ -339,9 +339,22 @@ namespace CanDao.Pos.ServiceImpl
             return new Tuple<string, List<BackDishInfo>>(null, list);
         }
 
-        public string BackDish(string orderid, string tableNo, string authorizerId, string userId, BackDishInfo backDishInfo)
+        public string BackDish(BackDishComboInfo info)
         {
-            return null;
+            try
+            {
+                var addr = ServiceAddrCache.GetServiceAddr("BackDish");
+                if (string.IsNullOrEmpty(addr))
+                    return "退菜地址为空。";
+
+                var request = DataConverter.ToBackDishRequest(info.OrderId, info.TableNo, info.AuthorizerUser, info.Waiter, info.DishInfo, info.BackDishNum, info.BackDishReason);
+                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                return result.IsSuccess ? null : "整桌退菜失败。";
+            }
+            catch (Exception ex)
+            {
+                return ex.MyMessage();
+            }
         }
 
         public string BackAllDish(string orderId, string tableNo, string userId)
