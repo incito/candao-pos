@@ -17,11 +17,10 @@ namespace CanDao.Pos.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="uri">URL地址。</param>
         /// <param name="param">参数。</param>
-        /// <param name="useJsonHeaderFlag">是否使用Json标识Http头。</param>
         /// <returns></returns>
-        public static T HttpGet<T>(string uri, Dictionary<string, string> param = null, bool useJsonHeaderFlag = false)
+        public static T HttpGet<T>(string uri, Dictionary<string, string> param = null)
         {
-            return HttpOper<T>(uri, param, HttpType.Get, useJsonHeaderFlag);
+            return HttpOper<T>(uri, param, HttpType.Get);
         }
 
         /// <summary>
@@ -29,11 +28,10 @@ namespace CanDao.Pos.Common
         /// </summary>
         /// <param name="uri">URL地址。</param>
         /// <param name="param">参数。</param>
-        /// <param name="useJsonHeaderFlag">是否使用Json标识Http头。</param>
         /// <returns></returns>
-        public static string HttpGet(string uri, Dictionary<string, string> param = null, bool useJsonHeaderFlag = false)
+        public static string HttpGet(string uri, Dictionary<string, string> param = null)
         {
-            var result = HttpOper(uri, param, HttpType.Get, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            var result = HttpOper(uri, param, HttpType.Get).ReadAsStringAsync().Result;
             HttpLog.Instance.D(result);
             return result;
         }
@@ -44,11 +42,10 @@ namespace CanDao.Pos.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="uri">URL地址。</param>
         /// <param name="data">输入数据。</param>
-        /// <param name="useJsonHeaderFlag">是否使用Json标识Http头。</param>
         /// <returns></returns>
-        public static T HttpPost<T>(string uri, object data, bool useJsonHeaderFlag = false)
+        public static T HttpPost<T>(string uri, object data)
         {
-            return HttpOper<T>(uri, data, HttpType.Post, useJsonHeaderFlag);
+            return HttpOper<T>(uri, data, HttpType.Post);
         }
 
         /// <summary>
@@ -56,11 +53,10 @@ namespace CanDao.Pos.Common
         /// </summary>
         /// <param name="uri">URL地址。</param>
         /// <param name="data">输入数据。</param>
-        /// <param name="useJsonHeaderFlag">是否使用Json标识Http头。</param>
         /// <returns></returns>
-        public static string HttpPost(string uri, object data, bool useJsonHeaderFlag = false)
+        public static string HttpPost(string uri, object data)
         {
-            var result = HttpOper(uri, data, HttpType.Post, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            var result = HttpOper(uri, data, HttpType.Post).ReadAsStringAsync().Result;
             HttpLog.Instance.D(result);
             return result;
         }
@@ -71,11 +67,10 @@ namespace CanDao.Pos.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="uri">URL地址。</param>
         /// <param name="data">输入数据。</param>
-        /// <param name="useJsonHeaderFlag">是否使用Json标识Http头。</param>
         /// <returns></returns>
-        public static T HttpPut<T>(string uri, object data, bool useJsonHeaderFlag = false)
+        public static T HttpPut<T>(string uri, object data)
         {
-            return HttpOper<T>(uri, data, HttpType.Put, useJsonHeaderFlag);
+            return HttpOper<T>(uri, data, HttpType.Put);
         }
 
         /// <summary>
@@ -83,11 +78,10 @@ namespace CanDao.Pos.Common
         /// </summary>
         /// <param name="uri">URL地址。</param>
         /// <param name="data">输入数据。</param>
-        /// <param name="useJsonHeaderFlag">是否使用Json标识Http头。</param>
         /// <returns></returns>
-        public static string HttpPut(string uri, object data, bool useJsonHeaderFlag = false)
+        public static string HttpPut(string uri, object data)
         {
-            var result = HttpOper(uri, data, HttpType.Put, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            var result = HttpOper(uri, data, HttpType.Put).ReadAsStringAsync().Result;
             HttpLog.Instance.D(result);
             return result;
         }
@@ -97,11 +91,10 @@ namespace CanDao.Pos.Common
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="uri">URL地址。</param>
-        /// <param name="useJsonHeaderFlag">是否使用Json标识Http头。</param>
         /// <returns></returns>
-        public static T HttpDelete<T>(string uri, bool useJsonHeaderFlag = false)
+        public static T HttpDelete<T>(string uri)
         {
-            return HttpOper<T>(uri, null, HttpType.Delete, useJsonHeaderFlag);
+            return HttpOper<T>(uri, null, HttpType.Delete);
         }
 
         /// <summary>
@@ -109,11 +102,10 @@ namespace CanDao.Pos.Common
         /// </summary>
         /// <param name="uri">URL地址。</param>
         /// <param name="data">输入数据。</param>
-        /// <param name="useJsonHeaderFlag">是否使用Json标识Http头。</param>
         /// <returns></returns>
-        public static string HttpDelete(string uri, object data, bool useJsonHeaderFlag = false)
+        public static string HttpDelete(string uri, object data)
         {
-            var result = HttpOper(uri, data, HttpType.Delete, useJsonHeaderFlag).ReadAsStringAsync().Result;
+            var result = HttpOper(uri, data, HttpType.Delete).ReadAsStringAsync().Result;
             HttpLog.Instance.D(result);
             return result;
         }
@@ -125,25 +117,22 @@ namespace CanDao.Pos.Common
         /// <param name="uri"></param>
         /// <param name="data"></param>
         /// <param name="type"></param>
-        /// <param name="useJsonHeaderFlag">是否使用Json标识Http头。</param>
         /// <returns></returns>
-        private static T HttpOper<T>(string uri, object data, HttpType type, bool useJsonHeaderFlag)
+        private static T HttpOper<T>(string uri, object data, HttpType type)
         {
-            var content = HttpOper(uri, data, type, useJsonHeaderFlag);
+            var content = HttpOper(uri, data, type);
             HttpLog.Instance.D("URL：{0}。 Result：{1}", uri, content.ReadAsStringAsync().Result);
             return content.ReadAsAsync<T>().Result;
         }
 
-        private static HttpContent HttpOper(string uri, object data, HttpType type, bool useJsonHeaderFlag)
+        private static HttpContent HttpOper(string uri, object data, HttpType type)
         {
             if (uri == null)
                 throw new ArgumentNullException("uri");
 
             using (var client = new HttpClient())
             {
-                if (useJsonHeaderFlag)
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.Timeout = new TimeSpan(0, 0, 0, 10, 0);//超时设置为10秒。
                 HttpResponseMessage response;
                 HttpLog.Instance.D("URL：{0}。 Request ：{1}", uri, data.ToJson());

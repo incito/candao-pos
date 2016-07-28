@@ -192,8 +192,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             InfoLog.Instance.I("点菜窗口加载完成时...");
             if (Globals.DishGroupInfos == null)
             {
-                InfoLog.Instance.I("菜谱缓存为空，开始获取所有菜品信息...");
-                TaskService.Start(null, GetMenuDishGroupInfoProcess, GetMenuDishGroupInfoComplete, "获取所有菜品信息...");
+                InfoLog.Instance.I("菜谱缓存为空，开始获取菜谱信息...");
+                TaskService.Start(null, GetMenuDishGroupInfoProcess, GetMenuDishGroupInfoComplete, "加载菜谱信息中，请稍后...");
                 return;
             }
 

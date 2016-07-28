@@ -127,7 +127,7 @@ namespace CanDao.Pos.ServiceImpl
                 if (!result.Item2.IsSuccess)
                     return new Tuple<string, List<MenuDishGroupInfo>>(result.Item2.Info, null);
 
-                var dishGroup = result.Item2.OrderJson.Data.Select(DataConverter.ToMenuDishInfo).GroupBy(t => t.GroupId);
+                var dishGroup = result.Item2.OrderJson.Select(DataConverter.ToMenuDishInfo).GroupBy(t => t.GroupId);
                 foreach (var group in dishGroup)
                 {
                     var gpItem = list.FirstOrDefault(t => t.GroupId.Equals(group.Key));

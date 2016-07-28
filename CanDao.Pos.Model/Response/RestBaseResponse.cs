@@ -31,7 +31,7 @@ namespace CanDao.Pos.Model.Response
     /// <typeparam name="T"></typeparam>
     public class RestOrderResponse<T> : RestBaseResponse where T : class
     {
-        public DataResponse<T> OrderJson { get; set; }
+        public List<T> OrderJson { get; set; }
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ namespace CanDao.Pos.Model.Response
     /// <typeparam name="T"></typeparam>
     public class RestListJsonResponse<T> : RestBaseResponse where T : class
     {
-        public DataResponse<T> ListJson { get; set; }
+        public List<T> ListJson { get; set; }
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ namespace CanDao.Pos.Model.Response
     /// <typeparam name="T"></typeparam>
     public class RestDoubleJsonResponse<T> : RestBaseResponse where T : class
     {
-        public DataResponse<T> DoubleJson { get; set; }
+        public List<T> DoubleJson { get; set; }
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ namespace CanDao.Pos.Model.Response
         where T : class
         where TK : class
     {
-        public DataResponse<TK> JSJson { get; set; }
+        public List<TK> JSJson { get; set; }
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ namespace CanDao.Pos.Model.Response
         where T : class
         where TK : class
     {
-        public DataResponse<TK> DoubleJson { get; set; }
+        public List<TK> DoubleJson { get; set; }
     }
 
     /// <summary>
@@ -87,6 +87,6 @@ namespace CanDao.Pos.Model.Response
         where TJ : class
         where TL : class
     {
-        public DataResponse<TL> ListJson { get; set; }
+        public List<TL> ListJson { get; set; }
     }
 }
