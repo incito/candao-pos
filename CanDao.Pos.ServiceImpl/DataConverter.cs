@@ -334,7 +334,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var cInfo = new MVipCardInfo();
                 cInfo.CardNum = card.MCard;
-                cInfo.Balance = float.Parse(card.StoreCardBalance);
+                cInfo.Balance = decimal.Parse(card.StoreCardBalance);
                 cInfo.Integral = decimal.Parse(card.IntegralOverall);
                 cInfo.CouponBalance = float.Parse(card.CouponsOverall);
                 cInfo.TraceCode = card.TraceCode;

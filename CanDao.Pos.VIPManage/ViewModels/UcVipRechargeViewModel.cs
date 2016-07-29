@@ -38,7 +38,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         private ObservableCollection<MListBoxInfo> _listBoxInfos;
         private MListBoxInfo _selectInfo;
 
-        IMemberService _memberService=null;
+        private IMemberService _memberService=null;
 
         private CanDaoMemberStorageResponse _ret;
         #endregion
@@ -435,6 +435,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
             memberstoreinfo.StoredBalance = storeCardbalance;
             memberstoreinfo.ScoreBalance = SelectModel.Integral;
             memberstoreinfo.StoredAmount = decimal.Parse(Model.RechargeValue);
+
+           
             ReportPrintHelper.PrintMemberStoredReport(memberstoreinfo);
         }
 

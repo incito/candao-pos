@@ -84,6 +84,7 @@
     <Compile Include="Enum\EnumOpenTableResult.cs" />
     <Compile Include="Enum\EnumOrderType.cs" />
     <Compile Include="Enum\EnumPrintOrderType.cs" />
+    <Compile Include="Enum\EnumPrintPayType.cs" />
     <Compile Include="Enum\EnumPrintStatus.cs" />
     <Compile Include="Enum\EnumQueryOrderStatus.cs" />
     <Compile Include="Enum\EnumStatisticsPeriodsType.cs" />

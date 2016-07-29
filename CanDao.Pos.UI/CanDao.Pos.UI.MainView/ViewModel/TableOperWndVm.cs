@@ -674,7 +674,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
                 case "PrintTransactionSlip":
                     IsPrintMoreOpened = false;
-                    ReportPrintHelper.PrintMemberPayBillReport(Data.OrderId, Globals.UserInfo.UserName);
+                    ReportPrintHelper.PrintMemberPayBillReport(Data, Globals.UserInfo.UserName);
                     break;
             }
         }
@@ -2442,7 +2442,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(MemberCardNo))
             {
                 InfoLog.Instance.I("开始打印交易凭条...");
-                ReportPrintHelper.PrintMemberPayBillReport(Data.OrderId, Globals.UserInfo.UserName);
+                ReportPrintHelper.PrintMemberPayBillReport(Data, Globals.UserInfo.UserName);
                 InfoLog.Instance.I("结束打印交易凭条。");
             }
 
