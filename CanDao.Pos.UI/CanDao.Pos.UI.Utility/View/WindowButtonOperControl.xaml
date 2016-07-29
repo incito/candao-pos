@@ -11,8 +11,19 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel Orientation="Horizontal" Margin="10">
-        <Button Content="确定" Command="{Binding ConfirmCmd}" Width="120" Height="40" />
-        <Button Content="取消" Command="{Binding CancelCmd}" Width="120" Height="40" />
-    </StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button Content="取消"
+                IsCancel="True"
+                Command="{Binding CancelCmd}"
+                MinWidth="120" Height="48"/>
+        <Button Grid.Column="1"
+                IsDefault="True"
+                Content="确定"
+                Command="{Binding ConfirmCmd}"
+                MinWidth="120" Height="48"/>
+    </Grid>
 </UserControl>

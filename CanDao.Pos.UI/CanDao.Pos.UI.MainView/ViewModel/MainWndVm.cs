@@ -15,7 +15,6 @@ using CanDao.Pos.Model.Request;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
-using DevExpress.Xpf.Editors.Helpers;
 using Timer = System.Timers.Timer;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
@@ -526,7 +525,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
 
                 //更新餐桌开台持续时间
-                Tables.Where(t => t.TableStatus == EnumTableStatus.Dinner).ForEach(t => t.UpdateDinnerDuration());
+                Tables.Where(t => t.TableStatus == EnumTableStatus.Dinner).ToList().ForEach(t => t.UpdateDinnerDuration());
             }
             catch (Exception ex)
             {
@@ -611,7 +610,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (removedTables.Any())
                 removedTables.ForEach(t => Tables.Remove(t));
 
-            Tables.ForEach(t => t.UpdateDinnerDuration());
+            Tables.ToList().ForEach(t => t.UpdateDinnerDuration());
         }
 
         /// <summary>

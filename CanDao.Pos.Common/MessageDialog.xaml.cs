@@ -68,5 +68,15 @@ namespace CanDao.Pos.Common
         {
             CancelBtn.Visibility = BoxButton == MessageBoxButton.OKCancel ? Visibility.Visible : Visibility.Collapsed;
         }
+
+        private void ButtonConfirm_OnClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
+
+        private void CancelBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+        }
     }
 }

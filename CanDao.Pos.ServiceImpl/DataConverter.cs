@@ -55,11 +55,11 @@ namespace CanDao.Pos.ServiceImpl
 
         internal static TableFullInfo ToTableFullInfo(GetOrderDishListResponse response)
         {
-            if (response.OrderJson == null || response.OrderJson.Data == null || !response.OrderJson.Data.Any())
+            if (response.OrderJson == null || !response.OrderJson.Any())
                 return null;
 
-            var orderResponse = response.OrderJson.Data.First();
-            var dishListResponse = response.JSJson != null ? response.JSJson.Data : null;
+            var orderResponse = response.OrderJson.First();
+            var dishListResponse = response.JSJson != null ? response.JSJson : null;
             return ToTableFullInfo(orderResponse, dishListResponse);
         }
 
@@ -89,14 +89,14 @@ namespace CanDao.Pos.ServiceImpl
         internal static PrintOrderFullInfo ToPrintOrderFullInfo(GetPrintOrderInfoResponse response)
         {
             var item = new PrintOrderFullInfo();
-            var orderResponse = response.OrderJson.Data.First();
+            var orderResponse = response.OrderJson.First();
             item.OrderInfo = ToPrintOrderInfo(orderResponse);
 
-            if (response.ListJson != null && response.ListJson.Data != null && response.ListJson.Data.Any())
-                item.OrderDishInfos = response.ListJson.Data.Select(ToOrderDishInfo).ToList();
+            if (response.ListJson != null && response.ListJson.Any())
+                item.OrderDishInfos = response.ListJson.Select(ToOrderDishInfo).ToList();
 
-            if (response.JSJson != null && response.JSJson.Data != null && response.JSJson.Data.Any())
-                item.PayDetails = response.JSJson.Data.Select(ToPrintPayDetail).ToList();
+            if (response.JSJson != null && response.JSJson.Any())
+                item.PayDetails = response.JSJson.Select(ToPrintPayDetail).ToList();
 
             return item;
         }
@@ -358,11 +358,13 @@ namespace CanDao.Pos.ServiceImpl
             var mVipCoupons = new List<MVipCoupon>();
             foreach (var coupon in response.datas)
             {
-                var info = new MVipCoupon();
-                info.Id = coupon.id;
-                info.CouponType = coupon.type;
-                info.DealValue = coupon.dealValue;
-                info.PresentValu = coupon.presentValue;
+                var info = new MVipCoupon
+                {
+                    Id = coupon.id,
+                    CouponType = coupon.type,
+                    DealValue = coupon.dealValue,
+                    PresentValu = coupon.presentValue
+                };
                 mVipCoupons.Add(info);
             }
 
@@ -481,7 +483,7 @@ namespace CanDao.Pos.ServiceImpl
         internal static MenuFishPotFullInfo ToMenuFishPotFullInfo(GetFishPotDishResponse response)
         {
             var item = new MenuFishPotFullInfo();
-            var list = response.OrderJson.Data.Select(ToMenuDishInfo).ToList();
+            var list = response.OrderJson.Select(ToMenuDishInfo).ToList();
             item.PotInfo = list.FirstOrDefault(t => t.FishPotType == EnumFishPotType.Normal);
             list.Remove(item.PotInfo);
             item.FishDishes = list;

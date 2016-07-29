@@ -295,13 +295,7 @@ namespace CanDao.Pos.ReportPrint
 
             try
             {
-                //InfoLog.Instance.I("开始准备清机报表数据...");
-                //var mainDb = CreateClearPosMainDb();
-                //AddObject2DataTable(mainDb, result.Item2.OrderJson.Data.First());
 
-                //var settDb = CreateClearPosSettlementDb();
-                //if (result.Item2.JSJson != null && result.Item2.JSJson.Data != null)
-                //    result.Item2.JSJson.Data.ForEach(t => AddObject2DataTable(settDb, t));
 
                 //var ds = new DataSet();
                 //ds.Tables.Add(mainDb);

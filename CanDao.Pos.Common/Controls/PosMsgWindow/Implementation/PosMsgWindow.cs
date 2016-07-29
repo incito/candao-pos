@@ -17,30 +17,6 @@ namespace CanDao.Pos.Common.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PosMsgWindow), new FrameworkPropertyMetadata(typeof(PosMsgWindow)));
         }
 
-        /// <summary>
-        /// 确认按钮文本。
-        /// </summary>
-        public string CloseBtnText
-        {
-            get { return (string)GetValue(CloseBtnTextProperty); }
-            set { SetValue(CloseBtnTextProperty, value); }
-        }
-
-        public static readonly DependencyProperty CloseBtnTextProperty =
-            DependencyProperty.Register("CloseBtnText", typeof(string), typeof(PosMsgWindow), new PropertyMetadata("确认"));
-
-        /// <summary>
-        /// 关闭按钮文本。
-        /// </summary>
-        public string CancelBtnText
-        {
-            get { return (string)GetValue(CancelBtnTextProperty); }
-            set { SetValue(CancelBtnTextProperty, value); }
-        }
-
-        public static readonly DependencyProperty CancelBtnTextProperty =
-            DependencyProperty.Register("CancelBtnText", typeof(string), typeof(PosMsgWindow), new PropertyMetadata("关闭"));
-
         public CornerRadius WindowCornerRadius
         {
             get { return (CornerRadius)GetValue(WindowCornerRadiusProperty); }
@@ -59,6 +35,16 @@ namespace CanDao.Pos.Common.Controls
         public static readonly DependencyProperty CloseBtnEnableProperty =
             DependencyProperty.Register("CloseBtnEnable", typeof(bool), typeof(PosMsgWindow), new PropertyMetadata(true));
 
+
+
+        public bool ShowCloseBtn
+        {
+            get { return (bool)GetValue(ShowCloseBtnProperty); }
+            set { SetValue(ShowCloseBtnProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowCloseBtnProperty =
+            DependencyProperty.Register("ShowCloseBtn", typeof(bool), typeof(PosMsgWindow), new PropertyMetadata(true));
 
         protected override void OnKeyDown(KeyEventArgs e)
         {

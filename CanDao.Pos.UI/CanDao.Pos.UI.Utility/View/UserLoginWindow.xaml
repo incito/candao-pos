@@ -5,7 +5,6 @@
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                        xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
                         CloseBtnText="欢迎登陆餐道POS收银系统" CloseBtnEnable="False" Height="768" Width="1024"
                         WindowStartupLocation="CenterScreen">
     <i:Interaction.Triggers>
@@ -27,9 +26,15 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Image Source="{StaticResource CanDaoPosImageLog3}" Width="79"/>
-        <TextBlock Grid.Row="1" FontSize="24" Text="餐道" Foreground="{StaticResource CanDaoPosColorSelected}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Border Grid.Row="2" BorderBrush="{StaticResource CanDaoPosColorFg}" BorderThickness="2"
-                 Width="642" Height="378">
+        <TextBlock Grid.Row="1"
+                   FontSize="24" 
+                   Text="餐道"
+                   Foreground="{StaticResource CanDaoPosColorBgOrange}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border Grid.Row="2"
+                BorderBrush="{StaticResource CanDaoPosColorBgWhite}"
+                BorderThickness="2"
+                Width="642" Height="378">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -41,11 +46,15 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <controls:WatermarkTextBox Watermark="用户：" Text="{Binding Account, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Height="54" Width="250" VerticalContentAlignment="Center"/>
-                <dxe:PasswordBoxEdit Grid.Row="1" Grid.Column="0" EditValue="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                <controls:WatermarkTextBox Watermark="用户："
+                                           Text="{Binding Account, UpdateSourceTrigger=PropertyChanged}"
+                                           FontSize="24"
+                                           Height="54" Width="250"
+                                           VerticalContentAlignment="Center"/>
+                <dxe:PasswordBoxEdit Grid.Row="1" Grid.Column="0"
+                                     EditValue="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                                      NullText="密码："
                                      FontSize="24" Height="54" Width="250" VerticalContentAlignment="Center"/>
-                <!--<controls:WatermarkTextBox Grid.Row="1" Grid.Column="0" Watermark="密码：" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Height="54" Width="250" VerticalContentAlignment="Center"/>-->
                 <CheckBox Grid.Row="2" Grid.Column="0"
                           Content="保存登录信息"
                           FontSize="24"

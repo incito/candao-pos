@@ -58,7 +58,7 @@ namespace CanDao.Pos.ServiceImpl
                 //参数顺序：当前用户，机器标识，零找金额，查询或输入（0查询，1输入）
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
-                return new Tuple<string, bool>(result.Item1, false);
+                return new Tuple<string, bool>(string.Format("检测是否输入零找金是错误：{0}", result.Item1), false);
             return new Tuple<string, bool>(null, result.Item2.IsSuccess);
         }
 
@@ -118,7 +118,7 @@ namespace CanDao.Pos.ServiceImpl
             if (!result.Item2.IsSuccess)
                 return new Tuple<string, OrderDishInfo>(result.Item2.Info ?? "服务器内部错误，获取餐具信息失败。", null);
 
-            var dishList = result.Item2.OrderJson.Data;
+            var dishList = result.Item2.OrderJson;
             if (dishList == null || !dishList.Any())
                 return new Tuple<string, OrderDishInfo>("获取的餐具信息为空。", null);
 
@@ -486,8 +486,8 @@ namespace CanDao.Pos.ServiceImpl
                     return new Tuple<string, List<QueryOrderInfo>>(string.Format("账单查询失败：{0}", result.Item1), null);
 
                 List<QueryOrderInfo> list = new List<QueryOrderInfo>();
-                if (result.Item2 != null && result.Item2.OrderJson != null && result.Item2.OrderJson.Data != null)
-                    list = result.Item2.OrderJson.Data.Select(DataConverter.ToQueryOrderInfo).ToList();
+                if (result.Item2 != null && result.Item2.OrderJson != null && result.Item2.OrderJson != null)
+                    list = result.Item2.OrderJson.Select(DataConverter.ToQueryOrderInfo).ToList();
                 return new Tuple<string, List<QueryOrderInfo>>(null, list);
             }
             catch (Exception ex)
@@ -568,7 +568,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
-                var response = HttpHelper.HttpGet<List<CategoryResponse>>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<List<CategoryResponse>>(parmAddr, null);
                 var result = DataConverter.ToCategory(response);
                 return new Tuple<string, List<MCategory>>(null, result);
 
@@ -600,7 +600,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}&shiftid=-1&bankcardno=-1&settlementWay=5&type=-1", addr, beginTime, endTime);
-                var response = HttpHelper.HttpGet<List<GrouponResponse>>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<List<GrouponResponse>>(parmAddr, null);
                 resList = DataConverter.ToGroupon(response);
                 return new Tuple<string, List<MHangingMoney>>(null, resList);
 
@@ -634,7 +634,7 @@ namespace CanDao.Pos.ServiceImpl
                 request.Add("beginTime", beginTime);
                 request.Add("endTime", endTime);
 
-                var response = HttpHelper.HttpGet<List<DataDetailResponse>>(addr, request, true);
+                var response = HttpHelper.HttpGet<List<DataDetailResponse>>(addr, request);
                 if (response.Count > 0)
                 {
                     dataDetail.StartTime = DateTime.Parse(beginTime);
@@ -716,7 +716,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}&billName=0&clearStatus=0", addr, beginTime, endTime);
-                var response = HttpHelper.HttpGet<List<GzdwResponse>>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<List<GzdwResponse>>(parmAddr, null);
                 resList = DataConverter.ToGzdw(response);
                 return new Tuple<string, List<MHangingMoney>>(null, resList);
 
@@ -747,7 +747,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
-                var response = HttpHelper.HttpGet<TipMoneyResponse>(parmAddr, null, true);
+                var response = HttpHelper.HttpGet<TipMoneyResponse>(parmAddr, null);
                 return new Tuple<string, string>(null, response.tipMoney);
 
             }
