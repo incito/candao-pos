@@ -14,8 +14,11 @@
     <converter:CountToVisibleConverter x:Key="Count2VisibleCvt"/>
     <converter:CountAddOneConverter x:Key="CountAdd1Cvt"/>
     <converter:CountToCollapsedConverter x:Key="Count2CollapsedCvt"/>
+    <converter:CountToBooleanConverter x:Key="Count2BoolCvt"/>
+    <converter:CountToBooleanConverter x:Key="Count2BoolInvertCvt" IsInvert="True"/>
     <converter:PrinterStatusToColorConverter x:Key="PrinterStatus2ColorCvt"/>
     <converter:SysBorderBrushConverter x:Key="SysBorderBrushCvt"/>
     <converter:PaiedStatus2StringConverter x:Key="PaiedStatus2StringCvt"/>
     <converter:QueryOrderStatusToCheckedConverter x:Key="OrderStatus2CheckedCvt"/>
+    <converter:MultBooleanToVisibilityConverter x:Key="MultBool2VisibilityCvt"/>
 </ResourceDictionary> 

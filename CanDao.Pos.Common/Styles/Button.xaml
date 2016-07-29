@@ -25,7 +25,7 @@
                                 <Condition Property="IsMouseOver" Value="True"/>
                                 <Condition Property="IsPressed" Value="False"/>
                             </MultiTrigger.Conditions>
-                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgDisable}"/>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
                             <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
                         </MultiTrigger>
                         <Trigger Property="IsMouseOver" Value="True">

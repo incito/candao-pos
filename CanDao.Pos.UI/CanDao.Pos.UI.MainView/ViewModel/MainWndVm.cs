@@ -60,6 +60,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             IsForcedEndWorkModel = isForcedEndWorkModel;
             Tables = new ObservableCollection<TableInfo>();
+            CfTables = new ObservableCollection<TableInfo>();
             RefreshRemainSecond = RefreshTimerInterval;
 
             _refreshTimer = new Timer(1000) { Enabled = true };
@@ -77,6 +78,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// 所有餐台集合。
         /// </summary>
         public ObservableCollection<TableInfo> Tables { get; private set; }
+
+        /// <summary>
+        /// 咖啡台集合。
+        /// </summary>
+        public ObservableCollection<TableInfo> CfTables { get; private set; }
 
         /// <summary>
         /// 空闲餐台数。
@@ -113,23 +119,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 不可用餐台个数。
-        /// </summary>
-        private int _disableCount;
-        /// <summary>
-        /// 不可用餐台个数。
-        /// </summary>
-        public int DisableCount
-        {
-            get { return _disableCount; }
-            set
-            {
-                _disableCount = value;
-                RaisePropertyChanged("DisableCount");
-            }
-        }
-
-        /// <summary>
         /// 刷新剩余时间。
         /// </summary>
         private int _refreshRemainSecond;
@@ -143,6 +132,23 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 _refreshRemainSecond = value;
                 RaisePropertiesChanged("RefreshRemainSecond");
+            }
+        }
+
+        /// <summary>
+        /// 不可用餐台个数。
+        /// </summary>
+        private int _disableCount;
+        /// <summary>
+        /// 不可用餐台个数。
+        /// </summary>
+        public int DisableCount
+        {
+            get { return _disableCount; }
+            set
+            {
+                _disableCount = value;
+                RaisePropertyChanged("DisableCount");
             }
         }
 
@@ -333,11 +339,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "System"://系统
                     WindowHelper.ShowDialog(new SystemSettingWindow(), OwnerWindow);
                     break;
-                case "PreGroup":
+                case "NormalTablesPreGroup":
                     ((MainWindow)OwnerWindow).GsTables.PreviousGroup();
                     break;
-                case "NextGroup":
+                case "NormalTablesNextGroup":
                     ((MainWindow)OwnerWindow).GsTables.NextGroup();
+                    break;
+                case "CfTablesPreGroup":
+                    ((MainWindow)OwnerWindow).GsCfTables.PreviousGroup();
+                    break;
+                case "CfTablesNextGroup":
+                    ((MainWindow)OwnerWindow).GsCfTables.NextGroup();
                     break;
             }
             SetRefreshTimerStatus(true);
@@ -347,10 +359,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             switch ((string)param)
             {
-                case "PreGroup":
+                case "NormalTablesPreGroup":
                     return ((MainWindow)OwnerWindow).GsTables.CanPreviousGroup;
-                case "NextGroup":
+                case "NormalTablesNextGroup":
                     return ((MainWindow)OwnerWindow).GsTables.CanNextGruop;
+                case "CfTablesPreGroup":
+                    return ((MainWindow)OwnerWindow).GsCfTables.CanPreviousGroup;
+                case "CfTablesNextGroup":
+                    return ((MainWindow)OwnerWindow).GsCfTables.CanNextGruop;
                 default:
                     return true;
             }
@@ -526,6 +542,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                 //更新餐桌开台持续时间
                 Tables.Where(t => t.TableStatus == EnumTableStatus.Dinner).ToList().ForEach(t => t.UpdateDinnerDuration());
+                CfTables.Where(t => t.TableStatus == EnumTableStatus.Dinner).ToList().ForEach(t => t.UpdateDinnerDuration());
             }
             catch (Exception ex)
             {
@@ -588,14 +605,23 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             SetRefreshTimerStatus(true);
             if (result.Item2 != null && result.Item2.Any())
             {
-                UpdateTables(result.Item2);
+                IdleCount = result.Item2.Count(t => !IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
+                DinnerCount = result.Item2.Count(t => t.TableStatus == EnumTableStatus.Dinner);
+                DisableCount = result.Item2.Count(t => IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
+
+                var normalTables = result.Item2.Where(t => t.TableType == EnumTableType.Room || t.TableType == EnumTableType.Outside).ToList();
+                UpdateNormalTables(normalTables);
+
+                var cfTables = result.Item2.Where(t => t.TableType == EnumTableType.CFTable).ToList();
+                UpdateCfTables(cfTables);
             }
-            IdleCount = Tables.Count(t => !IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
-            DinnerCount = Tables.Count(t => t.TableStatus == EnumTableStatus.Dinner);
-            DisableCount = Tables.Count(t => IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
         }
 
-        private void UpdateTables(List<TableInfo> tableInfos)
+        /// <summary>
+        /// 更新标准餐台。
+        /// </summary>
+        /// <param name="tableInfos">餐台集合。</param>
+        private void UpdateNormalTables(List<TableInfo> tableInfos)
         {
             foreach (var tableInfo in tableInfos)
             {
@@ -610,7 +636,35 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (removedTables.Any())
                 removedTables.ForEach(t => Tables.Remove(t));
 
-            Tables.ToList().ForEach(t => t.UpdateDinnerDuration());
+            foreach (var table in Tables)
+            {
+                table.UpdateDinnerDuration();
+            }
+        }
+
+        /// <summary>
+        /// 更新咖啡餐台信息。
+        /// </summary>
+        /// <param name="tableInfos"></param>
+        private void UpdateCfTables(List<TableInfo> tableInfos)
+        {
+            foreach (var tableInfo in tableInfos)
+            {
+                var item = CfTables.FirstOrDefault(t => t.TableId == tableInfo.TableId);
+                if (item == null)
+                    AddTableInfo(tableInfo);
+                else
+                    item.CloneData(tableInfo);
+            }
+
+            var removedTables = CfTables.Where(t => tableInfos.All(y => y.TableId != t.TableId)).ToList();
+            if (removedTables.Any())
+                removedTables.ForEach(t => Tables.Remove(t));
+
+            foreach (var cfTable in CfTables)
+            {
+                cfTable.UpdateDinnerDuration();
+            }
         }
 
         /// <summary>
@@ -621,7 +675,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             //餐台的可用状态：只有当是强制结业模式且餐台空闲时不可用，其他时候都可用。
             item.TableEnable = !IsForcedEndWorkModel || (item.TableStatus == EnumTableStatus.Dinner);
-            Tables.Add(item);
+            if (item.TableType == EnumTableType.CFTable)
+                CfTables.Add(item);
+            else
+                Tables.Add(item);
         }
 
         /// <summary>
