@@ -3,7 +3,7 @@
     /// <summary>
     /// 授权登录返回类型。
     /// </summary>
-    public class AuthorizeLoginResponse : JavaResponse
+    public class AuthorizeLoginResponse : NewHttpBaseResponse
     {
         /// <summary>
         /// 登录时间。

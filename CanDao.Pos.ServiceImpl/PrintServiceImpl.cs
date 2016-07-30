@@ -54,7 +54,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}/{1}/{2}/{3}", addr, Userid, orderid, (int)printPayType);
-                var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null, true);
+                var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
@@ -90,7 +90,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}/{1}/{2}/{3}", addr, Userid, jsorder, posid);
-                var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null, true);
+                var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
@@ -125,7 +125,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 string parmAddr = string.Format("{0}/{1}/{2}", addr, Userid, orderid);
-                var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null, true);
+                var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
@@ -169,7 +169,7 @@ namespace CanDao.Pos.ServiceImpl
                 param.Add("storedBalance", storeInfo.ScoreBalance.ToString());
                 param.Add("storedPoint", storeInfo.ScoreBalance.ToString());
 
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, param, true);
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
@@ -205,7 +205,7 @@ namespace CanDao.Pos.ServiceImpl
                 var param = new Dictionary<string, string>();
                 param.Add("flag", flag);
            
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, param, true);
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
@@ -241,7 +241,7 @@ namespace CanDao.Pos.ServiceImpl
                 var param = new Dictionary<string, string>();
                 param.Add("flag", flag);
 
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, param, true);
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
@@ -279,7 +279,7 @@ namespace CanDao.Pos.ServiceImpl
                 param.Add("beginTime", beginTime);
                 param.Add("endTime", endTime);
 
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, param, true);
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
@@ -317,7 +317,7 @@ namespace CanDao.Pos.ServiceImpl
                 param.Add("orderid", orderid);
                 param.Add("amount", amount);
 
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, param, true);
+                var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
                 if (response.IsSuccess)
                 {
                     return string.Empty;

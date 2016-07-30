@@ -524,7 +524,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var request = new ClearTableRequest { tableNo = tableNo };
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                var response = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return !response.IsSuccess ? "清台失败。" : null;
             }
             catch (Exception ex)
@@ -632,7 +632,7 @@ namespace CanDao.Pos.ServiceImpl
                     dishnum = dishNum.ToString(CultureInfo.InvariantCulture),
                     primarykey = primaryKey,
                 };
-                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return result.IsSuccess ? null : string.IsNullOrEmpty(result.msg) ? "更新菜品称重数量失败。" : string.Format("更新菜品称重数量失败：{0}", result.msg);
             }
             catch (Exception ex)
