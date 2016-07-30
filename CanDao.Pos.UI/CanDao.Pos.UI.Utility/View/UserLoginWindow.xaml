@@ -28,7 +28,7 @@
         <TextBlock Grid.Row="1"
                    FontSize="24" 
                    Text="餐道"
-                   Foreground="{StaticResource CanDaoPosColorBgOrange}"
+                   Foreground="{StaticResource CanDaoPosColorFgOrange}"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Border Grid.Row="2"
                 BorderBrush="{StaticResource CanDaoPosColorBgWhite}"

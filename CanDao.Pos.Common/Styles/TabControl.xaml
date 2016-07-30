@@ -4,7 +4,12 @@
         <ResourceDictionary Source="Brushes.xaml"/>
         <ResourceDictionary Source="Images.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
+    <Style TargetType="TabControl">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
     <Style x:Key="TabControlStyle" TargetType="{x:Type TabControl}">
         <Setter Property="Padding" Value="4,4,4,4"/>
         <Setter Property="BorderThickness" Value="0"/>

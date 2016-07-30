@@ -33,6 +33,7 @@
 
     <Style TargetType="{x:Type local:WatermarkTextBox}">
         <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorder}" />
+        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgWhite}"/>
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="3" />
         <Setter Property="AllowDrop" Value="true" />

@@ -1002,9 +1002,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (args == null)
                 return;
 
-            args.Handled = true;
             if (args.Key == Key.Enter)
+            {
+                args.Handled = true;
                 PayTheBill();
+            }
         }
 
         private void WindowClosing(object param)
