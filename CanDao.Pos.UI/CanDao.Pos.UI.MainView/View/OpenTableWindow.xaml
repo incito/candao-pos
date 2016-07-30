@@ -3,7 +3,6 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-                       xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
                        Width="650"  SizeToContent="Height" MaxHeight="768" ShowInTaskbar="False"
                        Title="开台">
     <controls:PosMsgWindow.Resources>
@@ -55,7 +54,6 @@
             <ToggleButton Grid.Row="0" Grid.Column="3" Content="老年" FontSize="20"  Margin="3" IsChecked="{Binding HasOld}"/>
             <Button Content="确认开台" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5" Command="{Binding ConfirmCmd}"/>
             <Button Content="取消" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"  Margin="0,5" Command="{Binding CancelCmd}"/>
-
         </Grid>
 
     </Grid>

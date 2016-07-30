@@ -442,7 +442,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetBranchInfo");
                 var result = HttpHelper.HttpGet<GetBranchInfoResponse>(addr);
-                if (result.IsSuccess) //这个接口1是成功，0是失败。
+                if (!result.IsSuccess) //这个接口1是成功，0是失败。
                     return new Tuple<string, BranchInfo>(string.IsNullOrEmpty(result.msg) ? "获取分店信息失败。" : result.msg,
                         null);
 

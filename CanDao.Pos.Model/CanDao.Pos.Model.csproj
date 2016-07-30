@@ -154,6 +154,7 @@
     <Compile Include="Response\CanDaoMemberQueryResponse.cs" />
     <Compile Include="Response\CanDaoMemberStorageResponse.cs" />
     <Compile Include="Response\GrouponResponse.cs" />
+    <Compile Include="Response\LoginInfoResponse.cs" />
     <Compile Include="Response\MenuSingleAllDishDataResponse.cs" />
     <Compile Include="Response\NewHttpBaseResponse.cs" />
     <Compile Include="Response\PrintOrderInfoResponse.cs" />

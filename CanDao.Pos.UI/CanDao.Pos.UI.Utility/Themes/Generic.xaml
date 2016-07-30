@@ -19,7 +19,7 @@
                 <ControlTemplate TargetType="{x:Type view:AllowMultSelectorControl}">
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"
-                                   Background="{StaticResource CanDaoPosColorSelected}"
+                                   Background="{StaticResource CanDaoPosColorBgOrange}"
                                    Foreground="{StaticResource CanDaoPosColorFg}"/>
                         <ItemsControl ItemsSource="{TemplateBinding ItemsSource}"
                                       MaxWidth="{TemplateBinding ActualWidth}"

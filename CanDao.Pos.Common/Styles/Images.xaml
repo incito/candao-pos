@@ -2,18 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <BitmapImage x:Key="CanDaoPosImageLog" UriSource="/CanDao.Pos.Common;component/Images/Logo.png" />
     <BitmapImage x:Key="CanDaoPosImageLog3" UriSource="/CanDao.Pos.Common;component/Images/Logo1.png" />
-    <BitmapImage x:Key="CanDaoPosImageLog1" UriSource="/CanDao.Pos.Common;component/Images/CanDaoLog1.png" />
-    <BitmapImage x:Key="CanDaoPosImageLog2" UriSource="/CanDao.Pos.Common;component/Images/CanDaoLog2.png" />
     <BitmapImage x:Key="CanDaoPosSplashImg" UriSource="/CanDao.Pos.Common;component/Images/CanDaoPosSplash.png"/>
-    <BitmapImage x:Key="CanDaoPosImageTakeout" UriSource="/CanDao.Pos.Common;component/Images/Takeout.png"/>
-    <BitmapImage x:Key="CanDaoPosImageReturn" UriSource="/CanDao.Pos.Common;component/Images/Return.png"/>
-    <BitmapImage x:Key="CanDaoPosImageRefresh" UriSource="/CanDao.Pos.Common;component/Images/Refresh.png"/>
-    <BitmapImage x:Key="CanDaoPosImageEndWork" UriSource="/CanDao.Pos.Common;component/Images/EndWork.png"/>
-    <BitmapImage x:Key="CanDaoPosImageClearn" UriSource="/CanDao.Pos.Common;component/Images/Clear.png"/>
-    <BitmapImage x:Key="CanDaoPosImageOrder" UriSource="/CanDao.Pos.Common;component/Images/Order.png"/>
-    <BitmapImage x:Key="CanDaoPosImageFree" UriSource="/CanDao.Pos.Common;component/Images/Free.png"/>
-    <BitmapImage x:Key="CanDaoPosImageOk" UriSource="/CanDao.Pos.Common;component/Images/Ok.png"/>
-    <BitmapImage x:Key="CanDaoPosImageEmpty" UriSource="/CanDao.Pos.Common;component/Images/Empty.png"/>
     <BitmapImage x:Key="CanDaoPosImageChangeShiftNor" UriSource="/CanDao.Pos.Common;component/Images/ChangeShift_Normal.png"/>
     <BitmapImage x:Key="CanDaoPosImageChangeShiftDis" UriSource="/CanDao.Pos.Common;component/Images/ChangeShift_Dis.png"/>
     <BitmapImage x:Key="CanDaoPosImageChangeShiftPress" UriSource="/CanDao.Pos.Common;component/Images/ChangeShift_Press.png"/>
@@ -23,14 +12,14 @@
     <BitmapImage x:Key="CanDaoPosImageWarning" UriSource="/CanDao.Pos.Common;component/Images/Warning.png"/>
     <BitmapImage x:Key="CanDaoPosImageRetryDn" UriSource="/CanDao.Pos.Common;component/Images/Retry_Down.png"/>
     <BitmapImage x:Key="CanDaoPosImageRetryPr" UriSource="/CanDao.Pos.Common;component/Images/Retry_Press.png"/>
-    <BitmapImage x:Key="CanDaoPosImagePrinting" UriSource="/CanDao.Pos.Common;component/Images/Print128.png"/>
     <BitmapImage x:Key="CanDaoPosImageBeWeigh" UriSource="/CanDao.Pos.Common;component/Images/ToBeWeigh.jpg"/>
     <BitmapImage x:Key="CanDaoPosImageReduce" UriSource="/CanDao.Pos.Common;component/Images/Reduce.png"/>
     <BitmapImage x:Key="CanDaoPosImageSelect" UriSource="/CanDao.Pos.Common;component/Images/SelectNum.png"/>
     <BitmapImage x:Key="CanDaoPosImageAdd" UriSource="/CanDao.Pos.Common;component/Images/Add.png"/>
-    <BitmapImage x:Key="CanDaoPosImageAdd1" UriSource="/CanDao.Pos.Common;component/Images/Add1.png"/>
     <BitmapImage x:Key="CanDaoPosImageDown" UriSource="/CanDao.Pos.Common;component/Images/Down.png"/>
+    <BitmapImage x:Key="CanDaoPosImageDownPress" UriSource="/CanDao.Pos.Common;component/Images/Down_Transparent.png"/>
     <BitmapImage x:Key="CanDaoPosImageUp" UriSource="/CanDao.Pos.Common;component/Images/Up.png"/>
+    <BitmapImage x:Key="CanDaoPosImageUpPress" UriSource="/CanDao.Pos.Common;component/Images/Up_Transparent.png"/>
     <BitmapImage x:Key="CanDaoPosImageLeft" UriSource="/CanDao.Pos.Common;component/Images/Left.png"/>
     <BitmapImage x:Key="CanDaoPosImageRight" UriSource="/CanDao.Pos.Common;component/Images/Right.png"/>
     <BitmapImage x:Key="CanDaoPosImageAlert" UriSource="/CanDao.Pos.Common;component/Images/Alert.png"/>

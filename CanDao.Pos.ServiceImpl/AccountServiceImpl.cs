@@ -34,7 +34,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var result = HttpHelper.HttpPost<AuthorizeLoginResponse>(addr, request);
-                return result.IsSuccess ? new Tuple<string, string>(null, result.fullname) : new Tuple<string, string>(result.msg, null);
+                return result.IsSuccess ? new Tuple<string, string>(null, result.data.fullname) : new Tuple<string, string>(result.msg, null);
             }
             catch (Exception ex)
             {
