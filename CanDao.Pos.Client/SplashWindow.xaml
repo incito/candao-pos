@@ -1,8 +1,9 @@
 ﻿<Window x:Class="CanDao.Pos.Client.SplashWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Height="330" Width="580"
-        WindowStartupLocation="CenterScreen" WindowStyle="None">
+        Height="768" Width="1024"
+        WindowStartupLocation="CenterScreen" WindowStyle="None"
+        Padding="0">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -11,7 +12,6 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Image Source="{StaticResource CanDaoPosSplashImg}"/>
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" Text="检测是否开业..." FontSize="20"/>
+        <Image Source="{StaticResource CanDaoPosSplashImg}" Height="768" Width="1024" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>
