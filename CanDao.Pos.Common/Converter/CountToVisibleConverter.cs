@@ -11,7 +11,7 @@ namespace CanDao.Pos.Common.Converter
 
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return System.Convert.ToInt32(value) >= 0 ? Visibility.Visible : Visibility.Collapsed;
+            return System.Convert.ToInt32(value) > 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)

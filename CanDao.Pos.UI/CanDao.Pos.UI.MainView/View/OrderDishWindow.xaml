@@ -122,7 +122,7 @@
                 <TextBlock Text="{Binding OrderRemark, StringFormat=全单备注：{0}}"/>
             </controls:FlagControl>
         </Grid>
-        
+
         <!--中间部分-->
         <StackPanel Grid.Row="0" Grid.Column="1" Width="53" Margin="0,54,0,0">
             <Button Style="{StaticResource BtnUpStyle}"
@@ -156,7 +156,10 @@
             <DockPanel Height="70" DockPanel.Dock="Top" Margin="10,0">
                 <Button DockPanel.Dock="Left" Style="{StaticResource BtnLeftNoBorderStyle}" Command="{Binding OperCmd}" CommandParameter="PreGroup"/>
                 <Button DockPanel.Dock="Right" Style="{StaticResource BtnRightStyle}"  Command="{Binding OperCmd}" CommandParameter="NextGroup"/>
-                <controls:GroupSelector x:Name="LbDishGroup" ItemsSource="{Binding DishGroups}" SelectedItem="{Binding SelectedMenuDishGroup, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemCountEachGroup="5">
+                <controls:GroupSelector x:Name="LbDishGroup"
+                                        ItemsSource="{Binding DishGroups}"
+                                        SelectedItem="{Binding SelectedMenuDishGroup, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        ItemCountEachGroup="6">
                     <controls:GroupSelector.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>
@@ -164,21 +167,41 @@
                     </controls:GroupSelector.ItemsPanel>
                     <controls:GroupSelector.ItemTemplate>
                         <DataTemplate>
-                            <Border CornerRadius="5" Margin="2" Width="90">
+                            <Border CornerRadius="5" Margin="2">
                                 <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="2*"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="{Binding GroupName}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Row="1" Text="{Binding SelectDishCount}" Foreground="Coral" HorizontalAlignment="Right" Margin="2,2,10,2" FontSize="20" FontWeight="Bold"/>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding GroupName}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <Border Grid.Column="1"
+                                            Width="15" Height="15"
+                                            Visibility="{Binding SelectDishCount, Converter={StaticResource Count2VisibleCvt}}">
+                                        <TextBlock Text="{Binding SelectDishCount}"
+                                               Foreground="{StaticResource CanDaoPosColorFg}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Border.Background>
+                                            <DrawingBrush>
+                                                <DrawingBrush.Drawing>
+                                                    <GeometryDrawing Brush="{StaticResource CanDaoPosColorBgOrange}" >
+                                                        <GeometryDrawing.Geometry>
+                                                            <EllipseGeometry RadiusX="15" RadiusY="15"/>
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                </DrawingBrush.Drawing>
+                                            </DrawingBrush>
+                                        </Border.Background>
+                                    </Border>
                                 </Grid>
                             </Border>
                         </DataTemplate>
                     </controls:GroupSelector.ItemTemplate>
                     <controls:GroupSelector.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Setter Property="Width" Value="Auto"/>
+                            <Setter Property="MaxWidth" Value="90"/>
+                            <Setter Property="MinWidth" Value="70"/>
+                            <Setter Property="Height" Value="40"/>
                         </Style>
                     </controls:GroupSelector.ItemContainerStyle>
                 </controls:GroupSelector>
@@ -251,8 +274,8 @@
                             </ControlTemplate>
                         </controls:GroupSelector.Template>
                     </controls:GroupSelector>
-                    
-                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,0,0">
+
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="5,0">
                         <Button Style="{StaticResource BtnUpStyle}"
                                 Height="60"
                                 Command="{Binding OperCmd}"

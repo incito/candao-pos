@@ -36,7 +36,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         public OrderDishWindow OwnerWnd
         {
-            get { return (OrderDishWindow) OwnerWindow; }
+            get { return (OrderDishWindow)OwnerWindow; }
         }
 
         /// <summary>
@@ -203,7 +203,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             DishGroups.Clear();
             Globals.DishGroupInfos.ForEach(t =>
             {
-                t.SelectDishCount = null;
                 DishGroups.Add(t);
             });
         }
@@ -456,7 +455,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             else if (SelectedDish.DishType == EnumDishType.Normal)//普通菜
             {
-              
+
 
                 //临时菜处理
                 if (SelectedDish.DishName.Contains("临时菜"))
@@ -621,9 +620,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             //得到每个菜单分组中被选择的菜品数量。
             foreach (var dishGroup in DishGroups)
             {
-                var items = OrderDishInfos.Where(t => !t.IsFishPotDish && !t.IsComboDish && t.MenuGroupId.Equals(dishGroup.GroupId)).ToList();
-                var totalDishCount = items.Sum(t => t.DishNum);
-                dishGroup.SelectDishCount = totalDishCount != 0 ? totalDishCount.ToString(CultureInfo.InvariantCulture) : "";
+                dishGroup.SelectDishCount = OrderDishInfos.Where(t => !t.IsFishPotDish && !t.IsComboDish && t.MenuGroupId.Equals(dishGroup.GroupId)).Sum(t => t.DishNum);
             }
         }
 
@@ -807,7 +804,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 OrderDishInfos.Clear();
                 TotalAmount = 0;
-                DishGroups.ForEach(t => t.SelectDishCount = null);
+                DishGroups.ForEach(t => t.SelectDishCount = 0m);
             }
             DoWhenDishChanged();
         }

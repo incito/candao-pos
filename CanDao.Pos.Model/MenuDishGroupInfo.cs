@@ -7,8 +7,6 @@ namespace CanDao.Pos.Model
     /// </summary>
     public class MenuDishGroupInfo : BaseNotifyObject
     {
-        private string _selectDishCount;
-
         public MenuDishGroupInfo()
         {
             DishInfos = new List<MenuDishInfo>();
@@ -32,7 +30,11 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 该分组下选中的菜品数量。
         /// </summary>
-        public string SelectDishCount
+        private decimal _selectDishCount;
+        /// <summary>
+        /// 该分组下选中的菜品数量。
+        /// </summary>
+        public decimal SelectDishCount
         {
             get { return _selectDishCount; }
             set

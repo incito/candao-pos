@@ -23,7 +23,8 @@
                     IsCancel="True"
                     Width="152" Height="48"
                     HorizontalAlignment="Center"
-                    Click="CancelBtn_OnClick"/>
+                    Click="CancelBtn_OnClick"
+                    Margin="20,0"/>
             <Button Grid.Column="1"
                     IsDefault="True"
                     Content="确定"

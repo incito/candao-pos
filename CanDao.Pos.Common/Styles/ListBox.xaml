@@ -6,7 +6,7 @@
         <ResourceDictionary Source="Images.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="ListBoxItem">
+    <Style x:Key="LbItemBaseStyle" TargetType="ListBoxItem">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -47,6 +47,10 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    
+    <Style TargetType="ListBoxItem" BasedOn="{StaticResource LbItemBaseStyle}">
+        
     </Style>
 
     <Style TargetType="ListBoxItem" x:Key="LbNormalStyle">
