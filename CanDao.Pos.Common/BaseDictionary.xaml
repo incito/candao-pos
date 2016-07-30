@@ -11,6 +11,7 @@
         <ResourceDictionary Source="Styles/ListBox.xaml"/>
         <ResourceDictionary Source="Styles/RadioButton.xaml"/>
         <ResourceDictionary Source="Styles/TabControl.xaml"/>
+        <ResourceDictionary Source="Styles/TabItem.xaml"/>
         <ResourceDictionary Source="Styles/ToggleButton.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     

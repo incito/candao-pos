@@ -3,7 +3,9 @@
     <SolidColorBrush x:Key="CanDaoPosColorBgWhite" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="CanDaoPosColorBgOrange" Color="#FFFF5803"/>
     <SolidColorBrush x:Key="CanDaoPosColorBgDarkOrange" Color="#FFFF5200"/>
-    <SolidColorBrush x:Key="CanDaoPosColorBgDisable" Color="#FFFFBB98"/>
+    <SolidColorBrush x:Key="CanDaoPosColorBgTableDinner" Color="#FFFFA87C"/>
+    <SolidColorBrush x:Key="CanDaoPosColorBgOver" Color="#FFFFBB98"/>
+    <SolidColorBrush x:Key="CanDaoPosColorBgDisable" Color="#FFDBDBDB"/>
     <SolidColorBrush x:Key="CanDaoPosColorBgBorder" Color="#FFC7C7C7"/>
     <SolidColorBrush x:Key="CanDaoPosColorBgGray" Color="#FFDEDEDE"/>
     <SolidColorBrush x:Key="CanDaoPosColorBgNormal" Color="#FFEAE9E6"/>
@@ -11,6 +13,7 @@
     <SolidColorBrush x:Key="CanDaoPosColorFg" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="CanDaoPosColorFgFont" Color="#FF000000"/>
     <SolidColorBrush x:Key="CanDaoPosColorFgDisable" Color="#FF808080"/>
+    <SolidColorBrush x:Key="CanDaoPosColorFgTableNormal" Color="#FF515356"/>
 
 
 

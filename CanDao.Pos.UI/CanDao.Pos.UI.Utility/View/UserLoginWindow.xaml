@@ -46,15 +46,19 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <controls:WatermarkTextBox Watermark="用户："
+                <controls:WatermarkTextBox x:Name="TbUserName"
+                                           Watermark="用户："
                                            Text="{Binding Account, UpdateSourceTrigger=PropertyChanged}"
                                            FontSize="24"
                                            Height="54" Width="250"
                                            VerticalContentAlignment="Center"/>
-                <dxe:PasswordBoxEdit Grid.Row="1" Grid.Column="0"
-                                     EditValue="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                                     NullText="密码："
-                                     FontSize="24" Height="54" Width="250" VerticalContentAlignment="Center"/>
+                <controls:WatermarkTextBox x:Name="TbPwd"
+                                           Grid.Row="1" Grid.Column="0"
+                                           Watermark="密码："
+                                           Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                                           FontSize="24"
+                                           Height="54" Width="250"
+                                           VerticalContentAlignment="Center"/>
                 <CheckBox Grid.Row="2" Grid.Column="0"
                           Content="保存登录信息"
                           FontSize="24"
