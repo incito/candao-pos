@@ -10,6 +10,7 @@ using CanDao.Pos.Common.Models;
 using CanDao.Pos.Common.Operates.FileOperate;
 using CanDao.Pos.Common.PublicValues;
 using CanDao.Pos.IService;
+using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
@@ -60,13 +61,12 @@ namespace CanDao.Pos.Client
             InfoLog.Instance.I("与服务器的连接正常。");
 
             GetBranchInfoAsync();
-            GetBankInfosAsync();
             GetTradeTimeAsync();
             GetOddSettingAsync();
             GetDietSettingAsync();
             GetDinnerWareSettingAsync();
 
-            TaskService.Start(null, CheckTheLastEndWorkProcess, CheckTheLastEndWorkComplete, "检测上次是否结业中...");
+            TaskService.Start(null, GetBranchInfoProcess, GetBranchInfoComplete, "获取门店信息中...");
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -137,31 +137,6 @@ namespace CanDao.Pos.Client
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// 异步获取结账可选银行集合。
-        /// </summary>
-        private void GetBankInfosAsync()
-        {
-
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                InfoLog.Instance.I("异步获取可选银行信息...");
-                var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-                if (service == null)
-                {
-                    ErrLog.Instance.E("创建IRestaurantService服务失败。");
-                    return;
-                }
-
-                var result = service.GetAllBankInfos();
-                InfoLog.Instance.I("异步获取可选银行信息完成。");
-                if (!string.IsNullOrEmpty(result.Item1))
-                    ErrLog.Instance.E("异步获取可选银行时错误：{0}", result.Item1);
-                else
-                    Globals.BankInfos = result.Item2;
-            });
         }
 
         /// <summary>
@@ -313,6 +288,44 @@ namespace CanDao.Pos.Client
                     }
                 }
             });
+        }
+
+        /// <summary>
+        /// 获取门店信息的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object GetBranchInfoProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+            {
+                ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                return new Tuple<string, BranchInfo>("创建IRestaurantService服务失败。", null);
+            }
+
+            return service.GetBranchInfo();
+        }
+
+        /// <summary>
+        /// 获取门店信息完成时执行。
+        /// </summary>
+        /// <param name="param"></param>
+        private void GetBranchInfoComplete(object param)
+        {
+            var result = (Tuple<string, BranchInfo>)param;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                var errMsg = string.Format("获取门店信息时错误：{0}", result.Item1);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
+                Shutdown();
+                return;
+            }
+
+            InfoLog.Instance.I("获取门店信息结束。门店Id：{0}", result.Item2.BranchId);
+            Globals.BranchInfo = result.Item2;
+            TaskService.Start(null, CheckTheLastEndWorkProcess, CheckTheLastEndWorkComplete, "检测上次是否结业中...");
         }
 
         /// <summary>
