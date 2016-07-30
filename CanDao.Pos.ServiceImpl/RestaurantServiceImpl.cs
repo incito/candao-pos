@@ -134,11 +134,17 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var result = HttpHelper.HttpPost<List<TableInfoResponse>>(addr, null);
+                var result = HttpHelper.HttpPost<GetAllTableInfoesResponse>(addr, null);
                 var dataList = new List<TableInfo>();
-                if (result != null && result.Any())
-                    dataList = result.Select(DataConverter.ToTableInfo).ToList();
-                return new Tuple<string, List<TableInfo>>(null, dataList);
+                if (result.IsSuccess)
+                {
+                    dataList = result.data.Select(DataConverter.ToTableInfo).ToList();
+                    return new Tuple<string, List<TableInfo>>(null, dataList); 
+                }
+                else
+                {
+                    return new Tuple<string, List<TableInfo>>(result.msg, null); 
+                }
             }
             catch (Exception ex)
             {

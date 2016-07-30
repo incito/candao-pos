@@ -110,10 +110,10 @@ namespace CanDao.Pos.ServiceImpl
                 if (menuResult == null)
                     return new Tuple<string, List<MenuDishGroupInfo>>("没有菜谱信息。", null);
 
-                if (menuResult.rows == null || !menuResult.rows.Any())
+                if (!menuResult.IsSuccess)
                     return new Tuple<string, List<MenuDishGroupInfo>>(null, new List<MenuDishGroupInfo>());
 
-                var list = menuResult.rows.Select(DataConverter.ToMenuDishGroupInfo).ToList();
+                var list = menuResult.data.Select(DataConverter.ToMenuDishGroupInfo).ToList();
 
                 addr = ServiceAddrCache.GetServiceAddr("GetAllDishInfos");
                 if (string.IsNullOrEmpty(addr))

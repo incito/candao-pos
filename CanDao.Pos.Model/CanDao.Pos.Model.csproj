@@ -140,6 +140,7 @@
     <Compile Include="Response\CanDaoVipBaseResponse.cs" />
     <Compile Include="Response\CanDaoVipQueryResponse.cs" />
     <Compile Include="Response\CategoryResponse.cs" />
+    <Compile Include="Response\GetAllTableInfoesResponse.cs" />
     <Compile Include="Response\GetBranchInfoResponse.cs" />
     <Compile Include="Response\GetClearPosInfoResponse.cs" />
     <Compile Include="Response\GetCouponListResponse.cs" />
