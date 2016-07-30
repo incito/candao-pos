@@ -140,6 +140,7 @@
     <Compile Include="Response\CanDaoVipBaseResponse.cs" />
     <Compile Include="Response\CanDaoVipQueryResponse.cs" />
     <Compile Include="Response\CategoryResponse.cs" />
+    <Compile Include="Response\GetAllTableInfoesResponse.cs" />
     <Compile Include="Response\GetBranchInfoResponse.cs" />
     <Compile Include="Response\GetClearPosInfoResponse.cs" />
     <Compile Include="Response\GetCouponListResponse.cs" />
@@ -153,7 +154,9 @@
     <Compile Include="Response\CanDaoMemberQueryResponse.cs" />
     <Compile Include="Response\CanDaoMemberStorageResponse.cs" />
     <Compile Include="Response\GrouponResponse.cs" />
+    <Compile Include="Response\LoginInfoResponse.cs" />
     <Compile Include="Response\MenuSingleAllDishDataResponse.cs" />
+    <Compile Include="Response\NewHttpBaseResponse.cs" />
     <Compile Include="Response\PrintOrderInfoResponse.cs" />
     <Compile Include="Response\QueryOrderInfoResponse.cs" />
     <Compile Include="Response\ReportDishInfoResponse.cs" />

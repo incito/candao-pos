@@ -6,7 +6,7 @@ namespace CanDao.Pos.Model.Response
     /// <summary>
     /// 开台返回类。
     /// </summary>
-    public class OpenTableResponse : JavaResponse
+    public class OpenTableResponse : NewHttpBaseResponse
     {
         public string orderid { get; set; }
 
@@ -20,7 +20,7 @@ namespace CanDao.Pos.Model.Response
 
         public EnumOpenTableResult OpenTableResult
         {
-            get { return (EnumOpenTableResult) Convert.ToInt32(result); }
+            get { return (EnumOpenTableResult) Convert.ToInt32(code); }
         }
     }
 }

@@ -110,10 +110,10 @@ namespace CanDao.Pos.ServiceImpl
                 if (menuResult == null)
                     return new Tuple<string, List<MenuDishGroupInfo>>("没有菜谱信息。", null);
 
-                if (menuResult.rows == null || !menuResult.rows.Any())
+                if (!menuResult.IsSuccess)
                     return new Tuple<string, List<MenuDishGroupInfo>>(null, new List<MenuDishGroupInfo>());
 
-                var list = menuResult.rows.Select(DataConverter.ToMenuDishGroupInfo).ToList();
+                var list = menuResult.data.Select(DataConverter.ToMenuDishGroupInfo).ToList();
 
                 addr = ServiceAddrCache.GetServiceAddr("GetAllDishInfos");
                 if (string.IsNullOrEmpty(addr))
@@ -524,7 +524,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var request = new ClearTableRequest { tableNo = tableNo };
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                var response = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return !response.IsSuccess ? "清台失败。" : null;
             }
             catch (Exception ex)
@@ -632,7 +632,7 @@ namespace CanDao.Pos.ServiceImpl
                     dishnum = dishNum.ToString(CultureInfo.InvariantCulture),
                     primarykey = primaryKey,
                 };
-                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return result.IsSuccess ? null : string.IsNullOrEmpty(result.msg) ? "更新菜品称重数量失败。" : string.Format("更新菜品称重数量失败：{0}", result.msg);
             }
             catch (Exception ex)

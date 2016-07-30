@@ -1,6 +1,6 @@
 ﻿namespace CanDao.Pos.Model.Response
 {
-    public class GetBranchInfoResponse : JavaResponse
+    public class GetBranchInfoResponse : NewHttpBaseResponse
     {
         /// <summary>
         /// 获取分店信息返回类。

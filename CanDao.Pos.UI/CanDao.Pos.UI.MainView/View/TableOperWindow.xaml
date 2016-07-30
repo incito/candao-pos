@@ -537,7 +537,8 @@
                                            Width="310" Height="260"
                                            Margin="0,60,0,0"/>
 
-            <Grid Grid.Row="4" Margin="5">
+            <Grid Grid.Row="4"
+                  Background="{StaticResource CanDaoPosColorBgDarkGray}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
@@ -548,7 +549,6 @@
                 </Grid.ColumnDefinitions>
                 <Border x:Name="BdSettInfo" 
                         CornerRadius="3"
-                        Background="{StaticResource CanDaoPosColorBgDarkGray}"
                         TextBlock.Foreground="{StaticResource CanDaoPosColorFg}"
                         MinHeight="40" MaxHeight="80">
                     <TextBlock Text="{Binding SettlementInfo}"

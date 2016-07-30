@@ -223,8 +223,8 @@ namespace CanDao.Pos.ServiceImpl
                     orderid = orderId,
                     mobile = memberCardNo,
                 };
-                var result = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, request);
-                return result.IsSuccess ? null : (string.IsNullOrEmpty(result.RetInfo) ? "餐道会员登录失败。" : result.RetInfo);
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
+                return result.IsSuccess ? null : (string.IsNullOrEmpty(result.msg) ? "餐道会员登录失败。" : result.msg);
             }
             catch (Exception ex)
             {
@@ -245,8 +245,8 @@ namespace CanDao.Pos.ServiceImpl
                     orderid = orderId,
                     mobile = memberCardNo,
                 };
-                var result = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, request);
-                return result.IsSuccess ? null : (string.IsNullOrEmpty(result.RetInfo) ? "餐道会员登出失败。" : result.RetInfo);
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
+                return result.IsSuccess ? null : (string.IsNullOrEmpty(result.msg) ? "餐道会员登出失败。" : result.msg);
             }
             catch (Exception ex)
             {

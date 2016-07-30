@@ -1,11 +1,13 @@
-﻿namespace CanDao.Pos.Model.Response
+﻿using System.Collections.Generic;
+
+namespace CanDao.Pos.Model.Response
 {
     /// <summary>
     /// 获取菜品分组信息返回类。
     /// </summary>
-    public class GetMenuDishGroupInfoResponse : RowsResponse<MenuDishGroupInfoResponse>
+    public class GetMenuDishGroupInfoResponse : NewHttpBaseResponse 
     {
-
+        public List<MenuDishGroupInfoResponse> data { set; get; } 
     }
 
     public class MenuDishGroupInfoResponse

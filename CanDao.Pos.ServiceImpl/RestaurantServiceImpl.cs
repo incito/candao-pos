@@ -134,11 +134,17 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var result = HttpHelper.HttpPost<List<TableInfoResponse>>(addr, null);
+                var result = HttpHelper.HttpPost<GetAllTableInfoesResponse>(addr, null);
                 var dataList = new List<TableInfo>();
-                if (result != null && result.Any())
-                    dataList = result.Select(DataConverter.ToTableInfo).ToList();
-                return new Tuple<string, List<TableInfo>>(null, dataList);
+                if (result.IsSuccess)
+                {
+                    dataList = result.data.Select(DataConverter.ToTableInfo).ToList();
+                    return new Tuple<string, List<TableInfo>>(null, dataList); 
+                }
+                else
+                {
+                    return new Tuple<string, List<TableInfo>>(result.msg, null); 
+                }
             }
             catch (Exception ex)
             {
@@ -436,7 +442,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetBranchInfo");
                 var result = HttpHelper.HttpGet<GetBranchInfoResponse>(addr);
-                if (result.IsSuccess) //这个接口1是成功，0是失败。
+                if (!result.IsSuccess) //这个接口1是成功，0是失败。
                     return new Tuple<string, BranchInfo>(string.IsNullOrEmpty(result.msg) ? "获取分店信息失败。" : result.msg,
                         null);
 
