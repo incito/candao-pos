@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -13,7 +12,6 @@ using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
-using CanDao.Pos.Model.Response;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
@@ -27,10 +25,11 @@ namespace CanDao.Pos.Client
     {
         private readonly object _syncObj = new object();
 
+        private SplashWindow _splashWnd;
+
         public App()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            //ThemeManager.ApplicationThemeName = "Office2010Blue";
         }
 
         private void App_OnStartup(object sender, StartupEventArgs e)
@@ -49,8 +48,8 @@ namespace CanDao.Pos.Client
 
             InfoLog.Instance.I("配置文件读取完毕。");
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            //_splashWnd = new SplashWindow();
-            //_splashWnd.Show();
+            _splashWnd = new SplashWindow();
+            _splashWnd.Show();
 
             InfoLog.Instance.I("检测与服务器的连接情况...");
             if (!CheckServerConnection())
@@ -66,7 +65,7 @@ namespace CanDao.Pos.Client
             GetDietSettingAsync();
             GetDinnerWareSettingAsync();
 
-            TaskService.Start(null, GetBranchInfoProcess, GetBranchInfoComplete, "获取门店信息中...");
+            TaskService.Start(null, GetBranchInfoProcess, GetBranchInfoComplete, "");
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -325,7 +324,7 @@ namespace CanDao.Pos.Client
 
             InfoLog.Instance.I("获取门店信息结束。门店Id：{0}", result.Item2.BranchId);
             Globals.BranchInfo = result.Item2;
-            TaskService.Start(null, CheckTheLastEndWorkProcess, CheckTheLastEndWorkComplete, "检测上次是否结业中...");
+            TaskService.Start(null, CheckTheLastEndWorkProcess, CheckTheLastEndWorkComplete, "");
         }
 
         /// <summary>
@@ -373,6 +372,9 @@ namespace CanDao.Pos.Client
 
                 if (allTableResult.Item2.Any(t => t.TableStatus == EnumTableStatus.Dinner)) //还有就餐的餐台，就让收银员登录，结账。
                 {
+                    if (_splashWnd != null)
+                        _splashWnd.Close();
+
                     InfoLog.Instance.I("上次还有未结餐台，登录收银员强制结账...");
                     MessageDialog.Warning("昨日还有未结账餐台，请先登录收银员账号结账，然后进行清机和结业。");
                     while (true)
@@ -450,6 +452,9 @@ namespace CanDao.Pos.Client
                 return;
             }
 
+            if (_splashWnd != null)
+                _splashWnd.Close();
+
             if (!result.Item2) //没有开业则进行开业授权。
             {
                 InfoLog.Instance.I("今日还未开业，进行开业授权...");
@@ -480,6 +485,9 @@ namespace CanDao.Pos.Client
             }
         }
 
+        /// <summary>
+        /// 结业。
+        /// </summary>
         private void EndWork()
         {
             AuthorizationWindow wnd = new AuthorizationWindow(EnumRightType.EndWork);
