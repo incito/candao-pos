@@ -227,10 +227,10 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, List<UsedCouponInfo>>("获取保存的优惠券信息地址为空。", null);
 
             var param = new List<string> { orderId, userId };
-            var response = RestHttpHelper.HttpGet<List<GetSavedCouponResponse>>(addr, param);
+            var response = RestHttpHelper.HttpGet<GetSavedCouponResponse>(addr, param);
             var result = new List<UsedCouponInfo>();
-            if (response.Item2 != null)
-                result = response.Item2.Select(DataConverter.ToUsedCouponInfo).ToList();
+            if (response.Item2.Data != null)
+                result = response.Item2.Data.Select(DataConverter.ToUsedCouponInfo).ToList();
             return new Tuple<string, List<UsedCouponInfo>>(null, result);
         }
 

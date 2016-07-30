@@ -501,7 +501,7 @@ namespace CanDao.Pos.ServiceImpl
             };
         }
 
-        internal static UsedCouponInfo ToUsedCouponInfo(GetSavedCouponResponse response)
+        internal static UsedCouponInfo ToUsedCouponInfo(SavedCouponInfoResponse response)
         {
             return new UsedCouponInfo
             {

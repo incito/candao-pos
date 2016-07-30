@@ -17,6 +17,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding TipInfo}" FontSize="18"
                    Foreground="{StaticResource CanDaoPosColorSelected}"
@@ -31,5 +32,22 @@
                               DecimalPlaces="2"/>
 
         <view:InputNumberControl x:Name="InputNumCtrl" Grid.Row="2"/>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="取消"
+                    IsCancel="True"
+                    Click="ButtonCancel_OnClick"
+                    MinWidth="120" Height="48"/>
+            <Button x:Name="BtnConfirm"
+                    Grid.Column="1"
+                    IsDefault="True"
+                    Content="确定"
+                    Click="ButtonConfirm_OnClick"
+                    MinWidth="120" Height="48"/>
+        </Grid>
     </Grid>
 </controls:PosMsgWindow>

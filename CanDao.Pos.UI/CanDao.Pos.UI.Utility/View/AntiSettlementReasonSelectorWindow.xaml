@@ -4,7 +4,8 @@
                         xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-                        Width="480" SizeToContent="Height" ShowInTaskbar="False"
+                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
+                        Width="475" SizeToContent="Height" ShowInTaskbar="False"
                         x:Name="MainWnd">
     <controls:PosMsgWindow.Resources>
         <ResourceDictionary>
@@ -41,5 +42,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        <view:WindowButtonOperControl Grid.Row="3" Margin="0,10,0,0"/>
     </Grid>
 </controls:PosMsgWindow>

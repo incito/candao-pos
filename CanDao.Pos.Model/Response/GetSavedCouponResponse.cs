@@ -4,7 +4,12 @@ namespace CanDao.Pos.Model.Response
     /// <summary>
     /// 保存的优惠券信息。
     /// </summary>
-    public class GetSavedCouponResponse
+    public class GetSavedCouponResponse : DataResponse<SavedCouponInfoResponse>
+    {
+
+    }
+
+    public class SavedCouponInfoResponse
     {
         public string orderid { get; set; }
 

@@ -70,7 +70,7 @@ namespace CanDao.Pos.UI.Utility.View
             {
                 ErrLog.Instance.E("数字输入窗口里转换成数字失败。", ex);
             }
-            //ctrl.CloseBtnEnable = ctrl.InputNum > 0;
+            ctrl.BtnConfirm.IsEnabled = ctrl.InputNum > 0;
         }
 
         #endregion
@@ -103,18 +103,20 @@ namespace CanDao.Pos.UI.Utility.View
 
         #endregion
 
-        #region Protected Methods
-
-        protected override void CloseBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
+        private void ButtonConfirm_OnClick(object sender, RoutedEventArgs e)
         {
             if (MaxNum > 0 && InputNum > MaxNum)
             {
                 MessageDialog.Warning(string.Format("输入数量不能超过：{0}", MaxNum));
                 return;
             }
-            base.CloseBtnOnClick(sender, routedEventArgs);
+
+            DialogResult = true;
         }
 
-        #endregion
+        private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+        }
     }
 }

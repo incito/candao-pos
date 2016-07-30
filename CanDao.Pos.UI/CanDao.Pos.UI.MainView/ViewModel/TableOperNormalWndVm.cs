@@ -36,7 +36,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
             }
             GetTableDishInfoAsync();
-            GenerateGetSavedCouponAsync();
+            //GenerateGetSavedCouponAsync();//暂时屏蔽，有问题。
 
             //定时检查菜品信息是否一致
             if (OwnerWindow.DialogResult == null)

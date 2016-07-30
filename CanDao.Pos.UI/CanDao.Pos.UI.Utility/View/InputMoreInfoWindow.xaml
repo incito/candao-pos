@@ -27,7 +27,7 @@
         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding RemainLetterNum,StringFormat=还可以输入{0}字}" HorizontalAlignment="Right"/>
 
         <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="TbMoreInfo" Text="{Binding InputInfo, UpdateSourceTrigger=PropertyChanged}" FontSize="16" MaxLength="{Binding MaxInputLetterCount}"/>
-        <Button Grid.Row="2" Grid.Column="0" Content="清空" Command="{Binding ClearCmd}" HorizontalAlignment="Left" Width="100" Height="35"/>
+        <Button Grid.Row="2" Grid.Column="0" Content="清空" Command="{Binding ClearCmd}" HorizontalAlignment="Left" Width="120" Height="48"/>
         <view:WindowButtonOperControl Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
     </Grid>
 </controls:PosBaseWindow>
