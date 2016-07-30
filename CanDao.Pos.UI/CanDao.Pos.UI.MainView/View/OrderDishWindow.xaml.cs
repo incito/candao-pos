@@ -29,5 +29,10 @@ namespace CanDao.Pos.UI.MainView.View
         {
             get { return ((OrderDishWndVm) DataContext).IsOrderHanged; }
         }
+
+        private void DishGroupSelector_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

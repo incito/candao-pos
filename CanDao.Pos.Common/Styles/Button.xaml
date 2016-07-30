@@ -80,83 +80,21 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <Style x:Key="NumBtnStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
-        <Setter Property="Focusable" Value="False"/>
-    </Style>
 
-    <Style x:Key="BtnReturnStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
+    <Style x:Key="BtnImgBaseStyle" TargetType="Button" BasedOn="{StaticResource BtnBaseStyle}">
+        <Setter Property="Width" Value="43"/>
+        <Setter Property="Height" Value="43"/>
+        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgLightGray}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Image Source="../Images/Return.png"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="BtnAddStyle" TargetType="Button">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1">
-                        <Image Source="{StaticResource CanDaoPosImageAdd}" UseLayoutRounding="True"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="BtnReduceStyle" TargetType="Button">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1">
-                        <Image Source="{StaticResource CanDaoPosImageReduce}" UseLayoutRounding="True"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="BtnDownStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
-        <Setter Property="Width" Value="32"/>
-        <Setter Property="Height" Value="31"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1">
-                        <Image Source="{StaticResource CanDaoPosImageDown}"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="BtnUpStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
-        <Setter Property="Width" Value="32"/>
-        <Setter Property="Height" Value="31"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="1">
-                        <Image Source="{StaticResource CanDaoPosImageUp}"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="BtnLeftStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="0">
-                        <Image Source="{StaticResource CanDaoPosImageLeft}" UseLayoutRounding="True"/>
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.3"/>
+                            <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -164,14 +102,113 @@
         </Setter>
     </Style>
     
-    <Style x:Key="BtnLeftNoBorderStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
+    <Style x:Key="NumBtnStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
+        <Setter Property="Focusable" Value="False"/>
+    </Style>
+
+    <Style x:Key="BtnAddStyle" TargetType="Button" BasedOn="{StaticResource BtnImgBaseStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}">
+                        <Image Source="{StaticResource CanDaoPosImageAdd}"
+                               Width="14" Height="14"
+                               UseLayoutRounding="True"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnReduceStyle" TargetType="Button" BasedOn="{StaticResource BtnImgBaseStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}">
+                        <Image Source="{StaticResource CanDaoPosImageReduce}"
+                               Width="14" Height="14"
+                               UseLayoutRounding="True"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnDownStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}">
+                        <Image Source="{StaticResource CanDaoPosImageDown}"
+                               Width="12" Height="7"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnUpStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}">
+                        <Image Source="{StaticResource CanDaoPosImageUp}"
+                               Width="12" Height="7"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnLeftStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}" BorderThickness="0">
+                        <Image Source="{StaticResource CanDaoPosImageLeft}" UseLayoutRounding="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnLeftNoBorderStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
                     <Image Source="{StaticResource CanDaoPosImageLeft}" UseLayoutRounding="True"/>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.3"/>
+                            <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -179,40 +216,18 @@
         </Setter>
     </Style>
 
-    <Style x:Key="BtnRightStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
+    <Style x:Key="BtnRightStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border BorderBrush="{StaticResource CanDaoPosColorBgBorder}" BorderThickness="0">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}" BorderThickness="0">
                         <Image Source="{StaticResource CanDaoPosImageRight}" UseLayoutRounding="True"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.3"/>
+                            <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="BtnClearStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Image Source="../Images/Clear32.png"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="Button" x:Key="AddBtnStyle">
-        <Setter Property="Width" Value="35"/>
-        <Setter Property="Height" Value="35"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Image Source="{StaticResource CanDaoPosImageAdd1}" UseLayoutRounding="True"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

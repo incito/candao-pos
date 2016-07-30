@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindableBase.cs" />
+    <Compile Include="Controls\FlagControl\Implementation\FlagControl.cs" />
     <Compile Include="Converter\CountToBooleanConverter.cs" />
     <Compile Include="Converter\MultBooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\PaiedStatus2StringConverter.cs" />
@@ -248,10 +249,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\CanDaoLog1.png" />
-    <Resource Include="Images\CanDaoLog2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="BaseDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -289,6 +286,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\DoubleUpDown\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FlagControl\Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -397,41 +398,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Takeout.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Return.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Clear.png" />
-    <Resource Include="Images\Refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\EndWork.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Order.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Add.png" />
     <Resource Include="Images\Down.png" />
     <Resource Include="Images\Up.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Clear32.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Left.png" />
     <Resource Include="Images\Right.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Free.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Ok.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Empty.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\ChangeShift_Dis.png" />
@@ -449,17 +422,11 @@
     <Resource Include="Images\Retry_Press.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Print128.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\ToBeWeigh.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Reduce.png" />
     <Resource Include="Images\SelectNum.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Add1.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Logo.png" />
@@ -469,6 +436,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Alert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Down_Transparent.png" />
+    <Resource Include="Images\Up_Transparent.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

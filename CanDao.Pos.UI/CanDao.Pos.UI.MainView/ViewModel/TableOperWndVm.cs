@@ -1102,12 +1102,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _isLongPressModel = true;
             OwnerWindow.Dispatcher.BeginInvoke((Action)delegate
             {
-                var msg = "";
-                if (_curSelectedCouponInfo.IsUncommonlyUsed)
-                    msg = string.Format("恢复\"{0}\"为常用优惠{1}（恢复后可在对应分类查看、使用）", _curSelectedCouponInfo.Name, Environment.NewLine);
-                else
-                    msg = string.Format("设置\"{0}\"为不常用优惠{1}（设置后可在不常用优惠分类查看、使用）", _curSelectedCouponInfo.Name,
-                        Environment.NewLine);
+                var msg = string.Format(_curSelectedCouponInfo.IsUncommonlyUsed ? "恢复\"{0}\"为常用优惠{1}（恢复后可在对应分类查看、使用）" : "设置\"{0}\"为不常用优惠{1}（设置后可在不常用优惠分类查看、使用）", _curSelectedCouponInfo.Name, Environment.NewLine);
 
                 if (!MessageDialog.Quest(msg, OwnerWindow))
                     return;

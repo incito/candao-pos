@@ -7,7 +7,7 @@
              xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
              xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
              xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
-             Height="768" Width="1024" ShowInTaskbar="False" WindowState="Maximized"
+             Height="768" Width="1024" ShowInTaskbar="False"
              x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

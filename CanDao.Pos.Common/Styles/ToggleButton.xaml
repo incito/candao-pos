@@ -8,17 +8,22 @@
     <Style TargetType="ToggleButton">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBg}"/>
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgWhite}"/>
+        <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFgFont}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="Gray" BorderThickness="1.5">
-                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="Gray" BorderThickness="1.5">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource CanDaoPosColorSelected}"/>
+                            <Setter TargetName="Bd" Property="Background"
+                                    Value="{StaticResource CanDaoPosColorSelected}"/>
                             <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

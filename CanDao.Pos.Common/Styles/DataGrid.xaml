@@ -8,59 +8,50 @@
     <Style TargetType="DataGrid">
         <!--网格线颜色-->
         <Setter Property="CanUserResizeColumns" Value="false"/>
-        <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource CanDaoPosColorBgWhite}"/>
         <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
     </Style>
-
-    <!--标题栏样式-->
-    <!--<Style  TargetType="DataGridColumnHeader" >
-        <Setter Property="Width" Value="50"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="Background" Value="White" />
-        <Setter  Property="FontWeight"  Value="Bold"/>
-    </Style>-->
 
     <Style TargetType="DataGridColumnHeader">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="MinWidth" Value="0" />
         <Setter Property="MinHeight" Value="28" />
-        <Setter Property="Foreground" Value="#323433" />
+        <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFgFont}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="TextBlock.FontWeight" Value="Bold"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridColumnHeader">
-                    <Border x:Name="BackgroundBorder" Width="Auto">
-                        <ContentPresenter  Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border x:Name="BackgroundBorder"
+                            BorderThickness="1"
+                            BorderBrush="{StaticResource CanDaoPosColorBgWhite}">
+                        <ContentPresenter  VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="Height" Value="25"/>
     </Style>
+    
     <!--行样式触发-->
     <!--背景色改变必须先设置cellStyle 因为cellStyle会覆盖rowStyle样式-->
     <Style  TargetType="DataGridRow">
-        <Setter Property="Background" Value="#F2F2F2" />
+        <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgLightGray}" />
         <Setter Property="MinHeight" Value="28"/>
         <Setter Property="Foreground" Value="Black" />
         <Style.Triggers>
             <!--隔行换色-->
-            <Trigger Property="AlternationIndex" Value="0" >
+            <!--<Trigger Property="AlternationIndex" Value="0" >
                 <Setter Property="Background" Value="#e7e7e7" />
             </Trigger>
             <Trigger Property="AlternationIndex" Value="1" >
                 <Setter Property="Background" Value="#f2f2f2" />
-            </Trigger>
-
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource CanDaoPosColorDisable}"/>
-            </Trigger>
-
+            </Trigger>-->
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
-                <Setter Property="Background" Value="{StaticResource CanDaoPosColorSelected}"/>
+                <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -79,7 +70,7 @@
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
-                <Setter Property="Background" Value="{StaticResource CanDaoPosColorSelected}"/>
+                <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
