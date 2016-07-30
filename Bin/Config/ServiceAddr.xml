@@ -56,6 +56,7 @@
     <Clearner Addr="/newspicyway/datasnap/rest/TServerMethods1/clearMachine/"/><!--清机-->
     <EndWork Addr="/newspicyway/datasnap/rest/TServerMethods1/endWork/"/><!--结业-->
     <SaveCouponInfo Addr="/newspicyway/datasnap/rest/TServerMethods1/saveOrderPreferential/"/><!--保存优惠券信息-->
+    <GetSavedCouponInfo Addr="/newspicyway/datasnap/rest/TServerMethods1/GetOrderCouponList/"/><!--获取保存的优惠券信息-->
     <BroadcastMsg Addr="/newspicyway/datasnap/rest/TServerMethods1/broadcastmsg/"/><!--广播消息-->
     <GetBackDishInfo Addr="/newspicyway/datasnap/rest/TServerMethods1/getBackDishInfo/"/><!--退菜-->
     <GetPrintOrderInfo Addr="/newspicyway/datasnap/rest/TServerMethods1/getOrderInfo/"/><!--获取打印用订单信息-->

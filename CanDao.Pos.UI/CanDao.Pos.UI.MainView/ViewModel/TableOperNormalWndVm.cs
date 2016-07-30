@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using CanDao.Pos.Common;
+using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.UI.MainView.Operates;
@@ -20,7 +23,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         protected override void GetTableDishInfo(object param)
         {
-         
             if (IsInDesignMode)
                 return;
 
@@ -34,6 +36,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
             }
             GetTableDishInfoAsync();
+            GenerateGetSavedCouponAsync();
 
             //定时检查菜品信息是否一致
             if (OwnerWindow.DialogResult == null)
@@ -43,7 +46,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _dishesTimer.DataChangeAction = new Action(GetTableDishInfoAsync);
                 _dishesTimer.Start(Data.TotalAmount);
             }
-          
+
         }
 
         protected override void BackAllDishSuccessProcess()
@@ -64,5 +67,50 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             CloseWindow(true);//结算完成后关闭窗口。
         }
+
+        /// <summary>
+        /// 异步获取保存的优惠券信息工作流。
+        /// </summary>
+        /// <returns></returns>
+        protected void GenerateGetSavedCouponAsync()
+        {
+            TaskService.Start(null, GetSavedCouponProcess, GetSavedCouponComplete, null);
+        }
+
+        /// <summary>
+        /// 获取保存的优惠券信息执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object GetSavedCouponProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return new Tuple<string, List<UsedCouponInfo>>("创建IOrderService服务失败。", null);
+
+            return service.GetSavedUsedCoupon(Data.OrderId, Globals.UserInfo.UserName);
+        }
+
+        /// <summary>
+        /// 获取保存的优惠券信息执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private void GetSavedCouponComplete(object param)
+        {
+            var result = (Tuple<string, List<UsedCouponInfo>>)param;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("获取保存的优惠券信息失败：{0}", result.Item1);
+                return;
+            }
+
+            if (result.Item2 != null && result.Item2.Any())
+            {
+                Data.UsedCouponInfos.Clear();
+                result.Item2.ForEach(Data.UsedCouponInfos.Add);
+            }
+        }
+
     }
 }

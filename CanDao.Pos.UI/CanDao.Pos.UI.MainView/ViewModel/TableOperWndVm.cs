@@ -1427,12 +1427,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (PvSystemConfig.VSystemConfig.IsEnabledCheck)
             {
                 var viewModel = new UCCashboxPswViewModel();
-                if (WindowHelper.ShowDialog(viewModel.GetUserCtl(),OwnerWindow) == false)
+                if (WindowHelper.ShowDialog(viewModel.GetUserCtl(), OwnerWindow) == false)
                 {
                     return;
                 }
             }
-         
+
             ThreadPool.QueueUserWorkItem(t =>
             {
                 InfoLog.Instance.I("开始打开钱箱...");
@@ -1457,6 +1457,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected void GetTableDishInfoAsync()
         {
             TaskService.Start(null, GetTableDishInfoProcess, GetTableDishInfoComplete, "加载餐台详情...");
+
         }
 
         /// <summary>
@@ -2743,8 +2744,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var result = obj as string;
             if (!string.IsNullOrEmpty(result))
             {
-                ErrLog.Instance.E("保存折扣类优惠失败：{0}", result);
-                MessageDialog.Warning(result, OwnerWindow);
+                var errMsg = string.Format("保存优惠券信息失败：{0}", result);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg, OwnerWindow);
                 return;
             }
 

@@ -84,6 +84,14 @@ namespace CanDao.Pos.IService
         string SaveUsedCoupon(string orderId, string userName, List<UsedCouponInfo> couponInfos);
 
         /// <summary>
+        /// 获取保存的优惠券信息。
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="userId">用户。</param>
+        /// <returns></returns>
+        Tuple<string, List<UsedCouponInfo>> GetSavedUsedCoupon(string orderId, string userId);
+
+        /// <summary>
         /// 获取套餐信息。
         /// </summary>
         /// <param name="request">获取套餐信息的请求类。</param>
