@@ -1,0 +1,42 @@
+﻿<WrapPanel x:Class="CanDao.Pos.UI.Utility.View.InputLetterControl"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:viewModel="clr-namespace:CanDao.Pos.UI.Utility.ViewModel"
+           x:Name="Ctrl">
+    <WrapPanel.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </WrapPanel.Resources>
+    <WrapPanel.DataContext>
+        <viewModel:InputHelperControlVm />
+    </WrapPanel.DataContext>
+    <Button Content="A" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="A" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="B" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="B" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="C" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="C" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="D" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="D" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="E" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="E" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="F" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="F" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="G" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="G" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="H" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="H" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="I" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="I" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="J" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="J" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="K" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="K" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="L" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="L" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="M" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="M" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="N" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="N" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="O" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="O" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="P" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="P" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="Q" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="Q" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="R" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="R" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="S" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="S" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="T" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="T" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="U" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="U" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="V" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="V" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="W" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="W" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="X" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="X" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="Y" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="Y" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+    <Button Content="Z" Style="{StaticResource NumBtnStyle}" Command="{Binding InputCmd}" CommandParameter="Z" Width="{Binding ItemSize, ElementName=Ctrl}" Height="{Binding ItemSize, ElementName=Ctrl}" Margin="{Binding ItemMargin, ElementName=Ctrl}"/>
+</WrapPanel>
