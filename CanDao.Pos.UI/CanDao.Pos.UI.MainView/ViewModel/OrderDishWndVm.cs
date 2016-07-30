@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using CanDao.Pos.Common;
@@ -13,7 +12,6 @@ using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
 using CanDao.Pos.UI.Utility.ViewModel;
-using DevExpress.Xpf.Editors.Helpers;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -369,14 +367,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 //将赠菜原因设置到菜品集合里。
                 var reason = arg as string;
 
-                OrderDishInfos.ForEach(t =>
+                foreach (var orderDishInfo in OrderDishInfos)
                 {
-                    t.OrderType = OrderType;
-                    t.Price = 0m;
-                    t.FreeReason = reason;
-                    t.FreeUserId = Globals.UserInfo.UserName;
-                    t.FreeAuthorizeId = Globals.Authorizer.UserName;
-                });
+                    orderDishInfo.OrderType = OrderType;
+                    orderDishInfo.Price = 0m;
+                    orderDishInfo.FreeReason = reason;
+                    orderDishInfo.FreeUserId = Globals.UserInfo.UserName;
+                    orderDishInfo.FreeAuthorizeId = Globals.Authorizer.UserName;
+                }
             }
 
             InfoLog.Instance.I("开始执行下单任务...");
@@ -804,7 +802,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 OrderDishInfos.Clear();
                 TotalAmount = 0;
-                DishGroups.ForEach(t => t.SelectDishCount = 0m);
+                foreach (var dishGroup in DishGroups)
+                {
+                    dishGroup.SelectDishCount = 0m;
+                }
             }
             DoWhenDishChanged();
         }

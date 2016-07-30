@@ -9,7 +9,6 @@ using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.ReportPrint;
 using CanDao.Pos.UI.MainView.View;
-using DevExpress.Xpf.Editors.Helpers;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -268,7 +267,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(FilterTableNo))
                 temp = temp.Where(t => t.TableName.Contains(FilterTableNo));
 
-            temp.ForEach(Orders.Add);
+            temp.ToList().ForEach(Orders.Add);
         }
 
         #endregion
