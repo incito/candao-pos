@@ -39,7 +39,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (OwnerWindow.DialogResult == null)
             {
                 _dishesTimer = new DishesTimer();
-                _dishesTimer.OrderID = _tableInfo.OrderId;
+                _dishesTimer.TableName = _tableInfo.TableName;
                 _dishesTimer.DataChangeAction = new Action(GetTableDishInfoAsync);
                 _dishesTimer.Start(Data.TotalAmount);
             }

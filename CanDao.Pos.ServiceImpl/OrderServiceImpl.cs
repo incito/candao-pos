@@ -205,20 +205,20 @@ namespace CanDao.Pos.ServiceImpl
 
         public string SaveUsedCoupon(string orderId, string userName, List<UsedCouponInfo> couponInfos)
         {
-            var jsonStr = couponInfos.ToJson();
+            //var jsonStr = couponInfos.ToJson();
             var addr = ServiceAddrCache.GetServiceAddr("SaveCouponInfo");
             if (string.IsNullOrEmpty(addr))
                 return "保存优惠券信息地址为空。";
 
-            List<string> param = new List<string>
-            {
-                userName,
-                PCInfoHelper.IPAddr,
-                orderId,
-                jsonStr
-            };
-
-            var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
+            //List<string> param = new List<string>
+            //{
+            //    userName,
+            //    PCInfoHelper.IPAddr,
+            //    orderId,
+            //    jsonStr
+            //};
+            string parmaAdd = string.Format("{0}/{1}/{2}/{3}/", addr, userName, PCInfoHelper.IPAddr, orderId);
+            var result = RestHttpHelper.HttpPost<RestBaseResponse>(parmaAdd, couponInfos);
             if (!string.IsNullOrEmpty(result.Item1))
                 return result.Item1;
 

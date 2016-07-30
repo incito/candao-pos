@@ -17,7 +17,7 @@ namespace CanDao.Pos.UI.MainView.Operates
 
         private decimal _totalAmount;
 
-        private string _orderID;
+        private string _tableName;
 
 
         #endregion
@@ -29,10 +29,10 @@ namespace CanDao.Pos.UI.MainView.Operates
         /// <summary>
         /// 订单ID
         /// </summary>
-        public string OrderID
+        public string TableName
         {
-            set { _orderID = value; }
-            get { return _orderID; }
+            set { _tableName = value; }
+            get { return _tableName; }
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace CanDao.Pos.UI.MainView.Operates
             try
             {
                 _totalAmount = 0;
-                _orderID = string.Empty;
+                _tableName = string.Empty;
                 _refreshTimer.Stop();
             }
             catch
@@ -110,13 +110,14 @@ namespace CanDao.Pos.UI.MainView.Operates
         {
             try
             {
+              
                 var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-                if (string.IsNullOrEmpty(_orderID) || Globals.UserInfo.UserName == null)
+                if (string.IsNullOrEmpty(_tableName) || Globals.UserInfo.UserName == null)
                     return;
 
-                var resTable = service.GetTableDishInfoByOrderId(_orderID, Globals.UserInfo.UserName);
+                var resTable = service.GetTableDishInfoes(_tableName, Globals.UserInfo.UserName);
 
-                if (!string.IsNullOrEmpty(resTable.Item1))//发生异常
+                if (!string.IsNullOrEmpty(resTable.Item1) || resTable.Item2==null)//发生异常
                 {
                     return;
                 }
