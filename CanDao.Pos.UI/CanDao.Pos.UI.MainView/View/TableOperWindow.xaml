@@ -32,47 +32,58 @@
     </controls:PosBaseWindow.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="380"/>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="53"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <!--左侧部分-->
-        <Grid Background="{StaticResource CanDaoPosColorBg2}">
+        <Grid Background="{StaticResource CanDaoPosColorBgWhite}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="2*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Border Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Height="59" Margin="10,10,10,0" >
-                <Grid>
+            <Border Background="{StaticResource CanDaoPosColorBgGray}"
+                    CornerRadius="2"
+                    Height="53">
+                <Grid TextBlock.FontSize="12" Margin="12,8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="桌号：" FontWeight="Bold"/>
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Data.TableName}"/>
-                    <TextBlock Grid.Row="0" Grid.Column="2" Text="账单号：" FontWeight="Bold"/>
-                    <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Data.OrderId}"/>
-                    <TextBlock  Grid.Row="1" Grid.Column="0"  Text="人数：" FontWeight="Bold"/>
-                    <TextBlock  Grid.Row="1" Grid.Column="1"  Text="{Binding Data.CustomerNumber}"/>
-                    <TextBlock Grid.Row="1" Grid.Column="2" Text="会员号：" FontWeight="Bold"/>
-                    <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding Data.MemberNo}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" 
+                               Text="账单号："
+                               FontWeight="Bold"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"
+                               HorizontalAlignment="Left"
+                               Text="{Binding Data.OrderId}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0"
+                               Text="桌号："
+                               FontWeight="Bold"
+                               HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1"
+                               Text="{Binding Data.TableName}"
+                               HorizontalAlignment="Left"/>
+                    <TextBlock  Grid.Row="1" Grid.Column="2"
+                                Text="人数：" FontWeight="Bold"/>
+                    <TextBlock  Grid.Row="1" Grid.Column="3"
+                                Text="{Binding Data.CustomerNumber}"
+                                HorizontalAlignment="Left"/>
                 </Grid>
             </Border>
 
             <Border Grid.Row="1"
                     Background="{StaticResource CanDaoPosColorFg}"
-                    CornerRadius="2"
-                    Margin="10" HorizontalAlignment="Center">
+                    Height="300">
                 <controls:GroupSelector x:Name="DishGroupSelector"
                                         ItemsSource="{Binding Data.DishInfos}"
                                         SelectedItem="{Binding SelectedOrderDish}" 
@@ -87,21 +98,20 @@
                                       ItemsSource="{TemplateBinding GroupedItemsSource}"
                                       SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="40" Binding="{Binding DishNum}" IsReadOnly="True"/>
                                     <DataGridTemplateColumn Header="菜单名称" Width="*" CanUserReorder="False" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <WrapPanel Width="140" VerticalAlignment="Center">
+                                                <WrapPanel VerticalAlignment="Center">
                                                     <TextBlock Text="{Binding TempDishName, StringFormat=({0})}" Visibility="{Binding TempDishName, Converter={StaticResource Strinig2VisibleCvt}}"/>
                                                     <TextBlock Text="{Binding DishName}"/>
-                                                    <TextBlock Text="{Binding Taste, StringFormat=({0})}" Visibility="{Binding Taste, Converter={StaticResource Strinig2VisibleCvt}}"/>
-                                                    <TextBlock Text="{Binding Diet,StringFormat=({0})}" Visibility="{Binding Diet, Converter={StaticResource Strinig2VisibleCvt}}"/>
                                                 </WrapPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="数量" Width="50" Binding="{Binding DishNum}" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="单位" Width="70" Binding="{Binding DishUnit}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn Header="小计" Width="90" IsReadOnly="True" >
+                                    <DataGridTextColumn Header="单位" Width="50" Binding="{Binding DishUnit}" IsReadOnly="True"/>
+                                    <DataGridTemplateColumn Header="小计" Width="66" IsReadOnly="True" >
                                         <DataGridTemplateColumn.CellTemplateSelector>
                                             <templateSelector:DishPayamountTemplateSelector  NormalTemplate="{StaticResource DishPayamountNormalTemplate}" ToBeWeighTemplate="{StaticResource DishPayamountBeWeighTemplate}"/>
                                         </DataGridTemplateColumn.CellTemplateSelector>
@@ -113,115 +123,57 @@
                 </controls:GroupSelector>
             </Border>
 
-            <Grid Grid.Row="2"  Margin="10,0">
+            <Grid Grid.Row="2"  Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource BtnAddStyle}" Command="{Binding OperCmd}" CommandParameter="AddDish"/>
-                    <Button Style="{StaticResource BtnReduceStyle}" Command="{Binding OperCmd}" CommandParameter="BackDish"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding GroupCount,ElementName=DishGroupSelector, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
-                    <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="DishPreGroup"/>
-                    <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=DishGroupSelector}"/>
-                    <TextBlock Text="/"/>
-                    <TextBlock Text="{Binding GroupCount, ElementName=DishGroupSelector}"/>
-                    <Button Style="{StaticResource BtnRightStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="DishNextGroup"/>
-                </StackPanel>
+                <controls:FlagControl >
+                    <TextBlock Text="{Binding Data.TotalAmount, StringFormat=消费：{0}}"
+                               FontSize="18"/>
+                </controls:FlagControl>
+                <controls:FlagControl Grid.Column="1">
+                    <TextBlock Text="{Binding Data.TipAmount, StringFormat=小费：{0}}"
+                               FontSize="18"/>
+                </controls:FlagControl>
             </Grid>
 
-            <Border Grid.Row="3" Margin="10,5" BorderBrush="{StaticResource CanDaoPosColorFg}" Visibility="{Binding HasTip, Converter={StaticResource Bool2VisibilityCvt}}">
-                <Grid TextBlock.FontSize="16">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="小费：" HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Column="1" Text="{Binding Data.TipAmount}" HorizontalAlignment="Right"/>
-                </Grid>
-            </Border>
-
-            <Border Grid.Row="4" Background="{StaticResource CanDaoPosColorFg}" CornerRadius="2" Margin="10" HorizontalAlignment="Center">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <controls:GroupSelector x:Name="CouponGroupSelector"
-                                            ItemsSource="{Binding Data.UsedCouponInfos}"
-                                            SelectedItem="{Binding SelectedUsedCouponInfo}"
-                                            ItemCountEachGroup="3">
-                        <controls:GroupSelector.Template>
-                            <ControlTemplate TargetType="controls:GroupSelector">
-                                <DataGrid x:Name="PART_Selector"
+            <Border Grid.Row="3"
+                    Background="{StaticResource CanDaoPosColorFg}">
+                <controls:GroupSelector x:Name="CouponGroupSelector"
+                                        ItemsSource="{Binding Data.UsedCouponInfos}"
+                                        SelectedItem="{Binding SelectedUsedCouponInfo}"
+                                        ItemCountEachGroup="5">
+                    <controls:GroupSelector.Template>
+                        <ControlTemplate TargetType="controls:GroupSelector">
+                            <DataGrid x:Name="PART_Selector"
                                           BorderThickness="0"
                                           AutoGenerateColumns="False" FontSize="14"
                                           CanUserResizeColumns="False" CanUserAddRows="False" SelectionUnit="FullRow"
                                           ItemsSource="{TemplateBinding GroupedItemsSource}"
                                           SelectedItem="{TemplateBinding SelectedItem}">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="优惠名称" Width="*" Binding="{Binding Name}" IsReadOnly="True"/>
-                                        <DataGridTextColumn Header="数量" Width="70" Binding="{Binding Count}" IsReadOnly="True"/>
-                                        <DataGridTextColumn Header="小计" Width="100" Binding="{Binding BillAmount}" IsReadOnly="True"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </ControlTemplate>
-                        </controls:GroupSelector.Template>
-                    </controls:GroupSelector>
-                    
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <!--账单金额和小费金额-->
-                        <Grid TextBlock.Foreground="Gray">
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="账单金额：" HorizontalAlignment="Right"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Data.TotalAmount}" HorizontalAlignment="Left"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="优惠金额：" HorizontalAlignment="Right"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Data.TotalFreeAmount}" HorizontalAlignment="Left"/>
-                        </Grid>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="优惠名称" Width="*" Binding="{Binding Name}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="数量" Width="70" Binding="{Binding Count}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="小计" Width="100" Binding="{Binding BillAmount}" IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ControlTemplate>
+                    </controls:GroupSelector.Template>
+                </controls:GroupSelector>
 
-                        <!--应收金额-->
-                        <Grid Grid.Column="1" VerticalAlignment="Center">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="应收金额：" Foreground="DarkViolet" FontSize="18" HorizontalAlignment="Right"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Data.PaymentAmount}" Foreground="DarkViolet" FontSize="18" HorizontalAlignment="Left"/>
-                        </Grid>
-                    </Grid>
-                </Grid>
             </Border>
+            
+            <StackPanel Grid.Row="4">
+                <controls:FlagControl Margin="0,4">
+                    <TextBlock Text="{Binding Data.TotalFreeAmount, StringFormat=优惠总额：{0}}" FontSize="14"/>
+                </controls:FlagControl>
+                <controls:FlagControl Margin="0,4">
+                    <TextBlock Text="{Binding Data.PaymentAmount, StringFormat=应收：{0}}" FontSize="18"/>
+                </controls:FlagControl>
+            </StackPanel>
 
-            <Grid Grid.Row="5"  Margin="10,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource BtnReduceStyle}" Command="{Binding OperCmd}" CommandParameter="CouponRemove"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding GroupCount,ElementName=CouponGroupSelector, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
-                    <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="CouponPreGroup"/>
-                    <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=CouponGroupSelector}"/>
-                    <TextBlock Text="/"/>
-                    <TextBlock Text="{Binding GroupCount, ElementName=CouponGroupSelector}"/>
-                    <Button Style="{StaticResource BtnRightStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="CouponNextGroup"/>
-                </StackPanel>
-            </Grid>
-
-            <StackPanel Grid.Row="6" Margin="10,0" Orientation="Horizontal">
+            <StackPanel Grid.Row="5" Margin="10,0" Orientation="Horizontal">
                 <Button Content="预结单" Command="{Binding PrintCmd}" CommandParameter="PreSettlement" Width="65" Height="40"/>
                 <Button Content="反结" Command="{Binding OperCmd}" CommandParameter="Resettlement" Width="65" Height="40"/>
                 <Button Content="点菜" Command="{Binding OperCmd}" CommandParameter="Order" Width="65" Height="40"/>
@@ -241,79 +193,167 @@
                 </Popup>
             </StackPanel>
         </Grid>
+        
+        <!--中间部分-->
+        <Grid Grid.Column="1" Background="{StaticResource CanDaoPosColorBgWhite}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Margin="0,53,0,0" >
+                <StackPanel Visibility="{Binding GroupCount,ElementName=DishGroupSelector, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
+                    <Button Style="{StaticResource BtnUpStyle}"
+                            Command="{Binding DataGridPageOperCmd}"
+                            CommandParameter="DishPreGroup"/>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,12">
+                        <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=DishGroupSelector}"/>
+                        <TextBlock Text="/"/>
+                        <TextBlock Text="{Binding GroupCount, ElementName=DishGroupSelector}"/>
+                    </StackPanel>
+                    <Button Style="{StaticResource BtnDownStyle}"
+                            Command="{Binding DataGridPageOperCmd}"
+                            CommandParameter="DishNextGroup"/>
+                </StackPanel>
+                <Button Style="{StaticResource BtnAddStyle}"
+                    Command="{Binding OperCmd}"
+                    CommandParameter="AddDish"/>
+                <Button Style="{StaticResource BtnReduceStyle}"
+                    Command="{Binding OperCmd}"
+                    CommandParameter="BackDish"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <StackPanel Visibility="{Binding GroupCount,ElementName=CouponGroupSelector, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
+                    <Button Style="{StaticResource BtnUpStyle}"
+                            Command="{Binding DataGridPageOperCmd}"
+                            CommandParameter="CouponPreGroup"/>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,12">
+                        <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=CouponGroupSelector}"/>
+                        <TextBlock Text="/"/>
+                        <TextBlock Text="{Binding GroupCount, ElementName=CouponGroupSelector}"/>
+                    </StackPanel>
+                    <Button Style="{StaticResource BtnDownStyle}"
+                            Command="{Binding DataGridPageOperCmd}"
+                            CommandParameter="CouponNextGroup"/>
+                </StackPanel>
+
+                <Button Style="{StaticResource BtnReduceStyle}"
+                    Command="{Binding OperCmd}"
+                    CommandParameter="CouponRemove"/>
+            </StackPanel>
+        </Grid>
 
         <!--右侧部分-->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="2"
+              Background="{StaticResource CanDaoPosColorBgGray}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="78"/>
+                <RowDefinition Height="200"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ListBox ItemsSource="{Binding CouponCategories}" DisplayMemberPath="CategoryName" SelectedItem="{Binding SelectedCouponCategory}" FontSize="18" BorderThickness="0"
-                     IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
+            <ListBox ItemsSource="{Binding CouponCategories}"
+                     Background="Transparent"
+                     DisplayMemberPath="CategoryName"
+                     SelectedItem="{Binding SelectedCouponCategory}" 
+                     FontSize="16" BorderThickness="0"
+                     IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}"
+                     VerticalAlignment="Center">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
+            
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <controls:GroupSelector x:Name="GsCouponList"
+                                        ItemCountEachGroup="12"
+                                        ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}"
+                                        IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
+                    <controls:GroupSelector.Template>
+                        <ControlTemplate TargetType="controls:GroupSelector">
+                            <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="3" Width="132" Height="50" Margin="5" Background="{Binding Color}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="MouseDown">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.CouponMouseDownCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
+                                                </i:EventTrigger>
+                                                <i:EventTrigger EventName="MouseUp">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.CouponMouseUpCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ControlTemplate>
+                    </controls:GroupSelector.Template>
+                </controls:GroupSelector>
 
-            <controls:GroupSelector Grid.Row="1" x:Name="GsCouponList" ItemCountEachGroup="16"
-                                    ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}"
-                                    IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}" Margin="-10,5,10,328" Grid.RowSpan="3">
-                <controls:GroupSelector.Template>
-                    <ControlTemplate TargetType="controls:GroupSelector">
-                        <ItemsControl x:Name="PART_Selector" ItemsSource="{TemplateBinding GroupedItemsSource}" VerticalAlignment="Top"  Focusable="False">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border CornerRadius="5" Width="130" Height="50" Margin="5" Background="{Binding Color}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseDown">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.CouponMouseDownCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
-                                            </i:EventTrigger>
-                                            <i:EventTrigger EventName="MouseUp">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.CouponMouseUpCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <TextBlock Text="{Binding Name}" TextWrapping="Wrap" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ControlTemplate>
-                </controls:GroupSelector.Template>
-            </controls:GroupSelector>
+                <StackPanel Grid.Column="1"
+                            Visibility="{Binding GroupCount,ElementName=GsCouponList, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
+                    <Button Style="{StaticResource BtnUpStyle}"
+                            Command="{Binding DataGridPageOperCmd}"
+                            CommandParameter="CouponListPreGroup"/>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,12">
+                        <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsCouponList}"/>
+                        <TextBlock Text="/"/>
+                        <TextBlock Text="{Binding GroupCount, ElementName=GsCouponList}"/>
+                    </StackPanel>
+                    <Button Style="{StaticResource BtnDownStyle}"
+                            Command="{Binding DataGridPageOperCmd}"
+                            CommandParameter="CouponListNextGruop"/>
+                </StackPanel>
+            </Grid>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding GroupCount,ElementName=GsCouponList, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
-                <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="CouponListPreGroup"/>
-                <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsCouponList}"/>
-                <TextBlock Text="/"/>
-                <TextBlock Text="{Binding GroupCount, ElementName=GsCouponList}"/>
-                <Button Style="{StaticResource BtnRightStyle}" Command="{Binding DataGridPageOperCmd}" CommandParameter="CouponListNextGruop"/>
-            </StackPanel>
+            <Border Grid.Row="2" Height="2" Background="{StaticResource CanDaoPosColorBgSep}" Margin="0,30,0,20"/>
 
-            <TabControl Grid.Row="3" FontSize="18" IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}" ItemContainerStyle="{StaticResource TbItemSettlementStyle}">
+            <TabControl Grid.Row="3"
+                        FontSize="18"
+                        IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
                 <TabItem Header="现金支付">
-                    <Grid Margin="10,10,300,10" VerticalAlignment="Top">
+                    <Grid Margin="10,10,310,10" VerticalAlignment="Top">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Border BorderBrush="{StaticResource CanDaoPosColorBg2}" BorderThickness="2" Height="85">
+                        <Border Background="{StaticResource CanDaoPosColorBgWhite}"
+                                Height="90">
                             <Grid>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="2*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="实收：" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="30"/>
-                                <toolkit:DoubleUpDown Grid.Row="0" Grid.Column="1" Minimum="0" FontSize="30" Text="{Binding CashAmount, UpdateSourceTrigger=PropertyChanged}" Watermark="现金金额" ShowButtonSpinner="False" SelectAllOnGotFocus="True" VerticalAlignment="Center" HorizontalContentAlignment="Left">
+                                <TextBlock Text="金额："
+                                           VerticalAlignment="Top" HorizontalAlignment="Left"
+                                           FontSize="20"
+                                           Margin="13,11,0,0"/>
+                                <toolkit:DoubleUpDown Grid.Row="0" Grid.Column="1" Minimum="0"
+                                                      FontSize="60"
+                                                      Text="{Binding CashAmount, UpdateSourceTrigger=PropertyChanged}"
+                                                      Watermark="现金金额"
+                                                      ShowButtonSpinner="False"
+                                                      SelectAllOnGotFocus="True"
+                                                      VerticalAlignment="Center" HorizontalContentAlignment="Left">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="GotFocus">
                                             <i:InvokeCommandAction Command="{Binding CashControlFocusCmd}" CommandParameter="true"/>
@@ -325,19 +365,29 @@
                                 </toolkit:DoubleUpDown>
                             </Grid>
                         </Border>
-                        <Grid Grid.Row="1" Height="60">
+                        <Grid Grid.Row="1"
+                              Height="60"
+                              TextBlock.Foreground="{StaticResource CanDaoPosColorBgOrange}"
+                              TextBlock.FontSize="20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="找零：" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,10,0,0" FontSize="24"/>
-                            <TextBlock Grid.Column="1" Text="{Binding ChargeAmount}" VerticalAlignment="Center" Margin="0,10,0,0" FontSize="24" HorizontalAlignment="Left"/>
+                            <TextBlock Grid.Column="0"
+                                       Text="找零："
+                                       VerticalAlignment="Center" HorizontalAlignment="Left"
+                                       Margin="0,10,0,0"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ChargeAmount}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,10,0,0"
+                                       HorizontalAlignment="Left"/>
                         </Grid>
                     </Grid>
                 </TabItem>
 
                 <TabItem Header="银行卡">
-                    <StackPanel Margin="10,10,300,10">
+                    <StackPanel Margin="10,10,310,10">
                         <Grid Margin="0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -346,25 +396,59 @@
                             <TextBox Text="{Binding SelectedBankInfo.Name}" IsEnabled="False" VerticalAlignment="Center" Height="40"/>
                             <Button Grid.Column="1" Content="选择银行" Command="{Binding OperCmd}" CommandParameter="SelectBank" Width="75" Height="40"/>
                         </Grid>
-                        <controls:WatermarkTextBox Text="{Binding BankCard}" Watermark="银行卡号：" VerticalAlignment="Center" Margin="0,5" Height="40" VerticalContentAlignment="Center"/>
-                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding BankAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="金额：" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Height="40" VerticalAlignment="Center" Margin="0,5"/>
+                        <controls:WatermarkTextBox Text="{Binding BankCard}" Watermark="银行卡号："
+                                                   VerticalAlignment="Center" Margin="0,5" Height="40" VerticalContentAlignment="Center"/>
+                        <toolkit:DoubleUpDown Minimum="0"
+                                              Text="{Binding BankAmount, UpdateSourceTrigger=PropertyChanged}"
+                                              ShowButtonSpinner="False"
+                                              Watermark="金额："
+                                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                              Height="40"
+                                              VerticalAlignment="Center" Margin="0,5"/>
                     </StackPanel>
                 </TabItem>
 
                 <TabItem Header="会员卡">
-                    <StackPanel Margin="10,10,300,10">
+                    <StackPanel Margin="10,10,310,10">
                         <Grid Height="40" Margin="0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <controls:WatermarkTextBox Text="{Binding MemberCardNo, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsMemberLogin, Converter={StaticResource BoolRevertCvt}}" Watermark="请输入会员卡号" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="40"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="登录" Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2CollapsedCvt}}" Command="{Binding OperCmd}" CommandParameter="MemberLogin" VerticalAlignment="Center" Width="40" Height="40"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="退出" Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2VisibilityCvt}}" Command="{Binding OperCmd}" CommandParameter="MemberLogout" VerticalAlignment="Center" Width="40" Height="40"/>
+                            <controls:WatermarkTextBox Text="{Binding MemberCardNo, UpdateSourceTrigger=PropertyChanged}"
+                                                       IsEnabled="{Binding IsMemberLogin, Converter={StaticResource BoolRevertCvt}}"
+                                                       Watermark="会员卡号"
+                                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                                       Height="40"/>
+                            <Button Grid.Row="0" Grid.Column="1"
+                                    Content="登录"
+                                    Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2CollapsedCvt}}" 
+                                    Command="{Binding OperCmd}" CommandParameter="MemberLogin" 
+                                    VerticalAlignment="Center"
+                                    Width="40" Height="40"/>
+                            <Button Grid.Row="0" Grid.Column="1"
+                                    Content="退出"
+                                    Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2VisibilityCvt}}"
+                                    Command="{Binding OperCmd}" CommandParameter="MemberLogout"
+                                    VerticalAlignment="Center"
+                                    Width="40" Height="40"/>
                         </Grid>
-                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding MemberAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="刷卡金额：" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="0,5" Height="40"/>
-                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding IntegralAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="使用积分：" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="0,5" Height="40"/>
-                        <controls:WatermarkTextBox Text="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged}" Watermark="会员密码：" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,5" Height="40"/>
+                        <toolkit:DoubleUpDown Minimum="0"
+                                              Text="{Binding MemberAmount, UpdateSourceTrigger=PropertyChanged}"
+                                              ShowButtonSpinner="False"
+                                              Watermark="刷卡金额："
+                                              HorizontalContentAlignment="Left" VerticalAlignment="Center"
+                                              Margin="0,5" Height="40"/>
+                        <toolkit:DoubleUpDown Minimum="0" 
+                                              Text="{Binding IntegralAmount, UpdateSourceTrigger=PropertyChanged}"
+                                              ShowButtonSpinner="False" 
+                                              Watermark="使用积分：" 
+                                              HorizontalContentAlignment="Left" VerticalAlignment="Center"
+                                              Margin="0,5" Height="40"/>
+                        <controls:WatermarkTextBox Text="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged}"
+                                                   Watermark="会员密码："
+                                                   VerticalContentAlignment="Center" VerticalAlignment="Center"
+                                                   Margin="0,5" Height="40"/>
                         <Grid HorizontalAlignment="Left" TextBlock.Foreground="{StaticResource CanDaoPosColorSelected}" TextBlock.FontSize="16">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -374,48 +458,87 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="储值金额：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                            <StackPanel Grid.Row="0"  Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="储值金额："
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <StackPanel Grid.Row="0"  Grid.Column="1"
+                                        Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding Data.MemberInfo.StoredBalance}"/>
                                 <TextBlock Text="{Binding Data.MemberInfo.CardLevel, StringFormat=({0})}"/>
                             </StackPanel>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="积分余额：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Data.MemberInfo.Integral}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0"
+                                       Text="积分余额："
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding Data.MemberInfo.Integral}"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
                         </Grid>
                     </StackPanel>
                 </TabItem>
 
                 <TabItem Header="挂账支付">
-                    <StackPanel Margin="10,10,300,10">
+                    <StackPanel Margin="10,10,310,10">
                         <Grid Margin="0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <controls:WatermarkTextBox Text="{Binding SelectedOnCmpAccInfo.Name}" Watermark="请选择挂账单位" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="40"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="选择" Command="{Binding OperCmd}" CommandParameter="SelectOnAccountCompany" VerticalAlignment="Center" Width="50" Height="40"/>
+                            <controls:WatermarkTextBox Text="{Binding SelectedOnCmpAccInfo.Name}"
+                                                       Watermark="挂账单位"
+                                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                                       Height="40"/>
+                            <Button Grid.Row="0" Grid.Column="1"
+                                    Content="选择"
+                                    Command="{Binding OperCmd}" CommandParameter="SelectOnAccountCompany"
+                                    VerticalAlignment="Center"
+                                    Width="50" Height="40"/>
                         </Grid>
-                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding DebitAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="挂账金额" HorizontalContentAlignment="Left" VerticalAlignment="Center" Height="40" Margin="0,5"/>
+                        <toolkit:DoubleUpDown Minimum="0"
+                                              Text="{Binding DebitAmount, UpdateSourceTrigger=PropertyChanged}"
+                                              ShowButtonSpinner="False"
+                                              Watermark="挂账金额"
+                                              HorizontalContentAlignment="Left" VerticalAlignment="Center"
+                                              Height="40" Margin="0,5"/>
                     </StackPanel>
                 </TabItem>
 
                 <TabItem Header="支付宝">
-                    <StackPanel Margin="10,10,300,10">
-                        <controls:WatermarkTextBox Text="{Binding AlipayNo, UpdateSourceTrigger=PropertyChanged}" Watermark="支付宝号：" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,5" Height="40" FontSize="18"/>
-                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding AlipayAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="金额：" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="0,5" Height="40" FontSize="18"/>
+                    <StackPanel Margin="10,10,310,10">
+                        <controls:WatermarkTextBox Text="{Binding AlipayNo, UpdateSourceTrigger=PropertyChanged}"
+                                                   Watermark="支付宝号："
+                                                   VerticalContentAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,5" Height="40"/>
+                        <toolkit:DoubleUpDown Minimum="0"
+                                              Text="{Binding AlipayAmount, UpdateSourceTrigger=PropertyChanged}"
+                                              ShowButtonSpinner="False"
+                                              Watermark="金额："
+                                              HorizontalContentAlignment="Left" VerticalAlignment="Center"
+                                              Margin="0,5" Height="40"/>
                     </StackPanel>
                 </TabItem>
 
                 <TabItem Header="微信">
-                    <StackPanel Margin="10,10,300,10">
-                        <controls:WatermarkTextBox Text="{Binding WechatNo, UpdateSourceTrigger=PropertyChanged}" Watermark="微信号：" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,5" Height="40" FontSize="18"/>
-                        <toolkit:DoubleUpDown Minimum="0" Text="{Binding WechatAmount, UpdateSourceTrigger=PropertyChanged}" ShowButtonSpinner="False" Watermark="金额：" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="0,5" Height="40" FontSize="18"/>
+                    <StackPanel Margin="10,10,310,10">
+                        <controls:WatermarkTextBox Text="{Binding WechatNo, UpdateSourceTrigger=PropertyChanged}"
+                                                   Watermark="微信号："
+                                                   VerticalContentAlignment="Center" VerticalAlignment="Center"
+                                                   Margin="0,5" Height="40"/>
+                        <toolkit:DoubleUpDown Minimum="0"
+                                              Text="{Binding WechatAmount, UpdateSourceTrigger=PropertyChanged}"
+                                              ShowButtonSpinner="False"
+                                              Watermark="金额："
+                                              HorizontalContentAlignment="Left" VerticalAlignment="Center"
+                                              Margin="0,5" Height="40"/>
                     </StackPanel>
                 </TabItem>
             </TabControl>
-            <view:InputHelperLetterControl Grid.Row="3"  HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="300" Margin="0,35,0,0"/>
+            <view:InputHelperLetterControl Grid.Row="3"
+                                           HorizontalAlignment="Right" VerticalAlignment="Top"
+                                           Width="310" Height="260"
+                                           Margin="0,60,0,0"/>
 
-            <Grid Grid.Row="4" Margin="5">
+            <Grid Grid.Row="4"
+                  Background="{StaticResource CanDaoPosColorBgDarkGray}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
@@ -426,7 +549,6 @@
                 </Grid.ColumnDefinitions>
                 <Border x:Name="BdSettInfo" 
                         CornerRadius="3"
-                        Background="{StaticResource CanDaoPosColorSelected}"
                         TextBlock.Foreground="{StaticResource CanDaoPosColorFg}"
                         MinHeight="40" MaxHeight="80">
                     <TextBlock Text="{Binding SettlementInfo}"

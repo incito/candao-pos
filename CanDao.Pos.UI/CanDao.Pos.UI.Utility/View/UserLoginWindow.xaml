@@ -28,7 +28,7 @@
         <TextBlock Grid.Row="1"
                    FontSize="24" 
                    Text="餐道"
-                   Foreground="{StaticResource CanDaoPosColorBgOrange}"
+                   Foreground="{StaticResource CanDaoPosColorFgOrange}"
                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Border Grid.Row="2"
                 BorderBrush="{StaticResource CanDaoPosColorBgWhite}"
@@ -60,14 +60,14 @@
                                            VerticalContentAlignment="Center"/>
                 <CheckBox Grid.Row="2" Grid.Column="0"
                           Content="保存登录信息"
-                          FontSize="24"
-                          VerticalAlignment="Center" Width="220"
+                          FontSize="20"
+                          VerticalAlignment="Center" VerticalContentAlignment="Center" Width="220"
                           IsChecked="{Binding IsSaveLoginInfo, UpdateSourceTrigger=PropertyChanged}"/>
                 <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="登录" Command="{Binding ConfirmCmd}" Width="118" Height="40" Margin="10,0"/>
                     <Button Content="取消" Command="{Binding CancelCmd}" Width="118" Height="40" Margin="10,0"/>
                 </StackPanel>
-                <view:InputNumberControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Margin="0,30" ShowConfirmBtn="True"/>
+                <view:InputNumberControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Margin="0,30"/>
             </Grid>
         </Border>
     </Grid>

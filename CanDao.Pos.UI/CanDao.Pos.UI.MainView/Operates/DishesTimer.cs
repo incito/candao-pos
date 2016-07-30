@@ -110,8 +110,7 @@ namespace CanDao.Pos.UI.MainView.Operates
         {
             try
             {
-                _refreshTimer.Stop();
-                _refreshTimer.Start();
+              
                 var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
                 if (string.IsNullOrEmpty(_tableName) || Globals.UserInfo.UserName == null)
                     return;

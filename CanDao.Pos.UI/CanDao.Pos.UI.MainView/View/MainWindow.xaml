@@ -50,7 +50,7 @@
                         <TextBlock x:Name="TbName"
                                    Grid.Row="1"
                                    Text="{Binding TableName}"
-                                   Foreground="{StaticResource CanDaoPosColorBgOrange}"
+                                   Foreground="{StaticResource CanDaoPosColorFgOrange}"
                                    FontSize="20" FontWeight="Bold"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Grid Grid.Row="2"
@@ -174,7 +174,7 @@
                     Orientation="Horizontal" HorizontalAlignment="Left"
                     TextBlock.FontSize="16">
             <TextBlock Text="{Binding IdleCount, StringFormat=空闲 ({0})}"
-                       Foreground="{StaticResource CanDaoPosColorBgOrange}"
+                       Foreground="{StaticResource CanDaoPosColorFgOrange}"
                        Width="81" Height="22"
                        Margin="20,10,0,0"/>
             <TextBlock Text="{Binding DinnerCount, StringFormat=就餐 ({0})}"
