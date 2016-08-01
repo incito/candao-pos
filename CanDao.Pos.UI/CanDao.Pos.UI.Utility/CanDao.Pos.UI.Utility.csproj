@@ -72,8 +72,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AntiSettlementHelper.cs" />
     <Compile Include="CommonHelper.cs" />
-    <Compile Include="CommonServiceHelper.cs" />
     <Compile Include="Controls\AllowMultSelectorControl.cs" />
     <Compile Include="Model\UcBusinessDataDetailsModel.cs" />
     <Compile Include="Model\UCCashboxPswModel.cs" />

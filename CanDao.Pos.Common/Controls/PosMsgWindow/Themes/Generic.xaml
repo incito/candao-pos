@@ -14,6 +14,7 @@
         <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgNormal}"/>
         <Setter Property="AllowsTransparency" Value="True"/>
         <Setter Property="Title" Value=""/>
+        <Setter Property="Icon" Value="{StaticResource CanDaoPosImageLog3}"></Setter>
         <Setter Property="WindowCornerRadius" Value="3"/>
         <Setter Property="MaxHeight" Value="768"/>
 
@@ -42,12 +43,11 @@
                                                     Foreground="{StaticResource CanDaoPosColorFg}"
                                                     HorizontalAlignment="Center" VerticalAlignment="Center" 
                                                     FontSize="16"/>
-                                    <Button x:Name="PART_CloseBtn"
+                                    <Button x:Name="PART_CancelBtn"
                                             Grid.Column="1"
-                                            Content="X" 
-                                            Width="22" Height="22"
                                             VerticalAlignment="Center"
-                                            Style="{StaticResource NoBorderBtnStyle}"
+                                            Margin="0,0,8,0"
+                                            Style="{StaticResource BtnCloseStyle}"
                                             Visibility="{TemplateBinding ShowCloseBtn, Converter={StaticResource Bool2VisibilityCvt}}"
                                             IsCancel="True"/>
                                 </Grid>

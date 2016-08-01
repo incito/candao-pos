@@ -1,10 +1,11 @@
 ﻿<controls:PosBaseWindow x:Class="CanDao.Pos.UI.MainView.View.QueryOrderHistoryWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-             Height="768" Width="1024" ShowInTaskbar="False">
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
+                        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+                        Height="768" Width="1024"
+                        Background="{StaticResource CanDaoPosColorBgMainGray}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding OperCmd}" CommandParameter="Load"/>
@@ -17,33 +18,47 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:PosBaseWindow.Resources>
-    <Grid Margin="0,10,0,0">
+    <Grid Margin="0,15,0,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid >
+        <Grid Margin="30,0,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="账单号：" FontSize="18"/>
-            <TextBox Grid.Column="1" Text="{Binding FilterOrderId, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="200"/>
-            <TextBlock Grid.Column="2" Text="桌号：" FontSize="18"/>
-            <TextBox Grid.Column="3" Text="{Binding FilterTableNo, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="120"/>
-            <view:InputHelperStripControl Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" AllowDot="False"/>
+            <controls:WatermarkTextBox Watermark="账单号："
+                                       Width="210" Height="40"
+                                       VerticalContentAlignment="Center"
+                                       Text="{Binding FilterOrderId, UpdateSourceTrigger=PropertyChanged}"/>
+            <controls:WatermarkTextBox Grid.Column="1"
+                                       Watermark="桌号："
+                                       Width="210" Height="40" Margin="5,0,0,0"
+                                       VerticalContentAlignment="Center"
+                                       Text="{Binding FilterTableNo, UpdateSourceTrigger=PropertyChanged}"/>
+            <view:InputHelperStripControl Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" AllowDot="False"/>
         </Grid>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <ToggleButton Content="全部" Command="{Binding OrderStatusCheckCmd}" CommandParameter="All" Margin="3" Width="60" Height="30" IsChecked="{Binding QueryOrderStatus, Converter={StaticResource OrderStatus2CheckedCvt}, ConverterParameter=All}"/>
-            <ToggleButton Content="已结账" Command="{Binding OrderStatusCheckCmd}" CommandParameter="Paied" Margin="3" Width="60" Height="30" IsChecked="{Binding QueryOrderStatus, Converter={StaticResource OrderStatus2CheckedCvt}, ConverterParameter=Paied}"/>
-            <ToggleButton Content="未结账" Command="{Binding OrderStatusCheckCmd}" CommandParameter="Unpay" Margin="3" Width="60" Height="30" IsChecked="{Binding QueryOrderStatus, Converter={StaticResource OrderStatus2CheckedCvt}, ConverterParameter=Unpay}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="30,10,0,10">
+            <TextBlock Text="账单状态：" FontSize="18"/>
+            <ToggleButton Content="全部"
+                          Command="{Binding OrderStatusCheckCmd}" CommandParameter="All"
+                          Margin="3" Width="69" Height="30"
+                          IsChecked="{Binding QueryOrderStatus, Converter={StaticResource OrderStatus2CheckedCvt}, ConverterParameter=All}"/>
+            <ToggleButton Content="已结账"
+                          Command="{Binding OrderStatusCheckCmd}" CommandParameter="Paied"
+                          Margin="3" Width="100" Height="30"
+                          IsChecked="{Binding QueryOrderStatus, Converter={StaticResource OrderStatus2CheckedCvt}, ConverterParameter=Paied}"/>
+            <ToggleButton Content="未结账"
+                          Command="{Binding OrderStatusCheckCmd}" CommandParameter="Unpay"
+                          Margin="3" Width="100" Height="30"
+                          IsChecked="{Binding QueryOrderStatus, Converter={StaticResource OrderStatus2CheckedCvt}, ConverterParameter=Unpay}"/>
         </StackPanel>
 
         <controls:GroupSelector Grid.Row="2" x:Name="GsOrderList" ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}" ItemCountEachGroup="25">
@@ -54,17 +69,17 @@
                                       SelectedItem="{TemplateBinding SelectedItem}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="账单号" Width="200" Binding="{Binding OrderId}" IsReadOnly="True"/>
-                            <DataGridTemplateColumn Header="状态">
+                            <DataGridTemplateColumn Header="状态" Width="50">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding HasBeenPaied, Converter={StaticResource PaiedStatus2StringCvt}}"
-                                                       Foreground="{Binding HasBeenPaied, Converter={StaticResource OrderStatus2ColorCvt}}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                                   VerticalAlignment="Center" TextWrapping="Wrap"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="区域" Width="80" Binding="{Binding AreaName}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="桌号" Width="80" Binding="{Binding TableName}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="服务员" Binding="{Binding UserId}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="服务员" Width="80" Binding="{Binding UserId}" IsReadOnly="True"/>
                             <DataGridTemplateColumn Header="开台时间" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -79,11 +94,11 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="人数" Binding="{Binding CustomerNum}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="应收金额" Binding="{Binding Dueamount}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="订餐单位" Binding="{Binding DebitCoupany}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="电话" Binding="{Binding DebitTelphone}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="联系人" Binding="{Binding DebitPeople}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="人数" Width="50" Binding="{Binding CustomerNum}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="应收金额" Width="80" Binding="{Binding Dueamount}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="订餐单位" Width="80" Binding="{Binding DebitCoupany}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="电话" Width="80" Binding="{Binding DebitTelphone}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="联系人" Width="80" Binding="{Binding DebitPeople}" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ControlTemplate>
@@ -98,12 +113,26 @@
             <Button Style="{StaticResource BtnRightStyle}" Command="{Binding OperCmd}" CommandParameter="NextGroup"/>
         </StackPanel>
         
-        <StackPanel Grid.Row="4" Orientation="Horizontal" VerticalAlignment="Bottom">
-            <Button Content="刷新" Command="{Binding OperCmd}" CommandParameter="Refresh" Width="90" Height="30" FontSize="18"/>
-            <Button Content="重印账单" Command="{Binding OperCmd}" CommandParameter="ReprintPayBill" Width="90" Height="30" FontSize="18"/>
-            <Button Content="重印清机单" Command="{Binding OperCmd}" CommandParameter="ReprintClearn" Width="90" Height="30" FontSize="18"/>
-            <Button Content="结算" Command="{Binding OperCmd}" CommandParameter="PayBill" Width="90" Height="30" FontSize="18"/>
-            <Button Content="反结算" Command="{Binding OperCmd}" CommandParameter="AntiPayBill" Width="90" Height="30" FontSize="18"/>
+        <StackPanel Grid.Row="4"
+                    Margin="0,10"
+                    Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+            <Button Content="刷新"
+                    Command="{Binding OperCmd}" CommandParameter="Refresh"
+                    Width="105" Height="45"/>
+            <Button Content="重印账单"
+                    Command="{Binding OperCmd}" CommandParameter="ReprintPayBill"
+                    Width="105" Height="45"/>
+            <Button Content="重印清机单"
+                    Command="{Binding OperCmd}" CommandParameter="ReprintClearn"
+                    Width="105" Height="45"/>
+            <Button Content="结算"
+                    Command="{Binding OperCmd}" CommandParameter="PayBill"
+                    Width="105" Height="45"/>
+            <Button Content="反结算"
+                    Command="{Binding OperCmd}" CommandParameter="AntiPayBill"
+                    Width="105" Height="45"/>
         </StackPanel>
+
+        <view:StatusControl Grid.Row="5"/>
     </Grid>
 </controls:PosBaseWindow>

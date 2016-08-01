@@ -29,6 +29,8 @@
                         CornerRadius="3"
                         Width="122" Height="64" Margin="2"
                         Background="{StaticResource CanDaoPosColorBgWhite}"
+                        BorderBrush="{StaticResource CanDaoPosColorBgWhite}"
+                        BorderThickness="1"
                         IsEnabled="{Binding TableEnable}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDown">
@@ -57,7 +59,7 @@
                               TextBlock.FontSize="10"
                               TextBlock.Foreground="{StaticResource CanDaoPosColorFgTableNormal}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="TbDuration"
@@ -88,9 +90,13 @@
                 <DataTemplate.Triggers>
                     <DataTrigger Binding="{Binding TableEnable}" Value="False">
                         <Setter TargetName="Bd" Property="Background" Value="{StaticResource CanDaoPosColorBgDisable}"/>
+                        <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource CanDaoPosColorBgBorder}"/>
+                        <Setter TargetName="SpInfo" Property="TextBlock.Foreground" Value="{StaticResource CanDaoPosColorFgGray}"/>
+                        <Setter TargetName="TbName" Property="Foreground" Value="{StaticResource CanDaoPosColorFgGray}"/>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding TableStatus}" Value="Dinner">
                         <Setter TargetName="Bd" Property="Background" Value="{StaticResource CanDaoPosColorBgTableDinner}"/>
+                        <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource CanDaoPosColorBgTableDinner}"/>
                         <Setter TargetName="TbName" Property="Foreground" Value="{StaticResource CanDaoPosColorFgFont}"/>
                         <Setter TargetName="SpInfo" Property="TextBlock.Foreground" Value="{StaticResource CanDaoPosColorFgFont}"/>
                         <Setter TargetName="TbStatus" Property="Text" Value="开"/>
@@ -106,7 +112,7 @@
     <controls:PosBaseWindow.TitleContent>
         <view:MemberControl />
     </controls:PosBaseWindow.TitleContent>
-    <Grid>
+    <Grid Background="{StaticResource CanDaoPosColorBgMainGray}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -133,7 +139,7 @@
                                           Focusable="False">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" Background="{StaticResource CanDaoPosColorBgDisable}"/>
+                                        <WrapPanel Orientation="Horizontal"/>
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
@@ -160,7 +166,7 @@
                                           Focusable="False">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" Background="{StaticResource CanDaoPosColorBgDisable}"/>
+                                        <WrapPanel Orientation="Horizontal"/>
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>

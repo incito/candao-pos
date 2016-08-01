@@ -11,7 +11,7 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 餐台编号。
         /// </summary>
-        public string TableId { get; set; }
+        public int TableId { get; set; }
 
         /// <summary>
         /// 账单号。
@@ -72,6 +72,11 @@ namespace CanDao.Pos.Model
         /// 订单状态。
         /// </summary>
         public EnumOrderStatus OrderStatus { get; set; }
+
+        /// <summary>
+        /// 会员号。
+        /// </summary>
+        public string MemberNo { get; set; }
 
         /// <summary>
         /// 是否已经结账。

@@ -47,7 +47,7 @@
         public int orderstatus { get; set; }
         public string endtime { get; set; }
         public string currenttableid { get; set; }
-        public string tableids { get; set; }
+        public int tableids { get; set; }
         public string partername { get; set; }
         public decimal fulldiscountrate { get; set; }
         public string pnum { get; set; }

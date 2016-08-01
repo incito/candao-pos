@@ -18,6 +18,8 @@ namespace CanDao.Pos.UI.Utility
     /// </summary>
     public class CommonHelper
     {
+        #region 强制结业相关
+
         /// <summary>
         /// 是否是强制结业清机。
         /// </summary>
@@ -150,6 +152,12 @@ namespace CanDao.Pos.UI.Utility
             else
                 Application.Current.MainWindow.Close();
         }
+        
+        #endregion
 
+        #region 订单反结算
+
+
+        #endregion
     }
 }
