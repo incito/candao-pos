@@ -201,6 +201,41 @@
         </Setter>
     </Style>
 
+    <Style x:Key="BtnBackStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            CornerRadius="3"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource CanDaoPosColorBgBorder}"
+                            BorderThickness="1">
+                        <Image x:Name="Img"
+                               Width="30" Height="14"
+                               Source="{StaticResource CanDaoPosImageBack}" UseLayoutRounding="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
+                            <Setter Property="Source" TargetName="Img" Value="{StaticResource CanDaoPosImageBackPress}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="BtnLeftNoBorderStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
@@ -232,14 +267,24 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <Style TargetType="Button" x:Key="ReduceBtnStyle">
-        <Setter Property="Width" Value="35"/>
-        <Setter Property="Height" Value="35"/>
+    
+    <Style x:Key="BtnCloseStyle" TargetType="Button">
+        <Setter Property="Width" Value="22"/>
+        <Setter Property="Height" Value="22"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Image Source="{StaticResource CanDaoPosImageReduce}" UseLayoutRounding="True"/>
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Background="{TemplateBinding Background}">
+                        <Image Width="22" Height="22" Source="{StaticResource CanDaoPosImageClose}" UseLayoutRounding="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

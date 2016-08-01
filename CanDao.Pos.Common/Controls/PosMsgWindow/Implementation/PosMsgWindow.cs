@@ -35,8 +35,6 @@ namespace CanDao.Pos.Common.Controls
         public static readonly DependencyProperty CloseBtnEnableProperty =
             DependencyProperty.Register("CloseBtnEnable", typeof(bool), typeof(PosMsgWindow), new PropertyMetadata(true));
 
-
-
         public bool ShowCloseBtn
         {
             get { return (bool)GetValue(ShowCloseBtnProperty); }

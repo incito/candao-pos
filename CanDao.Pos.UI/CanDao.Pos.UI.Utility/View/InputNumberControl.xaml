@@ -26,18 +26,74 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Button Content="1"  Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="1"/>
-        <Button Grid.Row="0" Grid.Column="1" Content="2" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="2"/>
-        <Button Grid.Row="0" Grid.Column="2" Content="3" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="3"/>
-        <Button Grid.Row="1" Grid.Column="0" Content="4" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="4"/>
-        <Button Grid.Row="1" Grid.Column="1" Content="5" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="5"/>
-        <Button Grid.Row="1" Grid.Column="2" Content="6" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="6"/>
-        <Button Grid.Row="2" Grid.Column="0" Content="7" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="7"/>
-        <Button Grid.Row="2" Grid.Column="1" Content="8" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="8"/>
-        <Button Grid.Row="2" Grid.Column="2" Content="9" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="9"/>
-        <Button Grid.Row="3" Grid.Column="0" Content="." Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="." Visibility="{Binding ShowDot, ElementName=Ctrl, Converter={StaticResource Bool2VisibilityCvt}}"/>
-        <Button Grid.Row="3" Grid.Column="1" Content="0" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="0"/>
-        <Button Grid.Row="3" Grid.Column="2" Content="&lt;-" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="Back"/>
-        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="确定" Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}" CommandParameter="Enter" Width="Auto" MinHeight="40" Visibility="{Binding ShowConfirmBtn, Converter={StaticResource Bool2VisibilityCvt}, ElementName=Ctrl}"/>
+        <Button Grid.Row="0" Grid.Column="0"
+                Content="1"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="1"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="0" Grid.Column="1" Content="2"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="2"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="0" Grid.Column="2" Content="3"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="3"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="1" Grid.Column="0" Content="4"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="4"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="1" Grid.Column="1" Content="5"
+                Style="{StaticResource NumBtnStyle}"  Command="{Binding InputCmd}"
+                CommandParameter="5"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="1" Grid.Column="2" Content="6"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="6"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="2" Grid.Column="0" Content="7"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="7"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="8"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="8"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="2" Grid.Column="2" Content="9"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="9"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="3" Grid.Column="0" Content="."
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="."
+                Visibility="{Binding ShowDot, ElementName=Ctrl, Converter={StaticResource Bool2VisibilityCvt}}"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="3" Grid.Column="1" Content="0"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="0"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <Button Grid.Row="3" Grid.Column="2"
+                Style="{StaticResource BtnBackStyle}"
+                Command="{Binding InputCmd}" CommandParameter="Back"
+                Width="{Binding ItemWidth, ElementName=Ctrl}"
+                Height="{Binding ItemHeight, ElementName=Ctrl}"/>
+        <!--<Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+                Content="确定"
+                Style="{StaticResource NumBtnStyle}"
+                Command="{Binding InputCmd}" CommandParameter="Enter"
+                Width="Auto" 
+                Height="{Binding ItemHeight, ElementName=Ctrl}"
+                Visibility="{Binding ShowConfirmBtn, Converter={StaticResource Bool2VisibilityCvt}, ElementName=Ctrl}"/>-->
     </Grid>
 </UserControl>
