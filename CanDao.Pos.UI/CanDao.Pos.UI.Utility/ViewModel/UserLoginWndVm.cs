@@ -149,6 +149,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 InfoLog.Instance.I("登录信息文件不存在。");
                 IsSaveLoginInfo = false;
+                ((UserLoginWindow) OwnerWindow).TbUserName.Focus();
                 return;
             }
 
@@ -159,6 +160,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 {
                     IsSaveLoginInfo = true;
                     Account = data;
+                }
+                else
+                {
+                    ((UserLoginWindow)OwnerWindow).TbUserName.Focus();
                 }
             }
             catch (Exception ex)

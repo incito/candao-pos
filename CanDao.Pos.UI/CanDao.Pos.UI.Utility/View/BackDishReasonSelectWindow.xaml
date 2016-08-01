@@ -18,6 +18,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <controls:AllowMultSelectorControl x:Name="SelectorCtrl" Title="退菜原因"/>
-        <view:WindowButtonOperControl Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+        <view:WindowButtonOperControl Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,10,0,0"/>
     </Grid>
 </controls1:PosBaseWindow>

@@ -8,7 +8,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.UI.Utility.View;
-using DevExpress.Xpf.Editors;
 
 namespace CanDao.Pos.UI.Utility.Controls
 {

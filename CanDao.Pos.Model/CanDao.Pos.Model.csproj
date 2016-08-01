@@ -150,6 +150,7 @@
     <Compile Include="Response\GetPrinterStatusResponse.cs" />
     <Compile Include="Response\GetPrintOrderInfoResponse.cs" />
     <Compile Include="Response\GetReportStatisticInfoBase.cs" />
+    <Compile Include="Response\GetSavedCouponResponse.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
     <Compile Include="Response\CanDaoMemberQueryResponse.cs" />
     <Compile Include="Response\CanDaoMemberStorageResponse.cs" />

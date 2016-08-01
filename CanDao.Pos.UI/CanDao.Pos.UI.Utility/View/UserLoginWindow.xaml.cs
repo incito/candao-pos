@@ -1,5 +1,4 @@
-﻿using CanDao.Pos.Model.Enum;
-using CanDao.Pos.UI.Utility.ViewModel;
+﻿using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility.View
 {

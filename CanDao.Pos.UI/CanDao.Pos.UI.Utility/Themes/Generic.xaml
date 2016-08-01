@@ -18,9 +18,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type view:AllowMultSelectorControl}">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"
-                                   Background="{StaticResource CanDaoPosColorBgOrange}"
-                                   Foreground="{StaticResource CanDaoPosColorFg}"/>
+                        <Border Background="{StaticResource CanDaoPosColorBgOrange}">
+                            <TextBlock Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"
+                                       Foreground="{StaticResource CanDaoPosColorFg}"
+                                       HorizontalAlignment="Left"/>
+                        </Border>
                         <ItemsControl ItemsSource="{TemplateBinding ItemsSource}"
                                       MaxWidth="{TemplateBinding ActualWidth}"
                                       ItemTemplate="{TemplateBinding ItemViewerTemplate}"

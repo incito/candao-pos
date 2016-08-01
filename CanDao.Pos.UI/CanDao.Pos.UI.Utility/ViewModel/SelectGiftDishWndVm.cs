@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.Model;
-using DevExpress.Xpf.Editors.Helpers;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {

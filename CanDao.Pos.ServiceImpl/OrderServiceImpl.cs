@@ -165,7 +165,7 @@ namespace CanDao.Pos.ServiceImpl
             var addr = ServiceAddrCache.GetServiceAddr("GetCouponInfos");
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, List<CouponInfo>>("获取优惠券集合地址为空。", null);
-            
+
             var request = new CouponInfoRequest { machineno = MachineManage.GetMachineId(), typeid = couponTypeId, userid = userName, orderid = "0" };
             try
             {
@@ -205,19 +205,11 @@ namespace CanDao.Pos.ServiceImpl
 
         public string SaveUsedCoupon(string orderId, string userName, List<UsedCouponInfo> couponInfos)
         {
-            //var jsonStr = couponInfos.ToJson();
             var addr = ServiceAddrCache.GetServiceAddr("SaveCouponInfo");
             if (string.IsNullOrEmpty(addr))
                 return "保存优惠券信息地址为空。";
 
-            //List<string> param = new List<string>
-            //{
-            //    userName,
-            //    PCInfoHelper.IPAddr,
-            //    orderId,
-            //    jsonStr
-            //};
-            string parmaAdd = string.Format("{0}/{1}/{2}/{3}/", addr, userName, PCInfoHelper.IPAddr, orderId);
+            var parmaAdd = string.Format("{0}/{1}/{2}/{3}/", addr, userName, PCInfoHelper.IPAddr, orderId);
             var result = RestHttpHelper.HttpPost<RestBaseResponse>(parmaAdd, couponInfos);
             if (!string.IsNullOrEmpty(result.Item1))
                 return result.Item1;
@@ -226,6 +218,20 @@ namespace CanDao.Pos.ServiceImpl
                 return !string.IsNullOrEmpty(result.Item2.Info) ? result.Item2.Info : "保存优惠券使用列表失败。";
 
             return null;
+        }
+
+        public Tuple<string, List<UsedCouponInfo>> GetSavedUsedCoupon(string orderId, string userId)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("GetSavedCouponInfo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, List<UsedCouponInfo>>("获取保存的优惠券信息地址为空。", null);
+
+            var param = new List<string> { orderId, userId };
+            var response = RestHttpHelper.HttpGet<GetSavedCouponResponse>(addr, param);
+            var result = new List<UsedCouponInfo>();
+            if (response.Item2.Data != null)
+                result = response.Item2.Data.Select(DataConverter.ToUsedCouponInfo).ToList();
+            return new Tuple<string, List<UsedCouponInfo>>(null, result);
         }
 
         public Tuple<string, MenuComboFullInfo> GetMenuComboDishes(GetMenuComboDishRequest request)

@@ -83,7 +83,7 @@
 
             <Border Grid.Row="1"
                     Background="{StaticResource CanDaoPosColorFg}"
-                    Height="300">
+                    Height="310">
                 <controls:GroupSelector x:Name="DishGroupSelector"
                                         ItemsSource="{Binding Data.DishInfos}"
                                         SelectedItem="{Binding SelectedOrderDish}" 
@@ -98,7 +98,7 @@
                                       ItemsSource="{TemplateBinding GroupedItemsSource}"
                                       SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="序号" Width="40" Binding="{Binding DishNum}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="序号" Width="40" Binding="{Binding Index}" IsReadOnly="True"/>
                                     <DataGridTemplateColumn Header="菜单名称" Width="*" CanUserReorder="False" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -276,7 +276,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <controls:GroupSelector x:Name="GsCouponList"
-                                        ItemCountEachGroup="12"
+                                        ItemCountEachGroup="16"
                                         ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}"
                                         IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
                     <controls:GroupSelector.Template>

@@ -15,6 +15,8 @@ namespace CanDao.Pos.Model
             Taste = "";
         }
 
+        public int Index { get; set; }
+
         /// <summary>
         /// 下单用户Id。
         /// </summary>

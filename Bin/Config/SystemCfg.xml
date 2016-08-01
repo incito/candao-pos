@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <!--Java后台服务地址-->
-  <JavaServer value="10.66.19.57:8080"/>
+  <JavaServer value="10.66.21.7:8080"/>
   <!--大数据服务地址-->
   <BigData value="10.66.21.84:8080"/>
   <!--餐道云服务地址-->
@@ -18,8 +18,6 @@
   <OpenCashIp value="127.0.0.1"/>
   <!--保存优惠券-->
   <SaveCoupon value="true"/>
-  <!--会员系统。0：雅座，1：餐道-->
-  <MemberSystem value="1"/>
   <!--是否打印开发票小票。0：不打印，1：打印-->
   <PrintInvoice value="true"/>
   <!--反结算原因，通过 ; 号区分，注意是英文的符号。-->

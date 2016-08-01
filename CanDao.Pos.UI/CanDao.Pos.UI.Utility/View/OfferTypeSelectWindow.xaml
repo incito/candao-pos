@@ -40,5 +40,6 @@
                                   Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Discount_Both}"/>
         </Grid>
         <view:InputNumberControl Width="200" Height="200"/>
+        <view:WindowButtonOperControl Margin="0,10,0,0"/>
     </StackPanel>
 </controls:PosMsgWindow>
