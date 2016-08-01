@@ -14,16 +14,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
                     <Border x:Name="Bd"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="Gray" BorderThickness="1.5">
+                            Background="{TemplateBinding Background}">
                         <ContentPresenter Content="{TemplateBinding Content}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Bd" Property="Background"
-                                    Value="{StaticResource CanDaoPosColorSelected}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
                             <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

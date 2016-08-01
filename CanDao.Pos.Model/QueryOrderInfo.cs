@@ -11,7 +11,7 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 餐台编号。
         /// </summary>
-        public string TableId { get; set; }
+        public int TableId { get; set; }
 
         /// <summary>
         /// 账单号。

@@ -150,7 +150,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 case "Load":
                 case "Refresh":
-                    WorkFlowService.Start(null, new WorkFlowInfo(LoadOrderInfosProcess, LoadOrderInfoComplete));
+                    LoadOrderHistoryAsync();
                     break;
                 case "ReprintPayBill":
                     ReportPrintHelper.PrintSettlementReport(SelectedOrder.OrderId, Globals.UserInfo.UserName);
@@ -165,6 +165,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.NextGroup();
                     break;
                 case "PayBill":
+                    var item = GenerateTableFullInfo(SelectedOrder);
+                    if (WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow))
+                        LoadOrderHistoryAsync();
                     break;
                 case "AntiPayBill":
                     break;
@@ -213,6 +216,24 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         #region Private Methods
 
+        private TableFullInfo GenerateTableFullInfo(QueryOrderInfo orderInfo)
+        {
+            var item = new TableFullInfo();
+            item.TableName = orderInfo.TableName;
+            item.TableId = orderInfo.TableId;
+            item.TableStatus = orderInfo.HasBeenPaied ? EnumTableStatus.Idle : EnumTableStatus.Dinner;
+            item.OrderId = orderInfo.OrderId;
+            return item;
+        }
+
+        /// <summary>
+        /// 异步加载历史账单。
+        /// </summary>
+        private void LoadOrderHistoryAsync()
+        {
+            TaskService.Start(null, LoadOrderInfosProcess, LoadOrderInfoComplete, "获取历史账单中...");
+        }
+
         /// <summary>
         /// 加载账单信息的执行方法。
         /// </summary>
@@ -233,22 +254,24 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private Tuple<bool, object> LoadOrderInfoComplete(object arg)
+        private void LoadOrderInfoComplete(object arg)
         {
             var result = (Tuple<string, List<QueryOrderInfo>>)arg;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E(result.Item1);
                 MessageDialog.Warning(result.Item1, OwnerWindow);
-                return null;
+                return;
             }
 
             InfoLog.Instance.I("账单查询完成。");
             _source = result.Item2;
             FilterOrders();
-            return null;
         }
 
+        /// <summary>
+        /// 过滤订单。
+        /// </summary>
         private void FilterOrders()
         {
             if (_source == null)

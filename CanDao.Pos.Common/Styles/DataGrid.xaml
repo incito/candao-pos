@@ -40,7 +40,7 @@
     <Style  TargetType="DataGridRow">
         <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgLightGray}" />
         <Setter Property="MinHeight" Value="28"/>
-        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFgFont}" />
         <Style.Triggers>
             <!--隔行换色-->
             <!--<Trigger Property="AlternationIndex" Value="0" >
@@ -61,8 +61,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridCell">
-                    <TextBlock TextAlignment="Center" VerticalAlignment="Center"  >
-                           <ContentPresenter />
+                    <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                           <ContentPresenter/>
                     </TextBlock>
                 </ControlTemplate>
             </Setter.Value>

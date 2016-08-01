@@ -1167,7 +1167,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     if (!MessageDialog.Quest(string.Format("还有{0}元小费未结算，点击确定继续结算，点击取消取消结算。", Data.TipAmount - TipPaymentAmount)))
                         return;
                 }
-                MessageDialog.Warning("还有");
+            }
+
+
+            if (Data.TotalAlreadyPayment - ChargeAmount > Data.PaymentAmount)
+            {
+                if (!MessageDialog.Quest(string.Format("实际支付金额\"{0}\"超过应收金额\"{1}\"，确定继续结算？", Data.TotalAlreadyPayment, Data.PaymentAmount), OwnerWindow))
+                    return;
             }
 
             if (!MessageDialog.Quest(string.Format("台号：{0} 确定现在结算吗？", Data.TableName), OwnerWindow))
@@ -1715,7 +1721,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 ChargeAmount = 0;
                 settlementInfo.Add(Data.TotalAlreadyPayment > 0 ? string.Format("还需再收：{0:f2}", remainderAmount) : string.Format("需收款：{0:f2}", remainderAmount));
             }
-            ChargeAmount = Math.Abs(remainderAmount);
+            ChargeAmount = Math.Min(Math.Abs(remainderAmount), CashAmount);//找零金额只能是现金
             if (ChargeAmount > 0)
                 settlementInfo.Add(string.Format("找零：{0:f2}", ChargeAmount));
 
