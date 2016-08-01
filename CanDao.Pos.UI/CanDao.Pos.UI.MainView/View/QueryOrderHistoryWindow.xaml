@@ -20,7 +20,7 @@
     </controls:PosBaseWindow.Resources>
     <Grid Margin="0,15,0,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -31,15 +31,18 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="账单号：" FontSize="18"/>
-            <TextBox Grid.Column="1" Text="{Binding FilterOrderId, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="200"/>
-            <TextBlock Grid.Column="2" Text="桌号：" FontSize="18"/>
-            <TextBox Grid.Column="3" Text="{Binding FilterTableNo, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Width="120"/>
-            <view:InputHelperStripControl Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" AllowDot="False"/>
+            <controls:WatermarkTextBox Watermark="账单号："
+                                       Width="210" Height="40"
+                                       VerticalContentAlignment="Center"
+                                       Text="{Binding FilterOrderId, UpdateSourceTrigger=PropertyChanged}"/>
+            <controls:WatermarkTextBox Grid.Column="1"
+                                       Watermark="桌号："
+                                       Width="210" Height="40" Margin="5,0,0,0"
+                                       VerticalContentAlignment="Center"
+                                       Text="{Binding FilterTableNo, UpdateSourceTrigger=PropertyChanged}"/>
+            <view:InputHelperStripControl Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" AllowDot="False"/>
         </Grid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="30,10,0,10">
@@ -66,7 +69,7 @@
                                       SelectedItem="{TemplateBinding SelectedItem}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="账单号" Width="200" Binding="{Binding OrderId}" IsReadOnly="True"/>
-                            <DataGridTemplateColumn Header="状态">
+                            <DataGridTemplateColumn Header="状态" Width="50">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding HasBeenPaied, Converter={StaticResource PaiedStatus2StringCvt}}"

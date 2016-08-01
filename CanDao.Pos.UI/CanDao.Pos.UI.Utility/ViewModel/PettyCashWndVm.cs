@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Windows;
 using CanDao.Pos.Common;
-using CanDao.Pos.Common.Service;
 using CanDao.Pos.IService;
 
 namespace CanDao.Pos.UI.Utility.ViewModel

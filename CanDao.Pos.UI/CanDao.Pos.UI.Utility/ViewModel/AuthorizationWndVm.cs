@@ -1,6 +1,5 @@
 ﻿using System;
 using CanDao.Pos.Common;
-using CanDao.Pos.Common.Service;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;

@@ -9,6 +9,7 @@ using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.ReportPrint;
 using CanDao.Pos.UI.MainView.View;
+using CanDao.Pos.UI.Utility;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -165,11 +166,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.NextGroup();
                     break;
                 case "PayBill":
-                    var item = GenerateTableFullInfo(SelectedOrder);
-                    if (WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow))
-                        LoadOrderHistoryAsync();
+                    PayBill();
                     break;
                 case "AntiPayBill":
+                    AntiPayBill();
                     break;
             }
         }
@@ -216,6 +216,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         #region Private Methods
 
+        /// <summary>
+        /// 根据账单信息组合餐台信息，进行结算或反结算。
+        /// </summary>
+        /// <param name="orderInfo">账单信息。</param>
+        /// <returns></returns>
         private TableFullInfo GenerateTableFullInfo(QueryOrderInfo orderInfo)
         {
             var item = new TableFullInfo();
@@ -224,6 +229,44 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             item.TableStatus = orderInfo.HasBeenPaied ? EnumTableStatus.Idle : EnumTableStatus.Dinner;
             item.OrderId = orderInfo.OrderId;
             return item;
+        }
+
+        /// <summary>
+        /// 结算账单。
+        /// </summary>
+        private void PayBill()
+        {
+            if (!Globals.UserRight.AllowCash)
+            {
+                MessageDialog.Warning("您没有收银权限！");
+                return;
+            }
+
+            if (!MessageDialog.Quest(string.Format("订单号：\"{0}\"确定结算吗？", SelectedOrder.OrderId), OwnerWindow))
+                return;
+
+            var item = GenerateTableFullInfo(SelectedOrder);
+            if (WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow))
+                LoadOrderHistoryAsync();
+        }
+
+        /// <summary>
+        /// 反结算账单。
+        /// </summary>
+        private void AntiPayBill()
+        {
+            if (!Globals.UserRight.AllowCash)
+            {
+                MessageDialog.Warning("您没有收银权限！");
+                return;
+            }
+
+            if (!MessageDialog.Quest(string.Format("订单号： \"{0}\" 确定反结算吗？", SelectedOrder.OrderId), OwnerWindow))
+                return;
+
+            var helper = new AntiSettlementHelper();
+            var afterAntiSettlementWf = new WorkFlowInfo(null, AfterAntiSettlement);
+            helper.AntiSettlementAsync(SelectedOrder.OrderId, SelectedOrder.MemberNo, OwnerWindow, afterAntiSettlementWf);
         }
 
         /// <summary>
@@ -267,6 +310,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             InfoLog.Instance.I("账单查询完成。");
             _source = result.Item2;
             FilterOrders();
+        }
+
+        private Tuple<bool, object> AfterAntiSettlement(object param)
+        {
+            NotifyDialog.Notify(string.Format("订单号：\"{0}\"反结算成功。", SelectedOrder.OrderId), OwnerWindow);
+            var item = GenerateTableFullInfo(SelectedOrder);
+            item.TableStatus = EnumTableStatus.Dinner;//反结算成功以后将餐台状态设置成就餐，避免进入结账页面弹出开台窗口。
+            InfoLog.Instance.I("弹出结账窗口...");
+            if (WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow))
+                LoadOrderHistoryAsync();
+            return null;
         }
 
         /// <summary>

@@ -477,6 +477,7 @@ namespace CanDao.Pos.ServiceImpl
                 TableId = response.tableids,
                 TableName = response.tableName,
                 UserId = response.userid,
+                MemberNo = response.memberno,
             };
         }
 

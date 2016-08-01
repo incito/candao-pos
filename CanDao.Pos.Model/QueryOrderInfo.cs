@@ -74,6 +74,11 @@ namespace CanDao.Pos.Model
         public EnumOrderStatus OrderStatus { get; set; }
 
         /// <summary>
+        /// 会员号。
+        /// </summary>
+        public string MemberNo { get; set; }
+
+        /// <summary>
         /// 是否已经结账。
         /// </summary>
         public bool HasBeenPaied
