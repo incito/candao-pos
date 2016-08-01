@@ -8,6 +8,15 @@ namespace CanDao.Pos.Model.Response
     /// </summary>
     public class OpenTableResponse : NewHttpBaseResponse
     {
+        public OpenTableInfo data { set; get; }
+        public EnumOpenTableResult OpenTableResult
+        {
+            get { return (EnumOpenTableResult)Convert.ToInt32(code); }
+        }
+    }
+
+    public class OpenTableInfo
+    {
         public string orderid { get; set; }
 
         public string delaytime { get; set; }
@@ -17,10 +26,5 @@ namespace CanDao.Pos.Model.Response
         public string locktime { get; set; }
 
         public string backpsd { get; set; }
-
-        public EnumOpenTableResult OpenTableResult
-        {
-            get { return (EnumOpenTableResult) Convert.ToInt32(code); }
-        }
     }
 }

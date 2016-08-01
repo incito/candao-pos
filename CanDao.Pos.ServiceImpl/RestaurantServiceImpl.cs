@@ -188,7 +188,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var result = HttpHelper.HttpPost<OpenTableResponse>(addr, request);
                 if (result.IsSuccess)
-                    return new Tuple<string, string>(null, result.orderid);
+                    return new Tuple<string, string>(null, result.data.orderid);
 
                 string errMsg;
                 switch (result.OpenTableResult)
