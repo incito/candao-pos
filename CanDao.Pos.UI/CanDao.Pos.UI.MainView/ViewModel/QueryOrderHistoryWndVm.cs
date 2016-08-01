@@ -221,7 +221,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         /// <param name="orderInfo">账单信息。</param>
         /// <returns></returns>
-        private TableInfo GenerateTableFullInfo(QueryOrderInfo orderInfo)
+        private TableInfo GenerateTableInfo(QueryOrderInfo orderInfo)
         {
             var item = new TableInfo
             {
@@ -247,7 +247,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!MessageDialog.Quest(string.Format("订单号：\"{0}\"确定结算吗？", SelectedOrder.OrderId), OwnerWindow))
                 return;
 
-            var item = GenerateTableFullInfo(SelectedOrder);
+            var item = GenerateTableInfo(SelectedOrder);
             if (WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow))
                 LoadOrderHistoryAsync();
         }
@@ -317,7 +317,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private Tuple<bool, object> AfterAntiSettlement(object param)
         {
             NotifyDialog.Notify(string.Format("订单号：\"{0}\"反结算成功。", SelectedOrder.OrderId), OwnerWindow);
-            var item = GenerateTableFullInfo(SelectedOrder);
+            var item = GenerateTableInfo(SelectedOrder);
             item.TableStatus = EnumTableStatus.Dinner;//反结算成功以后将餐台状态设置成就餐，避免进入结账页面弹出开台窗口。
             InfoLog.Instance.I("弹出结账窗口...");
             if (WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow))

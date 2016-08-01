@@ -59,7 +59,7 @@ namespace CanDao.Pos.Client
             }
             InfoLog.Instance.I("与服务器的连接正常。");
 
-            GetBranchInfoAsync();
+            //GetBranchInfoAsync();
             GetTradeTimeAsync();
             GetOddSettingAsync();
             GetDietSettingAsync();

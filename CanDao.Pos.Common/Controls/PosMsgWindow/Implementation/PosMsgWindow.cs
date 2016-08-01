@@ -89,7 +89,7 @@ namespace CanDao.Pos.Common.Controls
 
         protected virtual void CloseBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
-            DialogResult = true;
+            DialogResult = false;
         }
     }
 }
