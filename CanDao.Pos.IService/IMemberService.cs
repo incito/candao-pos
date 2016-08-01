@@ -73,6 +73,13 @@ namespace CanDao.Pos.IService
         Tuple<string, CanDaoMemberSaleResponse> Sale(CanDaoMemberSaleRequest request);
 
         /// <summary>
+        /// 餐道会员反结算。
+        /// </summary>
+        /// <param name="request">反结算请求类。</param>
+        /// <returns>反结算成功返回null，否则返回错误信息。</returns>
+        string VoidSale(CanDaoMemberVoidSaleRequest request);
+
+        /// <summary>
         /// 会员登录。
         /// </summary>
         /// <param name="orderId">订单号。</param>
@@ -109,53 +116,59 @@ namespace CanDao.Pos.IService
         /// <param name="selectNum"></param>
         /// <returns></returns>
         Tuple<string, MVipInfo> VipQuery(CanDaoVipQueryRequest selectNum);
+
         /// <summary>
         /// 修改卡号
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="cardNum"></param>
         /// <param name="newCardNum"></param>
         /// <returns></returns>
-        string VipChangeCardNum(string branch_id, string cardNum, string newCardNum);
+        string VipChangeCardNum(string branchId, string cardNum, string newCardNum);
+
         /// <summary>
         /// 修改会员基本信息
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="changeInfo"></param>
         /// <param name="newTelNum"></param>
         /// <returns></returns>
-        string VipChangeInfo(string branch_id, MVipChangeInfo changeInfo, string newTelNum = "");
+        string VipChangeInfo(string branchId, MVipChangeInfo changeInfo, string newTelNum = "");
+
         /// <summary>
         /// 新增实体卡
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="cardno"></param>
         /// <param name="insideId"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        string VipInsertCard(string branch_id, string cardno, string insideId, string level = "0");
+        string VipInsertCard(string branchId, string cardno, string insideId, string level = "0");
+
         /// <summary>
         /// 检查实体卡是否存在
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="cardno"></param>
         /// <returns></returns>
-        string VipCheckCard(string branch_id, string cardno);
+        string VipCheckCard(string branchId, string cardno);
+
         /// <summary>
         /// 修改密码
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="cardno"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        string VipChangePsw(string branch_id, string cardno, string password);
+        string VipChangePsw(string branchId, string cardno, string password);
+
         /// <summary>
         /// 获取优惠券
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="currentPage"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        Tuple<string, List<MVipCoupon>> GetCouponList(string branch_id, string currentPage = "", string pageSize = "");
+        Tuple<string, List<MVipCoupon>> GetCouponList(string branchId, string currentPage = "", string pageSize = "");
     }
 }

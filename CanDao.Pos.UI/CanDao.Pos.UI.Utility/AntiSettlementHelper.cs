@@ -4,6 +4,7 @@ using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
+using CanDao.Pos.Model.Request;
 using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility
@@ -195,8 +196,12 @@ namespace CanDao.Pos.UI.Utility
             }
 
             InfoLog.Instance.I("开始会员消费反结算...");
+            var voidSaleRequest = new CanDaoMemberVoidSaleRequest(_orderId);
+            voidSaleRequest.branch_id = Globals.BranchInfo.BranchId;
+            voidSaleRequest.cardno = result.Item2.cardno;
+            voidSaleRequest.Tracecode = result.Item2.serial;
 
-            return null;
+            return memberService.VoidSale(voidSaleRequest);
         }
 
         /// <summary>
@@ -206,6 +211,16 @@ namespace CanDao.Pos.UI.Utility
         /// <returns></returns>
         private Tuple<bool, object> CanDaoMemberResettlementComplete(object arg)
         {
+            var result = (string)arg;
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                var errMsg = string.Format("餐道会员消费反结算失败：{0}", result);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
+                return new Tuple<bool, object>(false, null);
+            }
+
+            InfoLog.Instance.I("餐道会员消费反结算完成。");
             return null;
         }
 

@@ -221,13 +221,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         /// <param name="orderInfo">账单信息。</param>
         /// <returns></returns>
-        private TableFullInfo GenerateTableFullInfo(QueryOrderInfo orderInfo)
+        private TableInfo GenerateTableFullInfo(QueryOrderInfo orderInfo)
         {
-            var item = new TableFullInfo();
-            item.TableName = orderInfo.TableName;
-            item.TableId = orderInfo.TableId;
-            item.TableStatus = orderInfo.HasBeenPaied ? EnumTableStatus.Idle : EnumTableStatus.Dinner;
-            item.OrderId = orderInfo.OrderId;
+            var item = new TableInfo
+            {
+                TableName = orderInfo.TableName,
+                TableId = orderInfo.TableId,
+                TableStatus = orderInfo.HasBeenPaied ? EnumTableStatus.Idle : EnumTableStatus.Dinner,
+                OrderId = orderInfo.OrderId
+            };
             return item;
         }
 
@@ -255,9 +257,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void AntiPayBill()
         {
-            if (!Globals.UserRight.AllowCash)
+            if (!Globals.UserRight.AllowAntiSettlement)
             {
-                MessageDialog.Warning("您没有收银权限！");
+                MessageDialog.Warning("您没有反结算权限。");
                 return;
             }
 

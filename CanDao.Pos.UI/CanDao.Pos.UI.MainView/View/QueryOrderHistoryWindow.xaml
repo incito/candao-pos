@@ -25,7 +25,6 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Margin="30,0,0,0">
             <Grid.ColumnDefinitions>
@@ -34,7 +33,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <controls:WatermarkTextBox Watermark="账单号："
-                                       Width="210" Height="40"
+                                       Width="200" Height="40"
                                        VerticalContentAlignment="Center"
                                        Text="{Binding FilterOrderId, UpdateSourceTrigger=PropertyChanged}"/>
             <controls:WatermarkTextBox Grid.Column="1"
@@ -46,7 +45,7 @@
         </Grid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="30,10,0,10">
-            <TextBlock Text="账单状态：" FontSize="18"/>
+            <TextBlock Text="账单状态" FontSize="18"/>
             <ToggleButton Content="全部"
                           Command="{Binding OrderStatusCheckCmd}" CommandParameter="All"
                           Margin="3" Width="69" Height="30"
@@ -77,8 +76,8 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="区域" Width="80" Binding="{Binding AreaName}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="桌号" Width="80" Binding="{Binding TableName}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="区域" Width="70" Binding="{Binding AreaName}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="桌号" Width="70" Binding="{Binding TableName}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="服务员" Width="80" Binding="{Binding UserId}" IsReadOnly="True"/>
                             <DataGridTemplateColumn Header="开台时间" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -113,7 +112,7 @@
             <Button Style="{StaticResource BtnRightStyle}" Command="{Binding OperCmd}" CommandParameter="NextGroup"/>
         </StackPanel>
         
-        <StackPanel Grid.Row="4"
+        <StackPanel Grid.Row="3"
                     Margin="0,10"
                     Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Content="刷新"
@@ -133,6 +132,6 @@
                     Width="105" Height="45"/>
         </StackPanel>
 
-        <view:StatusControl Grid.Row="5"/>
+        <view:StatusControl Grid.Row="4"/>
     </Grid>
 </controls:PosBaseWindow>

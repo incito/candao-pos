@@ -1,7 +1,13 @@
 ﻿namespace CanDao.Pos.Model.Request
 {
+    /// <summary>
+    /// 餐道会员消费请求类。
+    /// </summary>
     public class CanDaoMemberSaleRequest : CanDaoMemberQueryRequest
     {
+        /// <summary>
+        /// 订单号。
+        /// </summary>
         public string Serial { get; set; }
 
         /// <summary>

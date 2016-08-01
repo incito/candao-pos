@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using CanDao.Pos.Common;
+using CanDao.Pos.Common.Models.VipModels;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
-using JunLan.Common.Base;
 using HttpHelper = CanDao.Pos.Common.HttpHelper;
 
 namespace CanDao.Pos.ServiceImpl
@@ -194,19 +194,39 @@ namespace CanDao.Pos.ServiceImpl
         {
             var addr = ServiceAddrCache.GetServiceAddr("SaleCanDao");
             if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, CanDaoMemberSaleResponse>("餐道会员消费地址为空。", null);
+                return new Tuple<string, CanDaoMemberSaleResponse>("餐道会员消费结算地址为空。", null);
 
             try
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberSaleResponse>(addr, request);
                 if (!response.IsSuccess)
-                    return new Tuple<string, CanDaoMemberSaleResponse>(!string.IsNullOrEmpty(response.RetInfo) ? response.RetInfo : "会员消费失败。", null);
+                    return new Tuple<string, CanDaoMemberSaleResponse>(!string.IsNullOrEmpty(response.RetInfo) ? response.RetInfo : "会员消费结算失败。", null);
 
                 return new Tuple<string, CanDaoMemberSaleResponse>(null, response);
             }
             catch (Exception exp)
             {
                 return new Tuple<string, CanDaoMemberSaleResponse>(exp.MyMessage(), null);
+            }
+        }
+
+        public string VoidSale(CanDaoMemberVoidSaleRequest request)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("VoidSaleCanDao");
+            if (string.IsNullOrEmpty(addr))
+                return "餐道会员消费反结算地址为空。";
+
+            try
+            {
+                var response = HttpHelper.HttpPost<CanDaoMemberSaleResponse>(addr, request);
+                if (!response.IsSuccess)
+                    return !string.IsNullOrEmpty(response.RetInfo) ? response.RetInfo : "会员消费反结算失败。";
+
+                return null;
+            }
+            catch (Exception exp)
+            {
+                return string.Format("会员消费反结算时异常：{0}", exp.Message);
             }
         }
 
@@ -301,14 +321,14 @@ namespace CanDao.Pos.ServiceImpl
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public Tuple<string, Common.Models.VipModels.MVipInfo> VipQuery(CanDaoVipQueryRequest request)
+        public Tuple<string, MVipInfo> VipQuery(CanDaoVipQueryRequest request)
         {
             var addr = ServiceAddrCache.GetServiceAddr("VipQuery");
 
             if (string.IsNullOrEmpty(addr))
             {
                 ErrLog.Instance.E("会员查询地址为空。");
-                return new Tuple<string, Common.Models.VipModels.MVipInfo>("会员查询地址为空。", null);
+                return new Tuple<string, MVipInfo>("会员查询地址为空。", null);
             }
 
             try
@@ -321,34 +341,33 @@ namespace CanDao.Pos.ServiceImpl
 
                 var response = HttpHelper.HttpPost<CanDaoVipQueryResponse>(addr, parm);
                 if (!response.IsSuccess)
-                    return new Tuple<string, Common.Models.VipModels.MVipInfo>(response.retInfo ?? "会员查询失败。", null);
+                    return new Tuple<string, MVipInfo>(response.retInfo ?? "会员查询失败。", null);
 
                 var result = DataConverter.ToVipInfo(response);
-                return new Tuple<string, Common.Models.VipModels.MVipInfo>(null, result);
+                return new Tuple<string, MVipInfo>(null, result);
             }
             catch (Exception exp)
             {
-                return new Tuple<string, Common.Models.VipModels.MVipInfo>(exp.MyMessage(), null);
+                return new Tuple<string, MVipInfo>(exp.MyMessage(), null);
             }
         }
 
-
-       /// <summary>
-       /// 修改会员卡号
-       /// </summary>
-       /// <param name="branch_id"></param>
-       /// <param name="cardNum"></param>
-       /// <param name="newCardNum"></param>
-       /// <returns></returns>
-        public string VipChangeCardNum(string branch_id, string cardNum, string newCardNum)
+        /// <summary>
+        /// 修改会员卡号
+        /// </summary>
+        /// <param name="branchId"></param>
+        /// <param name="cardNum"></param>
+        /// <param name="newCardNum"></param>
+        /// <returns></returns>
+        public string VipChangeCardNum(string branchId, string cardNum, string newCardNum)
         {
-           var addr = ServiceAddrCache.GetServiceAddr("VipChangeCardNum");
+            var addr = ServiceAddrCache.GetServiceAddr("VipChangeCardNum");
 
-           var parm = new Dictionary<string, string>();
-           parm.Add("branch_id", branch_id);
-           parm.Add("securitycode", "");
-           parm.Add("cardno", cardNum);
-           parm.Add("new_cardno", newCardNum);
+            var parm = new Dictionary<string, string>();
+            parm.Add("branch_id", branchId);
+            parm.Add("securitycode", "");
+            parm.Add("cardno", cardNum);
+            parm.Add("new_cardno", newCardNum);
 
             if (string.IsNullOrEmpty(addr))
             {
@@ -367,14 +386,15 @@ namespace CanDao.Pos.ServiceImpl
                 return exp.MyMessage();
             }
         }
+
         /// <summary>
         /// 修改会员基本信息
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="changeInfo"></param>
         /// <param name="newTelNum"></param>
         /// <returns></returns>
-        public string VipChangeInfo(string branch_id, Common.Models.VipModels.MVipChangeInfo changeInfo, string newTelNum = "")
+        public string VipChangeInfo(string branchId, MVipChangeInfo changeInfo, string newTelNum = "")
         {
             string msg = "修改会员基本信息";
 
@@ -388,7 +408,7 @@ namespace CanDao.Pos.ServiceImpl
             {
 
                 var parm = new Dictionary<string, object>();
-                parm.Add("branch_id", branch_id);
+                parm.Add("branch_id", branchId);
                 parm.Add("securitycode", "");
                 parm.Add("mobile", changeInfo.TelNum);
                 parm.Add("new_mobile", newTelNum);
@@ -408,15 +428,16 @@ namespace CanDao.Pos.ServiceImpl
                 return exp.MyMessage();
             }
         }
+
         /// <summary>
         /// 新增会员实体卡
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="cardno"></param>
         /// <param name="insideId"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        public string VipInsertCard(string branch_id, string cardno, string insideId, string level = "0")
+        public string VipInsertCard(string branchId, string cardno, string insideId, string level = "0")
         {
             string msg = "新增会员实体卡";
 
@@ -432,7 +453,7 @@ namespace CanDao.Pos.ServiceImpl
                 var parm = new Dictionary<string, object>();
                 parm.Add("entity_cardNo", cardno);
                 parm.Add("mobile", insideId);
-                parm.Add("branch_id", branch_id);
+                parm.Add("branch_id", branchId);
                 parm.Add("level", level);
 
                 var response = HttpHelper.HttpPost<CanDaoVipBaseResponse>(addr, parm);
@@ -444,13 +465,14 @@ namespace CanDao.Pos.ServiceImpl
                 return exp.MyMessage();
             }
         }
+
         /// <summary>
         /// 检查实体卡是否存在
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="cardno"></param>
         /// <returns></returns>
-        public string VipCheckCard(string branch_id, string cardno)
+        public string VipCheckCard(string branchId, string cardno)
         {
             string msg = "检查实体卡是否存在";
 
@@ -465,7 +487,7 @@ namespace CanDao.Pos.ServiceImpl
 
                 var parm = new Dictionary<string, object>();
                 parm.Add("cardno", cardno);
-                parm.Add("branch_id", branch_id);
+                parm.Add("branch_id", branchId);
 
                 var response = HttpHelper.HttpPost<VipCheckCardResponse>(addr, parm);
                 return !response.IsSuccess ? response.msg ?? msg + "失败。" : null;
@@ -480,11 +502,11 @@ namespace CanDao.Pos.ServiceImpl
         /// <summary>
         /// 密码修改
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="cardno"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public string VipChangePsw(string branch_id, string cardno, string password)
+        public string VipChangePsw(string branchId, string cardno, string password)
         {
             string msg = "密码修改";
 
@@ -499,7 +521,7 @@ namespace CanDao.Pos.ServiceImpl
 
                 var parm = new Dictionary<string, object>();
                 parm.Add("mobile", cardno);
-                parm.Add("branch_id", branch_id);
+                parm.Add("branch_id", branchId);
                 parm.Add("securitycode", "");
                 parm.Add("password", password);
 
@@ -512,14 +534,15 @@ namespace CanDao.Pos.ServiceImpl
                 return exp.MyMessage();
             }
         }
+
         /// <summary>
         /// 获取优惠列表
         /// </summary>
-        /// <param name="branch_id"></param>
+        /// <param name="branchId"></param>
         /// <param name="currentPage"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public Tuple<string, List<Common.Models.VipModels.MVipCoupon>> GetCouponList(string branch_id, string currentPage = "", string pageSize = "")
+        public Tuple<string, List<MVipCoupon>> GetCouponList(string branchId, string currentPage = "", string pageSize = "")
         {
             string msg = "获取优惠列表";
 
@@ -527,26 +550,26 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
             {
                 ErrLog.Instance.E(msg + "地址为空。");
-                return new Tuple<string, List<Common.Models.VipModels.MVipCoupon>>(msg + "地址为空。", null);
+                return new Tuple<string, List<MVipCoupon>>(msg + "地址为空。", null);
             }
             try
             {
 
                 var parm = new Dictionary<string, object>();
                 parm.Add("current", currentPage);
-                parm.Add("branch_id", branch_id);
+                parm.Add("branch_id", branchId);
                 parm.Add("pageSize", pageSize);
 
 
                 var response = HttpHelper.HttpPost<GetCouponListResponse>(addr, parm);
                 var result = DataConverter.ToCouponList(response);
-                return new Tuple<string, List<Common.Models.VipModels.MVipCoupon>>(null, result);
+                return new Tuple<string, List<MVipCoupon>>(null, result);
 
             }
             catch (Exception exp)
             {
                 ErrLog.Instance.E(msg + "时异常。", exp);
-                return new Tuple<string, List<Common.Models.VipModels.MVipCoupon>>(exp.MyMessage(), null);
+                return new Tuple<string, List<MVipCoupon>>(exp.MyMessage(), null);
             }
         }
     }

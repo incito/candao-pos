@@ -289,7 +289,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             SetRefreshTimerStatus(false);
             if (!Globals.UserRight.AllowCash)
             {
-                MessageDialog.Warning("没有收银权限。", OwnerWindow);
+                MessageDialog.Warning("您没有收银权限。", OwnerWindow);
+                SetRefreshTimerStatus(true);
                 return;
             }
 
@@ -297,7 +298,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             GetAllTableInfoesAsync();
             RefreshRemainSecond = RefreshTimerInterval;
-            SetRefreshTimerStatus(true);
         }
 
         /// <summary>
@@ -599,6 +599,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 MessageDialog.Warning(result.Item1, OwnerWindow);
+                SetRefreshTimerStatus(true);
                 return;
             }
 

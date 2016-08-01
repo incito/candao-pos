@@ -92,6 +92,7 @@
     <ReportLossCanDao Addr="/member/deal/CardLose.json"/><!--餐道会员会员挂失-->
     <CancelCanDao Addr="/member/memberManager/delete.json"/><!--餐道会员会员注销-->
     <SaleCanDao Addr="/member/deal/MemberSale.json"/><!--餐道会员会员消费-->
+    <VoidSaleCanDao Addr="/member/deal/VoidSale.json"/><!--餐道会员取消消费-->
 
     <VipChangeCardNum Addr="/member/rest/memberCardService/cardNoByModify" /><!--修改会员卡号-->
     <VipChangeInfo Addr="/member/rest/memberService/memberEditService" /><!--修改会员基本信息-->

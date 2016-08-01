@@ -64,11 +64,6 @@ namespace CanDao.Pos.Common
         public static string BranchTelephone { get; set; }
 
         /// <summary>
-        /// 地址。
-        /// </summary>
-        public static string BranchAddress { get; set; }
-
-        /// <summary>
         /// 餐具信息。
         /// </summary>
         public static OrderDishInfo DinnerWareInfo { get; set; }
