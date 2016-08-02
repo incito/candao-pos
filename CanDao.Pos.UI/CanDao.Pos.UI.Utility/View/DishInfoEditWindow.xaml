@@ -3,6 +3,7 @@
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+                        xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
                         CloseBtnText="{Binding WndTitle}" CloseBtnEnable="False"
                         Width="530" Height="300"
                         ShowInTaskbar="False"
@@ -38,13 +39,15 @@
             <TextBlock Text="菜品名称："/>
             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DishName}" IsEnabled="{Binding AllowEditDishName}"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="菜品单价："/>
-            <controls:DoubleUpDown Grid.Row="1" Grid.Column="1"
+            <toolkit:DoubleTextBox Grid.Row="1" Grid.Column="1"
                                    Text="{Binding DishPrice}"
                                    ShowButtonSpinner="False"
+                                   DecimalPlaces="2"
                                    IsEnabled="{Binding AllowEditDishPrice}"/>
             <TextBlock Grid.Row="2" Grid.Column="0" Text="菜品数量："/>
-            <controls:DoubleUpDown x:Name="TbDishNum"
+            <toolkit:DoubleTextBox x:Name="TbDishNum"
                                    Grid.Row="2" Grid.Column="1"
+                                   DecimalPlaces="2"
                                    Text="{Binding DishNum, UpdateSourceTrigger=PropertyChanged}"/>
             <view:WindowButtonOperControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
         </Grid>

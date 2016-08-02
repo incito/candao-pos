@@ -7,19 +7,20 @@ namespace CanDao.Pos.Common
     {
         public static string MyMessage(this Exception exp)
         {
-            while (true)
-            {
-                if (exp.InnerException != null)
-                {
-                    if (exp.InnerException is WebException)
-                        return exp.InnerException.Message + "，请检查网络是否正常，服务器是否正常。";
+            return exp.Message;
+            //while (true)
+            //{
+            //    if (exp.InnerException != null)
+            //    {
+            //        if (exp.InnerException is WebException)
+            //            return exp.InnerException.Message + "，请检查网络是否正常，服务器是否正常。";
 
-                    exp = exp.InnerException;
-                    continue;
-                }
+            //        exp = exp.InnerException;
+            //        continue;
+            //    }
 
-                return exp.Message;
-            }
+            //    return exp.Message;
+            //}
         }
     }
 }

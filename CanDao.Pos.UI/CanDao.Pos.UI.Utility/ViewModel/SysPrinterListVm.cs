@@ -118,7 +118,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             _refreshTimer.Stop();
             OwnerCtrl.Dispatcher.BeginInvoke((Action)delegate
             {
-                TaskService.Start(null, GetPrinterStatusProcess, GetPrinterStatusComplete, "获取打印机状态中...");
+                TaskService.Start(null, GetPrinterStatusProcess, GetPrinterStatusComplete, null);
             });
         }
 

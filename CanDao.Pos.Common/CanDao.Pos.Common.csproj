@@ -151,7 +151,6 @@
     <Compile Include="Controls\CSystem\WUserCheck.xaml.cs">
       <DependentUpon>WUserCheck.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DoubleUpDown\Implementation\DoubleUpDown.cs" />
     <Compile Include="Controls\GroupSelector\Implementation\GroupSelector.cs" />
     <Compile Include="Controls\NewControl\CtDigitalTextBox.cs" />
     <Compile Include="Controls\NewControl\CtEnterTextBox.cs" />
@@ -286,10 +285,6 @@
     <Page Include="Controls\CSystem\WUserCheck.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\DoubleUpDown\Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\FlagControl\Themes\Generic.xaml">
       <SubType>Designer</SubType>

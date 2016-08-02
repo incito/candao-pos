@@ -6,7 +6,8 @@
                        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                        xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
                        Title="{Binding WindowNotice, StringFormat={}{0}}"
-                       Height="427" Width="330">
+                       Height="427" Width="330"
+                       WindowStartupLocation="CenterScreen">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="PreviewKeyDown">
             <common:ExInvokeCommandAction  Command="{Binding PreKeyDownCmd}" CommandParameter="{Binding ElementName=MainWnd}" />

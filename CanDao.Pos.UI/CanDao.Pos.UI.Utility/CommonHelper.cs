@@ -143,7 +143,6 @@ namespace CanDao.Pos.UI.Utility
             _arEvent.Set();
 
             NotifyDialog.Notify("清机成功。");
-            MessageDialog.Warning("清机成功。");
             return null;
         }
 
