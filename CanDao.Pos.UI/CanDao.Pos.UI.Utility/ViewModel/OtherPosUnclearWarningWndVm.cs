@@ -22,7 +22,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         private void ApplicationShutDown(object arg)
         {
-            if (OwnerWindow.DialogResult == true)
+            if (OwnerWindow.DialogResult != true)
                 Application.Current.Shutdown();
         }
 

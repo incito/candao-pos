@@ -202,6 +202,7 @@
     </Style>
 
     <Style x:Key="BtnBackStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">

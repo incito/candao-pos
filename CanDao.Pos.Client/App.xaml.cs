@@ -59,7 +59,7 @@ namespace CanDao.Pos.Client
             }
             InfoLog.Instance.I("与服务器的连接正常。");
 
-            //GetBranchInfoAsync();
+            GetBankInfosAsync();
             GetTradeTimeAsync();
             GetOddSettingAsync();
             GetDietSettingAsync();
@@ -139,6 +139,31 @@ namespace CanDao.Pos.Client
         }
 
         /// <summary>
+        /// 异步获取结账可选银行集合。
+        /// </summary>
+        private void GetBankInfosAsync()
+        {
+
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                InfoLog.Instance.I("异步获取可选银行信息...");
+                var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+                if (service == null)
+                {
+                    ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                    return;
+                }
+
+                var result = service.GetAllBankInfos();
+                InfoLog.Instance.I("异步获取可选银行信息完成。");
+                if (!string.IsNullOrEmpty(result.Item1))
+                    ErrLog.Instance.E("异步获取可选银行时错误：{0}", result.Item1);
+                else
+                    Globals.BankInfos = result.Item2;
+            });
+        }
+
+        /// <summary>
         /// 异步获取营业时间。
         /// </summary>
         private void GetTradeTimeAsync()
@@ -159,30 +184,6 @@ namespace CanDao.Pos.Client
                     ErrLog.Instance.E("异步获取营业时间时错误：{0}", result.Item1);
                 else
                     Globals.TradeTime = result.Item2;
-            });
-        }
-
-        /// <summary>
-        /// 异步获取分店信息。
-        /// </summary>
-        private void GetBranchInfoAsync()
-        {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                InfoLog.Instance.I("异步获取分店信息...");
-                var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-                if (service == null)
-                {
-                    ErrLog.Instance.E("创建IRestaurantService服务失败。");
-                    return;
-                }
-
-                var result = service.GetBranchInfo();
-                InfoLog.Instance.I("异步获取分店信息完成。");
-                if (!string.IsNullOrEmpty(result.Item1))
-                    ErrLog.Instance.E("异步获取分店信息时错误：{0}", result.Item1);
-                else
-                    Globals.BranchInfo = result.Item2;
             });
         }
 
@@ -252,6 +253,7 @@ namespace CanDao.Pos.Client
                 }
             });
         }
+
         /// <summary>
         /// 异步获取餐具设置。
         /// </summary>

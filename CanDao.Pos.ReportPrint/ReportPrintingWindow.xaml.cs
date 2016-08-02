@@ -1,4 +1,6 @@
-﻿namespace CanDao.Pos.ReportPrint
+﻿using System.Windows;
+
+namespace CanDao.Pos.ReportPrint
 {
     /// <summary>
     /// 正在打印的提示窗口。
@@ -25,6 +27,11 @@
                 }
                 return _instance;
             }
+        }
+
+        protected override void CancelBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Close();
         }
 
         private ReportPrintingWindow()

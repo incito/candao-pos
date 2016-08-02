@@ -451,7 +451,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
-                return new Tuple<string, BranchInfo>(ex.MyMessage(), null);
+                return new Tuple<string, BranchInfo>(ex.Message, null);
             }
         }
 

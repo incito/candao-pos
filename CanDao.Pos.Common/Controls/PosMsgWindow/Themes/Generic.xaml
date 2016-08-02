@@ -17,6 +17,7 @@
         <Setter Property="Icon" Value="{StaticResource CanDaoPosImageLog3}"></Setter>
         <Setter Property="WindowCornerRadius" Value="3"/>
         <Setter Property="MaxHeight" Value="768"/>
+        
 
         <Setter Property="Template">
             <Setter.Value>

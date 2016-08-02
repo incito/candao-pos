@@ -873,7 +873,6 @@ namespace CanDao.Pos.ReportPrint
         private static void ShowReportPrintingWindow()
         {
             ReportPrintingWindow.Instance.Show();
-            System.Windows.Forms.Application.DoEvents();
         }
 
         /// <summary>

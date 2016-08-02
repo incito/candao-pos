@@ -687,6 +687,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void ClearnMachine()
         {
+            InfoLog.Instance.I("点击清机按钮，选择清机或结业...");
             var hasDinnerTable = Tables.Any(t => t.TableStatus == EnumTableStatus.Dinner);
             var wnd = new SelectClearnStepWindow(!hasDinnerTable, IsForcedEndWorkModel);
             if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
@@ -694,9 +695,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (wnd.IsEndWork)
             {
+                InfoLog.Instance.I("选择的是结业，开始判断所有机器是否都清机。 ");
                 if (!CommonHelper.ClearAllPos(false))
                     return;
 
+                InfoLog.Instance.I("所有机器都清机完成，开始结业...");
                 EndWork();
             }
             else
@@ -711,10 +714,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void EndWork()
         {
-            AuthorizationWindow wnd = new AuthorizationWindow(EnumRightType.EndWork);
+            InfoLog.Instance.I("结业授权...");
+            var wnd = new AuthorizationWindow(EnumRightType.EndWork);
             if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
+            {
+                InfoLog.Instance.I("结业授权失败，终止结业。");
                 return;
+            }
 
+            InfoLog.Instance.I("结业授权成功，开始调用结业接口...");
             var request = new EndWorkRequest { UserId = Globals.UserInfo.UserName };
             TaskService.Start(request, EndWorkProcess, EndWorkComplete, "结业中...");
         }
@@ -743,10 +751,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result))
             {
                 SetRefreshTimerStatus(true);
+                ErrLog.Instance.E("结业接口调用失败：{0}", result);
                 MessageDialog.Warning(result, OwnerWindow);
                 return;
             }
 
+            InfoLog.Instance.I("结业成功，开始调用结业上传数据接口...");
             EndWorkSyncData();
         }
 
@@ -782,13 +792,22 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var result = (string)param;
             if (!string.IsNullOrEmpty(result))
             {
-                if (MessageDialog.Quest(result + Environment.NewLine + "上传数据失败，是否重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃上传。"))
+                ErrLog.Instance.E("结业后上传数据接口调用失败：{0}", result);
+                if (
+                    MessageDialog.Quest(result + Environment.NewLine + "上传数据失败，是否重新上传？" + Environment.NewLine +
+                                        "\"确定\"重新上传，\"取消\"放弃上传。"))
+                {
+                    InfoLog.Instance.I("选择了重新上传结业数据...");
                     EndWorkSyncData();
+                }
+
+                InfoLog.Instance.I("选择取消重新上传结业数据。");
                 return;
             }
 
+            InfoLog.Instance.I("结业数据上传成功。");
             MessageDialog.Warning("结业成功。", OwnerWindow);
-            CommonHelper.ForcedLogin();
+            Application.Current.Shutdown();
         }
 
         /// <summary>

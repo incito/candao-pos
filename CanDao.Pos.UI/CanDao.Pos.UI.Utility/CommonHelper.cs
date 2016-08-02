@@ -25,6 +25,9 @@ namespace CanDao.Pos.UI.Utility
         /// </summary>
         private static bool _isInForcedEndWorkModel;
 
+        /// <summary>
+        /// 清机成功。
+        /// </summary>
         private static bool _clearPosSuccess = false;
 
         private static AutoResetEvent _arEvent = new AutoResetEvent(false);
@@ -56,9 +59,11 @@ namespace CanDao.Pos.UI.Utility
                 return false;
             }
 
+            InfoLog.Instance.I("开始获取所有未清机的POS信息...");
             var result = service.GetUnclearnPosInfo();
             if (!string.IsNullOrEmpty(result.Item1))
             {
+                ErrLog.Instance.E("获取所有未清机的POS信息失败：{0}", result.Item1);
                 MessageDialog.Warning(result.Item1);
                 return false;
             }
@@ -86,6 +91,7 @@ namespace CanDao.Pos.UI.Utility
                 }
             }
 
+            InfoLog.Instance.I("所有机器都已清机。");
             return true;
         }
 
@@ -135,6 +141,8 @@ namespace CanDao.Pos.UI.Utility
             ReportPrintHelper.PrintClearPosReport(result.Item2);
             _clearPosSuccess = true;
             _arEvent.Set();
+
+            NotifyDialog.Notify("清机成功。");
             MessageDialog.Warning("清机成功。");
             return null;
         }
@@ -152,7 +160,7 @@ namespace CanDao.Pos.UI.Utility
             else
                 Application.Current.MainWindow.Close();
         }
-        
+
         #endregion
 
         #region 订单反结算

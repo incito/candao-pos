@@ -15,13 +15,15 @@ namespace CanDao.Pos.UI.Utility.View
         /// <summary>
         /// 数字输入窗口。
         /// </summary>
+        /// <param name="title">窗口标题。</param>
         /// <param name="tipInfo">提示信息。</param>
         /// <param name="numWatermark">数字输入框的水印提示。</param>
         /// <param name="maxNum">最大输入数量，为0时不做判断。</param>
         /// <param name="allowDot">是否允许输入小数点。</param>
-        public NumInputWindow(string tipInfo, string numWatermark, decimal maxNum, bool allowDot = true)
+        public NumInputWindow(string title, string tipInfo, string numWatermark, decimal maxNum, bool allowDot = true)
         {
             InitializeComponent();
+            Title = title;
             TipInfo = tipInfo;
             NumWatermark = numWatermark;
             MaxNum = maxNum;
