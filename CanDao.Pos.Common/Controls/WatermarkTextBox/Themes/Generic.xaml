@@ -28,11 +28,10 @@
     <SolidColorBrush x:Key="TextBoxDisabledBackground" Color="#FFF4F4F4" />
 
     <DataTemplate x:Key="DefaultWatermarkTemplate">
-        <ContentControl Content="{Binding}" Foreground="Gray" Focusable="False" />
+        <ContentControl Content="{Binding}" Foreground="{StaticResource CanDaoPosColorFgWatermarket}" Focusable="False" />
     </DataTemplate>
 
-    <Style TargetType="{x:Type local:WatermarkTextBox}">
-        <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorder}" />
+    <Style x:Key="WatermarkTbBaseStyle" TargetType="{x:Type local:WatermarkTextBox}">
         <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgWhite}"/>
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="3" />
@@ -94,4 +93,6 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style TargetType="local:WatermarkTextBox" BasedOn="{StaticResource WatermarkTbBaseStyle}"/>
 </ResourceDictionary>

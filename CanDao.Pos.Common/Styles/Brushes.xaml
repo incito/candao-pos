@@ -16,6 +16,7 @@
 
 
     <SolidColorBrush x:Key="CanDaoPosColorFgOrange" Color="#FFFF5803"/>
+    <SolidColorBrush x:Key="CanDaoPosColorFgWatermarket" Color="#FF969696"/>
     <SolidColorBrush x:Key="CanDaoPosColorFg" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="CanDaoPosColorFgFont" Color="#FF000000"/>
     <SolidColorBrush x:Key="CanDaoPosColorFgGray" Color="#FFA8A8A8"/>

@@ -101,7 +101,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override void Confirm(object param)
         {
-            TaskService.Start(new Tuple<string, string>(Account, Password), LoginProcess, LoginComplete, "授权验证中...");
+            var userLoginWf = new WorkFlowInfo(LoginProcess, LoginComplete, "用户身份验证...");
+            var getUserRightWf = new WorkFlowInfo(GetUserRightProcess, GetUserRightComplete, "获取用户权限中...");
+            userLoginWf.NextWorkFlowInfo = getUserRightWf;
+            var arg = new Tuple<string, string>(Account, Password);
+            WorkFlowService.Start(arg, userLoginWf);
         }
 
         protected override bool CanConfirm(object param)
@@ -120,7 +124,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <returns></returns>
         private object LoginProcess(object param)
         {
-            var info = (Tuple<string, string>)param;
             var service = ServiceManager.Instance.GetServiceIntance<IAccountService>();
             if (service == null)
             {
@@ -129,38 +132,20 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return msg;
             }
 
-            return service.Login(info.Item1, info.Item2, _rightType);
+            return service.Login(Account, Password, _rightType);
         }
 
         /// <summary>
         /// 授权登录执行完成后。
         /// </summary>
         /// <param name="param"></param>
-        private void LoginComplete(object param)
+        private Tuple<bool, object> LoginComplete(object param)
         {
             var result = (Tuple<string, string>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 MessageDialog.Warning(result.Item1, OwnerWindow);
-                return;
-            }
-
-            switch (_rightType)
-            {
-                case EnumRightType.Login:
-                case EnumRightType.Clearner:
-                    Globals.UserInfo.UserName = Account;
-                    Globals.UserInfo.Password = Password;
-                    Globals.UserInfo.FullName = result.Item2;
-                    TaskService.Start(Account, GetUserRightProcess, GetUserRightComplete, "获取用户权限中...");
-                    break;
-                case EnumRightType.Opening:
-                    Tuple<string, string> info = new Tuple<string, string>(Account, Password);
-                    TaskService.Start(info, OpeningProcess, OpeningComplete, "开业中...");
-                    break;
-                default:
-                    CloseWindow(true);
-                    break;
+                return null;
             }
 
             if (_rightType != EnumRightType.Login)
@@ -168,40 +153,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 Globals.Authorizer.UserName = Account;
                 Globals.Authorizer.FullName = result.Item2;
             }
-        }
 
-        /// <summary>
-        /// 执行开业方法。
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private object OpeningProcess(object param)
-        {
-            var info = (Tuple<string, string>)param;
-            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-            if (service == null)
-            {
-                var msg = "创建IRestaurantService服务接口失败。";
-                ErrLog.Instance.E(msg);
-                return msg;
-            }
-            return service.RestaurantOpening(info.Item1, info.Item2);
-        }
-
-        /// <summary>
-        /// 执行开业完成后。
-        /// </summary>
-        /// <param name="param"></param>
-        private void OpeningComplete(object param)
-        {
-            var result = param as string;
-            if (!string.IsNullOrEmpty(result))
-            {
-                MessageDialog.Warning(result, OwnerWindow);
-                return;
-            }
-
-            CloseWindow(true);
+            return new Tuple<bool, object>(true, Account);
         }
 
         /// <summary>
@@ -226,19 +179,64 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// 获取用户权限执行完成后。
         /// </summary>
         /// <param name="param"></param>
-        private void GetUserRightComplete(object param)
+        private Tuple<bool, object> GetUserRightComplete(object param)
         {
             var result = (Tuple<string, UserRight>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 MessageDialog.Warning(result.Item1, OwnerWindow);
+                return null;
             }
 
-            Globals.UserRight.CloneDataFrom(result.Item2);
-            if (Globals.UserRight.AllowCash)
-                TaskService.Start(Account, CheckPettyCashInputProcess, CheckPettyCashInputComplete, "检测零找金...");
-            else
-                CloseWindow(true);
+            switch (_rightType)
+            {
+                case EnumRightType.Opening:
+                    TaskService.Start(null, OpeningProcess, OpeningComplete, "开业中...");
+                    break;
+                case EnumRightType.Login:
+                    Globals.UserRight.CloneDataFrom(result.Item2);
+                    if (Globals.UserRight.AllowCash)
+                        TaskService.Start(Account, CheckPettyCashInputProcess, CheckPettyCashInputComplete, "检测零找金...");
+                    break;
+                default:
+                    CloseWindow(true);
+                    break;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 执行开业方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object OpeningProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+            {
+                var msg = "创建IRestaurantService服务接口失败。";
+                ErrLog.Instance.E(msg);
+                return msg;
+            }
+            return service.RestaurantOpening(Account, Password);
+        }
+
+        /// <summary>
+        /// 执行开业完成后。
+        /// </summary>
+        /// <param name="param"></param>
+        private void OpeningComplete(object param)
+        {
+            var result = param as string;
+            if (!string.IsNullOrEmpty(result))
+            {
+                MessageDialog.Warning(result, OwnerWindow);
+                return;
+            }
+
+            CloseWindow(true);
         }
 
         /// <summary>
@@ -266,7 +264,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 MessageDialog.Warning(result.Item1, OwnerWindow);
                 ErrLog.Instance.E(result.Item1);
-                CloseWindow(false);
                 return;
             }
 

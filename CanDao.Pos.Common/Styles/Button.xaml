@@ -268,6 +268,39 @@
         </Setter>
     </Style>
     
+    <Style x:Key="BtnClearStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            Background="{TemplateBinding Background}" BorderThickness="0">
+                        <Image x:Name="Img"
+                               Source="{StaticResource CanDaoPosImageClear}" 
+                               Width="26" Height="30"
+                               UseLayoutRounding="True"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
+                            <Setter Property="Source" TargetName="Img" Value="{StaticResource CanDaoPosImageBackPress}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <Style x:Key="BtnCloseStyle" TargetType="Button">
         <Setter Property="Width" Value="22"/>
         <Setter Property="Height" Value="22"/>

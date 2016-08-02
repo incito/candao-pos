@@ -26,8 +26,8 @@ namespace CanDao.Pos.ServiceImpl
             string addr = ServiceAddrCache.GetServiceAddr("RestaurantOpened");
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, bool>("开业接口地址为空。", false);
-            List<string> param = new List<string> {"", "", PCInfoHelper.LocalIPAddr, "0"};
-                //最后一个"0"是接口的CallType为1时是开业，为0时是检测是否开业。
+            List<string> param = new List<string> { "", "", PCInfoHelper.LocalIPAddr, "0" };
+            //最后一个"0"是接口的CallType为1时是开业，为0时是检测是否开业。
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, bool>(result.Item1, false);
@@ -40,8 +40,8 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "开业接口地址为空。";
 
-            List<string> param = new List<string> {userName, password, PCInfoHelper.LocalIPAddr, "1"};
-                //最后一个"1"是接口的CallType为1时是开业，为0时是检测是否开业。
+            List<string> param = new List<string> { userName, password, PCInfoHelper.LocalIPAddr, "1" };
+            //最后一个"1"是接口的CallType为1时是开业，为0时是检测是否开业。
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return result.Item1;
@@ -54,8 +54,8 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, bool>("零找金接口地址为空。", false);
 
-            List<string> param = new List<string> {userName, MachineManage.GetMachineId(), "0", "0"};
-                //参数顺序：当前用户，机器标识，零找金额，查询或输入（0查询，1输入）
+            List<string> param = new List<string> { userName, MachineManage.GetMachineId(), "0", "0" };
+            //参数顺序：当前用户，机器标识，零找金额，查询或输入（0查询，1输入）
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, bool>(string.Format("检测是否输入零找金是错误：{0}", result.Item1), false);
@@ -89,7 +89,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new GetSystemSetDataRequest {type = type.ToString("G")};
+                var request = new GetSystemSetDataRequest { type = type.ToString("G") };
                 var result = HttpHelper.HttpPost<GetSystemSetDataResponse>(addr, request);
                 if (result == null || !result.rows.Any())
                     return new Tuple<string, List<SystemSetData>>("返回系统设置值为空。", null);
@@ -110,7 +110,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, OrderDishInfo>("获取餐具信息地址为空。", null);
 
-            var param = new List<string> {userName};
+            var param = new List<string> { userName };
             var result = RestHttpHelper.HttpGet<GetDinnerWareInfoResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, OrderDishInfo>(result.Item1, null);
@@ -139,11 +139,11 @@ namespace CanDao.Pos.ServiceImpl
                 if (result.IsSuccess)
                 {
                     dataList = result.data.Select(DataConverter.ToTableInfo).ToList();
-                    return new Tuple<string, List<TableInfo>>(null, dataList); 
+                    return new Tuple<string, List<TableInfo>>(null, dataList);
                 }
                 else
                 {
-                    return new Tuple<string, List<TableInfo>>(result.msg, null); 
+                    return new Tuple<string, List<TableInfo>>(result.msg, null);
                 }
             }
             catch (Exception ex)
@@ -163,7 +163,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var request = new GetTableByTypeRequest
                 {
-                    tableType = tableTypes.Select(t => ((int) t).ToString()).ToList()
+                    tableType = tableTypes.Select(t => ((int)t).ToString()).ToList()
                 };
                 var result = HttpHelper.HttpPost<List<TableInfoResponse>>(addr, request);
                 var dataList = new List<TableInfo>();
@@ -223,7 +223,7 @@ namespace CanDao.Pos.ServiceImpl
 
             var mac = request.Mac ?? MachineManage.GetMachineId();
             var posId = request.PosId ?? SystemConfigCache.PosId;
-            var param = new List<string> {request.UserId, request.UserName, mac, posId, request.Authorizer};
+            var param = new List<string> { request.UserId, request.UserName, mac, posId, request.Authorizer };
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return "清机失败：" + result.Item1;
@@ -260,7 +260,7 @@ namespace CanDao.Pos.ServiceImpl
                 return "结业地址为空。";
 
             var ipAddr = request.IpAddress ?? PCInfoHelper.IPAddr;
-            var param = new List<string> {request.UserId, ipAddr};
+            var param = new List<string> { request.UserId, ipAddr };
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return "结业失败：" + result.Item1;
@@ -277,8 +277,8 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var request = new EndWorkSyncDataRequest();
-                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return result.IsSuccess ? null : "通知后台同步数据失败。";
+                var result = HttpHelper.HttpPost<SyncDataResponse>(addr, request);
+                return result.IsSuccess ? null : !string.IsNullOrWhiteSpace(result.message) ? result.message : "通知后台同步数据失败。";
             }
             catch (Exception ex)
             {
@@ -293,7 +293,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "广播消息地址为空。";
 
-            var param = new List<string> {Globals.UserInfo.UserName, msgId.ToString(), msg};
+            var param = new List<string> { Globals.UserInfo.UserName, msgId.ToString(), msg };
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return "广播消息失败：" + result.Item1;
@@ -386,7 +386,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetClearPosInfo");
-                var list = new List<string> {userId, " ", SystemConfigCache.PosId};
+                var list = new List<string> { userId, " ", SystemConfigCache.PosId };
                 return RestHttpHelper.HttpGet<GetClearPosInfoResponse>(addr, list);
             }
             catch (Exception exp)
@@ -401,7 +401,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetReportTipInfo");
-                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
+                var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
                 var result = HttpHelper.HttpGet<GetReportStatisticInfoBase<ReportDishInfoResponse>>(addr, request);
                 if (!result.IsSuccess)
                     return
@@ -421,7 +421,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetReportDishInfo");
-                var request = new Dictionary<string, string> {{"flag", ((int) periodsType).ToString()}};
+                var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
                 var result = HttpHelper.HttpGet<GetReportStatisticInfoBase<ReportDishInfoResponse>>(addr, request);
                 if (!result.IsSuccess)
                     return
@@ -463,7 +463,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new List<string> {cashIpAddr};
+                var param = new List<string> { cashIpAddr };
                 var response = RestHttpHelper.HttpGet(addr, param);
                 if (!string.IsNullOrEmpty(response.Item1))
                     return string.IsNullOrEmpty(response.Item1) ? "打开钱箱失败。" : response.Item1;
@@ -486,7 +486,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new List<string> {userId};
+                var param = new List<string> { userId };
                 var result = RestHttpHelper.HttpGet<QueryOrderInfoResponse>(addr, param);
                 if (!string.IsNullOrEmpty(result.Item1))
                     return new Tuple<string, List<QueryOrderInfo>>(string.Format("账单查询失败：{0}", result.Item1), null);

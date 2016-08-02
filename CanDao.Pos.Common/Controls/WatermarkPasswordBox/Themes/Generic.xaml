@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/CanDao.Pos.Common;component/Controls/WatermarkTextBox/Themes/Generic.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+    <Style TargetType="controls:WatermarkPasswordBox" BasedOn="{StaticResource WatermarkTbBaseStyle}"/>
+
+</ResourceDictionary>

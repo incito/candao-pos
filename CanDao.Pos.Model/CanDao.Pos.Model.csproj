@@ -166,6 +166,7 @@
     <Compile Include="Response\SendVerifyCodeResponse.cs" />
     <Compile Include="PrintOrderFullInfo.cs" />
     <Compile Include="Response\SetCouponFavorResponse.cs" />
+    <Compile Include="Response\SyncDataResponse.cs" />
     <Compile Include="Response\VipCheckCardResponse.cs" />
     <Compile Include="UnclearMachineInfo.cs" />
     <Compile Include="OnCompanyAccountInfo.cs" />

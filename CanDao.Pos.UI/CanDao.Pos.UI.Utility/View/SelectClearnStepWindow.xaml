@@ -2,7 +2,8 @@
                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-                        Width="550" SizeToContent="Height" CloseBtnText="倒班结业选择" ShowInTaskbar="False">
+                        Width="550" SizeToContent="Height"
+                        ShowInTaskbar="False">
     <controls:PosBaseWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

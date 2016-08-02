@@ -100,7 +100,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindableBase.cs" />
+    <Compile Include="ControlAttachProperty.cs" />
     <Compile Include="Controls\FlagControl\Implementation\FlagControl.cs" />
+    <Compile Include="Controls\WatermarkPasswordBox\Implementation\WatermarkPasswordBox.cs" />
+    <Compile Include="Controls\WatermarkTextBox\Implementation\WatermarkTextBox.cs" />
     <Compile Include="Converter\CountToBooleanConverter.cs" />
     <Compile Include="Converter\MultBooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\PaiedStatus2StringConverter.cs" />
@@ -163,7 +166,6 @@
     <Compile Include="Controls\NewControl\UcPageList.xaml.cs">
       <DependentUpon>UcPageList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WatermarkTextBox\Implementation\WatermarkTextBox.cs" />
     <Compile Include="Converter\BooleanRevertConverter.cs" />
     <Compile Include="Converter\BooleanToCollapsedConverter.cs" />
     <Compile Include="Converter\CountAddOneConverter.cs" />
@@ -317,6 +319,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\WatermarkPasswordBox\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\WatermarkTextBox\Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -445,6 +451,10 @@
     <Resource Include="Images\Back_Normal.png" />
     <Resource Include="Images\Back_Transparent.png" />
     <Resource Include="Images\Close_Normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Clear_Normal.png" />
+    <Resource Include="Images\Clear_Transparent.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

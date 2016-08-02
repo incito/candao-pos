@@ -1,14 +1,14 @@
 ﻿<controls:PosBaseWindow x:Class="CanDao.Pos.UI.MainView.View.TableOperWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:templateSelector="clr-namespace:CanDao.Pos.Common.TemplateSelector;assembly=CanDao.Pos.Common"
-             xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-             xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
-             xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
-             Height="768" Width="1024" ShowInTaskbar="False"
-             x:Name="MainWnd">
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+                        xmlns:templateSelector="clr-namespace:CanDao.Pos.Common.TemplateSelector;assembly=CanDao.Pos.Common"
+                        xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
+                        xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
+                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
+                        Height="768" Width="1024" ShowInTaskbar="False"
+                        x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding GetTableDishInfoCmd}" CommandParameter="Load"/>
@@ -33,19 +33,26 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="350"/>
-            <ColumnDefinition Width="53"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <!--左侧部分-->
         <Grid Background="{StaticResource CanDaoPosColorBgWhite}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <Border Background="{StaticResource CanDaoPosColorBgGray}"
                     CornerRadius="2"
                     Height="53">
@@ -81,7 +88,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="1"
+            <Border Grid.Row="1" Grid.Column="0"
                     Background="{StaticResource CanDaoPosColorFg}"
                     Height="310">
                 <controls:GroupSelector x:Name="DishGroupSelector"
@@ -123,7 +130,8 @@
                 </controls:GroupSelector>
             </Border>
 
-            <Grid Grid.Row="2"  Margin="10">
+            <Grid Grid.Row="2" Grid.Column="0"
+                  Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -138,7 +146,7 @@
                 </controls:FlagControl>
             </Grid>
 
-            <Border Grid.Row="3"
+            <Border Grid.Row="3" Grid.Column="0"
                     Background="{StaticResource CanDaoPosColorFg}">
                 <controls:GroupSelector x:Name="CouponGroupSelector"
                                         ItemsSource="{Binding Data.UsedCouponInfos}"
@@ -164,7 +172,7 @@
 
             </Border>
             
-            <StackPanel Grid.Row="4">
+            <StackPanel Grid.Row="4" Grid.Column="0">
                 <controls:FlagControl Margin="0,4">
                     <TextBlock Text="{Binding Data.TotalFreeAmount, StringFormat=优惠总额：{0}}" FontSize="14"/>
                 </controls:FlagControl>
@@ -173,78 +181,99 @@
                 </controls:FlagControl>
             </StackPanel>
 
-            <StackPanel Grid.Row="5" Margin="10,0" Orientation="Horizontal">
-                <Button Content="预结单" Command="{Binding PrintCmd}" CommandParameter="PreSettlement" Width="65" Height="40"/>
-                <Button Content="反结" Command="{Binding OperCmd}" CommandParameter="Resettlement" Width="65" Height="40"/>
-                <Button Content="点菜" Command="{Binding OperCmd}" CommandParameter="Order" Width="65" Height="40"/>
-                <Button Content="弹钱箱" Command="{Binding OperCmd}" CommandParameter="OpenCashBox" Width="65" Height="40"/>
-                <Button x:Name="BtnMore" Content="更多" Command="{Binding OperCmd}" CommandParameter="More" Width="65" Height="40"/>
-                <Popup IsOpen="{Binding IsPrintMoreOpened}" PlacementTarget="{Binding ElementName=BtnMore}" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade">
-                    <Border Background="{StaticResource CanDaoPosColorBg2}">
-                        <StackPanel >
-                            <Button Content="整单退菜" Command="{Binding OperCmd}" CommandParameter="BackAllDish" Width="90" Height="40" Margin="3"/>
-                            <Button Content="重印账单" Command="{Binding PrintCmd}" CommandParameter="ReprintBill" Width="90" Height="40" Margin="3"/>
-                            <Button Content="重印客用单" Command="{Binding PrintCmd}" CommandParameter="ReprintCustomUseBill" Width="90" Height="40" Margin="3"/>
-                            <Button Content="交易凭条" Command="{Binding PrintCmd}" CommandParameter="PrintTransactionSlip" Width="90" Height="40" Margin="3"/>
-                            <Button Content="取消订单" Command="{Binding OperCmd}" CommandParameter="CancelOrder" Width="90" Height="40" Margin="3"/>
-                            <Button Content="零头不处理" Command="{Binding OperCmd}" CommandParameter="KeepOdd" Width="90" Height="40" Margin="3"/>
-                        </StackPanel>
-                    </Border>
-                </Popup>
-            </StackPanel>
-        </Grid>
-        
-        <!--中间部分-->
-        <Grid Grid.Column="1" Background="{StaticResource CanDaoPosColorBgWhite}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <StackPanel Margin="0,53,0,0" >
-                <StackPanel Visibility="{Binding GroupCount,ElementName=DishGroupSelector, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
-                    <Button Style="{StaticResource BtnUpStyle}"
-                            Command="{Binding DataGridPageOperCmd}"
-                            CommandParameter="DishPreGroup"/>
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                Margin="0,12">
-                        <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=DishGroupSelector}"/>
-                        <TextBlock Text="/"/>
-                        <TextBlock Text="{Binding GroupCount, ElementName=DishGroupSelector}"/>
-                    </StackPanel>
-                    <Button Style="{StaticResource BtnDownStyle}"
-                            Command="{Binding DataGridPageOperCmd}"
-                            CommandParameter="DishNextGroup"/>
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <Button Style="{StaticResource BtnUpStyle}"
+                        Command="{Binding DataGridPageOperCmd}"
+                        CommandParameter="DishPreGroup"/>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,12">
+                    <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=DishGroupSelector}"/>
+                    <TextBlock Text="/"/>
+                    <TextBlock Text="{Binding GroupCount, ElementName=DishGroupSelector}"/>
                 </StackPanel>
+                <Button Style="{StaticResource BtnDownStyle}"
+                        Command="{Binding DataGridPageOperCmd}"
+                        CommandParameter="DishNextGroup"/>
                 <Button Style="{StaticResource BtnAddStyle}"
-                    Command="{Binding OperCmd}"
-                    CommandParameter="AddDish"/>
+                        Command="{Binding OperCmd}"
+                        CommandParameter="AddDish"/>
                 <Button Style="{StaticResource BtnReduceStyle}"
-                    Command="{Binding OperCmd}"
-                    CommandParameter="BackDish"/>
+                        Command="{Binding OperCmd}"
+                        CommandParameter="BackDish"/>
             </StackPanel>
-            <StackPanel Grid.Row="1">
-                <StackPanel Visibility="{Binding GroupCount,ElementName=CouponGroupSelector, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
-                    <Button Style="{StaticResource BtnUpStyle}"
-                            Command="{Binding DataGridPageOperCmd}"
-                            CommandParameter="CouponPreGroup"/>
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                Margin="0,12">
-                        <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=CouponGroupSelector}"/>
-                        <TextBlock Text="/"/>
-                        <TextBlock Text="{Binding GroupCount, ElementName=CouponGroupSelector}"/>
-                    </StackPanel>
-                    <Button Style="{StaticResource BtnDownStyle}"
-                            Command="{Binding DataGridPageOperCmd}"
-                            CommandParameter="CouponNextGroup"/>
+            
+            <StackPanel Grid.Row="3" Grid.Column="1">
+                <Button Style="{StaticResource BtnUpStyle}"
+                        Command="{Binding DataGridPageOperCmd}"
+                        CommandParameter="CouponPreGroup"/>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,12">
+                    <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=CouponGroupSelector}"/>
+                    <TextBlock Text="/"/>
+                    <TextBlock Text="{Binding GroupCount, ElementName=CouponGroupSelector}"/>
                 </StackPanel>
+                <Button Style="{StaticResource BtnDownStyle}"
+                        Command="{Binding DataGridPageOperCmd}"
+                        CommandParameter="CouponNextGroup"/>
 
                 <Button Style="{StaticResource BtnReduceStyle}"
-                    Command="{Binding OperCmd}"
-                    CommandParameter="CouponRemove"/>
+                        Command="{Binding OperCmd}"
+                        CommandParameter="CouponRemove"/>
+
+                <Button Style="{StaticResource BtnClearStyle}"
+                        Command="{Binding OperCmd}"
+                        CommandParameter="CouponClear"/>
             </StackPanel>
         </Grid>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0" Orientation="Horizontal">
+            <Button Content="预结单"
+                    Command="{Binding PrintCmd}" CommandParameter="PreSettlement"
+                    Width="70" Height="46"/>
+            <Button Content="反结"
+                    Command="{Binding OperCmd}" CommandParameter="Resettlement"
+                    Width="70" Height="46"/>
+            <Button Content="点菜"
+                    Command="{Binding OperCmd}" CommandParameter="Order"
+                    Width="70" Height="46"/>
+            <Button Content="弹钱箱"
+                    Command="{Binding OperCmd}" CommandParameter="OpenCashBox"
+                    Width="70" Height="46"/>
+            <Button x:Name="BtnMore" Content="更多"
+                    Command="{Binding OperCmd}" CommandParameter="More"
+                    Width="70" Height="46"/>
+            <Popup IsOpen="{Binding IsPrintMoreOpened}"
+                   PlacementTarget="{Binding ElementName=BtnMore}"
+                   StaysOpen="False"
+                   AllowsTransparency="True"
+                   PopupAnimation="Fade">
+                <Border Background="{StaticResource CanDaoPosColorBgGray}">
+                    <StackPanel >
+                        <Button Content="整单退菜"
+                                Command="{Binding OperCmd}" CommandParameter="BackAllDish"
+                                Width="90" Height="40" Margin="3"/>
+                        <Button Content="重印账单"
+                                Command="{Binding PrintCmd}" CommandParameter="ReprintBill"
+                                Width="90" Height="40" Margin="3"/>
+                        <Button Content="重印客用单"
+                                Command="{Binding PrintCmd}" CommandParameter="ReprintCustomUseBill"
+                                Width="90" Height="40" Margin="3"/>
+                        <Button Content="交易凭条"
+                                Command="{Binding PrintCmd}" CommandParameter="PrintTransactionSlip"
+                                Width="90" Height="40" Margin="3"/>
+                        <Button Content="取消订单"
+                                Command="{Binding OperCmd}" CommandParameter="CancelOrder"
+                                Width="90" Height="40" Margin="3"/>
+                        <Button Content="零头不处理"
+                                Command="{Binding OperCmd}" CommandParameter="KeepOdd"
+                                Width="90" Height="40" Margin="3"/>
+                    </StackPanel>
+                </Border>
+            </Popup>
+        </StackPanel>
+
 
         <!--右侧部分-->
         <Grid Grid.Column="2"

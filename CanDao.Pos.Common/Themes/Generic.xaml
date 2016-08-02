@@ -6,6 +6,7 @@
         <ResourceDictionary Source="/CanDao.Pos.Common;component/Controls/GroupSelector/Themes/Generic.xaml"/>
         <ResourceDictionary Source="/CanDao.Pos.Common;component/Controls/PosBaseWindow/Themes/Generic.xaml"/>
         <ResourceDictionary Source="/CanDao.Pos.Common;component/Controls/PosMsgWindow/Themes/Generic.xaml"/>
+        <ResourceDictionary Source="/CanDao.Pos.Common;component/Controls/WatermarkPasswordBox/Themes/Generic.xaml"/>
         <ResourceDictionary Source="/CanDao.Pos.Common;component/Controls/WatermarkTextBox/Themes/Generic.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

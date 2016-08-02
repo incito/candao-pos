@@ -26,5 +26,7 @@
     <BitmapImage x:Key="CanDaoPosImageClose" UriSource="/CanDao.Pos.Common;component/Images/Close_Normal.png"/>
     <BitmapImage x:Key="CanDaoPosImageBack" UriSource="/CanDao.Pos.Common;component/Images/Back_Normal.png"/>
     <BitmapImage x:Key="CanDaoPosImageBackPress" UriSource="/CanDao.Pos.Common;component/Images/Back_Transparent.png"/>
+    <BitmapImage x:Key="CanDaoPosImageClear" UriSource="/CanDao.Pos.Common;component/Images/Clear_Normal.png"/>
+    <BitmapImage x:Key="CanDaoPosImageClearPress" UriSource="/CanDao.Pos.Common;component/Images/Clear_Transparent.png"/>
 
 </ResourceDictionary>

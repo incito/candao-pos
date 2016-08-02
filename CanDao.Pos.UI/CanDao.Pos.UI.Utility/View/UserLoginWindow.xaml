@@ -51,13 +51,19 @@
                                            FontSize="24"
                                            Height="54" Width="250"
                                            VerticalContentAlignment="Center"/>
-                <controls:WatermarkTextBox x:Name="TbPwd"
+                <!--<controls:WatermarkTextBox x:Name="TbPwd"
                                            Grid.Row="1" Grid.Column="0"
                                            Watermark="密码："
                                            Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                                            FontSize="24"
                                            Height="54" Width="250"
-                                           VerticalContentAlignment="Center"/>
+                                           VerticalContentAlignment="Center"/>-->
+                <controls:WatermarkPasswordBox Grid.Row="1" Grid.Column="0"
+                                               Watermark="密码："
+                                               Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                               FontSize="24"
+                                               Height="54" Width="250"
+                                               VerticalContentAlignment="Center"/>
                 <CheckBox Grid.Row="2" Grid.Column="0"
                           Content="保存登录信息"
                           FontSize="20"
