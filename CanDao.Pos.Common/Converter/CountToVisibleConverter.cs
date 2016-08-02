@@ -8,7 +8,6 @@ namespace CanDao.Pos.Common.Converter
     /// </summary>
     public class CountToVisibleConverter : IValueConverter
     {
-
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return System.Convert.ToInt32(value) > 0 ? Visibility.Visible : Visibility.Collapsed;

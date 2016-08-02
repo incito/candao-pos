@@ -49,11 +49,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         }
 
         /// <summary>
-        /// 是否包含口味。
-        /// </summary>
-        public bool HasTasteInfos { get; set; }
-
-        /// <summary>
         /// 是否允许输入菜品数量。
         /// </summary>
         public bool AllowInputDishNum { get; set; }
@@ -141,7 +136,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override bool CanConfirm(object param)
         {
-            return !HasTasteInfos || ((SetDishTasteAndDietWindow)OwnerWindow).TasteSetCtrl.SelectedTaste != null;//当有口味时必须选择一个口味。
+            var tasteSetCtrl = ((SetDishTasteAndDietWindow) OwnerWindow).TasteSetCtrl;
+            return tasteSetCtrl.TasteInfos == null || !string.IsNullOrWhiteSpace(((SetDishTasteAndDietWindow)OwnerWindow).TasteSetCtrl.SelectedTaste);//当有口味时必须选择一个口味。
         }
 
         #endregion

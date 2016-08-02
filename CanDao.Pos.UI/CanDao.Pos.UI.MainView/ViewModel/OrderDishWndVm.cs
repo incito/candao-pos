@@ -176,7 +176,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand SelectDishCmd { get; private set; }
 
+        /// <summary>
+        /// 操作命令。
+        /// </summary>
         public ICommand OperCmd { get; private set; }
+
+        /// <summary>
+        /// 分组命令。
+        /// </summary>
+        public ICommand GroupCmd { get; private set; }
 
         #endregion
 
@@ -305,6 +313,52 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
+        private void Group(object param)
+        {
+            switch (param as string)
+            {
+                case "PreGroup":
+                    OwnerWnd.LbDishGroup.PreviousGroup();
+                    break;
+                case "NextGroup":
+                    OwnerWnd.LbDishGroup.NextGroup();
+                    break;
+                case "OrderDishPreGroup":
+                    OwnerWnd.DishGroupSelector.PreviousGroup();
+                    break;
+                case "OrderDishNextGroup":
+                    OwnerWnd.DishGroupSelector.NextGroup();
+                    break;
+                case "MenuDishPreGroup":
+                    OwnerWnd.MenuDishGroupSelector.PreviousGroup();
+                    break;
+                case "MenuDishNextGroup":
+                    OwnerWnd.MenuDishGroupSelector.NextGroup();
+                    break;
+            }
+        }
+
+        private bool CanGroup(object param)
+        {
+            switch (param as string)
+            {
+                case "PreGroup":
+                    return OwnerWnd.LbDishGroup.CanPreviousGroup;
+                case "NextGroup":
+                    return OwnerWnd.LbDishGroup.CanNextGruop;
+                case "OrderDishPreGroup":
+                    return OwnerWnd.DishGroupSelector.CanPreviousGroup;
+                case "OrderDishNextGroup":
+                    return OwnerWnd.DishGroupSelector.CanNextGruop;
+                case "MenuDishPreGroup":
+                    return OwnerWnd.MenuDishGroupSelector.CanPreviousGroup;
+                case "MenuDishNextGroup":
+                    return OwnerWnd.MenuDishGroupSelector.CanNextGruop;
+                default:
+                    return true;
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -315,6 +369,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             WndLoadCmd = CreateDelegateCommand(WndLoad);
             SelectDishCmd = CreateDelegateCommand(SelectDish);
             OperCmd = CreateDelegateCommand(Oper, CanOpen);
+            GroupCmd = CreateDelegateCommand(Group, CanGroup);
         }
 
         /// <summary>

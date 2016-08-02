@@ -6,7 +6,8 @@
              xmlns:viewModel="clr-namespace:CanDao.Pos.UI.Utility.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             x:Name="Ctrl">
+             x:Name="Ctrl"
+             Visibility="{Binding DishTasteInfos.Count, Converter={StaticResource Count2VisibleCvt}}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,7 +19,7 @@
         <viewModel:TasteSetControlVm/>
     </UserControl.DataContext>
     <StackPanel>
-        <TextBlock Text="选择口味" FontSize="18" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <TextBlock Text="选择口味" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <ListBox ItemContainerStyle="{StaticResource LbNormalStyle}"
                  SelectedItem="{Binding SelectedTaste}"
                  ItemsSource="{Binding DishTasteInfos}"

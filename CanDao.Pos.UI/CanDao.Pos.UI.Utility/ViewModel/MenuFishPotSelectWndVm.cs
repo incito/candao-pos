@@ -40,7 +40,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override bool CanConfirm(object param)
         {
-            return Data.FishDishes.All(t => t.SelectedCount > 0) && !string.IsNullOrEmpty(((MenuFishPotSelectWindow)OwnerWindow).TasteSetCtrl.SelectedTaste);
+            var tasteSetCtrl = ((MenuFishPotSelectWindow) OwnerWindow).TasteSetCtrl;
+            return Data.FishDishes.All(t => t.SelectedCount > 0) && (tasteSetCtrl.TasteInfos == null || !string.IsNullOrEmpty(tasteSetCtrl.SelectedTaste));
         }
 
         #endregion

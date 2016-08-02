@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
@@ -26,8 +27,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public AuthorizationWndVm(EnumRightType rightType, string userName)
         {
             _rightType = rightType;
-            //Account = userName;
-            Account = "002";
+            Account = userName;
             Password = "123456";
         }
 
@@ -92,6 +92,32 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 _password = value;
                 RaisePropertiesChanged("Password");
+            }
+        }
+
+        #endregion
+
+        #region Command
+
+        public ICommand PreKeyDownCmd { get; private set; }
+
+        #endregion
+
+        #region Command Methods
+
+        private void PreKeyDown(object param)
+        {
+            if (!(param is ExCommandParameter))
+                return;
+
+            var args = ((ExCommandParameter)param).EventArgs as KeyEventArgs;
+            if (args == null)
+                return;
+
+            if (args.Key == Key.Enter)
+            {
+                args.Handled = true;
+                ConfirmCmd.Execute(null);
             }
         }
 

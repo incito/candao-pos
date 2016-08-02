@@ -32,10 +32,13 @@
                                           Visibility="{TemplateBinding ShowButtonSpinner, Converter={StaticResource Bool2VisibilityCvt}}" 
                                           Style="{DynamicResource {x:Static themes:ResourceKeys.SpinnerButtonStyleKey}}"
                                           IsTabStop="{TemplateBinding IsTabStop}"
-                                          BorderThickness="0" BorderBrush="Transparent">
+                                          BorderThickness="0" BorderBrush="Transparent"
+                                          Width="38" Height="38">
                                 <RepeatButton.ContentTemplate>
                                     <DataTemplate>
-                                        <Image Source="{StaticResource CanDaoPosImageReduce}"/>
+                                        <Image Source="{StaticResource CanDaoPosImageReduce}"
+                                               Width="28" Height="4"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </RepeatButton.ContentTemplate>
                             </RepeatButton>
@@ -47,10 +50,13 @@
                                           Visibility="{TemplateBinding ShowButtonSpinner, Converter={StaticResource Bool2VisibilityCvt}}" 
                                           Style="{DynamicResource {x:Static themes:ResourceKeys.SpinnerButtonStyleKey}}"
                                           IsTabStop="{TemplateBinding IsTabStop}"
-                                          BorderThickness="0" BorderBrush="Transparent">
+                                          BorderThickness="0" BorderBrush="Transparent"
+                                          Width="38" Height="38">
                                 <RepeatButton.ContentTemplate>
                                     <DataTemplate>
-                                        <Image Source="{StaticResource CanDaoPosImageAdd}"/>
+                                        <Image Source="{StaticResource CanDaoPosImageAdd}"
+                                               Width="28" Height="28"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </RepeatButton.ContentTemplate>
                             </RepeatButton>
@@ -77,58 +83,4 @@
         <ContentControl Content="{Binding}" Foreground="Gray" Focusable="False" Margin="0,0,3,0" />
     </DataTemplate>
     
-    <Style x:Key="NumericUpDown" TargetType="{x:Type local:DoubleUpDown}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="Foreground" Value="Black" />
-        <Setter Property="HorizontalContentAlignment" Value="Right" />
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="TextAlignment" Value="Right" />
-        <Setter Property="WatermarkTemplate" Value="{StaticResource DefaultWatermarkTemplate}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Control">
-                    <local:ButtonSpinner x:Name="PART_Spinner"
-                                         IsTabStop="False"
-                                         Background="{TemplateBinding Background}"
-                                         BorderThickness="{TemplateBinding BorderThickness}"
-                                         BorderBrush="{TemplateBinding BorderBrush}"
-                                         AllowSpin="{Binding AllowSpin, RelativeSource={RelativeSource TemplatedParent}}"
-                                         ShowButtonSpinner="{Binding ShowButtonSpinner, RelativeSource={RelativeSource TemplatedParent}}">
-                        <local:WatermarkTextBox x:Name="PART_TextBox"
-                                                BorderThickness="0"
-                                                Background="{TemplateBinding Background}"
-                                                ContextMenu="{TemplateBinding ContextMenu}"
-                                                FontFamily="{TemplateBinding FontFamily}" 
-                                                FontSize="{TemplateBinding FontSize}" 
-                                                FontStretch="{TemplateBinding FontStretch}"
-                                                FontStyle="{TemplateBinding FontStyle}" 
-                                                FontWeight="{TemplateBinding FontWeight}" 
-                                                Foreground="{TemplateBinding Foreground}" 
-                                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}"
-                                                MinWidth="20"
-                                                AcceptsReturn="False"
-                                                Padding="{TemplateBinding Padding}"
-                                                SelectAllOnGotFocus="{Binding SelectAllOnGotFocus, RelativeSource={RelativeSource TemplatedParent}}"
-                                                TextAlignment="{Binding TextAlignment, RelativeSource={RelativeSource TemplatedParent}}"
-                                                TextWrapping="NoWrap" 
-                                                TabIndex="{TemplateBinding TabIndex}"
-                                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                Watermark="{Binding Watermark, RelativeSource={RelativeSource TemplatedParent}}"
-                                                WatermarkTemplate="{Binding WatermarkTemplate, RelativeSource={RelativeSource TemplatedParent}}" />
-                    </local:ButtonSpinner>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                        </Trigger>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="PART_TextBox" Property="FocusManager.FocusedElement" Value="{Binding ElementName=PART_TextBox}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 </ResourceDictionary>

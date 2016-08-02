@@ -10,20 +10,10 @@ namespace CanDao.Pos.UI.Utility.View
     /// </summary>
     public partial class AuthorizationWindow
     {
-        public AuthorizationWindow(EnumRightType rightType, string userName = null)
+        public AuthorizationWindow(EnumRightType rightType, string userName = "002")
         {
             InitializeComponent();
             DataContext = new AuthorizationWndVm(rightType, userName) { OwnerWindow = this };
-        }
-
-        private void AuthorizationWindow_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Enter:
-                    ((AuthorizationWndVm)DataContext).ConfirmCmd.Execute(null);
-                    break;
-            }
         }
     }
 }

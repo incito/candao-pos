@@ -38,7 +38,8 @@
             </StackPanel>
         </Grid>
 
-        <view:TasteSetControl x:Name="TasteSetCtrl" Grid.Row="1" Margin="10,0" Visibility="{Binding HasTasteInfos, Converter={StaticResource Bool2VisibilityCvt}}"/>
+        <view:TasteSetControl x:Name="TasteSetCtrl"
+                              Grid.Row="1" Margin="10,0"/>
 
         <controls:DietSetControl x:Name="DietSetCtrl" Grid.Row="2" Margin="10,0"/>
 

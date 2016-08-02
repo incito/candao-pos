@@ -21,7 +21,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls1:PosMsgWindow.Resources>
-    <Grid>
+    <Grid Margin="30,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -34,25 +34,39 @@
         <view:TasteSetControl x:Name="TasteSetCtrl"/>
 
         <StackPanel Grid.Row="1">
-            <TextBlock FontSize="18" Text="锅底" FontWeight="Bold" HorizontalAlignment="Left"/>
-            <Border CornerRadius="5"  HorizontalAlignment="Left" MinWidth="250" Height="35" Background="{StaticResource CanDaoPosColorSelected}" Margin="0,5">
-                <TextBlock FontSize="18" Text="{Binding Data.PotInfo.DishName}" FontWeight="Bold" Foreground="{StaticResource CanDaoPosColorFg}" />
+            <TextBlock Text="锅底" FontWeight="Bold" HorizontalAlignment="Left"/>
+            <Border CornerRadius="3"
+                    HorizontalAlignment="Left"
+                    Width="228" Height="40"
+                    Background="{StaticResource CanDaoPosColorSelected}"
+                    Margin="0,5">
+                <TextBlock Text="{Binding Data.PotInfo.DishName}"
+                           FontSize="14"
+                           Foreground="{StaticResource CanDaoPosColorFg}" />
             </Border>
         </StackPanel>
 
-        <TextBlock Grid.Row="2" FontSize="18" Text="鱼" FontWeight="Bold" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+        <TextBlock Grid.Row="2" Text="鱼" FontWeight="Bold" HorizontalAlignment="Left" Margin="0,10,0,0"/>
         <ItemsControl Grid.Row="3" Grid.Column="0" ItemsSource="{Binding Data.FishDishes}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="0,5" Height="35">
+                    <Grid Margin="0,5" Height="40">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border CornerRadius="5" MinWidth="250" HorizontalAlignment="Left" Background="{StaticResource CanDaoPosColorSelected}">
-                            <TextBlock Text="{Binding DishName}" FontSize="16" Foreground="{StaticResource CanDaoPosColorFg}"/>
+                        <Border CornerRadius="3"
+                                Width="228"
+                                HorizontalAlignment="Left"
+                                Background="{StaticResource CanDaoPosColorSelected}">
+                            <TextBlock Text="{Binding DishName}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource CanDaoPosColorFg}"/>
                         </Border>
-                        <toolkit:DoubleUpDown Grid.Column="1" Text="{Binding SelectedCount, UpdateSourceTrigger=PropertyChanged}" Width="120" Minimum="0" FontSize="18"/>
+                        <toolkit:DoubleUpDown Grid.Column="1"
+                                              Text="{Binding SelectedCount, UpdateSourceTrigger=PropertyChanged}"
+                                              Width="120" Height="40" Minimum="0"
+                                              FontSize="14"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
