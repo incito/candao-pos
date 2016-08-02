@@ -74,8 +74,6 @@ namespace CanDao.Pos.IService
             try
             {
                 ServiceInterfaceInfo info = _serviceInterfaceDic[interfaceName];
-                InfoLog.Instance.D("CreateObject {0} : {1} - {2}", info.Name, info.DllName, info.ClassName);
-
                 string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, info.DllName);
                 Assembly assembly = Assembly.LoadFrom(dllPath);
                 if (assembly == null)

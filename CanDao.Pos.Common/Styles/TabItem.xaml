@@ -39,7 +39,7 @@
                             <Setter TargetName="BdBottomLine" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="Cp" Property="TextBlock.Foreground" Value="{StaticResource CanDaoPosColorSelected}"/>
                         </Trigger>
-                        <Trigger Property="TabStripPlacement" Value="Left">
+                        <!--<Trigger Property="TabStripPlacement" Value="Left">
                             <Setter Property="LayoutTransform">
                                 <Setter.Value>
                                     <RotateTransform Angle="-90" />
@@ -52,7 +52,7 @@
                                     <RotateTransform Angle="90" />
                                 </Setter.Value>
                             </Setter>
-                        </Trigger>
+                        </Trigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
