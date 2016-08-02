@@ -56,6 +56,11 @@ namespace CanDao.Pos.Common
             _tbMsg.Text = message;
         }
 
+        protected override void CancelBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Close();
+        }
+
         /// <summary>
         /// 初始化窗口。
         /// </summary>
