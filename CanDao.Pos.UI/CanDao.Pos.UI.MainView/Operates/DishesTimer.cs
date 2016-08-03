@@ -124,6 +124,7 @@ namespace CanDao.Pos.UI.MainView.Operates
 
                 if (resTable.Item2.TotalAmount != _totalAmount)
                 {
+                    _totalAmount = resTable.Item2.TotalAmount;
                     if (DataChangeAction != null)
                     {
                         DataChangeAction();
