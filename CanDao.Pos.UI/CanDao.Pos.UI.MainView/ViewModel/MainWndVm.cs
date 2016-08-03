@@ -678,12 +678,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="item"></param>
         private void AddTableInfo(TableInfo item)
         {
-            //餐台的可用状态：只有当是强制结业模式且餐台空闲时不可用，其他时候都可用。
-            item.TableEnable = !IsForcedEndWorkModel || (item.TableStatus == EnumTableStatus.Dinner);
             if (item.TableType == EnumTableType.CFTable)
+            {
+                item.TableEnable = item.TableStatus == EnumTableStatus.Dinner;//咖啡台不允许开台，所以只有当就餐时才允许点击。
                 CfTables.Add(item);
+            }
             else
+            {
+                //餐台的可用状态：只有当是强制结业模式且餐台空闲时不可用，其他时候都可用。
+                item.TableEnable = !IsForcedEndWorkModel || (item.TableStatus == EnumTableStatus.Dinner);
                 Tables.Add(item);
+            }
         }
 
         /// <summary>
