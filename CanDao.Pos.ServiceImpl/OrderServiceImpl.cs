@@ -24,7 +24,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, TableFullInfo>("获取餐桌所有菜品信息接口地址为空。", null);
 
-            List<string> param = new List<string> { tableName, userName };
+            List<string> param = new List<string> {tableName, userName};
             return GetTableInfoProcess(addr, param);
         }
 
@@ -34,7 +34,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, TableFullInfo>("获取餐桌所有菜品信息接口地址为空。", null);
 
-            List<string> param = new List<string> { orderId, userName };
+            List<string> param = new List<string> {orderId, userName};
             return GetTableInfoProcess(addr, param);
         }
 
@@ -59,7 +59,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new GetOrderInvoiceRequest { orderid = orderId };
+                var request = new GetOrderInvoiceRequest {orderid = orderId};
                 var result = HttpHelper.HttpPost<GetOrderInvoiceResponse>(addr, request);
                 string orderInvoice = null;
                 if (result.IsSuccess && result.data != null && result.data.Any())
@@ -119,10 +119,11 @@ namespace CanDao.Pos.ServiceImpl
                 if (string.IsNullOrEmpty(addr))
                     return new Tuple<string, List<MenuDishGroupInfo>>("获取菜谱全部菜品地址为空。", null);
 
-                var param = new List<string> { fullName };
+                var param = new List<string> {fullName};
                 var result = RestHttpHelper.HttpGet<GetMenuDishInfoResponse>(addr, param);
                 if (!string.IsNullOrEmpty(result.Item1))
-                    return new Tuple<string, List<MenuDishGroupInfo>>("获取菜谱全部菜品失败。" + Environment.NewLine + result.Item1, null);
+                    return new Tuple<string, List<MenuDishGroupInfo>>(
+                        "获取菜谱全部菜品失败。" + Environment.NewLine + result.Item1, null);
 
                 if (!result.Item2.IsSuccess)
                     return new Tuple<string, List<MenuDishGroupInfo>>(result.Item2.Info, null);
@@ -152,7 +153,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, bool>("检测菜品状态地址为空。", false);
 
-            var param = new List<string> { dishId, dishUnit };
+            var param = new List<string> {dishId, dishUnit};
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, bool>("检测菜品状态失败。" + Environment.NewLine + result.Item1, false);
@@ -166,7 +167,13 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, List<CouponInfo>>("获取优惠券集合地址为空。", null);
 
-            var request = new CouponInfoRequest { machineno = MachineManage.GetMachineId(), typeid = couponTypeId, userid = userName, orderid = "0" };
+            var request = new CouponInfoRequest
+            {
+                machineno = MachineManage.GetMachineId(),
+                typeid = couponTypeId,
+                userid = userName,
+                orderid = "0"
+            };
             try
             {
                 var result = HttpHelper.HttpPost<List<CouponInfoResponse>>(addr, request);
@@ -194,7 +201,9 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var result = HttpHelper.HttpPost<CalcDiscountAmountResponse>(addr, request);
-                return !result.IsSuccess ? new Tuple<string, decimal>(null, result.amount) : new Tuple<string, decimal>(result.msg ?? "接口调用错误。", 0);//这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
+                return !result.IsSuccess
+                    ? new Tuple<string, decimal>(null, result.amount)
+                    : new Tuple<string, decimal>(result.msg ?? "接口调用错误。", 0); //这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
             }
             catch (Exception ex)
             {
@@ -202,6 +211,7 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, decimal>(ex.MyMessage(), 0);
             }
         }
+
 
         public string SaveUsedCoupon(string orderId, string userName, List<UsedCouponInfo> couponInfos)
         {
@@ -226,7 +236,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, List<UsedCouponInfo>>("获取保存的优惠券信息地址为空。", null);
 
-            var param = new List<string> { orderId, userId };
+            var param = new List<string> {orderId, userId};
             var response = RestHttpHelper.HttpGet<GetSavedCouponResponse>(addr, param);
             var result = new List<UsedCouponInfo>();
             if (response.Item2.Data != null)
@@ -243,7 +253,8 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var result = HttpHelper.HttpPost<GetMenuComboDishResponse>(addr, request);
-                if (result.rows == null || !result.rows.Any() || result.rows.First().only == null || !result.rows.First().only.Any())
+                if (result.rows == null || !result.rows.Any() || result.rows.First().only == null ||
+                    !result.rows.First().only.Any())
                     return new Tuple<string, MenuComboFullInfo>("套餐内没有包含任何菜品", null);
 
                 var item = DataConverter.ToMenuComboFullInfo(result.rows.First());
@@ -261,7 +272,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, MenuFishPotFullInfo>("获取鱼锅菜品信息地址为空。", null);
 
-            List<string> param = new List<string> { dishId };
+            List<string> param = new List<string> {dishId};
             var result = RestHttpHelper.HttpGet<GetFishPotDishResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, MenuFishPotFullInfo>(result.Item1, null);
@@ -308,7 +319,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 InfoLog.Instance.I("下单的请求Json：{0}", request.ToJson());
                 var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                var enumResult = (EnumBookOrderResult)Convert.ToInt32(result.result);
+                var enumResult = (EnumBookOrderResult) Convert.ToInt32(result.result);
                 switch (enumResult)
                 {
                     case EnumBookOrderResult.Success:
@@ -327,13 +338,14 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        public Tuple<string, List<BackDishInfo>> GetBackDishInfo(string orderid, string tableNo, string dishId, string dishUnit)
+        public Tuple<string, List<BackDishInfo>> GetBackDishInfo(string orderid, string tableNo, string dishId,
+            string dishUnit)
         {
             var addr = ServiceAddrCache.GetServiceAddr("GetBackDishInfo");
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, List<BackDishInfo>>("获取退菜信息地址为空。", null);
 
-            var param = new List<string> { orderid, dishId, dishUnit, tableNo };
+            var param = new List<string> {orderid, dishId, dishUnit, tableNo};
             var result = RestHttpHelper.HttpGet<GetBackDishInfoResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, List<BackDishInfo>>(result.Item1, null);
@@ -353,7 +365,8 @@ namespace CanDao.Pos.ServiceImpl
                 if (string.IsNullOrEmpty(addr))
                     return "退菜地址为空。";
 
-                var request = DataConverter.ToBackDishRequest(info.OrderId, info.TableNo, info.AuthorizerUser, info.Waiter, info.DishInfo, info.BackDishNum, info.BackDishReason);
+                var request = DataConverter.ToBackDishRequest(info.OrderId, info.TableNo, info.AuthorizerUser,
+                    info.Waiter, info.DishInfo, info.BackDishNum, info.BackDishReason);
                 var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return result.IsSuccess ? null : !string.IsNullOrEmpty(result.msg) ? result.msg : "退菜失败。";
             }
@@ -376,7 +389,7 @@ namespace CanDao.Pos.ServiceImpl
                     orderNo = orderId,
                     currenttableid = tableNo,
                     discardUserId = userId,
-                    actionType = ((int)EnumBackDishType.All).ToString(),
+                    actionType = ((int) EnumBackDishType.All).ToString(),
                 };
                 var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
                 return result.IsSuccess ? null : "整桌退菜失败。";
@@ -420,19 +433,22 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        public Tuple<string, PrintOrderFullInfo> GetPrintOrderInfo(string orderId, string userName, EnumPrintOrderType printType)
+        public Tuple<string, PrintOrderFullInfo> GetPrintOrderInfo(string orderId, string userName,
+            EnumPrintOrderType printType)
         {
             var addr = ServiceAddrCache.GetServiceAddr("GetPrintOrderInfo");
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, PrintOrderFullInfo>("获取打印用订单信息的地址为空。", null);
 
-            List<string> param = new List<string> { userName, orderId, ((int)printType).ToString() };
+            List<string> param = new List<string> {userName, orderId, ((int) printType).ToString()};
             var result = RestHttpHelper.HttpGet<GetPrintOrderInfoResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, PrintOrderFullInfo>(result.Item1, null);
 
             if (!result.Item2.IsSuccess)
-                return new Tuple<string, PrintOrderFullInfo>(string.IsNullOrEmpty(result.Item2.Info) ? "获取菜品信息失败。" : result.Item2.Info, null);
+                return
+                    new Tuple<string, PrintOrderFullInfo>(
+                        string.IsNullOrEmpty(result.Item2.Info) ? "获取菜品信息失败。" : result.Item2.Info, null);
 
             var data = DataConverter.ToPrintOrderFullInfo(result.Item2);
             return new Tuple<string, PrintOrderFullInfo>(null, data);
@@ -444,7 +460,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "获取检测订单是否允许反结算的地址为空。";
 
-            var param = new List<string> { userId, orderId };
+            var param = new List<string> {userId, orderId};
             var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
                 return result.Item1;
@@ -463,7 +479,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new GetOrderMemberInfoRequest { orderid = orderId };
+                var request = new GetOrderMemberInfoRequest {orderid = orderId};
                 var response = HttpHelper.HttpPost<GetOrderMemberInfoResponse>(addr, request);
                 return new Tuple<string, GetOrderMemberInfoResponse>(null, response);
             }
@@ -481,7 +497,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new List<string> { Globals.UserInfo.UserName, orderId, PCInfoHelper.IPAddr, memberCardNo };
+                var param = new List<string> {Globals.UserInfo.UserName, orderId, PCInfoHelper.IPAddr, memberCardNo};
                 var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
                 if (!string.IsNullOrEmpty(result.Item1))
                     return result.Item1;
@@ -505,7 +521,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new List<string> { Globals.UserInfo.UserName, orderId, PCInfoHelper.IPAddr };
+                var param = new List<string> {Globals.UserInfo.UserName, orderId, PCInfoHelper.IPAddr};
                 var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
                 if (!string.IsNullOrEmpty(result.Item1))
                     return result.Item1;
@@ -529,7 +545,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new ClearTableRequest { tableNo = tableNo };
+                var request = new ClearTableRequest {tableNo = tableNo};
                 var response = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return !response.IsSuccess ? "清台失败。" : null;
             }
@@ -547,7 +563,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new List<string> { userId, orderId, tableNo };
+                var request = new List<string> {userId, orderId, tableNo};
                 var response = RestHttpHelper.HttpGet<RestBaseResponse>(addr, request);
                 if (!string.IsNullOrEmpty(response.Item1))
                     return response.Item1;
@@ -568,7 +584,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new ClearTableRequest { tableNo = tableNo };
+                var request = new ClearTableRequest {tableNo = tableNo};
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
                 return !response.IsSuccess ? "清台失败。" : null;
             }
@@ -615,7 +631,9 @@ namespace CanDao.Pos.ServiceImpl
                     paid = tipAmount,
                 };
                 var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return result.IsSuccess ? null : string.IsNullOrEmpty(result.msg) ? "小费结算失败。" : string.Format("小费结算失败：{0}", result.msg);
+                return result.IsSuccess
+                    ? null
+                    : string.IsNullOrEmpty(result.msg) ? "小费结算失败。" : string.Format("小费结算失败：{0}", result.msg);
             }
             catch (Exception ex)
             {
@@ -639,7 +657,9 @@ namespace CanDao.Pos.ServiceImpl
                     primarykey = primaryKey,
                 };
                 var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
-                return result.IsSuccess ? null : string.IsNullOrEmpty(result.msg) ? "更新菜品称重数量失败。" : string.Format("更新菜品称重数量失败：{0}", result.msg);
+                return result.IsSuccess
+                    ? null
+                    : string.IsNullOrEmpty(result.msg) ? "更新菜品称重数量失败。" : string.Format("更新菜品称重数量失败：{0}", result.msg);
             }
             catch (Exception ex)
             {
@@ -653,7 +673,7 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return "设置订单为外卖单地址为空。";
 
-            var request = new List<string> { orderId };
+            var request = new List<string> {orderId};
             var response = RestHttpHelper.HttpGet<RestBaseResponse>(addr, request);
             if (!string.IsNullOrEmpty(response.Item1))
                 return response.Item1;
@@ -663,5 +683,55 @@ namespace CanDao.Pos.ServiceImpl
 
             return null;
         }
+
+        #region 优惠券处理
+        /// <summary>
+        /// 使用优惠券
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Tuple<string, List<PreferentialList>> UsePreferential(UsePreferentialRequest request)
+        {
+
+            var addr = ServiceAddrCache.GetServiceAddr("CalcDiscountAmount");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, List<PreferentialList>>("使用优惠券地址为空。", null);
+
+            try
+            {
+                var result = HttpHelper.HttpPost<UsePreferentialResponse>(addr, request);
+                return !result.IsSuccess ? new Tuple<string, List<PreferentialList>>(null, result.ordePreferential) : new Tuple<string, List<PreferentialList>>(result.msg ?? "接口调用错误。", null);//这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E(ex);
+                return new Tuple<string, List<PreferentialList>>(ex.MyMessage(), null);
+            }
+        }
+        /// <summary>
+        /// 删除优惠券
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public string DelPreferential(DelPreferentialRequest request)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("DelPreferential");
+            if (string.IsNullOrEmpty(addr))
+                return "删除优惠券地址为空。";
+
+            try
+            {
+                var result = HttpHelper.HttpPost<UsePreferentialResponse>(addr, request);
+                return !result.IsSuccess ? null : result.msg;
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E(ex);
+                return ex.MyMessage();
+            }
+        }
+
+        //public string GetOrderInfo()
+        #endregion
     }
 }

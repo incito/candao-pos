@@ -26,7 +26,7 @@
 
         public string custPrinter { get; set; }
 
-        public int tableid { get; set; }
+        public string tableid { get; set; }
 
         public string tableName { get; set; }
 

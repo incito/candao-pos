@@ -13,7 +13,8 @@
     <EndWorkSyncData Addr="/newspicyway/padinterface/jdesyndata.json"/><!--结业后通知后台同步数据-->
     <GetDishGroupInfos Addr="/newspicyway/padinterface/getMenuColumn.json"/><!--获取菜品分类信息-->
     <GetCouponInfos Addr="/newspicyway/padinterface/getPreferentialList.json"/><!--获取优惠券信息-->
-    <CalcDiscountAmount Addr="/newspicyway/padinterface/usePreferentialItem.json"/><!--计算折扣类优惠券的优惠金额-->
+    <CalcDiscountAmount Addr="/newspicyway/padinterface/usePreferentialItem.json"/><!--使用优惠券-->
+    <DelPreferential Addr="/newspicyway/padinterface/delPreferentialItem.json"/><!--删除优惠券-->
     <OrderDish Addr="/newspicyway/padinterface/bookorderList.json"/><!--菜品下单-->
     <OrderDishCf Addr="/newspicyway/padinterface/placeOrder.json"/><!--菜品下单（咖啡）-->
     <GetMenuComboDish Addr="/newspicyway/padinterface/getMenuCombodish.json"/><!--获取套餐内菜品-->

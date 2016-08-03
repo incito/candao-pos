@@ -8,7 +8,7 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 餐台编号。
         /// </summary>
-        public int TableId { get; set; }
+        public string TableId { get; set; }
 
         /// <summary>
         /// 餐桌状态。
