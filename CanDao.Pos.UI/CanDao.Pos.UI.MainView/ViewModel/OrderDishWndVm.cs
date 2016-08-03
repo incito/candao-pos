@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
@@ -456,7 +457,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var msg = string.Format("桌号\"{0}\"{1}成功。", Data.TableName, type);
             InfoLog.Instance.I(msg);
             NotifyDialog.Notify(msg, OwnerWnd.Owner);
-            CommonHelper.BroadcastMessage(EnumBroadcastMsgType.OrderDish, Data.OrderId);
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.OrderDish, Data.OrderId);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.OrderDish);
+            });
+
             OwnerWnd.DialogResult = true;
         }
 
