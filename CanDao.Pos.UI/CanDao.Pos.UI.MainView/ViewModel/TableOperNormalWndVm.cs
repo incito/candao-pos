@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Windows.Threading;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
@@ -9,6 +8,7 @@ using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.UI.MainView.Operates;
 using CanDao.Pos.UI.MainView.View;
+using CanDao.Pos.UI.Utility;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -69,9 +69,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         }
 
-
         protected override void BackAllDishSuccessProcess()
         {
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.SyncOrder, Data.OrderId);
             GetTableDishInfoAsync();//整单退菜完成后重新获取餐桌明细。
         }
 

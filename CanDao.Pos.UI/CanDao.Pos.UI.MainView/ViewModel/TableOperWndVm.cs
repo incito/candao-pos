@@ -1449,7 +1449,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected void GetTableDishInfoAsync()
         {
             TaskService.Start(null, GetTableDishInfoProcess, GetTableDishInfoComplete, "加载餐台详情...");
-
         }
 
         /// <summary>
@@ -1527,19 +1526,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void BroadcastSettlementMsgAsync()
         {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                InfoLog.Instance.I("广播结算消息给PAD...");
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Pad, Data.OrderId);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Pad);
+            InfoLog.Instance.I("广播结算消息给PAD...");
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.Settlement2Pad, Data.OrderId);
 
-                InfoLog.Instance.I("广播结算指令给手环...");
-                var msg = string.Format("{0}|{1}|{2}", Data.WaiterId, Data.TableName, Data.OrderId);
-                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
+            InfoLog.Instance.I("广播结算指令给手环...");
+            var msg = string.Format("{0}|{1}|{2}", Data.WaiterId, Data.TableName, Data.OrderId);
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.Settlement2Wristband, msg);
         }
 
         /// <summary>
@@ -1547,13 +1539,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void BroadcastCoffeeSettlementMsgAsyc()
         {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
+            var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.Settlement2Wristband, msg);
         }
 
         /// <summary>
@@ -1561,16 +1548,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void BroadcastClearTableMsgAsync()
         {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
-                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
-                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播手环结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.ClearTable, Data.OrderId);
+            var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.Settlement2Wristband, msg);
         }
 
         /// <summary>
@@ -2426,8 +2406,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            InfoLog.Instance.I("退菜成功。");
+            InfoLog.Instance.I("退菜成功。调用异步广播消息给PAD...");
             NotifyDialog.Notify("退菜成功", OwnerWindow);
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.SyncOrder, Data.OrderId);
             GetTableDishInfoAsync();
         }
 
@@ -2764,13 +2745,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             InfoLog.Instance.I("取消账单完成。");
             if (!Data.IsTakeoutTable)
             {
-                ThreadPool.QueueUserWorkItem(t =>
-                {
-                    InfoLog.Instance.I("广播清台消息给PAD...");
-                    var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
-                    if (!string.IsNullOrEmpty(errMsg))
-                        ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
-                });
+                InfoLog.Instance.I("广播清台消息给PAD...");
+                CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.ClearTable, Data.OrderId);
             }
             NotifyDialog.Notify("取消账单完成。", OwnerWindow.Owner);
             CloseWindow(true);

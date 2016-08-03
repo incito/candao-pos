@@ -3,7 +3,6 @@
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-                        CloseBtnEnable="True"
                         Width="390" SizeToContent="Height" MaxHeight="768" ShowInTaskbar="False">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">

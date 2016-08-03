@@ -45,6 +45,21 @@ namespace CanDao.Pos.UI.Utility
         }
 
         /// <summary>
+        /// 异步执行广播消息。
+        /// </summary>
+        /// <param name="type">广播消息类型。</param>
+        /// <param name="msg">广播消息。</param>
+        public static void BroadcastMessageAsync(EnumBroadcastMsgType type, string msg)
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                var errMsg = BroadcastMessage(type, msg);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)type);
+            });
+        }
+
+        /// <summary>
         /// 清理所有POS机。都清理成功返回true，否则返回false。
         /// </summary>
         /// <param name="isInForcedEndWorkModel">是否是强制结业清机。</param>
