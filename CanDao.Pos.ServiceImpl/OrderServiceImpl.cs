@@ -685,6 +685,7 @@ namespace CanDao.Pos.ServiceImpl
         }
 
         #region 优惠券处理
+
         /// <summary>
         /// 使用优惠券
         /// </summary>
@@ -700,7 +701,10 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var result = HttpHelper.HttpPost<UsePreferentialResponse>(addr, request);
-                return !result.IsSuccess ? new Tuple<string, List<PreferentialList>>(null, result.ordePreferential) : new Tuple<string, List<PreferentialList>>(result.msg ?? "接口调用错误。", null);//这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
+                return !result.IsSuccess
+                    ? new Tuple<string, List<PreferentialList>>(null, result.ordePreferential)
+                    : new Tuple<string, List<PreferentialList>>(result.msg ?? "接口调用错误。", null);
+                    //这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
             }
             catch (Exception ex)
             {
@@ -708,6 +712,7 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, List<PreferentialList>>(ex.MyMessage(), null);
             }
         }
+
         /// <summary>
         /// 删除优惠券
         /// </summary>
@@ -731,7 +736,37 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        //public string GetOrderInfo()
+
+        #endregion
+
+        #region 账单处理
+        /// <summary>
+        /// 获取账单信息
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public Tuple<string, TableFullInfo> GetOrderInfo(string orderId)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("DelPreferential");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, TableFullInfo>("获取账单信息地址为空。", null);
+
+            try
+            {
+                var parma=new Dictionary<string, string>();
+                parma.Add("orderid", orderId);
+
+                var result = HttpHelper.HttpPost<GetOrderInfoResponse>(addr, parma);
+                return !result.IsSuccess
+                  ? new Tuple<string, TableFullInfo>(null, null)
+                  : new Tuple<string, TableFullInfo>(result.msg ?? "接口调用错误。", null);
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E(ex);
+                return new Tuple<string, TableFullInfo>(ex.MyMessage(), null);
+            }
+        }
         #endregion
     }
 }

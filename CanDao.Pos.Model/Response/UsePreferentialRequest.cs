@@ -7,7 +7,7 @@ namespace CanDao.Pos.Model.Response
 {
     public class UsePreferentialResponse:NewHttpBaseResponse
     {
-      public string amount { set; get; }
+         public string amount { set; get; }
 
          public string payamount { set; get; }
          public string freeamount { set; get; }
