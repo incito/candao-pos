@@ -25,7 +25,8 @@
                    Foreground="{StaticResource CanDaoPosColorSelected}"
                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
-        <toolkit:DoubleTextBox Grid.Row="1"
+        <toolkit:DoubleTextBox x:Name="DtbNum"
+                               Grid.Row="1"
                                Watermark="{Binding NumWatermark}" 
                                Text="{Binding InputNumText, UpdateSourceTrigger=PropertyChanged}" 
                                ShowButtonSpinner="False"

@@ -30,6 +30,7 @@ namespace CanDao.Pos.UI.Utility.View
             InputNumCtrl.ShowDot = allowDot;
 
             DataContext = this;
+            Loaded += (sender, args) => { DtbNum.Focus(); };
         }
 
         #endregion
