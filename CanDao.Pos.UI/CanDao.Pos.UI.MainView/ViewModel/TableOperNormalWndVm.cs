@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Threading;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
@@ -43,11 +44,25 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 _dishesTimer = new DishesTimer();
                 _dishesTimer.TableName = _tableInfo.TableName;
-                _dishesTimer.DataChangeAction = new Action(GetTableDishInfoAsync);
+                _dishesTimer.DataChangeAction = new Action(DataChangeHandel);
                 _dishesTimer.Start(Data.TotalAmount);
             }
 
         }
+
+        /// <summary>
+        /// 同步订单信息
+        /// </summary>
+        private void DataChangeHandel()
+        {
+            this.OwnerWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                new Action(() =>
+                {
+                    GetTableDishInfoAsync();
+                }));
+
+        }
+
 
         protected override void BackAllDishSuccessProcess()
         {
