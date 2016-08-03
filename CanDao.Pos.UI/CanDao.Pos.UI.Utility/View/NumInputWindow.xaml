@@ -28,6 +28,7 @@
         <toolkit:DoubleTextBox x:Name="DtbNum"
                                Grid.Row="1"
                                Watermark="{Binding NumWatermark}" 
+                               FontSize="16"
                                Text="{Binding InputNumText, UpdateSourceTrigger=PropertyChanged}" 
                                ShowButtonSpinner="False"
                                HorizontalContentAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"

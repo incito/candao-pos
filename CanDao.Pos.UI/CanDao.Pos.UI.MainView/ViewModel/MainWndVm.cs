@@ -610,14 +610,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             SetRefreshTimerStatus(true);
             if (result.Item2 != null && result.Item2.Any())
             {
+                result.Item2.ForEach(SetTableEnableStatus);//设置餐台可用状态。
+
                 IdleCount = result.Item2.Count(t => !IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
                 DinnerCount = result.Item2.Count(t => t.TableStatus == EnumTableStatus.Dinner);
-                DisableCount = result.Item2.Count(t => IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
+                DisableCount = result.Item2.Count(t => !t.TableEnable);
 
-                var normalTables = result.Item2.Where(t => t.TableType == EnumTableType.Room || t.TableType == EnumTableType.Outside).ToList();
+                var normalTables = result.Item2.Where(t => !t.IsCoffeeTable).ToList();
                 UpdateNormalTables(normalTables);
 
-                var cfTables = result.Item2.Where(t => t.TableType == EnumTableType.CFTable).ToList();
+                var cfTables = result.Item2.Where(t => t.IsCoffeeTable).ToList();
                 UpdateCfTables(cfTables);
             }
         }
@@ -678,17 +680,18 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="item"></param>
         private void AddTableInfo(TableInfo item)
         {
-            if (item.TableType == EnumTableType.CFTable)
-            {
-                item.TableEnable = item.TableStatus == EnumTableStatus.Dinner;//咖啡台不允许开台，所以只有当就餐时才允许点击。
+            if (item.IsCoffeeTable)
                 CfTables.Add(item);
-            }
             else
-            {
-                //餐台的可用状态：只有当是强制结业模式且餐台空闲时不可用，其他时候都可用。
-                item.TableEnable = !IsForcedEndWorkModel || (item.TableStatus == EnumTableStatus.Dinner);
                 Tables.Add(item);
-            }
+        }
+
+        private void SetTableEnableStatus(TableInfo item)
+        {
+            if (item.IsCoffeeTable)
+                item.TableEnable = item.TableStatus == EnumTableStatus.Dinner;//咖啡台不允许开台，所以只有当就餐时才允许点击。
+            else
+                item.TableEnable = !IsForcedEndWorkModel || (item.TableStatus == EnumTableStatus.Dinner);//只有当是强制结业模式且餐台空闲时不可用，其他时候都可用。
         }
 
         /// <summary>

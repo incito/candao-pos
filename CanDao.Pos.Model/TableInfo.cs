@@ -176,6 +176,7 @@ namespace CanDao.Pos.Model
             TableStatus = srcInfo.TableStatus;
             BeginTime = srcInfo.BeginTime;
             Amount = srcInfo.Amount;
+            TableEnable = srcInfo.TableEnable;
         }
 
         /// <summary>
