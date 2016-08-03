@@ -95,7 +95,7 @@
                 <controls:GroupSelector x:Name="DishGroupSelector"
                                         ItemsSource="{Binding Data.DishInfos}"
                                         SelectedItem="{Binding SelectedOrderDish}" 
-                                        ItemCountEachGroup="10">
+                                        ItemCountEachGroup="7">
                     <controls:GroupSelector.Template>
                         <ControlTemplate TargetType="controls:GroupSelector">
                             <DataGrid x:Name="PART_Selector"

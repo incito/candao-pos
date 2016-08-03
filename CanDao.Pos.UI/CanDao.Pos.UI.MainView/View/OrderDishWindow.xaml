@@ -144,9 +144,9 @@
             <Button Style="{StaticResource BtnReduceStyle}"
                     Command="{Binding OperCmd}"
                     CommandParameter="DishCountReduce"/>
-            <Button Style="{StaticResource BtnImgBaseStyle}" Content="数量"
+            <!--<Button Style="{StaticResource BtnImgBaseStyle}" Content="数量"
                     Command="{Binding OperCmd}"
-                    CommandParameter="InputNum"/>
+                    CommandParameter="InputNum"/>-->
             <Button Style="{StaticResource BtnImgBaseStyle}" Content="备注"
                     Command="{Binding OperCmd}"
                     CommandParameter="Remark"/>
