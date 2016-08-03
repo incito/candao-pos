@@ -156,12 +156,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             InfoLog.Instance.I("开台完成，订单号：{0}", result.Item2);
-            if (IsDinnerWareEnable)
-            {
-                int dinnerWareCount = string.IsNullOrEmpty(DinnerWareCount) ? 0 : Convert.ToInt32(DinnerWareCount);
-                PosIni.SetDinnerWareCount(TableName, dinnerWareCount);
-            }
-
             _tableInfo.OrderId = result.Item2;
             CloseWindow(true);
         }
