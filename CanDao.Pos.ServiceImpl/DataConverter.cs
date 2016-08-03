@@ -110,6 +110,7 @@ namespace CanDao.Pos.ServiceImpl
                 DishUnit = InternationaHelper.GetBeforeSeparatorFlagData(response.unit),
                 SrcDishUnit = response.unit,
                 PriceSource = response.price ?? 0,
+                Price = response.price ?? 0,
                 MemberPrice = response.vipprice ?? response.price ?? 0,
             };
         }
@@ -413,8 +414,7 @@ namespace CanDao.Pos.ServiceImpl
             return item;
         }
 
-        internal static ReportStatisticInfo ToReportStatisticInfo(
-            GetReportStatisticInfoBase<ReportDishInfoResponse> response)
+        internal static ReportStatisticInfo ToReportStatisticInfo(GetReportStatisticInfoBase<ReportDishInfoResponse> response)
         {
             var item = new ReportStatisticInfo
             {

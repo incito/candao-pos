@@ -29,11 +29,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (_tableInfo.TableStatus == EnumTableStatus.Idle)
             {
-                if (WindowHelper.ShowDialog(new OpenTableWindow(_tableInfo), OwnerWindow))
+                var openTableWnd = new OpenTableWindow(_tableInfo);
+                if (WindowHelper.ShowDialog(openTableWnd, OwnerWindow))
                 {
                     _tableInfo.TableStatus = EnumTableStatus.Dinner;//开台成功以后需要修改餐桌状态。
+
+                    var tableFullInfo = new TableFullInfo();
+                    tableFullInfo.CloneDataFromTableInfo(_tableInfo);
+                    tableFullInfo.CustomerNumber = openTableWnd.CustomerNumber;
+
                     // 开台成功以后，弹出点菜窗口。
-                    WindowHelper.ShowDialog(new OrderDishWindow(_tableInfo), OwnerWindow);
+                    WindowHelper.ShowDialog(new OrderDishWindow(tableFullInfo), OwnerWindow);
                 }
             }
             GetTableDishInfoAsync();

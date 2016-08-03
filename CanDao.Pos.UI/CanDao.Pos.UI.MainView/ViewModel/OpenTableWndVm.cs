@@ -42,10 +42,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             set
             {
                 _maleCustomer = value;
-                int male = Convert.ToInt32(value ?? "0");
-                int famale = Convert.ToInt32(FemaleCustomer ?? "0");
-                DinnerWareCount = (male + famale).ToString();
-                RaisePropertiesChanged("DinnerWareCount");
+                int cus = Convert2Int(value) + Convert2Int(FemaleCustomer);
+                CustomerNumber = cus > 0 ? cus.ToString() : null;
+                RaisePropertiesChanged("CustomerNumber");
             }
         }
 
@@ -58,10 +57,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             set
             {
                 _femaleCustomer = value;
-                int famale = Convert.ToInt32(value ?? "0");
-                int male = Convert.ToInt32(MaleCustomer ?? "0");
-                DinnerWareCount = (male + famale).ToString();
-                RaisePropertiesChanged("DinnerWareCount");
+                int cus = Convert2Int(value) + Convert2Int(MaleCustomer);
+                CustomerNumber = cus > 0 ? cus.ToString() : null;
+                RaisePropertiesChanged("CustomerNumber");
             }
         }
 
@@ -73,7 +71,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <summary>
         /// 餐具数量。
         /// </summary>
-        public string DinnerWareCount { get; set; }
+        public string CustomerNumber { get; set; }
 
         /// <summary>
         /// 是否选中儿童。
@@ -176,6 +174,27 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (HasOld)
                 agePeriod += "4";
             return agePeriod;
+        }
+
+        /// <summary>
+        /// 将string转换成int。
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private int Convert2Int(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return 0;
+
+            try
+            {
+                return Convert.ToInt32(value);
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E(ex.Message);
+                return 0;
+            }
         }
     }
 }

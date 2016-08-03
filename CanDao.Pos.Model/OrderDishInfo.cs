@@ -215,5 +215,17 @@ namespace CanDao.Pos.Model
         /// 套餐的内部菜集合。
         /// </summary>
         public List<OrderDishInfo> DishInfos { get; set; }
+
+        public OrderDishInfo CloneData()
+        {
+            var item = (OrderDishInfo)MemberwiseClone();
+            if (DishInfos != null)
+            {
+                item.DishInfos = new List<OrderDishInfo>();
+                DishInfos.ForEach(t => item.DishInfos.Add(t.CloneData()));
+            }
+
+            return item;
+        }
     }
 }

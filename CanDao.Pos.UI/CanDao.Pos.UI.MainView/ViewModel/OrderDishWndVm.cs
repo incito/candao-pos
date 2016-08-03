@@ -210,6 +210,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             DishGroups.Clear();
             Globals.DishGroupInfos.ForEach(t =>
             {
+                t.SelectDishCount = 0m;
                 DishGroups.Add(t);
             });
         }
@@ -433,10 +434,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
             }
 
+            var dishList = OrderDishInfos.ToList();
             InfoLog.Instance.I("开始执行下单任务...");
             if (Data.TableType == EnumTableType.CFTable || Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout) //咖啡台和外卖模式都走咖啡模式的下单。
-                return service.OrderDishCf(Data.OrderId, Data.TableName, OrderRemark, OrderDishInfos.ToList());
-            return service.OrderDish(Data.OrderId, Data.TableName, OrderRemark, OrderDishInfos.ToList());
+                return service.OrderDishCf(Data.OrderId, Data.TableName, OrderRemark, dishList);
+
+            //如果餐具收费，则添加餐具到下单菜品里。
+            if (Globals.IsDinnerWareEnable && !Data.DishInfos.Any())
+            {
+                InfoLog.Instance.I("餐具收费，添加餐具到下单菜品列表里。");
+                var dinnerWare = Globals.DinnerWareInfo.CloneData();
+                UpdateOrderDishNum(dinnerWare, Data.CustomerNumber);
+                dishList.Add(dinnerWare);
+            }
+
+            return service.OrderDish(Data.OrderId, Data.TableName, OrderRemark, dishList);
         }
 
         /// <summary>
@@ -657,7 +669,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 更新订单菜品数量。
+        /// 更新订单菜品数量，和小计价格。
         /// </summary>
         /// <param name="orderDishInfo">订单菜品。</param>
         /// <param name="dishNum">订单菜品的数量。</param>
