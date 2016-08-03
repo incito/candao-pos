@@ -391,8 +391,8 @@ namespace CanDao.Pos.ServiceImpl
                     discardUserId = userId,
                     actionType = ((int) EnumBackDishType.All).ToString(),
                 };
-                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return result.IsSuccess ? null : "整桌退菜失败。";
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
+                return result.IsSuccess ? null : !string.IsNullOrEmpty(result.msg) ? result.msg : "整桌退菜失败。";
             }
             catch (Exception ex)
             {

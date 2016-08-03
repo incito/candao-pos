@@ -59,8 +59,7 @@ namespace CanDao.Pos.ServiceImpl
                 return null;
 
             var orderResponse = response.OrderJson.First();
-            var dishListResponse = response.JSJson != null ? response.JSJson : null;
-            return ToTableFullInfo(orderResponse, dishListResponse);
+            return ToTableFullInfo(orderResponse, response.JSJson);
         }
 
         internal static OrderDishInfo ToDishInfo(OrderDishDataResponse response)
@@ -401,13 +400,12 @@ namespace CanDao.Pos.ServiceImpl
             return item;
         }
 
-        internal static ReportStatisticInfo ToReportStatisticInfo(
-            GetReportStatisticInfoBase<ReportTipInfoResponse> response)
+        internal static ReportStatisticInfo ToReportStatisticInfo(GetReportStatisticInfoBase<ReportTipInfoResponse> response)
         {
             var item = new ReportStatisticInfo
             {
-                StartTime = Parse2DateTime(response.time.startTime, DateTimeFormat, DateTime.MinValue),
-                EndTime = Parse2DateTime(response.time.endTime, DateTimeFormat, DateTime.MinValue),
+                StartTime = Parse2DateTime(response.time.startTime, DateTimeFormat2, DateTime.MinValue),
+                EndTime = Parse2DateTime(response.time.endTime, DateTimeFormat2, DateTime.MinValue),
             };
             if (response.data != null)
                 item.DataSource = response.data.Select(ToReportDataBase).ToList();

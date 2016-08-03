@@ -85,7 +85,19 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 小费金额。
         /// </summary>
-        public decimal TipAmount { get; set; }
+        private decimal _tipAmount;
+        /// <summary>
+        /// 小费金额。
+        /// </summary>
+        public decimal TipAmount
+        {
+            get { return _tipAmount; }
+            set
+            {
+                _tipAmount = value;
+                RaisePropertyChanged("TipAmount");
+            }
+        }
 
         /// <summary>
         /// 会员号。

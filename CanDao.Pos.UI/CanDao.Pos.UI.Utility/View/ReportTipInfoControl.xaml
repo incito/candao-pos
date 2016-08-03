@@ -64,7 +64,7 @@
 
         <controls:GroupSelector x:Name="GsTipInfoes"
                                 Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" 
-                                ItemsSource="{Binding Data.DataSource}"
+                                ItemsSource="{Binding DataSource}"
                                 ItemCountEachGroup="15">
             <controls:GroupSelector.Template>
                 <ControlTemplate TargetType="controls:GroupSelector">

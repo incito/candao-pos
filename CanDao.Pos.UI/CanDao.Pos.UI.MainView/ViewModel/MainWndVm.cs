@@ -183,7 +183,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand WindowLoadCmd { get; private set; }
 
-
+        /// <summary>
+        /// 窗口关闭命令。
+        /// </summary>
         public ICommand WindowClosingCmd { get; private set; }
 
         /// <summary>
@@ -449,8 +451,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            InfoLog.Instance.I("获取到普通外卖台：{0}", result.Item2.First().TableName);
-            WindowHelper.ShowDialog(new TableOperWindow(result.Item2.First()), OwnerWindow);
+            var takeoutTable = result.Item2.First();
+            takeoutTable.OrderId = null;//外卖这里不能有订单号，不然进入结账页面不得开台。
+            InfoLog.Instance.I("获取到普通外卖台：{0}", takeoutTable.TableName);
+            WindowHelper.ShowDialog(new TableOperWindow(takeoutTable), OwnerWindow);
         }
 
         /// <summary>
