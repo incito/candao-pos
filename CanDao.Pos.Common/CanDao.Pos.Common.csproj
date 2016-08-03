@@ -403,13 +403,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Add.png" />
-    <Resource Include="Images\Down.png" />
-    <Resource Include="Images\Up.png" />
+    <Resource Include="Images\Add_Normal.png" />
+    <Resource Include="Images\Down_Normal.png" />
+    <Resource Include="Images\Up_Normal.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Left.png" />
-    <Resource Include="Images\Right.png" />
+    <Resource Include="Images\Left_Normal.png" />
+    <Resource Include="Images\Right_Normal.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\ChangeShift_Dis.png" />
@@ -443,17 +443,29 @@
     <Resource Include="Images\Alert.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Down_Transparent.png" />
-    <Resource Include="Images\Up_Transparent.png" />
+    <Resource Include="Images\Down_Press.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Back_Normal.png" />
-    <Resource Include="Images\Back_Transparent.png" />
+    <Resource Include="Images\Back_Press.png" />
     <Resource Include="Images\Close_Normal.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Clear_Normal.png" />
-    <Resource Include="Images\Clear_Transparent.png" />
+    <Resource Include="Images\Clear_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Left_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Right_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Up_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Add_Press.png" />
+    <Resource Include="Images\Reduce_Press.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

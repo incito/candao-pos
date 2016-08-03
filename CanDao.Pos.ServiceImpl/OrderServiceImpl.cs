@@ -367,8 +367,8 @@ namespace CanDao.Pos.ServiceImpl
 
                 var request = DataConverter.ToBackDishRequest(info.OrderId, info.TableNo, info.AuthorizerUser,
                     info.Waiter, info.DishInfo, info.BackDishNum, info.BackDishReason);
-                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return result.IsSuccess ? null : "整桌退菜失败。";
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
+                return result.IsSuccess ? null : !string.IsNullOrEmpty(result.msg) ? result.msg : "退菜失败。";
             }
             catch (Exception ex)
             {

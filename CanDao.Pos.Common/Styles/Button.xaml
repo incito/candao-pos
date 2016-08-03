@@ -109,16 +109,29 @@
     <Style x:Key="BtnAddStyle" TargetType="Button" BasedOn="{StaticResource BtnImgBaseStyle}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}">
-                        <Image Source="{StaticResource CanDaoPosImageAdd}"
-                               Width="14" Height="14"
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            Background="{TemplateBinding Background}" BorderThickness="0">
+                        <Image x:Name="Img"
+                               Source="{StaticResource CanDaoPosImageAdd}" 
+                               Width="26" Height="30"
                                UseLayoutRounding="True"
                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
+                            <Setter Property="Source" TargetName="Img" Value="{StaticResource CanDaoPosImageAddPress}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -129,16 +142,29 @@
     <Style x:Key="BtnReduceStyle" TargetType="Button" BasedOn="{StaticResource BtnImgBaseStyle}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Border Background="{TemplateBinding Background}">
-                        <Image Source="{StaticResource CanDaoPosImageReduce}"
-                               Width="14" Height="14"
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            Background="{TemplateBinding Background}" BorderThickness="0">
+                        <Image x:Name="Img"
+                               Source="{StaticResource CanDaoPosImageReduce}" 
+                               Width="26" Height="30"
                                UseLayoutRounding="True"
                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
+                            <Setter Property="Source" TargetName="Img" Value="{StaticResource CanDaoPosImageReducePress}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -149,15 +175,29 @@
     <Style x:Key="BtnDownStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}">
-                        <Image Source="{StaticResource CanDaoPosImageDown}"
-                               Width="12" Height="7"
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            Background="{TemplateBinding Background}" BorderThickness="0">
+                        <Image x:Name="Img"
+                               Source="{StaticResource CanDaoPosImageDown}" 
+                               Width="26" Height="30"
+                               UseLayoutRounding="True"
                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
+                            <Setter Property="Source" TargetName="Img" Value="{StaticResource CanDaoPosImageDownPress}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -168,15 +208,29 @@
     <Style x:Key="BtnUpStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}">
-                        <Image Source="{StaticResource CanDaoPosImageUp}"
-                               Width="12" Height="7"
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            Background="{TemplateBinding Background}" BorderThickness="0">
+                        <Image x:Name="Img"
+                               Source="{StaticResource CanDaoPosImageUp}" 
+                               Width="26" Height="30"
+                               UseLayoutRounding="True"
                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
+                            <Setter Property="Source" TargetName="Img" Value="{StaticResource CanDaoPosImageUpPress}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -187,13 +241,29 @@
     <Style x:Key="BtnLeftStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}" BorderThickness="0">
-                        <Image Source="{StaticResource CanDaoPosImageLeft}" UseLayoutRounding="True"/>
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            Background="{TemplateBinding Background}" BorderThickness="0">
+                        <Image x:Name="Img"
+                               Source="{StaticResource CanDaoPosImageLeft}" 
+                               Width="26" Height="30"
+                               UseLayoutRounding="True"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
+                            <Setter Property="Source" TargetName="Img" Value="{StaticResource CanDaoPosImageLeftPress}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -207,14 +277,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border SnapsToDevicePixels="True" ClipToBounds="True"
-                            CornerRadius="3"
-                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{StaticResource CanDaoPosColorBgBorder}"
-                            BorderThickness="1">
+                            Background="{TemplateBinding Background}" BorderThickness="0">
                         <Image x:Name="Img"
-                               Width="30" Height="14"
-                               Source="{StaticResource CanDaoPosImageBack}" UseLayoutRounding="True"/>
+                               Source="{StaticResource CanDaoPosImageBack}" 
+                               Width="26" Height="30"
+                               UseLayoutRounding="True"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>
@@ -255,13 +323,29 @@
     <Style x:Key="BtnRightStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Border SnapsToDevicePixels="True" ClipToBounds="True" Background="{TemplateBinding Background}" BorderThickness="0">
-                        <Image Source="{StaticResource CanDaoPosImageRight}" UseLayoutRounding="True"/>
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            Background="{TemplateBinding Background}" BorderThickness="0">
+                        <Image x:Name="Img"
+                               Source="{StaticResource CanDaoPosImageRight}" 
+                               Width="26" Height="30"
+                               UseLayoutRounding="True"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
+                            <Setter Property="Source" TargetName="Img" Value="{StaticResource CanDaoPosImageRightPress}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
