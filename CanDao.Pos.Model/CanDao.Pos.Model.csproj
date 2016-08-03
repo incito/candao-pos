@@ -125,6 +125,7 @@
     <Compile Include="Request\CanDaoMemberStorageRequest.cs" />
     <Compile Include="Request\CanDaoVipQueryRequest.cs" />
     <Compile Include="Request\DataDetailResponse.cs" />
+    <Compile Include="Request\DelPreferentialRequest.cs" />
     <Compile Include="Request\GetInvoiceInfoRequest.cs" />
     <Compile Include="Request\GetOrderMemberInfoRequest.cs" />
     <Compile Include="Request\GetTableByTypeRequest.cs" />
@@ -136,6 +137,8 @@
     <Compile Include="Request\TipSettlementRequest.cs" />
     <Compile Include="Request\UpdateDishWeightRequest.cs" />
     <Compile Include="Request\UpdateInvoiceRequest.cs" />
+    <Compile Include="Request\UsePreferentialRequest.cs" />
+    <Compile Include="Response\UsePreferentialRequest.cs" />
     <Compile Include="Response\CanDaoMemberBaseResponse.cs" />
     <Compile Include="Response\CanDaoMemberSaleResponse.cs" />
     <Compile Include="Response\CanDaoVipBaseResponse.cs" />
