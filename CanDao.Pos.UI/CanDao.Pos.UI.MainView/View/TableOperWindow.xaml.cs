@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using CanDao.Pos.Model;
+﻿using CanDao.Pos.Model;
 using CanDao.Pos.UI.MainView.ViewModel;
 
 namespace CanDao.Pos.UI.MainView.View
@@ -17,12 +15,6 @@ namespace CanDao.Pos.UI.MainView.View
                 DataContext = new TableOperTakeoutWndVm(tableInfo) { OwnerWindow = this };
             else
                 DataContext = new TableOperNormalWndVm(tableInfo) { OwnerWindow = this };
-        }
-
-        public TableOperWindow(string tableName)
-        {
-            InitializeComponent();
-            DataContext = new TableOperTakeoutWndVm(tableName) { OwnerWindow = this };
         }
     }
 }
