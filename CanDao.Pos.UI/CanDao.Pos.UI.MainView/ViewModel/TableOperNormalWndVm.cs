@@ -22,7 +22,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             HasTip = true;
         }
 
-        protected override void GetTableDishInfo(object param)
+        protected override void OnWindowLoaded(object param)
         {
             if (IsInDesignMode)
                 return;
@@ -53,7 +53,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _dishesTimer.DataChangeAction = new Action(DataChangeHandel);
                 _dishesTimer.Start(Data.TotalAmount);
             }
-
         }
 
         /// <summary>
@@ -75,18 +74,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             GetTableDishInfoAsync();//整单退菜完成后重新获取餐桌明细。
         }
 
-        protected override void OnWindowClosed()
+        protected override void OnWindowClosed(object param)
         {
             if (_dishesTimer != null)
             {
                 _dishesTimer.stop();
                 _dishesTimer = null;
             }
-        }
-
-        protected override void DosomethingAfterSettlement()
-        {
-            CloseWindow(true);//结算完成后关闭窗口。
         }
 
         /// <summary>

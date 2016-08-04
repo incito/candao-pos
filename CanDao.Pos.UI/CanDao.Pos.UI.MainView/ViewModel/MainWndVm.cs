@@ -179,29 +179,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Command
 
         /// <summary>
-        /// 窗口加载时执行命令。
-        /// </summary>
-        public ICommand WindowLoadCmd { get; private set; }
-
-        /// <summary>
-        /// 窗口关闭命令。
-        /// </summary>
-        public ICommand WindowClosingCmd { get; private set; }
-
-        /// <summary>
-        /// 窗口关闭时执行命令。
-        /// </summary>
-        public ICommand WindowClosedCmd { get; private set; }
-
-        /// <summary>
         /// 选择餐桌命令。
         /// </summary>
         public ICommand SelectTableCmd { get; private set; }
-
-        /// <summary>
-        /// 获取所有餐桌信息命令。   
-        /// </summary>
-        public ICommand GetAllTableInfoCmd { get; private set; }
 
         /// <summary>
         /// 操作命令。
@@ -211,72 +191,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #endregion
 
         #region Command Methods
-
-        /// <summary>
-        /// 窗口加载命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void WindowLoad(object param)
-        {
-            if (!IsInDesignMode)
-            {
-                GetAllTableInfoesAsync();
-                ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
-
-                if (Globals.IsDinnerWareEnable)
-                {
-                    ThreadPool.QueueUserWorkItem(t =>
-                    {
-                        InfoLog.Instance.I("启用了餐具收费设置，开始获取餐具信息...");
-                        var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-                        if (service == null)
-                        {
-                            ErrLog.Instance.E("创建IRestaurantService服务失败。");
-                            return;
-                        }
-
-                        var result2 = service.GetDinnerWareInfo(Globals.UserInfo.UserName);
-                        if (!string.IsNullOrEmpty(result2.Item1))
-                            ErrLog.Instance.E(result2.Item1);
-
-                        InfoLog.Instance.I("获取餐具信息完成。");
-                        Globals.DinnerWareInfo = result2.Item2;
-                    });
-                }
-            }
-        }
-
-        /// <summary>
-        /// 窗口关闭时执行命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void WindowClosing(object param)
-        {
-            ExCommandParameter cmdParam = (ExCommandParameter)param;
-            if (!MessageDialog.Quest("确定要退出系统吗？"))
-                ((CancelEventArgs)cmdParam.EventArgs).Cancel = true;
-        }
-
-        /// <summary>
-        /// 窗口关闭后命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void WindowClosed(object param)
-        {
-            if (_refreshTimer != null)//释放刷新定时器。
-            {
-                _refreshTimer.Stop();
-                _refreshTimer.Dispose();
-            }
-
-            if (_printerCheckTimer != null) //释放打印机状态定时器。
-            {
-                _printerCheckTimer.Stop();
-                _printerCheckTimer.Dispose();
-            }
-
-            Application.Current.Shutdown(1);//尝试解决有时候退出主窗口程序依然在运行的问题。
-        }
 
         /// <summary>
         /// 选择某个餐桌命令执行方法。
@@ -298,17 +212,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             WindowHelper.ShowDialog(new TableOperWindow(tableInfo) { Owner = OwnerWindow });
 
-            GetAllTableInfoesAsync();
-            RefreshRemainSecond = RefreshTimerInterval;
-        }
-
-        /// <summary>
-        /// 获取所有餐桌命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void GetAllTableInfos(object param)
-        {
-            SetRefreshTimerStatus(false);
             GetAllTableInfoesAsync();
             RefreshRemainSecond = RefreshTimerInterval;
         }
@@ -381,12 +284,63 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected override void InitCommand()
         {
             base.InitCommand();
-            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
-            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
-            WindowClosedCmd = CreateDelegateCommand(WindowClosed);
             SelectTableCmd = CreateDelegateCommand(SelectTable);
-            GetAllTableInfoCmd = CreateDelegateCommand(GetAllTableInfos);
             OperCmd = CreateDelegateCommand(OperMethod, CanOper);
+        }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            if (!IsInDesignMode)
+            {
+                SetRefreshTimerStatus(false);
+                GetAllTableInfoesAsync();
+                RefreshRemainSecond = RefreshTimerInterval;
+                ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
+
+                if (Globals.IsDinnerWareEnable)
+                {
+                    ThreadPool.QueueUserWorkItem(t =>
+                    {
+                        InfoLog.Instance.I("启用了餐具收费设置，开始获取餐具信息...");
+                        var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+                        if (service == null)
+                        {
+                            ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                            return;
+                        }
+
+                        var result2 = service.GetDinnerWareInfo(Globals.UserInfo.UserName);
+                        if (!string.IsNullOrEmpty(result2.Item1))
+                            ErrLog.Instance.E(result2.Item1);
+
+                        InfoLog.Instance.I("获取餐具信息完成。");
+                        Globals.DinnerWareInfo = result2.Item2;
+                    });
+                }
+            }
+        }
+
+        protected override void OnWindowClosing(CancelEventArgs arg)
+        {
+            if (!MessageDialog.Quest("确定要退出系统吗？"))
+                arg.Cancel = true;
+        }
+
+        protected override void OnWindowClosed(object param)
+        {
+            if (_refreshTimer != null)//释放刷新定时器。
+            {
+                _refreshTimer.Stop();
+                _refreshTimer.Dispose();
+            }
+
+            if (_printerCheckTimer != null) //释放打印机状态定时器。
+            {
+                _printerCheckTimer.Stop();
+                _printerCheckTimer.Dispose();
+            }
+
+            Application.Current.Shutdown(1);//尝试解决有时候退出主窗口程序依然在运行的问题。
         }
 
         #endregion

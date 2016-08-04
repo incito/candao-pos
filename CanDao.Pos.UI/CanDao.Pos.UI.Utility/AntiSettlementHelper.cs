@@ -221,7 +221,7 @@ namespace CanDao.Pos.UI.Utility
             }
 
             InfoLog.Instance.I("餐道会员消费反结算完成。");
-            return null;
+            return new Tuple<bool, object>(true, null);
         }
 
         /// <summary>

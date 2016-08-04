@@ -523,11 +523,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Command
 
         /// <summary>
-        /// 获取餐桌菜单明细命令。
-        /// </summary>
-        public ICommand GetTableDishInfoCmd { get; private set; }
-
-        /// <summary>
         /// 菜单列表操作命令。
         /// </summary>
         public ICommand DataGridPageOperCmd { get; private set; }
@@ -557,32 +552,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand CashControlFocusCmd { get; private set; }
 
-        /// <summary>
-        /// 回车支付命令。
-        /// </summary>
-        public ICommand EnterPayCmd { get; private set; }
-
-        /// <summary>
-        /// 窗口关闭时事件命令。
-        /// </summary>
-        public ICommand WindowClosingCmd { get; private set; }
-
-        /// <summary>
-        /// 窗口已关闭事件命令。
-        /// </summary>
-        public ICommand WindowClosedCmd { get; private set; }
-
         #endregion
 
         #region Command Methods
-
-        /// <summary>
-        /// 获取餐桌菜单明细命令执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        protected virtual void GetTableDishInfo(object param)
-        {
-        }
 
         /// <summary>
         /// 菜单列表操作命令执行方法。
@@ -1009,20 +981,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
-        private void WindowClosing(object param)
-        {
-            if (!(param is ExCommandParameter))
-                return;
-
-            var args = ((ExCommandParameter)param).EventArgs as CancelEventArgs;
-            OnWindowClosing(args);
-        }
-
-        private void WindowClosed(object param)
-        {
-            OnWindowClosed();
-        }
-
         #endregion
 
         #region Protected Method
@@ -1030,33 +988,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected override void InitCommand()
         {
             base.InitCommand();
-            GetTableDishInfoCmd = CreateDelegateCommand(GetTableDishInfo);
             DataGridPageOperCmd = CreateDelegateCommand(DataGridPageOper, CanDataGridPageOper);
             PrintCmd = CreateDelegateCommand(Print, CanPrint);
             OperCmd = CreateDelegateCommand(Oper, CanOper);
             CashControlFocusCmd = CreateDelegateCommand(CashControlFocus);
-            EnterPayCmd = CreateDelegateCommand(EnterPay);
             CouponMouseDownCmd = CreateDelegateCommand(CouponMouseDown);
             CouponMouseUpCmd = CreateDelegateCommand(CouponMouseUp);
-            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
-            WindowClosedCmd = CreateDelegateCommand(WindowClosed);
         }
 
-        /// <summary>
-        /// 窗口正在关闭时事件的虚方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        protected virtual void OnWindowClosing(CancelEventArgs arg)
+        protected override void OnPreviewKeyDown(KeyEventArgs arg)
         {
-
-        }
-
-        /// <summary>
-        /// 窗口已经关闭事件的虚方法。
-        /// </summary>
-        protected virtual void OnWindowClosed()
-        {
-
+            if (arg.Key == Key.Enter)
+            {
+                arg.Handled = true;
+                PayTheBill();
+            }
         }
 
         #endregion
@@ -1887,14 +1833,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
         }
 
-        /// <summary>
-        /// 结算后的一些处理。
-        /// </summary>
-        protected virtual void DosomethingAfterSettlement()
-        {
-
-        }
-
         #region Process Methods
 
         /// <summary>
@@ -2303,8 +2241,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             NotifyDialog.Notify(string.Format("桌号\"{0}\"结账成功。", Data.TableName), OwnerWindow.Owner);
-            InfoLog.Instance.I("结束整个结账流程，关闭窗口。");
-            DosomethingAfterSettlement();
+            InfoLog.Instance.I("桌号\"{0}\"结账成功。结束整个结账流程，关闭窗口。", Data.TableName);
+            CloseWindow(true);//结算完成后关闭窗口。
             return null;
         }
 

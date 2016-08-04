@@ -87,35 +87,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #endregion
 
-        #region Command
-
-        /// <summary>
-        /// 窗口加载事件命令。
-        /// </summary>
-        public ICommand WindowLoadCmd { get; private set; }
-
-        #endregion
-
-        #region Command Method
-
-        /// <summary>
-        /// 窗体加载事件命令的执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        private void WindowLoad(object arg)
-        {
-            LoadLoginInfo();
-        }
-
-        #endregion
-
         #region Protected Methods
-
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
-        }
 
         protected override void Confirm(object param)
         {
@@ -126,6 +98,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         protected override bool CanConfirm(object param)
         {
             return !string.IsNullOrEmpty(Account) && !string.IsNullOrEmpty(Password);
+        }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            LoadLoginInfo();
         }
 
         #endregion

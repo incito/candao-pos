@@ -60,7 +60,10 @@
                           IsChecked="{Binding QueryOrderStatus, Converter={StaticResource OrderStatus2CheckedCvt}, ConverterParameter=Unpay}"/>
         </StackPanel>
 
-        <controls:GroupSelector Grid.Row="2" x:Name="GsOrderList" ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}" ItemCountEachGroup="25">
+        <controls:GroupSelector x:Name="GsOrderList"
+                                Grid.Row="2"
+                                ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}"
+                                ItemCountEachGroup="16">
             <controls:GroupSelector.Template>
                 <ControlTemplate TargetType="controls:GroupSelector">
                     <DataGrid x:Name="PART_Selector" AutoGenerateColumns="False" FontSize="14" CanUserResizeColumns="False" CanUserAddRows="False" SelectionUnit="FullRow"

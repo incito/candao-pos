@@ -101,8 +101,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            int male = string.IsNullOrEmpty(MaleCustomer) ? 0 : Convert.ToInt32(MaleCustomer);
-            int famale = string.IsNullOrEmpty(FemaleCustomer) ? 0 : Convert.ToInt32(FemaleCustomer);
+            int male = Convert2Int(MaleCustomer);
+            int famale = Convert2Int(FemaleCustomer);
             if (male + famale <= 0)
             {
                 MessageDialog.Warning("请输入就餐人数。", OwnerWindow);

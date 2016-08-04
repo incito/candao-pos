@@ -168,11 +168,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Command
 
         /// <summary>
-        /// 窗体加载命令。
-        /// </summary>
-        public ICommand WndLoadCmd { get; private set; }
-
-        /// <summary>
         /// 选择一个菜品命令。
         /// </summary>
         public ICommand SelectDishCmd { get; private set; }
@@ -190,30 +185,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #endregion
 
         #region Command Methods
-
-        /// <summary>
-        /// 窗口加载命令执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void WndLoad(object param)
-        {
-            InfoLog.Instance.I("点菜窗口加载完成时...");
-            if (Globals.DishGroupInfos == null)
-            {
-                InfoLog.Instance.I("菜谱缓存为空，开始获取菜谱信息...");
-                TaskService.Start(null, GetMenuDishGroupInfoProcess, GetMenuDishGroupInfoComplete, "加载菜谱信息中...");
-                return;
-            }
-
-            InfoLog.Instance.I("菜谱有缓存，加载菜谱...");
-
-            DishGroups.Clear();
-            Globals.DishGroupInfos.ForEach(t =>
-            {
-                t.SelectDishCount = 0m;
-                DishGroups.Add(t);
-            });
-        }
 
         /// <summary>
         /// 选择菜品命令执行方法。
@@ -366,16 +337,39 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         #endregion
 
-        #region Private Methods
+        #region Protected Methods
 
         protected override void InitCommand()
         {
             base.InitCommand();
-            WndLoadCmd = CreateDelegateCommand(WndLoad);
             SelectDishCmd = CreateDelegateCommand(SelectDish);
             OperCmd = CreateDelegateCommand(Oper, CanOpen);
             GroupCmd = CreateDelegateCommand(Group, CanGroup);
         }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            InfoLog.Instance.I("点菜窗口加载完成时...");
+            if (Globals.DishGroupInfos == null)
+            {
+                InfoLog.Instance.I("菜谱缓存为空，开始获取菜谱信息...");
+                TaskService.Start(null, GetMenuDishGroupInfoProcess, GetMenuDishGroupInfoComplete, "加载菜谱信息中...");
+                return;
+            }
+
+            InfoLog.Instance.I("菜谱有缓存，加载菜谱...");
+
+            DishGroups.Clear();
+            Globals.DishGroupInfos.ForEach(t =>
+            {
+                t.SelectDishCount = 0m;
+                DishGroups.Add(t);
+            });
+        }
+
+        #endregion
+
+        #region Private Methods
 
         /// <summary>
         /// 获取菜品分组集合的执行方法。

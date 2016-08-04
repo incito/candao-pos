@@ -44,20 +44,6 @@ namespace CanDao.Pos.Common.Controls
         public static readonly DependencyProperty ShowCloseBtnProperty =
             DependencyProperty.Register("ShowCloseBtn", typeof(bool), typeof(PosMsgWindow), new PropertyMetadata(true));
 
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            switch (e.Key)
-            {
-                case Key.Enter:
-                    DialogResult = true;
-                    break;
-                case Key.Escape:
-                    DialogResult = false;
-                    break;
-            }
-        }
-
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -82,7 +68,7 @@ namespace CanDao.Pos.Common.Controls
             DragMove();
         }
 
-        protected  virtual void CancelBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
+        protected virtual void CancelBtnOnClick(object sender, RoutedEventArgs routedEventArgs)
         {
             DialogResult = false;
         }

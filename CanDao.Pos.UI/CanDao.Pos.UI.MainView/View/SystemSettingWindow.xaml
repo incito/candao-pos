@@ -6,11 +6,6 @@
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                         xmlns:views="clr-namespace:CanDao.Pos.SystemConfig.Views;assembly=CanDao.Pos.SystemConfig"
                         Height="680" Width="900" ShowInTaskbar="False">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding WndLoadCmd}" CommandParameter="Load"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <controls:PosBaseWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

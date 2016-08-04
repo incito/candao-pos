@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.UI.MainView.ViewModel;
 
@@ -12,6 +13,7 @@ namespace CanDao.Pos.UI.MainView.View
     {
         public OpenTableWindow(TableInfo tableInfo)
         {
+            InfoLog.Instance.I("桌号：\"{0}\"准备开台...", tableInfo.TableName);
             InitializeComponent();
             DataContext = new OpenTableWndVm(tableInfo) { OwnerWindow = this };
         }

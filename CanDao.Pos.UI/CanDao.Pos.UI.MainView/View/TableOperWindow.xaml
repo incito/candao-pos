@@ -11,10 +11,10 @@
                         x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding GetTableDishInfoCmd}" CommandParameter="Load"/>
+            <i:InvokeCommandAction Command="{Binding WindowLoadCmd}"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="PreviewKeyDown">
-            <common:ExInvokeCommandAction  Command="{Binding EnterPayCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
+            <common:ExInvokeCommandAction  Command="{Binding PreviewKeyDownCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Closing">
             <common:ExInvokeCommandAction  Command="{Binding WindowClosingCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
