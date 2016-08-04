@@ -671,7 +671,7 @@ namespace CanDao.Pos.ServiceImpl
                 freeauthorize = dishInfo.FreeAuthorizeId,
                 freereason = dishInfo.FreeReason,
                 taste = string.IsNullOrEmpty(dishInfo.TempDishName) ? dishInfo.Taste : dishInfo.TempDishName,
-                sperequire = dishInfo.Diet,
+                sperequire = dishInfo.Diet ?? "",//忌口设成null会导致打印的厨打单上显示null。
             };
         }
 

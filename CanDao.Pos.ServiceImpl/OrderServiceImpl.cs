@@ -253,11 +253,11 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var result = HttpHelper.HttpPost<GetMenuComboDishResponse>(addr, request);
-                if (result.rows == null || !result.rows.Any() || result.rows.First().only == null ||
-                    !result.rows.First().only.Any())
+                var data = result.data.rows;
+                if (data == null || !data.Any() || data.First().only == null || !data.First().only.Any())
                     return new Tuple<string, MenuComboFullInfo>("套餐内没有包含任何菜品", null);
 
-                var item = DataConverter.ToMenuComboFullInfo(result.rows.First());
+                var item = DataConverter.ToMenuComboFullInfo(data.First());
                 return new Tuple<string, MenuComboFullInfo>(null, item);
             }
             catch (Exception ex)

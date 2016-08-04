@@ -107,7 +107,7 @@
                                       SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="序号" Width="40" Binding="{Binding Index}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn Header="菜单名称" Width="*" CanUserReorder="False" IsReadOnly="True">
+                                    <DataGridTemplateColumn Header="菜单名称" Width="*" CanUserReorder="False" CanUserSort="True" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <WrapPanel VerticalAlignment="Center">
