@@ -379,7 +379,6 @@
                                 <toolkit:DoubleTextBox Grid.Row="0" Grid.Column="1" Minimum="0"
                                                        FontSize="60"
                                                        Text="{Binding CashAmount, UpdateSourceTrigger=PropertyChanged}"
-                                                       Watermark="现金金额"
                                                        ShowButtonSpinner="False"
                                                        SelectAllOnGotFocus="True"
                                                        DecimalPlaces="2"

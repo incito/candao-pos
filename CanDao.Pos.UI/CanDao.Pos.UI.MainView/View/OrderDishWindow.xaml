@@ -144,9 +144,9 @@
             <Button Style="{StaticResource BtnReduceStyle}"
                     Command="{Binding OperCmd}"
                     CommandParameter="DishCountReduce"/>
-            <!--<Button Style="{StaticResource BtnImgBaseStyle}" Content="数量"
+            <Button Style="{StaticResource BtnImgBaseStyle}" Content="数量"
                     Command="{Binding OperCmd}"
-                    CommandParameter="InputNum"/>-->
+                    CommandParameter="InputNum"/>
             <Button Style="{StaticResource BtnImgBaseStyle}" Content="备注"
                     Command="{Binding OperCmd}"
                     CommandParameter="Remark"/>
@@ -157,7 +157,7 @@
                    Background="{StaticResource CanDaoPosColorBgGray}">
             <DockPanel Height="70" DockPanel.Dock="Top" Margin="10,0">
                 <Button DockPanel.Dock="Left"
-                        Style="{StaticResource BtnLeftNoBorderStyle}"
+                        Style="{StaticResource BtnLeftStyle}"
                         Command="{Binding GroupCmd}" CommandParameter="PreGroup"/>
                 <Button DockPanel.Dock="Right"
                         Style="{StaticResource BtnRightStyle}"

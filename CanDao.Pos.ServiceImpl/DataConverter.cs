@@ -34,7 +34,7 @@ namespace CanDao.Pos.ServiceImpl
                 MinPrice = Math.Round(response.minprice, 2),
                 FixPrice = Math.Round(response.fixprice, 2),
                 BeginTime = Parse2DateTime(response.begintime, DateTimeFormat2),
-                Amount = response.amount ?? 0,
+                Amount = Math.Round(response.amount ?? 0, 2),
             };
         }
 

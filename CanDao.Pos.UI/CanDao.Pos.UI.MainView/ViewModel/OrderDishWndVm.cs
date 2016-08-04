@@ -264,6 +264,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "ClearFilter":
                     FilterMenuGroup = null;
                     break;
+                case "InputNum":
+                    InputDishCount();
+                    break;
                 case "PreGroup":
                     OwnerWnd.LbDishGroup.PreviousGroup();
                     break;
@@ -1030,6 +1033,27 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             UpdateOrderDishNum(SelectedOrderDish, SelectedOrderDish.DishNum + 1);
             DoWhenDishChanged();
+        }
+
+        private void InputDishCount()
+        {
+            if (SelectedOrderDish == null)
+                return;
+
+            if (SelectedOrderDish.IsComboDish || SelectedOrderDish.DishType == EnumDishType.Packages
+                || SelectedOrderDish.IsFishPotDish || SelectedOrderDish.DishType == EnumDishType.FishPot)
+            {
+                MessageDialog.Warning("鱼锅和套餐不允许直接输入数量。");
+                return;
+            }
+
+            var tipInfo = string.Format("菜品名称：{0}", SelectedOrderDish.DishName);
+            var numWnd = new NumInputWindow("菜品数量设置", tipInfo, "菜品数量：", 0);
+            if (WindowHelper.ShowDialog(numWnd, OwnerWnd))
+            {
+                UpdateOrderDishNum(SelectedOrderDish, numWnd.InputNum);
+                DoWhenDishChanged();
+            }
         }
 
         /// <summary>

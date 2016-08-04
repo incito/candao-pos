@@ -406,6 +406,7 @@ namespace CanDao.Pos.Client
                 if (!CommonHelper.ClearAllPos(true))
                 {
                     InfoLog.Instance.I("还有POS机未清机。");
+                    Shutdown();
                     return;
                 }
 
@@ -492,12 +493,11 @@ namespace CanDao.Pos.Client
         /// </summary>
         private void EndWork()
         {
-            AuthorizationWindow wnd = new AuthorizationWindow(EnumRightType.EndWork);
+            var wnd = new AuthorizationWindow(EnumRightType.EndWork);
             if (!WindowHelper.ShowDialog(wnd))
                 return;
 
-            var request = new EndWorkRequest { UserId = Globals.UserInfo.UserName };
-            TaskService.Start(request, EndWorkProcess, EndWorkComplete, "结业中...");
+            TaskService.Start(Globals.Authorizer.UserName, EndWorkProcess, EndWorkComplete, "结业中...");
         }
 
         /// <summary>
@@ -511,7 +511,7 @@ namespace CanDao.Pos.Client
             if (service == null)
                 return "创建IRestaurantService服务失败。";
 
-            return service.EndWork((EndWorkRequest)param);
+            return service.EndWork((string)param);
         }
 
         /// <summary>
@@ -561,12 +561,21 @@ namespace CanDao.Pos.Client
             var result = (string)param;
             if (!string.IsNullOrEmpty(result))
             {
-                if (MessageDialog.Quest(result + Environment.NewLine + "上传数据失败，是否重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃上传。"))
+                ErrLog.Instance.E("结业后上传数据接口调用失败：{0}", result);
+                if (
+                    MessageDialog.Quest(result + Environment.NewLine + "上传数据失败，是否重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃上传。"))
+                {
+                    InfoLog.Instance.I("选择了重新上传结业数据...");
                     EndWorkSyncData();
-                return;
-            }
+                }
 
-            MessageDialog.Warning("结业成功。");
+                InfoLog.Instance.I("选择取消重新上传结业数据。");
+            }
+            else
+            {
+                InfoLog.Instance.I("结业数据上传成功。");
+                MessageDialog.Warning("结业成功，即将退出程序。");
+            }
         }
 
     }

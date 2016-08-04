@@ -33,6 +33,11 @@ namespace CanDao.Pos.UI.Utility
         private static AutoResetEvent _arEvent = new AutoResetEvent(false);
 
         /// <summary>
+        /// 等待超时时间。
+        /// </summary>
+        private static int TimeOutSecond = 30;
+
+        /// <summary>
         /// 广播消息。
         /// </summary>
         /// <param name="type">广播消息类型。</param>
@@ -116,11 +121,17 @@ namespace CanDao.Pos.UI.Utility
             if (!WindowHelper.ShowDialog(wnd))
                 return false;
 
-            var request = new ClearnerRequest { UserId = Globals.UserInfo.UserName, UserName = Globals.UserInfo.FullName, Mac = MachineManage.GetMachineId(), Authorizer = Globals.Authorizer.FullName };
+            var request = new ClearnerRequest
+            {
+                UserId = Globals.Authorizer.UserName,
+                UserName = Globals.Authorizer.FullName,
+                Mac = MachineManage.GetMachineId(),
+                Authorizer = Globals.Authorizer.FullName
+            };
             _clearPosSuccess = false;
             var workFlowClear = new WorkFlowInfo(ClearnerProcess, ClearnerComplete, "清机中...");
             WorkFlowService.Start(request, workFlowClear);
-            _arEvent.WaitOne(20 * 1000);
+            _arEvent.WaitOne(TimeOutSecond * 1000);
             return _clearPosSuccess;
         }
 

@@ -4,7 +4,7 @@
                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                        xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
-                       Width="340" Height="415" ShowInTaskbar="False"
+                       Width="340" Height="407" ShowInTaskbar="False"
                        Title="{Binding Title}">
     <controls:PosMsgWindow.Resources>
         <ResourceDictionary>
@@ -21,11 +21,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding TipInfo}"
-                   Height="48" FontSize="16"
+                   FontSize="16" Margin="0,3,0,0"
                    Foreground="{StaticResource CanDaoPosColorSelected}"
                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
         <toolkit:DoubleTextBox x:Name="DtbNum"
+                               Background="{StaticResource CanDaoPosColorBgWhite}"
                                Grid.Row="1"
                                Watermark="{Binding NumWatermark}" 
                                FontSize="16"
