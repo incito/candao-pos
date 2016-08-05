@@ -15,6 +15,6 @@ namespace CanDao.Pos.Model.Request
        /// <summary>
        /// 是否全部清除（0：否1：是）默认0
        /// </summary>
-       public string clear { set; get; }
+       public int clear { set; get; }
     }
 }

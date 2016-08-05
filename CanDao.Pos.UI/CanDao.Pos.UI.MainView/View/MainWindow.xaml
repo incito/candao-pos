@@ -181,15 +181,15 @@
                     TextBlock.FontSize="16">
             <TextBlock Text="{Binding IdleCount, StringFormat=空闲 ({0})}"
                        Foreground="{StaticResource CanDaoPosColorFgOrange}"
-                       Width="81" Height="22"
+                       Width="85" Height="22"
                        Margin="20,10,0,0"/>
             <TextBlock Text="{Binding DinnerCount, StringFormat=就餐 ({0})}"
                        Foreground="{StaticResource CanDaoPosColorFgFont}"
-                       Width="81" Height="22"
+                       Width="85" Height="22"
                        Margin="20,10,0,0"/>
             <TextBlock Text="{Binding DinnerCount, StringFormat=禁用开台({0})}"
                        Foreground="{StaticResource CanDaoPosColorBgDisable}"
-                       Width="81" Height="22"
+                       Width="85" Height="22"
                        Margin="20,10,0,0"/>
         </StackPanel>
 

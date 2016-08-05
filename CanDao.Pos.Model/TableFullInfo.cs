@@ -228,5 +228,31 @@ namespace CanDao.Pos.Model
                 }
             }
         }
+
+        public void CloneOrderData(TableFullInfo info)
+        {
+            MemberNo = info.MemberNo;
+            PaymentAmount = info.PaymentAmount;
+            TipAmount = info.TipAmount;
+            TotalAmount = info.TotalAmount;
+            TotalFreeAmount = info.TotalFreeAmount;
+
+            DishInfos.Clear();
+            if (info.DishInfos != null && info.DishInfos.Any())
+            {
+                foreach (var dishInfo in info.DishInfos)
+                {
+                    DishInfos.Add(dishInfo);
+                }
+            }
+            UsedCouponInfos.Clear();
+            if (info.UsedCouponInfos != null && info.UsedCouponInfos.Any())
+            {
+                foreach (var couponInfo in info.UsedCouponInfos)
+                {
+                    UsedCouponInfos.Add(couponInfo);
+                }
+            }
+        }
     }
 }

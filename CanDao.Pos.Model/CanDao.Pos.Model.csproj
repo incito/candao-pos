@@ -138,6 +138,7 @@
     <Compile Include="Request\UpdateDishWeightRequest.cs" />
     <Compile Include="Request\UpdateInvoiceRequest.cs" />
     <Compile Include="Request\UsePreferentialRequest.cs" />
+    <Compile Include="Response\GetOrderInfoResponse.cs" />
     <Compile Include="Response\UsePreferentialRequest.cs" />
     <Compile Include="Response\CanDaoMemberBaseResponse.cs" />
     <Compile Include="Response\CanDaoMemberSaleResponse.cs" />
