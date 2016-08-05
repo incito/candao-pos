@@ -78,6 +78,7 @@
     <Compile Include="Model\UcBusinessDataDetailsModel.cs" />
     <Compile Include="Model\UCCashboxPswModel.cs" />
     <Compile Include="Model\UcCustomDishesModel.cs" />
+    <Compile Include="ViewModel\JdeReloadWndVm.cs" />
     <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
     <Compile Include="ViewModel\SelectTakeoutOnAccountCompanyVm.cs" />
     <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
@@ -85,6 +86,9 @@
     <Compile Include="ViewModel\UcBusinessDataDetailsViewModel.cs" />
     <Compile Include="ViewModel\UCCashboxPswViewModel.cs" />
     <Compile Include="ViewModel\UcCustomDishesViewModel.cs" />
+    <Compile Include="View\JdeReloadWindow.xaml.cs">
+      <DependentUpon>JdeReloadWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\NumInputWindow.xaml.cs">
       <DependentUpon>NumInputWindow.xaml</DependentUpon>
     </Compile>
@@ -248,6 +252,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\JdeReloadWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

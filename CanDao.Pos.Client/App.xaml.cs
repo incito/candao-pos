@@ -562,8 +562,7 @@ namespace CanDao.Pos.Client
             if (!string.IsNullOrEmpty(result))
             {
                 ErrLog.Instance.E("结业后上传数据接口调用失败：{0}", result);
-                if (
-                    MessageDialog.Quest(result + Environment.NewLine + "上传数据失败，是否重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃上传。"))
+                if (WindowHelper.ShowDialog(new JdeReloadWindow()))
                 {
                     InfoLog.Instance.I("选择了重新上传结业数据...");
                     EndWorkSyncData();
@@ -577,6 +576,5 @@ namespace CanDao.Pos.Client
                 MessageDialog.Warning("结业成功，即将退出程序。");
             }
         }
-
     }
 }
