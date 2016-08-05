@@ -33,6 +33,11 @@ namespace CanDao.Pos.UI.Utility
         private static AutoResetEvent _arEvent = new AutoResetEvent(false);
 
         /// <summary>
+        /// 等待超时时间。
+        /// </summary>
+        private static int TimeOutSecond = 30;
+
+        /// <summary>
         /// 广播消息。
         /// </summary>
         /// <param name="type">广播消息类型。</param>
@@ -42,6 +47,21 @@ namespace CanDao.Pos.UI.Utility
         {
             var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
             return service == null ? "创建IRestaurantService服务失败。" : service.BroadcastMessage((int)type, msg);
+        }
+
+        /// <summary>
+        /// 异步执行广播消息。
+        /// </summary>
+        /// <param name="type">广播消息类型。</param>
+        /// <param name="msg">广播消息。</param>
+        public static void BroadcastMessageAsync(EnumBroadcastMsgType type, string msg)
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                var errMsg = BroadcastMessage(type, msg);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)type);
+            });
         }
 
         /// <summary>
@@ -101,11 +121,17 @@ namespace CanDao.Pos.UI.Utility
             if (!WindowHelper.ShowDialog(wnd))
                 return false;
 
-            var request = new ClearnerRequest { UserId = Globals.UserInfo.UserName, UserName = Globals.UserInfo.FullName, Mac = MachineManage.GetMachineId(), Authorizer = Globals.Authorizer.FullName };
+            var request = new ClearnerRequest
+            {
+                UserId = Globals.Authorizer.UserName,
+                UserName = Globals.Authorizer.FullName,
+                Mac = MachineManage.GetMachineId(),
+                Authorizer = Globals.Authorizer.FullName
+            };
             _clearPosSuccess = false;
             var workFlowClear = new WorkFlowInfo(ClearnerProcess, ClearnerComplete, "清机中...");
             WorkFlowService.Start(request, workFlowClear);
-            _arEvent.WaitOne(20 * 1000);
+            _arEvent.WaitOne(TimeOutSecond * 1000);
             return _clearPosSuccess;
         }
 

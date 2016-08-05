@@ -2,9 +2,7 @@
 using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
-using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
-using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -99,12 +97,19 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #region Command
 
+        /// <summary>
+        /// 键盘按键事件命令。
+        /// </summary>
         public ICommand PreKeyDownCmd { get; private set; }
 
         #endregion
 
         #region Command Methods
 
+        /// <summary>
+        ///  键盘按键事件命令的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
         private void PreKeyDown(object param)
         {
             if (!(param is ExCommandParameter))
@@ -125,13 +130,16 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #region Protected Methods
 
+        protected override void InitCommand()
+        {
+            base.InitCommand();
+            PreKeyDownCmd = CreateDelegateCommand(PreKeyDown);
+        }
+
         protected override void Confirm(object param)
         {
-            var userLoginWf = new WorkFlowInfo(LoginProcess, LoginComplete, "用户身份验证...");
-            var getUserRightWf = new WorkFlowInfo(GetUserRightProcess, GetUserRightComplete, "获取用户权限中...");
-            userLoginWf.NextWorkFlowInfo = getUserRightWf;
             var arg = new Tuple<string, string>(Account, Password);
-            WorkFlowService.Start(arg, userLoginWf);
+            TaskService.Start(arg, LoginProcess, LoginComplete, "身份验证中...");
         }
 
         protected override bool CanConfirm(object param)
@@ -165,71 +173,23 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// 授权登录执行完成后。
         /// </summary>
         /// <param name="param"></param>
-        private Tuple<bool, object> LoginComplete(object param)
+        private void LoginComplete(object param)
         {
             var result = (Tuple<string, string>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
+                ErrLog.Instance.E("授权失败：{0}", result.Item1);
                 MessageDialog.Warning(result.Item1, OwnerWindow);
-                return null;
+                return;
             }
 
-            if (_rightType != EnumRightType.Login)
-            {
-                Globals.Authorizer.UserName = Account;
-                Globals.Authorizer.FullName = result.Item2;
-            }
+            Globals.Authorizer.UserName = Account;
+            Globals.Authorizer.FullName = result.Item2;
 
-            return new Tuple<bool, object>(true, Account);
-        }
-
-        /// <summary>
-        /// 执行获取用户权限方法。
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private object GetUserRightProcess(object param)
-        {
-            var service = ServiceManager.Instance.GetServiceIntance<IAccountService>();
-            if (service == null)
-            {
-                var msg = "创建授权登录服务接口失败。";
-                ErrLog.Instance.E(msg);
-                return new Tuple<string, UserRight>(msg, null);
-            }
-
-            return service.GetUserRight((string)param);
-        }
-
-        /// <summary>
-        /// 获取用户权限执行完成后。
-        /// </summary>
-        /// <param name="param"></param>
-        private Tuple<bool, object> GetUserRightComplete(object param)
-        {
-            var result = (Tuple<string, UserRight>)param;
-            if (!string.IsNullOrEmpty(result.Item1))
-            {
-                MessageDialog.Warning(result.Item1, OwnerWindow);
-                return null;
-            }
-
-            switch (_rightType)
-            {
-                case EnumRightType.Opening:
-                    TaskService.Start(null, OpeningProcess, OpeningComplete, "开业中...");
-                    break;
-                case EnumRightType.Login:
-                    Globals.UserRight.CloneDataFrom(result.Item2);
-                    if (Globals.UserRight.AllowCash)
-                        TaskService.Start(Account, CheckPettyCashInputProcess, CheckPettyCashInputComplete, "检测零找金...");
-                    break;
-                default:
-                    CloseWindow(true);
-                    break;
-            }
-
-            return null;
+            if (_rightType == EnumRightType.Opening)
+                TaskService.Start(null, OpeningProcess, OpeningComplete, "开业中...");
+            else
+                CloseWindow(true);
         }
 
         /// <summary>
@@ -265,42 +225,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             CloseWindow(true);
         }
 
-        /// <summary>
-        /// 检测是否输入零找金的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private object CheckPettyCashInputProcess(object param)
-        {
-            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-            if (service == null)
-                return new Tuple<string, bool>("创建IRestaurantService服务接口失败！", false);
-
-            return service.CheckPettyCashInput((string)param);
-        }
-
-        /// <summary>
-        /// 检测是否输入零找金执行完成。
-        /// </summary>
-        /// <param name="param"></param>
-        private void CheckPettyCashInputComplete(object param)
-        {
-            var result = (Tuple<string, bool>)param;
-            if (!string.IsNullOrEmpty(result.Item1))
-            {
-                MessageDialog.Warning(result.Item1, OwnerWindow);
-                ErrLog.Instance.E(result.Item1);
-                return;
-            }
-
-            if (!result.Item2)
-            {
-                CloseWindow(WindowHelper.ShowDialog(new PettyCashWindow(), OwnerWindow));
-                return;
-            }
-
-            CloseWindow(true);
-        }
         #endregion
     }
 }

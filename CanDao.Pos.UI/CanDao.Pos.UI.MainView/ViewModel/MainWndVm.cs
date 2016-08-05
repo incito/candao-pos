@@ -179,29 +179,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Command
 
         /// <summary>
-        /// 窗口加载时执行命令。
-        /// </summary>
-        public ICommand WindowLoadCmd { get; private set; }
-
-        /// <summary>
-        /// 窗口关闭命令。
-        /// </summary>
-        public ICommand WindowClosingCmd { get; private set; }
-
-        /// <summary>
-        /// 窗口关闭时执行命令。
-        /// </summary>
-        public ICommand WindowClosedCmd { get; private set; }
-
-        /// <summary>
         /// 选择餐桌命令。
         /// </summary>
         public ICommand SelectTableCmd { get; private set; }
-
-        /// <summary>
-        /// 获取所有餐桌信息命令。   
-        /// </summary>
-        public ICommand GetAllTableInfoCmd { get; private set; }
 
         /// <summary>
         /// 操作命令。
@@ -211,72 +191,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #endregion
 
         #region Command Methods
-
-        /// <summary>
-        /// 窗口加载命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void WindowLoad(object param)
-        {
-            if (!IsInDesignMode)
-            {
-                GetAllTableInfoesAsync();
-                ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
-
-                if (Globals.IsDinnerWareEnable)
-                {
-                    ThreadPool.QueueUserWorkItem(t =>
-                    {
-                        InfoLog.Instance.I("启用了餐具收费设置，开始获取餐具信息...");
-                        var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-                        if (service == null)
-                        {
-                            ErrLog.Instance.E("创建IRestaurantService服务失败。");
-                            return;
-                        }
-
-                        var result2 = service.GetDinnerWareInfo(Globals.UserInfo.UserName);
-                        if (!string.IsNullOrEmpty(result2.Item1))
-                            ErrLog.Instance.E(result2.Item1);
-
-                        InfoLog.Instance.I("获取餐具信息完成。");
-                        Globals.DinnerWareInfo = result2.Item2;
-                    });
-                }
-            }
-        }
-
-        /// <summary>
-        /// 窗口关闭时执行命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void WindowClosing(object param)
-        {
-            ExCommandParameter cmdParam = (ExCommandParameter)param;
-            if (!MessageDialog.Quest("确定要退出系统吗？"))
-                ((CancelEventArgs)cmdParam.EventArgs).Cancel = true;
-        }
-
-        /// <summary>
-        /// 窗口关闭后命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void WindowClosed(object param)
-        {
-            if (_refreshTimer != null)//释放刷新定时器。
-            {
-                _refreshTimer.Stop();
-                _refreshTimer.Dispose();
-            }
-
-            if (_printerCheckTimer != null) //释放打印机状态定时器。
-            {
-                _printerCheckTimer.Stop();
-                _printerCheckTimer.Dispose();
-            }
-
-            Application.Current.Shutdown(1);//尝试解决有时候退出主窗口程序依然在运行的问题。
-        }
 
         /// <summary>
         /// 选择某个餐桌命令执行方法。
@@ -298,17 +212,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             WindowHelper.ShowDialog(new TableOperWindow(tableInfo) { Owner = OwnerWindow });
 
-            GetAllTableInfoesAsync();
-            RefreshRemainSecond = RefreshTimerInterval;
-        }
-
-        /// <summary>
-        /// 获取所有餐桌命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void GetAllTableInfos(object param)
-        {
-            SetRefreshTimerStatus(false);
             GetAllTableInfoesAsync();
             RefreshRemainSecond = RefreshTimerInterval;
         }
@@ -381,12 +284,63 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected override void InitCommand()
         {
             base.InitCommand();
-            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
-            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
-            WindowClosedCmd = CreateDelegateCommand(WindowClosed);
             SelectTableCmd = CreateDelegateCommand(SelectTable);
-            GetAllTableInfoCmd = CreateDelegateCommand(GetAllTableInfos);
             OperCmd = CreateDelegateCommand(OperMethod, CanOper);
+        }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            if (!IsInDesignMode)
+            {
+                SetRefreshTimerStatus(false);
+                GetAllTableInfoesAsync();
+                RefreshRemainSecond = RefreshTimerInterval;
+                ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
+
+                if (Globals.IsDinnerWareEnable)
+                {
+                    ThreadPool.QueueUserWorkItem(t =>
+                    {
+                        InfoLog.Instance.I("启用了餐具收费设置，开始获取餐具信息...");
+                        var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+                        if (service == null)
+                        {
+                            ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                            return;
+                        }
+
+                        var result2 = service.GetDinnerWareInfo(Globals.UserInfo.UserName);
+                        if (!string.IsNullOrEmpty(result2.Item1))
+                            ErrLog.Instance.E(result2.Item1);
+
+                        InfoLog.Instance.I("获取餐具信息完成。");
+                        Globals.DinnerWareInfo = result2.Item2;
+                    });
+                }
+            }
+        }
+
+        protected override void OnWindowClosing(CancelEventArgs arg)
+        {
+            if (!MessageDialog.Quest("确定要退出系统吗？"))
+                arg.Cancel = true;
+        }
+
+        protected override void OnWindowClosed(object param)
+        {
+            if (_refreshTimer != null)//释放刷新定时器。
+            {
+                _refreshTimer.Stop();
+                _refreshTimer.Dispose();
+            }
+
+            if (_printerCheckTimer != null) //释放打印机状态定时器。
+            {
+                _printerCheckTimer.Stop();
+                _printerCheckTimer.Dispose();
+            }
+
+            Application.Current.Shutdown(1);//尝试解决有时候退出主窗口程序依然在运行的问题。
         }
 
         #endregion
@@ -602,7 +556,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var result = (Tuple<string, List<TableInfo>>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
-                MessageDialog.Warning(result.Item1, OwnerWindow);
+                var errMsg = string.Format("获取所有餐桌信息失败：{0}", result.Item1);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg, OwnerWindow);
                 SetRefreshTimerStatus(true);
                 return;
             }
@@ -610,14 +566,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             SetRefreshTimerStatus(true);
             if (result.Item2 != null && result.Item2.Any())
             {
+                result.Item2.ForEach(SetTableEnableStatus);//设置餐台可用状态。
+
                 IdleCount = result.Item2.Count(t => !IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
                 DinnerCount = result.Item2.Count(t => t.TableStatus == EnumTableStatus.Dinner);
-                DisableCount = result.Item2.Count(t => IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
+                DisableCount = result.Item2.Count(t => !t.TableEnable);
 
-                var normalTables = result.Item2.Where(t => t.TableType == EnumTableType.Room || t.TableType == EnumTableType.Outside).ToList();
+                var normalTables = result.Item2.Where(t => !t.IsCoffeeTable).ToList();
                 UpdateNormalTables(normalTables);
 
-                var cfTables = result.Item2.Where(t => t.TableType == EnumTableType.CFTable).ToList();
+                var cfTables = result.Item2.Where(t => t.IsCoffeeTable).ToList();
                 UpdateCfTables(cfTables);
             }
         }
@@ -678,12 +636,18 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="item"></param>
         private void AddTableInfo(TableInfo item)
         {
-            //餐台的可用状态：只有当是强制结业模式且餐台空闲时不可用，其他时候都可用。
-            item.TableEnable = !IsForcedEndWorkModel || (item.TableStatus == EnumTableStatus.Dinner);
-            if (item.TableType == EnumTableType.CFTable)
+            if (item.IsCoffeeTable)
                 CfTables.Add(item);
             else
                 Tables.Add(item);
+        }
+
+        private void SetTableEnableStatus(TableInfo item)
+        {
+            if (item.IsCoffeeTable)
+                item.TableEnable = item.TableStatus == EnumTableStatus.Dinner;//咖啡台不允许开台，所以只有当就餐时才允许点击。
+            else
+                item.TableEnable = !IsForcedEndWorkModel || (item.TableStatus == EnumTableStatus.Dinner);//只有当是强制结业模式且餐台空闲时不可用，其他时候都可用。
         }
 
         /// <summary>
@@ -727,8 +691,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             InfoLog.Instance.I("结业授权成功，开始调用结业接口...");
-            var request = new EndWorkRequest { UserId = Globals.UserInfo.UserName };
-            TaskService.Start(request, EndWorkProcess, EndWorkComplete, "结业中...");
+            TaskService.Start(Globals.Authorizer.UserName, EndWorkProcess, EndWorkComplete, "结业中...");
         }
 
         /// <summary>
@@ -742,7 +705,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IRestaurantService服务失败。";
 
-            return service.EndWork((EndWorkRequest)param);
+            return service.EndWork((string)param);
         }
 
         /// <summary>
@@ -754,9 +717,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var result = (string)param;
             if (!string.IsNullOrEmpty(result))
             {
-                SetRefreshTimerStatus(true);
                 ErrLog.Instance.E("结业接口调用失败：{0}", result);
                 MessageDialog.Warning(result, OwnerWindow);
+                SetRefreshTimerStatus(true);
                 return;
             }
 
@@ -792,25 +755,25 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="param"></param>
         private void EndWorkSyncDataComplete(object param)
         {
-            SetRefreshTimerStatus(true);
             var result = (string)param;
             if (!string.IsNullOrEmpty(result))
             {
                 ErrLog.Instance.E("结业后上传数据接口调用失败：{0}", result);
                 if (
-                    MessageDialog.Quest(result + Environment.NewLine + "上传数据失败，是否重新上传？" + Environment.NewLine +
-                                        "\"确定\"重新上传，\"取消\"放弃上传。"))
+                    MessageDialog.Quest(result + Environment.NewLine + "上传数据失败，是否重新上传？" + Environment.NewLine + "\"确定\"重新上传，\"取消\"放弃上传。"))
                 {
                     InfoLog.Instance.I("选择了重新上传结业数据...");
                     EndWorkSyncData();
                 }
 
                 InfoLog.Instance.I("选择取消重新上传结业数据。");
-                return;
+            }
+            else
+            {
+                InfoLog.Instance.I("结业数据上传成功。");
+                MessageDialog.Warning("结业成功，即将退出程序。", OwnerWindow);
             }
 
-            InfoLog.Instance.I("结业数据上传成功。");
-            MessageDialog.Warning("结业成功。", OwnerWindow);
             Application.Current.Shutdown();
         }
 

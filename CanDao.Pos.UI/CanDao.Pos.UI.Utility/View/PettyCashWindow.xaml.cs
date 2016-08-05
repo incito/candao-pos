@@ -14,20 +14,5 @@ namespace CanDao.Pos.UI.Utility.View
             InitializeComponent();
             DataContext = new PettyCashWndVm { OwnerWindow = this };
         }
-
-        private void PettyCashWindow_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Enter:
-                    ((PettyCashWndVm)DataContext).ConfirmCmd.Execute(null);
-                    break;
-            }
-        }
-
-        private void PettyCashWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            TxtEditPettyCash.Focus();
-        }
     }
 }

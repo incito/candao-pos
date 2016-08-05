@@ -32,7 +32,7 @@ namespace CanDao.Pos.Common
         public static string HttpGet(string uri, Dictionary<string, string> param = null)
         {
             var result = HttpOper(uri, param, HttpType.Get).ReadAsStringAsync().Result;
-            HttpLog.Instance.D(result);
+            HttpLog.Instance.D("URL：{0}。 Result：{1}", uri, result);
             return result;
         }
 
@@ -57,7 +57,7 @@ namespace CanDao.Pos.Common
         public static string HttpPost(string uri, object data)
         {
             var result = HttpOper(uri, data, HttpType.Post).ReadAsStringAsync().Result;
-            HttpLog.Instance.D(result);
+            HttpLog.Instance.D("URL：{0}。 Result：{1}", uri, result);
             return result;
         }
 
@@ -82,7 +82,7 @@ namespace CanDao.Pos.Common
         public static string HttpPut(string uri, object data)
         {
             var result = HttpOper(uri, data, HttpType.Put).ReadAsStringAsync().Result;
-            HttpLog.Instance.D(result);
+            HttpLog.Instance.D("URL：{0}。 Result：{1}", uri, result);
             return result;
         }
 
@@ -106,7 +106,7 @@ namespace CanDao.Pos.Common
         public static string HttpDelete(string uri, object data)
         {
             var result = HttpOper(uri, data, HttpType.Delete).ReadAsStringAsync().Result;
-            HttpLog.Instance.D(result);
+            HttpLog.Instance.D("URL：{0}。 Result：{1}", uri, result);
             return result;
         }
 
@@ -133,7 +133,7 @@ namespace CanDao.Pos.Common
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.Timeout = new TimeSpan(0, 0, 0, 10, 0);//超时设置为10秒。
+                client.Timeout = new TimeSpan(0, 0, 0, 30, 0);//超时设置为10秒。
                 HttpResponseMessage response;
                 HttpLog.Instance.D("URL：{0}。 Request ：{1}", uri, data.ToJson());
                 switch (type)

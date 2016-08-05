@@ -17,11 +17,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         #region Fields
 
         /// <summary>
-        /// 权限枚举。
-        /// </summary>
-        private readonly EnumRightType _rightType;
-
-        /// <summary>
         /// 保存登录信息的文件名。
         /// </summary>
         private const string LoginInfoFileName = "LoginInfo.pos";
@@ -32,7 +27,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         public UserLoginWndVm()
         {
-            _rightType = EnumRightType.Login;
             Password = "123456";
         }
 
@@ -93,35 +87,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #endregion
 
-        #region Command
-
-        /// <summary>
-        /// 窗口加载事件命令。
-        /// </summary>
-        public ICommand WindowLoadCmd { get; private set; }
-
-        #endregion
-
-        #region Command Method
-
-        /// <summary>
-        /// 窗体加载事件命令的执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        private void WindowLoad(object arg)
-        {
-            LoadLoginInfo();
-        }
-
-        #endregion
-
         #region Protected Methods
-
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
-        }
 
         protected override void Confirm(object param)
         {
@@ -132,6 +98,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         protected override bool CanConfirm(object param)
         {
             return !string.IsNullOrEmpty(Account) && !string.IsNullOrEmpty(Password);
+        }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            LoadLoginInfo();
         }
 
         #endregion
@@ -149,7 +120,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 InfoLog.Instance.I("登录信息文件不存在。");
                 IsSaveLoginInfo = false;
-                ((UserLoginWindow) OwnerWindow).TbUserName.Focus();
+                ((UserLoginWindow)OwnerWindow).TbUserName.Focus();
                 return;
             }
 
@@ -207,7 +178,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return msg;
             }
 
-            return service.Login(info.Item1, info.Item2, _rightType);
+            return service.Login(info.Item1, info.Item2, EnumRightType.Login);
         }
 
         /// <summary>
@@ -236,10 +207,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <returns></returns>
         private object GetUserRightProcess(object param)
         {
+            InfoLog.Instance.I("开始获取用户权限...");
             var service = ServiceManager.Instance.GetServiceIntance<IAccountService>();
             if (service == null)
             {
-                var msg = "创建授权登录服务接口失败。";
+                var msg = "创建IAccountService服务失败。";
                 ErrLog.Instance.E(msg);
                 return new Tuple<string, UserRight>(msg, null);
             }
@@ -256,9 +228,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             var result = (Tuple<string, UserRight>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
+                ErrLog.Instance.E("获取用户权限失败：{0}。", result.Item1);
                 MessageDialog.Warning(result.Item1, OwnerWindow);
             }
 
+            InfoLog.Instance.I("获取用户权限成功。");
             Globals.UserRight.CloneDataFrom(result.Item2);
             if (Globals.UserRight.AllowCash)
                 TaskService.Start(Account, CheckPettyCashInputProcess, CheckPettyCashInputComplete, "检测零找金...");
@@ -273,6 +247,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <returns></returns>
         private object CheckPettyCashInputProcess(object param)
         {
+            InfoLog.Instance.I("开始检测是否输入零找金...");
             var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
             if (service == null)
                 return new Tuple<string, bool>("创建IRestaurantService服务接口失败！", false);
@@ -289,20 +264,23 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             var result = (Tuple<string, bool>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
+                ErrLog.Instance.E("检测时候输入零找金时错误：{0}。", result.Item1);
                 MessageDialog.Warning(result.Item1, OwnerWindow);
-                ErrLog.Instance.E(result.Item1);
                 CloseWindow(false);
                 return;
             }
 
             if (!result.Item2)
             {
+                InfoLog.Instance.I("未输入零找金，显示零找金设置窗口...");
                 CloseWindow(WindowHelper.ShowDialog(new PettyCashWindow(), OwnerWindow));
                 return;
             }
 
+            InfoLog.Instance.I("已经输入过零找金，关闭登录窗口。");
             CloseWindow(true);
         }
+
         #endregion
     }
 }

@@ -18,9 +18,9 @@
         ClearTable = 1005, 
 
         /// <summary>
-        /// 下单指令。
+        /// 同步订单指令。
         /// </summary>
-        OrderDish = 2201,
+        SyncOrder = 2201,
 
         /// <summary>
         /// 结算指令（手环）

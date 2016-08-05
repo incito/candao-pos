@@ -524,11 +524,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Command
 
         /// <summary>
-        /// 获取餐桌菜单明细命令。
-        /// </summary>
-        public ICommand GetTableDishInfoCmd { get; private set; }
-
-        /// <summary>
         /// 菜单列表操作命令。
         /// </summary>
         public ICommand DataGridPageOperCmd { get; private set; }
@@ -558,32 +553,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand CashControlFocusCmd { get; private set; }
 
-        /// <summary>
-        /// 回车支付命令。
-        /// </summary>
-        public ICommand EnterPayCmd { get; private set; }
-
-        /// <summary>
-        /// 窗口关闭时事件命令。
-        /// </summary>
-        public ICommand WindowClosingCmd { get; private set; }
-
-        /// <summary>
-        /// 窗口已关闭事件命令。
-        /// </summary>
-        public ICommand WindowClosedCmd { get; private set; }
-
         #endregion
 
         #region Command Methods
-
-        /// <summary>
-        /// 获取餐桌菜单明细命令执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        protected virtual void GetTableDishInfo(object param)
-        {
-        }
 
         /// <summary>
         /// 菜单列表操作命令执行方法。
@@ -1186,20 +1158,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
-        private void WindowClosing(object param)
-        {
-            if (!(param is ExCommandParameter))
-                return;
-
-            var args = ((ExCommandParameter)param).EventArgs as CancelEventArgs;
-            OnWindowClosing(args);
-        }
-
-        private void WindowClosed(object param)
-        {
-            OnWindowClosed();
-        }
-
         #endregion
 
         #region Protected Method
@@ -1207,33 +1165,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected override void InitCommand()
         {
             base.InitCommand();
-            GetTableDishInfoCmd = CreateDelegateCommand(GetTableDishInfo);
             DataGridPageOperCmd = CreateDelegateCommand(DataGridPageOper, CanDataGridPageOper);
             PrintCmd = CreateDelegateCommand(Print, CanPrint);
             OperCmd = CreateDelegateCommand(Oper, CanOper);
             CashControlFocusCmd = CreateDelegateCommand(CashControlFocus);
-            EnterPayCmd = CreateDelegateCommand(EnterPay);
             CouponMouseDownCmd = CreateDelegateCommand(CouponMouseDown);
             CouponMouseUpCmd = CreateDelegateCommand(CouponMouseUp);
-            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
-            WindowClosedCmd = CreateDelegateCommand(WindowClosed);
         }
 
-        /// <summary>
-        /// 窗口正在关闭时事件的虚方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        protected virtual void OnWindowClosing(CancelEventArgs arg)
+        protected override void OnPreviewKeyDown(KeyEventArgs arg)
         {
-
-        }
-
-        /// <summary>
-        /// 窗口已经关闭事件的虚方法。
-        /// </summary>
-        protected virtual void OnWindowClosed()
-        {
-
+            if (arg.Key == Key.Enter)
+            {
+                arg.Handled = true;
+                PayTheBill();
+            }
         }
 
         #endregion
@@ -1626,7 +1572,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected void GetTableDishInfoAsync()
         {
             TaskService.Start(null, GetOrderInfoProcess, GetTableDishInfoComplete, "加载餐台详情...");
-
         }
 
         /// <summary>
@@ -1704,19 +1649,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void BroadcastSettlementMsgAsync()
         {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                InfoLog.Instance.I("广播结算消息给PAD...");
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Pad, Data.OrderId);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Pad);
+            InfoLog.Instance.I("广播结算消息给PAD...");
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.Settlement2Pad, Data.OrderId);
 
-                InfoLog.Instance.I("广播结算指令给手环...");
-                var msg = string.Format("{0}|{1}|{2}", Data.WaiterId, Data.TableName, Data.OrderId);
-                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
+            InfoLog.Instance.I("广播结算指令给手环...");
+            var msg = string.Format("{0}|{1}|{2}", Data.WaiterId, Data.TableName, Data.OrderId);
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.Settlement2Wristband, msg);
         }
 
         /// <summary>
@@ -1724,13 +1662,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void BroadcastCoffeeSettlementMsgAsyc()
         {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
+            var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.Settlement2Wristband, msg);
         }
 
         /// <summary>
@@ -1738,16 +1671,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void BroadcastClearTableMsgAsync()
         {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
-                var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
-                errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.Settlement2Wristband, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播手环结算指令失败：{0}", (int)EnumBroadcastMsgType.Settlement2Wristband);
-            });
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.ClearTable, Data.OrderId);
+            var msg = string.Format("{0}|{1}|{2}", Data.TableNo, Data.OrderId, Data.PaymentAmount);
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.Settlement2Wristband, msg);
         }
 
         /// <summary>
@@ -2468,8 +2394,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             NotifyDialog.Notify(string.Format("桌号\"{0}\"结账成功。", Data.TableName), OwnerWindow.Owner);
-            InfoLog.Instance.I("结束整个结账流程，关闭窗口。");
-            DosomethingAfterSettlement();
+            InfoLog.Instance.I("桌号\"{0}\"结账成功。结束整个结账流程，关闭窗口。", Data.TableName);
+            CloseWindow(true);//结算完成后关闭窗口。
             return null;
         }
 
@@ -2571,8 +2497,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            InfoLog.Instance.I("退菜成功。");
+            InfoLog.Instance.I("退菜成功。调用异步广播消息给PAD...");
             NotifyDialog.Notify("退菜成功", OwnerWindow);
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.SyncOrder, Data.OrderId);
             GetTableDishInfoAsync();
         }
 
@@ -2950,13 +2877,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             InfoLog.Instance.I("取消账单完成。");
             if (!Data.IsTakeoutTable)
             {
-                ThreadPool.QueueUserWorkItem(t =>
-                {
-                    InfoLog.Instance.I("广播清台消息给PAD...");
-                    var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.ClearTable, Data.OrderId);
-                    if (!string.IsNullOrEmpty(errMsg))
-                        ErrLog.Instance.E("广播清台指令失败：{0}", (int)EnumBroadcastMsgType.ClearTable);
-                });
+                InfoLog.Instance.I("广播清台消息给PAD...");
+                CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.ClearTable, Data.OrderId);
             }
             NotifyDialog.Notify("取消账单完成。", OwnerWindow.Owner);
             CloseWindow(true);

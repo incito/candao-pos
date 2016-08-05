@@ -7,6 +7,7 @@
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="{x:Type view:AllowMultSelectorControl}">
+        <Setter Property="TextBlock.FontSize" Value="16"/>
         <Setter Property="ItemViewerTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -19,7 +20,8 @@
                 <ControlTemplate TargetType="{x:Type view:AllowMultSelectorControl}">
                     <StackPanel Orientation="Vertical">
                         <Border Background="Transparent">
-                            <TextBlock Text="{TemplateBinding Title}" FontWeight="Bold"
+                            <TextBlock Text="{TemplateBinding Title}"
+                                       FontWeight="Bold"
                                        Foreground="{StaticResource CanDaoPosColorFgFont}"
                                        HorizontalAlignment="Left"/>
                         </Border>

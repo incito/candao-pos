@@ -34,7 +34,7 @@ namespace CanDao.Pos.ServiceImpl
                 MinPrice = Math.Round(response.minprice, 2),
                 FixPrice = Math.Round(response.fixprice, 2),
                 BeginTime = Parse2DateTime(response.begintime, DateTimeFormat2),
-                Amount = response.amount ?? 0,
+                Amount = Math.Round(response.amount ?? 0, 2),
             };
         }
 
@@ -110,6 +110,7 @@ namespace CanDao.Pos.ServiceImpl
                 DishUnit = InternationaHelper.GetBeforeSeparatorFlagData(response.unit),
                 SrcDishUnit = response.unit,
                 PriceSource = response.price ?? 0,
+                Price = response.price ?? 0,
                 MemberPrice = response.vipprice ?? response.price ?? 0,
             };
         }
@@ -415,8 +416,7 @@ namespace CanDao.Pos.ServiceImpl
             return item;
         }
 
-        internal static ReportStatisticInfo ToReportStatisticInfo(
-            GetReportStatisticInfoBase<ReportDishInfoResponse> response)
+        internal static ReportStatisticInfo ToReportStatisticInfo(GetReportStatisticInfoBase<ReportDishInfoResponse> response)
         {
             var item = new ReportStatisticInfo
             {
@@ -673,7 +673,7 @@ namespace CanDao.Pos.ServiceImpl
                 freeauthorize = dishInfo.FreeAuthorizeId,
                 freereason = dishInfo.FreeReason,
                 taste = string.IsNullOrEmpty(dishInfo.TempDishName) ? dishInfo.Taste : dishInfo.TempDishName,
-                sperequire = dishInfo.Diet,
+                sperequire = dishInfo.Diet ?? "",//忌口设成null会导致打印的厨打单上显示null。
             };
         }
 

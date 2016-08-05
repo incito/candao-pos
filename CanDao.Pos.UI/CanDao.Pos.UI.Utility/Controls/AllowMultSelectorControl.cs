@@ -46,7 +46,7 @@ namespace CanDao.Pos.UI.Utility.Controls
         private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var ctrl = (AllowMultSelectorControl)d;
-            ctrl.NullText = string.Format("其他{0}", ctrl.Title);
+            ctrl.NullText = string.Format("其他{0}：", ctrl.Title);
         }
 
         /// <summary>

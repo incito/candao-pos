@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using CanDao.Pos.Common;
-using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility.View
 {
@@ -30,6 +29,7 @@ namespace CanDao.Pos.UI.Utility.View
             InputNumCtrl.ShowDot = allowDot;
 
             DataContext = this;
+            Loaded += (sender, args) => { DtbNum.Focus(); };
         }
 
         #endregion
@@ -105,6 +105,8 @@ namespace CanDao.Pos.UI.Utility.View
 
         #endregion
 
+        #region Event Handles
+
         private void ButtonConfirm_OnClick(object sender, RoutedEventArgs e)
         {
             if (MaxNum > 0 && InputNum > MaxNum)
@@ -120,5 +122,7 @@ namespace CanDao.Pos.UI.Utility.View
         {
             DialogResult = false;
         }
+        
+        #endregion
     }
 }

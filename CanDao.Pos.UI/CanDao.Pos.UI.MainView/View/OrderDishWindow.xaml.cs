@@ -14,14 +14,6 @@ namespace CanDao.Pos.UI.MainView.View
             DataContext = new OrderDishWndVm(info) { OwnerWindow = this };
         }
 
-        public OrderDishWindow(TableInfo info)
-        {
-            InitializeComponent();
-            var tableFullInfo = new TableFullInfo();
-            tableFullInfo.CloneDataFromTableInfo(info);
-            DataContext = new OrderDishWndVm(tableFullInfo) { OwnerWindow = this };
-        }
-
         /// <summary>
         /// 是否订单被挂单。
         /// </summary>

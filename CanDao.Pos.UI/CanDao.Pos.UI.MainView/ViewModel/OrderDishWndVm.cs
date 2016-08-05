@@ -168,11 +168,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Command
 
         /// <summary>
-        /// 窗体加载命令。
-        /// </summary>
-        public ICommand WndLoadCmd { get; private set; }
-
-        /// <summary>
         /// 选择一个菜品命令。
         /// </summary>
         public ICommand SelectDishCmd { get; private set; }
@@ -190,29 +185,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #endregion
 
         #region Command Methods
-
-        /// <summary>
-        /// 窗口加载命令执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void WndLoad(object param)
-        {
-            InfoLog.Instance.I("点菜窗口加载完成时...");
-            if (Globals.DishGroupInfos == null)
-            {
-                InfoLog.Instance.I("菜谱缓存为空，开始获取菜谱信息...");
-                TaskService.Start(null, GetMenuDishGroupInfoProcess, GetMenuDishGroupInfoComplete, "加载菜谱信息中...");
-                return;
-            }
-
-            InfoLog.Instance.I("菜谱有缓存，加载菜谱...");
-
-            DishGroups.Clear();
-            Globals.DishGroupInfos.ForEach(t =>
-            {
-                DishGroups.Add(t);
-            });
-        }
 
         /// <summary>
         /// 选择菜品命令执行方法。
@@ -262,6 +234,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
                 case "ClearFilter":
                     FilterMenuGroup = null;
+                    break;
+                case "InputNum":
+                    InputDishCount();
                     break;
                 case "PreGroup":
                     OwnerWnd.LbDishGroup.PreviousGroup();
@@ -362,16 +337,39 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         #endregion
 
-        #region Private Methods
+        #region Protected Methods
 
         protected override void InitCommand()
         {
             base.InitCommand();
-            WndLoadCmd = CreateDelegateCommand(WndLoad);
             SelectDishCmd = CreateDelegateCommand(SelectDish);
             OperCmd = CreateDelegateCommand(Oper, CanOpen);
             GroupCmd = CreateDelegateCommand(Group, CanGroup);
         }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            InfoLog.Instance.I("点菜窗口加载完成时...");
+            if (Globals.DishGroupInfos == null)
+            {
+                InfoLog.Instance.I("菜谱缓存为空，开始获取菜谱信息...");
+                TaskService.Start(null, GetMenuDishGroupInfoProcess, GetMenuDishGroupInfoComplete, "加载菜谱信息中...");
+                return;
+            }
+
+            InfoLog.Instance.I("菜谱有缓存，加载菜谱...");
+
+            DishGroups.Clear();
+            Globals.DishGroupInfos.ForEach(t =>
+            {
+                t.SelectDishCount = 0m;
+                DishGroups.Add(t);
+            });
+        }
+
+        #endregion
+
+        #region Private Methods
 
         /// <summary>
         /// 获取菜品分组集合的执行方法。
@@ -433,10 +431,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
             }
 
+            var dishList = OrderDishInfos.ToList();
             InfoLog.Instance.I("开始执行下单任务...");
             if (Data.TableType == EnumTableType.CFTable || Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout) //咖啡台和外卖模式都走咖啡模式的下单。
-                return service.OrderDishCf(Data.OrderId, Data.TableName, OrderRemark, OrderDishInfos.ToList());
-            return service.OrderDish(Data.OrderId, Data.TableName, OrderRemark, OrderDishInfos.ToList());
+                return service.OrderDishCf(Data.OrderId, Data.TableName, OrderRemark, dishList);
+
+            //如果餐具收费，则添加餐具到下单菜品里。
+            if (Globals.IsDinnerWareEnable && !Data.DishInfos.Any())
+            {
+                InfoLog.Instance.I("餐具收费，添加餐具到下单菜品列表里。");
+                var dinnerWare = Globals.DinnerWareInfo.CloneData();
+                UpdateOrderDishNum(dinnerWare, Data.CustomerNumber);
+                dishList.Add(dinnerWare);
+            }
+
+            return service.OrderDish(Data.OrderId, Data.TableName, OrderRemark, dishList);
         }
 
         /// <summary>
@@ -457,12 +466,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var msg = string.Format("桌号\"{0}\"{1}成功。", Data.TableName, type);
             InfoLog.Instance.I(msg);
             NotifyDialog.Notify(msg, OwnerWnd.Owner);
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                var errMsg = CommonHelper.BroadcastMessage(EnumBroadcastMsgType.OrderDish, Data.OrderId);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)EnumBroadcastMsgType.OrderDish);
-            });
+            CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.SyncOrder, Data.OrderId);
 
             OwnerWnd.DialogResult = true;
         }
@@ -657,7 +661,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 更新订单菜品数量。
+        /// 更新订单菜品数量，和小计价格。
         /// </summary>
         /// <param name="orderDishInfo">订单菜品。</param>
         /// <param name="dishNum">订单菜品的数量。</param>
@@ -1023,6 +1027,27 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             UpdateOrderDishNum(SelectedOrderDish, SelectedOrderDish.DishNum + 1);
             DoWhenDishChanged();
+        }
+
+        private void InputDishCount()
+        {
+            if (SelectedOrderDish == null)
+                return;
+
+            if (SelectedOrderDish.IsComboDish || SelectedOrderDish.DishType == EnumDishType.Packages
+                || SelectedOrderDish.IsFishPotDish || SelectedOrderDish.DishType == EnumDishType.FishPot)
+            {
+                MessageDialog.Warning("鱼锅和套餐不允许直接输入数量。");
+                return;
+            }
+
+            var tipInfo = string.Format("菜品名称：{0}", SelectedOrderDish.DishName);
+            var numWnd = new NumInputWindow("菜品数量设置", tipInfo, "菜品数量：", 0);
+            if (WindowHelper.ShowDialog(numWnd, OwnerWnd))
+            {
+                UpdateOrderDishNum(SelectedOrderDish, numWnd.InputNum);
+                DoWhenDishChanged();
+            }
         }
 
         /// <summary>

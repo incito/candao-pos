@@ -11,10 +11,10 @@
                         x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding GetTableDishInfoCmd}" CommandParameter="Load"/>
+            <i:InvokeCommandAction Command="{Binding WindowLoadCmd}"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="PreviewKeyDown">
-            <common:ExInvokeCommandAction  Command="{Binding EnterPayCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
+            <common:ExInvokeCommandAction  Command="{Binding PreviewKeyDownCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Closing">
             <common:ExInvokeCommandAction  Command="{Binding WindowClosingCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
@@ -107,7 +107,7 @@
                                       SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="序号" Width="40" Binding="{Binding Index}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn Header="菜单名称" Width="*" CanUserReorder="False" IsReadOnly="True">
+                                    <DataGridTemplateColumn Header="菜单名称" Width="*" CanUserReorder="False" CanUserSort="True" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <WrapPanel VerticalAlignment="Center">
@@ -379,7 +379,6 @@
                                 <toolkit:DoubleTextBox Grid.Row="0" Grid.Column="1" Minimum="0"
                                                        FontSize="60"
                                                        Text="{Binding CashAmount, UpdateSourceTrigger=PropertyChanged}"
-                                                       Watermark="现金金额"
                                                        ShowButtonSpinner="False"
                                                        SelectAllOnGotFocus="True"
                                                        DecimalPlaces="2"

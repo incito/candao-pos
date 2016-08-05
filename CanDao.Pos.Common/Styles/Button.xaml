@@ -93,8 +93,19 @@
                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsPressed" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOver}"/>
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgOrange}"/>
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

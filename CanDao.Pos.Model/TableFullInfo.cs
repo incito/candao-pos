@@ -136,7 +136,19 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 顾客人数。
         /// </summary>
-        public int CustomerNumber { get; set; }
+        private int _customerNumber;
+        /// <summary>
+        /// 顾客人数。
+        /// </summary>
+        public int CustomerNumber
+        {
+            get { return _customerNumber; }
+            set
+            {
+                _customerNumber = value;
+                RaisePropertyChanged("CustomerNumber");
+            }
+        }
 
         /// <summary>
         /// 订单状态。
@@ -205,6 +217,7 @@ namespace CanDao.Pos.Model
             TipAmount = info.TipAmount;
             TotalAmount = info.TotalAmount;
             TableStatus = info.TableStatus;
+            CustomerNumber = info.CustomerNumber;
 
             DishInfos.Clear();
             if (info.DishInfos != null && info.DishInfos.Any())

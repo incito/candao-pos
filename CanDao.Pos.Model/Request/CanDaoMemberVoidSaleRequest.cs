@@ -19,7 +19,7 @@
         /// <summary>
         /// 交易号。
         /// </summary>
-        public string Tracecode { get; set; }
+        public string TraceCode { get; set; }
 
         /// <summary>
         /// 超级密码。

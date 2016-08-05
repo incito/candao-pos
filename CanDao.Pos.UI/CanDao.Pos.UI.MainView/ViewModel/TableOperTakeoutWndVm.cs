@@ -40,7 +40,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             HasTip = false;
         }
 
-        protected override void GetTableDishInfo(object param)
+        protected override void OnWindowLoaded(object param)
         {
             if (IsInDesignMode)
                 return;
@@ -119,13 +119,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             OrderDish();
-        }
-
-        protected override void DosomethingAfterSettlement()
-        {
-            Data.OrderId = null;//设定订单id为空以后，调用GetTableDishInfo命令执行方法时就会自动开台。
-            Data.DishInfos.Clear();//清空左侧外卖菜品列表。
-            GetTableDishInfoCmd.Execute(null);
         }
 
         protected override void BackAllDishFailedProcess()

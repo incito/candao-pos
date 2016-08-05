@@ -199,7 +199,7 @@ namespace CanDao.Pos.UI.Utility
             var voidSaleRequest = new CanDaoMemberVoidSaleRequest(_orderId);
             voidSaleRequest.branch_id = Globals.BranchInfo.BranchId;
             voidSaleRequest.cardno = result.Item2.cardno;
-            voidSaleRequest.Tracecode = result.Item2.serial;
+            voidSaleRequest.TraceCode = result.Item2.serial;
 
             return memberService.VoidSale(voidSaleRequest);
         }
@@ -221,7 +221,7 @@ namespace CanDao.Pos.UI.Utility
             }
 
             InfoLog.Instance.I("餐道会员消费反结算完成。");
-            return null;
+            return new Tuple<bool, object>(true, null);
         }
 
         /// <summary>

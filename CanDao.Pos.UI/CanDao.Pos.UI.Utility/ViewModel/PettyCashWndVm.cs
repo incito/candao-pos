@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -33,6 +35,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         protected override bool CanConfirm(object param)
         {
             return !string.IsNullOrEmpty(Amount);
+        }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            ((PettyCashWindow) OwnerWindow).TxtEditPettyCash.Focus();
         }
 
         /// <summary>
