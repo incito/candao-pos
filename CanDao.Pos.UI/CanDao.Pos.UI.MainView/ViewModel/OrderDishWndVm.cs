@@ -272,6 +272,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "DishCountReduce":
                 case "Remark":
                     return SelectedOrderDish != null;
+                case "OrderRemark":
+                    return OrderDishInfos != null && OrderDishInfos.Any();
                 case "PreGroup":
                     return OwnerWnd.LbDishGroup.CanPreviousGroup;
                 case "NextGroup":

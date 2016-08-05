@@ -173,7 +173,7 @@
                     </controls:GroupSelector.ItemsPanel>
                     <controls:GroupSelector.ItemTemplate>
                         <DataTemplate>
-                            <Border CornerRadius="5" Margin="2">
+                            <Border CornerRadius="5" Margin="2" TextBlock.FontSize="16">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
