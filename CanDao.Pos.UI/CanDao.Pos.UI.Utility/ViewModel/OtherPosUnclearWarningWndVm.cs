@@ -86,8 +86,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return;
             }
 
-            if (!result.Item2) //没有开业则进行开业授权。
+            if (!result.Item2) //没有开业则说明结业成功。
+            {
+                MessageDialog.Warning("其他机器已经完成结业，点击\"确定\"关闭程序。");
                 Application.Current.Shutdown();
+            }
 
             CloseWindow(true);
         }

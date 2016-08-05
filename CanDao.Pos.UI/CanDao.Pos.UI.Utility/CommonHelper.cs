@@ -161,6 +161,7 @@ namespace CanDao.Pos.UI.Utility
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 MessageDialog.Warning(result.Item1);
+                _arEvent.Set();
                 return null;
             }
 
@@ -179,7 +180,7 @@ namespace CanDao.Pos.UI.Utility
         {
             Application.Current.MainWindow.Hide();
 
-            var loginWnd = new AuthorizationWindow(EnumRightType.Login);
+            var loginWnd = new UserLoginWindow();//登录
             if (WindowHelper.ShowDialog(loginWnd))
                 Application.Current.MainWindow.ShowDialog();
             else
