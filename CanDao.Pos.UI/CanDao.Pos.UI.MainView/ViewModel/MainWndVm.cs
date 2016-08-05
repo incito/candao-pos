@@ -24,6 +24,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Filed
 
         /// <summary>
+        /// 是否已经释放了资源。
+        /// </summary>
+        private bool _isDisposed;
+
+        /// <summary>
         /// 刷新时间间隔（秒）
         /// </summary>
         private const int RefreshTimerInterval = 5;
@@ -340,6 +345,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _printerCheckTimer.Dispose();
             }
 
+            _isDisposed = true;
             Application.Current.Shutdown(1);//尝试解决有时候退出主窗口程序依然在运行的问题。
         }
 
@@ -416,14 +422,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void CheckPrinterStatus()
         {
-            _printerCheckTimer.Stop();
+            SetPrinterCheckTimerStatus(false);
             InfoLog.Instance.I("开始检测打印机状态...");
             var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
             if (service == null)
             {
                 ErrLog.Instance.E("创建IRestaurantService服务失败。");
                 OwnerWindow.Dispatcher.Invoke((Action)delegate { MessageDialog.Warning("创建IRestaurantService服务失败。"); });
-                _printerCheckTimer.Start();
+                SetPrinterCheckTimerStatus(true);
                 return;
             }
 
@@ -432,7 +438,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 ErrLog.Instance.E("检测打印机状态错误：{0}", result.Item1);
                 OwnerWindow.Dispatcher.Invoke((Action)delegate { MessageDialog.Warning(result.Item1); });
-                _printerCheckTimer.Start();
+                SetPrinterCheckTimerStatus(true);
                 return;
             }
 
@@ -454,7 +460,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 });
             }
 
-            _printerCheckTimer.Start();
+            SetPrinterCheckTimerStatus(true);
         }
 
         /// <summary>
@@ -783,7 +789,22 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="enable">启动定时器时为true，停止则为false。</param>
         private void SetRefreshTimerStatus(bool enable)
         {
+            if (_isDisposed)
+                return;
+
             _refreshTimer.Enabled = enable;
+        }
+
+        /// <summary>
+        /// 设置打印机检测定时器的状态。
+        /// </summary>
+        /// <param name="enable"></param>
+        private void SetPrinterCheckTimerStatus(bool enable)
+        {
+            if (_isDisposed)
+                return;
+
+            _printerCheckTimer.Enabled = enable;
         }
 
         #endregion
