@@ -270,6 +270,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 case "DishCountIncrease":
                 case "DishCountReduce":
+                case "InputNum":
                 case "Remark":
                     return SelectedOrderDish != null;
                 case "OrderRemark":

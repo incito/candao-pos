@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CanDao.Pos.Model;
-using CanDao.Pos.UI.Utility.Controls;
 using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility.View

@@ -288,7 +288,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border SnapsToDevicePixels="True" ClipToBounds="True"
-                            Background="{TemplateBinding Background}" BorderThickness="0">
+                            CornerRadius="3"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource CanDaoPosColorBgBorder}"
+                            BorderThickness="1">
                         <Image x:Name="Img"
                                Source="{StaticResource CanDaoPosImageBack}" 
                                Width="26" Height="30"
