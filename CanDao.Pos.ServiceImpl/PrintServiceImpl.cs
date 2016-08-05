@@ -205,7 +205,7 @@ namespace CanDao.Pos.ServiceImpl
                 var param = new Dictionary<string, string>();
                 param.Add("flag", flag);
            
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
+                var response = HttpHelper.HttpGet<JavaResponse>(addr, param);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
@@ -241,7 +241,7 @@ namespace CanDao.Pos.ServiceImpl
                 var param = new Dictionary<string, string>();
                 param.Add("flag", flag);
 
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
+                var response = HttpHelper.HttpGet<JavaResponse>(addr, param);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
