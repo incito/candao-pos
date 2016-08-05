@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Timers;
 using System.Windows.Input;
 using CanDao.Pos.Common;
-using CanDao.Pos.Common.Operates;
 using CanDao.Pos.Common.PublicValues;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
@@ -1126,17 +1123,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
         #endregion
 
-        /// <summary>
-        /// 保存优惠券信息。
-        /// </summary>
-        private void SaveCouponInfo()
-        {
-            if (SystemConfigCache.SaveCoupon)
-
-                InfoLog.Instance.I("开始保存优惠券到使用列表...");
-            var param = new Tuple<string, List<UsedCouponInfo>>(Data.OrderId, Data.UsedCouponInfos.ToList());
-            TaskService.Start(param, SaveCouponInfoProcess, SaveCouponInfoComplete);
-        }
 
         /// <summary>
         /// 回车支付。
@@ -1677,16 +1663,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 获取优惠券类型对应字符串。
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private string GetCouponTypeString(EnumCouponType type)
-        {
-            return ((int)type).ToString().PadLeft(type != EnumCouponType.Member ? 2 : 4, '0');
-        }
-
-        /// <summary>
         /// 计算账单的应收金额。
         /// </summary>
         private void CalculatePaymentAmount()
@@ -1828,45 +1804,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 添加一个优惠券到使用优惠券列表。
-        /// </summary>
-        /// <param name="coupon">使用的优惠券。</param>
-        /// <param name="usedCount">使用优惠券数量。</param>
-        /// <param name="isDiscount">是否是折扣类优惠券。</param>
-        /// <param name="freeAmount">单个优惠券优免金额。（当折扣类的优惠券或者手动输入优免金额的就需要传入数值）</param>
-        private void AddCouponInfoAsUsed(CouponInfo coupon, int usedCount, bool isDiscount, decimal? freeAmount = null)
-        {
-            var usedCouponInfo = new UsedCouponInfo
-            {
-                CouponInfo = coupon,
-                IsDiscount = isDiscount,
-                Name = coupon.Name,
-                Count = usedCount,
-                DebitAmount = coupon.DebitAmount * usedCount,
-                FreeAmount = freeAmount ?? coupon.FreeAmount ?? 0 * usedCount, //优免金额 = 单个优惠券优免金额 * 数量。(如果单个优惠券优免金额为null，则取优惠券的优免金额，如果还是null，则取0）
-            };
-
-            if (usedCouponInfo.DebitAmount > Data.PaymentAmount)
-            {
-                if (!MessageDialog.Quest("挂账金额大于应收金额，确定使用该优惠券？"))
-                    return;
-            }
-
-            var tempFreeAmount = Math.Max(0, Data.PaymentAmount - usedCouponInfo.DebitAmount);//最大能优免的金额=应收金额-挂账金额且大于0。
-            usedCouponInfo.FreeAmount = Math.Min(tempFreeAmount, usedCouponInfo.FreeAmount);//实际优免金额不能大于最大能优免的金额。
-            usedCouponInfo.BillAmount = Math.Round((usedCouponInfo.DebitAmount + usedCouponInfo.FreeAmount) * usedCouponInfo.Count * -1, 2);
-
-            if (!isDiscount)
-            {
-                var hasDiscountCoupon = Data.UsedCouponInfos.Any(t => t.IsDiscount);
-                if (hasDiscountCoupon)
-                    MessageDialog.Warning("帐单已选择过折扣类优惠，请注意选择使用优惠的顺序！");
-            }
-
-            AddUsedCouponInfo(usedCouponInfo);
-        }
-
-        /// <summary>
         /// 检测账单是否允许结账。
         /// </summary>
         /// <returns>允许结账则返回null，否则返回错误信息。</returns>
@@ -1960,22 +1897,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             return list;
-        }
-
-        /// <summary>
-        /// 添加一个优惠信息。
-        /// </summary>
-        /// <param name="item">添加的优惠券信息。</param>
-        private void AddUsedCouponInfo(UsedCouponInfo item)
-        {
-            if (item == null || Data == null)
-                return;
-
-            Data.UsedCouponInfos.Add(item);
-            Data.TotalDebitAmount = Data.UsedCouponInfos.Sum(t => t.DebitAmount * t.Count);
-            Data.TotalFreeAmount = Data.UsedCouponInfos.Sum(t => t.FreeAmount * t.Count);
-
-            CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
         }
 
         /// <summary>
@@ -2651,6 +2572,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     IsMemberLogin = true;
                 }
             }
+
+            InfoLog.Instance.I("开始获取订单{0}的发票抬头。", Data.OrderId);
+            var invoiceResult = service.GetOrderInvoice(Data.OrderId);
+            if (!string.IsNullOrEmpty(invoiceResult.Item1))
+                return string.Format("获取订单发票抬头失败。" + invoiceResult.Item1);
+
+            InfoLog.Instance.I("结束获取订单发票抬头：{0}。", invoiceResult.Item2);
+            Data.OrderInvoiceTitle = invoiceResult.Item2;
+
             return null;
         }
 
@@ -2798,50 +2728,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             MessageDialog.Warning("退菜权限验证成功。", OwnerWindow);
         }
 
-        /// <summary>
-        /// 计算折扣优免金额执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private object CalcDiscountAmountProcess(object arg)
-        {
-            var discount = (decimal)arg;//折扣率。
-            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (service == null)
-                return new Tuple<string, decimal>("创建IOrderService服务失败。", 0m);
-
-            var request = new CalcDiscountAmountRequest
-            {
-                disrate = discount.ToString(CultureInfo.InvariantCulture),
-                userid = Globals.UserInfo.UserName,
-                machineno = MachineManage.GetMachineId(),
-                orderid = Data.OrderId,
-                type = GetCouponTypeString(_curSelectedCouponInfo.CouponType),
-                preferentialAmt = (Data.TotalDebitAmount + Data.TotalFreeAmount).ToString(CultureInfo.InvariantCulture),
-                preferentialid = _curSelectedCouponInfo.RuleId,
-            };
-            return service.CalcDiscountAmount(request);
-        }
-
-        /// <summary>
-        /// 计算折扣优免金额执行完成。
-        /// </summary>
-        /// <param name="arg"></param>
-        private void CalcDiscountAmountComplete(object arg)
-        {
-            var result = (Tuple<string, decimal>)arg;
-            if (!string.IsNullOrEmpty(result.Item1))
-            {
-                ErrLog.Instance.E("折扣类优惠券\"{0}\"计算错误：{1}", _curSelectedCouponInfo.Name, result.Item1);
-                MessageDialog.Warning(result.Item1, OwnerWindow);
-                return;
-            }
-
-            InfoLog.Instance.I("结束折扣类优惠券\"{0}\"计算，结果：{1}。", _curSelectedCouponInfo.Name, result.Item2);
-            AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, true, result.Item2);
-
-            SaveCouponInfo();
-        }
 
         /// <summary>
         /// 清台的执行方法。
