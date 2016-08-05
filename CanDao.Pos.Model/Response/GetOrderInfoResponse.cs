@@ -72,7 +72,7 @@ namespace CanDao.Pos.Model.Response
 
     public class DishGroupInfo
     {
-        public decimal orderprice { set; get; }
+        public string orderprice { set; get; }
         public int dishstatus { set; get; }
         public string dishname { set; get; }
         public string dishunit { set; get; }

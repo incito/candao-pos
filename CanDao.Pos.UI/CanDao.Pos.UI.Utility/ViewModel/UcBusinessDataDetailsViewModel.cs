@@ -211,7 +211,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 }
                 //var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
                 //var res2 = service.GetDayReportList(Model.StarTime, Model.EndTime, Globals.UserInfo.UserName);
-                if (ReportPrintHelper.PrintBusinessDataDetail(Model.StarTime, Model.EndTime))
+                if (ReportPrintHelper.PrintBusinessDataDetail(Model.StarTime, Model.EndTime, Globals.UserInfo.UserName))
                 {
                     OWindowManage.ShowMessageWindow("打印成功！", false);
                 }

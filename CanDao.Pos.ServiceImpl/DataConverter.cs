@@ -932,6 +932,7 @@ namespace CanDao.Pos.ServiceImpl
         internal static OrderDishInfo ToDishInfo(DishGroupInfo response, string relateDishId)
         {
             var dishName = InternationaHelper.GetBeforeSeparatorFlagData(response.dishname);
+            var price = string.IsNullOrEmpty(response.orderprice) ? 0 : decimal.Parse(response.orderprice);
             return new OrderDishInfo
             {
 
@@ -944,9 +945,9 @@ namespace CanDao.Pos.ServiceImpl
                 DishUnit = InternationaHelper.GetBeforeSeparatorFlagData(response.dishunit),
                 TempDishName = dishName.Contains("临时菜") ? response.sperequire.Split('|')[2] : "",
                 SrcDishUnit = response.dishunit,
-                Price = response.orderprice,
+                Price = price,
                 PrimaryKey = response.primarykey,
-                PayAmount = response.dishnum * response.orderprice,
+                PayAmount = response.dishnum * price,
                 IsPot = response.ispot.Equals("1"),
                 IsMaster = !string.IsNullOrEmpty(relateDishId),//有值表示为套餐和鱼锅
             };

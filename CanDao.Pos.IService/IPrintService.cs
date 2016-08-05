@@ -61,7 +61,7 @@ namespace CanDao.Pos.IService
         /// <param name="beginTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        string PrintBusinessDetail(string beginTime, string endTime);
+        string PrintBusinessDetail(string beginTime, string endTime, string operationname);
         /// <summary>
         /// 打印发票
         /// </summary>

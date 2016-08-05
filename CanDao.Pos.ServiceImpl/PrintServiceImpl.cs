@@ -164,7 +164,7 @@ namespace CanDao.Pos.ServiceImpl
                 param.Add("pzh", storeInfo.TraceCode);
                 param.Add("date", storeInfo.TradeTime.ToString("yyyy-MM-dd"));
                 param.Add("time", storeInfo.TradeTime.ToString("HH:mm:ss"));
-                param.Add("storeName", storeInfo.BranchName);
+                param.Add("storeName", storeInfo.ReportTitle);
                 param.Add("storedAmount", storeInfo.StoredAmount.ToString());
                 param.Add("storedBalance", storeInfo.ScoreBalance.ToString());
                 param.Add("storedPoint", storeInfo.ScoreBalance.ToString());
@@ -264,7 +264,7 @@ namespace CanDao.Pos.ServiceImpl
         /// <param name="beginTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public string PrintBusinessDetail(string beginTime, string endTime)
+        public string PrintBusinessDetail(string beginTime, string endTime, string operationname)
         {
             string msg = "打印营业报表明细";
             var addr = ServiceAddrCache.GetServiceAddr("PrintBusinessDetail");
@@ -278,8 +278,9 @@ namespace CanDao.Pos.ServiceImpl
                 var param = new Dictionary<string, string>();
                 param.Add("beginTime", beginTime);
                 param.Add("endTime", endTime);
+                param.Add("operationname", operationname);
 
-                var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
+                var response = HttpHelper.HttpGet<JavaResponse>(addr, param);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
