@@ -2293,7 +2293,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private Tuple<bool, object> PrintSettlementReportAndInvoice(object arg)
         {
             if (Data.TableType == EnumTableType.Outside || Data.TableType == EnumTableType.Room)
-                BroadcastSettlementMsgAsync();
+            {
+                //BroadcastSettlementMsgAsync(); //转成后台进行发送。
+            }
+              
             else if (Data.TableType == EnumTableType.CFTable)
                 BroadcastCoffeeSettlementMsgAsyc();
 
