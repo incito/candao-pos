@@ -402,11 +402,9 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var addr = ServiceAddrCache.GetServiceAddr("GetReportTipInfo");
                 var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
-                var result = HttpHelper.HttpGet<GetReportStatisticInfoBase<ReportDishInfoResponse>>(addr, request);
+                var result = HttpHelper.HttpGet<GetReportStatisticInfoBase<ReportTipInfoResponse>>(addr, request);
                 if (!result.IsSuccess)
-                    return
-                        new Tuple<string, ReportStatisticInfo>(
-                            string.IsNullOrEmpty(result.msg) ? "获取品项销售统计信息失败。" : result.msg, null);
+                    return new Tuple<string, ReportStatisticInfo>(string.IsNullOrEmpty(result.msg) ? "获取小费统计信息失败。" : result.msg, null);
 
                 return new Tuple<string, ReportStatisticInfo>(null, DataConverter.ToReportStatisticInfo(result));
             }
@@ -424,9 +422,7 @@ namespace CanDao.Pos.ServiceImpl
                 var request = new Dictionary<string, string> { { "flag", ((int)periodsType).ToString() } };
                 var result = HttpHelper.HttpGet<GetReportStatisticInfoBase<ReportDishInfoResponse>>(addr, request);
                 if (!result.IsSuccess)
-                    return
-                        new Tuple<string, ReportStatisticInfo>(
-                            string.IsNullOrEmpty(result.msg) ? "获取小费统计信息失败。" : result.msg, null);
+                    return new Tuple<string, ReportStatisticInfo>(string.IsNullOrEmpty(result.msg) ? "获取品项消费统计信息失败。" : result.msg, null);
 
                 return new Tuple<string, ReportStatisticInfo>(null, DataConverter.ToReportStatisticInfo(result));
             }

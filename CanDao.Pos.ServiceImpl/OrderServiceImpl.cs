@@ -391,8 +391,8 @@ namespace CanDao.Pos.ServiceImpl
                     discardUserId = userId,
                     actionType = ((int) EnumBackDishType.All).ToString(),
                 };
-                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return result.IsSuccess ? null : "整桌退菜失败。";
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
+                return result.IsSuccess ? null : !string.IsNullOrEmpty(result.msg) ? result.msg : "整桌退菜失败。";
             }
             catch (Exception ex)
             {
@@ -691,25 +691,25 @@ namespace CanDao.Pos.ServiceImpl
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public Tuple<string, List<PreferentialList>> UsePreferential(UsePreferentialRequest request)
+        public Tuple<string, preferentialInfoResponse> UsePreferential(UsePreferentialRequest request)
         {
 
             var addr = ServiceAddrCache.GetServiceAddr("CalcDiscountAmount");
             if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, List<PreferentialList>>("使用优惠券地址为空。", null);
+                return new Tuple<string, preferentialInfoResponse>("使用优惠券地址为空。", null);
 
             try
             {
                 var result = HttpHelper.HttpPost<UsePreferentialResponse>(addr, request);
-                return !result.IsSuccess
-                    ? new Tuple<string, List<PreferentialList>>(null, result.ordePreferential)
-                    : new Tuple<string, List<PreferentialList>>(result.msg ?? "接口调用错误。", null);
+                return result.IsSuccess
+                    ? new Tuple<string, preferentialInfoResponse>(null, result.data)
+                    : new Tuple<string, preferentialInfoResponse>(result.msg ?? "接口调用错误。", null);
                     //这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
             }
             catch (Exception ex)
             {
                 ErrLog.Instance.E(ex);
-                return new Tuple<string, List<PreferentialList>>(ex.MyMessage(), null);
+                return new Tuple<string, preferentialInfoResponse>(ex.MyMessage(), null);
             }
         }
 
@@ -718,21 +718,23 @@ namespace CanDao.Pos.ServiceImpl
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public string DelPreferential(DelPreferentialRequest request)
+        public Tuple<string, preferentialInfoResponse> DelPreferential(DelPreferentialRequest request)
         {
             var addr = ServiceAddrCache.GetServiceAddr("DelPreferential");
             if (string.IsNullOrEmpty(addr))
-                return "删除优惠券地址为空。";
+                return new Tuple<string, preferentialInfoResponse>("删除优惠券地址为空。", null);
 
             try
             {
-                var result = HttpHelper.HttpPost<UsePreferentialResponse>(addr, request);
-                return !result.IsSuccess ? null : result.msg;
+                var result = HttpHelper.HttpPost<DelePreferentialResponse>(addr, request);
+                return result.IsSuccess
+                   ? new Tuple<string, preferentialInfoResponse>(null, result.data.preferentialInfo)
+                   : new Tuple<string, preferentialInfoResponse>(result.msg ?? "接口调用错误。", null);
             }
             catch (Exception ex)
             {
                 ErrLog.Instance.E(ex);
-                return ex.MyMessage();
+                return new Tuple<string, preferentialInfoResponse>(ex.MyMessage(), null);
             }
         }
 
@@ -747,9 +749,9 @@ namespace CanDao.Pos.ServiceImpl
         /// <returns></returns>
         public Tuple<string, TableFullInfo> GetOrderInfo(string orderId)
         {
-            var addr = ServiceAddrCache.GetServiceAddr("DelPreferential");
+            var addr = ServiceAddrCache.GetServiceAddr("GetOrderInfo");
             if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, TableFullInfo>("获取账单信息地址为空。", null);
+                return new Tuple<string, TableFullInfo>("获取餐台账单明细地址为空。", null);
 
             try
             {
@@ -757,9 +759,14 @@ namespace CanDao.Pos.ServiceImpl
                 parma.Add("orderid", orderId);
 
                 var result = HttpHelper.HttpPost<GetOrderInfoResponse>(addr, parma);
-                return !result.IsSuccess
-                  ? new Tuple<string, TableFullInfo>(null, null)
-                  : new Tuple<string, TableFullInfo>(result.msg ?? "接口调用错误。", null);
+                if (result.IsSuccess)
+                {
+                    return new Tuple<string, TableFullInfo>(null, DataConverter.ToOrderInfo(result));
+                }
+                else
+                {
+                    return new Tuple<string, TableFullInfo>(result.msg ?? "接口调用错误。", null);
+                }
             }
             catch (Exception ex)
             {

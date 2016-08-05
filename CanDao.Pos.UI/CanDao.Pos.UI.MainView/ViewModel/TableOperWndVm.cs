@@ -20,6 +20,7 @@ using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
 using CanDao.Pos.UI.Utility.ViewModel;
 using Timer = System.Timers.Timer;
+using CanDao.Pos.Model.Response;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -816,6 +817,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _isUserInputCash = Convert.ToBoolean(param);
         }
 
+        #region 优惠券处理
         /// <summary>
         /// 优惠券鼠标按下命令的执行方法。
         /// </summary>
@@ -858,7 +860,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return;
 
                 InfoLog.Instance.I("开始折扣类优惠券：{0}计算接口。", _curSelectedCouponInfo.Name);
-                TaskService.Start(0m, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");//优惠券折扣时，自定义折扣为0。
+
+               CreatUsePreferentialRequest(1, "", 0, 0, 0);
+               
+                //TaskService.Start(0m, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");//优惠券折扣时，自定义折扣为0。
             }
             else
             {
@@ -875,10 +880,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         return;
                     }
 
-                    _curSelectedCouponInfo.BillAmount = debitAmount;
-                    _curSelectedCouponInfo.FreeAmount = 0;
-                    _curSelectedCouponInfo.Amount = debitAmount;
-                    AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
+                    //_curSelectedCouponInfo.BillAmount = debitAmount;
+                    //_curSelectedCouponInfo.FreeAmount = 0;
+                    //_curSelectedCouponInfo.Amount = debitAmount;
+
+                    CreatUsePreferentialRequest(1, "", 0, debitAmount, 1);
+                   
+                    //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
                 }
                 else
                 {
@@ -895,7 +903,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                             if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                                 return;
 
-                            AddCouponInfoAsUsed(_curSelectedCouponInfo, Convert.ToInt32(numWnd.InputNum), false);
+                            //AddCouponInfoAsUsed(_curSelectedCouponInfo, Convert.ToInt32(numWnd.InputNum), false);
+
+                            CreatUsePreferentialRequest(Convert.ToInt32(numWnd.InputNum), "", 0, 0, 0);
+                           
                         }
                     }
                     else if (_curSelectedCouponInfo.BillAmount <= 0 && _curSelectedCouponInfo.DebitAmount <= 0)
@@ -913,33 +924,89 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                                 return;
                             }
 
-                            _curSelectedCouponInfo.BillAmount = offSelectWnd.Amount;
-                            _curSelectedCouponInfo.FreeAmount = offSelectWnd.Amount;
-                            AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, offSelectWnd.Amount);
+                            CreatUsePreferentialRequest(1, "", 0, offSelectWnd.Amount, 1);
+                          
+                            //_curSelectedCouponInfo.BillAmount = offSelectWnd.Amount;
+                            //_curSelectedCouponInfo.FreeAmount = offSelectWnd.Amount;
+                            //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, offSelectWnd.Amount);
                         }
                         else if (offSelectWnd.SelectedOfferType == EnumOfferType.Discount)
                         {
-                            TaskService.Start(offSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
+                            CreatUsePreferentialRequest(1, "", offSelectWnd.Discount, 0, 1);
+                            
+
+                            //TaskService.Start(offSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
                         }
                     }
                 }
             }
 
-            SaveCouponInfo();
+            //SaveCouponInfo();
         }
-
         /// <summary>
-        /// 保存优惠券信息。
+        /// 创建使用优惠券参数
         /// </summary>
-        private void SaveCouponInfo()
+        /// <param name="pNum">使用券数量</param>
+        /// <param name="dishId">菜品Id</param>
+        /// <param name="disRate">手工折扣额</param>
+        /// <param name="preferentialAmout">手工优惠金额</param>
+        /// <param name="isCustom">是否收银员输入（1：是：0不是）</param>
+        /// <returns></returns>
+        private void CreatUsePreferentialRequest(int pNum,string dishName,decimal disRate,decimal preferentialAmout, int isCustom)
         {
-            if (SystemConfigCache.SaveCoupon)
+            var usePreferential=new UsePreferentialRequest();
+            usePreferential.orderid = _tableInfo.OrderId;
+            usePreferential.preferentialid = _curSelectedCouponInfo.CouponId;
+            usePreferential.type = _curSelectedCouponInfo.CouponType.GetHashCode().ToString();
+            if (_curSelectedCouponInfo.HandCouponType != null)
+            {
+                usePreferential.sub_type=((int)_curSelectedCouponInfo.HandCouponType).ToString();
+            }
+            usePreferential.preferentialAmt = Data.TotalFreeAmount.ToString();
 
-                InfoLog.Instance.I("开始保存优惠券到使用列表...");
-            var param = new Tuple<string, List<UsedCouponInfo>>(Data.OrderId, Data.UsedCouponInfos.ToList());
-            TaskService.Start(param, SaveCouponInfoProcess, SaveCouponInfoComplete);
+            usePreferential.preferentialNum = pNum.ToString();
+            usePreferential.dishname = dishName;
+            usePreferential.isCustom = isCustom.ToString();
+            usePreferential.disrate = disRate;
+            usePreferential.preferentialAmout = preferentialAmout.ToString();
+
+            TaskService.Start(usePreferential, UseCouponProcess, UseCouponInfoComplete, "保存使用优惠券...");
         }
+        /// <summary>
+        /// 保存使用优惠券处理
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private object UseCouponProcess(object arg)
+        {
+            IOrderService service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return new Tuple<string, preferentialInfoResponse>("创建IOrderService服务失败。", null);
+           
+            return service.UsePreferential((UsePreferentialRequest)arg);
+        }
+        /// <summary>
+        /// 使用优惠券完成
+        /// </summary>
+        /// <param name="obj"></param>
+        private void UseCouponInfoComplete(object obj)
+        {
+            var result = obj as Tuple<string, preferentialInfoResponse>;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                var errMsg = string.Format("保存优惠券信息失败：{0}", result);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg, OwnerWindow);
+                return;
+            }
+            else
+            {
+                ProcessCouponShow(result.Item2);
 
+                InfoLog.Instance.I("结束保存优惠券到使用列表。");
+                //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
+            }
+        }
         /// <summary>
         /// 手工优免类优惠券处理方式。
         /// </summary>
@@ -955,9 +1022,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     {
                         foreach (var giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
                         {
-                            _curSelectedCouponInfo.Name = string.Format("赠菜：{0}", giftDishInfo.DishName);
-                            _curSelectedCouponInfo.FreeAmount = giftDishInfo.DishPrice;
-                            AddCouponInfoAsUsed(_curSelectedCouponInfo, giftDishInfo.SelectGiftNum, false);
+                            CreatUsePreferentialRequest(giftDishInfo.SelectGiftNum, giftDishInfo.DishName, 0, giftDishInfo.DishPrice, 0);
+                         
+                            //_curSelectedCouponInfo.Name = string.Format("赠菜：{0}", giftDishInfo.DishName);
+                            //_curSelectedCouponInfo.FreeAmount = giftDishInfo.DishPrice;
+                            //AddCouponInfoAsUsed(_curSelectedCouponInfo, giftDishInfo.SelectGiftNum, false);
                         }
                         result = true;
                     }
@@ -968,7 +1037,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     if (WindowHelper.ShowDialog(diacountSelectWnd, OwnerWindow))
                     {
                         InfoLog.Instance.I("选择折扣率：{0}，开始调用接口计算折扣金额...", diacountSelectWnd.Discount);
-                        TaskService.Start(diacountSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
+                        CreatUsePreferentialRequest(1, "", diacountSelectWnd.Discount, 0, 1);
+                      
+                        //TaskService.Start(diacountSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
                         result = true;
                     }
                     break;
@@ -977,7 +1048,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     var amountSelectWnd = new OfferTypeSelectWindow(EnumOfferType.Amount);
                     if (WindowHelper.ShowDialog(amountSelectWnd, OwnerWindow))
                     {
-                        AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, amountSelectWnd.Amount);
+                         CreatUsePreferentialRequest(1, "", 0, amountSelectWnd.Amount, 1);
+                       
+                        //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, amountSelectWnd.Amount);
                         result = true;
                     }
                     break;
@@ -987,6 +1060,110 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     throw new ArgumentOutOfRangeException();
             }
             return result;
+        }
+        /// <summary>
+        /// 删除优惠券处理
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private object DeleCouponInfoProcess(object arg)
+        {
+            IOrderService service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return new Tuple<string, preferentialInfoResponse>("创建IOrderService服务失败。", null);
+
+            return service.DelPreferential((DelPreferentialRequest)arg);
+        }
+        /// <summary>
+        /// 删除优惠券完成
+        /// </summary>
+        /// <param name="obj"></param>
+        private void DeleCouponInfoComplete(object obj)
+        {
+            var result = obj as Tuple<string, preferentialInfoResponse>;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                var errMsg = string.Format("删除优惠券信息失败：{0}", result);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg, OwnerWindow);
+                return;
+            }
+            else
+            {
+                //先清除
+                Data.UsedCouponInfos.Clear();
+
+                ProcessCouponShow(result.Item2);
+
+                InfoLog.Instance.I("结束删除优惠券。");
+                //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
+            }
+        }
+        /// <summary>
+        /// 移除一个优惠券。
+        /// </summary>
+        /// <param name="item">移除的优惠券信息。</param>
+        private void RemoveUsedCouponInfo(UsedCouponInfo item)
+        {
+            //if (item == null || Data == null)
+            //    return;
+
+            //Data.UsedCouponInfos.Remove(item);
+            //Data.TotalDebitAmount = Data.UsedCouponInfos.Sum(t => t.DebitAmount * t.Count);
+            //Data.TotalFreeAmount = Data.UsedCouponInfos.Sum(t => t.FreeAmount * t.Count);
+
+            //CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
+            var parma = new DelPreferentialRequest();
+            parma.orderid = _tableInfo.OrderId;
+            parma.DetalPreferentiald = item.RelationId;
+            parma.clear = 0;
+
+            TaskService.Start(parma, DeleCouponInfoProcess, DeleCouponInfoComplete, "正在删除优惠券...");
+        }
+
+        /// <summary>
+        /// 清除优惠券。
+        /// </summary>
+        /// <param name="Data"></param>
+        private void ClearUsedCouponInfo()
+        {
+            var parma = new DelPreferentialRequest();
+            parma.orderid = _tableInfo.OrderId;
+            parma.DetalPreferentiald = "";
+            parma.clear = 1;
+
+            TaskService.Start(parma, DeleCouponInfoProcess, DeleCouponInfoComplete, "正在清空优惠券...");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="preferential"></param>
+        private void ProcessCouponShow(preferentialInfoResponse preferential)
+        {
+            foreach (var info in preferential.detailPreferentials)
+            {
+                var coupon = new UsedCouponInfo();
+                coupon.Count = 1; //默认单张
+                coupon.RelationId = info.id;
+                coupon.FreeAmount = info.deAmount;
+                coupon.Name = info.activity.name;
+                Data.UsedCouponInfos.Add(coupon);
+            }
+            Data.TotalFreeAmount = preferential.amount;
+            Data.PaymentAmount = preferential.payamount;
+        }
+        #endregion
+
+        /// <summary>
+        /// 保存优惠券信息。
+        /// </summary>
+        private void SaveCouponInfo()
+        {
+            if (SystemConfigCache.SaveCoupon)
+
+                InfoLog.Instance.I("开始保存优惠券到使用列表...");
+            var param = new Tuple<string, List<UsedCouponInfo>>(Data.OrderId, Data.UsedCouponInfos.ToList());
+            TaskService.Start(param, SaveCouponInfoProcess, SaveCouponInfoComplete);
         }
 
         /// <summary>
@@ -1448,7 +1625,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         protected void GetTableDishInfoAsync()
         {
-            TaskService.Start(null, GetTableDishInfoProcess, GetTableDishInfoComplete, "加载餐台详情...");
+            TaskService.Start(null, GetOrderInfoProcess, GetTableDishInfoComplete, "加载餐台详情...");
 
         }
 
@@ -1871,38 +2048,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             Data.UsedCouponInfos.Add(item);
             Data.TotalDebitAmount = Data.UsedCouponInfos.Sum(t => t.DebitAmount * t.Count);
             Data.TotalFreeAmount = Data.UsedCouponInfos.Sum(t => t.FreeAmount * t.Count);
-
-            CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
-        }
-
-        /// <summary>
-        /// 移除一个优惠券。
-        /// </summary>
-        /// <param name="item">移除的优惠券信息。</param>
-        private void RemoveUsedCouponInfo(UsedCouponInfo item)
-        {
-            if (item == null || Data == null)
-                return;
-
-            Data.UsedCouponInfos.Remove(item);
-            Data.TotalDebitAmount = Data.UsedCouponInfos.Sum(t => t.DebitAmount * t.Count);
-            Data.TotalFreeAmount = Data.UsedCouponInfos.Sum(t => t.FreeAmount * t.Count);
-
-            CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
-        }
-
-        /// <summary>
-        /// 清除优惠券。
-        /// </summary>
-        /// <param name="Data"></param>
-        private void ClearUsedCouponInfo()
-        {
-            if (Data == null)
-                return;
-
-            Data.UsedCouponInfos.Clear();
-            Data.TotalDebitAmount = 0m;
-            Data.TotalFreeAmount = 0m;
 
             CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
         }
@@ -2538,6 +2683,47 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("结束获取订单发票抬头：{0}。", invoiceResult.Item2);
             Data.OrderInvoiceTitle = invoiceResult.Item2;
+            return null;
+        }
+
+        /// <summary>
+        /// 获取餐台账单明细
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object GetOrderInfoProcess(object param)
+        {
+            InfoLog.Instance.I("开始获取餐台所有信息...");
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            var result = service.GetOrderInfo(_tableInfo.OrderId);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return string.Format("获取餐台明细失败：{0}", result.Item1);
+
+            InfoLog.Instance.I("获取餐台所有信息完成。");
+            if (result.Item2 == null)
+                return "没有获取到该餐台的账单信息。";
+
+            OwnerWindow.Dispatcher.Invoke((Action)delegate
+            {
+                Data.CloneOrderData(result.Item2);//合并餐台账单明细(金额，菜，优惠)
+                MemberCardNo = Data.MemberNo;
+            });
+
+            if (!string.IsNullOrEmpty(MemberCardNo))//走会员登录的流程。
+            {
+                InfoLog.Instance.I("该餐台登录了会员，开始会员登录...");
+                var memberLoginResult = MemberCanDaoLoginProcess(null) as string;
+                if (!string.IsNullOrEmpty(memberLoginResult))
+                    ErrLog.Instance.E("会员登录时失败：{0}", memberLoginResult);
+                else
+                {
+                    InfoLog.Instance.I("设置会员价成功，完成整个会员登录流程。");
+                    IsMemberLogin = true;
+                }
+            }
             return null;
         }
 

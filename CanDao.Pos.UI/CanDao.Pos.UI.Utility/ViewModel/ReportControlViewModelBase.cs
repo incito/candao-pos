@@ -213,7 +213,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <returns></returns>
         private Tuple<bool, object> GetReportStatisticInfoComplete(object arg)
         {
-            var result = arg as Tuple<string, ReportStatisticInfo>;
+            var result = (Tuple<string, ReportStatisticInfo>)arg;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取报表统计信息失败：{0}", result.Item1);

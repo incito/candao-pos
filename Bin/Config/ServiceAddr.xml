@@ -15,6 +15,7 @@
     <GetCouponInfos Addr="/newspicyway/padinterface/getPreferentialList.json"/><!--获取优惠券信息-->
     <CalcDiscountAmount Addr="/newspicyway/padinterface/usePreferentialItem.json"/><!--使用优惠券-->
     <DelPreferential Addr="/newspicyway/padinterface/delPreferentialItem.json"/><!--删除优惠券-->
+    <GetOrderInfo Addr="/newspicyway/padinterface/getOrderInfo.json"/><!--获取餐台账单明细（新接口）-->
     <OrderDish Addr="/newspicyway/padinterface/bookorderList.json"/><!--菜品下单-->
     <OrderDishCf Addr="/newspicyway/padinterface/placeOrder.json"/><!--菜品下单（咖啡）-->
     <GetMenuComboDish Addr="/newspicyway/padinterface/getMenuCombodish.json"/><!--获取套餐内菜品-->
@@ -73,14 +74,14 @@
     <SetTakeoutOrderOnAccount Addr="/newspicyway/datasnap/rest/TServerMethods1/putOrder/"/><!--外卖挂单-->
     <SetOrderTakeout Addr="/newspicyway/datasnap/rest/TServerMethods1/wmOrder/"/><!--设置订单为外卖单。-->
 	
-    <PrintPay Addr="/print4POS/getOrderInfo"/><!--打印预结，结算，客用-->
-    <PrintClearMachine Addr="/print4POS/getClearMachineData"/><!--打印清机单-->
-    <PrintMemberSale Addr="/print4POS/getMemberSaleInfo"/><!-- 打印会员消费-->
-    <PrintMemberStore Addr="/print4POS/StoreCardToNewPos.json"/><!--打印会员储值-->
-    <PrintItemSell Addr="/print4POS/getItemSellDetail.json"/><!--打印品项销售统计报表-->
-    <PrintTip Addr="/print4POS/tipList.json"/><!--打印小费统计报表-->
-    <PrintBusinessDetail Addr="/print4POS/printBusinessDetail.json"/><!--打印营业报表明细-->
-    <PrintInvoice Addr="/print4POS/printInvoice.json"/><!--打印发票单-->
+    <PrintPay Addr="/newspicyway/print4POS/getOrderInfo"/><!--打印预结，结算，客用-->
+    <PrintClearMachine Addr="/newspicyway/print4POS/getClearMachineData"/><!--打印清机单-->
+    <PrintMemberSale Addr="/newspicyway/print4POS/getMemberSaleInfo"/><!-- 打印会员消费-->
+    <PrintMemberStore Addr="/newspicyway/print4POS/StoreCardToNewPos.json"/><!--打印会员储值-->
+    <PrintItemSell Addr="/newspicyway/print4POS/getItemSellDetail.json"/><!--打印品项销售统计报表-->
+    <PrintTip Addr="/newspicyway/print4POS/tipList.json"/><!--打印小费统计报表-->
+    <PrintBusinessDetail Addr="/newspicyway/print4POS/printBusinessDetail.json"/><!--打印营业报表明细-->
+    <PrintInvoice Addr="/newspicyway/print4POS/printInvoice.json"/><!--打印发票单-->
   </JavaServerApi>
   <!--云接口-->
   <CloudServerApi>

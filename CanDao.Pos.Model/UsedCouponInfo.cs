@@ -6,6 +6,11 @@
     public class UsedCouponInfo
     {
         /// <summary>
+        /// 使用优惠券与账单关系ID
+        /// </summary>
+        public string RelationId { set; get; }
+
+        /// <summary>
         /// 使用的优惠券。
         /// </summary>
         public CouponInfo CouponInfo { get; set; }

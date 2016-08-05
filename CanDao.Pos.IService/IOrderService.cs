@@ -264,5 +264,26 @@ namespace CanDao.Pos.IService
         /// <param name="orderId"></param>
         /// <returns></returns>
         string SetOrderTakeoutOrder(string orderId);
+
+        /// <summary>
+        /// 获取餐台账单明细
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        Tuple<string, TableFullInfo> GetOrderInfo(string orderId);
+
+        /// <summary>
+        /// 使用优惠券
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Tuple<string, preferentialInfoResponse> UsePreferential(UsePreferentialRequest request);
+
+        /// <summary>
+        /// 删除优惠券
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Tuple<string, preferentialInfoResponse> DelPreferential(DelPreferentialRequest request);
     }
 }

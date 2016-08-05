@@ -12,24 +12,48 @@ namespace CanDao.Pos.Model.Response
 
     public class OrderInfos
     {
-        public preferentialInfoList preferentialInfo { set; get; }
-        public DishInfoList rows { set; get; }
+        public OrderInfos ()
+        {
+            preferentialInfo = new preferentialInfoResponse();
+            rows = new List<DishInfosResponse>();
+        }
+        public preferentialInfoResponse preferentialInfo { set; get; }
+        public List<DishInfosResponse> rows { set; get; }
     }
 
-    public class preferentialInfoList
+    public class preferentialInfoResponse
     {
-        public string amount { set; get; }
-        public string menuAmount { set; get; }
-        public string payamount { set; get; }
-        public string tipAmount { set; get; }
-        public string freeamount { set; get; }
-        public GetpreferentialDetails detailPreferentials { set; get; }
+        public string memberno { set; get; }
+        /// <summary>
+        /// 优惠总额
+        /// </summary>
+        public decimal amount { set; get; }
+        /// <summary>
+        /// 实际价格
+        /// </summary>
+        public decimal menuAmount { set; get; }
+        /// <summary>
+        /// 应收金额
+        /// </summary>
+        public decimal payamount { set; get; }
+        /// <summary>
+        /// 小费总计
+        /// </summary>
+        public decimal tipAmount { set; get; }
+        /// <summary>
+        /// 优免金额
+        /// </summary>
+        public decimal freeamount { set; get; }
+        public List<GetpreferentialDetails> detailPreferentials { set; get; }
     }
 
     public class GetpreferentialDetails
     {
         public string id { set; get; }
-        public string deAmount { set; get; }
+        /// <summary>
+        /// 优惠券优惠金额
+        /// </summary>
+        public decimal deAmount { set; get; }
         public PreferentialDetails activity { set; get; }
     }
 
@@ -38,10 +62,18 @@ namespace CanDao.Pos.Model.Response
         public string name { set; get; }
     }
 
-    public class DishInfoList
+    public class DishInfosResponse:DishGroupInfo
     {
-        public string orderprice { set; get; }
-        public string dishstatus { set; get; }
+        /// <summary>
+        /// 套餐、鱼锅
+        /// </summary>
+        public List<DishGroupInfo> dishes { set; get; }
+    }
+
+    public class DishGroupInfo
+    {
+        public decimal orderprice { set; get; }
+        public int dishstatus { set; get; }
         public string dishname { set; get; }
         public string dishunit { set; get; }
         public string sperequire { set; get; }
@@ -52,8 +84,9 @@ namespace CanDao.Pos.Model.Response
         public string pricetype { set; get; }
         public string orderid { set; get; }
         public string ispot { set; get; }
-        public string dishtype { set; get; }
+        public int dishtype { set; get; }
         public string orderseq { set; get; }
-        public string dishnum { set; get; }
+        public decimal dishnum { set; get; }
+   
     }
 }

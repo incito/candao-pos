@@ -13,14 +13,14 @@ namespace CanDao.Pos.Model.Enum
         /// <summary>
         /// 预结
         /// </summary>
-        BeforehandPay = 0,
+        BeforehandPay = 1,
         /// <summary>
         /// 结算
         /// </summary>
-        Pay=1,
+        Pay=2,
         /// <summary>
         /// 客用
         /// </summary>
-        CustomerUse=2
+        CustomerUse=3
     }
 }

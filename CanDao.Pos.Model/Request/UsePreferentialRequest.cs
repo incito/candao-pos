@@ -9,12 +9,14 @@ namespace CanDao.Pos.Model.Request
     {
         public string orderid { set; get; }
         public string preferentialid { set; get; }
-        public string disrate { set; get; }
+        public decimal disrate { set; get; }
         public string type { set; get; }
         public string sub_type { set; get; }
         public string preferentialAmt { set; get; }
         public string preferentialNum { set; get; }
         public string preferentialAmout { set; get; }
         public string isCustom { set; get; }
+
+        public string dishname { set; get; }
     }
 }

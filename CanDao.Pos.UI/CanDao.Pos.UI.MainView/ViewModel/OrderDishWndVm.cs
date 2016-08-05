@@ -978,13 +978,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            if (SelectedOrderDish.IsFishPotDish)
+            if (SelectedOrderDish.IsFishPotDish && SelectedOrderDish.IsPot)
             {
                 MessageDialog.Warning("请选中鱼锅主体减菜。");
                 return;
             }
 
-            if (--SelectedOrderDish.DishNum <= 0)
+            UpdateOrderDishNum(SelectedOrderDish, SelectedOrderDish.DishNum - 1);
+            if (SelectedOrderDish.DishNum <= 0)
             {
                 var tempOrderDish = SelectedOrderDish;
                 OrderDishInfos.Remove(SelectedOrderDish);
@@ -1020,7 +1021,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            SelectedOrderDish.DishNum++;
+            UpdateOrderDishNum(SelectedOrderDish, SelectedOrderDish.DishNum + 1);
             DoWhenDishChanged();
         }
 
