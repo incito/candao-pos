@@ -2606,6 +2606,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 MessageDialog.Warning(result, OwnerWindow);
                 CloseWindow(false);
             }
+
+            GenerateSettlementInfo();
         }
 
         /// <summary>
