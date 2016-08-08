@@ -107,7 +107,7 @@
                                       SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="序号" Width="40" Binding="{Binding Index}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn Header="菜单名称" Width="*" CanUserReorder="False" CanUserSort="True" IsReadOnly="True">
+                                    <DataGridTemplateColumn Header="菜单名称" Width="*" SortMemberPath="TempDishName" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <WrapPanel VerticalAlignment="Center">
@@ -119,7 +119,7 @@
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="数量" Width="50" Binding="{Binding DishNum}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="单位" Width="50" Binding="{Binding DishUnit}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn Header="小计" Width="66" IsReadOnly="True" >
+                                    <DataGridTemplateColumn Header="小计" Width="66" SortMemberPath="PayAmount"  IsReadOnly="True" >
                                         <DataGridTemplateColumn.CellTemplateSelector>
                                             <templateSelector:DishPayamountTemplateSelector  NormalTemplate="{StaticResource DishPayamountNormalTemplate}" ToBeWeighTemplate="{StaticResource DishPayamountBeWeighTemplate}"/>
                                         </DataGridTemplateColumn.CellTemplateSelector>

@@ -16,14 +16,17 @@ namespace CanDao.Pos.Model.Response
         {
             preferentialInfo = new preferentialInfoResponse();
             rows = new List<DishInfosResponse>();
+            
         }
+
+        public UserOrderInfo userOrderInfo { set; get; }
         public preferentialInfoResponse preferentialInfo { set; get; }
         public List<DishInfosResponse> rows { set; get; }
     }
 
     public class preferentialInfoResponse
     {
-        public string memberno { set; get; }
+
         /// <summary>
         /// 优惠总额
         /// </summary>
@@ -88,5 +91,15 @@ namespace CanDao.Pos.Model.Response
         public string orderseq { set; get; }
         public decimal dishnum { set; get; }
    
+    }
+
+    public class UserOrderInfo
+    {
+        public string memberno { set; get; }
+        public int tableStatus { set; get; }
+        public string orderInvoiceTitle { set; get; }
+        public int customerNumber { set; get; }
+        public string orderid { set; get; }
+        public int orderStatus { set; get; }
     }
 }

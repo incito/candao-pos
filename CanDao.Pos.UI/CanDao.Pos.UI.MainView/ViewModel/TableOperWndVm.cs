@@ -1317,9 +1317,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 curStepWf.ErrorWorkFlowInfo = antiSettlementWf;//会员消费结算错误时执行自动反结算工作流。
             }
 
-            var jdeDebitAmountWf = new WorkFlowInfo(JdeDebitAmountProcess, JdeDebitAmountComplete, "计算实收执行中...");
-            curStepWf.NextWorkFlowInfo = jdeDebitAmountWf;//结算的最后一个执行步骤为调用JDE计算实收。
-            jdeDebitAmountWf.NextWorkFlowInfo = new WorkFlowInfo(null, PrintSettlementReportAndInvoice);//打印和开发票
+            //屏蔽功能，由后台进行操作。
+            //var jdeDebitAmountWf = new WorkFlowInfo(JdeDebitAmountProcess, JdeDebitAmountComplete, "计算实收执行中...");
+            //curStepWf.NextWorkFlowInfo = jdeDebitAmountWf;//结算的最后一个执行步骤为调用JDE计算实收。
+
+            curStepWf.NextWorkFlowInfo = new WorkFlowInfo(null, PrintSettlementReportAndInvoice);//打印和开发票
 
             WorkFlowService.Start(param, payBillWorkFlow);
         }
@@ -2576,13 +2578,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
             }
 
-            InfoLog.Instance.I("开始获取订单{0}的发票抬头。", Data.OrderId);
-            var invoiceResult = service.GetOrderInvoice(Data.OrderId);
-            if (!string.IsNullOrEmpty(invoiceResult.Item1))
-                return string.Format("获取订单发票抬头失败。" + invoiceResult.Item1);
+            //新后台接口每次获取会返回发票抬头，注销此业务
 
-            InfoLog.Instance.I("结束获取订单发票抬头：{0}。", invoiceResult.Item2);
-            Data.OrderInvoiceTitle = invoiceResult.Item2;
+            //InfoLog.Instance.I("开始获取订单{0}的发票抬头。", Data.OrderId);
+            //var invoiceResult = service.GetOrderInvoice(Data.OrderId);
+            //if (!string.IsNullOrEmpty(invoiceResult.Item1))
+            //    return string.Format("获取订单发票抬头失败。" + invoiceResult.Item1);
+
+            //InfoLog.Instance.I("结束获取订单发票抬头：{0}。", invoiceResult.Item2);
+            //Data.OrderInvoiceTitle = invoiceResult.Item2;
 
             return null;
         }

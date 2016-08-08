@@ -24,11 +24,6 @@ namespace CanDao.Pos.Common
         public static string JavaServer { get; private set; }
 
         /// <summary>
-        /// 大数据服务地址。
-        /// </summary>
-        public static string BigData { get; private set; }
-
-        /// <summary>
         /// 会员等云服务地址。
         /// </summary>
         public static string CloudServer { get; private set; }
@@ -81,7 +76,6 @@ namespace CanDao.Pos.Common
                         return;
 
                     JavaServer = GetElementValue(root.Element("JavaServer"));
-                    BigData = GetElementValue(root.Element("BigData"));
                     CloudServer = GetElementValue(root.Element("CloudServer"));
                     MemberSystem = GetElementInt(root.Element("MemberSystem"), 1);
                     //TakeoutTableName = GetElementValue(root.Element("TakeoutTableName"));

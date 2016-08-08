@@ -54,6 +54,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private const int NextMaxWarningInterval = 10;
 
+        /// <summary>
+        /// 下一次警告时间。
+        /// </summary>
+        private DateTime _nextWarningTime = DateTime.MinValue;
+
         #endregion
 
         #region Constructor
@@ -248,7 +253,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     WindowHelper.ShowDialog(new ReportViewWindow(), OwnerWindow);
                     break;
                 case "System"://系统
+                    SetPrinterCheckTimerStatus(false);
                     WindowHelper.ShowDialog(new SystemSettingWindow(), OwnerWindow);
+                    SetPrinterCheckTimerStatus(true);
                     break;
                 case "NormalTablesPreGroup":
                     ((MainWindow)OwnerWindow).GsTables.PreviousGroup();
@@ -445,7 +452,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             var errPrintCount = result.Item2.Count(t => t.PrintStatus != EnumPrintStatus.Normal);
             HasPrinterError = errPrintCount > 0;
-            if (HasPrinterError)
+            if (HasPrinterError && DateTime.Now >= _nextWarningTime)
             {
                 var errMsg = string.Format("检测到{0}个打印机异常，请到\"系统\">\"打印机列表\"查看并修复。", errPrintCount);
                 OwnerWindow.Dispatcher.Invoke((Action)delegate
@@ -453,10 +460,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     var wnd = new PrinterErrorInfoWindow(errMsg, NextMaxWarningInterval);
                     if (WindowHelper.ShowDialog(wnd, OwnerWindow))
                     {
-                        if (wnd.IsCheckedNoWarning)
-                            _printerCheckTimer.Interval = NextMaxWarningInterval * 60 * 1000;
-                        else
-                            _printerCheckTimer.Interval = PrinterCheckTimerInterval * 1000;
+                        _nextWarningTime = wnd.IsCheckedNoWarning ? DateTime.Now.AddMinutes(NextMaxWarningInterval) : DateTime.Now.AddSeconds(PrinterCheckTimerInterval);
                     }
                 });
             }
@@ -663,12 +667,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void ClearnMachine()
         {
             InfoLog.Instance.I("点击清机按钮，选择清机或结业...");
-            if (Globals.UserRight.AllowClearn)
-            {
-                MessageDialog.Warning("当前账号没有清机权限，请联系管理员。");
-                return;
-            }
-
             var hasDinnerTable = Tables.Any(t => t.TableStatus == EnumTableStatus.Dinner);
             var allowCash = !IsForcedEndWorkModel && Globals.UserRight.AllowClearn;//只有当不是强制结业且有清机权限时才允许清机。
             var wnd = new SelectClearnStepWindow(!hasDinnerTable, allowCash);
