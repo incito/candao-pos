@@ -882,7 +882,7 @@ namespace CanDao.Pos.ServiceImpl
             var tableFullInfo=new TableFullInfo();
             AddDishInfos(response.data.rows,ref tableFullInfo);
             ToAccount(response.data.preferentialInfo, ref tableFullInfo);
-
+            ToTableBaseInfo(response.data.userOrderInfo, ref tableFullInfo);
             return tableFullInfo;
         }
        
@@ -953,14 +953,18 @@ namespace CanDao.Pos.ServiceImpl
             };
         }
 
+        /// <summary>
+        /// 账单金额、优惠转换
+        /// </summary>
+        /// <param name="preferential"></param>
+        /// <param name="tableFullInfo"></param>
         internal static void ToAccount(preferentialInfoResponse preferential, ref TableFullInfo tableFullInfo)
         {
             tableFullInfo.TotalFreeAmount = preferential.amount;
             tableFullInfo.PaymentAmount = preferential.payamount;
             tableFullInfo.TipAmount = preferential.tipAmount;
             tableFullInfo.TotalAmount = preferential.menuAmount;
-            tableFullInfo.MemberNo = preferential.memberno;
-
+            
             if(preferential.detailPreferentials==null)
             { return;}
 
@@ -973,6 +977,19 @@ namespace CanDao.Pos.ServiceImpl
                 coupon.Name = info.activity.name;
                 tableFullInfo.UsedCouponInfos.Add(coupon);
             }
+        }
+
+        /// <summary>
+        /// 转换桌台基础信息
+        /// </summary>
+        internal static void ToTableBaseInfo(UserOrderInfo userOrderInfo, ref TableFullInfo tableFullInfo)
+        {
+            tableFullInfo.MemberNo = userOrderInfo.memberno;
+            tableFullInfo.OrderStatus = (EnumOrderStatus) userOrderInfo.orderStatus;
+            tableFullInfo.CustomerNumber = userOrderInfo.customerNumber;
+            tableFullInfo.OrderInvoiceTitle = userOrderInfo.orderInvoiceTitle;
+            tableFullInfo.OrderId= userOrderInfo.orderid;
+            tableFullInfo.TableStatus = (EnumTableStatus)userOrderInfo.tableStatus;
         }
         #endregion
     }
