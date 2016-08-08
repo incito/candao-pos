@@ -280,7 +280,7 @@
               Background="{StaticResource CanDaoPosColorBgGray}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="78"/>
-                <RowDefinition Height="200"/>
+                <RowDefinition Height="180"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -305,7 +305,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <controls:GroupSelector x:Name="GsCouponList"
-                                        ItemCountEachGroup="16"
+                                        ItemCountEachGroup="12"
                                         ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}"
                                         IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
                     <controls:GroupSelector.Template>
@@ -350,7 +350,7 @@
                     </StackPanel>
                     <Button Style="{StaticResource BtnDownStyle}"
                             Command="{Binding DataGridPageOperCmd}"
-                            CommandParameter="CouponListNextGruop"/>
+                            CommandParameter="CouponListNextGroup"/>
                 </StackPanel>
             </Grid>
 
