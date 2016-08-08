@@ -66,7 +66,19 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 餐桌名称。
         /// </summary>
-        public string TableName { get; set; }
+        private string _tableName;
+        /// <summary>
+        /// 餐桌名称。
+        /// </summary>
+        public string TableName
+        {
+            get { return _tableName; }
+            set
+            {
+                _tableName = value;
+                RaisePropertyChanged("TableName");
+            }
+        }
 
         /// <summary>
         /// 餐桌编号。（现餐桌名称与编号同）
@@ -177,6 +189,7 @@ namespace CanDao.Pos.Model
             BeginTime = srcInfo.BeginTime;
             Amount = srcInfo.Amount;
             TableEnable = srcInfo.TableEnable;
+            TableName = srcInfo.TableName;
         }
 
         /// <summary>
