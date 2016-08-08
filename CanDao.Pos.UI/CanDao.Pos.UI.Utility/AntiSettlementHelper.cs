@@ -33,6 +33,10 @@ namespace CanDao.Pos.UI.Utility
 
         #endregion
 
+#region 属性
+        public string OrderId { set; get; }
+#endregion
+
         #region Public Methods
 
         /// <summary>
@@ -73,6 +77,43 @@ namespace CanDao.Pos.UI.Utility
             WorkFlowService.Start(null, checkWf);
         }
 
+         /// <summary>
+         /// 设置获取反结算工作流（自动反结算）
+         /// </summary>
+         /// <param name="orderId"></param>
+         /// <param name="memberNo"></param>
+         /// <param name="ownerWnd"></param>
+         /// <param name="afterAntiSettlementWf"></param>
+        public WorkFlowInfo GetAntiSettlement(string orderId, string memberNo, Window ownerWnd)
+        {
+            _orderId = orderId;
+            _ownerWindow = ownerWnd;
+
+            InfoLog.Instance.I("开始检测账单是否允许反结算...");
+            var checkWf = new WorkFlowInfo(CheckOrderCanResettlementProcess, OrderCanResettlementComplete);//检测订单是否允许反结工作流。
+            var currentWf = checkWf;//当前工作流。
+            if (!string.IsNullOrEmpty(memberNo))
+            {
+                if (Globals.IsCanDaoMember)
+                {
+                    var canDaoMemberResettlementWf = new WorkFlowInfo(CanDaoMemberResettlementProcess, CanDaoMemberResettlementComplete);//餐道会员反结算工作流。
+                    currentWf.NextWorkFlowInfo = canDaoMemberResettlementWf;
+                    currentWf = canDaoMemberResettlementWf;
+                }
+                else if (Globals.IsYazuoMember)
+                {
+                    var yaZuoMemberResettlementWf = new WorkFlowInfo(YaZuoMemberResettlementProcess, YaZuoMemberResettlementComplete);//雅座会员反结算工作流。
+                    currentWf.NextWorkFlowInfo = yaZuoMemberResettlementWf;
+                    currentWf = yaZuoMemberResettlementWf;
+                }
+            }
+
+            var antiSettlementWf = new WorkFlowInfo(AntiSettlementProcess, AntiSettlementComplete, "账单反结算中...");
+
+            currentWf.NextWorkFlowInfo = antiSettlementWf;
+
+            return checkWf;
+        }
         /// <summary>
         /// 反结算执行方法。
         /// </summary>
@@ -154,6 +195,26 @@ namespace CanDao.Pos.UI.Utility
             }
 
             InfoLog.Instance.I("反结算授权成功，开始会员系统反结算...");
+            return new Tuple<bool, object>(true, _orderId);
+        }
+
+        /// <summary>
+        /// 不需要弹出验证授权
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private Tuple<bool, object> OrderCanResettlementComplete(object arg)
+        {
+            var result = arg as string;
+            if (!string.IsNullOrEmpty(result))
+            {
+                ErrLog.Instance.E("检测账单是否允许反结算失败：{0}", result);
+                MessageDialog.Warning(result, _ownerWindow);
+                return null;
+            }
+
+            InfoLog.Instance.I("结束检测账单是否允许反结算。");
+
             return new Tuple<bool, object>(true, _orderId);
         }
 

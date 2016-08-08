@@ -97,7 +97,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var result = HttpHelper.HttpPost<VerifyUserResponse>(addr, request);
-                return new Tuple<string, bool>(null, result.IsSuccess);
+                return new Tuple<string, bool>(result.msg, result.IsSuccess);
             }
             catch (Exception ex)
             {

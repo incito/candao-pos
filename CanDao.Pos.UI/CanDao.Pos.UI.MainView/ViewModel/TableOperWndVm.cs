@@ -1313,7 +1313,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
 
                 var helper = new AntiSettlementHelper();
-                var antiSettlementWf = new WorkFlowInfo(helper.AntiSettlementProcess, helper.AntiSettlementComplete, "自动反结算中...");
+                var antiSettlementWf = helper.GetAntiSettlement(Data.OrderId, MemberCardNo, OwnerWindow);
                 curStepWf.ErrorWorkFlowInfo = antiSettlementWf;//会员消费结算错误时执行自动反结算工作流。
             }
 
@@ -2040,33 +2040,34 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return string.Format("餐道会员登入失败：{0}。", loginResult);
 
             InfoLog.Instance.I("餐道会员登入成功。");
-            InfoLog.Instance.I("开始设置会员价...");
-            var orderService = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (orderService == null)
-                return "创建IOrderService服务失败。";
 
-            var setMemberPriceResult = orderService.SetMemberPrice(Data.OrderId, MemberCardNo);
-            if (!string.IsNullOrEmpty(setMemberPriceResult))
-                return string.Format("设置会员价失败：{0}", setMemberPriceResult);
+            //InfoLog.Instance.I("开始设置会员价...");
+            //var orderService = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            //if (orderService == null)
+            //    return "创建IOrderService服务失败。";
 
-            InfoLog.Instance.I("设置会员价完成。");
-            InfoLog.Instance.I("从新获取餐台所有信息...");
+            //var setMemberPriceResult = orderService.SetMemberPrice(Data.OrderId, MemberCardNo);
+            //if (!string.IsNullOrEmpty(setMemberPriceResult))
+            //    return string.Format("设置会员价失败：{0}", setMemberPriceResult);
 
-            var result = new Tuple<string, TableFullInfo>("未赋值", null);
-            if (Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout)
-                result = orderService.GetTableDishInfoByOrderId(_tableInfo.OrderId, Globals.UserInfo.UserName);
-            else
-                result = orderService.GetTableDishInfoes(_tableInfo.TableName, Globals.UserInfo.UserName);
+            //InfoLog.Instance.I("设置会员价完成。");
+            //InfoLog.Instance.I("从新获取餐台所有信息...");
 
-            if (!string.IsNullOrEmpty(result.Item1))
-                return string.Format("获取餐台明细失败：{0}", result.Item1);
+            //var result = new Tuple<string, TableFullInfo>("未赋值", null);
+            //if (Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout)
+            //    result = orderService.GetTableDishInfoByOrderId(_tableInfo.OrderId, Globals.UserInfo.UserName);
+            //else
+            //    result = orderService.GetTableDishInfoes(_tableInfo.TableName, Globals.UserInfo.UserName);
 
-            InfoLog.Instance.I("获取餐台所有信息完成。");
-            if (result.Item2 == null)
-                return "没有获取到该餐台的账单信息。";
+            //if (!string.IsNullOrEmpty(result.Item1))
+            //    return string.Format("获取餐台明细失败：{0}", result.Item1);
 
-            result.Item2.MemberInfo = Data.MemberInfo;//会员信息保留，不用再次查询了。
-            Data = result.Item2;
+            //InfoLog.Instance.I("获取餐台所有信息完成。");
+            //if (result.Item2 == null)
+            //    return "没有获取到该餐台的账单信息。";
+
+            //result.Item2.MemberInfo = Data.MemberInfo;//会员信息保留，不用再次查询了。
+            //Data = result.Item2;
             return null;
         }
 
@@ -2108,13 +2109,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return string.Format("餐道会员登出失败：{0}。", logoutResult);
 
             InfoLog.Instance.I("餐道会员登出成功。");
-            InfoLog.Instance.I("开始设置成正常价...");
-            var orderService = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (orderService == null)
-                return "创建IOrderService服务失败。";
 
-            var setNormalPriceResult = orderService.SetNormalPrice(Data.OrderId);
-            return !string.IsNullOrEmpty(setNormalPriceResult) ? string.Format("设置成正常价失败：{0}", setNormalPriceResult) : null;
+            return null;
+            //InfoLog.Instance.I("开始设置成正常价...");
+            //var orderService = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            //if (orderService == null)
+            //    return "创建IOrderService服务失败。";
+
+            //var setNormalPriceResult = orderService.SetNormalPrice(Data.OrderId);
+            //return !string.IsNullOrEmpty(setNormalPriceResult) ? string.Format("设置成正常价失败：{0}", setNormalPriceResult) : null;
         }
 
         /// <summary>

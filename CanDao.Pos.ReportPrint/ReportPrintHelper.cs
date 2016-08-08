@@ -612,8 +612,7 @@ namespace CanDao.Pos.ReportPrint
                     MessageDialog.Warning(string.Format("打印交易凭条失败：{0}", res));
                     return false;
                 }
-                CopyReportHelper.PayPrint(info.MemberInfo.Integral, info.MemberInfo.StoredBalance, info.MemberNo,
-                    Globals.BranchInfo.BranchId);
+
             }
             catch (Exception ex)
             {
