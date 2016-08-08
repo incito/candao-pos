@@ -114,8 +114,8 @@ namespace CanDao.Pos.Common
                 if (!string.IsNullOrEmpty(result.Item1))
                     return new Tuple<string, T>(result.Item1, default(T));
 
-                //var tag = ParseRestJson<T>(result.Item2.FromUnicodeString());
-                var tag = ParseRestJson<T>(result.Item2);
+                var tag = ParseRestJson<T>(result.Item2.FromUnicodeString());
+                //var tag = ParseRestJson<T>(result.Item2);
                 return new Tuple<string, T>(null, tag);
             }
             catch (Exception ex)

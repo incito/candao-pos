@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Timers;
 using System.Windows;
@@ -662,8 +663,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void ClearnMachine()
         {
             InfoLog.Instance.I("点击清机按钮，选择清机或结业...");
+            if (Globals.UserRight.AllowClearn)
+            {
+                MessageDialog.Warning("当前账号没有清机权限，请联系管理员。");
+                return;
+            }
+
             var hasDinnerTable = Tables.Any(t => t.TableStatus == EnumTableStatus.Dinner);
-            var wnd = new SelectClearnStepWindow(!hasDinnerTable, IsForcedEndWorkModel);
+            var allowCash = !IsForcedEndWorkModel && Globals.UserRight.AllowClearn;//只有当不是强制结业且有清机权限时才允许清机。
+            var wnd = new SelectClearnStepWindow(!hasDinnerTable, allowCash);
             if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
                 return;
 

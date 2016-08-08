@@ -29,10 +29,10 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, string>("授权登录服务地址为空。", null);
             }
 
-            var encodePwd = MD5Encrypt.Encrypt(password);
-            var request = new AuthorizeLoginRequest(userName, encodePwd, GetRightCode(rightType));
             try
             {
+                var encodePwd = MD5Encrypt.Encrypt(password);
+                var request = new AuthorizeLoginRequest(userName, encodePwd, GetRightCode(rightType));
                 var result = HttpHelper.HttpPost<AuthorizeLoginResponse>(addr, request);
                 return result.IsSuccess ? new Tuple<string, string>(null, result.data.fullname) : new Tuple<string, string>(result.msg, null);
             }

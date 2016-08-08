@@ -7,10 +7,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     {
         #region Constructor
 
-        public SelectClearnStepWndVm(bool allowEndWork, bool isForcedEndWorkModel)
+        public SelectClearnStepWndVm(bool allowEndWork, bool allowClearn)
         {
             AllowEndWork = allowEndWork;
-            AllowChangeShift = !isForcedEndWorkModel;
+            AllowChangeShift = allowClearn;
         }
         
         #endregion

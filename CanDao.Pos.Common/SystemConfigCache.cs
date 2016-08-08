@@ -54,16 +54,6 @@ namespace CanDao.Pos.Common
         public static string OpenCashIp { get; set; }
 
         /// <summary>
-        /// 是否保存优惠券信息。
-        /// </summary>
-        public static bool SaveCoupon { get; set; }
-
-        /// <summary>
-        /// 是否打印开发票小票。
-        /// </summary>
-        public static bool PrintInvoice { get; set; }
-
-        /// <summary>
         /// 反结算原因集合。
         /// </summary>
         public static List<string> ResettlementReasonList { get; set; }
@@ -95,13 +85,9 @@ namespace CanDao.Pos.Common
                     CloudServer = GetElementValue(root.Element("CloudServer"));
                     MemberSystem = GetElementInt(root.Element("MemberSystem"), 1);
                     //TakeoutTableName = GetElementValue(root.Element("TakeoutTableName"));
-                    Globals.BranchTelephone = GetElementValue(root.Element("BranchTelephone"));
                     PosId = GetElementValue(root.Element("PosId"));
                     OpenCashIp = GetElementValue(root.Element("OpenCashIp"));
                     Globals.MemberSystem = (EnumMemberSystem)MemberSystem;
-
-                    SaveCoupon = GetElementBool(root.Element("SaveCoupon"), false);
-                    PrintInvoice = GetElementBool(root.Element("PrintInvoice"), false);
 
                     var resettlementReason = GetElementValue(root.Element("ResettlementReason"));
                     ResettlementReasonList = !string.IsNullOrEmpty(resettlementReason) ? resettlementReason.Split(';').ToList() : null;

@@ -753,7 +753,7 @@ namespace CanDao.Pos.ServiceImpl
                 BranchAddress = Globals.BranchInfo.BranchAddress,
                 BranchId = Globals.BranchInfo.BranchId,
                 BranchName = Globals.BranchInfo.BranchName,
-                BranchTelephone = Globals.BranchTelephone,
+                //BranchTelephone = Globals.BranchTelephone,
                 AreaName = response.areaname,
                 TableName = response.tableName,
                 BeginTime = Parse2DateTime(response.begintime, DateTimeFormat, DateTime.MinValue),
