@@ -59,11 +59,6 @@ namespace CanDao.Pos.Common
         public static BranchInfo BranchInfo { get; set; }
 
         /// <summary>
-        /// 电话。
-        /// </summary>
-        public static string BranchTelephone { get; set; }
-
-        /// <summary>
         /// 餐具信息。
         /// </summary>
         public static OrderDishInfo DinnerWareInfo { get; set; }

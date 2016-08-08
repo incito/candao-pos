@@ -38,6 +38,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 InitRefreshTimer();
                 PrinterStatusInfos = new ObservableCollection<PrintStatusInfo>();
                 RefreshCmd = CreateDelegateCommand(Refresh);
+                CtrlUnloadedCmd = CreateDelegateCommand(CtrlUnloaded);
                 GroupCmd = CreateDelegateCommand(Group, CanGroup);
             }
         }
@@ -101,6 +102,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public ICommand RefreshCmd { get; private set; }
 
         /// <summary>
+        /// 控件卸载事件命令。
+        /// </summary>
+        public ICommand CtrlUnloadedCmd { get; private set; }
+
+        /// <summary>
         /// 分组命令。
         /// </summary>
         public ICommand GroupCmd { get; private set; }
@@ -116,9 +122,14 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         {
             RemainingTimes = RefreshIntervalsSecond - 1;
             _refreshTimer.Stop();
+
+            string msg = null;
+            if (!string.IsNullOrEmpty(arg as string) && arg.Equals("BtnPress"))
+                msg = "正在获取打印机状态...";
+
             OwnerCtrl.Dispatcher.BeginInvoke((Action)delegate
             {
-                TaskService.Start(null, GetPrinterStatusProcess, GetPrinterStatusComplete, null);
+                TaskService.Start(null, GetPrinterStatusProcess, GetPrinterStatusComplete, msg);
             });
         }
 
@@ -157,6 +168,14 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
         }
 
+        private void CtrlUnloaded(object param)
+        {
+            if (_refreshTimer != null)
+            {
+                _refreshTimer.Stop();
+                _refreshTimer.Dispose();
+            }
+        }
 
         #endregion
 
@@ -175,11 +194,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         private void RefreshTimerElspsed(object sender, ElapsedEventArgs e)
         {
-            _refreshTimer.Stop();
             if (--RemainingTimes < 0)
-                Refresh(null);
-            else
-                _refreshTimer.Start();
+                Refresh("BtnPress");
         }
 
         /// <summary>

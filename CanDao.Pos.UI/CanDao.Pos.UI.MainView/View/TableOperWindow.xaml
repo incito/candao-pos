@@ -107,7 +107,7 @@
                                       SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="序号" Width="40" Binding="{Binding Index}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn Header="菜单名称" Width="*" CanUserReorder="False" CanUserSort="True" IsReadOnly="True">
+                                    <DataGridTemplateColumn Header="菜单名称" Width="*" SortMemberPath="TempDishName" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <WrapPanel VerticalAlignment="Center">
@@ -119,7 +119,7 @@
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="数量" Width="50" Binding="{Binding DishNum}" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="单位" Width="50" Binding="{Binding DishUnit}" IsReadOnly="True"/>
-                                    <DataGridTemplateColumn Header="小计" Width="66" IsReadOnly="True" >
+                                    <DataGridTemplateColumn Header="小计" Width="66" SortMemberPath="PayAmount"  IsReadOnly="True" >
                                         <DataGridTemplateColumn.CellTemplateSelector>
                                             <templateSelector:DishPayamountTemplateSelector  NormalTemplate="{StaticResource DishPayamountNormalTemplate}" ToBeWeighTemplate="{StaticResource DishPayamountBeWeighTemplate}"/>
                                         </DataGridTemplateColumn.CellTemplateSelector>
@@ -280,7 +280,7 @@
               Background="{StaticResource CanDaoPosColorBgGray}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="78"/>
-                <RowDefinition Height="200"/>
+                <RowDefinition Height="180"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -305,7 +305,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <controls:GroupSelector x:Name="GsCouponList"
-                                        ItemCountEachGroup="16"
+                                        ItemCountEachGroup="12"
                                         ItemsSource="{Binding CouponInfos}" SelectedItem="{Binding SelectedOrderDish}"
                                         IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
                     <controls:GroupSelector.Template>
@@ -350,7 +350,7 @@
                     </StackPanel>
                     <Button Style="{StaticResource BtnDownStyle}"
                             Command="{Binding DataGridPageOperCmd}"
-                            CommandParameter="CouponListNextGruop"/>
+                            CommandParameter="CouponListNextGroup"/>
                 </StackPanel>
             </Grid>
 

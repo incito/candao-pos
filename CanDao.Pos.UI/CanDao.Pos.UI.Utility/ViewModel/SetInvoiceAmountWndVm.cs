@@ -35,17 +35,17 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
 
             WorkFlowService.Start(null, new WorkFlowInfo(UpdateOrderInvoiceProcess, UpdateOrderInvoiceComplete));
-            if (SystemConfigCache.PrintInvoice)
-            {
-                var invoiceInfo = new PrintInvoiceInfo
-                {
-                    OrderId = Data.OrderId,
-                    TableName = Data.TableName,
-                    InvoiceAmount = InvoiceAmount,
-                    InvoiceTitle = Data.OrderInvoiceTitle,
-                };
-                ReportPrintHelper.PrintInvoiceReport(invoiceInfo);
-            }
+            //if (SystemConfigCache.PrintInvoice)
+            //{
+            //    var invoiceInfo = new PrintInvoiceInfo
+            //    {
+            //        OrderId = Data.OrderId,
+            //        TableName = Data.TableName,
+            //        InvoiceAmount = InvoiceAmount,
+            //        InvoiceTitle = Data.OrderInvoiceTitle,
+            //    };
+            //    ReportPrintHelper.PrintInvoiceReport(invoiceInfo);
+            //}
             base.Confirm(param);
         }
 

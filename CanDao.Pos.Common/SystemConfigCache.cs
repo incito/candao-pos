@@ -24,11 +24,6 @@ namespace CanDao.Pos.Common
         public static string JavaServer { get; private set; }
 
         /// <summary>
-        /// 大数据服务地址。
-        /// </summary>
-        public static string BigData { get; private set; }
-
-        /// <summary>
         /// 会员等云服务地址。
         /// </summary>
         public static string CloudServer { get; private set; }
@@ -52,16 +47,6 @@ namespace CanDao.Pos.Common
         /// 钱箱IP地址。
         /// </summary>
         public static string OpenCashIp { get; set; }
-
-        /// <summary>
-        /// 是否保存优惠券信息。
-        /// </summary>
-        public static bool SaveCoupon { get; set; }
-
-        /// <summary>
-        /// 是否打印开发票小票。
-        /// </summary>
-        public static bool PrintInvoice { get; set; }
 
         /// <summary>
         /// 反结算原因集合。
@@ -91,17 +76,12 @@ namespace CanDao.Pos.Common
                         return;
 
                     JavaServer = GetElementValue(root.Element("JavaServer"));
-                    BigData = GetElementValue(root.Element("BigData"));
                     CloudServer = GetElementValue(root.Element("CloudServer"));
                     MemberSystem = GetElementInt(root.Element("MemberSystem"), 1);
                     //TakeoutTableName = GetElementValue(root.Element("TakeoutTableName"));
-                    Globals.BranchTelephone = GetElementValue(root.Element("BranchTelephone"));
                     PosId = GetElementValue(root.Element("PosId"));
                     OpenCashIp = GetElementValue(root.Element("OpenCashIp"));
                     Globals.MemberSystem = (EnumMemberSystem)MemberSystem;
-
-                    SaveCoupon = GetElementBool(root.Element("SaveCoupon"), false);
-                    PrintInvoice = GetElementBool(root.Element("PrintInvoice"), false);
 
                     var resettlementReason = GetElementValue(root.Element("ResettlementReason"));
                     ResettlementReasonList = !string.IsNullOrEmpty(resettlementReason) ? resettlementReason.Split(';').ToList() : null;
