@@ -108,6 +108,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 MessageDialog.Warning("请输入就餐人数。", OwnerWindow);
                 return;
             }
+            var checkUser = CheckIsUser();
+            if (!checkUser.Item2)//验证服务员输入
+            {
+                MessageDialog.Warning(checkUser.Item1, OwnerWindow);
+                return;
+            }
 
             if (!MessageDialog.Quest("确定开台吗？"))
                 return;
@@ -122,6 +128,18 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             };
             InfoLog.Instance.I("开始开台...");
             TaskService.Start(request, OpenTableProcess, OpenTableComplete, "正在开台...");
+        }
+
+        /// <summary>
+        /// 判断服务员输入
+        /// </summary>
+        private Tuple<string,bool> CheckIsUser()
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IAccountService>();
+            if (service == null)
+                return new Tuple<string,bool>("创建IRestaurantService服务失败。",false);
+
+            return service.VerifyUser(WaiterId);
         }
 
         /// <summary>

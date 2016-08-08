@@ -124,8 +124,8 @@ namespace CanDao.Pos.ServiceImpl
             }
             try
             {
-                string parmAddr = string.Format("{0}/{1}/{2}", addr, Userid, orderid);
-                var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null);
+                string parmAddr = string.Format("{0}/{1}/{2}/", addr, Userid, orderid);
+                var response = HttpHelper.HttpGet<JavaResponse>(parmAddr, null);
                 if (response.IsSuccess)
                 {
                     return string.Empty;
