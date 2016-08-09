@@ -45,7 +45,7 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, TableFullInfo>(result.Item1, null);
 
             if (!result.Item2.IsSuccess)
-                return new Tuple<string, TableFullInfo>(result.Item2.Info ?? "服务器内部错误，获取菜品信息失败。", null);
+                return new Tuple<string, TableFullInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "服务器内部错误，获取菜品信息失败。"), null);
 
             var data = DataConverter.ToTableFullInfo(result.Item2);
             return new Tuple<string, TableFullInfo>(null, data);
@@ -90,10 +90,11 @@ namespace CanDao.Pos.ServiceImpl
                     cardno = cardNo,
                 };
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return response.IsSuccess ? null : "获取发票信息失败。";
+                return response.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(response.msg, response.info, "获取发票信息失败。");
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("获取发票信息时异常。", ex);
                 return string.Format("获取发票信息失败：{0}", ex);
             }
         }
@@ -122,11 +123,10 @@ namespace CanDao.Pos.ServiceImpl
                 var param = new List<string> { fullName };
                 var result = RestHttpHelper.HttpGet<GetMenuDishInfoResponse>(addr, param);
                 if (!string.IsNullOrEmpty(result.Item1))
-                    return new Tuple<string, List<MenuDishGroupInfo>>(
-                        "获取菜谱全部菜品失败。" + Environment.NewLine + result.Item1, null);
+                    return new Tuple<string, List<MenuDishGroupInfo>>("获取菜谱全部菜品失败。" + Environment.NewLine + result.Item1, null);
 
                 if (!result.Item2.IsSuccess)
-                    return new Tuple<string, List<MenuDishGroupInfo>>(result.Item2.Info, null);
+                    return new Tuple<string, List<MenuDishGroupInfo>>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "获取菜谱全部菜品失败。"), null);
 
                 var dishGroup = result.Item2.OrderJson.Select(DataConverter.ToMenuDishInfo).GroupBy(t => t.GroupId);
                 foreach (var group in dishGroup)
@@ -142,7 +142,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E(ex);
+                ErrLog.Instance.E("获取菜谱信息时异常。", ex);
                 return new Tuple<string, List<MenuDishGroupInfo>>(ex.MyMessage(), null);
             }
         }
@@ -186,7 +186,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E(ex);
+                ErrLog.Instance.E("根据优惠券类型获取所有优惠券时异常。", ex);
                 return new Tuple<string, List<CouponInfo>>(ex.MyMessage(), null);
             }
         }
@@ -203,11 +203,11 @@ namespace CanDao.Pos.ServiceImpl
                 var result = HttpHelper.HttpPost<CalcDiscountAmountResponse>(addr, request);
                 return !result.IsSuccess
                     ? new Tuple<string, decimal>(null, result.amount)
-                    : new Tuple<string, decimal>(result.msg ?? "接口调用错误。", 0); //这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
+                    : new Tuple<string, decimal>(DataHelper.GetNoneNullValueByOrder(result.msg, "接口调用错误。"), 0); //这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E(ex);
+                ErrLog.Instance.E("计算折扣金额时异常。", ex);
                 return new Tuple<string, decimal>(ex.MyMessage(), 0);
             }
         }
@@ -224,10 +224,7 @@ namespace CanDao.Pos.ServiceImpl
             if (!string.IsNullOrEmpty(result.Item1))
                 return result.Item1;
 
-            if (!result.Item2.IsSuccess)
-                return !string.IsNullOrEmpty(result.Item2.Info) ? result.Item2.Info : "保存优惠券使用列表失败。";
-
-            return null;
+            return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "保存优惠券使用列表失败。") : null;
         }
 
         public Tuple<string, List<UsedCouponInfo>> GetSavedUsedCoupon(string orderId, string userId)
@@ -262,6 +259,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("获取套餐内菜品时异常。", ex);
                 return new Tuple<string, MenuComboFullInfo>(ex.MyMessage(), null);
             }
         }
@@ -278,7 +276,7 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, MenuFishPotFullInfo>(result.Item1, null);
 
             if (!result.Item2.IsSuccess)
-                return new Tuple<string, MenuFishPotFullInfo>(result.Item2.Info ?? "服务器内部错误，获取鱼锅信息失败，请重试。", null);
+                return new Tuple<string, MenuFishPotFullInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "服务器内部错误，获取鱼锅信息失败，请重试。"), null);
 
             if (result.Item2.OrderJson == null)
                 return new Tuple<string, MenuFishPotFullInfo>("获取鱼锅信息失败，请重启POS后重试。", null);
@@ -338,6 +336,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("下单时发生异常。", ex);
                 return ex.Message;
             }
         }
@@ -372,10 +371,11 @@ namespace CanDao.Pos.ServiceImpl
                 var request = DataConverter.ToBackDishRequest(info.OrderId, info.TableNo, info.AuthorizerUser,
                     info.Waiter, info.DishInfo, info.BackDishNum, info.BackDishReason);
                 var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
-                return result.IsSuccess ? null : !string.IsNullOrEmpty(result.msg) ? result.msg : "退菜失败。";
+                return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "退菜失败。");
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("退菜时异常。", ex);
                 return ex.MyMessage();
             }
         }
@@ -396,10 +396,11 @@ namespace CanDao.Pos.ServiceImpl
                     actionType = ((int)EnumBackDishType.All).ToString(),
                 };
                 var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
-                return result.IsSuccess ? null : !string.IsNullOrEmpty(result.msg) ? result.msg : "整桌退菜失败。";
+                return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "整桌退菜失败。");
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("整桌退菜时异常。", ex);
                 return ex.MyMessage();
             }
         }
@@ -433,6 +434,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("结账时异常。", ex);
                 return "结账失败" + ex.Message;
             }
         }
@@ -450,9 +452,7 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, PrintOrderFullInfo>(result.Item1, null);
 
             if (!result.Item2.IsSuccess)
-                return
-                    new Tuple<string, PrintOrderFullInfo>(
-                        string.IsNullOrEmpty(result.Item2.Info) ? "获取菜品信息失败。" : result.Item2.Info, null);
+                return new Tuple<string, PrintOrderFullInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "获取菜品信息失败。"), null);
 
             var data = DataConverter.ToPrintOrderFullInfo(result.Item2);
             return new Tuple<string, PrintOrderFullInfo>(null, data);
@@ -469,10 +469,7 @@ namespace CanDao.Pos.ServiceImpl
             if (!string.IsNullOrEmpty(result.Item1))
                 return result.Item1;
 
-            if (!result.Item2.IsSuccess)
-                return !string.IsNullOrEmpty(result.Item2.Info) ? result.Item2.Info : "订单反结算检测失败。";
-
-            return null;
+            return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "订单反结算检测失败。") : null;
         }
 
         public Tuple<string, GetOrderMemberInfoResponse> GetOrderMemberInfo(string orderId)
@@ -489,6 +486,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("获取订单会员信息时异常。", ex);
                 return new Tuple<string, GetOrderMemberInfoResponse>(ex.MyMessage(), null);
             }
         }
@@ -506,13 +504,11 @@ namespace CanDao.Pos.ServiceImpl
                 if (!string.IsNullOrEmpty(result.Item1))
                     return result.Item1;
 
-                if (!result.Item2.IsSuccess)
-                    return !string.IsNullOrEmpty(result.Item2.Info) ? result.Item2.Info : "设置会员价失败。";
-
-                return null;
+                return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "设置会员价失败。") : null;
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("设置会员价时异常。", ex);
                 return ex.MyMessage();
             }
         }
@@ -530,13 +526,11 @@ namespace CanDao.Pos.ServiceImpl
                 if (!string.IsNullOrEmpty(result.Item1))
                     return result.Item1;
 
-                if (!result.Item2.IsSuccess)
-                    return !string.IsNullOrEmpty(result.Item2.Info) ? result.Item2.Info : "设置正常价失败。";
-
-                return null;
+                return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "设置正常价失败。") : null;
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("设置正常价时异常。", ex);
                 return ex.MyMessage();
             }
         }
@@ -555,6 +549,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("清台时异常。", ex);
                 return string.Format("清台失败：{0}", ex.MyMessage());
             }
         }
@@ -576,6 +571,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("取消账单时异常。", ex);
                 return string.Format("取消账单失败：{0}", ex.MyMessage());
             }
         }
@@ -594,6 +590,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("清咖啡台失败。", ex);
                 return string.Format("清台失败：{0}", ex.MyMessage());
             }
         }
@@ -613,10 +610,11 @@ namespace CanDao.Pos.ServiceImpl
                     reason = reason,
                 };
                 var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return result.IsSuccess ? null : string.IsNullOrEmpty(result.msg) ? "反结算账单失败。" : result.msg;
+                return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "反结算账单失败。");
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("反结算账单异常。", ex);
                 return string.Format("反结算账单失败：{0}", ex.MyMessage());
             }
         }
@@ -635,12 +633,11 @@ namespace CanDao.Pos.ServiceImpl
                     paid = tipAmount,
                 };
                 var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return result.IsSuccess
-                    ? null
-                    : string.IsNullOrEmpty(result.msg) ? "小费结算失败。" : string.Format("小费结算失败：{0}", result.msg);
+                return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "小费结算失败。");
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("小费结算时异常。", ex);
                 return string.Format("小费结算失败：{0}", ex.MyMessage());
             }
         }
@@ -661,12 +658,11 @@ namespace CanDao.Pos.ServiceImpl
                     primarykey = primaryKey,
                 };
                 var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
-                return result.IsSuccess
-                    ? null
-                    : string.IsNullOrEmpty(result.msg) ? "更新菜品称重数量失败。" : string.Format("更新菜品称重数量失败：{0}", result.msg);
+                return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "更新菜品称重数量失败。");
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("更新菜品称重数量时异常。", ex);
                 return string.Format("更新菜品称重数量失败：{0}", ex.MyMessage());
             }
         }
@@ -682,10 +678,7 @@ namespace CanDao.Pos.ServiceImpl
             if (!string.IsNullOrEmpty(response.Item1))
                 return response.Item1;
 
-            if (!response.Item2.IsSuccess)
-                return !string.IsNullOrEmpty(response.Item2.Info) ? response.Item2.Info : "设置订单为外卖单失败。";
-
-            return null;
+            return !response.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(response.Item2.Info, "设置订单为外卖单失败。") : null;
         }
 
         #region 优惠券处理
@@ -697,7 +690,6 @@ namespace CanDao.Pos.ServiceImpl
         /// <returns></returns>
         public Tuple<string, preferentialInfoResponse> UsePreferential(UsePreferentialRequest request)
         {
-
             var addr = ServiceAddrCache.GetServiceAddr("CalcDiscountAmount");
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, preferentialInfoResponse>("使用优惠券地址为空。", null);
@@ -707,12 +699,12 @@ namespace CanDao.Pos.ServiceImpl
                 var result = HttpHelper.HttpPost<UsePreferentialResponse>(addr, request);
                 return result.IsSuccess
                     ? new Tuple<string, preferentialInfoResponse>(null, result.data)
-                    : new Tuple<string, preferentialInfoResponse>(result.msg ?? "接口调用错误。", null);
-                    //这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
+                    : new Tuple<string, preferentialInfoResponse>(DataHelper.GetNoneNullValueByOrder(result.msg, "使用优惠券失败。"), null);
+                //这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E(ex);
+                ErrLog.Instance.E("使用优惠券时异常。", ex);
                 return new Tuple<string, preferentialInfoResponse>(ex.MyMessage(), null);
             }
         }
@@ -733,23 +725,23 @@ namespace CanDao.Pos.ServiceImpl
                 var result = HttpHelper.HttpPost<DelePreferentialResponse>(addr, request);
                 return result.IsSuccess
                    ? new Tuple<string, preferentialInfoResponse>(null, result.data.preferentialInfo)
-                   : new Tuple<string, preferentialInfoResponse>(result.msg ?? "接口调用错误。", null);
+                    : new Tuple<string, preferentialInfoResponse>(DataHelper.GetNoneNullValueByOrder(result.msg, "删除优惠券失败。"), null);
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E(ex);
+                ErrLog.Instance.E("删除优惠券时异常。", ex);
                 return new Tuple<string, preferentialInfoResponse>(ex.MyMessage(), null);
             }
         }
 
-
         #endregion
 
         #region 账单处理
+
         /// <summary>
         /// 获取账单信息
         /// </summary>
-        /// <param name="orderId"></param>
+        /// <param name="orderId">订单号。</param>
         /// <returns></returns>
         public Tuple<string, TableFullInfo> GetOrderInfo(string orderId)
         {
@@ -759,25 +751,19 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var parma=new Dictionary<string, string>();
-                parma.Add("orderid", orderId);
-
-                var result = HttpHelper.HttpPost<GetOrderInfoResponse>(addr, parma);
-                if (result.IsSuccess)
-                {
-                    return new Tuple<string, TableFullInfo>(null, DataConverter.ToOrderInfo(result));
-                }
-                else
-                {
-                    return new Tuple<string, TableFullInfo>(result.msg ?? "接口调用错误。", null);
-                }
+                var param = new Dictionary<string, string> { { "orderid", orderId } };
+                var result = HttpHelper.HttpPost<GetOrderInfoResponse>(addr, param);
+                return result.IsSuccess
+                    ? new Tuple<string, TableFullInfo>(null, DataConverter.ToOrderInfo(result))
+                    : new Tuple<string, TableFullInfo>(DataHelper.GetNoneNullValueByOrder(result.msg, "获取账单信息失败。"), null);
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E(ex);
+                ErrLog.Instance.E("获取账单信息时异常。", ex);
                 return new Tuple<string, TableFullInfo>(ex.MyMessage(), null);
             }
         }
+
         #endregion
     }
 }

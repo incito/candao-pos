@@ -34,11 +34,13 @@ namespace CanDao.Pos.ServiceImpl
                 var encodePwd = MD5Encrypt.Encrypt(password);
                 var request = new AuthorizeLoginRequest(userName, encodePwd, MachineManage.GetMachineId(), GetRightCode(rightType));
                 var result = HttpHelper.HttpPost<AuthorizeLoginResponse>(addr, request);
-                return result.IsSuccess ? new Tuple<string, string>(null, result.data.fullname) : new Tuple<string, string>(result.msg, null);
+                if (!result.IsSuccess)
+                    return new Tuple<string, string>(DataHelper.GetNoneNullValueByOrder(result.msg, "用户登录失败。"), null);
+                return new Tuple<string, string>(null, result.data.fullname);
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E(ex);
+                ErrLog.Instance.E("用户登录时发生异常。", ex);
                 return new Tuple<string, string>(ex.MyMessage(), null);
             }
         }
@@ -67,10 +69,11 @@ namespace CanDao.Pos.ServiceImpl
                 var result = JsonHelper.GetValueFromJson(jsonResult, "result");
                 if (string.IsNullOrEmpty(result))
                     return new Tuple<string, UserRight>("获取用户权限失败。", null);
+
                 if (result.Equals("1"))
                 {
                     string errMsg = JsonHelper.GetValueFromJson(jsonResult, "msg");
-                    return new Tuple<string, UserRight>(errMsg ?? "获取用户权限失败。", null);
+                    return new Tuple<string, UserRight>(DataHelper.GetNoneNullValueByOrder(errMsg, "获取用户权限失败。"), null);
                 }
 
                 var rightsJson = JsonHelper.GetValueFromJson(jsonResult, "rights");

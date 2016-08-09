@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
-using CanDao.Pos.Model.Enum;
-using CanDao.Pos.Model.Reports;
-using CanDao.Pos.Model.Response;
 using CanDao.Pos.Model;
+using CanDao.Pos.Model.Enum;
+using CanDao.Pos.Model.Response;
 
 namespace CanDao.Pos.ServiceImpl
 {
@@ -19,30 +16,24 @@ namespace CanDao.Pos.ServiceImpl
         /// <summary>
         /// 打印预结，结算，客用
         /// </summary>
-        /// <param name="Userid"></param>
+        /// <param name="userid"></param>
         /// <param name="orderid"></param>
         /// <param name="printPayType"></param>
         /// <returns></returns>
-        public string PrintPay(string Userid, string orderid, EnumPrintPayType printPayType)
+        public string PrintPay(string userid, string orderid, EnumPrintPayType printPayType)
         {
             string msg = string.Empty;
             switch (printPayType)
             {
                 case EnumPrintPayType.BeforehandPay:
-                {
                     msg = "打印预结单";
                     break;
-                }
                 case EnumPrintPayType.Pay:
-                {
                     msg = "打印结算单";
                     break;
-                }
                 case EnumPrintPayType.CustomerUse:
-                {
                     msg = "打印客用单";
                     break;
-                }
             }
 
             var addr = ServiceAddrCache.GetServiceAddr("PrintPay");
@@ -51,24 +42,17 @@ namespace CanDao.Pos.ServiceImpl
                 ErrLog.Instance.E(msg + "地址为空。");
                 return msg + "地址为空。";
             }
+
             try
             {
-                string parmAddr = string.Format("{0}/{1}/{2}/{3}", addr, Userid, orderid, (int)printPayType);
+                string parmAddr = string.Format("{0}/{1}/{2}/{3}", addr, userid, orderid, (int)printPayType);
                 var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null);
-                if (response.IsSuccess)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return string.Format("{0}错误：{1}", msg, response.msg);
-                }
-          
+                return response.IsSuccess ? null : string.Format("{0}错误：{1}", msg, response.msg);
             }
             catch (Exception exp)
             {
                 ErrLog.Instance.E(msg + "时异常。", exp);
-                return string.Format("{0}异常：{1}",msg,exp);
+                return string.Format("{0}异常：{1}", msg, exp);
             }
         }
         /// <summary>
@@ -87,19 +71,12 @@ namespace CanDao.Pos.ServiceImpl
                 ErrLog.Instance.E(msg + "地址为空。");
                 return msg + "地址为空。";
             }
+
             try
             {
                 string parmAddr = string.Format("{0}/{1}/{2}/{3}", addr, Userid, jsorder, posid);
                 var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null);
-                if (response.IsSuccess)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return string.Format("{0}错误：{1}", msg, response.msg);
-                }
-
+                return response.IsSuccess ? null : string.Format("{0}错误：{1}", msg, response.msg);
             }
             catch (Exception exp)
             {
@@ -107,6 +84,7 @@ namespace CanDao.Pos.ServiceImpl
                 return string.Format("{0}异常：{1}", msg, exp);
             }
         }
+
         /// <summary>
         /// 打印会员消费
         /// </summary>
@@ -122,18 +100,12 @@ namespace CanDao.Pos.ServiceImpl
                 ErrLog.Instance.E(msg + "地址为空。");
                 return msg + "地址为空。";
             }
+
             try
             {
                 string parmAddr = string.Format("{0}/{1}/{2}/", addr, Userid, orderid);
                 var response = HttpHelper.HttpGet<JavaResponse>(parmAddr, null);
-                if (response.IsSuccess)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return string.Format("{0}错误：{1}", msg, response.msg);
-                }
+                return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
 
             }
             catch (Exception exp)
@@ -156,6 +128,7 @@ namespace CanDao.Pos.ServiceImpl
                 ErrLog.Instance.E(msg + "地址为空。");
                 return msg + "地址为空。";
             }
+
             try
             {
                 var param = new Dictionary<string, string>();
@@ -170,14 +143,7 @@ namespace CanDao.Pos.ServiceImpl
                 param.Add("storedPoint", storeInfo.ScoreBalance.ToString());
 
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
-                if (response.IsSuccess)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return string.Format("{0}错误：{1}", msg, response.msg);
-                }
+                return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
 
             }
             catch (Exception exp)
@@ -204,16 +170,9 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var param = new Dictionary<string, string>();
                 param.Add("flag", flag);
-           
+
                 var response = HttpHelper.HttpGet<JavaResponse>(addr, param);
-                if (response.IsSuccess)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return string.Format("{0}错误：{1}", msg, response.msg);
-                }
+                return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
 
             }
             catch (Exception exp)
@@ -236,20 +195,14 @@ namespace CanDao.Pos.ServiceImpl
                 ErrLog.Instance.E(msg + "地址为空。");
                 return msg + "地址为空。";
             }
+
             try
             {
                 var param = new Dictionary<string, string>();
                 param.Add("flag", flag);
 
                 var response = HttpHelper.HttpGet<JavaResponse>(addr, param);
-                if (response.IsSuccess)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return string.Format("{0}错误：{1}", msg, response.msg);
-                }
+                return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
 
             }
             catch (Exception exp)
@@ -258,6 +211,7 @@ namespace CanDao.Pos.ServiceImpl
                 return string.Format("{0}异常：{1}", msg, exp);
             }
         }
+
         /// <summary>
         /// 打印营业报表明细
         /// </summary>
@@ -281,15 +235,7 @@ namespace CanDao.Pos.ServiceImpl
                 param.Add("operationname", operationname);
 
                 var response = HttpHelper.HttpGet<JavaResponse>(addr, param);
-                if (response.IsSuccess)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return string.Format("{0}错误：{1}", msg, response.msg);
-                }
-
+                return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
             }
             catch (Exception exp)
             {
@@ -297,6 +243,7 @@ namespace CanDao.Pos.ServiceImpl
                 return string.Format("{0}异常：{1}", msg, exp);
             }
         }
+
         /// <summary>
         /// 打印发票小票
         /// </summary>
@@ -319,15 +266,7 @@ namespace CanDao.Pos.ServiceImpl
                 param.Add("amount", amount);
 
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
-                if (response.IsSuccess)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return string.Format("{0}错误：{1}", msg, response.msg);
-                }
-
+                return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
             }
             catch (Exception exp)
             {

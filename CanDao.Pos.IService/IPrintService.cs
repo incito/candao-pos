@@ -15,11 +15,11 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 打印预结，结算，客用
         /// </summary>
-        /// <param name="Userid"></param>
+        /// <param name="userid"></param>
         /// <param name="orderid"></param>
         /// <param name="printPayType">预结单=1；结账单=2；客用单=3</param>
         /// <returns></returns>
-        string PrintPay(string Userid, string orderid, EnumPrintPayType printPayType);
+        string PrintPay(string userid, string orderid, EnumPrintPayType printPayType);
         /// <summary>
         /// 打印清机单
         /// </summary>

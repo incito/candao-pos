@@ -187,10 +187,10 @@
                        Foreground="{StaticResource CanDaoPosColorFgFont}"
                        Width="85" Height="22"
                        Margin="20,10,0,0"/>
-            <TextBlock Text="{Binding DinnerCount, StringFormat=禁用开台({0})}"
+            <!--<TextBlock Text="{Binding DisableCount, StringFormat=禁用开台({0})}"
                        Foreground="{StaticResource CanDaoPosColorBgDisable}"
                        Width="85" Height="22"
-                       Margin="20,10,0,0"/>
+                       Margin="20,10,0,0"/>-->
         </StackPanel>
 
         <Grid Grid.Row="2" Margin="10,16,10,16">

@@ -26,11 +26,11 @@ namespace CanDao.Pos.ServiceImpl
                 AreaNo = response.areaid,
                 OrderId = response.orderid,
                 PeopleNumber = response.personNum,
-                TableStatus = (EnumTableStatus) response.status,
+                TableStatus = (EnumTableStatus)response.status,
                 TableId = response.tableid,
                 TableName = response.tableName,
                 TableNo = response.tableNo,
-                TableType = (EnumTableType) response.tabletype,
+                TableType = (EnumTableType)response.tabletype,
                 MinPrice = Math.Round(response.minprice, 2),
                 FixPrice = Math.Round(response.fixprice, 2),
                 BeginTime = Parse2DateTime(response.begintime, DateTimeFormat2),
@@ -47,7 +47,7 @@ namespace CanDao.Pos.ServiceImpl
                 ItemDesc = response.itemDesc,
                 ItemId = Parse2Int(response.itemid),
                 ItemSort = response.itemSort,
-                Type = (EnumSystemDataType) Enum.Parse(typeof (EnumSystemDataType), response.type),
+                Type = (EnumSystemDataType)Enum.Parse(typeof(EnumSystemDataType), response.type),
                 TypeName = response.typename,
                 Value = response.item_value,
             };
@@ -72,8 +72,8 @@ namespace CanDao.Pos.ServiceImpl
                 DishName = dishName,
                 RelateDishId = response.relatedishid,
                 DishNum = response.dishnum,
-                DishStatus = response.dishstatus != null ? (EnumDishStatus) response.dishstatus : EnumDishStatus.Normal,
-                DishType = (EnumDishType) response.dishtype,
+                DishStatus = response.dishstatus != null ? (EnumDishStatus)response.dishstatus : EnumDishStatus.Normal,
+                DishType = (EnumDishType)response.dishtype,
                 DishUnit = InternationaHelper.GetBeforeSeparatorFlagData(response.dishunit),
                 TempDishName = dishName.Contains("临时菜") ? response.avoid.Split('|')[2] : "",
                 SrcDishUnit = response.dishunit,
@@ -106,7 +106,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 DishId = response.dishid,
                 DishName = response.dishname,
-                DishType = (EnumDishType) response.dishtype,
+                DishType = (EnumDishType)response.dishtype,
                 DishUnit = InternationaHelper.GetBeforeSeparatorFlagData(response.unit),
                 SrcDishUnit = response.unit,
                 PriceSource = response.price ?? 0,
@@ -130,7 +130,7 @@ namespace CanDao.Pos.ServiceImpl
             var item = new MenuDishInfo
             {
                 DishName = InternationaHelper.GetBeforeSeparatorFlagData(response.title),
-                DishType = (EnumDishType) response.dishtype,
+                DishType = (EnumDishType)response.dishtype,
                 DishId = response.dishid,
                 GroupId = response.source,
                 Menuid = response.menuid,
@@ -162,13 +162,13 @@ namespace CanDao.Pos.ServiceImpl
                     (response.bill_amount != null && response.amount != null)
                         ? response.bill_amount - response.amount
                         : response.amount ?? 0, // 当账单金额和实际金额都有时，优免金额等于二者的差，否则等于实际金额。
-                Name = GetAnOrderValue(response.name, response.company_name, response.free_reason),
+                Name = DataHelper.GetNoneNullValueByOrder(response.name, response.company_name, response.free_reason),
                 PartnerName = response.company_name ?? "",
                 CouponId = response.preferential,
                 RuleId = response.id,
                 Color = response.color ?? "LightBlue",
                 DishId = response.dish,
-                CouponType = (EnumCouponType) response.type,
+                CouponType = (EnumCouponType)response.type,
                 Discount = response.discount ?? 0m,
                 HandCouponType = Convert2HandCounCouponType(response.free_reason),
                 IsUncommonlyUsed = response.status == "2",
@@ -192,8 +192,7 @@ namespace CanDao.Pos.ServiceImpl
         /// <param name="orderRemark">全单备注</param>
         /// <param name="dishInfos">点的菜品集合。</param>
         /// <returns></returns>
-        internal static OrderDishRequest ToOrderDishRequest(string orderId, string tableId, string orderRemark,
-            List<OrderDishInfo> dishInfos)
+        internal static OrderDishRequest ToOrderDishRequest(string orderId, string tableId, string orderRemark, List<OrderDishInfo> dishInfos)
         {
             var list = dishInfos.Where(t => !t.IsComboDish && !t.IsFishPotDish).ToList();
             //过滤掉套餐和鱼锅内部的菜，套餐和鱼锅内部的菜在套餐里面处理。
@@ -213,7 +212,7 @@ namespace CanDao.Pos.ServiceImpl
             return new BackDishInfo
             {
                 IsPot = Convert.ToBoolean(response.ispot),
-                DishType = (EnumDishType) response.dishtype,
+                DishType = (EnumDishType)response.dishtype,
                 IsMaster = Convert.ToBoolean(response.ismaster),
                 ChildDishType = response.childdishtype,
                 PrimaryKey = response.primarykey,
@@ -222,8 +221,7 @@ namespace CanDao.Pos.ServiceImpl
             };
         }
 
-        internal static BackDishRequest ToBackDishRequest(string orderId, string tableNo, string authorizerId,
-            string userId, OrderDishInfo dishInfo, decimal backDishNum, string backReason)
+        internal static BackDishRequest ToBackDishRequest(string orderId, string tableNo, string authorizerId, string userId, OrderDishInfo dishInfo, decimal backDishNum, string backReason)
         {
             if (dishInfo.DishType == EnumDishType.FishPot || dishInfo.IsFishPotDish)
             {
@@ -234,7 +232,7 @@ namespace CanDao.Pos.ServiceImpl
                     dishNo = dishInfo.DishId,
                     currenttableid = tableNo,
                     discardReason = backReason,
-                    dishtype = ((int) dishInfo.DishType).ToString(),
+                    dishtype = ((int)dishInfo.DishType).ToString(),
                     primarykey = dishInfo.PrimaryKey,
                     discardUserId = authorizerId,
                     dishunit = dishInfo.DishUnit,
@@ -253,7 +251,7 @@ namespace CanDao.Pos.ServiceImpl
                     dishNo = dishInfo.DishId,
                     currenttableid = tableNo,
                     discardReason = backReason,
-                    dishtype = ((int) dishInfo.DishType).ToString(),
+                    dishtype = ((int)dishInfo.DishType).ToString(),
                     primarykey = dishInfo.PrimaryKey,
                     discardUserId = authorizerId,
                     dishunit = dishInfo.DishUnit,
@@ -309,7 +307,7 @@ namespace CanDao.Pos.ServiceImpl
                 Name = response.name,
                 Mobile = response.mobile,
                 Birthday = DateTime.ParseExact(response.birthday, "yyyy-MM-dd", null),
-                Gender = (EnumGender) response.gender,
+                Gender = (EnumGender)response.gender,
                 StoredBalance = response.StoreCardBalance,
                 CardLevel = response.CardLevel,
                 Integral = response.IntegralOverall,
@@ -402,8 +400,7 @@ namespace CanDao.Pos.ServiceImpl
             return item;
         }
 
-        internal static ReportStatisticInfo ToReportStatisticInfo(
-            GetReportStatisticInfoBase<ReportTipInfoResponse> response)
+        internal static ReportStatisticInfo ToReportStatisticInfo(GetReportStatisticInfoBase<ReportTipInfoResponse> response)
         {
             var item = new ReportStatisticInfo
             {
@@ -473,7 +470,7 @@ namespace CanDao.Pos.ServiceImpl
                 Dueamount = response.dueamount,
                 EndTime = Parse2DateTime(response.endtime, DateTimeFormat),
                 OrderId = response.orderid,
-                OrderStatus = (EnumOrderStatus) response.orderstatus,
+                OrderStatus = (EnumOrderStatus)response.orderstatus,
                 TableId = response.tableids,
                 TableName = response.tableName,
                 UserId = response.userid,
@@ -497,7 +494,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 PrintIp = response.ip,
                 PrintName = response.name,
-                PrintStatus = (EnumPrintStatus) response.status,
+                PrintStatus = (EnumPrintStatus)response.status,
                 PrintStatusDes = response.statusTitle,
             };
         }
@@ -521,7 +518,7 @@ namespace CanDao.Pos.ServiceImpl
             return new MenuDishInfo
             {
                 DishName = response.title,
-                DishType = (EnumDishType) response.dishtype,
+                DishType = (EnumDishType)response.dishtype,
                 DishId = response.dishid,
                 GroupId = response.source,
                 NeedWeigh = Convert.ToBoolean(response.weigh),
@@ -560,7 +557,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 DishId = response.contactdishid,
                 DishName = response.contactdishname,
-                DishType = (EnumDishType) response.dishtype,
+                DishType = (EnumDishType)response.dishtype,
                 DishCount = response.dishnum,
                 Unit = InternationaHelper.GetBeforeSeparatorFlagData(response.dishunitid),
                 SrcUnit = response.dishunitid,
@@ -582,7 +579,7 @@ namespace CanDao.Pos.ServiceImpl
                 couponid = payInfo.CouponId,
                 couponnum = payInfo.CouponNum.ToString(),
                 payAmount = payInfo.PayAmount,
-                payWay = ((int) payInfo.PayType).ToString(),
+                payWay = ((int)payInfo.PayType).ToString(),
             };
         }
 
@@ -661,14 +658,14 @@ namespace CanDao.Pos.ServiceImpl
                 userName = dishInfo.UserName,
                 dishid = dishInfo.DishId,
                 dishunit = dishInfo.SrcDishUnit,
-                dishtype = ((int) dishInfo.DishType),
+                dishtype = ((int)dishInfo.DishType),
                 dishnum = dishInfo.DishNum,
-                pricetype = ((int) dishInfo.OrderType).ToString(),
+                pricetype = ((int)dishInfo.OrderType).ToString(),
                 orderprice = dishInfo.Price,
                 orignalprice = dishInfo.PriceSource,
                 orderid = dishInfo.OrderId,
                 primarykey = dishInfo.PrimaryKey,
-                dishstatus = ((int) dishInfo.DishStatus).ToString(),
+                dishstatus = ((int)dishInfo.DishStatus).ToString(),
                 ispot = dishInfo.IsPot ? 1 : 0,
                 freeuser = dishInfo.FreeUserId,
                 freeauthorize = dishInfo.FreeAuthorizeId,
@@ -678,8 +675,7 @@ namespace CanDao.Pos.ServiceImpl
             };
         }
 
-        private static TableFullInfo ToTableFullInfo(TableFullInfoResponse orderResponse,
-            List<OrderDishDataResponse> dishResponses)
+        private static TableFullInfo ToTableFullInfo(TableFullInfoResponse orderResponse, List<OrderDishDataResponse> dishResponses)
         {
             var item = new TableFullInfo
             {
@@ -688,16 +684,16 @@ namespace CanDao.Pos.ServiceImpl
                 OrderId = orderResponse.orderid,
                 PeopleNumber = orderResponse.personNum,
                 CustomerNumber = orderResponse.custnum,
-                TableStatus = (EnumTableStatus) orderResponse.status,
+                TableStatus = (EnumTableStatus)orderResponse.status,
                 TableId = orderResponse.tableid,
                 TableName = orderResponse.tableName,
                 TableNo = orderResponse.tableNo,
-                TableType = (EnumTableType) orderResponse.tabletype,
+                TableType = (EnumTableType)orderResponse.tabletype,
                 MinPrice = orderResponse.minprice,
                 FixPrice = orderResponse.fixprice,
                 TotalAmount = orderResponse.dueamount,
                 MemberNo = orderResponse.memberno,
-                OrderStatus = (EnumOrderStatus) orderResponse.orderstatus,
+                OrderStatus = (EnumOrderStatus)orderResponse.orderstatus,
                 WaiterId = orderResponse.userid,
                 TipAmount = orderResponse.tipAmount ?? 0,
             };
@@ -808,7 +804,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                return (EnumHandCouponType) Enum.Parse(typeof (EnumHandCouponType), freeReason);
+                return (EnumHandCouponType)Enum.Parse(typeof(EnumHandCouponType), freeReason);
             }
             catch (Exception)
             {
@@ -880,13 +876,13 @@ namespace CanDao.Pos.ServiceImpl
 
         internal static TableFullInfo ToOrderInfo(GetOrderInfoResponse response)
         {
-            var tableFullInfo=new TableFullInfo();
-            AddDishInfos(response.data.rows,ref tableFullInfo);
+            var tableFullInfo = new TableFullInfo();
+            AddDishInfos(response.data.rows, ref tableFullInfo);
             ToAccount(response.data.preferentialInfo, ref tableFullInfo);
             ToTableBaseInfo(response.data.userOrderInfo, ref tableFullInfo);
             return tableFullInfo;
         }
-       
+
 
         /// <summary>
         /// 添加菜品到菜单信息里
@@ -895,11 +891,11 @@ namespace CanDao.Pos.ServiceImpl
         /// <param name="tableFullInfo"></param>
         internal static void AddDishInfos(List<DishInfosResponse> dishInfosResponse, ref TableFullInfo tableFullInfo)
         {
-            if (dishInfosResponse != null )
+            if (dishInfosResponse != null)
             {
                 foreach (var dish in dishInfosResponse)
                 {
-                    if (dish.dishes != null ) //套餐和鱼锅
+                    if (dish.dishes != null) //套餐和鱼锅
                     {
                         var masterItem = ToDishInfo(dish, dish.dishid);
                         tableFullInfo.DishInfos.Add(masterItem);
@@ -965,9 +961,9 @@ namespace CanDao.Pos.ServiceImpl
             tableFullInfo.PaymentAmount = preferential.payamount;
             tableFullInfo.TipAmount = preferential.tipAmount;
             tableFullInfo.TotalAmount = preferential.menuAmount;
-            
-            if(preferential.detailPreferentials==null)
-            { return;}
+
+            if (preferential.detailPreferentials == null)
+            { return; }
 
             foreach (var info in preferential.detailPreferentials)
             {
@@ -986,10 +982,10 @@ namespace CanDao.Pos.ServiceImpl
         internal static void ToTableBaseInfo(UserOrderInfo userOrderInfo, ref TableFullInfo tableFullInfo)
         {
             tableFullInfo.MemberNo = userOrderInfo.memberno;
-            tableFullInfo.OrderStatus = (EnumOrderStatus) userOrderInfo.orderStatus;
+            tableFullInfo.OrderStatus = (EnumOrderStatus)userOrderInfo.orderStatus;
             tableFullInfo.CustomerNumber = userOrderInfo.customerNumber;
             tableFullInfo.OrderInvoiceTitle = userOrderInfo.orderInvoiceTitle;
-            tableFullInfo.OrderId= userOrderInfo.orderid;
+            tableFullInfo.OrderId = userOrderInfo.orderid;
             tableFullInfo.TableStatus = (EnumTableStatus)userOrderInfo.tableStatus;
         }
         #endregion

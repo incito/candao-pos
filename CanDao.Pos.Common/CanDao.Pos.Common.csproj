@@ -108,6 +108,7 @@
     <Compile Include="Converter\MultBooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\PaiedStatus2StringConverter.cs" />
     <Compile Include="Converter\QueryOrderStatusToCheckedConverter.cs" />
+    <Compile Include="DataHelper.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="HttpLog.cs" />
     <Compile Include="BaseViewModel.cs" />

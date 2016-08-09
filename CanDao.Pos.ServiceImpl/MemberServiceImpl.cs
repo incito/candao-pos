@@ -26,7 +26,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberQueryResponse>(addr, request);
                 if (!response.IsSuccess)
-                    return new Tuple<string, MemberInfo>(response.RetInfo ?? "会员查询失败。", null);
+                    return new Tuple<string, MemberInfo>(DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员查询失败。"), null);
 
                 var result = DataConverter.ToMemberInfo(response);
                 return new Tuple<string, MemberInfo>(null, result);
@@ -50,7 +50,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberStorageResponse>(addr, request);
                 if (!response.IsSuccess)
-                    return new Tuple<string, CanDaoMemberStorageResponse>(response.RetInfo ?? "储值失败。", null);
+                    return new Tuple<string, CanDaoMemberStorageResponse>(DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员储值失败。"), null);
 
                 return new Tuple<string, CanDaoMemberStorageResponse>(null, response);
             }
@@ -72,7 +72,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, request);
-                return !response.IsSuccess ? response.RetInfo ?? "修改餐道会员密码失败。" : null;
+                return !response.IsSuccess ? DataHelper.GetNoneNullValueByOrder(response.RetInfo, "修改餐道会员密码失败。") : null;
             }
             catch (Exception exp)
             {
@@ -92,8 +92,7 @@ namespace CanDao.Pos.ServiceImpl
                 var response = HttpHelper.HttpPost<SendVerifyCodeResponse>(addr, request);
                 if (!response.IsSuccess)
                 {
-                    var msg = string.Format("发送验证码失败。{0}", response.RetInfo ?? "发送验证码失败。");
-                    ErrLog.Instance.E(msg);
+                    var msg = DataHelper.GetNoneNullValueByOrder(response.RetInfo, "发送验证码失败。");
                     return new Tuple<string, SendVerifyCodeResponse>(msg, null);
                 }
 
@@ -110,16 +109,12 @@ namespace CanDao.Pos.ServiceImpl
         {
             var addr = ServiceAddrCache.GetServiceAddr("MobileRepeatCheck");
             if (string.IsNullOrEmpty(addr))
-            {
-                var msg = "检测会员手机号是否重复地址为空。";
-                ErrLog.Instance.E(msg);
-                return msg;
-            }
+                return "检测会员手机号是否重复地址为空。";
 
             try
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, request);
-                return response.IsSuccess ? null : (!string.IsNullOrEmpty(response.RetInfo) ? response.RetInfo : "检测手机号是否重复时错误。");
+                return response.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(response.RetInfo, "检测手机号是否重复时错误。");
             }
             catch (Exception exp)
             {
@@ -141,7 +136,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, request);
-                return response.IsSuccess ? null : (string.IsNullOrEmpty(response.RetInfo) ? "会员注册失败。" : response.RetInfo);
+                return response.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员注册失败。");
             }
             catch (Exception exp)
             {
@@ -163,7 +158,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, request);
-                return response.IsSuccess ? null : (string.IsNullOrEmpty(response.RetInfo) ? "会员挂失失败。" : response.RetInfo);
+                return response.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员挂失失败。");
             }
             catch (Exception exp)
             {
@@ -181,7 +176,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, request);
-                return response.IsSuccess ? null : (string.IsNullOrEmpty(response.RetInfo) ? "会员注销失败。" : response.RetInfo);
+                return response.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员注销失败。");
             }
             catch (Exception exp)
             {
@@ -200,7 +195,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberSaleResponse>(addr, request);
                 if (!response.IsSuccess)
-                    return new Tuple<string, CanDaoMemberSaleResponse>(!string.IsNullOrEmpty(response.RetInfo) ? response.RetInfo : "会员消费结算失败。", null);
+                    return new Tuple<string, CanDaoMemberSaleResponse>(DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员消费结算失败。"), null);
 
                 return new Tuple<string, CanDaoMemberSaleResponse>(null, response);
             }
@@ -220,12 +215,13 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberSaleResponse>(addr, request);
                 if (!response.IsSuccess)
-                    return !string.IsNullOrEmpty(response.RetInfo) ? response.RetInfo : "会员消费反结算失败。";
+                    return DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员消费反结算失败。");
 
                 return null;
             }
             catch (Exception exp)
             {
+                ErrLog.Instance.E("会员消费反结算时异常。", exp);
                 return string.Format("会员消费反结算时异常：{0}", exp.Message);
             }
         }
@@ -244,10 +240,11 @@ namespace CanDao.Pos.ServiceImpl
                     mobile = memberCardNo,
                 };
                 var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
-                return result.IsSuccess ? null : (string.IsNullOrEmpty(result.msg) ? "餐道会员登录失败。" : result.msg);
+                return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "餐道会员登录失败。");
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("餐道会员登入时异常。", ex);
                 return "餐道会员登入失败：" + ex.MyMessage();
             }
         }
@@ -266,10 +263,11 @@ namespace CanDao.Pos.ServiceImpl
                     mobile = memberCardNo,
                 };
                 var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
-                return result.IsSuccess ? null : (string.IsNullOrEmpty(result.msg) ? "餐道会员登出失败。" : result.msg);
+                return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "餐道会员登出失败。");
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("餐道会员登出时异常。", ex);
                 return "餐道会员登出失败：" + ex.MyMessage();
             }
         }
@@ -283,10 +281,11 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var result = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, request);
-                return result.IsSuccess ? null : (string.IsNullOrEmpty(result.RetInfo) ? "添加餐道会员消费信息失败。" : result.RetInfo);
+                return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.RetInfo, "添加餐道会员消费信息失败。");
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("添加餐道会员消费信息时异常。", ex);
                 return "添加餐道会员消费信息失败：" + ex.MyMessage();
             }
         }
@@ -305,13 +304,14 @@ namespace CanDao.Pos.ServiceImpl
                     return new Tuple<string, PrintMemberPayInfo>(result.Item1, null);
 
                 if (!result.Item2.IsSuccess)
-                    return new Tuple<string, PrintMemberPayInfo>(string.IsNullOrEmpty(result.Item2.Info) ? "获取会员消费打印信息失败。" : result.Item2.Info, null);
+                    return new Tuple<string, PrintMemberPayInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "获取会员消费打印信息失败。"), null);
 
                 var data = DataConverter.ToPrintMemberPayInfo(result.Item2.OrderJson.First());
                 return new Tuple<string, PrintMemberPayInfo>(null, data);
             }
             catch (Exception ex)
             {
+                ErrLog.Instance.E("获取会员消费打印信息时异常。", ex);
                 return new Tuple<string, PrintMemberPayInfo>(ex.MyMessage(), null);
             }
         }
@@ -341,14 +341,15 @@ namespace CanDao.Pos.ServiceImpl
 
                 var response = HttpHelper.HttpPost<CanDaoVipQueryResponse>(addr, parm);
                 if (!response.IsSuccess)
-                    return new Tuple<string, MVipInfo>(response.retInfo ?? "会员查询失败。", null);
+                    return new Tuple<string, MVipInfo>(DataHelper.GetNoneNullValueByOrder(response.retInfo, "会员查询失败。"), null);
 
                 var result = DataConverter.ToVipInfo(response);
                 return new Tuple<string, MVipInfo>(null, result);
             }
-            catch (Exception exp)
+            catch (Exception ex)
             {
-                return new Tuple<string, MVipInfo>(exp.MyMessage(), null);
+                ErrLog.Instance.E("会员查询时异常。", ex);
+                return new Tuple<string, MVipInfo>(ex.MyMessage(), null);
             }
         }
 
@@ -363,11 +364,13 @@ namespace CanDao.Pos.ServiceImpl
         {
             var addr = ServiceAddrCache.GetServiceAddr("VipChangeCardNum");
 
-            var parm = new Dictionary<string, string>();
-            parm.Add("branch_id", branchId);
-            parm.Add("securitycode", "");
-            parm.Add("cardno", cardNum);
-            parm.Add("new_cardno", newCardNum);
+            var parm = new Dictionary<string, string>
+            {
+                {"branch_id", branchId},
+                {"securitycode", ""},
+                {"cardno", cardNum},
+                {"new_cardno", newCardNum}
+            };
 
             if (string.IsNullOrEmpty(addr))
             {
@@ -378,7 +381,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var response = HttpHelper.HttpPost<CanDaoVipBaseResponse>(addr, parm);
-                return !response.IsSuccess ? response.retInfo ?? "修改会员卡号失败。" : null;
+                return !response.IsSuccess ? DataHelper.GetNoneNullValueByOrder(response.retInfo, "修改会员卡号失败。") : null;
             }
             catch (Exception exp)
             {
@@ -418,9 +421,8 @@ namespace CanDao.Pos.ServiceImpl
                 parm.Add("birthday", changeInfo.Birthday);
                 parm.Add("member_address", changeInfo.Address);
 
-
                 var response = HttpHelper.HttpPost<CanDaoVipBaseResponse>(addr, parm);
-                return !response.IsSuccess ? response.retInfo ?? msg + "失败。" : null;
+                return !response.IsSuccess ? DataHelper.GetNoneNullValueByOrder(response.retInfo, msg + "失败。") : null;
             }
             catch (Exception exp)
             {
@@ -457,7 +459,7 @@ namespace CanDao.Pos.ServiceImpl
                 parm.Add("level", level);
 
                 var response = HttpHelper.HttpPost<CanDaoVipBaseResponse>(addr, parm);
-                return !response.IsSuccess ? response.retInfo ?? msg + "失败。" : null;
+                return !response.IsSuccess ? DataHelper.GetNoneNullValueByOrder(response.retInfo, msg + "失败。") : null;
             }
             catch (Exception exp)
             {
@@ -490,7 +492,7 @@ namespace CanDao.Pos.ServiceImpl
                 parm.Add("branch_id", branchId);
 
                 var response = HttpHelper.HttpPost<VipCheckCardResponse>(addr, parm);
-                return !response.IsSuccess ? response.msg ?? msg + "失败。" : null;
+                return !response.IsSuccess ? DataHelper.GetNoneNullValueByOrder(response.msg, msg + "失败。") : null;
             }
             catch (Exception exp)
             {
@@ -518,7 +520,6 @@ namespace CanDao.Pos.ServiceImpl
             }
             try
             {
-
                 var parm = new Dictionary<string, object>();
                 parm.Add("mobile", cardno);
                 parm.Add("branch_id", branchId);
@@ -526,7 +527,7 @@ namespace CanDao.Pos.ServiceImpl
                 parm.Add("password", password);
 
                 var response = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, parm);
-                return !response.IsSuccess ? response.RetInfo ?? msg + "失败。" : null;
+                return !response.IsSuccess ? DataHelper.GetNoneNullValueByOrder(response.RetInfo, msg + "失败。") : null;
             }
             catch (Exception exp)
             {
