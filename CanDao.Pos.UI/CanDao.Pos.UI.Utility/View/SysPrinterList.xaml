@@ -7,9 +7,6 @@
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding RefreshCmd}" CommandParameter="CtrlLoaded"/>
         </i:EventTrigger>
-        <i:EventTrigger EventName="Unloaded">
-            <i:InvokeCommandAction Command="{Binding CtrlUnloadedCmd}"/>
-        </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.Resources>
         <ResourceDictionary>

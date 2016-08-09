@@ -12,5 +12,13 @@ namespace CanDao.Pos.UI.Utility.View
             InitializeComponent();
             DataContext = new SysPrinterListVm { OwnerCtrl = this };
         }
+
+        /// <summary>
+        /// 释放定时器资源。
+        /// </summary>
+        public void DisposeTimer()
+        {
+            ((SysPrinterListVm)DataContext).DisposeTimer();
+        }
     }
 }

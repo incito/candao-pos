@@ -619,7 +619,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             var removedTables = CfTables.Where(t => tableInfos.All(y => y.TableId != t.TableId)).ToList();
             if (removedTables.Any())
-                removedTables.ForEach(t => Tables.Remove(t));
+                removedTables.ForEach(t => CfTables.Remove(t));
 
             foreach (var cfTable in CfTables) { cfTable.UpdateDinnerDuration(); }
         }

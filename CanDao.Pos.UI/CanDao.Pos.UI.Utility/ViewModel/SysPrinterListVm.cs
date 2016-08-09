@@ -38,7 +38,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 InitRefreshTimer();
                 PrinterStatusInfos = new ObservableCollection<PrintStatusInfo>();
                 RefreshCmd = CreateDelegateCommand(Refresh);
-                CtrlUnloadedCmd = CreateDelegateCommand(CtrlUnloaded);
                 GroupCmd = CreateDelegateCommand(Group, CanGroup);
             }
         }
@@ -102,11 +101,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public ICommand RefreshCmd { get; private set; }
 
         /// <summary>
-        /// 控件卸载事件命令。
-        /// </summary>
-        public ICommand CtrlUnloadedCmd { get; private set; }
-
-        /// <summary>
         /// 分组命令。
         /// </summary>
         public ICommand GroupCmd { get; private set; }
@@ -168,7 +162,14 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
         }
 
-        private void CtrlUnloaded(object param)
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// 释放定时器资源。
+        /// </summary>
+        public void DisposeTimer()
         {
             if (_refreshTimer != null)
             {
