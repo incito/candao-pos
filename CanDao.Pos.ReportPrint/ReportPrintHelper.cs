@@ -319,7 +319,7 @@ namespace CanDao.Pos.ReportPrint
 
                 InfoLog.Instance.I("开始打印清机单报表...");
                 var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
-                     .PrintClearMachine(userId, "", SystemConfigCache.PosId);
+                     .PrintClearMachine(userId, "0", SystemConfigCache.PosId);
                 if (string.IsNullOrEmpty(res))
                 {
                     InfoLog.Instance.I("结束打印清机单报表。");

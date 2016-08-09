@@ -74,7 +74,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                string parmAddr = string.Format("{0}/{1}/{2}/{3}", addr, Userid, jsorder, posid);
+                string parmAddr = string.Format("{0}/{1}/{2}/{3}/", addr, Userid, jsorder, posid);
                 var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null);
                 return response.IsSuccess ? null : string.Format("{0}错误：{1}", msg, response.msg);
             }
