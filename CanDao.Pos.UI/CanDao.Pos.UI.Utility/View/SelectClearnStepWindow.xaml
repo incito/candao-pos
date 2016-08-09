@@ -19,8 +19,13 @@
         </Grid.RowDefinitions>
         <TextBlock Text="请选择倒班或结业：" FontSize="24" Foreground="#FF333333" Margin="0,20,0,20" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15" HorizontalAlignment="Center">
-            <Button Command="{Binding ChangeShiftCmd}" Width="180" Height="60" Style="{StaticResource ChangeShiftBtnStyle}"/>
-            <Button Command="{Binding EndWorkCmd}" Width="180" Height="60" Margin="15,0,0,0" Style="{StaticResource EndWorkBtnStyle}"/>
+            <Button Command="{Binding OperCmd}" CommandParameter="ChangeShift"
+                    Width="180" Height="60"
+                    Style="{StaticResource ChangeShiftBtnStyle}"/>
+            <Button Command="{Binding OperCmd}" CommandParameter="EndWork"
+                    Width="180" Height="60"
+                    Margin="15,0,0,0"
+                    Style="{StaticResource EndWorkBtnStyle}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10" Visibility="{Binding AllowEndWork, Converter={StaticResource Bool2CollapsedCvt}}">
             <Image Source="{StaticResource CanDaoPosImageWarning}" Height="16"/>

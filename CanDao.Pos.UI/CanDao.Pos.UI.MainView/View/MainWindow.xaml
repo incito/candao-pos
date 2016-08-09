@@ -193,7 +193,7 @@
                        Margin="20,10,0,0"/>
         </StackPanel>
 
-        <Grid Grid.Row="2" Margin="10,26,10,17">
+        <Grid Grid.Row="2" Margin="10,16,10,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -238,11 +238,11 @@
                         <Binding Path="GroupCount" ElementName="GsTables" Converter="{StaticResource Count2BoolInvertCvt}" ConverterParameter="0_1"/>
                     </MultiBinding>
                 </StackPanel.Visibility>
-                <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding OperCmd}" CommandParameter="NormalTablesPreGroup"/>
+                <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding GroupCmd}" CommandParameter="NormalTablesPreGroup"/>
                 <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsTables}"/>
                 <TextBlock Text="/"/>
                 <TextBlock Text="{Binding GroupCount, ElementName=GsTables}"/>
-                <Button Style="{StaticResource BtnRightStyle}" Command="{Binding OperCmd}" CommandParameter="NormalTablesNextGroup"/>
+                <Button Style="{StaticResource BtnRightStyle}" Command="{Binding GroupCmd}" CommandParameter="NormalTablesNextGroup"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1"
@@ -254,11 +254,11 @@
                         <Binding Path="GroupCount" ElementName="GsCfTables" Converter="{StaticResource Count2BoolInvertCvt}" ConverterParameter="0_1"/>
                     </MultiBinding>
                 </StackPanel.Visibility>
-                <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding OperCmd}" CommandParameter="CfTablesPreGroup"/>
+                <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding GroupCmd}" CommandParameter="CfTablesPreGroup"/>
                 <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsCfTables}"/>
                 <TextBlock Text="/"/>
                 <TextBlock Text="{Binding GroupCount, ElementName=GsCfTables}"/>
-                <Button Style="{StaticResource BtnRightStyle}" Command="{Binding OperCmd}" CommandParameter="CfTablesNextGroup"/>
+                <Button Style="{StaticResource BtnRightStyle}" Command="{Binding GroupCmd}" CommandParameter="CfTablesNextGroup"/>
             </StackPanel>
         </Grid>
 

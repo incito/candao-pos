@@ -112,11 +112,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand OrderStatusCheckCmd { get; private set; }
 
-        /// <summary>
-        /// 操作命令集合。
-        /// </summary>
-        public ICommand OperCmd { get; private set; }
-
         #endregion
 
         #region Command Methods
@@ -141,13 +136,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
-        /// <summary>
-        /// 操作命令的执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        private void Oper(object arg)
+        #endregion
+
+        #region Protected  Methods
+
+        protected override void InitCommand()
         {
-            switch (arg as string)
+            base.InitCommand();
+            OrderStatusCheckCmd = CreateDelegateCommand(OrderStatusCheck);
+        }
+
+        protected override void OperMethod(object param)
+        {
+            switch (param as string)
             {
                 case "Load":
                 case "Refresh":
@@ -174,42 +175,22 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
-        /// <summary>
-        /// 操作命令是否可用的判断方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private bool CanOper(object arg)
+        protected override bool CanOperMethod(object param)
         {
-            var enable = true;
-            switch (arg as string)
+            switch (param as string)
             {
                 case "ReprintPayBill":
                 case "AntiPayBill":
-                    enable = SelectedOrder != null && SelectedOrder.HasBeenPaied;
-                    break;
+                    return SelectedOrder != null && SelectedOrder.HasBeenPaied;
                 case "PayBill":
-                    enable = SelectedOrder != null && !SelectedOrder.HasBeenPaied;
-                    break;
+                    return SelectedOrder != null && !SelectedOrder.HasBeenPaied;
                 case "PreGroup":
-                    enable = ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.CanPreviousGroup;
-                    break;
+                    return ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.CanPreviousGroup;
                 case "NextGroup":
-                    enable = ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.CanNextGruop;
-                    break;
+                    return ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.CanNextGruop;
+                default:
+                    return true;
             }
-            return enable;
-        }
-
-        #endregion
-
-        #region Protected  Methods
-
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            OrderStatusCheckCmd = CreateDelegateCommand(OrderStatusCheck);
-            OperCmd = CreateDelegateCommand(Oper, CanOper);
         }
 
         #endregion

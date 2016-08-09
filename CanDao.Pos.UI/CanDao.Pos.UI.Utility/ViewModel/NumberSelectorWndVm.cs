@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using CanDao.Pos.Common;
+﻿using CanDao.Pos.Common;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {

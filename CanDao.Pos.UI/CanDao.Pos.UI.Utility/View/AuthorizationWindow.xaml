@@ -10,7 +10,7 @@
                        WindowStartupLocation="CenterScreen">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="PreviewKeyDown">
-            <common:ExInvokeCommandAction  Command="{Binding PreKeyDownCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
+            <common:ExInvokeCommandAction  Command="{Binding PreviewKeyDownCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <controls:PosMsgWindow.Resources>

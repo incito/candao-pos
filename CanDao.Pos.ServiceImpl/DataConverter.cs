@@ -613,6 +613,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             if (string.IsNullOrEmpty(value))
                 return defaulTime;
+
             try
             {
                 return DateTime.ParseExact(value, format, null);

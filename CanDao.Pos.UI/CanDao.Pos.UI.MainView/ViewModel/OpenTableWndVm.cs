@@ -3,7 +3,6 @@ using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Request;
-using CanDao.Pos.UI.Utility;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {

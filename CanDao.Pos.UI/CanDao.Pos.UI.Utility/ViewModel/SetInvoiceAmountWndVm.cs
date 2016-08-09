@@ -2,7 +2,6 @@
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
-using CanDao.Pos.ReportPrint;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {

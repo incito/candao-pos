@@ -12,7 +12,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             AllowEndWork = allowEndWork;
             AllowChangeShift = allowClearn;
         }
-        
+
         #endregion
 
         #region Properties
@@ -34,48 +34,34 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #endregion
 
-        #region Command
-
-        public ICommand ChangeShiftCmd { get; private set; }
-
-        public ICommand EndWorkCmd { get; set; }
-
-        #endregion
-
-        #region Command Methods
-
-        private void ChangeShift(object arg)
-        {
-            IsEndWork = false;
-            CloseWindow(true);
-        }
-
-        private bool CanChangeShift(object arg)
-        {
-            return AllowChangeShift;
-        }
-
-        private void EndWork(object arg)
-        {
-            IsEndWork = true;
-            CloseWindow(true);
-        }
-
-        private bool CanEndWork(object arg)
-        {
-            return AllowEndWork;
-        }
-
-        #endregion
-
         #region Protected Methods
 
-        protected override void InitCommand()
+        protected override void OperMethod(object param)
         {
-            base.InitCommand();
-            ChangeShiftCmd = CreateDelegateCommand(ChangeShift, CanChangeShift);
-            EndWorkCmd = CreateDelegateCommand(EndWork, CanEndWork);
-        } 
+            switch ((string)param)
+            {
+                case "ChangeShift":
+                    IsEndWork = false;
+                    break;
+                case "EndWork":
+                    IsEndWork = true;
+                    break;
+            }
+            CloseWindow(true);
+        }
+
+        protected override bool CanOperMethod(object param)
+        {
+            switch ((string)param)
+            {
+                case "ChangeShift":
+                    return AllowChangeShift;
+                case "EndWork":
+                    return AllowEndWork;
+                default:
+                    return true;
+            }
+        }
 
         #endregion
     }

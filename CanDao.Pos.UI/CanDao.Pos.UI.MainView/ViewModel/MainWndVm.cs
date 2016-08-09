@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Timers;
 using System.Windows;
@@ -12,7 +11,6 @@ using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
-using CanDao.Pos.Model.Request;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
@@ -64,7 +62,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Constructor
 
         /// <summary>
-        /// 
+        /// 实例化一个POS主界面窗口。
         /// </summary>
         /// <param name="isForcedEndWorkModel">是否是强制结业模式。</param>
         public MainWndVm(bool isForcedEndWorkModel)
@@ -194,11 +192,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand SelectTableCmd { get; private set; }
 
-        /// <summary>
-        /// 操作命令。
-        /// </summary>
-        public ICommand OperCmd { get; private set; }
-
         #endregion
 
         #region Command Methods
@@ -221,73 +214,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            WindowHelper.ShowDialog(new TableOperWindow(tableInfo) { Owner = OwnerWindow });
-
+            WindowHelper.ShowDialog(new TableOperWindow(tableInfo), OwnerWindow);
             GetAllTableInfoesAsync();
-            RefreshRemainSecond = RefreshTimerInterval;
-        }
-
-        /// <summary>
-        /// 操作命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void OperMethod(object param)
-        {
-            SetRefreshTimerStatus(false);
-            switch ((string)param)
-            {
-                case "Takeout"://外卖
-                    TakeoutTable();
-                    break;
-                case "QueryOrderHistory"://账单历史
-                    WindowHelper.ShowDialog(new QueryOrderHistoryWindow(), OwnerWindow);
-                    break;
-                case "Clearner"://清机
-                    ClearnMachine();
-                    break;
-                case "EndWork"://结业
-                    if (MessageDialog.Quest("确定要结业吗？"))
-                        EndWork();
-                    break;
-                case "Report"://报表
-                    WindowHelper.ShowDialog(new ReportViewWindow(), OwnerWindow);
-                    break;
-                case "System"://系统
-                    SetPrinterCheckTimerStatus(false);
-                    WindowHelper.ShowDialog(new SystemSettingWindow(), OwnerWindow);
-                    SetPrinterCheckTimerStatus(true);
-                    break;
-                case "NormalTablesPreGroup":
-                    ((MainWindow)OwnerWindow).GsTables.PreviousGroup();
-                    break;
-                case "NormalTablesNextGroup":
-                    ((MainWindow)OwnerWindow).GsTables.NextGroup();
-                    break;
-                case "CfTablesPreGroup":
-                    ((MainWindow)OwnerWindow).GsCfTables.PreviousGroup();
-                    break;
-                case "CfTablesNextGroup":
-                    ((MainWindow)OwnerWindow).GsCfTables.NextGroup();
-                    break;
-            }
-            SetRefreshTimerStatus(true);
-        }
-
-        private bool CanOper(object param)
-        {
-            switch ((string)param)
-            {
-                case "NormalTablesPreGroup":
-                    return ((MainWindow)OwnerWindow).GsTables.CanPreviousGroup;
-                case "NormalTablesNextGroup":
-                    return ((MainWindow)OwnerWindow).GsTables.CanNextGruop;
-                case "CfTablesPreGroup":
-                    return ((MainWindow)OwnerWindow).GsCfTables.CanPreviousGroup;
-                case "CfTablesNextGroup":
-                    return ((MainWindow)OwnerWindow).GsCfTables.CanNextGruop;
-                default:
-                    return true;
-            }
         }
 
         #endregion
@@ -298,7 +226,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             base.InitCommand();
             SelectTableCmd = CreateDelegateCommand(SelectTable);
-            OperCmd = CreateDelegateCommand(OperMethod, CanOper);
         }
 
         protected override void OnWindowLoaded(object param)
@@ -307,7 +234,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 SetRefreshTimerStatus(false);
                 GetAllTableInfoesAsync();
-                RefreshRemainSecond = RefreshTimerInterval;
                 ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
 
                 if (Globals.IsDinnerWareEnable)
@@ -354,7 +280,73 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             _isDisposed = true;
-            Application.Current.Shutdown(1);//尝试解决有时候退出主窗口程序依然在运行的问题。
+            Application.Current.Shutdown();//尝试解决有时候退出主窗口程序依然在运行的问题。
+        }
+
+        protected override void OperMethod(object param)
+        {
+            SetRefreshTimerStatus(false);
+            switch ((string)param)
+            {
+                case "Takeout"://外卖
+                    TakeoutTable();
+                    break;
+                case "QueryOrderHistory"://账单历史
+                    WindowHelper.ShowDialog(new QueryOrderHistoryWindow(), OwnerWindow);
+                    break;
+                case "Clearner"://清机
+                    ClearnMachine();
+                    break;
+                case "EndWork"://结业
+                    if (MessageDialog.Quest("确定要结业吗？"))
+                        EndWork();
+                    break;
+                case "Report"://报表
+                    WindowHelper.ShowDialog(new ReportViewWindow(), OwnerWindow);
+                    break;
+                case "System"://系统
+                    SetPrinterCheckTimerStatus(false);
+                    WindowHelper.ShowDialog(new SystemSettingWindow(), OwnerWindow);
+                    SetPrinterCheckTimerStatus(true);
+                    break;
+            }
+            SetRefreshTimerStatus(true);
+        }
+
+        protected override void GroupMethod(object param)
+        {
+            switch ((string)param)
+            {
+                case "NormalTablesPreGroup":
+                    ((MainWindow)OwnerWindow).GsTables.PreviousGroup();
+                    break;
+                case "NormalTablesNextGroup":
+                    ((MainWindow)OwnerWindow).GsTables.NextGroup();
+                    break;
+                case "CfTablesPreGroup":
+                    ((MainWindow)OwnerWindow).GsCfTables.PreviousGroup();
+                    break;
+                case "CfTablesNextGroup":
+                    ((MainWindow)OwnerWindow).GsCfTables.NextGroup();
+                    break;
+            }
+        }
+
+        protected override bool CanGroupMethod(object param)
+        {
+            switch ((string)param)
+            {
+                case "NormalTablesPreGroup":
+                    return ((MainWindow)OwnerWindow).GsTables.CanPreviousGroup;
+                case "NormalTablesNextGroup":
+                    return ((MainWindow)OwnerWindow).GsTables.CanNextGruop;
+                case "CfTablesPreGroup":
+                    return ((MainWindow)OwnerWindow).GsCfTables.CanPreviousGroup;
+                case "CfTablesNextGroup":
+                    return ((MainWindow)OwnerWindow).GsCfTables.CanNextGruop;
+                default:
+                    return true;
+            }
         }
 
         #endregion
@@ -455,6 +447,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (HasPrinterError && DateTime.Now >= _nextWarningTime)
             {
                 var errMsg = string.Format("检测到{0}个打印机异常，请到\"系统\">\"打印机列表\"查看并修复。", errPrintCount);
+                InfoLog.Instance.I(errMsg);
                 OwnerWindow.Dispatcher.Invoke((Action)delegate
                 {
                     var wnd = new PrinterErrorInfoWindow(errMsg, NextMaxWarningInterval);
@@ -481,27 +474,22 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 if (DateTime.Now > Globals.TradeTime.BeginTime)//当前时间大于开业时间，强制结业
                 {
                     Globals.TradeTime.BeginTime = Globals.TradeTime.BeginTime.AddDays(1);
-                    OwnerWindow.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        MessageDialog.Warning("昨天还未结业，请先结业。", OwnerWindow);
-                    });
+                    InfoLog.Instance.I("检测到当前时间大于开业时间，触发强制结业流程...");
+                    OwnerWindow.Dispatcher.BeginInvoke((Action)delegate { MessageDialog.Warning("昨天还未结业，请先结业。", OwnerWindow); });
 
                     IsForcedEndWorkModel = true;
                 }
                 else if (DateTime.Now > Globals.TradeTime.EndTime.AddSeconds(10))//当前时间大于结业时间，提示结业，与真实的时间提前10秒。
                 {
                     Globals.TradeTime.EndTime = Globals.TradeTime.EndTime.AddDays(1);
-                    OwnerWindow.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        MessageDialog.Warning("结业时间到了，请及时结业。", OwnerWindow);
-                    });
+                    InfoLog.Instance.I("检测到当前时间大于结业时间，提示结业...");
+                    OwnerWindow.Dispatcher.BeginInvoke((Action)delegate { MessageDialog.Warning("结业时间到了，请及时结业。", OwnerWindow); });
                 }
 
                 if (RefreshRemainSecond == 0)
                 {
                     SetRefreshTimerStatus(false);
                     OwnerWindow.Dispatcher.BeginInvoke((Action)GetAllTableInfoesAsync);
-                    RefreshRemainSecond = RefreshTimerInterval;
                 }
                 else
                 {
@@ -534,7 +522,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void GetAllTableInfoesAsync()
         {
-            var info = Tables.Any() ? "" : "加载所有餐桌信息...";
+            RefreshRemainSecond = RefreshTimerInterval;
+            var info = Tables.Any() ? "" : "加载所有餐桌信息...";//这里处理是为了第一次显示提示信息，后续定时刷新时候不显示提示信息，防止阻塞其他业务
             TaskService.Start(null, GetAllTableInfoProcess, GetAllTableInfoComplete, info);
         }
 
@@ -601,7 +590,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 var item = Tables.FirstOrDefault(t => t.TableId == tableInfo.TableId);
                 if (item == null)
-                    AddTableInfo(tableInfo);
+                    Tables.Add(tableInfo);
                 else
                     item.CloneData(tableInfo);
             }
@@ -610,10 +599,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (removedTables.Any())
                 removedTables.ForEach(t => Tables.Remove(t));
 
-            foreach (var table in Tables)
-            {
-                table.UpdateDinnerDuration();
-            }
+            foreach (var table in Tables) { table.UpdateDinnerDuration(); }
         }
 
         /// <summary>
@@ -626,7 +612,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 var item = CfTables.FirstOrDefault(t => t.TableId == tableInfo.TableId);
                 if (item == null)
-                    AddTableInfo(tableInfo);
+                    CfTables.Add(tableInfo);
                 else
                     item.CloneData(tableInfo);
             }
@@ -635,24 +621,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (removedTables.Any())
                 removedTables.ForEach(t => Tables.Remove(t));
 
-            foreach (var cfTable in CfTables)
-            {
-                cfTable.UpdateDinnerDuration();
-            }
+            foreach (var cfTable in CfTables) { cfTable.UpdateDinnerDuration(); }
         }
 
         /// <summary>
-        /// 添加餐台。
+        /// 设定餐台可用状态。
         /// </summary>
         /// <param name="item"></param>
-        private void AddTableInfo(TableInfo item)
-        {
-            if (item.IsCoffeeTable)
-                CfTables.Add(item);
-            else
-                Tables.Add(item);
-        }
-
         private void SetTableEnableStatus(TableInfo item)
         {
             if (item.IsCoffeeTable)

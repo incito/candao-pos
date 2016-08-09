@@ -1,4 +1,4 @@
-﻿using CanDao.Pos.UI.MainView.ViewModel;
+﻿using CanDao.Pos.Common;
 
 namespace CanDao.Pos.UI.MainView.View
 {
@@ -10,7 +10,7 @@ namespace CanDao.Pos.UI.MainView.View
         public RestaurantOpeningWindow()
         {
             InitializeComponent();
-            DataContext = new RestaurantOpeningWndVm { OwnerWindow = this };
+            DataContext = new NormalWindowViewModel { OwnerWindow = this };
         }
     }
 }

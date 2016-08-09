@@ -104,7 +104,6 @@
     <Compile Include="View\SetInvoiceAmountWindow.xaml.cs">
       <DependentUpon>SetInvoiceAmountWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\AllowMultSelectorCtrlVm.cs" />
     <Compile Include="ViewModel\DishInfoEditWndVm.cs" />
     <Compile Include="ViewModel\InputMoreInfoWndVm.cs" />
     <Compile Include="ViewModel\MemberControlVm.cs" />

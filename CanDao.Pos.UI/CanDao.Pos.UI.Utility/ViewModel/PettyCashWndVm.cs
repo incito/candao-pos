@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.UI.Utility.View;
@@ -25,7 +24,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override void Confirm(object param)
         {
-            if(!MessageDialog.Quest("确定输入零找金：" + Amount))
+            if (!MessageDialog.Quest("确定输入零找金：" + Amount))
                 return;
 
             var info = new Tuple<string, decimal>(Globals.UserInfo.UserName, Convert.ToDecimal(Amount));
@@ -39,7 +38,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override void OnWindowLoaded(object param)
         {
-            ((PettyCashWindow) OwnerWindow).TxtEditPettyCash.Focus();
+            ((PettyCashWindow)OwnerWindow).TxtEditPettyCash.Focus();
         }
 
         /// <summary>

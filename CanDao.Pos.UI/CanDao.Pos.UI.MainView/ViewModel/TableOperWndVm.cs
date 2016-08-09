@@ -1123,27 +1123,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
         #endregion
 
-
-        /// <summary>
-        /// 回车支付。
-        /// </summary>
-        /// <param name="param"></param>
-        private void EnterPay(object param)
-        {
-            if (!(param is ExCommandParameter))
-                return;
-
-            var args = ((ExCommandParameter)param).EventArgs as KeyEventArgs;
-            if (args == null)
-                return;
-
-            if (args.Key == Key.Enter)
-            {
-                args.Handled = true;
-                PayTheBill();
-            }
-        }
-
         #endregion
 
         #region Protected Method
@@ -1280,8 +1259,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (Data.TotalAlreadyPayment - ChargeAmount > Data.PaymentAmount)
             {
+                InfoLog.Instance.I(string.Format("实际支付金额\"{0}\"超过应收金额\"{1}\"。", Data.TotalAlreadyPayment, Data.PaymentAmount));
                 if (!MessageDialog.Quest(string.Format("实际支付金额\"{0}\"超过应收金额\"{1}\"，确定继续结算？", Data.TotalAlreadyPayment, Data.PaymentAmount), OwnerWindow))
                     return;
+                InfoLog.Instance.I("用户选择继续结算...");
             }
 
             if (!MessageDialog.Quest(string.Format("台号：{0} 确定现在结算吗？", Data.TableName), OwnerWindow))
@@ -1559,7 +1540,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         protected void GetTableDishInfoAsync()
         {
-            TaskService.Start(null, GetOrderInfoProcess, GetTableDishInfoComplete, "加载餐台详情...");
+            TaskService.Start(null, GetOrderInfoProcess, GetOrderInfoComplete, "加载餐台详情...");
         }
 
         /// <summary>
@@ -2235,68 +2216,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 自动反结算执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private object AutoAntiSettlementProcess(object arg)
-        {
-            InfoLog.Instance.I("开始反结算账单：{0}...", Data.OrderId);
-            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (service == null)
-                return "创建IOrderService服务失败。";
-
-            var reason = _antiSettlementReason;
-            if (string.IsNullOrEmpty(reason))
-                reason = "会员结算失败，系统自动反结";
-            return service.AntiSettlementOrder(Globals.UserInfo.UserName, Data.OrderId, reason);
-        }
-
-        /// <summary>
-        /// 自动反结算执行完成。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private Tuple<bool, object> AutoAntiSettlementComplete(object arg)
-        {
-            _antiSettlementReason = null;
-            var result = (string)arg;
-            if (!string.IsNullOrEmpty(result))
-            {
-                ErrLog.Instance.E(result);
-                MessageDialog.Warning(result, OwnerWindow);
-                return null;
-            }
-
-            InfoLog.Instance.I("反结算账单：{0}完成。", Data.OrderId);
-            _tableInfo.TableStatus = EnumTableStatus.Dinner;//将餐桌状态设置成就餐，调用GetTableDishInfo获取餐桌信息时就不会弹出开台窗口了。
-            GetTableDishInfoAsync();
-            return null;
-        }
-
-        /// <summary>
-        /// JDE计算实收执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private object JdeDebitAmountProcess(object arg)
-        {
-            InfoLog.Instance.I("开始调用JDE计算实收接口...");
-            return null;
-        }
-
-        /// <summary>
-        /// JDE计算实收执行完成。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private Tuple<bool, object> JdeDebitAmountComplete(object arg)
-        {
-            InfoLog.Instance.I("调用JDE计算时候接口结束，也结束了账单结算。");
-            return new Tuple<bool, object>(true, null);
-        }
-
-        /// <summary>
         /// 打印结账单和发票。
         /// </summary>
         /// <param name="arg"></param>
@@ -2496,59 +2415,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 获取餐台菜品信息执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private object GetTableDishInfoProcess(object param)
-        {
-            InfoLog.Instance.I("开始获取餐台所有信息...");
-            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (service == null)
-                return "创建IOrderService服务失败。";
-
-            var result = service.GetTableDishInfoes(_tableInfo.TableName, Globals.UserInfo.UserName);
-            if (!string.IsNullOrEmpty(result.Item1))
-                return string.Format("获取餐台明细失败：{0}", result.Item1);
-
-            InfoLog.Instance.I("获取餐台所有信息完成。");
-            if (result.Item2 == null)
-                return "没有获取到该餐台的账单信息。";
-
-            OwnerWindow.Dispatcher.Invoke((Action)delegate
-            {
-                if (Data == null)
-                    Data = result.Item2;
-                else
-                    Data.CloneData(result.Item2);
-                MemberCardNo = Data.MemberNo;
-            });
-
-            if (!string.IsNullOrEmpty(MemberCardNo))//走会员登录的流程。
-            {
-                InfoLog.Instance.I("该餐台登录了会员，开始会员登录...");
-                var memberLoginResult = MemberCanDaoLoginProcess(null) as string;
-                if (!string.IsNullOrEmpty(memberLoginResult))
-                    ErrLog.Instance.E("会员登录时失败：{0}", memberLoginResult);
-                else
-                {
-                    InfoLog.Instance.I("设置会员价成功，完成整个会员登录流程。");
-                    IsMemberLogin = true;
-                }
-            }
-
-            CalculatePaymentAmount();
-            InfoLog.Instance.I("开始获取订单{0}的发票抬头。", Data.OrderId);
-            var invoiceResult = service.GetOrderInvoice(Data.OrderId);
-            if (!string.IsNullOrEmpty(invoiceResult.Item1))
-                return string.Format("获取订单发票抬头失败。" + invoiceResult.Item1);
-
-            InfoLog.Instance.I("结束获取订单发票抬头：{0}。", invoiceResult.Item2);
-            Data.OrderInvoiceTitle = invoiceResult.Item2;
-            return null;
-        }
-
-        /// <summary>
         /// 获取餐台账单明细
         /// </summary>
         /// <param name="param"></param>
@@ -2604,7 +2470,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         ///  获取餐台菜品信息执行完成。
         /// </summary>
         /// <param name="param"></param>
-        private void GetTableDishInfoComplete(object param)
+        private void GetOrderInfoComplete(object param)
         {
             var result = (string)param;
             if (!string.IsNullOrEmpty(result))
@@ -2652,100 +2518,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     CouponInfos.Add(t);
                 });
         }
-
-        /// <summary>
-        /// 保存优惠券执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private object SaveCouponInfoProcess(object arg)
-        {
-            IOrderService service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (service == null)
-                return "创建IOrderService服务失败。";
-
-            Tuple<string, List<UsedCouponInfo>> param = (Tuple<string, List<UsedCouponInfo>>)arg;
-            return service.SaveUsedCoupon(param.Item1, Globals.UserInfo.UserName, param.Item2);
-        }
-
-        /// <summary>
-        /// 保存优惠券执行完成。
-        /// </summary>
-        /// <param name="obj"></param>
-        private void SaveCouponInfoComplete(object obj)
-        {
-            var result = obj as string;
-            if (!string.IsNullOrEmpty(result))
-            {
-                var errMsg = string.Format("保存优惠券信息失败：{0}", result);
-                ErrLog.Instance.E(errMsg);
-                MessageDialog.Warning(errMsg, OwnerWindow);
-                return;
-            }
-
-            InfoLog.Instance.I("结束保存优惠券到使用列表。");
-        }
-
-        /// <summary>
-        /// 获取退菜信息的执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private object GetBackDishInfoProcess(object arg)
-        {
-            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            if (service == null)
-                return new Tuple<string, List<BackDishInfo>>("创建IOrderService服务失败。", null);
-
-            var selectedOrderDish = (OrderDishInfo)arg;
-            return service.GetBackDishInfo(Data.OrderId, Data.TableName, selectedOrderDish.DishId,
-                selectedOrderDish.SrcDishUnit);
-        }
-
-        /// <summary>
-        /// 获取退菜信息执行完成。
-        /// </summary>
-        /// <param name="obj"></param>
-        private void GetBackDishInfoComplete(object obj)
-        {
-            var result = (Tuple<string, List<BackDishInfo>>)obj;
-            if (!string.IsNullOrEmpty(result.Item1))
-            {
-                MessageDialog.Warning(result.Item1, OwnerWindow);
-                return;
-            }
-
-            bool allowInputBackNum = true;
-            var firstItem = result.Item2.First();
-            if (firstItem.IsPot || (firstItem.IsMaster && firstItem.DishType == EnumDishType.FishPot))
-                allowInputBackNum = false;
-
-            if (firstItem.DishType == EnumDishType.Packages)
-            {
-                if (firstItem.ChildDishType != 2)
-                {
-                    MessageDialog.Warning("请选择套餐名称退整个套餐！", OwnerWindow);
-                    return;
-                }
-                allowInputBackNum = false;
-            }
-
-            if (allowInputBackNum)
-            {
-                var numWnd = new NumInputWindow("退菜：", SelectedOrderDish.DishName, "退菜数量：", SelectedOrderDish.DishNum);
-                if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
-                    return;
-
-                //输入退菜数量
-            }
-
-            AuthorizationWindow wnd = new AuthorizationWindow(EnumRightType.BackDish);
-            if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
-                return;
-
-            MessageDialog.Warning("退菜权限验证成功。", OwnerWindow);
-        }
-
 
         /// <summary>
         /// 清台的执行方法。

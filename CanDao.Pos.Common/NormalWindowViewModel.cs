@@ -54,6 +54,31 @@ namespace CanDao.Pos.Common
         public ICommand PreviewKeyDownCmd { get; private set; }
 
         /// <summary>
+        /// 操作命令。
+        /// </summary>
+        public ICommand OperCmd { get; private set; }
+
+        /// <summary>
+        /// 分组命令。
+        /// </summary>
+        public ICommand GroupCmd { get; private set; }
+
+        /// <summary>
+        /// 初始化命令。
+        /// </summary>
+        protected virtual void InitCommand()
+        {
+            ConfirmCmd = CreateDelegateCommand(Confirm, CanConfirm);
+            CancelCmd = CreateDelegateCommand(Cancel, CanCancel);
+            WindowLoadCmd = CreateDelegateCommand(OnWindowLoaded);
+            WindowClosedCmd = CreateDelegateCommand(OnWindowClosed);
+            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
+            PreviewKeyDownCmd = CreateDelegateCommand(PreviewKeyDown);
+            OperCmd = CreateDelegateCommand(OperMethod, CanOperMethod);
+            GroupCmd = CreateDelegateCommand(GroupMethod, CanGroupMethod);
+        }
+
+        /// <summary>
         /// 确定命令的执行方法。
         /// </summary>
         protected virtual void Confirm(object param)
@@ -89,7 +114,7 @@ namespace CanDao.Pos.Common
         }
 
         /// <summary>
-        /// 窗体加载事件命令的执行犯法。
+        /// 窗体加载事件命令的执行方法。
         /// </summary>
         /// <param name="param"></param>
         protected virtual void OnWindowLoaded(object param)
@@ -100,7 +125,7 @@ namespace CanDao.Pos.Common
         /// <summary>
         /// 按键按下事件命令的执行方法。
         /// </summary>
-        /// <param name="param"></param>
+        /// <param name="arg">键盘按下事件参数。</param>
         protected virtual void OnPreviewKeyDown(KeyEventArgs arg)
         {
             if (arg.Key == Key.Enter && IsEnterKey2Confirm)
@@ -110,6 +135,10 @@ namespace CanDao.Pos.Common
             }
         }
 
+        /// <summary>
+        /// 键盘按下事件的执行方法。
+        /// </summary>
+        /// <param name="param">参数。</param>
         private void PreviewKeyDown(object param)
         {
             if (!(param is ExCommandParameter))
@@ -122,33 +151,70 @@ namespace CanDao.Pos.Common
             OnPreviewKeyDown(args);
         }
 
+        /// <summary>
+        /// 窗口关闭后的方法。
+        /// </summary>
+        /// <param name="param">参数。</param>
         protected virtual void OnWindowClosed(object param)
         {
-            
+
         }
 
+        /// <summary>
+        /// 窗口正在关闭命令的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
         private void WindowClosing(object param)
         {
             ExCommandParameter cmdParam = (ExCommandParameter)param;
             OnWindowClosing(((CancelEventArgs)cmdParam.EventArgs));
         }
 
+        /// <summary>
+        /// 窗口正在关闭时执行的方法。
+        /// </summary>
+        /// <param name="arg">取消事件参数。</param>
         protected virtual void OnWindowClosing(CancelEventArgs arg)
         {
-            
+
         }
 
         /// <summary>
-        /// 初始化命令。
+        /// 操作命令的可执行方法。
         /// </summary>
-        protected virtual void InitCommand()
+        /// <param name="param">参数。</param>
+        protected virtual void OperMethod(object param)
         {
-            ConfirmCmd = CreateDelegateCommand(Confirm, CanConfirm);
-            CancelCmd = CreateDelegateCommand(Cancel, CanCancel);
-            WindowLoadCmd = CreateDelegateCommand(OnWindowLoaded);
-            WindowClosedCmd = CreateDelegateCommand(OnWindowClosed);
-            WindowClosingCmd = CreateDelegateCommand(WindowClosing);
-            PreviewKeyDownCmd = CreateDelegateCommand(PreviewKeyDown);
+
+        }
+
+        /// <summary>
+        /// 操作命令是否可用的判断方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        protected virtual bool CanOperMethod(object param)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 分组命令的执行方法。
+        /// </summary>
+        /// <param name="param">参数。</param>
+        protected virtual void GroupMethod(object param)
+        {
+
+        }
+
+        /// <summary>
+        /// 分组命令是否可用的判断方法。
+        /// </summary>
+        /// <param name="param">参数。</param>
+        /// <returns></returns>
+        protected virtual bool CanGroupMethod(object param)
+        {
+            return true;
         }
 
         /// <summary>

@@ -95,46 +95,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #endregion
 
-        #region Command
-
-        /// <summary>
-        /// 键盘按键事件命令。
-        /// </summary>
-        public ICommand PreKeyDownCmd { get; private set; }
-
-        #endregion
-
-        #region Command Methods
-
-        /// <summary>
-        ///  键盘按键事件命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void PreKeyDown(object param)
-        {
-            if (!(param is ExCommandParameter))
-                return;
-
-            var args = ((ExCommandParameter)param).EventArgs as KeyEventArgs;
-            if (args == null)
-                return;
-
-            if (args.Key == Key.Enter)
-            {
-                args.Handled = true;
-                ConfirmCmd.Execute(null);
-            }
-        }
-
-        #endregion
-
         #region Protected Methods
-
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            PreKeyDownCmd = CreateDelegateCommand(PreKeyDown);
-        }
 
         protected override void Confirm(object param)
         {

@@ -172,16 +172,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand SelectDishCmd { get; private set; }
 
-        /// <summary>
-        /// 操作命令。
-        /// </summary>
-        public ICommand OperCmd { get; private set; }
-
-        /// <summary>
-        /// 分组命令。
-        /// </summary>
-        public ICommand GroupCmd { get; private set; }
-
         #endregion
 
         #region Command Methods
@@ -202,7 +192,37 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             TaskService.Start(arg, CheckDishStatusProcess, CheckDishStatusComplete, "检测菜品状态...");
         }
 
-        private void Oper(object param)
+        #endregion
+
+        #region Protected Methods
+
+        protected override void InitCommand()
+        {
+            base.InitCommand();
+            SelectDishCmd = CreateDelegateCommand(SelectDish);
+        }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            InfoLog.Instance.I("点菜窗口加载完成时...");
+            if (Globals.DishGroupInfos == null)
+            {
+                InfoLog.Instance.I("菜谱缓存为空，开始获取菜谱信息...");
+                TaskService.Start(null, GetMenuDishGroupInfoProcess, GetMenuDishGroupInfoComplete, "加载菜谱信息中...");
+                return;
+            }
+
+            InfoLog.Instance.I("菜谱有缓存，加载菜谱...");
+
+            DishGroups.Clear();
+            Globals.DishGroupInfos.ForEach(t =>
+            {
+                t.SelectDishCount = 0m;
+                DishGroups.Add(t);
+            });
+        }
+
+        protected override void OperMethod(object param)
         {
             switch (param as string)
             {
@@ -238,33 +258,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "InputNum":
                     InputDishCount();
                     break;
-                case "PreGroup":
-                    OwnerWnd.LbDishGroup.PreviousGroup();
-                    break;
-                case "NextGroup":
-                    OwnerWnd.LbDishGroup.NextGroup();
-                    break;
-                case "OrderDishPreGroup":
-                    OwnerWnd.DishGroupSelector.PreviousGroup();
-                    break;
-                case "OrderDishNextGroup":
-                    OwnerWnd.DishGroupSelector.NextGroup();
-                    break;
-                case "MenuDishPreGroup":
-                    OwnerWnd.MenuDishGroupSelector.PreviousGroup();
-                    break;
-                case "MenuDishNextGroup":
-                    OwnerWnd.MenuDishGroupSelector.NextGroup();
-                    break;
             }
         }
 
-        /// <summary>
-        /// 是否操作命令可用。
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private bool CanOpen(object param)
+        protected override bool CanOperMethod(object param)
         {
             switch (param as string)
             {
@@ -275,24 +272,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return SelectedOrderDish != null;
                 case "OrderRemark":
                     return OrderDishInfos != null && OrderDishInfos.Any();
-                case "PreGroup":
-                    return OwnerWnd.LbDishGroup.CanPreviousGroup;
-                case "NextGroup":
-                    return OwnerWnd.LbDishGroup.CanNextGruop;
-                case "OrderDishPreGroup":
-                    return OwnerWnd.DishGroupSelector.CanPreviousGroup;
-                case "OrderDishNextGroup":
-                    return OwnerWnd.DishGroupSelector.CanNextGruop;
-                case "MenuDishPreGroup":
-                    return OwnerWnd.MenuDishGroupSelector.CanPreviousGroup;
-                case "MenuDishNextGroup":
-                    return OwnerWnd.MenuDishGroupSelector.CanNextGruop;
                 default:
                     return true;
             }
         }
 
-        private void Group(object param)
+        protected override void GroupMethod(object param)
         {
             switch (param as string)
             {
@@ -317,7 +302,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
-        private bool CanGroup(object param)
+        protected override bool CanGroupMethod(object param)
         {
             switch (param as string)
             {
@@ -336,38 +321,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 default:
                     return true;
             }
-        }
-
-        #endregion
-
-        #region Protected Methods
-
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            SelectDishCmd = CreateDelegateCommand(SelectDish);
-            OperCmd = CreateDelegateCommand(Oper, CanOpen);
-            GroupCmd = CreateDelegateCommand(Group, CanGroup);
-        }
-
-        protected override void OnWindowLoaded(object param)
-        {
-            InfoLog.Instance.I("点菜窗口加载完成时...");
-            if (Globals.DishGroupInfos == null)
-            {
-                InfoLog.Instance.I("菜谱缓存为空，开始获取菜谱信息...");
-                TaskService.Start(null, GetMenuDishGroupInfoProcess, GetMenuDishGroupInfoComplete, "加载菜谱信息中...");
-                return;
-            }
-
-            InfoLog.Instance.I("菜谱有缓存，加载菜谱...");
-
-            DishGroups.Clear();
-            Globals.DishGroupInfos.ForEach(t =>
-            {
-                t.SelectDishCount = 0m;
-                DishGroups.Add(t);
-            });
         }
 
         #endregion

@@ -91,7 +91,6 @@
     <Compile Include="ViewModel\OpenTableWndVm.cs" />
     <Compile Include="ViewModel\OrderDishWndVm.cs" />
     <Compile Include="ViewModel\QueryOrderHistoryWndVm.cs" />
-    <Compile Include="ViewModel\RestaurantOpeningWndVm.cs" />
     <Compile Include="ViewModel\TableOperNormalWndVm.cs" />
     <Compile Include="ViewModel\TableOperTakeoutWndVm.cs" />
     <Compile Include="ViewModel\TableOperWndVm.cs" />

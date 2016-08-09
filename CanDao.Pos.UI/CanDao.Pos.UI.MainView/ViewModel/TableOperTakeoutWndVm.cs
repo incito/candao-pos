@@ -7,7 +7,6 @@ using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
-using CanDao.Pos.UI.MainView.View;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -148,12 +147,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private Tuple<bool, object> CancelOrderComplete(object param)
         {
-            var result = (string) param;
+            var result = (string)param;
             if (!string.IsNullOrEmpty(result))
             {
                 var msg = string.Format("取消外卖台账单失败：{0}", result);
-                ErrLog.Instance.E("取消账单失败：{0}", result);
-                MessageDialog.Warning(result);
+                ErrLog.Instance.E(msg);
+                MessageDialog.Warning(msg);
                 _eventWait.Set();
                 return null;
             }

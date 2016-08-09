@@ -33,9 +33,11 @@ namespace CanDao.Pos.UI.Utility
 
         #endregion
 
-#region 属性
+        #region 属性
+
         public string OrderId { set; get; }
-#endregion
+
+        #endregion
 
         #region Public Methods
 
@@ -51,7 +53,6 @@ namespace CanDao.Pos.UI.Utility
             _orderId = orderId;
             _ownerWindow = ownerWnd;
 
-            InfoLog.Instance.I("开始检测账单是否允许反结算...");
             var checkWf = new WorkFlowInfo(CheckOrderCanResettlementProcess, CheckOrderCanResettlementComplete);//检测订单是否允许反结工作流。
             var currentWf = checkWf;//当前工作流。
             if (!string.IsNullOrEmpty(memberNo))
@@ -77,13 +78,12 @@ namespace CanDao.Pos.UI.Utility
             WorkFlowService.Start(null, checkWf);
         }
 
-         /// <summary>
-         /// 设置获取反结算工作流（自动反结算）
-         /// </summary>
-         /// <param name="orderId"></param>
-         /// <param name="memberNo"></param>
-         /// <param name="ownerWnd"></param>
-         /// <param name="afterAntiSettlementWf"></param>
+        /// <summary>
+        /// 设置获取反结算工作流（自动反结算）
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="memberNo"></param>
+        /// <param name="ownerWnd"></param>
         public WorkFlowInfo GetAntiSettlement(string orderId, string memberNo, Window ownerWnd)
         {
             _orderId = orderId;
@@ -163,6 +163,7 @@ namespace CanDao.Pos.UI.Utility
                 return "创建IOrderService服务失败。";
 
             var param = new Tuple<string, string>(_orderId, Globals.UserInfo.UserName);
+            InfoLog.Instance.I("开始检测账单是否允许反结算...");
             return service.CheckCanAntiSettlement(param.Item1, param.Item2);
         }
 

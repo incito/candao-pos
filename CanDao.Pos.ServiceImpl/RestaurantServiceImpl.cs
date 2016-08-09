@@ -10,8 +10,6 @@ using CanDao.Pos.Model.Reports;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
 using JunLan.Common.Base;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using HttpHelper = CanDao.Pos.Common.HttpHelper;
 
 namespace CanDao.Pos.ServiceImpl

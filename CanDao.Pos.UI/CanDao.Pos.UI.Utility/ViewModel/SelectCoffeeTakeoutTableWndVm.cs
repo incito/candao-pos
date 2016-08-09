@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.UI.Utility.View;
@@ -30,16 +29,12 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// </summary>
         public TableInfo SelectedTable { get; set; }
 
-        /// <summary>
-        /// 分组命令。
-        /// </summary>
-        public ICommand GroupCmd { get; private set; }
+        protected override bool CanConfirm(object param)
+        {
+            return SelectedTable != null;
+        }
 
-        /// <summary>
-        /// 分组命令的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void GroupTable(object param)
+        protected override void GroupMethod(object param)
         {
             switch ((string)param)
             {
@@ -52,12 +47,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
         }
 
-        /// <summary>
-        /// 分组命令是否可用的判断方法。
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private bool CanGroupTable(object param)
+        protected override bool CanGroupMethod(object param)
         {
             switch ((string)param)
             {
@@ -68,17 +58,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 default:
                     return true;
             }
-        }
-
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            GroupCmd = CreateDelegateCommand(GroupTable, CanGroupTable);
-        }
-
-        protected override bool CanConfirm(object param)
-        {
-            return SelectedTable != null;
         }
     }
 }

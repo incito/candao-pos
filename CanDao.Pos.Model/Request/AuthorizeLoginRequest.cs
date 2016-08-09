@@ -5,10 +5,11 @@
     /// </summary>
     public class AuthorizeLoginRequest
     {
-        public AuthorizeLoginRequest(string name, string pwd, string rightCode)
+        public AuthorizeLoginRequest(string name, string pwd, string macAddr, string rightCode)
         {
             username = name;
             password = pwd;
+            macAddress = macAddr;
             loginType = rightCode;
         }
 
@@ -26,5 +27,10 @@
         /// 授权登录类型。
         /// </summary>
         public string loginType { get; set; }
+
+        /// <summary>
+        /// 本机标识。
+        /// </summary>
+        public string macAddress { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var encodePwd = MD5Encrypt.Encrypt(password);
-                var request = new AuthorizeLoginRequest(userName, encodePwd, GetRightCode(rightType));
+                var request = new AuthorizeLoginRequest(userName, encodePwd, MachineManage.GetMachineId(), GetRightCode(rightType));
                 var result = HttpHelper.HttpPost<AuthorizeLoginResponse>(addr, request);
                 return result.IsSuccess ? new Tuple<string, string>(null, result.data.fullname) : new Tuple<string, string>(result.msg, null);
             }
