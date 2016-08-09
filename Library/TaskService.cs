@@ -28,7 +28,8 @@ namespace Library
                 {
                     asynWindow = new AsynWindow();
                     asynWindow.SetShowText(infoMsg);
-                    asynWindow.ShowDialog();
+                    asynWindow.Topmost = true;
+                    asynWindow.Show();
                     //frmMsg = new frmWarning(infoMsg);
                     //frmMsg.ShowDialog();
                 };
@@ -39,7 +40,7 @@ namespace Library
                     //    frmMsg.Dispose();
                     if (asynWindow != null)
                     {
-                        asynWindow.DialogResult = true;
+                        asynWindow.Close();
                     }
                 };
             }
