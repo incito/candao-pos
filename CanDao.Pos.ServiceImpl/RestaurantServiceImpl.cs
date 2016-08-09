@@ -251,14 +251,13 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        public string EndWork(string authorizerName)
+        public string EndWork()
         {
             var addr = ServiceAddrCache.GetServiceAddr("EndWork");
             if (string.IsNullOrEmpty(addr))
                 return "结业地址为空。";
 
-            var param = new List<string> { authorizerName, PCInfoHelper.IPAddr };
-            var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
+            var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr);
             if (!string.IsNullOrEmpty(result.Item1))
                 return "结业失败：" + result.Item1;
 

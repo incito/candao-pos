@@ -497,7 +497,7 @@ namespace CanDao.Pos.Client
             if (!WindowHelper.ShowDialog(wnd))
                 return;
 
-            TaskService.Start(Globals.Authorizer.UserName, EndWorkProcess, EndWorkComplete, "结业中...");
+            TaskService.Start(null, EndWorkProcess, EndWorkComplete, "结业中...");
         }
 
         /// <summary>
@@ -511,7 +511,7 @@ namespace CanDao.Pos.Client
             if (service == null)
                 return "创建IRestaurantService服务失败。";
 
-            return service.EndWork((string)param);
+            return service.EndWork();
         }
 
         /// <summary>

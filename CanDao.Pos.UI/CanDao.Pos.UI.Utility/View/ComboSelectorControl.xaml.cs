@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using CanDao.Pos.Model;
 
 namespace CanDao.Pos.UI.Utility.View
@@ -24,7 +17,6 @@ namespace CanDao.Pos.UI.Utility.View
         public ComboSelectorControl()
         {
             InitializeComponent();
-            var br = (Brush)System.ComponentModel.TypeDescriptor.GetConverter(typeof(Brush)).ConvertFromInvariantString("White");
         }
 
         public MenuComboDishInfo Data
@@ -95,13 +87,13 @@ namespace CanDao.Pos.UI.Utility.View
         private void UpdateSelectedCount()
         {
             var totalSelectedCount = Data.SourceDishes.Sum(t => t.SelectedCount);
-            ComboSelectInfo = string.Format("{0}（{1}选{2}）   ->  已选{3}", Data.ComboName, Data.SourceCount, Data.SelectCount, totalSelectedCount);
+            ComboSelectInfo = string.Format("{0}（{1}选{2}）  已选{3}", Data.ComboName, Data.SourceCount, Data.SelectCount, totalSelectedCount);
             BdName.Background = Convert2Brush(totalSelectedCount >= Data.SelectCount ? "Green" : "Coral");
         }
 
         private Brush Convert2Brush(string colorName)
         {
-            return (Brush)System.ComponentModel.TypeDescriptor.GetConverter(typeof(Brush)).ConvertFromInvariantString(colorName);
+            return (Brush)TypeDescriptor.GetConverter(typeof(Brush)).ConvertFromInvariantString(colorName);
         }
     }
 }

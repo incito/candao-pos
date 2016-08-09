@@ -30,8 +30,11 @@
                             <TextBlock Text="{Binding DishName}" FontSize="16" />
                             <TextBlock Text="{Binding Unit, StringFormat=({0})}" FontSize="16"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding SelectedCount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="80" VerticalAlignment="Center"
-                                 GotFocus="UIElement_OnGotFocus" TextChanged="TextBoxBase_OnTextChanged"/>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding SelectedCount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="16" Width="40" Height="30" VerticalAlignment="Center"
+                                 GotFocus="UIElement_OnGotFocus"
+                                 TextChanged="TextBoxBase_OnTextChanged"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

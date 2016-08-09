@@ -5,7 +5,7 @@
                          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                          xmlns:controls="clr-namespace:CanDao.Pos.UI.Utility.Controls"
                          xmlns:controls1="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-                         Width="550" SizeToContent="Height" MaxHeight="768"
+                         Width="763" SizeToContent="Height" MaxHeight="768"
                          CloseBtnText="套餐选择窗口" CloseBtnEnable="False"
                          ResizeMode="NoResize" ShowInTaskbar="False">
     <i:Interaction.Triggers>
@@ -22,6 +22,11 @@
     </controls1:PosBaseWindow.Resources>
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -62,15 +67,37 @@
                     </ItemsControl>
                 </StackPanel>
             </ScrollViewer>
-            
-            <controls:DietSetControl Grid.Row="3" x:Name="DietSetCtrl" VerticalAlignment="Bottom"/>
-            
-            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Left">
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{StaticResource BtnUpStyle}" Command="{Binding PageUpCmd}"/>
                 <Button Style="{StaticResource BtnDownStyle}" Command="{Binding PageUpCmd}"/>
             </StackPanel>
-            
-            <view:WindowButtonOperControl Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+
+            <controls:DietSetControl Grid.Row="4" x:Name="DietSetCtrl" VerticalAlignment="Bottom"/>
+        </Grid>
+
+        <GridSplitter Grid.Column="1" Width="3" Background="{StaticResource CanDaoPosColorBgSep}"/>
+        
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <view:InputHelperStripControl Orientation="Vertical"/>
+
+            <StackPanel Grid.Row="1"
+                        VerticalAlignment="Bottom"
+                        Margin="20,0">
+                <Button Content="取消"
+                        IsCancel="True"
+                        Command="{Binding CancelCmd}"
+                        MinWidth="120" Height="48"/>
+                <Button IsDefault="True"
+                        Content="确定"
+                        Command="{Binding ConfirmCmd}"
+                        MinWidth="120" Height="48"
+                        Margin="0,5"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </controls1:PosBaseWindow>

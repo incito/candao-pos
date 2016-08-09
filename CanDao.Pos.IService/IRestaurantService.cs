@@ -93,9 +93,8 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 结业。
         /// </summary>
-        /// <param name="authorizerName">结业授权人。</param>
         /// <returns>结业成功返回null，否则返回错误信息。</returns>
-        string EndWork(string authorizerName);
+        string EndWork();
 
         /// <summary>
         /// 结业后通知后台同步数据。

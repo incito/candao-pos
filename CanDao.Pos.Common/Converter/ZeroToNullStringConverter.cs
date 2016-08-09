@@ -3,12 +3,12 @@ using System.Windows.Data;
 
 namespace CanDao.Pos.Common.Converter
 {
-    public class ZeroToNullStringConverter:IValueConverter
+    public class ZeroToNullStringConverter : IValueConverter
     {
 
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return (int) value == 0 ? "" : value.ToString();
+            return (DataHelper.Parse2Int(value) == 0) ? "" : value.ToString();
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)

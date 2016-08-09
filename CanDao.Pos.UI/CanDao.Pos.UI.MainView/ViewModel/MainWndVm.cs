@@ -678,7 +678,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             InfoLog.Instance.I("结业授权成功，开始调用结业接口...");
-            TaskService.Start(Globals.Authorizer.UserName, EndWorkProcess, EndWorkComplete, "结业中...");
+            TaskService.Start(null, EndWorkProcess, EndWorkComplete, "结业中...");
         }
 
         /// <summary>
@@ -692,7 +692,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IRestaurantService服务失败。";
 
-            return service.EndWork((string)param);
+            return service.EndWork();
         }
 
         /// <summary>

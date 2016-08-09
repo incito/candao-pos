@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
@@ -153,8 +154,8 @@ namespace CanDao.Pos.ServiceImpl
             if (string.IsNullOrEmpty(addr))
                 return new Tuple<string, bool>("检测菜品状态地址为空。", false);
 
-            var param = new List<string> { dishId, dishUnit };
-            var result = RestHttpHelper.HttpGet<RestBaseResponse>(addr, param);
+            addr = string.Format("{0}/{1}/", addr, dishId);
+            var result = RestHttpHelper.HttpPost<RestBaseResponse>(addr, dishUnit);
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, bool>("检测菜品状态失败。" + Environment.NewLine + result.Item1, false);
 

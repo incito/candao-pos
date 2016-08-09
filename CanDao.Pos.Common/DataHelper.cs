@@ -15,9 +15,9 @@ namespace CanDao.Pos.Common
             return values.FirstOrDefault(value => !string.IsNullOrWhiteSpace(value));
         }
 
-        public static int Parse2Int(string valueStr, int defaultValue = 0)
+        public static int Parse2Int(object valueStr, int defaultValue = 0)
         {
-            if (string.IsNullOrEmpty(valueStr))
+            if(valueStr == null)
                 return defaultValue;
 
             try
