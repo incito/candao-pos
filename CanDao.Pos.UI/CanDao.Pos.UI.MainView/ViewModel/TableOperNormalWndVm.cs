@@ -27,17 +27,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (_tableInfo.TableStatus == EnumTableStatus.Idle)
             {
                 var openTableWnd = new OpenTableWindow(_tableInfo);
-                if (WindowHelper.ShowDialog(openTableWnd, OwnerWindow))
+                if (!WindowHelper.ShowDialog(openTableWnd, OwnerWindow))
                 {
-                    _tableInfo.TableStatus = EnumTableStatus.Dinner;//开台成功以后需要修改餐桌状态。
-
-                    var tableFullInfo = new TableFullInfo();
-                    tableFullInfo.CloneDataFromTableInfo(_tableInfo);
-                    tableFullInfo.CustomerNumber = openTableWnd.CustomerNumber;
-
-                    // 开台成功以后，弹出点菜窗口。
-                    WindowHelper.ShowDialog(new OrderDishWindow(tableFullInfo), OwnerWindow);
+                    InfoLog.Instance.I("取消开台，关闭窗口。");
+                    CloseWindow(true);
+                    return;
                 }
+
+                _tableInfo.TableStatus = EnumTableStatus.Dinner;//开台成功以后需要修改餐桌状态。
+
+                var tableFullInfo = new TableFullInfo();
+                tableFullInfo.CloneDataFromTableInfo(_tableInfo);
+                tableFullInfo.CustomerNumber = openTableWnd.CustomerNumber;
+
+                // 开台成功以后，弹出点菜窗口。
+                WindowHelper.ShowDialog(new OrderDishWindow(tableFullInfo), OwnerWindow);
             }
             GetTableDishInfoAsync();
             //GenerateGetSavedCouponAsync();//暂时屏蔽，有问题。
