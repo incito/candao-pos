@@ -1120,6 +1120,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             Data.TotalFreeAmount = preferential.amount;
             Data.PaymentAmount = preferential.payamount;
+
+            GenerateSettlementInfo();
         }
         #endregion
 
