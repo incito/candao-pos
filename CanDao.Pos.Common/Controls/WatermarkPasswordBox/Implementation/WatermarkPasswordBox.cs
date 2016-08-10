@@ -71,9 +71,8 @@ namespace CanDao.Pos.Common.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            Text = ConvertToPasswordChar(Password.Length);
+            Text = string.IsNullOrEmpty(Password) ? "" : ConvertToPasswordChar(Password.Length);
             _isResponseChange = true;
         }
-
     }
 }

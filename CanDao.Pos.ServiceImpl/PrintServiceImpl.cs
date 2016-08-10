@@ -52,7 +52,7 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception exp)
             {
                 ErrLog.Instance.E(msg + "时异常。", exp);
-                return string.Format("{0}异常：{1}", msg, exp);
+                return string.Format("{0}异常：{1}", msg, exp.MyMessage());
             }
         }
         /// <summary>

@@ -14,6 +14,13 @@ namespace CanDao.Pos.Common
                 var innerExp = exp.InnerException;
                 if (innerExp is TaskCanceledException)
                     return "接口调用超时，请检测网络或联系管理员。";
+                if (innerExp is HttpRequestException)
+                {
+                    if (!NetwrokHelper.DetectNetworkConnection(SystemConfigCache.JavaServer))
+                    {
+                        return string.Format("与后台服务器：\"{0}\"连接失败。{1}请检查服务器是否开机，网络是否正常！", SystemConfigCache.JavaServer, Environment.NewLine);
+                    }
+                }
                 if (innerExp != null)
                     return innerExp.Message;
             }
