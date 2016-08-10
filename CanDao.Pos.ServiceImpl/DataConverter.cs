@@ -893,17 +893,19 @@ namespace CanDao.Pos.ServiceImpl
         {
             if (dishInfosResponse != null)
             {
+                int index = 1;
                 foreach (var dish in dishInfosResponse)
                 {
                     if (dish.dishes != null) //套餐和鱼锅
                     {
-                        var masterItem = ToDishInfo(dish, dish.dishid);
+                        var masterItem = ToDishInfo(dish, dish.dishid, index);
+                        index++;
                         tableFullInfo.DishInfos.Add(masterItem);
 
                         masterItem.DishInfos = new List<OrderDishInfo>();
                         foreach (var groupItem in dish.dishes)
                         {
-                            var subItem = ToDishInfo(groupItem, string.Empty);
+                            var subItem = ToDishInfo(groupItem, string.Empty,index);
                             if (masterItem.DishType == EnumDishType.FishPot)
                                 subItem.IsFishPotDish = true;
                             else if (masterItem.DishType == EnumDishType.Packages)
@@ -914,8 +916,9 @@ namespace CanDao.Pos.ServiceImpl
                     }
                     else //单品
                     {
-                        tableFullInfo.DishInfos.Add(ToDishInfo(dish, string.Empty));
+                        tableFullInfo.DishInfos.Add(ToDishInfo(dish, string.Empty, index));
                     }
+                    index++;
                 }
             }
         }
@@ -926,13 +929,13 @@ namespace CanDao.Pos.ServiceImpl
         /// <param name="response"></param>
         /// <param name="relateDishId"></param>
         /// <returns></returns>
-        internal static OrderDishInfo ToDishInfo(DishGroupInfo response, string relateDishId)
+        internal static OrderDishInfo ToDishInfo(DishGroupInfo response, string relateDishId,int index)
         {
             var dishName = InternationaHelper.GetBeforeSeparatorFlagData(response.dishname);
             var price = string.IsNullOrEmpty(response.orderprice) ? 0 : decimal.Parse(response.orderprice);
             return new OrderDishInfo
             {
-
+                Index =index,
                 DishId = response.dishid,
                 DishName = dishName,
                 RelateDishId = relateDishId,
