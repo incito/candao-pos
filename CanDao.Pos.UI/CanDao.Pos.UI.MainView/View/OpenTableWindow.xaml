@@ -55,6 +55,7 @@
                                    VerticalContentAlignment="Center"
                                    Height="38" Margin="0,2"/>
             <TextBox Grid.Row="4" Grid.Column="0"
+                     FontSize="16"
                      Text="{Binding CustomerNumber, StringFormat=餐具数量：{0}}"
                      IsEnabled="False"
                      Visibility="{Binding IsDinnerWareEnable, Converter={StaticResource Bool2VisibilityCvt}}"

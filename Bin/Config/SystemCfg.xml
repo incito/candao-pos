@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <!--Java后台服务地址-->
-  <JavaServer value="10.66.9.249:80"/>
+  <JavaServer value="10.66.21.4:8080"/>
   <!--餐道会员地址-->
   <CloudServer value="10.66.21.6:8080"/>
   <!--会员系统。0：雅座，1：餐道-->
