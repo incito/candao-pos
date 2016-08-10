@@ -47,7 +47,7 @@ namespace CanDao.Pos.Common.Controls
             var lastOffset = Text.Length;
             foreach (var change in e.Changes)
             {
-                var str = Password.Remove(change.Offset, change.RemovedLength);
+                var str = !string.IsNullOrEmpty(Password) ? Password.Remove(change.Offset, change.RemovedLength) : "";
                 str = str.Insert(change.Offset, Text.Substring(change.Offset, change.AddedLength));
                 lastOffset = change.Offset;
                 this.SetValue(PasswordProperty, str);
