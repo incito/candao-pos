@@ -458,7 +458,7 @@
                                                Text="{Binding IntegralAmount, UpdateSourceTrigger=PropertyChanged}"
                                                Watermark="使用积分：" 
                                                Margin="0,5" Height="40"/>
-                        <controls:WatermarkPasswordBox Password="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged}"
+                        <controls:WatermarkPasswordBox Password="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                                                    Watermark="会员密码："
                                                    VerticalContentAlignment="Center" VerticalAlignment="Center"
                                                    Margin="0,5" Height="40"/>
