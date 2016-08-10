@@ -1774,7 +1774,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 ChargeAmount = 0;
                 settlementInfo.Add(Data.TotalAlreadyPayment > 0 ? string.Format("还需再收：{0:f2}", remainderAmount) : string.Format("需收款：{0:f2}", remainderAmount));
             }
-            ChargeAmount = Math.Min(Math.Abs(remainderAmount), CashAmount);//找零金额只能是现金
+            var tempChargeAmount = Math.Abs(Math.Min(0, remainderAmount));
+            ChargeAmount = Math.Min(tempChargeAmount, CashAmount);//找零金额只能是现金
             if (ChargeAmount > 0)
                 settlementInfo.Add(string.Format("找零：{0:f2}", ChargeAmount));
 

@@ -27,14 +27,14 @@
             <RadioButton Content="优免" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="0,3"
                          IsChecked="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Amount}"
                          Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Amount_Both}"/>
-            <toolkit:DoubleUpDown Grid.Row="0" Grid.Column="1" Margin="0,3" ShowButtonSpinner="False" Watermark="请输入优免金额" FontSize="18" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+            <toolkit:DoubleUpDown Grid.Row="0" Grid.Column="1" Margin="0,3" ShowButtonSpinner="False" Watermark="优免金额：" FontSize="18" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
                                   Text="{Binding AmountString, UpdateSourceTrigger=PropertyChanged}"
                                   IsEnabled="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Amount}"
                                   Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Amount_Both}"/>
             <RadioButton Grid.Row="1" Grid.Column="0" Content="折扣" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20"
                          IsChecked="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Discount}"
                          Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Discount_Both}"/>
-            <toolkit:DoubleUpDown Grid.Row="1" Grid.Column="1"  ShowButtonSpinner="False" Watermark="请输入折扣率(8.5折输入85)" FontSize="18" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+            <toolkit:DoubleUpDown Grid.Row="1" Grid.Column="1"  ShowButtonSpinner="False" Watermark="折扣率：" FontSize="18" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
                                   Text="{Binding DiscountString, UpdateSourceTrigger=PropertyChanged}"
                                   IsEnabled="{Binding SelectedOfferType, Converter={StaticResource OfferType2CheckedCvt}, ConverterParameter=Discount}"
                                   Visibility="{Binding AllowOfferType, Converter={StaticResource OfferType2VisibilityCvt}, ConverterParameter=Discount_Both}"/>
