@@ -81,7 +81,7 @@
                 <controls:GroupSelector x:Name="DishGroupSelector"
                                         ItemsSource="{Binding OrderDishInfos}"
                                         SelectedItem="{Binding SelectedOrderDish}"
-                                        ItemCountEachGroup="15">
+                                        ItemCountEachGroup="18">
                     <controls:GroupSelector.Template>
                         <ControlTemplate TargetType="controls:GroupSelector">
                             <DataGrid x:Name="PART_Selector"
@@ -117,7 +117,8 @@
             </controls:FlagControl>
             <controls:FlagControl Grid.Row="4" FlagWidth="3" Margin="22,0,0,10"
                                   Visibility="{Binding OrderRemark, Converter={StaticResource Strinig2VisibleCvt}}">
-                <TextBlock Text="{Binding OrderRemark, StringFormat=全单备注：{0}}"/>
+                <TextBlock TextWrapping="Wrap"
+                           Text="{Binding OrderRemark, StringFormat=全单备注：{0}}"/>
             </controls:FlagControl>
         </Grid>
 
@@ -185,8 +186,9 @@
                                             Width="15" Height="15"
                                             Visibility="{Binding SelectDishCount, Converter={StaticResource Count2VisibleCvt}}">
                                         <TextBlock Text="{Binding SelectDishCount}"
-                                               Foreground="{StaticResource CanDaoPosColorFg}"
-                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                   FontSize="14"
+                                                   Foreground="{StaticResource CanDaoPosColorFg}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         <Border.Background>
                                             <DrawingBrush>
                                                 <DrawingBrush.Drawing>

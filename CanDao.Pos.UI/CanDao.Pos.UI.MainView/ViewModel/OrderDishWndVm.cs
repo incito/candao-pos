@@ -475,8 +475,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             else if (SelectedDish.DishType == EnumDishType.Normal)//普通菜
             {
-
-
                 //临时菜处理
                 if (SelectedDish.DishName.Contains("临时菜"))
                 {
@@ -522,6 +520,18 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
+        /// 插入型添加菜品。
+        /// </summary>
+        /// <param name="item"></param>
+        private void InsertOrderDishInfo(OrderDishInfo item)
+        {
+            if (item == null)
+                return;
+
+            OrderDishInfos.Insert(0, item);
+        }
+
+        /// <summary>
         /// 添加菜品信息到点菜单集合。
         /// </summary>
         /// <param name="dishInfo">添加的菜单菜品。</param>
@@ -533,10 +543,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (item != null)
                 UpdateOrderDishNum(item, item.DishNum + dishInfo.SelectedCount);
             else
-                OrderDishInfos.Add(Convert2OrderDishInfo(SelectedDish, taste, diet));
+                InsertOrderDishInfo(Convert2OrderDishInfo(SelectedDish, taste, diet));
 
             DoWhenDishChanged();
         }
+
         /// <summary>
         /// 添加临时菜到菜单集合
         /// </summary>
@@ -576,8 +587,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             return true;
         }
 
-
-
         /// <summary>
         /// 添加套餐菜。
         /// </summary>
@@ -586,9 +595,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void AddComboDishInfo(MenuComboFullInfo comboFullInfo, string diet)
         {
             var comboOrderDish = Convert2OrderDishInfo(comboFullInfo, diet);
-            OrderDishInfos.Add(comboOrderDish);//添加套餐主菜
             if (comboOrderDish.DishInfos != null && comboOrderDish.DishInfos.Any())//将套餐内的菜加到列表来。
-                comboOrderDish.DishInfos.ForEach(OrderDishInfos.Add);
+                comboOrderDish.DishInfos.ForEach(InsertOrderDishInfo);
+            InsertOrderDishInfo(comboOrderDish);//添加套餐主菜，因为是插入型添加，所以先放套餐内的菜。
             DoWhenDishChanged();
         }
 
@@ -601,9 +610,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void AddFishPotDishInfo(MenuFishPotFullInfo fishPotFullInfo, string taste, string diet)
         {
             var fishPotDish = Convert2OrderDishInfo(fishPotFullInfo, taste, diet);
-            OrderDishInfos.Add(fishPotDish);
             if (fishPotDish.DishInfos != null && fishPotDish.DishInfos.Any())//将鱼锅内的菜加到列表来。
-                fishPotDish.DishInfos.ForEach(OrderDishInfos.Add);
+                fishPotDish.DishInfos.ForEach(InsertOrderDishInfo);
+            InsertOrderDishInfo(fishPotDish);//添加鱼锅主菜，因为是插入型添加，所以先放鱼锅内的菜。
             DoWhenDishChanged();
         }
 
