@@ -209,7 +209,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E(ex.Message);
+                ErrLog.Instance.E(ex.MyMessage());
                 return 0;
             }
         }

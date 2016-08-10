@@ -25,14 +25,14 @@ namespace CanDao.Pos.UI.Utility.View
         /// <summary>
         /// 是否显示小数点。
         /// </summary>
-        public bool ShowDot
+        public bool AllowDot
         {
-            get { return (bool)GetValue(ShowDotProperty); }
-            set { SetValue(ShowDotProperty, value); }
+            get { return (bool)GetValue(AllowDotProperty); }
+            set { SetValue(AllowDotProperty, value); }
         }
 
-        public static readonly DependencyProperty ShowDotProperty =
-            DependencyProperty.Register("ShowDot", typeof(bool), typeof(InputNumberControl), new PropertyMetadata(true));
+        public static readonly DependencyProperty AllowDotProperty =
+            DependencyProperty.Register("AllowDot", typeof(bool), typeof(InputNumberControl), new PropertyMetadata(true));
 
 
         /// <summary>

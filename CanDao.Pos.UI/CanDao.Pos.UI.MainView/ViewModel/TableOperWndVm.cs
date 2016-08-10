@@ -1392,9 +1392,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void BackAllOrderDish()
         {
-            var authorizeWnd = new AuthorizationWindow(EnumRightType.BackDish);
-            if (WindowHelper.ShowDialog(authorizeWnd, OwnerWindow))
-                WorkFlowService.Start(null, GenerateBackAllDishWf());
+            var backDishReasonWnd = new BackDishReasonSelectWindow();
+            if (!WindowHelper.ShowDialog(backDishReasonWnd, OwnerWindow))
+                return;
+
+            if (WindowHelper.ShowDialog(new AuthorizationWindow(EnumRightType.BackDish), OwnerWindow))
+                WorkFlowService.Start(backDishReasonWnd.SelectedReason, GenerateBackAllDishWf());
         }
 
         /// <summary>
@@ -2297,7 +2300,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            return service.BackAllDish(Data.OrderId, Data.TableName, Globals.UserInfo.UserName);
+            var backDishReason = param as string;
+            return service.BackAllDish(Data.OrderId, Data.TableName, Globals.UserInfo.UserName, backDishReason);
         }
 
         /// <summary>
@@ -2371,7 +2375,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (!Data.HasBeenPaied && Data.DishInfos.Any())//未结账且有菜品，则先整单退菜。
             {
-                var result = (string)BackAllDishProcess(null);
+                var result = (string)BackAllDishProcess("清台自动整单退菜");
                 if (!string.IsNullOrEmpty(result))
                     return result;
             }

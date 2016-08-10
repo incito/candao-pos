@@ -316,7 +316,7 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception ex)
             {
                 ErrLog.Instance.E(ex);
-                return new Tuple<string, List<BankInfo>>("获取银行信息异常。" + ex.Message, null);
+                return new Tuple<string, List<BankInfo>>("获取银行信息异常。" + ex.MyMessage(), null);
             }
         }
 
@@ -373,7 +373,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
-                return new Tuple<string, bool>(ex.Message, false);
+                return new Tuple<string, bool>(ex.MyMessage(), false);
             }
         }
 
@@ -406,7 +406,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
-                return new Tuple<string, ReportStatisticInfo>(ex.Message, null);
+                return new Tuple<string, ReportStatisticInfo>(ex.MyMessage(), null);
             }
         }
 
@@ -424,7 +424,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
-                return new Tuple<string, ReportStatisticInfo>(ex.Message, null);
+                return new Tuple<string, ReportStatisticInfo>(ex.MyMessage(), null);
             }
         }
 
@@ -443,7 +443,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
-                return new Tuple<string, BranchInfo>(ex.Message, null);
+                return new Tuple<string, BranchInfo>(ex.MyMessage(), null);
             }
         }
 
@@ -541,7 +541,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             catch (Exception ex)
             {
-                return new Tuple<string, List<PrintStatusInfo>>(ex.Message, null);
+                return new Tuple<string, List<PrintStatusInfo>>(ex.MyMessage(), null);
             }
         }
 

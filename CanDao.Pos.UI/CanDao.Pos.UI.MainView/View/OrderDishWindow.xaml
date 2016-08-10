@@ -24,7 +24,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="350"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -39,8 +39,8 @@
             </Grid.RowDefinitions>
             <Border Background="{StaticResource CanDaoPosColorBgGray}"
                     CornerRadius="2"
-                    Width="350" Height="53"
-                    HorizontalAlignment="Left">
+                    Height="53"
+                    HorizontalAlignment="Stretch">
                 <Grid TextBlock.FontSize="12" Margin="12,8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -81,18 +81,16 @@
                 <controls:GroupSelector x:Name="DishGroupSelector"
                                         ItemsSource="{Binding OrderDishInfos}"
                                         SelectedItem="{Binding SelectedOrderDish}"
-                                        ItemCountEachGroup="20">
+                                        ItemCountEachGroup="15">
                     <controls:GroupSelector.Template>
                         <ControlTemplate TargetType="controls:GroupSelector">
                             <DataGrid x:Name="PART_Selector"
-                                      BorderThickness="0"
-                                      AutoGenerateColumns="False"
-                                      FontSize="14"
-                                      CanUserResizeColumns="False" CanUserAddRows="False" SelectionUnit="FullRow"
                                       ItemsSource="{TemplateBinding GroupedItemsSource}"
                                       SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="菜单名称" Width="201" CanUserReorder="False" IsReadOnly="True">
+                                    <DataGridTemplateColumn Header="菜单名称" Width="201"
+                                                            CanUserReorder="False" SortMemberPath="DishName"
+                                                            IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <WrapPanel Width="201" VerticalAlignment="Center">
@@ -165,7 +163,7 @@
                 <controls:GroupSelector x:Name="LbDishGroup"
                                         ItemsSource="{Binding DishGroups}"
                                         SelectedItem="{Binding SelectedMenuDishGroup, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                        ItemCountEachGroup="6">
+                                        ItemCountEachGroup="5">
                     <controls:GroupSelector.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>

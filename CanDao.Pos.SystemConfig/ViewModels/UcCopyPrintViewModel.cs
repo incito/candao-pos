@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using CanDao.Pos.Common;
 using CanDao.Pos.SystemConfig.Models;
 using CanDao.Pos.SystemConfig.Views;
 using CanDao.Pos.Common.Classes.Mvvms;
@@ -128,7 +129,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow("配置异常："+ex.Message, false);
+                OWindowManage.ShowMessageWindow("配置异常："+ex.MyMessage(), false);
             }
            
 

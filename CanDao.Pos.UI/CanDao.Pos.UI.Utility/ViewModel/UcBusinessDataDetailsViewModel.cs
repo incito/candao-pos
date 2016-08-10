@@ -226,7 +226,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow("打印失败："+ex.Message, false);
+                OWindowManage.ShowMessageWindow("打印失败："+ex.MyMessage(), false);
             }
 
         }

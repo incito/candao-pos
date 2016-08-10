@@ -34,7 +34,7 @@
         </Grid>
         <TextBlock MaxWidth="450"
                    Text="{Binding InfoMsg}"
-                   TextWrapping="WrapWithOverflow"
+                   TextWrapping="Wrap"
                    HorizontalAlignment="Left" VerticalAlignment="Top"
                    FontSize="24" Margin="15,15,0,0"/>
     </DockPanel>

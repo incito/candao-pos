@@ -75,7 +75,7 @@
         <Button Grid.Row="3" Grid.Column="0" Content="."
                 Style="{StaticResource NumBtnStyle}"
                 Command="{Binding InputCmd}" CommandParameter="."
-                Visibility="{Binding ShowDot, ElementName=Ctrl, Converter={StaticResource Bool2VisibilityCvt}}"
+                IsEnabled="{Binding AllowDot, ElementName=Ctrl}"
                 Width="{Binding ItemWidth, ElementName=Ctrl}"
                 Height="{Binding ItemHeight, ElementName=Ctrl}"/>
         <Button Grid.Row="3" Grid.Column="1" Content="0"

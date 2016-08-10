@@ -394,7 +394,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception ex)
             {
                 ErrLog.Instance.E("打印开发票单异常。", ex);
-                MessageDialog.Warning(string.Format("打印开发票单异常：{0}", ex.Message));
+                MessageDialog.Warning(string.Format("打印开发票单异常：{0}", ex.MyMessage()));
                 return false;
             }
             finally
@@ -458,7 +458,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception ex)
             {
                 ErrLog.Instance.E("打印品项销售明细统计报表异常。", ex);
-                MessageDialog.Warning(string.Format("打印品项销售明细统计报表异常：{0}", ex.Message));
+                MessageDialog.Warning(string.Format("打印品项销售明细统计报表异常：{0}", ex.MyMessage()));
                 return false;
             }
             finally
@@ -523,7 +523,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception ex)
             {
                 ErrLog.Instance.E("打印小费统计报表异常。", ex);
-                MessageDialog.Warning(string.Format("打印小费统计报表异常：{0}", ex.Message));
+                MessageDialog.Warning(string.Format("打印小费统计报表异常：{0}", ex.MyMessage()));
                 return false;
             }
             finally
@@ -617,7 +617,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception ex)
             {
                 ErrLog.Instance.E("打印交易凭条异常。", ex);
-                MessageDialog.Warning(string.Format("打印交易凭条异常：{0}", ex.Message));
+                MessageDialog.Warning(string.Format("打印交易凭条异常：{0}", ex.MyMessage()));
                 return false;
             }
             finally
@@ -699,7 +699,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception ex)
             {
                 ErrLog.Instance.E("打印储值凭条异常。", ex);
-                MessageDialog.Warning(string.Format("打印储值凭条异常：{0}", ex.Message));
+                MessageDialog.Warning(string.Format("打印储值凭条异常：{0}", ex.MyMessage()));
                 return false;
             }
             finally
@@ -762,7 +762,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception ex)
             {
                 ErrLog.Instance.E("打印营业报表明细异常。", ex);
-                MessageDialog.Warning(string.Format("打印营业报表明细异常：{0}", ex.Message));
+                MessageDialog.Warning(string.Format("打印营业报表明细异常：{0}", ex.MyMessage()));
                 return false;
             }
             finally

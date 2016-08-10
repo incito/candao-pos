@@ -231,7 +231,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             catch (Exception ex)
             {
                 OWindowManage.ShowMessageWindow(
-                    string.Format("会员查询错误[{0}-{1}]：{2}", Globals.BranchInfo.BranchId, Model.SelectNum, ex.Message), false);
+                    string.Format("会员查询错误[{0}-{1}]：{2}", Globals.BranchInfo.BranchId, Model.SelectNum, ex.MyMessage()), false);
             }
         }
         /// <summary>
@@ -269,7 +269,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             catch (Exception ex)
             {
                 OWindowManage.ShowMessageWindow(
-                      string.Format("修改卡号失败：{0}",ex.Message), false);
+                      string.Format("修改卡号失败：{0}",ex.MyMessage()), false);
                 return;
             }
            
@@ -316,7 +316,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             catch (Exception ex)
             {
                 OWindowManage.ShowMessageWindow(
-                    string.Format("修改会员信息失败：{0}", ex.Message), false);
+                    string.Format("修改会员信息失败：{0}", ex.MyMessage()), false);
                 return;
             }
         }
@@ -350,7 +350,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             catch (Exception ex)
             {
                 OWindowManage.ShowMessageWindow(
-                    string.Format("修改手机号码失败：{0}", ex.Message), false);
+                    string.Format("修改手机号码失败：{0}", ex.MyMessage()), false);
                 return;
             }
         }
@@ -396,7 +396,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             catch (Exception ex)
             {
                 OWindowManage.ShowMessageWindow(
-                    string.Format("新增实体卡失败：{0}", ex.Message), false);
+                    string.Format("新增实体卡失败：{0}", ex.MyMessage()), false);
                 return;
             }
         }
@@ -430,7 +430,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             catch (Exception ex)
             {
                 OWindowManage.ShowMessageWindow(
-             string.Format("会员注销失败[{0}-{1}]：{2}", Globals.BranchInfo.BranchId, Model.CardNum, ex.Message), false);
+             string.Format("会员注销失败[{0}-{1}]：{2}", Globals.BranchInfo.BranchId, Model.CardNum, ex.MyMessage()), false);
             }
            
         }

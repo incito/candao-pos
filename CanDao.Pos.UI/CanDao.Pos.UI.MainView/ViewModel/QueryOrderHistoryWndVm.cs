@@ -225,7 +225,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            if (!MessageDialog.Quest(string.Format("订单号：\"{0}\"确定结算吗？", SelectedOrder.OrderId), OwnerWindow))
+            if (!MessageDialog.Quest(string.Format("订单号： \"{0}\"确定结算吗？", SelectedOrder.OrderId), OwnerWindow))
                 return;
 
             var item = GenerateTableInfo(SelectedOrder);

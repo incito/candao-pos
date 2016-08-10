@@ -99,10 +99,6 @@
                     <controls:GroupSelector.Template>
                         <ControlTemplate TargetType="controls:GroupSelector">
                             <DataGrid x:Name="PART_Selector"
-                                      BorderThickness="0"
-                                      AutoGenerateColumns="False"
-                                      FontSize="14"
-                                      CanUserResizeColumns="False" CanUserAddRows="False" SelectionUnit="FullRow"
                                       ItemsSource="{TemplateBinding GroupedItemsSource}"
                                       SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
@@ -156,9 +152,6 @@
                     <controls:GroupSelector.Template>
                         <ControlTemplate TargetType="controls:GroupSelector">
                             <DataGrid x:Name="PART_Selector"
-                                          BorderThickness="0"
-                                          AutoGenerateColumns="False" FontSize="14"
-                                          CanUserResizeColumns="False" CanUserAddRows="False" SelectionUnit="FullRow"
                                           ItemsSource="{TemplateBinding GroupedItemsSource}"
                                           SelectedItem="{TemplateBinding SelectedItem}">
                                 <DataGrid.Columns>
@@ -500,6 +493,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <controls:WatermarkTextBox Text="{Binding SelectedOnCmpAccInfo.Name}"
+                                                       IsEnabled="False"
                                                        Watermark="挂账单位："
                                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
                                                        Height="40"/>

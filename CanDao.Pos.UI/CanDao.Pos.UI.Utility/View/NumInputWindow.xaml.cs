@@ -26,7 +26,7 @@ namespace CanDao.Pos.UI.Utility.View
             TipInfo = tipInfo;
             NumWatermark = numWatermark;
             MaxNum = maxNum;
-            InputNumCtrl.ShowDot = allowDot;
+            InputNumCtrl.AllowDot = allowDot;
 
             DataContext = this;
             Loaded += (sender, args) => { DtbNum.Focus(); };

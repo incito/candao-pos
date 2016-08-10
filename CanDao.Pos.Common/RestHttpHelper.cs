@@ -167,7 +167,7 @@ namespace CanDao.Pos.Common
             }
             catch (HttpRequestException ex)
             {
-                HttpStatusCode statusCode = (HttpStatusCode)Enum.Parse(typeof(HttpStatusCode), ex.Message);
+                HttpStatusCode statusCode = (HttpStatusCode)Enum.Parse(typeof(HttpStatusCode), ex.MyMessage());
                 string errMsg = GetHttpStatusCodeString(statusCode);
                 return new Tuple<string, string>(errMsg, null);
             }

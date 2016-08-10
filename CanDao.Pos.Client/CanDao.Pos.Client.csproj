@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon64.ico</ApplicationIcon>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -143,10 +143,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon64.ico" />
+    <None Include="Images\CanDaoPosSplash.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\CanDaoPosSplash.png" />
+    <Resource Include="App.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

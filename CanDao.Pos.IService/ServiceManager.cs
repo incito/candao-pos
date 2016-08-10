@@ -93,7 +93,7 @@ namespace CanDao.Pos.IService
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E("创建服务\"{0}\"失败，失败原因：{1}", interfaceName, ex.Message);
+                ErrLog.Instance.E("创建服务\"{0}\"失败，失败原因：{1}", interfaceName, ex.MyMessage());
                 return default(T);
             }
         }

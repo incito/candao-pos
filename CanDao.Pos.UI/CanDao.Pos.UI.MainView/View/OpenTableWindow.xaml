@@ -3,6 +3,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
+                       xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
                        Width="600" Height="391" ShowInTaskbar="False"
                        Title="开台"
                        Loaded="OpenTableWindow_OnLoaded">
@@ -39,23 +40,30 @@
                                        Watermark="服务员编号："
                                        VerticalContentAlignment="Center"
                                        Height="38" Margin="0,2"/>
-            <controls:WatermarkTextBox Grid.Row="2" Grid.Column="0" 
-                                       Text="{Binding MaleCustomer, UpdateSourceTrigger=PropertyChanged}"
-                                       Watermark="就餐人数（男）："
-                                       VerticalContentAlignment="Center"
-                                       Height="38" Margin="0,2"/>
-            <controls:WatermarkTextBox Grid.Row="3" Grid.Column="0"
-                                       Text="{Binding FemaleCustomer, UpdateSourceTrigger=PropertyChanged}"
-                                       Watermark="就餐人数（女）："
-                                       VerticalContentAlignment="Center"
-                                       Height="38" Margin="0,2"/>
+            <toolkit:DoubleTextBox Grid.Row="2" Grid.Column="0" 
+                                   Text="{Binding MaleCustomer, UpdateSourceTrigger=PropertyChanged}"
+                                   Watermark="就餐人数（男）："
+                                   DecimalPlaces="0"
+                                   Maximum="100"
+                                   VerticalContentAlignment="Center"
+                                   Height="38" Margin="0,2"/>
+            <toolkit:DoubleTextBox Grid.Row="3" Grid.Column="0"
+                                   Text="{Binding FemaleCustomer, UpdateSourceTrigger=PropertyChanged}"
+                                   Watermark="就餐人数（女）："
+                                   DecimalPlaces="0"
+                                   Maximum="100"
+                                   VerticalContentAlignment="Center"
+                                   Height="38" Margin="0,2"/>
             <TextBox Grid.Row="4" Grid.Column="0"
                      Text="{Binding CustomerNumber, StringFormat=餐具数量：{0}}"
                      IsEnabled="False"
                      Visibility="{Binding IsDinnerWareEnable, Converter={StaticResource Bool2VisibilityCvt}}"
                      VerticalContentAlignment="Center"
                      Height="38" Margin="0,2"/>
-            <view:InputNumberControl Grid.Row="0" Grid.RowSpan="5" Grid.Column="1" Margin="2"/>
+            <view:InputNumberControl Grid.Row="0" Grid.RowSpan="5" Grid.Column="1"
+                                     AllowDot="False"
+                                     ItemWidth="89"
+                                     Margin="2"/>
         </Grid>
         
         <Grid Grid.Row="1">

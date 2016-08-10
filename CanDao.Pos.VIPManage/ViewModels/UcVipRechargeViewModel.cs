@@ -365,7 +365,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     catch (Exception ex)
                     {
                         OWindowManage.ShowMessageWindow(
-                            string.Format("注册失败：{0}", ex.Message), false);
+                            string.Format("注册失败：{0}", ex.MyMessage()), false);
                     }
                     finally
                     {

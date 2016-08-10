@@ -230,7 +230,7 @@ namespace CanDao.Pos.Common
             }
             catch (Exception ex)
             {
-                MessageDialog.Warning(ex.Message);
+                MessageDialog.Warning(ex.MyMessage());
             }
         }
     }

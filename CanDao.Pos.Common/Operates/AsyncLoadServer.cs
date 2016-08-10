@@ -101,7 +101,7 @@ namespace CanDao.Pos.Common.Operates
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                ErrorMessage = ex.MyMessage();
             }
         }
 

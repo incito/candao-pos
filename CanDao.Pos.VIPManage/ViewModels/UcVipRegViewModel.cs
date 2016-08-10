@@ -200,7 +200,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow("会员注册失败：" + ex.Message, false);
+                OWindowManage.ShowMessageWindow("会员注册失败：" + ex.MyMessage(), false);
             }
 
         }

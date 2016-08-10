@@ -49,7 +49,7 @@ namespace CanDao.Pos.Common
             catch (Exception ex)
             {
                 ErrLog.Instance.E("打开软键盘时异常：", ex);
-                return string.Format("打开软键盘时异常：{0}", ex.Message);
+                return string.Format("打开软键盘时异常：{0}", ex.MyMessage());
             }
         }
 

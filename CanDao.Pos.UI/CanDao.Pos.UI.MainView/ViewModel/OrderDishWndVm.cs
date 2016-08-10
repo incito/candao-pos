@@ -452,7 +452,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("检测菜品状态失败。" + result.Item1);
-                MessageDialog.Warning(result.Item1, OwnerWnd);
+                MessageDialog.Warning(string.Format("检测菜品状态失败：{0}", result), OwnerWnd);
                 return;
             }
 

@@ -148,8 +148,9 @@ namespace CanDao.Pos.IService
         /// <param name="orderId">订单Id。</param>
         /// <param name="tableNo">餐桌名。</param>
         /// <param name="userId">授权用户Id。</param>
+        /// <param name="reason">退菜原因。</param>
         /// <returns></returns>
-        string BackAllDish(string orderId, string tableNo, string userId);
+        string BackAllDish(string orderId, string tableNo, string userId, string reason);
 
         /// <summary>
         /// 结账。

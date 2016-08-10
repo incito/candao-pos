@@ -69,8 +69,6 @@
             <controls:GroupSelector.Template>
                 <ControlTemplate TargetType="controls:GroupSelector">
                     <DataGrid x:Name="PART_Selector"
-                              FontSize="14" MinRowHeight="28"
-                              AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False" SelectionUnit="FullRow"
                               ItemsSource="{TemplateBinding GroupedItemsSource}"
                               SelectedItem="{TemplateBinding SelectedItem}">
                         <DataGrid.Resources>

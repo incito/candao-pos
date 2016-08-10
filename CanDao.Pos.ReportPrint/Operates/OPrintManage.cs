@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using CanDao.Pos.Common;
 using CanDao.Pos.ReportPrint.Structs;
 using PrintKs=CanDao.Pos.ReportPrint.Drives.DPrintTRW;
 
@@ -78,7 +79,7 @@ namespace CanDao.Pos.ReportPrint.Operates
             }
             catch (Exception ex)
             {
-                ErrorString = "打印组件错误，请联系管理员："+ex.Message;
+                ErrorString = "打印组件错误，请联系管理员："+ex.MyMessage();
                 return false;
             }
           
@@ -121,7 +122,7 @@ namespace CanDao.Pos.ReportPrint.Operates
             }
             catch (Exception ex)
             {
-                ErrorString = ex.Message;
+                ErrorString = ex.MyMessage();
                 _isInit = false;
                 return false;
             }
@@ -179,7 +180,7 @@ namespace CanDao.Pos.ReportPrint.Operates
             }
             catch(Exception ex)
             {
-                ErrorString = ex.Message;
+                ErrorString = ex.MyMessage();
                 return false;
             }
         }
@@ -216,7 +217,7 @@ namespace CanDao.Pos.ReportPrint.Operates
             }
             catch (Exception ex)
             {
-                ErrorString = ex.Message;
+                ErrorString = ex.MyMessage();
                 return false;
             }
         }
@@ -246,7 +247,7 @@ namespace CanDao.Pos.ReportPrint.Operates
             }
             catch (Exception ex)
             {
-                ErrorString = ex.Message;
+                ErrorString = ex.MyMessage();
                 return false;
             }
         }
@@ -309,7 +310,7 @@ namespace CanDao.Pos.ReportPrint.Operates
             }
             catch (Exception ex)
             {
-                ErrorString = ex.Message;
+                ErrorString = ex.MyMessage();
                 return false;
             }
         }
@@ -353,7 +354,7 @@ namespace CanDao.Pos.ReportPrint.Operates
             }
             catch (Exception ex)
             {
-                ErrorString = ex.Message;
+                ErrorString = ex.MyMessage();
                 return false;
             }
         }
@@ -407,7 +408,7 @@ namespace CanDao.Pos.ReportPrint.Operates
             }
             catch (Exception ex)
             {
-                ErrorString = ex.Message;
+                ErrorString = ex.MyMessage();
                 return false;
             }
         }
@@ -430,7 +431,7 @@ namespace CanDao.Pos.ReportPrint.Operates
             }
             catch (Exception ex)
             {
-                ErrorString = ex.Message;
+                ErrorString = ex.MyMessage();
                 return false;
             }
         }

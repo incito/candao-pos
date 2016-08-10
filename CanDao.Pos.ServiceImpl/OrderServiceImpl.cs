@@ -156,10 +156,7 @@ namespace CanDao.Pos.ServiceImpl
 
             addr = string.Format("{0}/{1}/", addr, dishId);
             var result = RestHttpHelper.HttpPost<RestBaseResponse>(addr, dishUnit);
-            if (!string.IsNullOrEmpty(result.Item1))
-                return new Tuple<string, bool>("检测菜品状态失败。" + Environment.NewLine + result.Item1, false);
-
-            return new Tuple<string, bool>(null, !result.Item2.Info.Equals("1"));
+            return !string.IsNullOrEmpty(result.Item1) ? new Tuple<string, bool>(result.Item1, false) : new Tuple<string, bool>(null, !result.Item2.Info.Equals("1"));
         }
 
         public Tuple<string, List<CouponInfo>> GetCouponInfos(string couponTypeId, string userName)
@@ -338,7 +335,7 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception ex)
             {
                 ErrLog.Instance.E("下单时发生异常。", ex);
-                return ex.Message;
+                return ex.MyMessage();
             }
         }
 
@@ -381,7 +378,7 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        public string BackAllDish(string orderId, string tableNo, string userId)
+        public string BackAllDish(string orderId, string tableNo, string userId, string reason)
         {
             try
             {
@@ -394,6 +391,7 @@ namespace CanDao.Pos.ServiceImpl
                     orderNo = orderId,
                     currenttableid = tableNo,
                     discardUserId = userId,
+                    discardReason = reason,
                     actionType = ((int)EnumBackDishType.All).ToString(),
                 };
                 var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
@@ -436,7 +434,7 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception ex)
             {
                 ErrLog.Instance.E("结账时异常。", ex);
-                return "结账失败" + ex.Message;
+                return "结账失败" + ex.MyMessage();
             }
         }
 

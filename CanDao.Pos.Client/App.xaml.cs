@@ -319,7 +319,7 @@ namespace CanDao.Pos.Client
             {
                 var errMsg = string.Format("获取门店信息时错误：{0}", result.Item1);
                 ErrLog.Instance.E(errMsg);
-                MessageDialog.Warning(string.Format("{0}，请重启程序重试或联系管理员。", errMsg));
+                MessageDialog.Warning(errMsg);
                 Shutdown();
                 return;
             }

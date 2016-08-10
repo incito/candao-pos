@@ -7,10 +7,16 @@
     
     <Style TargetType="DataGrid">
         <!--网格线颜色-->
-        <Setter Property="CanUserResizeColumns" Value="false"/>
         <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource CanDaoPosColorBgWhite}"/>
         <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="RowHeaderWidth" Value="0"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserResizeColumns" Value="False"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinRowHeight" Value="28"/>
     </Style>
 
     <Style TargetType="DataGridColumnHeader">
