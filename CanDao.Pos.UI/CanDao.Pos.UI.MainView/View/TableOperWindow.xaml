@@ -414,11 +414,14 @@
                             <TextBox Text="{Binding SelectedBankInfo.Name}" IsEnabled="False" VerticalAlignment="Center" Height="40"/>
                             <Button Grid.Column="1" Content="选择银行" Command="{Binding OperCmd}" CommandParameter="SelectBank" Width="75" Height="40"/>
                         </Grid>
-                        <controls:WatermarkTextBox Text="{Binding BankCard}" Watermark="银行卡号："
-                                                   VerticalAlignment="Center" Margin="0,5" Height="40" VerticalContentAlignment="Center"/>
+                        <controls:WatermarkTextBox Text="{Binding BankCard}"
+                                                   Watermark="银行卡号："
+                                                   VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                                   Height="40" Margin="0,5"/>
                         <toolkit:DoubleTextBox Minimum="0"
                                                Text="{Binding BankAmount, UpdateSourceTrigger=PropertyChanged}"
-                                               Watermark="金额：" Margin="0,5"/>
+                                               Watermark="金额："
+                                               Height="40" Margin="0,5"/>
                     </StackPanel>
                 </TabItem>
 
@@ -455,7 +458,7 @@
                                                Text="{Binding IntegralAmount, UpdateSourceTrigger=PropertyChanged}"
                                                Watermark="使用积分：" 
                                                Margin="0,5" Height="40"/>
-                        <controls:WatermarkTextBox Text="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged}"
+                        <controls:WatermarkPasswordBox Password="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged}"
                                                    Watermark="会员密码："
                                                    VerticalContentAlignment="Center" VerticalAlignment="Center"
                                                    Margin="0,5" Height="40"/>
