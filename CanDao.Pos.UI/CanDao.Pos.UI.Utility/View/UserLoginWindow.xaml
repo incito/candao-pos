@@ -68,8 +68,8 @@
                           VerticalAlignment="Center" VerticalContentAlignment="Center" Width="220"
                           IsChecked="{Binding IsSaveLoginInfo, UpdateSourceTrigger=PropertyChanged}"/>
                 <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="登录" Command="{Binding ConfirmCmd}" Width="118" Height="40" Margin="10,0"/>
                     <Button Content="取消" IsCancel="True" Command="{Binding CancelCmd}" Width="118" Height="40" Margin="10,0"/>
+                    <Button Content="登录" Command="{Binding ConfirmCmd}" Width="118" Height="40" Margin="10,0"/>
                 </StackPanel>
                 <view:InputNumberControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1"
                                          ItemHeight="60"

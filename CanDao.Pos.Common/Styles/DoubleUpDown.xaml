@@ -66,6 +66,7 @@
     <Style TargetType="{x:Type toolkit:DoubleUpDown}" BasedOn="{StaticResource NumericUpDown}"/>
     
     <Style TargetType="{x:Type toolkit:DoubleTextBox}" BasedOn="{StaticResource NumericUpDown}">
+        <Setter Property="Minimum" Value="0"/>
         <Setter Property="ShowButtonSpinner" Value="False"/>
         <Setter Property="DecimalPlaces" Value="2"/>
         <Setter Property="SelectAllOnGotFocus" Value="True"/>

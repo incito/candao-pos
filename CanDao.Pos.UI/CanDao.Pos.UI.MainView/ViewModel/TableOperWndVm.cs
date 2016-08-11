@@ -721,6 +721,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "MemberLogin":
                     InfoLog.Instance.I("会员登入按钮点击...");
                     var loginWf = GenerateMemberLoginWf();
+                    ((TableOperWindow) OwnerWindow).TbMemAmount.Focus();//这里是为了解决登录以后直接点回车，不触发结账的问题。
                     if (loginWf != null)
                         WorkFlowService.Start(MemberCardNo, loginWf);
                     break;
@@ -1776,7 +1777,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 ChargeAmount = 0;
                 settlementInfo.Add(Data.TotalAlreadyPayment > 0 ? string.Format("还需再收：{0:f2}", remainderAmount) : string.Format("需收款：{0:f2}", remainderAmount));
             }
-            ChargeAmount = Math.Min(Math.Abs(remainderAmount), CashAmount);//找零金额只能是现金
+            var tempChargeAmount = Math.Abs(Math.Min(0, remainderAmount));
+            ChargeAmount = Math.Min(tempChargeAmount, CashAmount);//找零金额只能是现金
             if (ChargeAmount > 0)
                 settlementInfo.Add(string.Format("找零：{0:f2}", ChargeAmount));
 
@@ -1822,7 +1824,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (IntegralAmount > 0 && string.IsNullOrEmpty(MemberCardNo))
                 return "使用会员积分请先登录会员。";
 
-            if (Globals.IsYazuoMember &&
+            if (Globals.IsCanDaoMember &&
                 !string.IsNullOrWhiteSpace(MemberCardNo) &&
                 (IntegralAmount > 0 || MemberAmount > 0) &&
                 string.IsNullOrWhiteSpace(MemberPassword))//雅座会员消费不必输入密码。

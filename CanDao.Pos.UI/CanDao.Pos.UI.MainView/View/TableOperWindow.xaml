@@ -369,9 +369,9 @@
                                            VerticalAlignment="Top" HorizontalAlignment="Left"
                                            FontSize="20"
                                            Margin="13,11,0,0"/>
-                                <toolkit:DoubleTextBox Grid.Row="0" Grid.Column="1" Minimum="0"
+                                <toolkit:DoubleTextBox Grid.Row="0" Grid.Column="1"
                                                        FontSize="60"
-                                                       Text="{Binding CashAmount, UpdateSourceTrigger=PropertyChanged}">
+                                                       Text="{Binding CashAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="GotFocus">
                                             <i:InvokeCommandAction Command="{Binding CashControlFocusCmd}" CommandParameter="true"/>
@@ -414,12 +414,13 @@
                             <TextBox Text="{Binding SelectedBankInfo.Name}" IsEnabled="False" VerticalAlignment="Center" Height="40"/>
                             <Button Grid.Column="1" Content="选择银行" Command="{Binding OperCmd}" CommandParameter="SelectBank" Width="75" Height="40"/>
                         </Grid>
-                        <controls:WatermarkTextBox Text="{Binding BankCard}"
-                                                   Watermark="银行卡号："
-                                                   VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                                   Height="40" Margin="0,5"/>
+                        <toolkit:DoubleTextBox Text="{Binding BankCard}"
+                                               DecimalPlaces="0"
+                                               Watermark="银行卡号："
+                                               VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                               Height="40" Margin="0,5"/>
                         <toolkit:DoubleTextBox Minimum="0"
-                                               Text="{Binding BankAmount, UpdateSourceTrigger=PropertyChanged}"
+                                               Text="{Binding BankAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
                                                Watermark="金额："
                                                Height="40" Margin="0,5"/>
                     </StackPanel>
@@ -436,26 +437,31 @@
                                                        IsEnabled="{Binding IsMemberLogin, Converter={StaticResource BoolRevertCvt}}"
                                                        Watermark="会员卡号："
                                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                                       IsTabStop="False"
                                                        Height="40"/>
                             <Button Grid.Row="0" Grid.Column="1"
                                     Content="登录"
                                     Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2CollapsedCvt}}" 
                                     Command="{Binding OperCmd}" CommandParameter="MemberLogin" 
                                     VerticalAlignment="Center"
-                                    Width="40" Height="40"/>
+                                    Width="40" Height="40"
+                                    Focusable="False"
+                                    IsTabStop="False"/>
                             <Button Grid.Row="0" Grid.Column="1"
                                     Content="退出"
                                     Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2VisibilityCvt}}"
                                     Command="{Binding OperCmd}" CommandParameter="MemberLogout"
                                     VerticalAlignment="Center"
-                                    Width="40" Height="40"/>
+                                    Width="40" Height="40"
+                                    Focusable="False"
+                                    IsTabStop="False"/>
                         </Grid>
-                        <toolkit:DoubleTextBox Minimum="0"
-                                               Text="{Binding MemberAmount, UpdateSourceTrigger=PropertyChanged}"
+                        <toolkit:DoubleTextBox x:Name="TbMemAmount"
+                                               Text="{Binding MemberAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
                                                Watermark="刷卡金额："
                                                Margin="0,5" Height="40"/>
                         <toolkit:DoubleTextBox Minimum="0" 
-                                               Text="{Binding IntegralAmount, UpdateSourceTrigger=PropertyChanged}"
+                                               Text="{Binding IntegralAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
                                                Watermark="使用积分：" 
                                                Margin="0,5" Height="40"/>
                         <controls:WatermarkPasswordBox Password="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
@@ -506,8 +512,7 @@
                                     VerticalAlignment="Center"
                                     Width="50" Height="40"/>
                         </Grid>
-                        <toolkit:DoubleTextBox Minimum="0"
-                                               Text="{Binding DebitAmount, UpdateSourceTrigger=PropertyChanged}"
+                        <toolkit:DoubleTextBox Text="{Binding DebitAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
                                                Watermark="挂账金额："
                                                Height="40" Margin="0,5"/>
                     </StackPanel>
@@ -520,8 +525,7 @@
                                                    VerticalContentAlignment="Center"
                                                    VerticalAlignment="Center"
                                                    Margin="0,5" Height="40"/>
-                        <toolkit:DoubleTextBox Minimum="0"
-                                              Text="{Binding AlipayAmount, UpdateSourceTrigger=PropertyChanged}"
+                        <toolkit:DoubleTextBox Text="{Binding AlipayAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
                                               Watermark="金额："
                                               Margin="0,5" Height="40"/>
                     </StackPanel>
@@ -533,8 +537,7 @@
                                                    Watermark="微信号："
                                                    VerticalContentAlignment="Center" VerticalAlignment="Center"
                                                    Margin="0,5" Height="40"/>
-                        <toolkit:DoubleTextBox Minimum="0"
-                                               Text="{Binding WechatAmount, UpdateSourceTrigger=PropertyChanged}"
+                        <toolkit:DoubleTextBox Text="{Binding WechatAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
                                                Watermark="金额："
                                                Margin="0,5" Height="40"/>
                     </StackPanel>
