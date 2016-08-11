@@ -5,7 +5,6 @@
                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                        xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
-                       Title="{Binding WindowNotice, StringFormat={}{0}}"
                        Height="430" Width="330"
                        WindowStartupLocation="CenterScreen">
     <i:Interaction.Triggers>
@@ -31,7 +30,8 @@
                                    Watermark="员工编号："
                                    Text="{Binding Account, UpdateSourceTrigger=PropertyChanged}"
                                    Height="48" Width="310" Margin="0,2"
-                                   VerticalContentAlignment="Center"/>
+                                   VerticalContentAlignment="Center"
+                                   IsEnabled="{Binding AllowInputUserName}"/>
         <controls:WatermarkPasswordBox Grid.Row="1"
                                        Watermark="权限密码："
                                        Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
