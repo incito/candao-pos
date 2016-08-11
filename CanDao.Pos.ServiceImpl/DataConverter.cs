@@ -391,7 +391,7 @@ namespace CanDao.Pos.ServiceImpl
                 DishId = response.dishid,
                 SourceCount = response.startnum,
                 SelectCount = response.endnum,
-                ComboName = response.itemDesc
+                ComboName = InternationaHelper.GetBeforeSeparatorFlagData(response.itemDesc),
             };
 
             if (response.alldishes != null)
@@ -517,7 +517,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             return new MenuDishInfo
             {
-                DishName = response.title,
+                DishName = InternationaHelper.GetBeforeSeparatorFlagData(response.title),
                 DishType = (EnumDishType)response.dishtype,
                 DishId = response.dishid,
                 GroupId = response.source,
@@ -556,7 +556,7 @@ namespace CanDao.Pos.ServiceImpl
             return new MenuDishInfo
             {
                 DishId = response.contactdishid,
-                DishName = response.contactdishname,
+                DishName = InternationaHelper.GetBeforeSeparatorFlagData(response.contactdishname),
                 DishType = (EnumDishType)response.dishtype,
                 DishCount = response.dishnum,
                 Unit = InternationaHelper.GetBeforeSeparatorFlagData(response.dishunitid),
@@ -905,7 +905,7 @@ namespace CanDao.Pos.ServiceImpl
                         masterItem.DishInfos = new List<OrderDishInfo>();
                         foreach (var groupItem in dish.dishes)
                         {
-                            var subItem = ToDishInfo(groupItem, string.Empty,index);
+                            var subItem = ToDishInfo(groupItem, string.Empty, index);
                             if (masterItem.DishType == EnumDishType.FishPot)
                                 subItem.IsFishPotDish = true;
                             else if (masterItem.DishType == EnumDishType.Packages)
@@ -929,13 +929,13 @@ namespace CanDao.Pos.ServiceImpl
         /// <param name="response"></param>
         /// <param name="relateDishId"></param>
         /// <returns></returns>
-        internal static OrderDishInfo ToDishInfo(DishGroupInfo response, string relateDishId,int index)
+        internal static OrderDishInfo ToDishInfo(DishGroupInfo response, string relateDishId, int index)
         {
             var dishName = InternationaHelper.GetBeforeSeparatorFlagData(response.dishname);
             var price = string.IsNullOrEmpty(response.orderprice) ? 0 : decimal.Parse(response.orderprice);
             return new OrderDishInfo
             {
-                Index =index,
+                Index = index,
                 DishId = response.dishid,
                 DishName = dishName,
                 RelateDishId = relateDishId,
