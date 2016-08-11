@@ -1114,7 +1114,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var coupon = new UsedCouponInfo();
                 coupon.Count = 1; //默认单张
                 coupon.RelationId = info.id;
-                coupon.FreeAmount = info.deAmount;
+                coupon.BillAmount = info.deAmount;
                 coupon.Name = info.activity.name;
                 Data.UsedCouponInfos.Add(coupon);
             }
