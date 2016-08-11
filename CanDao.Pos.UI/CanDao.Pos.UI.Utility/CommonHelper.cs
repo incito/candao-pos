@@ -56,12 +56,13 @@ namespace CanDao.Pos.UI.Utility
         /// <param name="msg">广播消息。</param>
         public static void BroadcastMessageAsync(EnumBroadcastMsgType type, string msg)
         {
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                var errMsg = BroadcastMessage(type, msg);
-                if (!string.IsNullOrEmpty(errMsg))
-                    ErrLog.Instance.E("广播结算指令失败：{0}", (int)type);
-            });
+            //现在不用POS发送广播消息，暂时屏蔽，以后删除。
+            //ThreadPool.QueueUserWorkItem(t =>
+            //{
+            //    var errMsg = BroadcastMessage(type, msg);
+            //    if (!string.IsNullOrEmpty(errMsg))
+            //        ErrLog.Instance.E("广播结算指令失败：{0}", (int)type);
+            //});
         }
 
         /// <summary>

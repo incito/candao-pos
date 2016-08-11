@@ -205,6 +205,7 @@ namespace CanDao.Pos.IService
         /// <param name="cmpInfo">外卖挂账单单位信息。</param>
         /// <returns></returns>
         string SetTakeoutOrderOnAccount(string tableNo, string orderId, SetTakeoutOrderOnAccountRequest cmpInfo);
+
         /// <summary>
         /// 获取营业明细(团购券)
         /// </summary>

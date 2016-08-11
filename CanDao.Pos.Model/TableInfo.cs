@@ -190,6 +190,7 @@ namespace CanDao.Pos.Model
             Amount = srcInfo.Amount;
             TableEnable = srcInfo.TableEnable;
             TableName = srcInfo.TableName;
+            OrderId = srcInfo.OrderId;
         }
 
         /// <summary>

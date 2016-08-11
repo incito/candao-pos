@@ -18,6 +18,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 {
     public class OrderDishWndVm : NormalWindowViewModel
     {
+        #region Fields
+
+        /// <summary>
+        /// 挂单的请求类。（全局缓存。）
+        /// </summary>
+        private SetTakeoutOrderOnAccountRequest _onAccountRequest;
+
+        #endregion
+
         #region Constrator
 
         public OrderDishWndVm(TableFullInfo info)
@@ -362,6 +371,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
+        /// 异步执行下单。
+        /// </summary>
+        /// <param name="reason"></param>
+        private void OrderDishAsync(string reason = null)
+        {
+            TaskService.Start(reason, OrderDishProcess, OrderDishComplete, "下单中...");
+        }
+
+        /// <summary>
         /// 下单执行方法。
         /// </summary>
         /// <param name="arg"></param>
@@ -424,7 +442,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             NotifyDialog.Notify(msg, OwnerWnd.Owner);
             CommonHelper.BroadcastMessageAsync(EnumBroadcastMsgType.SyncOrder, Data.OrderId);
 
-            OwnerWnd.DialogResult = true;
+            if (IsOrderHanged)
+                TaskService.Start(_onAccountRequest, SetTakeoutOrderOnAccountProcess, SetTakeoutOrderOnAccountComplete, "挂单中...");
+            else
+                CloseWindow(true);
         }
 
         /// <summary>
@@ -696,12 +717,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private OrderDishInfo Convert2OrderDishInfo(MenuComboFullInfo comboFullInfo, string diet)
         {
-            //套餐的忌口信息会设置到套餐内部所有菜品上，且套餐没有口味设置。
             var comboOrderDishInfo = Convert2OrderDishInfo(comboFullInfo.ComboSelfInfo, "", diet);
 
             comboOrderDishInfo.DishInfos = new List<OrderDishInfo>();
             if (comboFullInfo.SingleDishInfos != null)
-                comboOrderDishInfo.DishInfos.AddRange(comboFullInfo.SingleDishInfos.Select(t => Convert2OrderDishInfo(t, "", diet, true)));
+                comboOrderDishInfo.DishInfos.AddRange(comboFullInfo.SingleDishInfos.Select(t => Convert2OrderDishInfo(t, "", "", true)));
             if (comboFullInfo.ComboDishInfos != null)
             {
                 var allComboDishInfos = new List<MenuDishInfo>();
@@ -709,7 +729,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 {
                     allComboDishInfos.AddRange(t.SourceDishes.Where(y => y.SelectedCount > 0));//将选择的菜品提取出来。
                 });
-                comboOrderDishInfo.DishInfos.AddRange(allComboDishInfos.Select(t => Convert2OrderDishInfo(t, "", diet, true)));
+                comboOrderDishInfo.DishInfos.AddRange(allComboDishInfos.Select(t => Convert2OrderDishInfo(t, "", "", true)));
             }
 
             if (comboOrderDishInfo.DishInfos != null)
@@ -825,6 +845,41 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
+        /// 设置外卖挂单执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object SetTakeoutOrderOnAccountProcess(object param)
+        {
+            InfoLog.Instance.I("开始设置外卖挂单...");
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+                return "创建IRestaurantService服务失败。";
+
+            return service.SetTakeoutOrderOnAccount(Data.TableNo, Data.OrderId, (SetTakeoutOrderOnAccountRequest)param);
+        }
+
+        /// <summary>
+        /// 设置外卖挂单执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void SetTakeoutOrderOnAccountComplete(object param)
+        {
+            var result = (string)param;
+            if (!string.IsNullOrEmpty(result))
+            {
+                ErrLog.Instance.E(result);
+                MessageDialog.Warning(result);
+                return;
+            }
+
+            InfoLog.Instance.I("设置外卖挂单成功。");
+            MessageDialog.Warning(string.Format("设置外卖挂单成功，挂单单号：{0}", Data.OrderId));
+            CloseWindow(true);
+            IsOrderHanged = true;
+        }
+
+        /// <summary>
         /// 清空所有已点菜品。
         /// </summary>
         private void EmptyOrderDishes()
@@ -855,7 +910,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
 
             OrderType = EnumOrderType.Normal;
-            TaskService.Start(null, OrderDishProcess, OrderDishComplete, null);
+            OrderDishAsync();
         }
 
         /// <summary>
@@ -878,7 +933,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
 
             OrderType = EnumOrderType.Free;
-            TaskService.Start(reasonWnd.SelectedReason, OrderDishProcess, OrderDishComplete, null);
+            OrderDishAsync(reasonWnd.SelectedReason);
         }
 
         /// <summary>
@@ -886,11 +941,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void HangTakeoutOrder()
         {
-            var wnd = new SelectTakeoutOnAccountCompany(Data);
+            var wnd = new SelectTakeoutOnAccountCompany();
             if (WindowHelper.ShowDialog(wnd, OwnerWnd))
             {
-                CloseWindow(true);
+                _onAccountRequest = new SetTakeoutOrderOnAccountRequest
+                {
+                    CmpCode = wnd.OnAccountInfo.Id,
+                    CmpName = wnd.OnAccountInfo.Name,
+                    ContactMobile = wnd.ContactMobile,
+                    ContactName = wnd.ContactName,
+                };
+
                 IsOrderHanged = true;
+                OrderDishAsync();
             }
         }
 

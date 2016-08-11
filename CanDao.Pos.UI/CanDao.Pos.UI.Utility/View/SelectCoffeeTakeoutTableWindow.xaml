@@ -21,7 +21,7 @@
         <controls:GroupSelector x:Name="GsCfTakeout"
                                 FontSize="20"
                                 ItemsSource="{Binding CoffeeTakeoutTables}"
-                                SelectedItem="{Binding SelectedTable}"
+                                SelectedItem="{Binding SelectedTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ItemCountEachGroup="20"
                                 ItemContainerStyle="{StaticResource LbNormalStyle}">
             <controls:GroupSelector.ItemsPanel>

@@ -5,7 +5,7 @@
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                         xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
-                        CloseBtnText="欢迎登陆餐道POS收银系统" CloseBtnEnable="False" Height="768" Width="1024"
+                        CloseBtnText="欢迎登录餐道POS收银系统" CloseBtnEnable="False" Height="768" Width="1024"
                         WindowStartupLocation="CenterScreen"
                         x:Name="MainWnd">
     <i:Interaction.Triggers>

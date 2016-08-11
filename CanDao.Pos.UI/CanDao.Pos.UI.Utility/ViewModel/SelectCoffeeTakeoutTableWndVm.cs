@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.UI.Utility.View;
@@ -17,6 +18,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             CoffeeTakeoutTables = new ObservableCollection<TableInfo>();
             if (tableInfos != null)
                 tableInfos.ForEach(CoffeeTakeoutTables.Add);
+            SelectedTable = CoffeeTakeoutTables.FirstOrDefault();
         }
 
         /// <summary>
