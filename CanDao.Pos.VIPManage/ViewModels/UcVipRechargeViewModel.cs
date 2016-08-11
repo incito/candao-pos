@@ -285,8 +285,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
             if (IsCheckInput())
             {
                 if (
-                    OWindowManage.ShowMessageWindow(
-                        string.Format("确定为用户{0}充值{1}，赠送{2}吗？", Model.TelNum, Model.RechargeValue, Model.GiveValue), true))
+                    MessageDialog.Quest(
+                        string.Format("确定为用户{0}充值{1}，赠送{2}吗？", Model.TelNum, Model.RechargeValue, Model.GiveValue)))
                 {
 
                     try
@@ -321,8 +321,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
                             }
                             else
                             {
-                                OWindowManage.ShowMessageWindow(
-                                    string.Format("会员查询错误：{0}", info.Item1), true);
+                                MessageDialog.Warning(
+                                    string.Format("会员查询错误：{0}", info.Item1));
 
                                 return;
                             }
@@ -358,14 +358,14 @@ namespace CanDao.Pos.VIPManage.ViewModels
                         }
                         else
                         {
-                            OWindowManage.ShowMessageWindow(
-                                string.Format("注册失败：{0}", ret.Item1), false);
+                            MessageDialog.Warning(
+                                string.Format("注册失败：{0}", ret.Item1));
                         }
                     }
                     catch (Exception ex)
                     {
-                        OWindowManage.ShowMessageWindow(
-                            string.Format("注册失败：{0}", ex.MyMessage()), false);
+                        MessageDialog.Warning(
+                            string.Format("注册失败：{0}", ex.MyMessage()));
                     }
                     finally
                     {
@@ -406,8 +406,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
         private void WorkOk(int res)
         {
-            OWindowManage.ShowMessageWindow(
-                string.Format("储值成功,交易流水号:{0}", _ret.TraceCode), false);
+            MessageDialog.Warning(
+                string.Format("储值成功,交易流水号:{0}", _ret.TraceCode));
             _userControl.DialogResult = true;
         }
 
@@ -449,17 +449,17 @@ namespace CanDao.Pos.VIPManage.ViewModels
             float recharge;
             if (string.IsNullOrEmpty(Model.TelNum))
             {
-                OWindowManage.ShowMessageWindow("手机号码或卡号不能为空，请检查！", false);
+                MessageDialog.Warning("手机号码或卡号不能为空，请检查！");
                 return false;
             }
             if (!float.TryParse(Model.RechargeValue, out recharge))
             {
-                OWindowManage.ShowMessageWindow("充值金额为空或格式不正确！", false);
+                MessageDialog.Warning("充值金额为空或格式不正确！");
                 return false;
             }
             if (recharge.Equals(0))
             {
-                OWindowManage.ShowMessageWindow("充值金额不能为零！", false);
+                MessageDialog.Warning("充值金额不能为零！");
                 return false;
             }
             return true;

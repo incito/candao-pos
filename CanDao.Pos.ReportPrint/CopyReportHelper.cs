@@ -46,7 +46,7 @@ namespace CanDao.Pos.ReportPrint
                 {
                     if (_printManage._isInit)
                     {
-                        if (OWindowManage.ShowMessageWindow("请先将复写卡插入到复写卡打印机，再此尝试？", true))
+                        if (MessageDialog.Quest("请先将复写卡插入到复写卡打印机，再此尝试？"))
                         {
                             CardCheck();
                         }
@@ -58,8 +58,8 @@ namespace CanDao.Pos.ReportPrint
                     else
                     {
                         var ErrorString = "打印机连接错误，请检查打印机是否连接正常。再次尝试？";
-                        if (OWindowManage.ShowMessageWindow(
-                            string.Format("{0}", ErrorString), true))
+                        if (MessageDialog.Quest(
+                            string.Format("{0}", ErrorString)))
                         {
                             CardCheck();
                         }

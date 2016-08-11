@@ -111,7 +111,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
                var res=_memberService.SendVerifyCode(response);
                 if (!string.IsNullOrEmpty(res.Item1))
                 {
-                    OWindowManage.ShowMessageWindow("发送失败，请重试！", false);
+                    MessageDialog.Warning("发送失败，请重试！");
+              
                 }
                 else
                 {
@@ -120,7 +121,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             else
             {
-                OWindowManage.ShowMessageWindow("手机号码不正确，请检查！",false);
+                MessageDialog.Warning("手机号码不正确，请检查！");
             }
         }
 
@@ -157,7 +158,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     var res = _memberService.CheckMobileRepeat(request);
                     if (!string.IsNullOrEmpty(res))
                     {
-                        OWindowManage.ShowMessageWindow(string.Format("会员注册错误：{0}", res), false);
+                        MessageDialog.Warning(string.Format("会员注册错误：{0}", res));
 
                         return;
                     }
@@ -190,7 +191,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
                     if (!string.IsNullOrEmpty(ret))
                     {
-                        OWindowManage.ShowMessageWindow(string.Format("注册失败:{0}", ret), false);
+                        MessageDialog.Warning(string.Format("注册失败:{0}", ret));
                     }
                     else
                     {
@@ -200,7 +201,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow("会员注册失败：" + ex.MyMessage(), false);
+                MessageDialog.Warning("会员注册失败：" + ex.MyMessage());
             }
 
         }
@@ -218,7 +219,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         /// <param name="res"></param>
         private void WorkOk(int res)
         {
-            OWindowManage.ShowMessageWindow(string.Format("会员注册成功!"), false);
+            MessageDialog.Warning(string.Format("会员注册成功!"));
 
             _userControl.DialogResult = true;
         }
@@ -240,37 +241,38 @@ namespace CanDao.Pos.VIPManage.ViewModels
         {
             if (!OCheckFormat.IsMobilePhone(Model.TelNum))
             {
-                OWindowManage.ShowMessageWindow("手机号码为空或格式不正确，请检查！", false);
+
+                MessageDialog.Warning("手机号码为空或格式不正确，请检查！");
                 return false;
             }
             if (string.IsNullOrEmpty(Model.Code))
             {
-                OWindowManage.ShowMessageWindow("验证码不能为空，请检查！", false);
+                MessageDialog.Warning("验证码不能为空，请检查！");
                 return false;
             }
             if (!Model.Code.Equals(_receiveCode))
             {
-                OWindowManage.ShowMessageWindow("验证码错误！", false);
+                MessageDialog.Warning("验证码错误！");
                 return false;
             }
             if (string.IsNullOrEmpty(Model.UserName))
             {
-                OWindowManage.ShowMessageWindow("姓名不能为空，请检查！", false);
+                MessageDialog.Warning("姓名不能为空，请检查！");
                 return false;
             }
             if (string.IsNullOrEmpty(Model.Psw))
             {
-                OWindowManage.ShowMessageWindow("密码不能为空，请检查！", false);
+                MessageDialog.Warning("密码不能为空，请检查！");
                 return false;
             }
             if (Model.Psw.Length<6)
             {
-                OWindowManage.ShowMessageWindow("密码长度不能少于6位，请检查！", false);
+                MessageDialog.Warning("密码长度不能少于6位，请检查！");
                 return false;
             }
             if (Model.Psw != Model.PswConfirm)
             {
-                OWindowManage.ShowMessageWindow("2个密码不一致，请检查！", false);
+                MessageDialog.Warning("2个密码不一致，请检查！");
                 return false;
             }
             return true;

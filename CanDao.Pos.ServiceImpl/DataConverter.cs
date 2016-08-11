@@ -326,7 +326,7 @@ namespace CanDao.Pos.ServiceImpl
             info.Sex = int.Parse(response.gender);
             info.Birthday = response.birthday;
             info.Address = response.member_address;
-            info.Creattime = response.createtime;
+            //info.Creattime = response.createtime;
             info.TelNum = response.mobile;
 
             foreach (var card in response.result)
@@ -933,6 +933,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             var dishName = InternationaHelper.GetBeforeSeparatorFlagData(response.dishname);
             var price = string.IsNullOrEmpty(response.orderprice) ? 0 : decimal.Parse(response.orderprice);
+            var dishStatus =string.IsNullOrEmpty(response.dishstatus) ? 0 : int.Parse(response.dishstatus);
             return new OrderDishInfo
             {
                 Index =index,
@@ -940,7 +941,7 @@ namespace CanDao.Pos.ServiceImpl
                 DishName = dishName,
                 RelateDishId = relateDishId,
                 DishNum = response.dishnum,
-                DishStatus = (EnumDishStatus)response.dishstatus,
+                DishStatus = (EnumDishStatus)dishStatus,
                 DishType = (EnumDishType)response.dishtype,
                 DishUnit = InternationaHelper.GetBeforeSeparatorFlagData(response.dishunit),
                 TempDishName = dishName.Contains("临时菜") ? response.sperequire.Split('|')[2] : "",

@@ -76,7 +76,7 @@ namespace CanDao.Pos.Model.Response
     public class DishGroupInfo
     {
         public string orderprice { set; get; }
-        public int dishstatus { set; get; }
+        public string dishstatus { set; get; }
         public string dishname { set; get; }
         public string dishunit { set; get; }
         public string sperequire { set; get; }

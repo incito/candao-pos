@@ -116,7 +116,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
                 PvSystemConfig.VSystemConfig.IsEnabledPrint = Model.IsEnabledPrint;
                 PvSystemConfig.VSystemConfig.SerialNum = Model.SerialNum;
                 OXmlOperate.SerializerFile<MSystemConfig>(PvSystemConfig.VSystemConfig, PvSystemConfig.VSystemConfigFile);
-                OWindowManage.ShowMessageWindow("配置成功！", false);
+                MessageDialog.Warning("配置成功！");
 
                 if (CopyReportHelper.CheckPrintSate())
                 {
@@ -129,7 +129,7 @@ namespace CanDao.Pos.SystemConfig.ViewModels
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow("配置异常："+ex.MyMessage(), false);
+                MessageDialog.Warning("配置异常：" + ex.MyMessage());
             }
            
 

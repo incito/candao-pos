@@ -631,7 +631,7 @@ namespace CanDao.Pos.ServiceImpl
                     orderid = orderId,
                     paid = tipAmount,
                 };
-                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "小费结算失败。");
             }
             catch (Exception ex)

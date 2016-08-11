@@ -4,6 +4,7 @@ using CanDao.Pos.Common.Classes.Mvvms;
 using CanDao.Pos.Common.Operates;
 using CanDao.Pos.UI.Utility.Model;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.Common;
 
 
 namespace CanDao.Pos.UI.Utility.ViewModel
@@ -59,23 +60,23 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         {
             if (string.IsNullOrEmpty(this.Model.DishesName))
             {
-                OWindowManage.ShowMessageWindow("菜名不能为空，请检查！", false);
+                MessageDialog.Warning("菜名不能为空，请检查！");
                 return false;
             }
             if (string.IsNullOrEmpty(this.Model.Price))
             {
-                OWindowManage.ShowMessageWindow("价格（元）不能为空，请检查！", false);
+                MessageDialog.Warning("价格（元）不能为空，请检查！");
                 return false;
             }
             if (string.IsNullOrEmpty(this.Model.DishesCount))
             {
-                OWindowManage.ShowMessageWindow("数量（份）不能为空，请检查！", false);
+                MessageDialog.Warning("数量（份）不能为空，请检查！");
                 return false;
             }
             decimal outDecimal = 0;
             if (!decimal.TryParse(this.Model.Price, out outDecimal))
             {
-                OWindowManage.ShowMessageWindow("价格（元）输入格式不正确，请检查！", false);
+                MessageDialog.Warning("价格（元）输入格式不正确，请检查！");
                 return false; 
             }
             int outTem = 0;
@@ -83,13 +84,13 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 if (outTem == 0)
                 {
-                    OWindowManage.ShowMessageWindow("数量（份）不能为[0]，请检查！", false);
+                    MessageDialog.Warning("数量（份）不能为[0]，请检查！");
                     return false;
                 }
             }
             else
             {
-                OWindowManage.ShowMessageWindow("数量（份）输入格式不正确，请检查！", false);
+                MessageDialog.Warning("数量（份）输入格式不正确，请检查！");
                 return false; 
             }
         

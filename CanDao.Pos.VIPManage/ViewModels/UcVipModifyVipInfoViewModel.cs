@@ -113,13 +113,13 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 var ret = _memberService.VipChangeInfo(Globals.BranchInfo.BranchId, VipChangeInfo);
                 if (string.IsNullOrEmpty(ret))
                 {
-                    OWindowManage.ShowMessageWindow("修改成功!", false);
+                    MessageDialog.Warning("修改成功!");
                     CloseStateHandel(true);
 
                 }
                 else
                 {
-                    OWindowManage.ShowMessageWindow("修改失败：" + ret, false);
+                    MessageDialog.Warning("修改失败：" + ret);
                 }
 
             }
@@ -149,7 +149,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         {
             if (string.IsNullOrEmpty(Model.UserName))
             {
-                OWindowManage.ShowMessageWindow("用户名不能为空！", false);
+                MessageDialog.Warning("用户名不能为空！");
                 return false;
             }
             return true;
