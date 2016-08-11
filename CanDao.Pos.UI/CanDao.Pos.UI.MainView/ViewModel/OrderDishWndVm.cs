@@ -405,6 +405,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
             }
 
+            if (!string.IsNullOrWhiteSpace(Data.MemberNo))
+            {
+                foreach (var orderDishInfo in OrderDishInfos)
+                {
+                    orderDishInfo.Price = orderDishInfo.MemberPrice;
+                }
+            }
+
             var dishList = OrderDishInfos.ToList();
             InfoLog.Instance.I("开始执行下单任务...");
             if (Data.TableType == EnumTableType.CFTable || Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout) //咖啡台和外卖模式都走咖啡模式的下单。
