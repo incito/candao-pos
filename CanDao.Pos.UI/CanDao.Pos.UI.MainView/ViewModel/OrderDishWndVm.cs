@@ -717,12 +717,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private OrderDishInfo Convert2OrderDishInfo(MenuComboFullInfo comboFullInfo, string diet)
         {
-            //套餐的忌口信息会设置到套餐内部所有菜品上，且套餐没有口味设置。
             var comboOrderDishInfo = Convert2OrderDishInfo(comboFullInfo.ComboSelfInfo, "", diet);
 
             comboOrderDishInfo.DishInfos = new List<OrderDishInfo>();
             if (comboFullInfo.SingleDishInfos != null)
-                comboOrderDishInfo.DishInfos.AddRange(comboFullInfo.SingleDishInfos.Select(t => Convert2OrderDishInfo(t, "", diet, true)));
+                comboOrderDishInfo.DishInfos.AddRange(comboFullInfo.SingleDishInfos.Select(t => Convert2OrderDishInfo(t, "", "", true)));
             if (comboFullInfo.ComboDishInfos != null)
             {
                 var allComboDishInfos = new List<MenuDishInfo>();
@@ -730,7 +729,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 {
                     allComboDishInfos.AddRange(t.SourceDishes.Where(y => y.SelectedCount > 0));//将选择的菜品提取出来。
                 });
-                comboOrderDishInfo.DishInfos.AddRange(allComboDishInfos.Select(t => Convert2OrderDishInfo(t, "", diet, true)));
+                comboOrderDishInfo.DishInfos.AddRange(allComboDishInfos.Select(t => Convert2OrderDishInfo(t, "", "", true)));
             }
 
             if (comboOrderDishInfo.DishInfos != null)
