@@ -11,7 +11,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 {
     public class TableOperNormalWndVm : TableOperWndVm
     {
-        private DishesTimer _dishesTimer;
+      
 
         public TableOperNormalWndVm(TableInfo tableInfo)
             : base(tableInfo)
@@ -23,6 +23,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             if (IsInDesignMode)
                 return;
+            _dishesTimer = new DishesTimer();
 
             if (_tableInfo.TableStatus == EnumTableStatus.Idle)
             {
@@ -49,7 +50,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             //定时检查菜品信息是否一致
             if (OwnerWindow.DialogResult == null)
             {
-                _dishesTimer = new DishesTimer();
                 _dishesTimer.TableName = _tableInfo.TableName;
                 _dishesTimer.DataChangeAction = new Action(DataChangeHandel);
                 _dishesTimer.Start(Data.TotalAmount);

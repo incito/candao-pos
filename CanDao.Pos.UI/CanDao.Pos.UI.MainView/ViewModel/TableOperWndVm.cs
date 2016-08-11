@@ -18,6 +18,7 @@ using CanDao.Pos.UI.Utility.View;
 using CanDao.Pos.UI.Utility.ViewModel;
 using Timer = System.Timers.Timer;
 using CanDao.Pos.Model.Response;
+using CanDao.Pos.UI.MainView.Operates;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -68,6 +69,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private bool _isLongPressModel;
 
+        protected DishesTimer _dishesTimer;
         #endregion
 
         #region Constructor
@@ -2485,6 +2487,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 CloseWindow(false);
             }
 
+            _dishesTimer.TotalAmount = Data.TotalAmount;
             GenerateSettlementInfo();
         }
 
