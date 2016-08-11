@@ -757,6 +757,7 @@ namespace CanDao.Pos.ServiceImpl
         }
 
         #endregion
+
         public string SetTakeoutOrderOnAccount(string tableNo, string orderId, SetTakeoutOrderOnAccountRequest cmpInfo)
         {
             var addr = ServiceAddrCache.GetServiceAddr("SetTakeoutOrderOnAccount");

@@ -12,11 +12,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// </summary>
     public class SelectTakeoutOnAccountCompanyVm : NormalWindowViewModel
     {
-        public SelectTakeoutOnAccountCompanyVm(TableInfo tableInfo)
-        {
-            TableInfo = tableInfo;
-        }
-
         /// <summary>
         /// 挂账单位信息。
         /// </summary>
@@ -46,11 +41,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public string ContactName { get; set; }
 
         /// <summary>
-        /// 餐桌信息。
-        /// </summary>
-        public TableInfo TableInfo { get; set; }
-
-        /// <summary>
         /// 选择挂账单位命令。
         /// </summary>
         public ICommand SelectOnAccountCmd { get; private set; }
@@ -76,59 +66,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             SelectOnAccountCmd = CreateDelegateCommand(SelectOnAccount);
         }
 
-        protected override void Confirm(object param)
-        {
-            TaskService.Start(null, SetTakeoutOrderOnAccountProcess, SetTakeoutOrderOnAccountComplete, "设置外卖挂单中...");
-        }
-
         protected override bool CanConfirm(object param)
         {
             return OnAccountInfo != null;
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        /// 设置外卖挂单执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private object SetTakeoutOrderOnAccountProcess(object param)
-        {
-            InfoLog.Instance.I("开始设置外卖挂单...");
-            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-            if (service == null)
-                return "创建IRestaurantService服务失败。";
-
-            var request = new SetTakeoutOrderOnAccountRequest
-                {
-                    CmpCode = OnAccountInfo.Id,
-                    CmpName = OnAccountInfo.Name,
-                    ContactMobile = ContactMobile,
-                    ContactName = ContactName,
-                };
-            return service.SetTakeoutOrderOnAccount(TableInfo.TableNo, TableInfo.OrderId, request);
-        }
-
-        /// <summary>
-        /// 设置外卖挂单执行完成。
-        /// </summary>
-        /// <param name="param"></param>
-        private void SetTakeoutOrderOnAccountComplete(object param)
-        {
-            var result = (string)param;
-            if (!string.IsNullOrEmpty(result))
-            {
-                ErrLog.Instance.E(result);
-                MessageDialog.Warning(result);
-                return;
-            }
-
-            InfoLog.Instance.I("设置外卖挂单成功。");
-            MessageDialog.Warning(string.Format("设置外卖挂单成功，挂单单号：{0}", TableInfo.OrderId));
-            CloseWindow(true);
         }
 
         #endregion
