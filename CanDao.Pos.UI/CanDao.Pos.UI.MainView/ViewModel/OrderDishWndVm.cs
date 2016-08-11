@@ -886,8 +886,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void HangTakeoutOrder()
         {
-            var wnd = new SelectTakeoutOnAccountCompany(Data);
-            if (WindowHelper.ShowDialog(wnd, OwnerWnd))
+            if (WindowHelper.ShowDialog(new SelectTakeoutOnAccountCompany(Data), OwnerWnd))
             {
                 CloseWindow(true);
                 IsOrderHanged = true;
