@@ -155,7 +155,8 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, bool>("检测菜品状态地址为空。", false);
 
             addr = string.Format("{0}/{1}/", addr, dishId);
-            var result = RestHttpHelper.HttpPost<RestBaseResponse>(addr, dishUnit);
+            var param = new Dictionary<string, string> {{"dishUnit", dishUnit}};
+            var result = RestHttpHelper.HttpPost<RestBaseResponse>(addr, param);
             return !string.IsNullOrEmpty(result.Item1) ? new Tuple<string, bool>(result.Item1, false) : new Tuple<string, bool>(null, !result.Item2.Info.Equals("1"));
         }
 
@@ -366,8 +367,7 @@ namespace CanDao.Pos.ServiceImpl
                 if (string.IsNullOrEmpty(addr))
                     return "退菜地址为空。";
 
-                var request = DataConverter.ToBackDishRequest(info.OrderId, info.TableNo, info.AuthorizerUser,
-                    info.Waiter, info.DishInfo, info.BackDishNum, info.BackDishReason);
+                var request = DataConverter.ToBackDishRequest(info.OrderId, info.TableNo, info.AuthorizerUser, info.Waiter, info.DishInfo, info.BackDishNum, info.BackDishReason);
                 var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "退菜失败。");
             }
