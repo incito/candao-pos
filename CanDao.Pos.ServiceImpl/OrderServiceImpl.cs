@@ -249,7 +249,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var result = HttpHelper.HttpPost<GetMenuComboDishResponse>(addr, request);
                 var data = result.data.rows;
-                if (data == null || !data.Any() || data.First().only == null || !data.First().only.Any())
+                if (data == null || !data.Any())
                     return new Tuple<string, MenuComboFullInfo>("套餐内没有包含任何菜品", null);
 
                 var item = DataConverter.ToMenuComboFullInfo(data.First());
