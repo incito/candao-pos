@@ -32,7 +32,7 @@ namespace CanDao.Pos.Common
         /// <summary>
         /// 显示时间（单位毫秒）
         /// </summary>
-        private int ShowTime = 3000;
+        private int ShowTime = 2000;
 
         /// <summary>
         /// 窗口宽度。

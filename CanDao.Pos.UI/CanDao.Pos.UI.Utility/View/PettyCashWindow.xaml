@@ -5,6 +5,7 @@
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                         xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
+                        xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
                         Width="642" Height="378" ShowInTaskbar="False"
                         CloseBtnText="零找金输入" CloseBtnEnable="False"
                         x:Name="MainWnd">
@@ -32,11 +33,17 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <controls:WatermarkTextBox x:Name="TxtEditPettyCash" Watermark="零找金金额：" Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Height="54" Width="250" VerticalContentAlignment="Center"/>
+        <toolkit:DoubleTextBox x:Name="TxtEditPettyCash"
+                               Watermark="零找金金额："
+                               Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
+                               FontSize="24"
+                               Height="54" Width="250" 
+                               VerticalContentAlignment="Center"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="登录" Command="{Binding ConfirmCmd}" Width="118" Height="40" Margin="10,0"/>
             <Button Content="取消" Command="{Binding CancelCmd}" Width="118" Height="40" Margin="10,0"/>
+            <Button Content="确定" Command="{Binding ConfirmCmd}" Width="118" Height="40" Margin="10,0"/>
         </StackPanel>
-        <view:InputNumberControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Margin="0,30"/>
+        <view:InputNumberControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                                 VerticalAlignment="Center"/>
     </Grid>
 </controls:PosBaseWindow>

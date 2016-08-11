@@ -30,5 +30,21 @@ namespace CanDao.Pos.Common
                 return defaultValue;
             }
         }
+
+        public static decimal Parse2Decimal(object valueStr, decimal defaultValue = 0m)
+        {
+            if (valueStr == null)
+                return defaultValue;
+
+            try
+            {
+                return Convert.ToDecimal(valueStr);
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E(string.Format("将字符：\"{0}\"转换成decimal出错。", valueStr), ex);
+                return defaultValue;
+            }
+        }
     }
 }
