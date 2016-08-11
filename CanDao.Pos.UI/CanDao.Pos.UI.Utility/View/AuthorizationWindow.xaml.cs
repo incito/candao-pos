@@ -1,8 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
-using CanDao.Pos.Common;
-using CanDao.Pos.Model.Enum;
+﻿using CanDao.Pos.Model.Enum;
 using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility.View

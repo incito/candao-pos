@@ -27,37 +27,13 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             _rightType = rightType;
             Account = userName;
             Password = "123456";
+
+            AllowInputUserName = rightType != EnumRightType.Clearner;//清机不允许修改用户名。
         }
 
         #endregion
 
         #region Properties
-
-        public string WindowNotice
-        {
-            get
-            {
-                switch (_rightType)
-                {
-                    case EnumRightType.Login:
-                        return "用户登录";
-                    case EnumRightType.Opening:
-                        return "开业权限验证";
-                    case EnumRightType.AntiSettlement:
-                        return "反结算权限验证";
-                    case EnumRightType.Clearner:
-                        return "清机权限验证";
-                    case EnumRightType.EndWork:
-                        return "结业权限验证";
-                    case EnumRightType.FreeDish:
-                        return "赠菜权限验证";
-                    case EnumRightType.BackDish:
-                        return "退菜权限验证";
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
 
         /// <summary>
         /// 账户。
@@ -92,6 +68,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 RaisePropertiesChanged("Password");
             }
         }
+
+        /// <summary>
+        /// 是否允许输入用户名。
+        /// </summary>
+        public bool AllowInputUserName { get; set; }
 
         #endregion
 
