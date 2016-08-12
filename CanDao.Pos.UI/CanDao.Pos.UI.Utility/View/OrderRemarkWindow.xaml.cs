@@ -10,10 +10,11 @@ namespace CanDao.Pos.UI.Utility.View
         /// <summary>
         /// 实例化一个全单备注设置窗口。
         /// </summary>
-        public OrderRemarkWindow()
+        public OrderRemarkWindow(string diet)
         {
             InitializeComponent();
             DataContext = new NormalWindowViewModel { OwnerWindow = this };
+            DietSetCtrl.SetInitValue(diet);
         }
 
         /// <summary>

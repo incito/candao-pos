@@ -24,7 +24,19 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <summary>
         /// 选择的口味。
         /// </summary>
-        public string SelectedTaste { get; set; }
+        private string _selectedTaste;
+        /// <summary>
+        /// 选择的口味。
+        /// </summary>
+        public string SelectedTaste
+        {
+            get { return _selectedTaste; }
+            set
+            {
+                _selectedTaste = value;
+                RaisePropertyChanged("SelectedTaste");
+            }
+        }
 
         /// <summary>
         /// 初始化口味。

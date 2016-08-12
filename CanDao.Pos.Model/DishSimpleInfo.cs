@@ -24,5 +24,15 @@
         /// 菜品数量。
         /// </summary>
         public decimal DishNum { get; set; }
+
+        /// <summary>
+        /// 菜品设置的忌口信息。
+        /// </summary>
+        public string Diet { get; set; }
+
+        /// <summary>
+        /// 口味。
+        /// </summary>
+        public string Taste { get; set; }
     }
 }

@@ -17,6 +17,12 @@ namespace CanDao.Pos.UI.Utility.View
             if (tasteList != null)
                 TasteSetCtrl.TasteInfos = tasteList.ToList();
 
+            if (!string.IsNullOrWhiteSpace(dishSimpleInfo.Taste))
+                TasteSetCtrl.SelectedTaste = dishSimpleInfo.Taste;
+
+            if (!string.IsNullOrWhiteSpace(dishSimpleInfo.Diet))
+                DietSetCtrl.SetInitValue(dishSimpleInfo.Diet);
+
             DataContext = vm;
         }
 

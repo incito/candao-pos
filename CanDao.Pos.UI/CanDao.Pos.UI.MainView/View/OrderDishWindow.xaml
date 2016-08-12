@@ -174,7 +174,7 @@
                         <DataTemplate>
                             <Border CornerRadius="5"
                                     Margin="2"
-                                    MaxWidth="65"
+                                    MaxWidth="70"
                                     TextBlock.FontSize="16">
                                 <Grid>
                                     <Grid.ColumnDefinitions>

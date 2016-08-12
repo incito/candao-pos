@@ -260,7 +260,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     ReduceDishCount();
                     break;
                 case "OrderRemark":
-                    var orderRemarkWnd = new OrderRemarkWindow();
+                    var orderRemarkWnd = new OrderRemarkWindow(OrderRemark);
                     if (WindowHelper.ShowDialog(orderRemarkWnd, OwnerWnd))
                         OrderRemark = orderRemarkWnd.SelectedDiet;
                     break;
@@ -720,6 +720,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 OrderId = Data.OrderId,
                 UserName = GetOrderWaiterId(),
                 IsPot = dishInfo.IsPot,
+                Tastes = dishInfo.Tastes,
                 Taste = taste,
                 Diet = diet,
             };
@@ -1000,13 +1001,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 DishPrice = SelectedOrderDish.Price,
                 DishUnit = SelectedOrderDish.DishUnit,
                 DishNum = SelectedOrderDish.DishNum,
+                Diet = SelectedOrderDish.Diet,
+                Taste = SelectedOrderDish.Taste,
             };
             var allowInputDishNum = SelectedOrderDish.DishType == EnumDishType.Normal; //只有单品菜才允许直接修改数量。
-            var wnd = new SetDishTasteAndDietWindow(null, dishSimpleInfo, allowInputDishNum);
+            var wnd = new SetDishTasteAndDietWindow(SelectedOrderDish.Tastes, dishSimpleInfo, allowInputDishNum);
             if (WindowHelper.ShowDialog(wnd, OwnerWnd))
             {
                 UpdateOrderDishNum(SelectedOrderDish, wnd.DishNum);
                 SelectedOrderDish.Diet = wnd.SelectedDiet;
+                SelectedOrderDish.Taste = wnd.SelectedTaste;
                 if (SelectedOrderDish.DishType == EnumDishType.Packages && SelectedOrderDish.DishInfos != null)
                 //套餐要设置套餐内部所有菜品的忌口。
                 {

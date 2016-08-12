@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using CanDao.Pos.Model.Enum;
 
 namespace CanDao.Pos.Model
@@ -161,6 +160,11 @@ namespace CanDao.Pos.Model
         /// 是否是锅底。
         /// </summary>
         public bool IsPot { get; set; }
+
+        /// <summary>
+        /// 菜品口味集合。
+        /// </summary>
+        public List<string> Tastes { get; set; }
 
         /// <summary>
         /// 菜品选择的口味。

@@ -35,6 +35,7 @@ namespace CanDao.Pos.UI.Utility.View
         public string SelectedTaste
         {
             get { return ((TasteSetControlVm)DataContext).SelectedTaste; }
+            set { ((TasteSetControlVm) DataContext).SelectedTaste = value; }
         }
     }
 }
