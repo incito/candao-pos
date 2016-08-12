@@ -5,6 +5,7 @@ using CanDao.Pos.Common.Controls.CSystem;
 using CanDao.Pos.Common.Operates;
 using CanDao.Pos.UI.Utility.Model;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.Common;
 
 
 namespace CanDao.Pos.UI.Utility.ViewModel
@@ -47,13 +48,13 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         {
             if (string.IsNullOrEmpty(Model.Password))
             {
-                OWindowManage.ShowMessageWindow("密码不能为空。", false);
+                MessageDialog.Warning("密码不能为空。");
                 return;
             }
 
             if (!Model.Password.Equals(_psw))
             {
-                OWindowManage.ShowMessageWindow("密码验证错误，请输入正确密码。", false);
+                MessageDialog.Warning("密码验证错误，请输入正确密码。");
                 return;
             }
             else

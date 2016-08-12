@@ -110,7 +110,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                var res=_memberService.SendVerifyCode(response);
                if (!string.IsNullOrEmpty(res.Item1))
                 {
-                    OWindowManage.ShowMessageWindow("发送失败，请重试！", false);
+                    MessageDialog.Warning("发送失败，请重试！");
                 }
                else
                {
@@ -119,7 +119,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             else
             {
-                OWindowManage.ShowMessageWindow("手机号码不正确，请检查！", false);
+                MessageDialog.Warning("手机号码不正确，请检查！");
             }
         }
 
@@ -131,13 +131,13 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 var res = _memberService.VipChangePsw(Globals.BranchInfo.BranchId, Model.TelNum, Model.Psw);
                 if (string.IsNullOrEmpty(res))
                 {
-                    OWindowManage.ShowMessageWindow("修改成功!", false);
+                    MessageDialog.Warning("修改成功!");
 
                     _userControl.DialogResult = true;
                 }
                 else
                 {
-                    OWindowManage.ShowMessageWindow("修改失败：" + res, false);
+                    MessageDialog.Warning("修改失败：" + res);
                 }
 
             }
@@ -159,33 +159,33 @@ namespace CanDao.Pos.VIPManage.ViewModels
         {
             if (!OCheckFormat.IsMobilePhone(Model.TelNum))
             {
-                OWindowManage.ShowMessageWindow("手机号码为空或格式不正确，请检查！", false);
+                MessageDialog.Warning("手机号码为空或格式不正确，请检查！");
                 return false;
             }
             if (string.IsNullOrEmpty(Model.Code))
             {
-                OWindowManage.ShowMessageWindow("验证码不能为空，请检查！", false);
+                MessageDialog.Warning("验证码不能为空，请检查！");
                 return false;
             }
             if (!Model.Code.Equals(_receiveCode) )
             {
-                OWindowManage.ShowMessageWindow("验证码错误，请检查！", false);
+                MessageDialog.Warning("验证码错误，请检查！");
                 return false;
             }
             
             if (string.IsNullOrEmpty(Model.Psw))
             {
-                OWindowManage.ShowMessageWindow("密码不能为空，请检查！", false);
+                MessageDialog.Warning("密码不能为空，请检查！");
                 return false;
             }
             if (Model.Psw.Length < 6)
             {
-                OWindowManage.ShowMessageWindow("密码长度不能少于6位，请检查！", false);
+                MessageDialog.Warning("密码长度不能少于6位，请检查！");
                 return false;
             }
             if (Model.Psw != Model.PswConfirm)
             {
-                OWindowManage.ShowMessageWindow("2个密码不一致，请检查！", false);
+                MessageDialog.Warning("2个密码不一致，请检查！");
                 return false;
             }
             return true;

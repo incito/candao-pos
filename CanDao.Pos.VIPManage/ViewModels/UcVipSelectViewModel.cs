@@ -151,8 +151,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
             {
                 if (string.IsNullOrEmpty(Model.SelectNum))//检查查询不能为空
                 {
-                    OWindowManage.ShowMessageWindow(
-                       string.Format("查询信息不能为空！"), false);
+                    MessageDialog.Warning(
+                       string.Format("查询信息不能为空！"));
                     return;
                 }
 
@@ -211,8 +211,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 }
                 else
                 {
-                    OWindowManage.ShowMessageWindow(
-                        string.Format("会员查询错误：{0}", res.Item1), false);
+                    MessageDialog.Warning(
+                        string.Format("会员查询错误：{0}", res.Item1));
 
                     Model.TelNum = "";
                     Model.CardType = 0;
@@ -230,8 +230,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow(
-                    string.Format("会员查询错误[{0}-{1}]：{2}", Globals.BranchInfo.BranchId, Model.SelectNum, ex.MyMessage()), false);
+                MessageDialog.Warning(
+                    string.Format("会员查询错误[{0}-{1}]：{2}", Globals.BranchInfo.BranchId, Model.SelectNum, ex.MyMessage()));
             }
         }
         /// <summary>
@@ -243,8 +243,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
             {
                 if (Model.CardType != 1)
                 {
-                    OWindowManage.ShowMessageWindow(
-                      string.Format("该会员未绑定实体卡，不能进行修改。"), false);
+                    MessageDialog.Warning(
+                      string.Format("该会员未绑定实体卡，不能进行修改。"));
                     return;
                 }
 
@@ -268,8 +268,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow(
-                      string.Format("修改卡号失败：{0}",ex.MyMessage()), false);
+                MessageDialog.Warning(
+                      string.Format("修改卡号失败：{0}",ex.MyMessage()));
                 return;
             }
            
@@ -315,8 +315,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow(
-                    string.Format("修改会员信息失败：{0}", ex.MyMessage()), false);
+                MessageDialog.Warning(
+                    string.Format("修改会员信息失败：{0}", ex.MyMessage()));
                 return;
             }
         }
@@ -349,8 +349,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow(
-                    string.Format("修改手机号码失败：{0}", ex.MyMessage()), false);
+                MessageDialog.Warning(
+                    string.Format("修改手机号码失败：{0}", ex.MyMessage()));
                 return;
             }
         }
@@ -395,8 +395,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow(
-                    string.Format("新增实体卡失败：{0}", ex.MyMessage()), false);
+                MessageDialog.Warning(
+                    string.Format("新增实体卡失败：{0}", ex.MyMessage()));
                 return;
             }
         }
@@ -408,29 +408,29 @@ namespace CanDao.Pos.VIPManage.ViewModels
         {
             try
             {
-                if (OWindowManage.ShowMessageWindow(
-               string.Format("是否要注销[{0}]?", Model.UserName), true))
+                if (MessageDialog.Quest(
+               string.Format("是否要注销[{0}]?", Model.UserName)))
                 {
                     var request = new CanDaoMemberReportLossRequest(Globals.BranchInfo.BranchId, Model.CardNum);
 
                     var resInfo = _memberService.Cancel(request);
                     if (string.IsNullOrEmpty(resInfo))
                     {
-                        OWindowManage.ShowMessageWindow(
-                            string.Format("[{0}]注销成功！", Model.CardNum), false);
+                        MessageDialog.Warning(
+                            string.Format("[{0}]注销成功！", Model.CardNum));
                         Model = new UcVipSelectModel();
                     }
                     else
                     {
-                        OWindowManage.ShowMessageWindow(
-                           string.Format("注销失败：[{0}]", resInfo), false);
+                        MessageDialog.Warning(
+                           string.Format("注销失败：[{0}]", resInfo));
                     }
                 }
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow(
-             string.Format("会员注销失败[{0}-{1}]：{2}", Globals.BranchInfo.BranchId, Model.CardNum, ex.MyMessage()), false);
+                MessageDialog.Warning(
+             string.Format("会员注销失败[{0}-{1}]：{2}", Globals.BranchInfo.BranchId, Model.CardNum, ex.MyMessage()));
             }
            
         }

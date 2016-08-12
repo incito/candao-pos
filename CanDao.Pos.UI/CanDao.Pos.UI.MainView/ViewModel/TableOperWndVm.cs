@@ -18,6 +18,7 @@ using CanDao.Pos.UI.Utility.View;
 using CanDao.Pos.UI.Utility.ViewModel;
 using Timer = System.Timers.Timer;
 using CanDao.Pos.Model.Response;
+using CanDao.Pos.UI.MainView.Operates;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -68,6 +69,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private bool _isLongPressModel;
 
+        protected DishesTimer _dishesTimer;
         #endregion
 
         #region Constructor
@@ -1276,6 +1278,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             var payBillWorkFlow = new WorkFlowInfo(PayTheBillProcess, PayTheBillComplete, "账单结算中...");
             var curStepWf = payBillWorkFlow;
+
+
+            if (HasTip && Data.TipAmount > 0)
+            {
+                var tipSettlementWf = new WorkFlowInfo(TipSettlementProcess, TipSettlementComplete, "小费结算中...");
+                curStepWf.NextWorkFlowInfo = tipSettlementWf;
+                curStepWf = tipSettlementWf;
+            }
+
             if (!string.IsNullOrEmpty(Data.MemberNo))
             {
                 if (Data.MemberInfo == null)
@@ -1288,13 +1299,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var saleMemberWf = GenerateMemberSaleWf();
                 curStepWf.NextWorkFlowInfo = saleMemberWf;
                 curStepWf = saleMemberWf;
-
-                if (HasTip && Data.TipAmount > 0)
-                {
-                    var tipSettlementWf = new WorkFlowInfo(TipSettlementProcess, TipSettlementComplete, "小费结算中...");
-                    curStepWf.NextWorkFlowInfo = tipSettlementWf;
-                    curStepWf = tipSettlementWf;
-                }
 
                 var helper = new AntiSettlementHelper();
                 var antiSettlementWf = helper.GetAntiSettlement(Data.OrderId, MemberCardNo, OwnerWindow);
@@ -2486,7 +2490,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 MessageDialog.Warning(result, OwnerWindow);
                 CloseWindow(false);
             }
-
+            if (_dishesTimer != null)
+            {
+                _dishesTimer.TotalAmount = Data.TotalAmount;
+            }
             GenerateSettlementInfo();
         }
 

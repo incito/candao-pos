@@ -189,44 +189,37 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 if (Model.StarTime.Equals("开始时间") || Model.EndTime.Equals("结束时间"))
                 {
-                    OWindowManage.ShowMessageWindow("开始和结束时间不能为空，请检查！", false);
+ 
+                    MessageDialog.Warning("开始和结束时间不能为空，请检查！");
                     return;
                 }
                 DateTime outsTime;
                 DateTime outeTime;
                 if (!DateTime.TryParse(Model.StarTime, out outsTime) | !DateTime.TryParse(Model.EndTime, out outeTime))
                 {
-                    OWindowManage.ShowMessageWindow("打印自定义时间不是时间格式，请检查！", false);
+                    MessageDialog.Warning("打印自定义时间不是时间格式，请检查！");
                     return;
                 }
                 if (outsTime > outeTime)
                 {
-                    OWindowManage.ShowMessageWindow("自定义时间选择错误：开始时间不能大于结束时间，请检查！", false);
+                    MessageDialog.Warning("自定义时间选择错误：开始时间不能大于结束时间，请检查！");
                     return;
                 }
 
-                if (!OWindowManage.ShowMessageWindow(string.Format("确定打印{0}至{1}时间段的营业数据明细？", Model.StarTime, Model.EndTime), true))
+                if (!MessageDialog.Quest(string.Format("确定打印{0}至{1}时间段的营业数据明细？", Model.StarTime, Model.EndTime)))
                 {
                     return;
                 }
-                //var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-                //var res2 = service.GetDayReportList(Model.StarTime, Model.EndTime, Globals.UserInfo.UserName);
+              
                 if (ReportPrintHelper.PrintBusinessDataDetail(Model.StarTime, Model.EndTime, Globals.UserInfo.UserName))
                 {
-                    OWindowManage.ShowMessageWindow("打印成功！", false);
+                     MessageDialog.Warning("打印成功！");
                 }
-                //if (string.IsNullOrEmpty(res2.Item1))
-                //{
-                //    if (ReportPrintHelper.PrintBusinessDataDetail(res2.Item2))
-                //    {
-                //        OWindowManage.ShowMessageWindow("打印成功！", false);
-                //    }
-                      
-                //}
+              
             }
             catch (Exception ex)
             {
-                OWindowManage.ShowMessageWindow("打印失败："+ex.MyMessage(), false);
+                MessageDialog.Warning("打印失败：" + ex.MyMessage());
             }
 
         }
