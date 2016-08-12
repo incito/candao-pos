@@ -5,12 +5,19 @@
                          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                          xmlns:controls="clr-namespace:CanDao.Pos.UI.Utility.Controls"
                          xmlns:controls1="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-                         Width="763" SizeToContent="Height" MaxHeight="768"
+                         xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
+                         Width="763" Height="650"
                          CloseBtnText="套餐选择窗口" CloseBtnEnable="False"
-                         ResizeMode="NoResize" ShowInTaskbar="False">
+                         x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding WndLoadCmd}"/>
+            <i:InvokeCommandAction Command="{Binding WindowLoadCmd}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding WindowClosedCmd}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <common:ExInvokeCommandAction Command="{Binding WindowClosingCmd}" CommandParameter="{Binding ElementName=MainWnd}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <controls1:PosBaseWindow.Resources>
@@ -69,8 +76,8 @@
             </ScrollViewer>
 
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Style="{StaticResource BtnUpStyle}" Command="{Binding PageUpCmd}"/>
-                <Button Style="{StaticResource BtnDownStyle}" Command="{Binding PageUpCmd}"/>
+                <Button Style="{StaticResource BtnUpStyle}" Command="{Binding OperCmd}" CommandParameter="PageUp"/>
+                <Button Style="{StaticResource BtnDownStyle}" Command="{Binding OperCmd}" CommandParameter="PageDown"/>
             </StackPanel>
 
             <controls:DietSetControl Grid.Row="4" x:Name="DietSetCtrl" VerticalAlignment="Bottom"/>

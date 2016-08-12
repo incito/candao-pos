@@ -54,98 +54,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #endregion
 
-        #region Commands
-
-        /// <summary>
-        /// 翻页上翻。
-        /// </summary>
-        public ICommand PageUpCmd { get; private set; }
-
-        /// <summary>
-        /// 翻页下翻。
-        /// </summary>
-        public ICommand PageDownCmd { get; private set; }
-
-        /// <summary>
-        /// 窗口加载命令。
-        /// </summary>
-        public ICommand WndLoadCmd { get; private set; }
-
-        #endregion
-
-        #region Command Methods
-
-        /// <summary>
-        /// 上翻页的执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        private void PageUp(object arg)
-        {
-            if (_wndSv == null)
-                return;
-
-            _wndSv.PageUp();
-        }
-
-        /// <summary>
-        /// 是否允许上翻页。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private bool CanPageUp(object arg)
-        {
-            if (_wndSv == null)
-                return false;
-
-            return _wndSv.VerticalOffset > 0;
-        }
-
-        /// <summary>
-        /// 下翻执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        private void PageDown(object arg)
-        {
-            if (_wndSv == null)
-                return;
-
-            _wndSv.PageDown();
-        }
-
-        /// <summary>
-        /// 是否允许下翻。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private bool CanPageDown(object arg)
-        {
-            if (_wndSv == null)
-                return false;
-
-            return _wndSv.ContentVerticalOffset + _wndSv.ViewportHeight < _wndSv.ExtentHeight;
-        }
-
-        /// <summary>
-        /// 窗口加载命令的执行方法。
-        /// </summary>
-        /// <param name="arg"></param>
-        private void WndLoad(object arg)
-        {
-            NeedPageUpDown = ((MenuComboDishSelectWindow)OwnerWindow).SvList.ComputedVerticalScrollBarVisibility == Visibility.Visible;
-            _wndSv = ((MenuComboDishSelectWindow)OwnerWindow).SvList;
-        }
-
-        #endregion
-
         #region Protected Methods
-
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            PageUpCmd = CreateDelegateCommand(PageUp, CanPageUp);
-            PageDownCmd = CreateDelegateCommand(PageDown, CanPageDown);
-            WndLoadCmd = CreateDelegateCommand(WndLoad);
-        }
 
         protected override void Confirm(object param)
         {
@@ -166,6 +75,40 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             //对套餐内所有菜品设定忌口信息
 
             base.Confirm(param);
+        }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            NeedPageUpDown = ((MenuComboDishSelectWindow)OwnerWindow).SvList.ComputedVerticalScrollBarVisibility == Visibility.Visible;
+            _wndSv = ((MenuComboDishSelectWindow)OwnerWindow).SvList;
+        }
+
+        protected override void OperMethod(object param)
+        {
+            switch (param as string)
+            {
+                case "PageUp":
+                    if (_wndSv != null)
+                        _wndSv.PageUp();
+                    break;
+                case "PageDown":
+                    if (_wndSv != null)
+                        _wndSv.PageDown();
+                    break;
+            }
+        }
+
+        protected override bool CanOperMethod(object param)
+        {
+            switch (param as string)
+            {
+                case "PageUp":
+                    return _wndSv != null && _wndSv.VerticalOffset > 0;
+                case "PageDown":
+                    return _wndSv != null && (_wndSv.ContentVerticalOffset + _wndSv.ViewportHeight < _wndSv.ExtentHeight);
+                default:
+                    return true;
+            }
         }
 
         #endregion
