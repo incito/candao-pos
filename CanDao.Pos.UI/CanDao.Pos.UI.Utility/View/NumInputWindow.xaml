@@ -34,7 +34,8 @@
                                ShowButtonSpinner="False"
                                HorizontalContentAlignment="Left" VerticalAlignment="Center" VerticalContentAlignment="Center"
                                Margin="0,2" Height="48"
-                               DecimalPlaces="2"/>
+                               DecimalPlaces="2"
+                               Maximum="1000"/>
 
         <view:InputNumberControl x:Name="InputNumCtrl" Grid.Row="2"/>
 

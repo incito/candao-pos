@@ -35,6 +35,32 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #region Properties
 
+        public string WindowNotice
+        {
+            get
+            {
+                switch (_rightType)
+                {
+                    case EnumRightType.Login:
+                        return "用户登录";
+                    case EnumRightType.Opening:
+                        return "开业授权";
+                    case EnumRightType.AntiSettlement:
+                        return "反结算授权";
+                    case EnumRightType.Clearner:
+                        return "清机授权";
+                    case EnumRightType.EndWork:
+                        return "结业授权";
+                    case EnumRightType.FreeDish:
+                        return "赠菜授权";
+                    case EnumRightType.BackDish:
+                        return "退菜授权";
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
         /// <summary>
         /// 账户。
         /// </summary>
