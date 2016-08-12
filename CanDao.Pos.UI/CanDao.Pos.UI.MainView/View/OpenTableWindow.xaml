@@ -4,9 +4,12 @@
                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                        xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
+                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                       xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
                        Width="600" Height="391" ShowInTaskbar="False"
                        Title="开台"
-                       Loaded="OpenTableWindow_OnLoaded">
+                       Loaded="OpenTableWindow_OnLoaded"
+                       x:Name="MainWnd">
     <controls:PosMsgWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,6 +17,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:PosMsgWindow.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewKeyDown">
+            <common:ExInvokeCommandAction  Command="{Binding PreviewKeyDownCmd}" CommandParameter="{Binding ElementName=MainWnd}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

@@ -414,7 +414,7 @@
                             <TextBox Text="{Binding SelectedBankInfo.Name}" IsEnabled="False" VerticalAlignment="Center" Height="40"/>
                             <Button Grid.Column="1" Content="选择银行" Command="{Binding OperCmd}" CommandParameter="SelectBank" Width="75" Height="40"/>
                         </Grid>
-                        <toolkit:DoubleTextBox Text="{Binding BankCard}"
+                        <toolkit:DoubleTextBox Text="{Binding BankCardNo}"
                                                DecimalPlaces="0"
                                                Watermark="银行卡号："
                                                VerticalAlignment="Center" VerticalContentAlignment="Center"

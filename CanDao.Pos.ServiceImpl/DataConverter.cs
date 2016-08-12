@@ -933,7 +933,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             var dishName = InternationaHelper.GetBeforeSeparatorFlagData(response.dishname);
             var price = string.IsNullOrEmpty(response.orderprice) ? 0 : decimal.Parse(response.orderprice);
-            var dishStatus =string.IsNullOrEmpty(response.dishstatus) ? 0 : int.Parse(response.dishstatus);
+            var dishStatus = string.IsNullOrEmpty(response.dishstatus) ? 0 : int.Parse(response.dishstatus);
             return new OrderDishInfo
             {
                 Index = index,
