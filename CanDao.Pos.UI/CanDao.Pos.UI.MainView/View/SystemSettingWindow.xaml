@@ -23,7 +23,7 @@
                 <views:UcCopyPrintView/>
             </TabItem.Content>
         </TabItem>
-        <TabItem HorizontalContentAlignment="Left">
+        <TabItem>
             <TabItem.Header>
                 <Grid Height="40">
                     <Grid.ColumnDefinitions>
@@ -41,7 +41,7 @@
                 <view:SysPrinterList x:Name="SysPrinterList"/>
             </TabItem.Content>
         </TabItem>
-        <TabItem HorizontalContentAlignment="Left">
+        <TabItem>
             <TabItem.Header>
                 <TextBlock Text="钱箱密码验证" FontSize="20" FontWeight="Bold" Height="40"/>
             </TabItem.Header>

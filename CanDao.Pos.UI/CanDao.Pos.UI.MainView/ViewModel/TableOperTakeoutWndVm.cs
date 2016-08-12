@@ -44,8 +44,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (IsInDesignMode)
                 return;
 
-            if (Data == null || string.IsNullOrEmpty(Data.OrderId))
-                TaskService.Start(null, OpenTableProcess, OpenTableComplete, "外卖台开台中...");
+            TaskService.Start(null, OpenTableProcess, OpenTableComplete, "外卖台开台中...");
         }
 
         protected override void OnWindowClosing(CancelEventArgs e)

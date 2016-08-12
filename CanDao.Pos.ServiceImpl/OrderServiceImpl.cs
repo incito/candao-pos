@@ -434,7 +434,7 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception ex)
             {
                 ErrLog.Instance.E("结账时异常。", ex);
-                return "结账失败" + ex.MyMessage();
+                return "结账失败。" + ex.MyMessage();
             }
         }
 

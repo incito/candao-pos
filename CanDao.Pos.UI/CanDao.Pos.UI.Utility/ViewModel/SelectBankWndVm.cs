@@ -15,8 +15,14 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             SelectedBank = bankInfo;
         }
 
+        /// <summary>
+        /// 可选银行集合。
+        /// </summary>
         public ObservableCollection<BankInfo> BankInfos { get; private set; }
 
+        /// <summary>
+        /// 选择的银行。
+        /// </summary>
         public BankInfo SelectedBank { get; set; }
 
     }

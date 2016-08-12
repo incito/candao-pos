@@ -534,11 +534,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         public ICommand PrintCmd { get; private set; }
 
         /// <summary>
-        /// 其他操作命令。
-        /// </summary>
-        public ICommand OperCmd { get; private set; }
-
-        /// <summary>
         /// 优惠券按下时命令。
         /// </summary>
         public ICommand CouponMouseDownCmd { get; private set; }
@@ -673,112 +668,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
             }
             return enable;
-        }
-
-        /// <summary>
-        /// 其他操作命令执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        private void Oper(object param)
-        {
-            switch (param as string)
-            {
-                case "More":
-                    IsPrintMoreOpened = !IsPrintMoreOpened;
-                    break;
-                case "CancelOrder":
-                    CancelOrder();
-                    break;
-                case "Resettlement":
-                    ResettlementSync();
-                    break;
-                case "Order":
-                    OrderDish();
-                    break;
-                case "OpenCashBox":
-                    OpenCashBoxAsync();
-                    break;
-                case "KeepOdd":
-                    _curOddModel = EnumOddModel.None;
-                    CalculatePaymentAmount();
-                    break;
-                case "AddDish":
-                    AddDish();
-                    break;
-                case "BackDish":
-                    BackDish();
-                    break;
-                case "SelectBank":
-                    var wnd = new SelectBankWindow(SelectedBankInfo);
-                    if (WindowHelper.ShowDialog(wnd, OwnerWindow))
-                        SelectedBankInfo = ((SelectBankWndVm)wnd.DataContext).SelectedBank;
-                    break;
-                case "SelectOnAccountCompany":
-                    InfoLog.Instance.I("开始获取挂账单位...");
-                    var companyWnd = new OnAccountCompanySelectWindow();
-                    if (WindowHelper.ShowDialog(companyWnd, OwnerWindow))
-                        SelectedOnCmpAccInfo = companyWnd.SelectedCompany;
-                    break;
-                case "MemberLogin":
-                    InfoLog.Instance.I("会员登入按钮点击...");
-                    var loginWf = GenerateMemberLoginWf();
-                    ((TableOperWindow) OwnerWindow).TbMemAmount.Focus();//这里是为了解决登录以后直接点回车，不触发结账的问题。
-                    if (loginWf != null)
-                        WorkFlowService.Start(MemberCardNo, loginWf);
-                    break;
-                case "MemberLogout":
-                    InfoLog.Instance.I("会员登出按钮点击...");
-                    var logoutWf = GenerateMemberLogoutWf();
-                    if (logoutWf != null)
-                        WorkFlowService.Start(MemberCardNo, logoutWf);
-                    break;
-                case "CouponRemove":
-                    InfoLog.Instance.I("移除优惠券：{0}。", SelectedUsedCouponInfo.Name);
-                    RemoveUsedCouponInfo(SelectedUsedCouponInfo);
-                    break;
-                case "CouponClear":
-                    InfoLog.Instance.I("清除优惠券。");
-                    ClearUsedCouponInfo();
-                    break;
-                case "ClearTable":
-                    ClearCoffeeTable();
-                    break;
-                case "BackAllDish":
-                    BackAllOrderDish();
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// 是否操作命令可用的执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private bool CanOper(object param)
-        {
-            switch (param as string)
-            {
-                case "CancelOrder":
-                    return Data != null && !Data.HasBeenPaied;
-                case "Resettlement":
-                    return Data != null && Data.HasBeenPaied;
-                case "Order":
-                case "KeepOdd":
-                case "DishCountIncrease":
-                case "DishCountReduce":
-                case "PayBill":
-                    return Data != null && !Data.HasBeenPaied;
-                case "MemberLogin":
-                    return !string.IsNullOrEmpty(MemberCardNo) && MemberCardNo.Length >= 11;
-                case "CouponRemove":
-                    return SelectedUsedCouponInfo != null;
-                case "CouponClear":
-                    return Data != null && Data.UsedCouponInfos.Any();
-                case "BackAllDish":
-                    return Data != null && Data.OrderStatus == EnumOrderStatus.Ordered && Data.DishInfos.Any();
-                default:
-                    return true;
-            }
         }
 
         /// <summary>
@@ -1135,7 +1024,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             base.InitCommand();
             DataGridPageOperCmd = CreateDelegateCommand(DataGridPageOper, CanDataGridPageOper);
             PrintCmd = CreateDelegateCommand(Print, CanPrint);
-            OperCmd = CreateDelegateCommand(Oper, CanOper);
             CashControlFocusCmd = CreateDelegateCommand(CashControlFocus);
             CouponMouseDownCmd = CreateDelegateCommand(CouponMouseDown);
             CouponMouseUpCmd = CreateDelegateCommand(CouponMouseUp);
@@ -1147,6 +1035,108 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 arg.Handled = true;
                 PayTheBill();
+            }
+        }
+
+        protected override void OperMethod(object param)
+        {
+            switch (param as string)
+            {
+                case "More":
+                    IsPrintMoreOpened = !IsPrintMoreOpened;
+                    break;
+                case "CancelOrder":
+                    CancelOrder();
+                    break;
+                case "Resettlement":
+                    ResettlementSync();
+                    break;
+                case "Order":
+                    OrderDish();
+                    break;
+                case "OpenCashBox":
+                    OpenCashBoxAsync();
+                    break;
+                case "KeepOdd":
+                    _curOddModel = EnumOddModel.None;
+                    CalculatePaymentAmount();
+                    break;
+                case "BackDish":
+                    BackDish();
+                    break;
+                case "DishWeight":
+                    DishWeight();
+                    break;
+                case "SelectBank":
+                    InfoLog.Instance.I("开始选择银行...");
+                    var wnd = new SelectBankWindow(SelectedBankInfo);
+                    if (WindowHelper.ShowDialog(wnd, OwnerWindow))
+                        SelectedBankInfo = wnd.SelectedBank;
+                    break;
+                case "SelectOnAccountCompany":
+                    InfoLog.Instance.I("开始获取挂账单位...");
+                    var companyWnd = new OnAccountCompanySelectWindow();
+                    if (WindowHelper.ShowDialog(companyWnd, OwnerWindow))
+                        SelectedOnCmpAccInfo = companyWnd.SelectedCompany;
+                    break;
+                case "MemberLogin":
+                    InfoLog.Instance.I("会员登入按钮点击...");
+                    var loginWf = GenerateMemberLoginWf();
+                    ((TableOperWindow)OwnerWindow).TbMemAmount.Focus();//这里是为了解决登录以后直接点回车，不触发结账的问题。
+                    if (loginWf != null)
+                        WorkFlowService.Start(MemberCardNo, loginWf);
+                    break;
+                case "MemberLogout":
+                    InfoLog.Instance.I("会员登出按钮点击...");
+                    var logoutWf = GenerateMemberLogoutWf();
+                    if (logoutWf != null)
+                        WorkFlowService.Start(MemberCardNo, logoutWf);
+                    break;
+                case "CouponRemove":
+                    InfoLog.Instance.I("移除优惠券：{0}。", SelectedUsedCouponInfo.Name);
+                    RemoveUsedCouponInfo(SelectedUsedCouponInfo);
+                    break;
+                case "CouponClear":
+                    InfoLog.Instance.I("清除优惠券。");
+                    ClearUsedCouponInfo();
+                    break;
+                case "ClearTable":
+                    ClearCoffeeTable();
+                    break;
+                case "BackAllDish":
+                    BackAllOrderDish();
+                    break;
+            }
+        }
+
+        protected override bool CanOperMethod(object param)
+        {
+            switch (param as string)
+            {
+                case "CancelOrder":
+                    return Data != null && !Data.HasBeenPaied;
+                case "Resettlement":
+                    return Data != null && Data.HasBeenPaied;
+                case "Order":
+                case "KeepOdd":
+                case "DishCountIncrease":
+                case "DishCountReduce":
+                case "PayBill":
+                    return Data != null && !Data.HasBeenPaied;
+                case "MemberLogin":
+                    return !string.IsNullOrEmpty(MemberCardNo) && MemberCardNo.Length >= 11;
+                case "CouponRemove":
+                    return SelectedUsedCouponInfo != null;
+                case "CouponClear":
+                    return Data != null && Data.UsedCouponInfos.Any();
+                case "BackAllDish":
+                    return Data != null && Data.OrderStatus == EnumOrderStatus.Ordered && Data.DishInfos.Any();
+                case "BackDish":
+                    return SelectedOrderDish != null;
+                case "DishWeight":
+                    return SelectedOrderDish != null && SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed;
+                default:
+                    return true;
             }
         }
 
@@ -1217,8 +1207,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return;
                 }
 
-                InfoLog.Instance.I("设置优惠券偏好成功。");
-                NotifyDialog.Notify("设置优惠券偏好成功。", OwnerWindow);
+                msg = string.Format(_curSelectedCouponInfo.IsUncommonlyUsed ? "恢复\"{0}\"为常用优惠成功。" : "设置\"{0}\"为不常用优惠成功。", _curSelectedCouponInfo.Name, Environment.NewLine);
+                InfoLog.Instance.I(msg);
+                NotifyDialog.Notify(msg, OwnerWindow);
                 SelectedCouponCategory = SelectedCouponCategory;//触发优惠券的重新获取。
             });
         }
@@ -1335,12 +1326,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (SelectedOrderDish == null)
                 return;
 
-            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
-            {
-                DishWeight();
-                return;
-            }
-
             if (SelectedOrderDish.IsComboDish)
             {
                 MessageDialog.Warning("请选择套餐主体退整个套餐。");
@@ -1406,29 +1391,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 点击加菜时执行。
-        /// </summary>
-        private void AddDish()
-        {
-            if (SelectedOrderDish == null)
-                return;
-
-            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
-            {
-                DishWeight();
-                return;
-            }
-
-            if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
-                GetTableDishInfoAsync();
-        }
-
-        /// <summary>
         /// 菜品称重。
         /// </summary>
         /// <returns></returns>
         private void DishWeight()
         {
+            if (SelectedOrderDish.DishStatus != EnumDishStatus.ToBeWeighed)
+                return;
+
             InfoLog.Instance.I("选中的菜时称重菜品，弹出称重窗体...");
             var dishWeightWnd = new NumInputWindow("称重：", SelectedOrderDish.DishName, "称重数量：", 0);
             if (WindowHelper.ShowDialog(dishWeightWnd, OwnerWindow))

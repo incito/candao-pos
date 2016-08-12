@@ -109,7 +109,7 @@ namespace CanDao.Pos.UI.Utility.Controls
         {
             var wnd = new InputMoreInfoWindow(NullText, OtherInfo);
             SoftKeyboardHelper.ShowSoftKeyboard();//系统软键盘。
-            if (wnd.ShowDialog() == true)
+            if (WindowHelper.ShowDialog(wnd))
                 OtherInfo = wnd.InputInfo;
             SoftKeyboardHelper.CloseSoftKeyboard();
         }

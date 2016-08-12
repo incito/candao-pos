@@ -31,6 +31,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (InvoiceAmount > Data.TotalAmount)
             {
                 MessageDialog.Warning("发票金额不能大于账单金额。", OwnerWindow);
+                return;
             }
 
             WorkFlowService.Start(null, new WorkFlowInfo(UpdateOrderInvoiceProcess, UpdateOrderInvoiceComplete));
