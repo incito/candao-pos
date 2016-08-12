@@ -1209,8 +1209,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return;
                 }
 
-                InfoLog.Instance.I("设置优惠券偏好成功。");
-                NotifyDialog.Notify("设置优惠券偏好成功。", OwnerWindow);
+                msg = string.Format(_curSelectedCouponInfo.IsUncommonlyUsed ? "恢复\"{0}\"为常用优惠成功。" : "设置\"{0}\"为不常用优惠成功。", _curSelectedCouponInfo.Name, Environment.NewLine);
+                InfoLog.Instance.I(msg);
+                NotifyDialog.Notify(msg, OwnerWindow);
                 SelectedCouponCategory = SelectedCouponCategory;//触发优惠券的重新获取。
             });
         }
