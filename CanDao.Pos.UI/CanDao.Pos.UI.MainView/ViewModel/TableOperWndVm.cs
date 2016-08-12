@@ -701,11 +701,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     _curOddModel = EnumOddModel.None;
                     CalculatePaymentAmount();
                     break;
-                case "AddDish":
-                    AddDish();
-                    break;
                 case "BackDish":
                     BackDish();
+                    break;
+                case "DishWeight":
+                    DishWeight();
                     break;
                 case "SelectBank":
                     var wnd = new SelectBankWindow(SelectedBankInfo);
@@ -721,7 +721,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "MemberLogin":
                     InfoLog.Instance.I("会员登入按钮点击...");
                     var loginWf = GenerateMemberLoginWf();
-                    ((TableOperWindow) OwnerWindow).TbMemAmount.Focus();//这里是为了解决登录以后直接点回车，不触发结账的问题。
+                    ((TableOperWindow)OwnerWindow).TbMemAmount.Focus();//这里是为了解决登录以后直接点回车，不触发结账的问题。
                     if (loginWf != null)
                         WorkFlowService.Start(MemberCardNo, loginWf);
                     break;
@@ -775,6 +775,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return Data != null && Data.UsedCouponInfos.Any();
                 case "BackAllDish":
                     return Data != null && Data.OrderStatus == EnumOrderStatus.Ordered && Data.DishInfos.Any();
+                case "BackDish":
+                    return SelectedOrderDish != null;
+                case "DishWeight":
+                    return SelectedOrderDish != null && SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed;
                 default:
                     return true;
             }
@@ -1337,12 +1341,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (SelectedOrderDish == null)
                 return;
 
-            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
-            {
-                DishWeight();
-                return;
-            }
-
             if (SelectedOrderDish.IsComboDish)
             {
                 MessageDialog.Warning("请选择套餐主体退整个套餐。");
@@ -1408,29 +1406,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 点击加菜时执行。
-        /// </summary>
-        private void AddDish()
-        {
-            if (SelectedOrderDish == null)
-                return;
-
-            if (SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed)
-            {
-                DishWeight();
-                return;
-            }
-
-            if (WindowHelper.ShowDialog(new OrderDishWindow(Data), OwnerWindow))
-                GetTableDishInfoAsync();
-        }
-
-        /// <summary>
         /// 菜品称重。
         /// </summary>
         /// <returns></returns>
         private void DishWeight()
         {
+            if (SelectedOrderDish.DishStatus != EnumDishStatus.ToBeWeighed)
+                return;
+
             InfoLog.Instance.I("选中的菜时称重菜品，弹出称重窗体...");
             var dishWeightWnd = new NumInputWindow("称重：", SelectedOrderDish.DishName, "称重数量：", 0);
             if (WindowHelper.ShowDialog(dishWeightWnd, OwnerWindow))

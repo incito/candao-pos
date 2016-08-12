@@ -189,12 +189,14 @@
                 <Button Style="{StaticResource BtnDownStyle}"
                         Command="{Binding DataGridPageOperCmd}"
                         CommandParameter="DishNextGroup"/>
-                <Button Style="{StaticResource BtnAddStyle}"
-                        Command="{Binding OperCmd}"
-                        CommandParameter="AddDish"/>
-                <Button Style="{StaticResource BtnReduceStyle}"
+                <Button Style="{StaticResource BtnImgBaseStyle}"
+                        Content="退菜"
                         Command="{Binding OperCmd}"
                         CommandParameter="BackDish"/>
+                <Button Style="{StaticResource BtnImgBaseStyle}"
+                        Content="称重"
+                        Command="{Binding OperCmd}"
+                        CommandParameter="DishWeight"/>
             </StackPanel>
             
             <StackPanel Grid.Row="3" Grid.Column="1">

@@ -7,9 +7,6 @@ namespace CanDao.Pos.Model
     /// </summary>
     public class BillPayInfo
     {
-        private decimal p;
-        private EnumBillPayType enumBillPayType;
-
         public BillPayInfo(decimal payAmount, EnumBillPayType payType, string bankCardNo = "", string memberCardNo = "")
         {
             PayAmount = payAmount;
@@ -41,6 +38,9 @@ namespace CanDao.Pos.Model
         /// </summary>
         public string BankCardNo { get; set; }
 
+        /// <summary>
+        /// 优惠券数量。
+        /// </summary>
         public int CouponNum { get; set; }
 
         /// <summary>
