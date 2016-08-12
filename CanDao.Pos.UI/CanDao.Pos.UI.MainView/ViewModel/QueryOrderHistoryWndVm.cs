@@ -323,10 +323,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 temp = _source.Where(t => !t.HasBeenPaied);
 
             if (!string.IsNullOrEmpty(FilterOrderId))
-                temp = temp.Where(t => t.OrderId.Contains(FilterOrderId));
+                temp = temp.Where(t => t.OrderId.ToUpper().Contains(FilterOrderId.ToUpper()));
 
             if (!string.IsNullOrEmpty(FilterTableNo))
-                temp = temp.Where(t => t.TableName.Contains(FilterTableNo));
+                temp = temp.Where(t => t.TableName.ToUpper().Contains(FilterTableNo.ToUpper()));
 
             temp.ToList().ForEach(Orders.Add);
         }
