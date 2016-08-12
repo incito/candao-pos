@@ -337,7 +337,7 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception exp)
             {
                 ErrLog.Instance.E(exp);
-                return new Tuple<string, List<OnCompanyAccountInfo>>("获取挂账单位异常。" + exp.Message, null);
+                return new Tuple<string, List<OnCompanyAccountInfo>>("获取挂账单位异常。" + exp.MyMessage(), null);
             }
         }
 
@@ -356,7 +356,7 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception exp)
             {
                 ErrLog.Instance.E(exp);
-                return new Tuple<string, TradeTime>("获取营业时间异常。" + exp.Message, null);
+                return new Tuple<string, TradeTime>("获取营业时间异常。" + exp.MyMessage(), null);
             }
         }
 

@@ -195,6 +195,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (dishInfo == null)
                 return;
 
+            if (dishInfo.FishPotType == EnumFishPotType.New)
+            {
+                MessageDialog.Warning("POS暂不支持双拼鱼锅点餐，请通过PAD点餐。");
+                return;
+            }
+
             SelectedDish = dishInfo;
             var arg = new Tuple<string, string>(dishInfo.DishId, dishInfo.SrcUnit);
             InfoLog.Instance.I("选择了一个菜品，开始检测菜品状态。");
@@ -1096,7 +1102,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             var temp = SelectedMenuDishGroup.DishInfos;
             if (!string.IsNullOrEmpty(FilterMenuGroup))
-                temp = SelectedMenuDishGroup.DishInfos.Where(t => t.FirstLetter.ToUpper().Contains(FilterMenuGroup)).ToList();
+                temp = SelectedMenuDishGroup.DishInfos.Where(t => t.FirstLetter.ToUpper().Contains(FilterMenuGroup.ToUpper())).ToList();
             temp.ForEach(MenuDishes.Add);
         }
 

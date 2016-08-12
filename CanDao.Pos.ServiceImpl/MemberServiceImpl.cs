@@ -222,7 +222,7 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception exp)
             {
                 ErrLog.Instance.E("会员消费反结算时异常。", exp);
-                return string.Format("会员消费反结算时异常：{0}", exp.Message);
+                return string.Format("会员消费反结算时异常：{0}", exp.MyMessage());
             }
         }
 

@@ -100,7 +100,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception exp)
             {
                 ErrLog.Instance.E("打印预结单时异常。", exp);
-                MessageDialog.Warning(string.Format("打印预结单时异常。{0}", exp.Message));
+                MessageDialog.Warning(string.Format("打印预结单时异常。{0}", exp.MyMessage()));
                 return false;
             }
             finally
@@ -186,7 +186,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception exp)
             {
                 ErrLog.Instance.E("打印结账单时异常。", exp);
-                MessageDialog.Warning(string.Format("打印结账单时错误：{0}", exp.Message));
+                MessageDialog.Warning(string.Format("打印结账单时错误：{0}", exp.MyMessage()));
                 return false;
             }
             finally
@@ -264,7 +264,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception exp)
             {
                 ErrLog.Instance.E("打印客用单时异常。", exp);
-                MessageDialog.Warning(string.Format("打印客用单时错误：{0}", exp.Message));
+                MessageDialog.Warning(string.Format("打印客用单时错误：{0}", exp.MyMessage()));
                 return false;
             }
             finally
@@ -335,7 +335,7 @@ namespace CanDao.Pos.ReportPrint
             catch (Exception exp)
             {
                 ErrLog.Instance.E("打印清机单异常。", exp);
-                MessageDialog.Warning(string.Format("打印清机单时错误：{0}", exp.Message));
+                MessageDialog.Warning(string.Format("打印清机单时错误：{0}", exp.MyMessage()));
                 return false;
             }
             finally
