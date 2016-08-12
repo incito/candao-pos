@@ -11,8 +11,15 @@ namespace CanDao.Pos.UI.Utility.View
         public SelectBankWindow(BankInfo bankInfo)
         {
             InitializeComponent();
-
             DataContext = new SelectBankWndVm(bankInfo) { OwnerWindow = this };
+        }
+
+        /// <summary>
+        /// 选择的银行。
+        /// </summary>
+        public BankInfo SelectedBank
+        {
+            get { return ((SelectBankWndVm)DataContext).SelectedBank; }
         }
     }
 }
