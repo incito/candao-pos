@@ -7,7 +7,7 @@
              d:DesignHeight="500" d:DesignWidth="600" Background="White">
     <Grid>
         <Grid.Resources>
-            <BitmapImage x:Key="CalendarImage" UriSource="CalendarImage.png"></BitmapImage>
+            <BitmapImage x:Key="CalendarImage" UriSource="../Controls/CalendarImage.png"></BitmapImage>
             
             <Style TargetType="TextBlock">
                 <Setter Property="HorizontalAlignment" Value="Left"></Setter>
@@ -73,7 +73,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         
-        <TextBlock Text="选择营业时间"></TextBlock>
+        <TextBlock Text="选择营业时间" Visibility="Collapsed"></TextBlock>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Visibility="Collapsed">
             <RadioButton Content="{Binding Model.Today}" ToolTip="今天" Margin="15,0,0,0" Command="{Binding TodayCommand}" IsChecked="{Binding Model.IsToday}"></RadioButton>
             <RadioButton Content="{Binding Model.Yesterday}" ToolTip="昨天" Margin="15,0,0,0" Command="{Binding YesterdayCommand}" IsChecked="{Binding Model.IsYesterday}"></RadioButton>

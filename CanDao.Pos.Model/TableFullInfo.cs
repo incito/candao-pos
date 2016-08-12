@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using CanDao.Pos.Model.Enum;
+using CanDao.Pos.Model.Response;
 
 namespace CanDao.Pos.Model
 {
@@ -81,6 +82,14 @@ namespace CanDao.Pos.Model
         /// 总挂账金额。
         /// </summary>
         public decimal TotalDebitAmount { get; set; }
+        /// <summary>
+        /// 四舍五入金额
+        /// </summary>
+        public decimal RoundAmount { get; set; }
+        /// <summary>
+        /// 抹零金额
+        /// </summary>
+        public decimal RemovezeroAmount { get; set; }
 
         /// <summary>
         /// 小费金额。
@@ -242,6 +251,9 @@ namespace CanDao.Pos.Model
             TipAmount = info.TipAmount;
             TotalAmount = info.TotalAmount;
             TotalFreeAmount = info.TotalFreeAmount;
+            TotalDebitAmount = info.TotalDebitAmount;
+            RemovezeroAmount = info.RemovezeroAmount;
+            RoundAmount = info.RoundAmount;
 
             DishInfos.Clear();
             if (info.DishInfos != null && info.DishInfos.Any())
@@ -258,6 +270,58 @@ namespace CanDao.Pos.Model
                 {
                     UsedCouponInfos.Add(couponInfo);
                 }
+            }
+        }
+
+        public void ClonePreferentialInfo(preferentialInfoResponse preferential)
+        {
+            TotalFreeAmount = preferential.toalFreeAmount;
+            PaymentAmount = preferential.payamount;
+            TipAmount = preferential.tipAmount;
+            TotalAmount = preferential.menuAmount;
+            TotalDebitAmount = preferential.toalDebitAmount;
+            switch (preferential.moneyDisType)
+            {
+                case 0: //未设置
+                    {
+                        RoundAmount = 0;
+                        RemovezeroAmount = 0;
+                        break;
+                    }
+                case 1: //四舍五入
+                    {
+                        RoundAmount = preferential.moneyWipeAmount;
+                        RemovezeroAmount = 0;
+                        break;
+                    }
+                case 2:
+                    {
+                        RoundAmount = 0;
+                        RemovezeroAmount = preferential.moneyWipeAmount;
+                        break;
+                    }
+            }
+
+
+
+            if (preferential.detailPreferentials == null)
+            { return; }
+
+            foreach (var info in preferential.detailPreferentials)
+            {
+                var coupon = new UsedCouponInfo();
+                coupon.CouponInfo = new CouponInfo();
+                coupon.CouponInfo.RuleId = info.coupondetailid;
+                coupon.CouponInfo.CouponId = info.preferential;
+
+
+                coupon.Count = 1;//默认单张
+                coupon.RelationId = info.id;
+                coupon.BillAmount = info.deAmount;
+                coupon.DebitAmount = info.toalDebitAmount;
+                coupon.FreeAmount = info.toalFreeAmount;
+                coupon.Name = info.activity.name;
+                UsedCouponInfos.Add(coupon);
             }
         }
     }

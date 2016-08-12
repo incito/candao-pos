@@ -18,6 +18,7 @@ namespace CanDao.Pos.VIPManage.Models
         private string _selectNum;
         private int _cardType;
 
+        private string _showCardNum;
         private string _cardNum;
         private string _telNum;
         private string _userName;
@@ -43,6 +44,19 @@ namespace CanDao.Pos.VIPManage.Models
             {
                 _selectNum = value;
                 RaisePropertyChanged(() => SelectNum);
+            }
+        }
+
+        /// <summary>
+        /// 会员卡
+        /// </summary>
+        public string ShowCardNum
+        {
+            get { return _showCardNum; }
+            set
+            {
+                _showCardNum = value;
+                RaisePropertyChanged(() => ShowCardNum);
             }
         }
 

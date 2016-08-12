@@ -139,7 +139,7 @@ namespace CanDao.Pos.ServiceImpl
                 param.Add("time", storeInfo.TradeTime.ToString("HH:mm:ss"));
                 param.Add("storeName", storeInfo.ReportTitle);
                 param.Add("storedAmount", storeInfo.StoredAmount.ToString());
-                param.Add("storedBalance", storeInfo.ScoreBalance.ToString());
+                param.Add("storedBalance", storeInfo.StoredBalance.ToString());
                 param.Add("storedPoint", storeInfo.ScoreBalance.ToString());
 
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, param);

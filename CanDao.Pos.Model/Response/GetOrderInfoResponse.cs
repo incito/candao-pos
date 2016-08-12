@@ -46,7 +46,19 @@ namespace CanDao.Pos.Model.Response
         /// <summary>
         /// 优免金额
         /// </summary>
-        public decimal freeamount { set; get; }
+        public decimal toalFreeAmount { set; get; }
+        /// <summary>
+        /// 四舍五入或抹零金额
+        /// </summary>
+        public decimal moneyWipeAmount { set; get; }
+        /// <summary>
+        /// 0:未设置，1：四舍五入，2：抹零
+        /// </summary>
+        public int moneyDisType { set; get; }
+        /// <summary>
+        /// 总挂账
+        /// </summary>
+        public decimal toalDebitAmount { set; get; }
         public List<GetpreferentialDetails> detailPreferentials { set; get; }
     }
 
@@ -57,6 +69,22 @@ namespace CanDao.Pos.Model.Response
         /// 优惠券优惠金额
         /// </summary>
         public decimal deAmount { set; get; }
+        /// <summary>
+        /// 优免
+        /// </summary>
+        public decimal toalFreeAmount { set; get; }
+        /// <summary>
+        /// 挂账
+        /// </summary>
+        public decimal toalDebitAmount { set; get; }
+        /// <summary>
+        /// 优惠券Id
+        /// </summary>
+        public string preferential { set; get; }
+        /// <summary>
+        /// 优惠券明细Id
+        /// </summary>
+        public string coupondetailid { set; get; }
         public PreferentialDetails activity { set; get; }
     }
 

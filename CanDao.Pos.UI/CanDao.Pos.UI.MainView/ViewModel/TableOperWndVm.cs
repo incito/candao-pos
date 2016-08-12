@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Timers;
 using System.Windows.Input;
@@ -635,7 +636,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     if (MessageDialog.Quest(string.Format("确定要重印餐台\"{0}\"的客用单吗？", Data.TableName)))
                     {
                         InfoLog.Instance.I("开始重印餐台\"{0}\"的客用单...", Data.TableName);
-                        ReportPrintHelper.PrintCustomUseBillReport(Data.OrderId, Globals.UserInfo.UserName);
+                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.UserName);
                         InfoLog.Instance.I("结束重印餐台\"{0}\"的客用单。", Data.TableName);
                     }
                     break;
@@ -722,7 +723,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                 InfoLog.Instance.I("开始折扣类优惠券：{0}计算接口。", _curSelectedCouponInfo.Name);
 
-                CreatUsePreferentialRequest(1, "", 0, 0, 0);
+                CreatUsePreferentialRequest("1", "", 0, 0, 0);
 
                 //TaskService.Start(0m, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");//优惠券折扣时，自定义折扣为0。
             }
@@ -745,7 +746,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     //_curSelectedCouponInfo.FreeAmount = 0;
                     //_curSelectedCouponInfo.Amount = debitAmount;
 
-                    CreatUsePreferentialRequest(1, "", 0, debitAmount, 1);
+                    CreatUsePreferentialRequest("1", "", 0, debitAmount, 1);
 
                     //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
                 }
@@ -766,7 +767,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                             //AddCouponInfoAsUsed(_curSelectedCouponInfo, Convert.ToInt32(numWnd.InputNum), false);
 
-                            CreatUsePreferentialRequest(Convert.ToInt32(numWnd.InputNum), "", 0, 0, 0);
+                            CreatUsePreferentialRequest(numWnd.InputNum.ToString(), "", 0, 0, 0);
 
                         }
                     }
@@ -785,7 +786,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                                 return;
                             }
 
-                            CreatUsePreferentialRequest(1, "", 0, offSelectWnd.Amount, 1);
+                            CreatUsePreferentialRequest("1", "", 0, offSelectWnd.Amount, 1);
 
                             //_curSelectedCouponInfo.BillAmount = offSelectWnd.Amount;
                             //_curSelectedCouponInfo.FreeAmount = offSelectWnd.Amount;
@@ -793,7 +794,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         }
                         else if (offSelectWnd.SelectedOfferType == EnumOfferType.Discount)
                         {
-                            CreatUsePreferentialRequest(1, "", offSelectWnd.Discount, 0, 1);
+                            CreatUsePreferentialRequest("1", "", offSelectWnd.Discount, 0, 1);
 
 
                             //TaskService.Start(offSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
@@ -813,7 +814,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="preferentialAmout">手工优惠金额</param>
         /// <param name="isCustom">是否收银员输入（1：是：0不是）</param>
         /// <returns></returns>
-        private void CreatUsePreferentialRequest(int pNum, string dishName, decimal disRate, decimal preferentialAmout, int isCustom)
+        private void CreatUsePreferentialRequest(string pNum, string dishid, decimal disRate, decimal preferentialAmout, int isCustom)
         {
             var usePreferential = new UsePreferentialRequest();
             usePreferential.orderid = _tableInfo.OrderId;
@@ -825,8 +826,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             usePreferential.preferentialAmt = Data.TotalFreeAmount.ToString();
 
-            usePreferential.preferentialNum = pNum.ToString();
-            usePreferential.dishname = dishName;
+            usePreferential.preferentialNum = pNum;
+            usePreferential.dishid = dishid;
             usePreferential.isCustom = isCustom.ToString();
             usePreferential.disrate = disRate;
             usePreferential.preferentialAmout = preferentialAmout.ToString();
@@ -881,14 +882,20 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     var giftDishWnd = new SelectGiftDishWindow(Data);
                     if (WindowHelper.ShowDialog(giftDishWnd, OwnerWindow))
                     {
-                        foreach (var giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
+                        if (giftDishWnd.SelectedGiftDishInfos.Count > 0)
                         {
-                            CreatUsePreferentialRequest(giftDishInfo.SelectGiftNum, giftDishInfo.DishName, 0, giftDishInfo.DishPrice, 0);
+                            var dishIds=new List<string>();
+                            var dishNum=new List<string>();
+                            foreach (var giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
+                            {
+                              
+                                dishIds.Add(giftDishInfo.DishId);
+                                dishNum.Add(giftDishInfo.SelectGiftNum.ToString());
+                            }
+                            CreatUsePreferentialRequest(string.Join(",", dishNum), string.Join(",", dishIds), 0, 0, 0);
 
-                            //_curSelectedCouponInfo.Name = string.Format("赠菜：{0}", giftDishInfo.DishName);
-                            //_curSelectedCouponInfo.FreeAmount = giftDishInfo.DishPrice;
-                            //AddCouponInfoAsUsed(_curSelectedCouponInfo, giftDishInfo.SelectGiftNum, false);
                         }
+                       
                         result = true;
                     }
                     break;
@@ -898,7 +905,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     if (WindowHelper.ShowDialog(diacountSelectWnd, OwnerWindow))
                     {
                         InfoLog.Instance.I("选择折扣率：{0}，开始调用接口计算折扣金额...", diacountSelectWnd.Discount);
-                        CreatUsePreferentialRequest(1, "", diacountSelectWnd.Discount, 0, 1);
+                        CreatUsePreferentialRequest("1", "", diacountSelectWnd.Discount, 0, 1);
 
                         //TaskService.Start(diacountSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
                         result = true;
@@ -909,7 +916,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     var amountSelectWnd = new OfferTypeSelectWindow(EnumOfferType.Amount);
                     if (WindowHelper.ShowDialog(amountSelectWnd, OwnerWindow))
                     {
-                        CreatUsePreferentialRequest(1, "", 0, amountSelectWnd.Amount, 1);
+                        CreatUsePreferentialRequest("1", "", 0, amountSelectWnd.Amount, 1);
 
                         //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, amountSelectWnd.Amount);
                         result = true;
@@ -995,26 +1002,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             TaskService.Start(parma, DeleCouponInfoProcess, DeleCouponInfoComplete, "正在清空优惠券...");
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="preferential"></param>
         private void ProcessCouponShow(preferentialInfoResponse preferential)
         {
-            foreach (var info in preferential.detailPreferentials)
-            {
-                var coupon = new UsedCouponInfo();
-                coupon.Count = 1; //默认单张
-                coupon.RelationId = info.id;
-                coupon.BillAmount = info.deAmount;
-                coupon.Name = info.activity.name;
-                Data.UsedCouponInfos.Add(coupon);
-            }
-            Data.TotalFreeAmount = preferential.amount;
-            Data.PaymentAmount = preferential.payamount;
-
+            Data.ClonePreferentialInfo(preferential);
             GenerateSettlementInfo();
         }
+
         #endregion
 
         #endregion
@@ -1261,7 +1259,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 InfoLog.Instance.I("用户选择继续结算...");
             }
 
-            if (!MessageDialog.Quest(string.Format("台号：{0} 确定现在结算吗？", Data.TableName), OwnerWindow))
+            if (!MessageDialog.Quest(string.Format("桌号：{0} 确定现在结算吗？", Data.TableName), OwnerWindow))
                 return;
 
             var param = new Tuple<string, string, List<BillPayInfo>>(Data.OrderId, Globals.UserInfo.UserName, GenerateBillPayInfos());
@@ -2420,6 +2418,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 Data.CloneOrderData(result.Item2);//合并餐台账单明细(金额，菜，优惠)
                 MemberCardNo = Data.MemberNo;
+                RoundingAmount = Data.RoundAmount;
+                WipeOddAmount = Data.RemovezeroAmount;
             });
 
             if (!string.IsNullOrEmpty(MemberCardNo))//走会员登录的流程。

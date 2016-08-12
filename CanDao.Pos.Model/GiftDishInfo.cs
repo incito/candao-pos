@@ -7,6 +7,11 @@
         private bool _showSelectString;
 
         /// <summary>
+        /// 菜品Id
+        /// </summary>
+        public string DishId { set; get; }
+
+        /// <summary>
         /// 是否选中。
         /// </summary>
         public bool IsSelected

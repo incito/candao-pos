@@ -78,9 +78,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     if (dishNum == 0)
                         continue;
                 }
-
+           
                 GiftDishes.Add(new GiftDishInfo
                 {
+                    DishId = orderDishInfo.DishId,
                     DishName = orderDishInfo.DishName,
                     DishPrice = orderDishInfo.Price,
                     DishNum = dishNum,

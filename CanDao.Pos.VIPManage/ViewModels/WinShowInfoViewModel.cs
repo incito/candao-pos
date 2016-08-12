@@ -74,7 +74,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 }
                 else
                 {
-                    MessageDialog.Quest("新增实体卡成功！");
+                    MessageDialog.Warning("新增实体卡成功！");
                 }
             }
             else if(!string.IsNullOrEmpty(VipChangeInfo.CardNum))
@@ -82,12 +82,12 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 var ret = _memberService.VipChangeCardNum(Globals.BranchInfo.BranchId, VipChangeInfo.CardNum, Model.CardNum);
                 if (!string.IsNullOrEmpty(ret))
                 {
-                    MessageDialog.Quest("会员卡修改失败：" + ret);
+                    MessageDialog.Warning("会员卡修改失败：" + ret);
                     return;
                 }
                 else
                 {
-                    MessageDialog.Quest("会员卡修改成功！");
+                    MessageDialog.Warning("会员卡修改成功！");
                 }
             }
 
