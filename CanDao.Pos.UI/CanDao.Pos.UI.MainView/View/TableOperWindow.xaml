@@ -413,14 +413,14 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox Text="{Binding SelectedBankInfo.Name}" IsEnabled="False" VerticalAlignment="Center" Height="40"/>
+                            <TextBox Text="{Binding SelectedBankInfo.Name}" IsEnabled="False" VerticalContentAlignment="Center" Height="40"/>
                             <Button Grid.Column="1" Content="选择银行" Command="{Binding OperCmd}" CommandParameter="SelectBank" Width="75" Height="40"/>
                         </Grid>
                         <toolkit:DoubleTextBox Text="{Binding BankCardNo}"
                                                DecimalPlaces="0"
                                                Watermark="银行卡号："
                                                VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                               Height="40" Margin="0,5"/>
+                                               Height="40" Margin="0,5" MaxLength="20"/>
                         <toolkit:DoubleTextBox Minimum="0"
                                                Text="{Binding BankAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
                                                Watermark="金额："
