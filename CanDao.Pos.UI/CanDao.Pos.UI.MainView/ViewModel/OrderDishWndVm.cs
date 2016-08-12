@@ -286,6 +286,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Remark":
                     return SelectedOrderDish != null;
                 case "OrderRemark":
+                case "Order":
+                case "Empty":
+                case "Free":
                     return OrderDishInfos != null && OrderDishInfos.Any();
                 default:
                     return true;
@@ -901,6 +904,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             if (MessageDialog.Quest("确定要清空已选菜品吗？"))
             {
+                OrderRemark = "";
+
                 OrderDishInfos.Clear();
                 TotalAmount = 0;
                 foreach (var dishGroup in DishGroups)
