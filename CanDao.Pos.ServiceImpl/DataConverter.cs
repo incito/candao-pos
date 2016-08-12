@@ -961,23 +961,7 @@ namespace CanDao.Pos.ServiceImpl
         /// <param name="tableFullInfo"></param>
         internal static void ToAccount(preferentialInfoResponse preferential, ref TableFullInfo tableFullInfo)
         {
-            tableFullInfo.TotalFreeAmount = preferential.amount;
-            tableFullInfo.PaymentAmount = preferential.payamount;
-            tableFullInfo.TipAmount = preferential.tipAmount;
-            tableFullInfo.TotalAmount = preferential.menuAmount;
-
-            if (preferential.detailPreferentials == null)
-            { return; }
-
-            foreach (var info in preferential.detailPreferentials)
-            {
-                var coupon = new UsedCouponInfo();
-                coupon.Count = 1;//默认单张
-                coupon.RelationId = info.id;
-                coupon.BillAmount = info.deAmount;
-                coupon.Name = info.activity.name;
-                tableFullInfo.UsedCouponInfos.Add(coupon);
-            }
+            tableFullInfo.ClonePreferentialInfo(preferential);
         }
 
         /// <summary>

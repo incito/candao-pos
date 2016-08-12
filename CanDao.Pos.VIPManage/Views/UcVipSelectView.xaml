@@ -66,7 +66,7 @@
                 <newControl:CtEnterTextBox x:Name="TexSelectNum" Grid.Row="0" Grid.ColumnSpan="2" Margin="4,5,97,5" Text="{Binding Model.SelectNum,UpdateSourceTrigger=PropertyChanged}" EnterAction="{Binding TextEnterAction}"/>
                 <Button Style="{DynamicResource ColBtn}" Focusable="False" Height="30" Content="搜索" Command="{Binding SelectCardCommand}" Grid.Column="1" Margin="202,7,45,9" Grid.ColumnSpan="2"/>
 
-                <TextBox x:Name="TexCardNum"  Grid.Row="1" Grid.Column="1" Text="{Binding Model.CardNum}" IsEnabled="False"/>
+                <TextBox x:Name="TexCardNum"  Grid.Row="1" Grid.Column="1" Text="{Binding Model.ShowCardNum}" IsEnabled="False"/>
                 <TextBox x:Name="TexTelNum" Grid.Row="1" Grid.Column="3" Text="{Binding Model.TelNum}" IsEnabled="False"></TextBox>
                 <TextBox x:Name="TexUserName" Grid.Row="1" Grid.Column="5" Text="{Binding Model.UserName}" IsEnabled="False"/>
                 

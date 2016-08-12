@@ -183,6 +183,10 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     Model.Balance = _vipInfo.CardInfos[0].Balance.ToString();
                     Model.CardNum = _vipInfo.CardInfos[0].CardNum;
                     Model.CardType = _vipInfo.CardInfos[0].CardType;
+                    if (Model.CardType == 1)//实体卡在界面显示卡号
+                    {
+                        Model.ShowCardNum = Model.CardNum;
+                    }
                     switch (_vipInfo.CardInfos[0].CardState)
                     {
                         case 0:
@@ -224,6 +228,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     Model.CardState = "";
                     Model.UserName = "";
                     Model.Sex = "";
+                    Model.ShowCardNum = "";
 
                     IsOper = false; //禁用操作区域
                 }
@@ -264,6 +269,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 if (window.ShowDialog() == true)
                 {
                     Model.CardNum = _winShowInfo.Model.CardNum;
+                    Model.ShowCardNum = _winShowInfo.Model.CardNum;
                 }
             }
             catch (Exception ex)
@@ -391,6 +397,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 if (WindowHelper.ShowDialog(window,_userControl))
                 {
                     Model.CardNum = _winShowInfo.Model.CardNum;
+                    Model.ShowCardNum= _winShowInfo.Model.CardNum;
+                    Model.CardType = 1;
                 }
             }
             catch (Exception ex)

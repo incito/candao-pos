@@ -432,9 +432,9 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
             memberstoreinfo.TraceCode = tracecode;
             memberstoreinfo.TradeTime = DateTime.Now;
-            memberstoreinfo.StoredBalance = storeCardbalance;
+            memberstoreinfo.StoredBalance = decimal.Parse(Model.RechargeValue);
             memberstoreinfo.ScoreBalance = SelectModel.Integral;
-            memberstoreinfo.StoredAmount = decimal.Parse(Model.RechargeValue);
+            memberstoreinfo.StoredAmount =storeCardbalance ;
 
            
             ReportPrintHelper.PrintMemberStoredReport(memberstoreinfo);

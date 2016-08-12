@@ -17,6 +17,6 @@ namespace CanDao.Pos.Model.Request
         public string preferentialAmout { set; get; }
         public string isCustom { set; get; }
 
-        public string dishname { set; get; }
+        public string dishid { set; get; }
     }
 }

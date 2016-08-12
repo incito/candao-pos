@@ -87,6 +87,8 @@ namespace CanDao.Pos.ReportPrint
                 if (string.IsNullOrEmpty(res))
                 {
                     InfoLog.Instance.I("结束打印预结单报表。");
+            
+                    NotifyDialog.Notify(string.Format("{0}桌台的预结单打印成功！", tableFullInfo.TableName));
                     return true;
                 }
                 else
@@ -201,7 +203,7 @@ namespace CanDao.Pos.ReportPrint
         /// <param name="orderId">订单号。</param>
         /// <param name="printUser">当前用户。</param>
         /// <returns></returns>
-        public static bool PrintCustomUseBillReport(string orderId, string printUser)
+        public static bool PrintCustomUseBillReport(TableFullInfo tableFullInfo, string printUser)
         {
             ShowReportPrintingWindow();
             //InfoLog.Instance.I("开始获取客用单报表数据...");
@@ -248,10 +250,11 @@ namespace CanDao.Pos.ReportPrint
 
                 InfoLog.Instance.I("开始打印客用单报表...");
                 var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
-                     .PrintPay(printUser, orderId, EnumPrintPayType.CustomerUse);
+                     .PrintPay(printUser, tableFullInfo.OrderId, EnumPrintPayType.CustomerUse);
                 if (string.IsNullOrEmpty(res))
                 {
                     InfoLog.Instance.I("结束打印客用单报表。");
+                    NotifyDialog.Notify(string.Format("{0}桌台的账单重新打印成功！", tableFullInfo.TableName));
                     return true;
                 }
                 else

@@ -272,7 +272,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             }
             if (Model.Psw != Model.PswConfirm)
             {
-                MessageDialog.Warning("2个密码不一致，请检查！");
+                MessageDialog.Warning("两次密码不相同，请检查！");
                 return false;
             }
             return true;
