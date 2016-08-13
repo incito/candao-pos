@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
@@ -25,7 +26,7 @@ namespace CanDao.Pos.ReportPrint
         /// <param name="tableFullInfo">订单全信息。</param>
         /// <param name="printUser">当前用户。</param>
         /// <returns></returns>
-        public static bool PrintPresettlementReport(TableFullInfo tableFullInfo, string printUser)
+        public static bool PrintPresettlementReport(TableFullInfo tableFullInfo, string printUser,Window oWindow)
         {
             ShowReportPrintingWindow();
             //InfoLog.Instance.I("开始获取预结单报表数据...");
@@ -87,8 +88,8 @@ namespace CanDao.Pos.ReportPrint
                 if (string.IsNullOrEmpty(res))
                 {
                     InfoLog.Instance.I("结束打印预结单报表。");
-            
-                    NotifyDialog.Notify(string.Format("{0}桌台的预结单打印成功！", tableFullInfo.TableName));
+
+                    NotifyDialog.Notify(string.Format("{0}桌台的预结单打印成功！", tableFullInfo.TableName), oWindow);
                     return true;
                 }
                 else
@@ -203,7 +204,7 @@ namespace CanDao.Pos.ReportPrint
         /// <param name="orderId">订单号。</param>
         /// <param name="printUser">当前用户。</param>
         /// <returns></returns>
-        public static bool PrintCustomUseBillReport(TableFullInfo tableFullInfo, string printUser)
+        public static bool PrintCustomUseBillReport(TableFullInfo tableFullInfo, string printUser, Window oWindow)
         {
             ShowReportPrintingWindow();
             //InfoLog.Instance.I("开始获取客用单报表数据...");
@@ -254,7 +255,7 @@ namespace CanDao.Pos.ReportPrint
                 if (string.IsNullOrEmpty(res))
                 {
                     InfoLog.Instance.I("结束打印客用单报表。");
-                    NotifyDialog.Notify(string.Format("{0}桌台的账单重新打印成功！", tableFullInfo.TableName));
+                    NotifyDialog.Notify(string.Format("{0}桌台的客用单重新打印成功！", tableFullInfo.TableName), oWindow);
                     return true;
                 }
                 else

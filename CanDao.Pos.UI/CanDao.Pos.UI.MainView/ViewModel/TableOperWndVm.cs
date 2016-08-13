@@ -620,7 +620,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "PreSettlement":
                     IsPrintMoreOpened = false;
                     GetTableDishInfoAsync();
-                    ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.UserName);
+                    ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.UserName, OwnerWindow);
                     break;
                 case "ReprintBill":
                     IsPrintMoreOpened = false;
@@ -636,7 +636,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     if (MessageDialog.Quest(string.Format("确定要重印餐台\"{0}\"的客用单吗？", Data.TableName)))
                     {
                         InfoLog.Instance.I("开始重印餐台\"{0}\"的客用单...", Data.TableName);
-                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.UserName);
+                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.UserName,OwnerWindow);
                         InfoLog.Instance.I("结束重印餐台\"{0}\"的客用单。", Data.TableName);
                     }
                     break;
