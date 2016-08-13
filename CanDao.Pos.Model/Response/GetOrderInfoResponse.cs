@@ -59,6 +59,11 @@ namespace CanDao.Pos.Model.Response
         /// 总挂账
         /// </summary>
         public decimal toalDebitAmount { set; get; }
+
+        /// <summary>
+        /// 调整金额
+        /// </summary>
+        public decimal adjAmout { set; get; }
         public List<GetpreferentialDetails> detailPreferentials { set; get; }
     }
 

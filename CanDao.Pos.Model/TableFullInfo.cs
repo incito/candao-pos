@@ -57,7 +57,7 @@ namespace CanDao.Pos.Model
         public decimal TotalAlreadyPayment { get; set; }
 
         /// <summary>
-        /// 调整的金额。（如果抹零则是零头金额，如果四舍五入，舍去的或者舍入的金额。当舍入是为正数，否则会负数。）
+        /// 优免调整金额
         /// </summary>
         public decimal AdjustmentAmount { get; set; }
 
@@ -75,6 +75,16 @@ namespace CanDao.Pos.Model
             {
                 _totalFreeAmount = Math.Round(value, 2);
                 RaisePropertyChanged("TotalFreeAmount");
+            }
+        }
+        private decimal _couponAmount;
+        public decimal CouponAmount
+        {
+            get { return _couponAmount; }
+            set
+            {
+                _couponAmount = Math.Round(value, 2);
+                RaisePropertyChanged("CouponAmount");
             }
         }
 
@@ -251,9 +261,11 @@ namespace CanDao.Pos.Model
             TipAmount = info.TipAmount;
             TotalAmount = info.TotalAmount;
             TotalFreeAmount = info.TotalFreeAmount;
+            CouponAmount = info.CouponAmount;
             TotalDebitAmount = info.TotalDebitAmount;
             RemovezeroAmount = info.RemovezeroAmount;
             RoundAmount = info.RoundAmount;
+            AdjustmentAmount = info.AdjustmentAmount;
 
             DishInfos.Clear();
             if (info.DishInfos != null && info.DishInfos.Any())
@@ -276,10 +288,12 @@ namespace CanDao.Pos.Model
         public void ClonePreferentialInfo(preferentialInfoResponse preferential)
         {
             TotalFreeAmount = preferential.toalFreeAmount;
+            CouponAmount = preferential.amount;
             PaymentAmount = preferential.payamount;
             TipAmount = preferential.tipAmount;
             TotalAmount = preferential.menuAmount;
             TotalDebitAmount = preferential.toalDebitAmount;
+            AdjustmentAmount = preferential.adjAmout;
             switch (preferential.moneyDisType)
             {
                 case 0: //未设置

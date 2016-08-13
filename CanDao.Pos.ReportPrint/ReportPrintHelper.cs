@@ -1113,66 +1113,7 @@ namespace CanDao.Pos.ReportPrint
             return db;
         }
 
-        /// <summary>
-        /// 生成预结单结算备注。
-        /// </summary>
-        /// <param name="tableFullInfo"></param>
-        /// <param name="freeAmount"></param>
-        /// <returns></returns>
-        private static Dictionary<string, decimal> GetPresettlementDic(TableFullInfo tableFullInfo, decimal freeAmount = 0)
-        {
-            var dic = new Dictionary<string, decimal> { { "合计：", tableFullInfo.TotalAmount } };
-            if (Globals.OddModel == EnumOddModel.Rounding)
-            {
-                if (tableFullInfo.AdjustmentAmount > 0)
-                    dic.Add("四舍五入：", tableFullInfo.AdjustmentAmount);
-            }
-            else if (Globals.OddModel == EnumOddModel.Wipe)
-            {
-                if (tableFullInfo.AdjustmentAmount > 0)
-                    dic.Add("抹零：", tableFullInfo.AdjustmentAmount);
-            }
-
-            if (freeAmount > 0)
-                dic.Add("赠送金额：", freeAmount);
-
-            if (tableFullInfo.TotalFreeAmount > 0)
-                dic.Add("总优惠：", tableFullInfo.TotalFreeAmount);
-
-            dic.Add("应收：", tableFullInfo.PaymentAmount);
-            return dic;
-        }
-
-        /// <summary>
-        /// 生成结账单结算备注。
-        /// </summary>
-        /// <param name="orderInfo"></param>
-        /// <returns></returns>
-        private static Dictionary<string, decimal> GetSetttlementDic(PrintOrderInfo orderInfo)
-        {
-            var dic = new Dictionary<string, decimal> { { "合计：", orderInfo.TotalAmount } };
-            if (Globals.OddModel == EnumOddModel.Rounding)
-            {
-                if (orderInfo.RoundingAmount > 0)
-                    dic.Add("四舍五入：", orderInfo.RoundingAmount);
-            }
-            else if (Globals.OddModel == EnumOddModel.Wipe)
-            {
-                if (orderInfo.RemoveOddAmount > 0)
-                    dic.Add("抹零：", orderInfo.RemoveOddAmount);
-            }
-
-            if (orderInfo.FreeAmount > 0)
-                dic.Add("赠送金额：", orderInfo.FreeAmount);
-
-            var favorableAmount = orderInfo.TotalAmount - orderInfo.PaidAmount;//总优惠是合计-实收。
-            if (favorableAmount > 0)
-                dic.Add("总优惠：", favorableAmount);
-
-            dic.Add("实收：", orderInfo.PaidAmount);
-            return dic;
-        }
-
+     
         /// <summary>
         /// 创建DataColumn。
         /// </summary>
