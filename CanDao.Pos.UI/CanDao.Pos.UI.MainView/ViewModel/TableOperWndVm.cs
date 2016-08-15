@@ -1381,7 +1381,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var backDishNum = SelectedOrderDish.DishNum;
             if (allowInputBackNum)
             {
-                var numWnd = new NumInputWindow("退菜：", SelectedOrderDish.DishName, "退菜数量：", SelectedOrderDish.DishNum);
+                var numWnd = new NumInputWindow("退菜", SelectedOrderDish.DishName, "退菜数量：", SelectedOrderDish.DishNum);
                 if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                     return;
 
