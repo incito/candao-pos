@@ -538,7 +538,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 Name = response.waiterName,
                 Amount = response.tipMoney,
-                Count = response.serviceCount,
+                Count = Math.Round(response.serviceCount, 2),
             };
         }
 
@@ -548,7 +548,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 Name = response.dishName,
                 Amount = response.totlePrice ?? 0,
-                Count = response.dishCount,
+                Count = Math.Round(response.dishCount, 2),
             };
         }
 

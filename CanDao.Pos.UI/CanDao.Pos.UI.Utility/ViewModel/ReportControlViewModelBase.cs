@@ -41,9 +41,61 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public ObservableCollection<ReportDataBase> DataSource { get; private set; }
 
         /// <summary>
+        /// 项总数。
+        /// </summary>
+        private decimal _totalItemsCount;
+        /// <summary>
+        /// 项总数。
+        /// </summary>
+        public decimal TotalItemsCount
+        {
+            get { return _totalItemsCount; }
+            set
+            {
+                _totalItemsCount = value;
+                RaisePropertyChanged("TotalItemsCount");
+            }
+        }
+
+        /// <summary>
+        /// 数量总数。
+        /// </summary>
+        private decimal _totalCount;
+        /// <summary>
+        /// 数量总数。
+        /// </summary>
+        public decimal TotalCount
+        {
+            get { return _totalCount; }
+            set
+            {
+                _totalCount = value;
+                RaisePropertyChanged("TotalCount");
+            }
+        }
+
+        /// <summary>
+        /// 金额总数。
+        /// </summary>
+        private decimal _totalAmount;
+        /// <summary>
+        /// 金额总数。
+        /// </summary>
+        public decimal TotalAmount
+        {
+            get { return _totalAmount; }
+            set
+            {
+                _totalAmount = value;
+                RaisePropertyChanged("TotalAmount");
+            }
+        }
+
+        /// <summary>
         /// 统计周期。
         /// </summary>
         private EnumStatisticsPeriodsType _statisticsPeriodsType;
+
         /// <summary>
         /// 统计周期。
         /// </summary>
@@ -226,6 +278,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             DataSource.Clear();
             if (result.Item2 != null)
                 result.Item2.DataSource.ForEach(DataSource.Add);
+
+            TotalItemsCount = DataSource.Count;
+            TotalCount = DataSource.Sum(t => t.Count);
+            TotalAmount = DataSource.Sum(t => t.Amount);
 
             return null;
         }
