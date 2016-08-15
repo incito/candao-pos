@@ -1011,11 +1011,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 UpdateOrderDishNum(SelectedOrderDish, wnd.DishNum);
                 SelectedOrderDish.Diet = wnd.SelectedDiet;
                 SelectedOrderDish.Taste = wnd.SelectedTaste;
-                if (SelectedOrderDish.DishType == EnumDishType.Packages && SelectedOrderDish.DishInfos != null)
-                //套餐要设置套餐内部所有菜品的忌口。
-                {
-                    SelectedOrderDish.DishInfos.ForEach(t => { t.Diet = wnd.SelectedDiet; });
-                }
+
                 DoWhenDishChanged();
             }
         }

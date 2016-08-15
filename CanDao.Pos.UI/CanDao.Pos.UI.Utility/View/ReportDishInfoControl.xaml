@@ -24,6 +24,7 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}" IsChecked="True">
@@ -32,7 +33,7 @@
                         <i:InvokeCommandAction Command="{Binding StatisticCheckedCmd}" CommandParameter="Today"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <Label Content="今天"/>
+                <Label Content="今天" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </RadioButton>
             <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}">
                 <i:Interaction.Triggers>
@@ -40,7 +41,7 @@
                         <i:InvokeCommandAction Command="{Binding StatisticCheckedCmd}" CommandParameter="ThisWeek"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <Label Content="本周"/>
+                <Label Content="本周" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </RadioButton>
             <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}">
                 <i:Interaction.Triggers>
@@ -48,7 +49,7 @@
                         <i:InvokeCommandAction Command="{Binding StatisticCheckedCmd}" CommandParameter="ThisMonth"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <Label Content="本月"/>
+                <Label Content="本月" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </RadioButton>
             <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}">
                 <i:Interaction.Triggers>
@@ -56,11 +57,14 @@
                         <i:InvokeCommandAction Command="{Binding StatisticCheckedCmd}" CommandParameter="LastMonth"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <Label Content="上月"/>
+                <Label Content="上月" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </RadioButton>
         </StackPanel>
         
-        <Button Grid.Row="0" Grid.Column="1" Content="打印" Width="50" Command="{Binding PrintCmd}"/>
+        <Button Grid.Row="0" Grid.Column="1"
+                Content="打印"
+                Width="96" Height="40"
+                Command="{Binding PrintCmd}"/>
 
         <controls:GroupSelector x:Name="GsDish"
                                 Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
@@ -77,16 +81,45 @@
                             </Style>
                         </DataGrid.Resources>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="品项名称" Width="420" Binding="{Binding Name}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="销售数量" Width="150" Binding="{Binding Count,StringFormat=F2}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="销售金额" Width="150" Binding="{Binding Amount}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="品项名称" Width="3*" Binding="{Binding Name}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="销售数量" Width="2*" Binding="{Binding Count}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="销售金额" Width="2*" Binding="{Binding Amount}" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ControlTemplate>
             </controls:GroupSelector.Template>
         </controls:GroupSelector>
+        
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding TotalItemsCount, StringFormat=品项个数：{0}}"
+                       Foreground="{StaticResource CanDaoPosColorFgStatistics}"
+                       FontSize="18" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="1"
+                       Text="{Binding TotalCount, StringFormat=数量总计：{0}}"
+                       Foreground="{StaticResource CanDaoPosColorFgStatistics}"
+                       FontSize="18" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="2"
+                       Text="{Binding TotalAmount, StringFormat=金额合计：{0}}"
+                       Foreground="{StaticResource CanDaoPosColorFgStatistics}"
+                       FontSize="18" HorizontalAlignment="Center"/>
+        </Grid>
+        
+        <!--<StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                    Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="上一页"
+                    Width="105" Height="45"
+                    Command="{Binding PreGroupCmd}"/>
+            <Button Content="下一页"
+                    Width="105" Height="45"
+                    Command="{Binding NextGroupCmd}"/>
+        </StackPanel>-->
 
-        <StackPanel Grid.Row="2" Grid.Column="1"
+        <StackPanel Grid.Row="3" Grid.Column="1"
                     Orientation="Horizontal" HorizontalAlignment="Right"
                     Visibility="{Binding GroupCount,ElementName=GsDish, Converter={StaticResource Count2CollapsedCvt}, ConverterParameter=0_1}">
             <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding PreGroupCmd}"/>

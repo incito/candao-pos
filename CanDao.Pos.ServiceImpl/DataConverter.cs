@@ -473,6 +473,7 @@ namespace CanDao.Pos.ServiceImpl
                 OrderStatus = (EnumOrderStatus)response.orderstatus,
                 TableId = response.tableids,
                 TableName = response.tableName,
+                TableType = (EnumTableType)response.tabletype,
                 UserId = response.userid,
                 MemberNo = response.memberno,
             };
@@ -537,7 +538,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 Name = response.waiterName,
                 Amount = response.tipMoney,
-                Count = response.serviceCount,
+                Count = Math.Round(response.serviceCount, 2),
             };
         }
 
@@ -547,7 +548,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 Name = response.dishName,
                 Amount = response.totlePrice ?? 0,
-                Count = response.dishCount,
+                Count = Math.Round(response.dishCount, 2),
             };
         }
 

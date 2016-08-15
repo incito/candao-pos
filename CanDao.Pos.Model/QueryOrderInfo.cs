@@ -29,6 +29,11 @@ namespace CanDao.Pos.Model
         public string TableName { get; set; }
 
         /// <summary>
+        /// 餐台类型。
+        /// </summary>
+        public EnumTableType TableType { get; set; }
+
+        /// <summary>
         /// 服务员。
         /// </summary>
         public string UserId { get; set; }

@@ -23,6 +23,7 @@
         public int befprintcount { get; set; }
         public string couponname3 { get; set; }
         public string tableName { get; set; }
+        public int tabletype { get; set; }
         public string ordertype { get; set; }
         public string payway { get; set; }
         public int? custnum { get; set; }

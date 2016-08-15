@@ -439,8 +439,16 @@
                                                        IsEnabled="{Binding IsMemberLogin, Converter={StaticResource BoolRevertCvt}}"
                                                        Watermark="会员卡号："
                                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                                       IsTabStop="False"
-                                                       Height="40"/>
+                                                       Height="40">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="GotFocus">
+                                        <i:InvokeCommandAction Command="{Binding MemberControlFocusCmd}" CommandParameter="true"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding MemberControlFocusCmd}" CommandParameter="false"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </controls:WatermarkTextBox>
                             <Button Grid.Row="0" Grid.Column="1"
                                     Content="登录"
                                     Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2CollapsedCvt}}" 
@@ -480,18 +488,18 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="储值金额："
-                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             <StackPanel Grid.Row="0"  Grid.Column="1"
-                                        Orientation="Horizontal" VerticalAlignment="Center">
+                                        Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                 <TextBlock Text="{Binding Data.MemberInfo.StoredBalance}"/>
                                 <TextBlock Text="{Binding Data.MemberInfo.CardLevel, StringFormat=({0})}"/>
                             </StackPanel>
                             <TextBlock Grid.Row="1" Grid.Column="0"
                                        Text="积分余额："
-                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             <TextBlock Grid.Row="1" Grid.Column="1"
                                        Text="{Binding Data.MemberInfo.Integral}"
-                                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </Grid>
                     </StackPanel>
                 </TabItem>

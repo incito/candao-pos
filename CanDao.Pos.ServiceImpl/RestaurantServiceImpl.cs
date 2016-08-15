@@ -273,7 +273,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var request = new EndWorkSyncDataRequest();
-                var result = HttpHelper.HttpPost<SyncDataResponse>(addr, request);
+                var result = HttpHelper.HttpPost<SyncDataResponse>(addr, request, 500);
                 return result.IsSuccess ? null : !string.IsNullOrWhiteSpace(result.message) ? result.message : "通知后台同步数据失败。";
             }
             catch (Exception ex)

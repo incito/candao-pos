@@ -22,6 +22,7 @@
     <SolidColorBrush x:Key="CanDaoPosColorFgGray" Color="#FFA8A8A8"/>
     <SolidColorBrush x:Key="CanDaoPosColorFgLightGray" Color="#FFF0F0F0"/>
     <SolidColorBrush x:Key="CanDaoPosColorFgDisable" Color="#FF808080"/>
+    <SolidColorBrush x:Key="CanDaoPosColorFgStatistics" Color="#FF999999"/>
     <SolidColorBrush x:Key="CanDaoPosColorFgTableNormal" Color="#FF515356"/>
 
 

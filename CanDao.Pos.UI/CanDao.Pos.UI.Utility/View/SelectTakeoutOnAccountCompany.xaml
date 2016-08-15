@@ -3,7 +3,8 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
-                       Height="280" Width="460"
+                       xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
+                       Height="280" Width="660"
                        ShowInTaskbar="False">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -33,14 +34,15 @@
             </Grid>
 
             <controls:WatermarkTextBox Grid.Row="1"
-                                       Watermark="联系人："
+                                       Watermark="   联系人："
                                        Text="{Binding ContactName}"
                                        Height="40" VerticalAlignment="Center" FontSize="18"/>
 
-            <controls:WatermarkTextBox Grid.Row="2"
-                                       Watermark="联系电话："
-                                       Text="{Binding ContactMobile}"
-                                       Height="40" VerticalAlignment="Center" FontSize="18"/>
+            <toolkit:DoubleTextBox Grid.Row="2"
+                                   Watermark="联系电话："
+                                   Text="{Binding ContactMobile}"
+                                   DecimalPlaces="0" MaxLength="12"
+                                   Height="40" VerticalAlignment="Center" FontSize="18"/>
 
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
