@@ -185,7 +185,7 @@ namespace CanDao.Pos.UI.Utility
             if (WindowHelper.ShowDialog(loginWnd))
                 Application.Current.MainWindow.ShowDialog();
             else
-                Application.Current.MainWindow.Close();
+                Application.Current.Shutdown();
         }
 
         #endregion
