@@ -42,10 +42,11 @@ namespace CanDao.Pos.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="uri">URL地址。</param>
         /// <param name="data">输入数据。</param>
+        /// <param name="timeoutSecond">超时时间，默认30秒。</param>
         /// <returns></returns>
-        public static T HttpPost<T>(string uri, object data)
+        public static T HttpPost<T>(string uri, object data, int timeoutSecond = 30)
         {
-            return HttpOper<T>(uri, data, HttpType.Post);
+            return HttpOper<T>(uri, data, HttpType.Post, timeoutSecond);
         }
 
         /// <summary>
@@ -53,10 +54,11 @@ namespace CanDao.Pos.Common
         /// </summary>
         /// <param name="uri">URL地址。</param>
         /// <param name="data">输入数据。</param>
+        /// <param name="timeoutSecond">超时时间，默认30秒。</param>
         /// <returns></returns>
-        public static string HttpPost(string uri, object data)
+        public static string HttpPost(string uri, object data, int timeoutSecond = 30)
         {
-            var result = HttpOper(uri, data, HttpType.Post).ReadAsStringAsync().Result;
+            var result = HttpOper(uri, data, HttpType.Post, timeoutSecond).ReadAsStringAsync().Result;
             HttpLog.Instance.D("URL：{0}。 Result：{1}", uri, result);
             return result;
         }
@@ -117,15 +119,24 @@ namespace CanDao.Pos.Common
         /// <param name="uri"></param>
         /// <param name="data"></param>
         /// <param name="type"></param>
+        /// <param name="timeoutSecond">超时时间，默认30秒。</param>
         /// <returns></returns>
-        private static T HttpOper<T>(string uri, object data, HttpType type)
+        private static T HttpOper<T>(string uri, object data, HttpType type, int timeoutSecond = 30)
         {
-            var content = HttpOper(uri, data, type);
+            var content = HttpOper(uri, data, type, timeoutSecond);
             HttpLog.Instance.D("URL：{0}。 Result：{1}", uri, content.ReadAsStringAsync().Result);
             return content.ReadAsAsync<T>().Result;
         }
 
-        private static HttpContent HttpOper(string uri, object data, HttpType type)
+        /// <summary>
+        /// Http请求执行类。
+        /// </summary>
+        /// <param name="uri">地址。</param>
+        /// <param name="data">数据。</param>
+        /// <param name="type">Http操作类型。</param>
+        /// <param name="timeoutSecond">超时时间，默认30秒。</param>
+        /// <returns></returns>
+        private static HttpContent HttpOper(string uri, object data, HttpType type, int timeoutSecond = 30)
         {
             if (uri == null)
                 throw new ArgumentNullException("uri");
@@ -133,7 +144,7 @@ namespace CanDao.Pos.Common
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.Timeout = new TimeSpan(0, 0, 0, 30, 0);//超时设置为30秒。
+                client.Timeout = new TimeSpan(0, 0, 0, timeoutSecond, 0);//超时设置。
                 HttpResponseMessage response;
                 HttpLog.Instance.D("URL：{0}。 Request ：{1}", uri, data.ToJson());
                 switch (type)
