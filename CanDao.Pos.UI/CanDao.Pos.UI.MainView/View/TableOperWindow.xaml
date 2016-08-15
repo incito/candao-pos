@@ -440,7 +440,16 @@
                                                        Watermark="会员卡号："
                                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
                                                        IsTabStop="False"
-                                                       Height="40"/>
+                                                       Height="40">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="GotFocus">
+                                        <i:InvokeCommandAction Command="{Binding MemberControlFocusCmd}" CommandParameter="true"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding MemberControlFocusCmd}" CommandParameter="false"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </controls:WatermarkTextBox>
                             <Button Grid.Row="0" Grid.Column="1"
                                     Content="登录"
                                     Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2CollapsedCvt}}" 

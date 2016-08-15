@@ -473,6 +473,7 @@ namespace CanDao.Pos.ServiceImpl
                 OrderStatus = (EnumOrderStatus)response.orderstatus,
                 TableId = response.tableids,
                 TableName = response.tableName,
+                TableType = (EnumTableType)response.tabletype,
                 UserId = response.userid,
                 MemberNo = response.memberno,
             };

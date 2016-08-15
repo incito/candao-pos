@@ -56,6 +56,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private bool _isUserInputCash;
 
         /// <summary>
+        /// 是否是用户输入会员号。
+        /// </summary>
+        private bool _isUserInputMember;
+
+        /// <summary>
         /// 优惠券长按定时器。
         /// </summary>
         private Timer _couponLongPressTimer;
@@ -548,6 +553,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         public ICommand CashControlFocusCmd { get; private set; }
 
+        /// <summary>
+        /// 会员控件获取或失去焦点命令。
+        /// </summary>
+        public ICommand MemberControlFocusCmd { get; private set; }
+
         #endregion
 
         #region Command Methods
@@ -677,6 +687,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void CashControlFocus(object param)
         {
             _isUserInputCash = Convert.ToBoolean(param);
+        }
+
+        /// <summary>
+        /// 会员控件获取获取或失去焦点命令的执行。
+        /// </summary>
+        /// <param name="param"></param>
+        private void MemberControlFocus(object param)
+        {
+            _isUserInputMember = Convert.ToBoolean(param);
         }
 
         #region 优惠券处理
@@ -884,18 +903,18 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     {
                         if (giftDishWnd.SelectedGiftDishInfos.Count > 0)
                         {
-                            var dishIds=new List<string>();
-                            var dishNum=new List<string>();
+                            var dishIds = new List<string>();
+                            var dishNum = new List<string>();
                             foreach (var giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
                             {
-                              
+
                                 dishIds.Add(giftDishInfo.DishId);
                                 dishNum.Add(giftDishInfo.SelectGiftNum.ToString());
                             }
                             CreatUsePreferentialRequest(string.Join(",", dishNum), string.Join(",", dishIds), 0, 0, 0);
 
                         }
-                       
+
                         result = true;
                     }
                     break;
@@ -1025,6 +1044,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             DataGridPageOperCmd = CreateDelegateCommand(DataGridPageOper, CanDataGridPageOper);
             PrintCmd = CreateDelegateCommand(Print, CanPrint);
             CashControlFocusCmd = CreateDelegateCommand(CashControlFocus);
+            MemberControlFocusCmd = CreateDelegateCommand(MemberControlFocus);
             CouponMouseDownCmd = CreateDelegateCommand(CouponMouseDown);
             CouponMouseUpCmd = CreateDelegateCommand(CouponMouseUp);
         }
@@ -1034,7 +1054,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (arg.Key == Key.Enter)
             {
                 arg.Handled = true;
-                PayTheBill();
+                if (_isUserInputMember)
+                    MemberLogin();
+                else
+                    PayTheBill();
             }
         }
 
@@ -1080,11 +1103,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         SelectedOnCmpAccInfo = companyWnd.SelectedCompany;
                     break;
                 case "MemberLogin":
-                    InfoLog.Instance.I("会员登入按钮点击...");
-                    var loginWf = GenerateMemberLoginWf();
-                    ((TableOperWindow)OwnerWindow).TbMemAmount.Focus();//这里是为了解决登录以后直接点回车，不触发结账的问题。
-                    if (loginWf != null)
-                        WorkFlowService.Start(MemberCardNo, loginWf);
+                    MemberLogin();
                     break;
                 case "MemberLogout":
                     InfoLog.Instance.I("会员登出按钮点击...");
@@ -1301,6 +1320,18 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             curStepWf.NextWorkFlowInfo = new WorkFlowInfo(null, PrintSettlementReportAndInvoice);//打印和开发票
 
             WorkFlowService.Start(param, payBillWorkFlow);
+        }
+
+        /// <summary>
+        /// 会员登录。
+        /// </summary>
+        private void MemberLogin()
+        {
+            InfoLog.Instance.I("会员登录按钮点击...");
+            var loginWf = GenerateMemberLoginWf();
+            ((TableOperWindow)OwnerWindow).TbMemAmount.Focus(); //这里是为了解决登录以后直接点回车，不触发结账的问题。
+            if (loginWf != null)
+                WorkFlowService.Start(MemberCardNo, loginWf);
         }
 
         /// <summary>

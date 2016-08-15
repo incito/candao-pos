@@ -208,6 +208,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 TableName = orderInfo.TableName,
                 TableId = orderInfo.TableId,
+                TableType = orderInfo.TableType,
                 TableStatus = orderInfo.HasBeenPaied ? EnumTableStatus.Idle : EnumTableStatus.Dinner,
                 OrderId = orderInfo.OrderId,
                 TableNo = orderInfo.TableName,
