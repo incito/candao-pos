@@ -630,7 +630,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "PreSettlement":
                     IsPrintMoreOpened = false;
                     GetTableDishInfoAsync();
-                    ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.UserName);
+                    ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.UserName, OwnerWindow);
                     break;
                 case "ReprintBill":
                     IsPrintMoreOpened = false;
@@ -646,7 +646,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     if (MessageDialog.Quest(string.Format("确定要重印餐台\"{0}\"的客用单吗？", Data.TableName)))
                     {
                         InfoLog.Instance.I("开始重印餐台\"{0}\"的客用单...", Data.TableName);
-                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.UserName);
+                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.UserName,OwnerWindow);
                         InfoLog.Instance.I("结束重印餐台\"{0}\"的客用单。", Data.TableName);
                     }
                     break;
@@ -843,7 +843,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 usePreferential.sub_type = ((int)_curSelectedCouponInfo.HandCouponType).ToString();
             }
-            usePreferential.preferentialAmt = Data.TotalFreeAmount.ToString();
+            usePreferential.preferentialAmt = Data.CouponAmount.ToString();
 
             usePreferential.preferentialNum = pNum;
             usePreferential.dishid = dishid;
@@ -1662,17 +1662,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (Data == null)
                 return;
 
-            var paymentAmount = Data.TotalAmount - Data.TotalFreeAmount - Data.TotalDebitAmount; //应收=总额-优免-挂账
-            paymentAmount = Math.Max(0, paymentAmount);//应收必须大于0
-            paymentAmount += Data.TipAmount;//应收需要再加上小费金额。
-            var amount = ProcessOdd(paymentAmount, _curOddModel, Globals.OddAccuracy);
-            Data.AdjustmentAmount = paymentAmount - amount;
-            Data.PaymentAmount = Math.Max(0, amount); //应付金额不能小于0
+            //var paymentAmount = Data.TotalAmount - Data.TotalFreeAmount - Data.TotalDebitAmount; //应收=总额-优免-挂账
+            //paymentAmount = Math.Max(0, paymentAmount);//应收必须大于0
+            //paymentAmount += Data.TipAmount;//应收需要再加上小费金额。
+            //var amount = ProcessOdd(paymentAmount, _curOddModel, Globals.OddAccuracy);
+            //Data.AdjustmentAmount = paymentAmount - amount;
+            //Data.PaymentAmount = Math.Max(0, amount); //应付金额不能小于0
 
-            if (_curOddModel == EnumOddModel.Rounding)
-                RoundingAmount = Math.Abs(Data.AdjustmentAmount);
-            else if (_curOddModel == EnumOddModel.Wipe)
-                WipeOddAmount = Data.AdjustmentAmount;
+            //if (_curOddModel == EnumOddModel.Rounding)
+            //    RoundingAmount = Math.Abs(Data.AdjustmentAmount);
+            //else if (_curOddModel == EnumOddModel.Wipe)
+            //    WipeOddAmount = Data.AdjustmentAmount;
 
             GenerateSettlementInfo();
         }
@@ -1741,12 +1741,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (Data.TotalFreeAmount != 0)
                 settlementInfo.Add(string.Format("优免：{0:f2}", Data.TotalFreeAmount));
 
-            if (Data.AdjustmentAmount != 0)
+            //if (Data.AdjustmentAmount != 0)
+            //{
+            //    if (Globals.OddModel == EnumOddModel.Rounding)
+            //        settlementInfo.Add(string.Format("舍{1}：{0:f2}", Math.Abs(Data.AdjustmentAmount), Data.AdjustmentAmount > 0 ? "去" : "入"));
+            //    else
+            //        settlementInfo.Add(string.Format("抹零：{0:f2}", Data.AdjustmentAmount));
+            //}
+
+            if (Data.RoundAmount != 0)
             {
-                if (Globals.OddModel == EnumOddModel.Rounding)
-                    settlementInfo.Add(string.Format("舍{1}：{0:f2}", Math.Abs(Data.AdjustmentAmount), Data.AdjustmentAmount > 0 ? "去" : "入"));
-                else
-                    settlementInfo.Add(string.Format("抹零：{0:f2}", Data.AdjustmentAmount));
+                settlementInfo.Add(string.Format("舍{1}：{0:f2}", Math.Abs(Data.RoundAmount), Data.RoundAmount > 0 ? "去" : "入"));
+            }
+            if (Data.RemovezeroAmount != 0)
+            {
+                settlementInfo.Add(string.Format("抹零：{0:f2}", Data.RemovezeroAmount));
             }
 
             //支付部分
@@ -1864,10 +1873,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var cmpId = SelectedOnCmpAccInfo != null ? SelectedOnCmpAccInfo.Id : "";
             list.Add(new BillPayInfo(DebitAmount, EnumBillPayType.OnCompanyAccount, onAcc) { CouponDetailId = cmpId });
 
-            if (RoundingAmount > 0)
+            if (RoundingAmount != 0)
                 list.Add(new BillPayInfo(RoundingAmount, EnumBillPayType.Rounding));
-            if (WipeOddAmount > 0)
+            if (WipeOddAmount != 0)
                 list.Add(new BillPayInfo(WipeOddAmount, EnumBillPayType.RemoveOdd));
+            if (Data.AdjustmentAmount != 0)//优免调整
+            {
+                list.Add(new BillPayInfo(Data.AdjustmentAmount, EnumBillPayType.FreeAmount,"优免调整"));
+            }
 
             foreach (var usedCouponInfo in Data.UsedCouponInfos)
             {
