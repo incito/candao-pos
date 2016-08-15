@@ -2,6 +2,7 @@
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
+using CanDao.Pos.ReportPrint;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -87,6 +88,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 MessageDialog.Warning(result, OwnerWindow);
                 return null;
             }
+            //打印发票
+            var invoice = new PrintInvoiceInfo();
+            invoice.OrderId = Data.OrderId;
+            invoice.InvoiceAmount = InvoiceAmount;
+            ReportPrintHelper.PrintInvoiceReport(invoice);
 
             InfoLog.Instance.I("结束更新发票信息。");
             return null;
