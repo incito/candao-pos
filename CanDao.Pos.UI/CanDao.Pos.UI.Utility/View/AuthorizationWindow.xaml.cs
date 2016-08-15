@@ -12,6 +12,7 @@ namespace CanDao.Pos.UI.Utility.View
         {
             InitializeComponent();
             DataContext = new AuthorizationWndVm(rightType, userName) { OwnerWindow = this };
+            Loaded += (sender, args) => { TbUserName.Focus(); };
         }
     }
 }
