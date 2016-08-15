@@ -78,7 +78,7 @@
                         </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="品项名称" Width="420" Binding="{Binding Name}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="销售数量" Width="150" Binding="{Binding Count}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="销售数量" Width="150" Binding="{Binding Count,StringFormat=F2}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="销售金额" Width="150" Binding="{Binding Amount}" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>

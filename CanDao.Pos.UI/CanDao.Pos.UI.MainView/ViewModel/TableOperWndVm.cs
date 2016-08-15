@@ -620,14 +620,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "PreSettlement":
                     IsPrintMoreOpened = false;
                     GetTableDishInfoAsync();
-                    ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.UserName, OwnerWindow);
+                    ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.FullName, OwnerWindow);
                     break;
                 case "ReprintBill":
                     IsPrintMoreOpened = false;
                     if (MessageDialog.Quest(string.Format("确定要重印餐台\"{0}\"的结账单吗？", Data.TableName)))
                     {
                         InfoLog.Instance.I("开始重印餐台\"{0}\"的结账单...", Data.TableName);
-                        ReportPrintHelper.PrintSettlementReport(Data.OrderId, Globals.UserInfo.UserName);
+                        ReportPrintHelper.PrintSettlementReport(Data.OrderId, Globals.UserInfo.FullName);
                         InfoLog.Instance.I("结束重印餐台\"{0}\"的结账单。", Data.TableName);
                     }
                     break;
@@ -636,13 +636,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     if (MessageDialog.Quest(string.Format("确定要重印餐台\"{0}\"的客用单吗？", Data.TableName)))
                     {
                         InfoLog.Instance.I("开始重印餐台\"{0}\"的客用单...", Data.TableName);
-                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.UserName,OwnerWindow);
+                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.FullName, OwnerWindow);
                         InfoLog.Instance.I("结束重印餐台\"{0}\"的客用单。", Data.TableName);
                     }
                     break;
                 case "PrintTransactionSlip":
                     IsPrintMoreOpened = false;
-                    ReportPrintHelper.PrintMemberPayBillReport(Data, Globals.UserInfo.UserName);
+                    ReportPrintHelper.PrintMemberPayBillReport(Data, Globals.UserInfo.FullName);
                     break;
             }
         }
@@ -657,6 +657,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             bool enable = true;
             switch (param as string)
             {
+               
                 case "PreSettlement":
                     enable = Data != null && !Data.HasBeenPaied && Data.DishInfos.Any();
                     break;
@@ -665,6 +666,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     enable = Data != null && Data.HasBeenPaied;
                     break;
                 case "ReprintUserBill":
+                 
+                    break;
+                case "ReprintCustomUseBill":
+                    enable = Data.DishInfos.Any();
                     break;
             }
             return enable;
@@ -825,6 +830,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 usePreferential.sub_type = ((int)_curSelectedCouponInfo.HandCouponType).ToString();
             }
             usePreferential.preferentialAmt = Data.CouponAmount.ToString();
+            usePreferential.adjAmout = Data.AdjustmentAmount.ToString();
+            usePreferential.toalDebitAmount = Data.TotalDebitAmount.ToString();
+            usePreferential.toalFreeAmount = Data.TotalFreeAmount.ToString();
+            usePreferential.toalDebitAmountMany = Data.ToalDebitAmountMany.ToString();
 
             usePreferential.preferentialNum = pNum;
             usePreferential.dishid = dishid;
@@ -1709,7 +1718,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (Data.TotalFreeAmount != 0)
                 settlementInfo.Add(string.Format("优免：{0:f2}", Data.TotalFreeAmount));
-
+            if (Data.AdjustmentAmount != 0)
+                settlementInfo.Add(string.Format("优免调整：{0:f2}", Data.AdjustmentAmount));
+            if (Data.ToalDebitAmountMany != 0)
+                settlementInfo.Add(string.Format("挂账多收：{0:f2}", Data.ToalDebitAmountMany));
             //if (Data.AdjustmentAmount != 0)
             //{
             //    if (Globals.OddModel == EnumOddModel.Rounding)
@@ -1849,6 +1861,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (Data.AdjustmentAmount != 0)//优免调整
             {
                 list.Add(new BillPayInfo(Data.AdjustmentAmount, EnumBillPayType.FreeAmount,"优免调整"));
+            }
+            if (Data.ToalDebitAmountMany != 0)//挂账多收
+            {
+                list.Add(new BillPayInfo(Data.ToalDebitAmountMany, EnumBillPayType.OnAccount, "挂账多收"));
             }
 
             foreach (var usedCouponInfo in Data.UsedCouponInfos)
@@ -2226,7 +2242,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             ReportPrintHelper.PrintSettlementReport(Data.OrderId, Globals.UserInfo.UserName);
             InfoLog.Instance.I("结束打印结账单。");
 
-            if (!string.IsNullOrEmpty(MemberCardNo))
+            if (!string.IsNullOrEmpty(Data.MemberNo))
             {
                 InfoLog.Instance.I("开始打印交易凭条...");
                 ReportPrintHelper.PrintMemberPayBillReport(Data, Globals.UserInfo.UserName);

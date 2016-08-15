@@ -512,7 +512,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             string msg = "密码修改";
 
-            var addr = ServiceAddrCache.GetServiceAddr("VipCheckCard");
+            var addr = ServiceAddrCache.GetServiceAddr("VipChangePsw");
             if (string.IsNullOrEmpty(addr))
             {
                 ErrLog.Instance.E(msg + "地址为空。");

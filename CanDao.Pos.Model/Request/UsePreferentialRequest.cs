@@ -13,6 +13,10 @@ namespace CanDao.Pos.Model.Request
         public string type { set; get; }
         public string sub_type { set; get; }
         public string preferentialAmt { set; get; }
+        public string toalFreeAmount { set; get; }
+        public string toalDebitAmount { set; get; }
+        public string toalDebitAmountMany { set; get; }
+        public string adjAmout { set; get; }
         public string preferentialNum { set; get; }
         public string preferentialAmout { set; get; }
         public string isCustom { set; get; }
