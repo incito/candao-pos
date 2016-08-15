@@ -439,7 +439,6 @@
                                                        IsEnabled="{Binding IsMemberLogin, Converter={StaticResource BoolRevertCvt}}"
                                                        Watermark="会员卡号："
                                                        VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                                       IsTabStop="False"
                                                        Height="40">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="GotFocus">
