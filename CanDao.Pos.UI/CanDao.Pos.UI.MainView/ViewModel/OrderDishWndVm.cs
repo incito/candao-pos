@@ -927,7 +927,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 MessageDialog.Warning("请先选择菜品。", OwnerWnd);
                 return;
             }
-            if (!MessageDialog.Quest(string.Format("餐台【{0}】确定下单吗？", Data.TableName)))
+            if (!MessageDialog.Quest(string.Format("桌台【{0}】确定下单吗？", Data.TableName)))
                 return;
 
             OrderType = EnumOrderType.Normal;

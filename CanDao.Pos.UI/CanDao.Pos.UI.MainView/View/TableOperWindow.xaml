@@ -373,7 +373,7 @@
                                            Margin="13,11,0,0"/>
                                 <toolkit:DoubleTextBox Grid.Row="0" Grid.Column="1"
                                                        FontSize="60"
-                                                       Text="{Binding CashAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}">
+                                                       Text="{Binding CashAmount, UpdateSourceTrigger=PropertyChanged}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="GotFocus">
                                             <i:InvokeCommandAction Command="{Binding CashControlFocusCmd}" CommandParameter="true"/>

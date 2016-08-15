@@ -93,6 +93,10 @@ namespace CanDao.Pos.Model
         /// </summary>
         public decimal TotalDebitAmount { get; set; }
         /// <summary>
+        /// 总挂账多收
+        /// </summary>
+        public decimal ToalDebitAmountMany { set; get; }
+        /// <summary>
         /// 四舍五入金额
         /// </summary>
         public decimal RoundAmount { get; set; }
@@ -266,6 +270,7 @@ namespace CanDao.Pos.Model
             RemovezeroAmount = info.RemovezeroAmount;
             RoundAmount = info.RoundAmount;
             AdjustmentAmount = info.AdjustmentAmount;
+            ToalDebitAmountMany = info.ToalDebitAmountMany;
 
             DishInfos.Clear();
             if (info.DishInfos != null && info.DishInfos.Any())
@@ -294,6 +299,7 @@ namespace CanDao.Pos.Model
             TotalAmount = preferential.menuAmount;
             TotalDebitAmount = preferential.toalDebitAmount;
             AdjustmentAmount = preferential.adjAmout;
+            ToalDebitAmountMany = preferential.toalDebitAmountMany;
             switch (preferential.moneyDisType)
             {
                 case 0: //未设置

@@ -4,6 +4,11 @@
         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls"
         Title="WTimeSelect" Height="550" Width="450" Background="White" BorderThickness="1" BorderBrush="Blue" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.ResourceService;component/DictionaryServer.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+     
         <Style x:Key="CalendarStyle1"
                TargetType="{x:Type Calendar}">
             <!--日历控件的背景色,也可以改成绑定的-->
@@ -686,6 +691,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -700,8 +706,8 @@
 
         <controls:CtTextChange x:Name="TimeSelect"  Grid.Row="1" HorizontalAlignment="Center"></controls:CtTextChange>
 
-        <Button x:Name="BtnCancel" Grid.Row="2" Width="205" HorizontalAlignment="Left" Margin="0,0,5,0" Content="取消" Background="White" PreviewMouseDown="BtnCancel_OnPreviewMouseDown"></Button>
-        <Button x:Name="BtnSure" Grid.Row="2" Width="205" HorizontalAlignment="Right" Content="确定" Background="White" IsDefault="True" PreviewMouseDown="BtnSure_OnPreviewMouseDown"></Button>
+        <Button x:Name="BtnCancel" Style="{DynamicResource ColBtn}" Grid.Row="2" Width="205" HorizontalAlignment="Left" Margin="0,0,5,0" Content="取消" Background="White" PreviewMouseDown="BtnCancel_OnPreviewMouseDown"></Button>
+        <Button x:Name="BtnSure" Style="{DynamicResource ColBtn}" Grid.Row="2" Width="205" HorizontalAlignment="Right" Content="确定" Background="White" IsDefault="True" PreviewMouseDown="BtnSure_OnPreviewMouseDown"></Button>
     </Grid>
 </Window>
 
