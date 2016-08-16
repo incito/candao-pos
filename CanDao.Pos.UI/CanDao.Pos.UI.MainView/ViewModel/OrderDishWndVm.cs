@@ -1107,7 +1107,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             var temp = SelectedMenuDishGroup.DishInfos;
             if (!string.IsNullOrEmpty(FilterMenuGroup))
-                temp = SelectedMenuDishGroup.DishInfos.Where(t => t.FirstLetter.ToUpper().Contains(FilterMenuGroup.ToUpper())).ToList();
+                temp = SelectedMenuDishGroup.DishInfos.Where(t => !string.IsNullOrEmpty(t.FirstLetter) && t.FirstLetter.ToUpper().Contains(FilterMenuGroup.ToUpper())).ToList();
             temp.ForEach(MenuDishes.Add);
         }
 
