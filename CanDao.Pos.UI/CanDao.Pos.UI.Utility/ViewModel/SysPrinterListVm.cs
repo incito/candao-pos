@@ -173,6 +173,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         {
             if (_refreshTimer != null)
             {
+                InfoLog.Instance.I("释放打印机定时器...");
                 _refreshTimer.Stop();
                 _refreshTimer.Dispose();
             }

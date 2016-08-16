@@ -267,16 +267,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         protected override void OnWindowClosed(object param)
         {
+            InfoLog.Instance.I("窗口关闭了....");
             if (_refreshTimer != null)//释放刷新定时器。
             {
                 _refreshTimer.Stop();
                 _refreshTimer.Dispose();
+                InfoLog.Instance.I("释放了刷新定时器。");
             }
 
             if (_printerCheckTimer != null) //释放打印机状态定时器。
             {
                 _printerCheckTimer.Stop();
                 _printerCheckTimer.Dispose();
+                InfoLog.Instance.I("释放了打印机状态定时器。");
             }
 
             _isDisposed = true;
