@@ -127,6 +127,8 @@ namespace CanDao.Pos.Model.Response
         public int dishtype { set; get; }
         public string orderseq { set; get; }
         public decimal dishnum { set; get; }
+
+        public string taste { set; get; }
    
     }
 

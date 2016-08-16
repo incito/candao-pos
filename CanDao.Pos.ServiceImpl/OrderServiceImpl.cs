@@ -741,8 +741,9 @@ namespace CanDao.Pos.ServiceImpl
         /// 获取账单信息
         /// </summary>
         /// <param name="orderId">订单号。</param>
+        /// <param name="itemid">订单号。</param>
         /// <returns></returns>
-        public Tuple<string, TableFullInfo> GetOrderInfo(string orderId)
+        public Tuple<string, TableFullInfo> GetOrderInfo(string orderId, string itemid="0")
         {
             var addr = ServiceAddrCache.GetServiceAddr("GetOrderInfo");
             if (string.IsNullOrEmpty(addr))
@@ -750,7 +751,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new Dictionary<string, string> { { "orderid", orderId } };
+                var param = new Dictionary<string, string> { { "orderid", orderId }, { "itemid", itemid } };
                 var result = HttpHelper.HttpPost<GetOrderInfoResponse>(addr, param);
                 return result.IsSuccess
                     ? new Tuple<string, TableFullInfo>(null, DataConverter.ToOrderInfo(result))

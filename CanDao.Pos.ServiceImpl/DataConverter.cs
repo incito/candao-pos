@@ -945,7 +945,7 @@ namespace CanDao.Pos.ServiceImpl
                 DishStatus = (EnumDishStatus)dishStatus,
                 DishType = (EnumDishType)response.dishtype,
                 DishUnit = InternationaHelper.GetBeforeSeparatorFlagData(response.dishunit),
-                TempDishName = dishName.Contains("临时菜") ? response.sperequire.Split('|')[2] : "",
+                TempDishName = dishName.Contains("临时菜") ? response.taste : "",
                 SrcDishUnit = response.dishunit,
                 Price = price,
                 PrimaryKey = response.primarykey,
