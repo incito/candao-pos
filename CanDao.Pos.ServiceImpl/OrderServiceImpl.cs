@@ -743,7 +743,7 @@ namespace CanDao.Pos.ServiceImpl
         /// <param name="orderId">订单号。</param>
         /// <param name="itemid">订单号。</param>
         /// <returns></returns>
-        public Tuple<string, TableFullInfo> GetOrderInfo(string orderId, string itemid="0")
+        public Tuple<string, TableFullInfo> GetOrderInfo(string orderId, string itemid)
         {
             var addr = ServiceAddrCache.GetServiceAddr("GetOrderInfo");
             if (string.IsNullOrEmpty(addr))

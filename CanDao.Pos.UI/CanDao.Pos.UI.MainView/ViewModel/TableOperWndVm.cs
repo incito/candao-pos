@@ -76,12 +76,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private bool _isLongPressModel;
 
         protected DishesTimer _dishesTimer;
+
+        //POS是否作抹零
+        protected string _isKeepOdd ;
         #endregion
 
         #region Constructor
 
         public TableOperWndVm(TableInfo tableInfo)
         {
+            _isKeepOdd = "1";
             _tableInfo = tableInfo;
             InitCouponCategories();
             InitCouponLongPressTimer();
@@ -1091,7 +1095,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
                 case "KeepOdd":
                     _curOddModel = EnumOddModel.None;
-                    CalculatePaymentAmount();
+                    _isKeepOdd = "1";
+                    GetTableDishInfoAsync();
                     break;
                 case "BackDish":
                     BackDish();
@@ -2466,7 +2471,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var result = service.GetOrderInfo(_tableInfo.OrderId);
+            var result = service.GetOrderInfo(_tableInfo.OrderId,_isKeepOdd);
             if (!string.IsNullOrEmpty(result.Item1))
                 return string.Format("获取餐台明细失败：{0}", result.Item1);
 
