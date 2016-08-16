@@ -578,7 +578,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="diet">菜品的忌口。</param>
         private void AddDishInfo(MenuDishInfo dishInfo, string taste, string diet)
         {
-            var item = OrderDishInfos.FirstOrDefault(t => OrderDishEqual(t, dishInfo, taste, diet));
+            var item = OrderDishInfos.FirstOrDefault(t => !dishInfo.NeedWeigh && OrderDishEqual(t, dishInfo, taste, diet));//称重的菜都不合并。
             if (item != null)
                 UpdateOrderDishNum(item, item.DishNum + dishInfo.SelectedCount);
             else
