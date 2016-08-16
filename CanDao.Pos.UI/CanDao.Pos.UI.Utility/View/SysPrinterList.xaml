@@ -38,7 +38,8 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="打印机IP" Width="200" Binding="{Binding PrintIp}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="打印机名称" Width="200" Binding="{Binding PrintName}" IsReadOnly="True"/>
-                            <DataGridTemplateColumn Header="打印机状态" Width="200" IsReadOnly="True">
+                            <DataGridTextColumn Header="打印机状态" Width="200" Binding="{Binding PrintStatusDes}" IsReadOnly="True"/>
+                            <!--<DataGridTemplateColumn Header="打印机状态" Width="200" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding PrintStatusDes}"
@@ -46,7 +47,7 @@
                                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                            </DataGridTemplateColumn>-->
                         </DataGrid.Columns>
                     </DataGrid>
                 </ControlTemplate>
