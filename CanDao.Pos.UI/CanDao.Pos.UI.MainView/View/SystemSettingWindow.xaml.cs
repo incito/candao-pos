@@ -1,4 +1,5 @@
 ﻿using System;
+using CanDao.Pos.Common;
 
 namespace CanDao.Pos.UI.MainView.View
 {
@@ -14,6 +15,7 @@ namespace CanDao.Pos.UI.MainView.View
 
         private void SystemSettingWindow_OnClosed(object sender, EventArgs e)
         {
+            InfoLog.Instance.I("系统窗口关闭了。");
             SysPrinterList.DisposeTimer();
         }
     }

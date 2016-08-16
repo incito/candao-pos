@@ -49,6 +49,7 @@
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Text="发票抬头："/>
             <TextBlock Grid.Row="2" Grid.Column="1"
+                       TextWrapping="Wrap"
                        Text="{Binding Data.OrderInvoiceTitle}"
                        HorizontalAlignment="Left"/>
 
@@ -66,6 +67,7 @@
                                   HorizontalAlignment="Left" VerticalAlignment="Center" Height="40" Width="130"/>
         </Grid>
         <view:InputNumberControl Grid.Row="0" Grid.Column="1"
+                                 ItemWidth="78"
                                  Width="250" Height="250"/>
         <view:WindowButtonOperControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,10,0,0"/>
     </Grid>
