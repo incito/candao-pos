@@ -227,6 +227,7 @@ namespace CanDao.Pos.Model
             OrderId = tableInfo.OrderId;
             BeginTime = tableInfo.BeginTime;
             TableType = tableInfo.TableType;
+            IsHangOrder = tableInfo.IsHangOrder;
         }
 
         public void CloneData(TableFullInfo info)

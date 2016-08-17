@@ -98,7 +98,7 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding TotalItemsCount, StringFormat=品项个数：{0}}"
+            <TextBlock Text="{Binding TotalItemsCount, StringFormat=收银员个数：{0}}"
                        Foreground="{StaticResource CanDaoPosColorFgStatistics}"
                        FontSize="18" HorizontalAlignment="Center"/>
             <TextBlock Grid.Column="1"

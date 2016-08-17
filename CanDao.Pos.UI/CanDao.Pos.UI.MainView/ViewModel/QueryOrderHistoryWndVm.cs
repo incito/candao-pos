@@ -213,6 +213,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 OrderId = orderInfo.OrderId,
                 TableNo = orderInfo.TableName,
             };
+            item.IsHangOrder = item.IsTakeoutTable && item.TableStatus == EnumTableStatus.Dinner;
             return item;
         }
 

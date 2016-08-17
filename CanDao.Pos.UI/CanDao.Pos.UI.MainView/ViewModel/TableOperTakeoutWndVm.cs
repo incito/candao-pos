@@ -44,12 +44,18 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (IsInDesignMode)
                 return;
 
-            TaskService.Start(null, OpenTableProcess, OpenTableComplete, "外卖台开台中...");
+            if (Data == null || string.IsNullOrEmpty(Data.OrderId))
+                TaskService.Start(null, OpenTableProcess, OpenTableComplete, "外卖台开台中...");
+            else
+                GetTableDishInfoAsync();
         }
 
         protected override void OnWindowClosing(CancelEventArgs e)
         {
             if (OwnerWindow.DialogResult == true)//为true表示正常关闭，不做后续处理。
+                return;
+
+            if (Data.IsHangOrder)//外卖挂单退出时不做处理。
                 return;
 
             e.Cancel = true;
@@ -58,7 +64,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var curWf = new WorkFlowInfo(CancelOrderProcess, CancelOrderComplete, "取消账单中...");
             if (Data.DishInfos.Any())
             {
-                if (!MessageDialog.Quest("退出将清空当前已选菜品，确定放弃结算？"))
+                if (!MessageDialog.Quest("退出将清空当前已选菜品并取消该订单，确定放弃结算？"))
                     return;
 
                 InfoLog.Instance.I("外卖台有已点菜品，进行整桌退菜...");
