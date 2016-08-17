@@ -634,14 +634,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "PreSettlement":
                     IsPrintMoreOpened = false;
                     GetTableDishInfoAsync();
-                    ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.FullName, OwnerWindow);
+                    ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.UserName, OwnerWindow);
                     break;
                 case "ReprintBill":
                     IsPrintMoreOpened = false;
                     if (MessageDialog.Quest(string.Format("确定要重印餐台\"{0}\"的结账单吗？", Data.TableName)))
                     {
                         InfoLog.Instance.I("开始重印餐台\"{0}\"的结账单...", Data.TableName);
-                        ReportPrintHelper.PrintSettlementReport(Data.OrderId, Globals.UserInfo.FullName);
+                        ReportPrintHelper.PrintSettlementReport(Data.OrderId, Globals.UserInfo.UserName);
                         InfoLog.Instance.I("结束重印餐台\"{0}\"的结账单。", Data.TableName);
                     }
                     break;
@@ -650,13 +650,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     if (MessageDialog.Quest(string.Format("确定要重印餐台\"{0}\"的客用单吗？", Data.TableName)))
                     {
                         InfoLog.Instance.I("开始重印餐台\"{0}\"的客用单...", Data.TableName);
-                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.FullName, OwnerWindow);
+                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.UserName, OwnerWindow);
                         InfoLog.Instance.I("结束重印餐台\"{0}\"的客用单。", Data.TableName);
                     }
                     break;
                 case "PrintTransactionSlip":
                     IsPrintMoreOpened = false;
-                    ReportPrintHelper.PrintMemberPayBillReport(Data, Globals.UserInfo.FullName);
+                    ReportPrintHelper.PrintMemberPayBillReport(Data, Globals.UserInfo.UserName);
                     break;
             }
         }
@@ -888,7 +888,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var result = obj as Tuple<string, preferentialInfoResponse>;
             if (!string.IsNullOrEmpty(result.Item1))
             {
-                var errMsg = string.Format("保存优惠券信息失败：{0}", result);
+                var errMsg = string.Format("保存优惠券信息失败：{0}", result.Item1);
                 ErrLog.Instance.E(errMsg);
                 MessageDialog.Warning(errMsg, OwnerWindow);
                 return;

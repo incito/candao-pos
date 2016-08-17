@@ -109,7 +109,7 @@
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="数量" Width="56" Binding="{Binding DishNum}" IsReadOnly="True"/>
                                     <!--<DataGridTextColumn Header="单位" Width="70" Binding="{Binding DishUnit}" IsReadOnly="True"/>-->
-                                    <DataGridTextColumn Header="金额（元）" Width="91" Binding="{Binding PayAmount}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="金额（元）" Width="91" Binding="{Binding PayAmount,StringFormat=F2}" IsReadOnly="True"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ControlTemplate>
