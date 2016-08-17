@@ -133,7 +133,7 @@ namespace CanDao.Pos.Model
             get { return _dinnerDuration; }
             set
             {
-                if(_dinnerDuration==value)
+                if (_dinnerDuration == value)
                     return;
 
                 _dinnerDuration = value;
@@ -165,6 +165,11 @@ namespace CanDao.Pos.Model
         public string WaiterId { get; set; }
 
         /// <summary>
+        /// 是否是挂单的订单。
+        /// </summary>
+        public bool IsHangOrder { get; set; }
+
+        /// <summary>
         /// 获取是否是咖啡台。
         /// </summary>
         public bool IsCoffeeTable
@@ -182,7 +187,7 @@ namespace CanDao.Pos.Model
 
         public void CloneData(TableInfo srcInfo)
         {
-            if(TableId != srcInfo.TableId)
+            if (TableId != srcInfo.TableId)
                 return;
 
             TableStatus = srcInfo.TableStatus;
@@ -191,6 +196,7 @@ namespace CanDao.Pos.Model
             TableEnable = srcInfo.TableEnable;
             TableName = srcInfo.TableName;
             OrderId = srcInfo.OrderId;
+            IsHangOrder = srcInfo.IsHangOrder;
         }
 
         /// <summary>
@@ -198,7 +204,7 @@ namespace CanDao.Pos.Model
         /// </summary>
         public void UpdateDinnerDuration()
         {
-            if(!IsInDinner)
+            if (!IsInDinner)
                 return;
 
             try
@@ -208,7 +214,7 @@ namespace CanDao.Pos.Model
             }
             catch (Exception ex)
             {
-                
+                // ignored
             }
         }
     }

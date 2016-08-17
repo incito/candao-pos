@@ -580,6 +580,7 @@ namespace CanDao.Pos.ServiceImpl
                 couponid = payInfo.CouponId,
                 couponnum = payInfo.CouponNum.ToString(),
                 payAmount = payInfo.PayAmount,
+                memerberCardNo = payInfo.MemberCardNo,
                 payWay = ((int)payInfo.PayType).ToString(),
             };
         }

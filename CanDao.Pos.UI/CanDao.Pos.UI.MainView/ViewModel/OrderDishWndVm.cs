@@ -1077,6 +1077,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             DoWhenDishChanged();
         }
 
+        /// <summary>
+        /// 直接输入菜品数量。
+        /// </summary>
         private void InputDishCount()
         {
             if (SelectedOrderDish == null)
