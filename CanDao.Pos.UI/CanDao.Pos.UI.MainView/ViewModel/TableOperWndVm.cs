@@ -1095,7 +1095,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
                 case "KeepOdd":
                     _curOddModel = EnumOddModel.None;
-                    _isKeepOdd = "1";
+                    _isKeepOdd = "0";
                     GetTableDishInfoAsync();
                     break;
                 case "BackDish":
