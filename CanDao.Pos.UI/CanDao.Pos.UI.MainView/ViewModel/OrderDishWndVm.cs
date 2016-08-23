@@ -433,6 +433,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 InfoLog.Instance.I("餐具收费，添加餐具到下单菜品列表里。");
                 var dinnerWare = Globals.DinnerWareInfo.CloneData();
                 dinnerWare.PrimaryKey = Guid.NewGuid().ToString();
+                if (!string.IsNullOrEmpty(Data.MemberNo))
+                    dinnerWare.Price = dinnerWare.MemberPrice;
                 UpdateOrderDishNum(dinnerWare, Data.CustomerNumber);
                 dishList.Add(dinnerWare);
             }

@@ -78,7 +78,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected DishesTimer _dishesTimer;
 
         //POS是否作抹零
-        protected string _isKeepOdd ;
+        protected string _isKeepOdd;
         #endregion
 
         #region Constructor
@@ -671,7 +671,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             bool enable = true;
             switch (param as string)
             {
-               
+
                 case "PreSettlement":
                     enable = Data != null && !Data.HasBeenPaied && Data.DishInfos.Any();
                     break;
@@ -680,7 +680,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     enable = Data != null && Data.HasBeenPaied;
                     break;
                 case "ReprintUserBill":
-                 
+
                     break;
                 case "ReprintCustomUseBill":
                     enable = Data.DishInfos.Any();
@@ -1876,9 +1876,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private List<BillPayInfo> GenerateBillPayInfos()
         {
             int bankId = SelectedBankInfo != null ? SelectedBankInfo.Id : 0;
+            var realCashAmount = CashAmount - ChargeAmount - TipPaymentAmount;//真实的现金消费金额为输入的现金-找零的现金-小费金额
             var list = new List<BillPayInfo>
             {
-                new BillPayInfo(CashAmount - ChargeAmount, EnumBillPayType.Cash),
+                new BillPayInfo(realCashAmount, EnumBillPayType.Cash),
                 new BillPayInfo(BankAmount, EnumBillPayType.BankCard, BankCardNo, bankId.ToString()),
                 new BillPayInfo(MemberAmount, EnumBillPayType.MemberCard, "", MemberCardNo),
                 new BillPayInfo(IntegralAmount, EnumBillPayType.MemberIntegral, "", MemberCardNo),
@@ -1896,7 +1897,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 list.Add(new BillPayInfo(WipeOddAmount, EnumBillPayType.RemoveOdd));
             if (Data.AdjustmentAmount != 0)//优免调整
             {
-                list.Add(new BillPayInfo(Data.AdjustmentAmount, EnumBillPayType.FreeAmount,"优免调整"));
+                list.Add(new BillPayInfo(Data.AdjustmentAmount, EnumBillPayType.FreeAmount, "优免调整"));
             }
             if (Data.ToalDebitAmountMany != 0)//挂账多收
             {
@@ -2471,7 +2472,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var result = service.GetOrderInfo(_tableInfo.OrderId,_isKeepOdd);
+            var result = service.GetOrderInfo(_tableInfo.OrderId, _isKeepOdd);
             if (!string.IsNullOrEmpty(result.Item1))
                 return string.Format("获取餐台明细失败：{0}", result.Item1);
 
