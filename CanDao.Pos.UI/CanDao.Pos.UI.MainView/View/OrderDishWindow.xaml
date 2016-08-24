@@ -122,7 +122,7 @@
             </Border>
 
             <controls:FlagControl Grid.Row="3" FlagWidth="3" Margin="22,0,0,10">
-                <TextBlock Text="{Binding TotalAmount, StringFormat=合计金额：{0}}"/>
+                <TextBlock Text="{Binding TotalAmount, StringFormat=合计金额：{0:0.00}}"/>
             </controls:FlagControl>
             <controls:FlagControl Grid.Row="4" FlagWidth="3" Margin="22,0,0,10"
                                   Visibility="{Binding OrderRemark, Converter={StaticResource Strinig2VisibleCvt}}">

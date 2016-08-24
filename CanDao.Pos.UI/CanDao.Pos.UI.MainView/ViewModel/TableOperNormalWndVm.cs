@@ -48,7 +48,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (OwnerWindow.DialogResult == null)
             {
                 _dishesTimer.TableName = _tableInfo.TableName;
-                _dishesTimer.DataChangeAction = new Action(DataChangeHandel);
+                _dishesTimer.DataChangeAction = new Action<string>(DataChangeHandel);
                 _dishesTimer.Start(Data.TotalAmount);
             }
         }
@@ -56,11 +56,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <summary>
         /// 同步订单信息
         /// </summary>
-        private void DataChangeHandel()
+        private void DataChangeHandel(string orderId)
         {
             this.OwnerWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                 new Action(() =>
                 {
+                    _tableInfo.OrderId = orderId;
                     GetTableDishInfoAsync();
                 }));
 

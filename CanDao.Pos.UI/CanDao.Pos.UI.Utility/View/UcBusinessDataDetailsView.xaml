@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="600" Background="White">
+             d:DesignHeight="500" d:DesignWidth="600" >
     <Grid>
         <Grid.Resources>
             <BitmapImage x:Key="CalendarImage" UriSource="../Controls/CalendarImage.png"></BitmapImage>
@@ -50,12 +50,12 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Border x:Name="bd" Background="White">
+                            <Border x:Name="bd" Background="#FFFF5803" CornerRadius="2">
                                 <Image Source="{StaticResource CalendarImage}" Height="30" Width="30"></Image>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="bd" Property="Background" Value="#C0C0C0"></Setter>
+                                    <Setter TargetName="bd" Property="Background" Value="#FFFFBB98"></Setter>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -93,6 +93,6 @@
         
         
         <Separator Grid.Row="4" BorderBrush="Black" BorderThickness="2" Margin="5,0,5,0"></Separator>
-        <Button Grid.Row="5" Width="262" Height="37" Content="打印" Background="#009DD9" Command="{Binding PrintCommand}"></Button>
+        <Button Grid.Row="5" Width="262" Height="37" Content="打印" Background="#FFFF5803" Command="{Binding PrintCommand}"></Button>
     </Grid>
 </UserControl>

@@ -24,7 +24,7 @@ namespace CanDao.Pos.UI.MainView.Operates
 
         #region 事件
 
-        public Action DataChangeAction;
+        public Action<string> DataChangeAction;
 
         /// <summary>
         /// 订单ID
@@ -127,7 +127,7 @@ namespace CanDao.Pos.UI.MainView.Operates
                     _totalAmount = resTable.Item2.TotalAmount;
                     if (DataChangeAction != null)
                     {
-                        DataChangeAction();
+                        DataChangeAction(resTable.Item2.OrderId);
                     }
                 }
             }
