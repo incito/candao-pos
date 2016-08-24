@@ -557,6 +557,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 if (WindowHelper.ShowDialog(selectTableWnd, OwnerWindow))//选择了咖啡外卖就走咖啡外卖桌台，如果没有选择则走配置文件的外卖。
                 {
                     InfoLog.Instance.I("选择了\"{0}\"咖啡外卖台", selectTableWnd.SelectedTable.TableName);
+                    selectTableWnd.SelectedTable.OrderId = null;//清空订单号才会在进入结账页面时开台。
                     WindowHelper.ShowDialog(new TableOperWindow(selectTableWnd.SelectedTable), OwnerWindow);
                     return;
                 }
