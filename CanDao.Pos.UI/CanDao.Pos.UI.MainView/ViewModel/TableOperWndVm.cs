@@ -2169,7 +2169,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 branch_id = Globals.BranchInfo.BranchId,
                 cardno = Data.MemberInfo.CardNo,
                 password = MemberPassword,
-                FCash = CashAmount,
+                FCash = CashAmount + BankAmount + DebitAmount + AlipayAmount,
+                FWeChat = WechatAmount,
                 FStore = MemberAmount,
                 FIntegral = IntegralAmount,
                 Serial = Data.OrderId,
@@ -2450,7 +2451,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var result = service.GetOrderInfo("",_tableInfo.TableNo, _isKeepOdd);
+            var result = service.GetOrderInfo("", _tableInfo.TableNo, _isKeepOdd);
             if (!string.IsNullOrEmpty(result.Item1))
                 return string.Format("获取餐台明细失败：{0}", result.Item1);
 

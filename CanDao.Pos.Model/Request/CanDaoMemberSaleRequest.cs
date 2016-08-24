@@ -16,6 +16,11 @@
         public decimal FCash { get; set; }
 
         /// <summary>
+        /// 微信支付金额。
+        /// </summary>
+        public decimal FWeChat { get; set; }
+
+        /// <summary>
         /// 积分消费金额。
         /// </summary>
         public decimal FIntegral { get; set; }
