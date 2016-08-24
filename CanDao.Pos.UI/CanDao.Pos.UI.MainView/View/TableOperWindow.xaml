@@ -106,9 +106,12 @@
                                     <DataGridTemplateColumn Header="菜单名称" Width="*" SortMemberPath="TempDishName" IsReadOnly="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <WrapPanel VerticalAlignment="Center">
-                                                    <TextBlock Text="{Binding TempDishName, StringFormat=({0})}" Visibility="{Binding TempDishName, Converter={StaticResource Strinig2VisibleCvt}}"/>
-                                                    <TextBlock Text="{Binding DishName}"/>
+                                                <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                    <TextBlock Text="{Binding TempDishName, StringFormat=({0})}"
+                                                               Visibility="{Binding TempDishName, Converter={StaticResource Strinig2VisibleCvt}}"
+                                                               HorizontalAlignment="Left"/>
+                                                    <TextBlock Text="{Binding DishName}"
+                                                               HorizontalAlignment="Left"/>
                                                 </WrapPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
@@ -250,14 +253,8 @@
                         <Button Content="整单退菜"
                                 Command="{Binding OperCmd}" CommandParameter="BackAllDish"
                                 Width="90" Height="40" Margin="3"/>
-                        <Button Content="重印账单"
-                                Command="{Binding PrintCmd}" CommandParameter="ReprintBill"
-                                Width="90" Height="40" Margin="3"/>
                         <Button Content="重印客用单"
                                 Command="{Binding PrintCmd}" CommandParameter="ReprintCustomUseBill"
-                                Width="90" Height="40" Margin="3"/>
-                        <Button Content="交易凭条"
-                                Command="{Binding PrintCmd}" CommandParameter="PrintTransactionSlip"
                                 Width="90" Height="40" Margin="3"/>
                         <Button Content="取消订单"
                                 Command="{Binding OperCmd}" CommandParameter="CancelOrder"
