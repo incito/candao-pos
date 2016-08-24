@@ -33,7 +33,7 @@
                         <i:InvokeCommandAction Command="{Binding StatisticCheckedCmd}" CommandParameter="Today"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <Label Content="今天" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Label Content="今天" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,3,17,3"/>
             </RadioButton>
             <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}">
                 <i:Interaction.Triggers>
@@ -60,7 +60,7 @@
                 <Label Content="上月" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </RadioButton>
         </StackPanel>
-        
+
         <Button Grid.Row="0" Grid.Column="1"
                 Content="打印"
                 Width="96" Height="40"
@@ -89,7 +89,7 @@
                 </ControlTemplate>
             </controls:GroupSelector.Template>
         </controls:GroupSelector>
-        
+
         <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
@@ -108,7 +108,7 @@
                        Foreground="{StaticResource CanDaoPosColorFgStatistics}"
                        FontSize="18" HorizontalAlignment="Center"/>
         </Grid>
-        
+
         <!--<StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                     Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="上一页"
