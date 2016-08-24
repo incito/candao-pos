@@ -271,7 +271,7 @@ namespace CanDao.Pos.IService
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        Tuple<string, TableFullInfo> GetOrderInfo(string orderId, string itemid);
+        Tuple<string, TableFullInfo> GetOrderInfo(string orderId, string tableNo, string itemid);
 
         /// <summary>
         /// 使用优惠券

@@ -2472,7 +2472,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var result = service.GetOrderInfo(_tableInfo.OrderId, _isKeepOdd);
+            var result = service.GetOrderInfo("",_tableInfo.TableNo, _isKeepOdd);
             if (!string.IsNullOrEmpty(result.Item1))
                 return string.Format("获取餐台明细失败：{0}", result.Item1);
 
