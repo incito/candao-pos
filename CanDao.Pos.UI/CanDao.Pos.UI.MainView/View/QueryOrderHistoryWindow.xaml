@@ -98,7 +98,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="人数" Width="50" Binding="{Binding CustomerNum}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="应收金额" Width="80" Binding="{Binding Dueamount}" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="订餐单位" Width="80" Binding="{Binding DebitCoupany}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="订餐单位" Width="80" Binding="{Binding DebitCompany}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="电话" Width="80" Binding="{Binding DebitTelphone}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="联系人" Width="80" Binding="{Binding DebitPeople}" IsReadOnly="True"/>
                         </DataGrid.Columns>
@@ -123,6 +123,9 @@
                     Width="105" Height="45"/>
             <Button Content="重印账单"
                     Command="{Binding OperCmd}" CommandParameter="ReprintPayBill"
+                    Width="105" Height="45"/>
+            <Button Content="交易凭条"
+                    Command="{Binding OperCmd}" CommandParameter="ReprintTransactionSlip"
                     Width="105" Height="45"/>
             <Button Content="重印清机单"
                     Command="{Binding OperCmd}" CommandParameter="ReprintClearn"
