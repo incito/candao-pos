@@ -629,34 +629,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="param"></param>
         private void Print(object param)
         {
+            var print = new ReportPrintHelper2(OwnerWindow);
             switch (param as string)
             {
                 case "PreSettlement":
                     IsPrintMoreOpened = false;
-                    GetTableDishInfoAsync();
-                    ReportPrintHelper.PrintPresettlementReport(Data, Globals.UserInfo.UserName, OwnerWindow);
-                    break;
-                case "ReprintBill":
-                    IsPrintMoreOpened = false;
-                    if (MessageDialog.Quest(string.Format("确定要重印餐台\"{0}\"的结账单吗？", Data.TableName)))
-                    {
-                        InfoLog.Instance.I("开始重印餐台\"{0}\"的结账单...", Data.TableName);
-                        ReportPrintHelper.PrintSettlementReport(Data.OrderId, Globals.UserInfo.UserName);
-                        InfoLog.Instance.I("结束重印餐台\"{0}\"的结账单。", Data.TableName);
-                    }
+                    InfoLog.Instance.I("开始重印餐台\"{0}\"的预结单...", Data.TableName);
+                    print.PrintPresettlementReport(Data.OrderId, Globals.UserInfo.UserName);
                     break;
                 case "ReprintCustomUseBill":
                     IsPrintMoreOpened = false;
-                    if (MessageDialog.Quest(string.Format("确定要重印餐台\"{0}\"的客用单吗？", Data.TableName)))
-                    {
-                        InfoLog.Instance.I("开始重印餐台\"{0}\"的客用单...", Data.TableName);
-                        ReportPrintHelper.PrintCustomUseBillReport(Data, Globals.UserInfo.UserName, OwnerWindow);
-                        InfoLog.Instance.I("结束重印餐台\"{0}\"的客用单。", Data.TableName);
-                    }
-                    break;
-                case "PrintTransactionSlip":
-                    IsPrintMoreOpened = false;
-                    ReportPrintHelper.PrintMemberPayBillReport(Data, Globals.UserInfo.UserName);
+                    InfoLog.Instance.I("开始重印餐台\"{0}\"的客用单...", Data.TableName);
+                    print.PrintCustomUseBillReport(Data.OrderId, Globals.UserInfo.UserName);
+                    InfoLog.Instance.I("结束重印餐台\"{0}\"的客用单。", Data.TableName);
                     break;
             }
         }
@@ -671,16 +656,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             bool enable = true;
             switch (param as string)
             {
-
                 case "PreSettlement":
                     enable = Data != null && !Data.HasBeenPaied && Data.DishInfos.Any();
-                    break;
-                case "ReprintBill":
-                case "PrintTransactionSlip":
-                    enable = Data != null && Data.HasBeenPaied;
-                    break;
-                case "ReprintUserBill":
-
                     break;
                 case "ReprintCustomUseBill":
                     enable = Data.DishInfos.Any();
@@ -2276,13 +2253,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 BroadcastCoffeeSettlementMsgAsyc();
 
             InfoLog.Instance.I("开始打印结账单...");
-            ReportPrintHelper.PrintSettlementReport(Data.OrderId, Globals.UserInfo.UserName);
+            var print = new ReportPrintHelper2(OwnerWindow);
+            print.PrintSettlementReport(Data.OrderId, Globals.UserInfo.UserName);
             InfoLog.Instance.I("结束打印结账单。");
 
             if (!string.IsNullOrEmpty(Data.MemberNo))
             {
                 InfoLog.Instance.I("开始打印交易凭条...");
-                ReportPrintHelper.PrintMemberPayBillReport(Data, Globals.UserInfo.UserName);
+                print.PrintMemberPayBillReport(Data.OrderId, Globals.UserInfo.UserName);
                 InfoLog.Instance.I("结束打印交易凭条。");
             }
 

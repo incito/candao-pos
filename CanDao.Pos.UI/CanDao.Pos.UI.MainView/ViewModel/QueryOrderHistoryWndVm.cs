@@ -155,7 +155,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     LoadOrderHistoryAsync();
                     break;
                 case "ReprintPayBill":
-                    ReportPrintHelper.PrintSettlementReport(SelectedOrder.OrderId, Globals.UserInfo.UserName);
+                    var print = new ReportPrintHelper2(OwnerWindow);
+                    print.PrintSettlementReport(SelectedOrder.OrderId, Globals.UserInfo.UserName);
+                    break;
+                case "ReprintTransactionSlip":
+                    var print2 = new ReportPrintHelper2(OwnerWindow);
+                    print2.PrintMemberPayBillReport(SelectedOrder.OrderId, Globals.UserInfo.UserName);
                     break;
                 case "ReprintClearn":
                     ReportPrintHelper.PrintClearPosReport(Globals.UserInfo.UserName);

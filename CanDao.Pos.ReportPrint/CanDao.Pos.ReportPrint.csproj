@@ -76,6 +76,7 @@
     <Compile Include="Operates\OPrintManage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportPrintHelper.cs" />
+    <Compile Include="ReportPrintHelper2.cs" />
     <Compile Include="ReportPrintingWindow.xaml.cs">
       <DependentUpon>ReportPrintingWindow.xaml</DependentUpon>
     </Compile>
