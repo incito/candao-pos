@@ -106,10 +106,7 @@ namespace CanDao.Pos.Common
 
             // 计时器初始化
             _timer = new Timer { Interval = ShowTime };
-            _timer.Elapsed += (sender, args) =>
-            {
-                Dispatcher.Invoke((Action)Close);
-            };
+            _timer.Elapsed += (sender, args) => { Dispatcher.Invoke((Action)Close); };
         }
 
         protected override void OnClosed(EventArgs e)

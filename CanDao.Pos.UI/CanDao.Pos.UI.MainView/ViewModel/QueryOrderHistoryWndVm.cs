@@ -148,6 +148,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         protected override void OperMethod(object param)
         {
+            var print = new ReportPrintHelper2(OwnerWindow);
             switch (param as string)
             {
                 case "Load":
@@ -155,15 +156,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     LoadOrderHistoryAsync();
                     break;
                 case "ReprintPayBill":
-                    var print = new ReportPrintHelper2(OwnerWindow);
                     print.PrintSettlementReport(SelectedOrder.OrderId, Globals.UserInfo.UserName);
                     break;
                 case "ReprintTransactionSlip":
-                    var print2 = new ReportPrintHelper2(OwnerWindow);
-                    print2.PrintMemberPayBillReport(SelectedOrder.OrderId, Globals.UserInfo.UserName);
+                    print.PrintMemberPayBillReport(SelectedOrder.OrderId, Globals.UserInfo.UserName);
                     break;
                 case "ReprintClearn":
-                    ReportPrintHelper.PrintClearPosReport(Globals.UserInfo.UserName);
+                    print.PrintClearPosReport(Globals.UserInfo.UserName);
                     break;
                 case "PreGroup":
                     ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.PreviousGroup();
