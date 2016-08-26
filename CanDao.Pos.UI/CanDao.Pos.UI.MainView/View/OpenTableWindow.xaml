@@ -44,7 +44,7 @@
                        Foreground="{StaticResource CanDaoPosColorFgOrange }"/>
             <controls:WatermarkTextBox x:Name="WtbWaiterId"
                                        Grid.Row="1" Grid.Column="0"
-                                       Text="{Binding WaiterId}"
+                                       Text="{Binding WaiterId, UpdateSourceTrigger=PropertyChanged}"
                                        Watermark="服务员编号："
                                        VerticalContentAlignment="Center"
                                        Height="38" Margin="0,2"/>
