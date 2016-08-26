@@ -280,7 +280,7 @@
                                                     <TextBlock Text="{Binding DishName}" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                                     <Border Grid.Row="1" Height="1" Margin="15,0" Background="{StaticResource CanDaoPosColorFgLightGray}"/>
                                                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                        <TextBlock Text="{Binding Price}" FontSize="14"/>
+                                                        <TextBlock Text="{Binding Price,StringFormat=F2}" FontSize="14"/>
                                                         <TextBlock Text="/"/>
                                                         <TextBlock Text="{Binding Unit}" FontSize="14"/>
                                                     </StackPanel>
