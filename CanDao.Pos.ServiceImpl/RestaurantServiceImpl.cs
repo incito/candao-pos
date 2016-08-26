@@ -187,23 +187,31 @@ namespace CanDao.Pos.ServiceImpl
                 var result = HttpHelper.HttpPost<OpenTableResponse>(addr, request);
                 if (result.IsSuccess)
                     return new Tuple<string, string>(null, result.data.orderid);
-
                 string errMsg;
-                switch (result.OpenTableResult)
+
+                if (string.IsNullOrEmpty(result.msg))
                 {
-                    case EnumOpenTableResult.Occupied:
-                        errMsg = "餐台被占用。";
-                        break;
-                    case EnumOpenTableResult.NoTableName:
-                        errMsg = string.Format("餐台名称：\"{0}\"不存在。", request.tableNo);
-                        break;
-                    case EnumOpenTableResult.NoOpenUp:
-                        errMsg = "餐厅未开业。";
-                        break;
-                    default:
-                        errMsg = "其他未知错误";
-                        break;
+                    switch (result.OpenTableResult)
+                    {
+                        case EnumOpenTableResult.Occupied:
+                            errMsg = "餐台被占用。";
+                            break;
+                        case EnumOpenTableResult.NoTableName:
+                            errMsg = string.Format("餐台名称：\"{0}\"不存在。", request.tableNo);
+                            break;
+                        case EnumOpenTableResult.NoOpenUp:
+                            errMsg = "餐厅未开业。";
+                            break;
+                        default:
+                            errMsg = "其他未知错误";
+                            break;
+                    }
                 }
+                else
+                {
+                    errMsg = result.msg;
+                }
+             
                 return new Tuple<string, string>(errMsg, null);
             }
             catch (Exception ex)
