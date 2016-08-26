@@ -370,7 +370,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             var param = new List<EnumTableType> { EnumTableType.CFTakeout };
-            TaskService.Start(param, GetTableInfoByTableTypeProcess, GetCFTakeoutTableInfoComplete, "获取咖啡外卖台信息中...");
+            TaskService.Start(param, GetTableInfoByTableTypeProcess, GetCfTakeoutTableInfoComplete, "获取咖啡外卖台信息中...");
         }
 
         /// <summary>
@@ -538,7 +538,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// 获取咖啡外卖信息完成时执行。
         /// </summary>
         /// <param name="param">返回结果。</param>
-        private void GetCFTakeoutTableInfoComplete(object param)
+        private void GetCfTakeoutTableInfoComplete(object param)
         {
             var result = (Tuple<string, List<TableInfo>>)param;
             if (!string.IsNullOrEmpty(result.Item1))
@@ -554,19 +554,22 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 InfoLog.Instance.I("咖啡外卖台个数：{0}", result.Item2.Count);
                 var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
-                if (WindowHelper.ShowDialog(selectTableWnd, OwnerWindow))//选择了咖啡外卖就走咖啡外卖桌台，如果没有选择则走配置文件的外卖。
+                if (WindowHelper.ShowDialog(selectTableWnd, OwnerWindow))//选择了咖啡外卖。
                 {
-                    InfoLog.Instance.I("选择了\"{0}\"咖啡外卖台", selectTableWnd.SelectedTable.TableName);
-                    selectTableWnd.SelectedTable.OrderId = null;//清空订单号才会在进入结账页面时开台。
-                    WindowHelper.ShowDialog(new TableOperWindow(selectTableWnd.SelectedTable), OwnerWindow);
-                    return;
+                    if (selectTableWnd.IsSelectNormalTakeout)//选择普通外卖。
+                    {
+                        InfoLog.Instance.I("开始获取普通外卖台...");
+                        var request = new List<EnumTableType> { EnumTableType.Takeout };
+                        TaskService.Start(request, GetTableInfoByTableTypeProcess, GetTakeoutTableInfoComplete, "获取普通外卖台信息中...");
+                    }
+                    else//选择了咖啡外卖。
+                    {
+                        InfoLog.Instance.I("选择了\"{0}\"咖啡外卖台", selectTableWnd.SelectedTable.TableName);
+                        selectTableWnd.SelectedTable.OrderId = null; //清空订单号才会在进入结账页面时开台。
+                        WindowHelper.ShowDialog(new TableOperWindow(selectTableWnd.SelectedTable), OwnerWindow);
+                    }
                 }
-                InfoLog.Instance.I("没有选择咖啡外卖台。");
             }
-
-            InfoLog.Instance.I("开始获取普通外卖台...");
-            var request = new List<EnumTableType> {EnumTableType.Takeout};
-            TaskService.Start(request, GetTableInfoByTableTypeProcess, GetTakeoutTableInfoComplete, "获取普通外卖台信息中...");
         }
 
         private void GetTakeoutTableInfoComplete(object param)

@@ -12,7 +12,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// </summary>
     public class SelectCoffeeTakeoutTableWndVm : NormalWindowViewModel
     {
-
         public SelectCoffeeTakeoutTableWndVm(List<TableInfo> tableInfos)
         {
             CoffeeTakeoutTables = new ObservableCollection<TableInfo>();
@@ -30,6 +29,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// 选择的咖啡模式外卖台。
         /// </summary>
         public TableInfo SelectedTable { get; set; }
+
+        /// <summary>
+        /// 是否选择普通外卖。
+        /// </summary>
+        public bool IsSelectNormalTakeout { get; set; }
 
         protected override bool CanConfirm(object param)
         {
@@ -59,6 +63,17 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     return ((SelectCoffeeTakeoutTableWindow)OwnerWindow).GsCfTakeout.CanNextGruop;
                 default:
                     return true;
+            }
+        }
+
+        protected override void OperMethod(object param)
+        {
+            switch (param as string)
+            {
+                case "NormalTakeout":
+                    IsSelectNormalTakeout = true;
+                    CloseWindow(true);
+                    break;
             }
         }
     }

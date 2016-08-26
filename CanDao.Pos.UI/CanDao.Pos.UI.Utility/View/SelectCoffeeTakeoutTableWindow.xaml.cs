@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using CanDao.Pos.Model;
 using CanDao.Pos.UI.Utility.ViewModel;
 
@@ -22,6 +21,14 @@ namespace CanDao.Pos.UI.Utility.View
         public TableInfo SelectedTable
         {
             get { return ((SelectCoffeeTakeoutTableWndVm)DataContext).SelectedTable; }
+        }
+
+        /// <summary>
+        /// 是否选择普通外卖。
+        /// </summary>
+        public bool IsSelectNormalTakeout
+        {
+            get { return ((SelectCoffeeTakeoutTableWndVm)DataContext).IsSelectNormalTakeout; }
         }
     }
 }
