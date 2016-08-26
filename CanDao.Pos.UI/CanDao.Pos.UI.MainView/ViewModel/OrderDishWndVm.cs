@@ -289,6 +289,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Order":
                 case "Empty":
                 case "Free":
+                case "Hang":
                     return OrderDishInfos != null && OrderDishInfos.Any();
                 default:
                     return true;
