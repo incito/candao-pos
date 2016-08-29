@@ -150,7 +150,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             {
                 var request = new CanDaoMemberCheckMobileRepeatRequest();
                 request.branch_id = Globals.BranchInfo.BranchId;
-                request.mobile = Model.TelNum;
+                request.mobile = Model.NTelNum;
                 //验证手机验证码
                 var res = _memberService.CheckMobileRepeat(request);
                 if (!string.IsNullOrEmpty(res))
