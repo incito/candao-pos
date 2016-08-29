@@ -277,13 +277,24 @@
                                                         <RowDefinition Height="Auto"/>
                                                         <RowDefinition />
                                                     </Grid.RowDefinitions>
-                                                    <TextBlock Text="{Binding DishName}" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                                    <Border Grid.Row="1" Height="1" Margin="15,0" Background="{StaticResource CanDaoPosColorFgLightGray}"/>
-                                                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                        <TextBlock Text="{Binding Price,StringFormat=F2}" FontSize="14"/>
-                                                        <TextBlock Text="/"/>
-                                                        <TextBlock Text="{Binding Unit}" FontSize="14"/>
-                                                    </StackPanel>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Grid.ColumnSpan="3"
+                                                               Text="{Binding DishName}"
+                                                               FontSize="16"
+                                                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                                            Height="1" Margin="15,0"
+                                                            Background="{StaticResource CanDaoPosColorFgLightGray}"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="0"
+                                                               Text="{Binding Price,StringFormat=F2}"
+                                                               FontSize="14" HorizontalAlignment="Left"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="/"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Unit}"
+                                                               FontSize="14" HorizontalAlignment="Left"/>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
