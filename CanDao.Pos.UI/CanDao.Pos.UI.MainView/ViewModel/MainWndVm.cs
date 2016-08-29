@@ -310,7 +310,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "System"://系统
                     SetPrinterCheckTimerStatus(false);
                     WindowHelper.ShowDialog(new SystemSettingWindow(), OwnerWindow);
-                    SetPrinterCheckTimerStatus(true);
+                    CheckPrinterStatus();//从系统退出以后马上检测一下打印机状态，不然可能出现状态在一定时间内不同步的现象。#9264
                     break;
             }
             SetRefreshTimerStatus(true);
