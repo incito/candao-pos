@@ -129,7 +129,7 @@ namespace CanDao.Pos.UI.Utility
             var reason = _antiSettlementReason;
             if (string.IsNullOrEmpty(reason))
                 reason = "会员结算失败，系统自动反结";
-            return service.AntiSettlementOrder(Globals.UserInfo.UserName, _orderId, reason);
+            return service.AntiSettlementOrder(Globals.Authorizer.UserName, _orderId, reason);
         }
 
         /// <summary>
