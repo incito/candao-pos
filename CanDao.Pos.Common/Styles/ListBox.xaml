@@ -48,6 +48,10 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="LbLeftStyle" TargetType="ListBoxItem" BasedOn="{StaticResource LbItemBaseStyle}">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
     
     <Style TargetType="ListBoxItem" BasedOn="{StaticResource LbItemBaseStyle}">
         

@@ -34,13 +34,35 @@
         <controls:WatermarkTextBox Grid.Row="1" Grid.ColumnSpan="2" Height="30" Text="{Binding FilterLetter, UpdateSourceTrigger=PropertyChanged}" MinWidth="130" FontSize="16" Watermark="输入首字母过滤："/>
         <Button Grid.Row="1" Grid.Column="1" Content="C" Command="{Binding ClearFilterLetterCmd}" Width="30" Focusable="False"/>
 
-        <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  ItemsSource="{Binding CompanyInfos}" SelectedItem="{Binding SelectedCompany}">
-            <ListBox.ItemTemplate>
-                <HierarchicalDataTemplate>
-                    <TextBlock FontSize="25" Text="{Binding Name}"/>
-                </HierarchicalDataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <controls:GroupSelector x:Name="GsCpys"
+                                Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                ItemsSource="{Binding CompanyInfos}"
+                                SelectedItem="{Binding SelectedCompany}"
+                                ItemCountEachGroup="10">
+            <controls:GroupSelector.Template>
+                <ControlTemplate TargetType="controls:GroupSelector">
+                    <ListBox x:Name="PART_Selector" 
+                             ItemsSource="{TemplateBinding GroupedItemsSource}"
+                             ItemContainerStyle="{StaticResource LbLeftStyle}"
+                             Margin="3"
+                             Focusable="False">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock FontSize="25" Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ListBox>
+                </ControlTemplate>
+            </controls:GroupSelector.Template>
+        </controls:GroupSelector>
+
+        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+            <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding OperCmd}" CommandParameter="PreGroup"/>
+            <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsCpys}"/>
+            <TextBlock Text="/"/>
+            <TextBlock Text="{Binding GroupCount, ElementName=GsCpys}"/>
+            <Button Style="{StaticResource BtnRightStyle}" Command="{Binding OperCmd}" CommandParameter="NextGroup"/>
+        </StackPanel>
 
         <view:WindowButtonOperControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
     </Grid>

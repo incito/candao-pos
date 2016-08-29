@@ -6,6 +6,7 @@ using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -54,11 +55,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public ICommand ClearFilterLetterCmd { get; private set; }
 
         /// <summary>
-        /// 窗口加载时命令。
-        /// </summary>
-        public ICommand WindowLoadCmd { get; private set; }
-
-        /// <summary>
         /// 清除过滤字母。
         /// </summary>
         /// <param name="arg"></param>
@@ -67,11 +63,13 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             FilterLetter = "";
         }
 
-        /// <summary>
-        /// 窗口加载。
-        /// </summary>
-        /// <param name="arg"></param>
-        private void WindowLoad(object arg)
+        protected override void InitCommand()
+        {
+            base.InitCommand();
+            ClearFilterLetterCmd = CreateDelegateCommand(ClearFilterLetter);
+        }
+
+        protected override void OnWindowLoaded(object param)
         {
             if (Globals.OnCompanyInfos == null || !Globals.OnCompanyInfos.Any())
                 TaskService.Start(null, GetAllOnAccountCompanyProcess, GetAllOnAccountCompanyComplete, "获取挂账单位...");
@@ -79,16 +77,35 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 FilterCompany();
         }
 
-        protected override void InitCommand()
-        {
-            base.InitCommand();
-            ClearFilterLetterCmd = CreateDelegateCommand(ClearFilterLetter);
-            WindowLoadCmd = CreateDelegateCommand(WindowLoad);
-        }
-
         protected override bool CanConfirm(object param)
         {
             return SelectedCompany != null;
+        }
+
+        protected override void OperMethod(object param)
+        {
+            switch (param as string)
+            {
+                case "PreGroup":
+                    ((OnAccountCompanySelectWindow) OwnerWindow).GsCpys.PreviousGroup();
+                    break;
+                case "NextGroup":
+                    ((OnAccountCompanySelectWindow)OwnerWindow).GsCpys.NextGroup();
+                    break;
+            }
+        }
+
+        protected override bool CanOperMethod(object param)
+        {
+            switch (param as string)
+            {
+                case "PreGroup":
+                    return ((OnAccountCompanySelectWindow)OwnerWindow).GsCpys.CanPreviousGroup;
+                case "NextGroup":
+                    return ((OnAccountCompanySelectWindow)OwnerWindow).GsCpys.CanNextGruop;
+                default:
+                    return true;
+            }
         }
 
         /// <summary>
