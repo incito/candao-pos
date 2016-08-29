@@ -231,9 +231,9 @@
             <Button Content="预结单"
                     Command="{Binding PrintCmd}" CommandParameter="PreSettlement"
                     Width="70" Height="46"/>
-            <Button Content="反结"
+            <!--<Button Content="反结"
                     Command="{Binding OperCmd}" CommandParameter="Resettlement"
-                    Width="70" Height="46"/>
+                    Width="70" Height="46"/>-->
             <Button Content="点菜"
                     Command="{Binding OperCmd}" CommandParameter="Order"
                     Width="70" Height="46"/>
