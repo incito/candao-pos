@@ -1746,10 +1746,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (Data.RoundAmount != 0)
             {
                 settlementInfo.Add(string.Format("舍{1}：{0:f2}", Math.Abs(Data.RoundAmount), Data.RoundAmount > 0 ? "去" : "入"));
+                RoundingAmount = Data.RoundAmount;
             }
             if (Data.RemovezeroAmount != 0)
             {
                 settlementInfo.Add(string.Format("抹零：{0:f2}", Data.RemovezeroAmount));
+                WipeOddAmount = Data.RemovezeroAmount;
             }
 
             //支付部分
@@ -1868,10 +1870,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var cmpId = SelectedOnCmpAccInfo != null ? SelectedOnCmpAccInfo.Id : "";
             list.Add(new BillPayInfo(DebitAmount, EnumBillPayType.OnCompanyAccount, onAcc) { CouponDetailId = cmpId });
 
-            if (RoundingAmount != 0)
-                list.Add(new BillPayInfo(RoundingAmount, EnumBillPayType.Rounding));
-            if (WipeOddAmount != 0)
-                list.Add(new BillPayInfo(WipeOddAmount, EnumBillPayType.RemoveOdd));
+            if (Data.RoundAmount != 0)
+                list.Add(new BillPayInfo(Data.RoundAmount, EnumBillPayType.Rounding));
+            if (Data.RemovezeroAmount != 0)
+                list.Add(new BillPayInfo(Data.RemovezeroAmount, EnumBillPayType.RemoveOdd));
             if (Data.AdjustmentAmount != 0)//优免调整
             {
                 list.Add(new BillPayInfo(Data.AdjustmentAmount, EnumBillPayType.FreeAmount, "优免调整"));
