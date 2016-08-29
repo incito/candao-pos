@@ -186,6 +186,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "ReprintPayBill":
                 case "AntiPayBill":
                     return SelectedOrder != null && SelectedOrder.HasBeenPaied;
+                case "ReprintTransactionSlip":
+                    return SelectedOrder != null && SelectedOrder.HasBeenPaied && !string.IsNullOrEmpty(SelectedOrder.MemberNo);
                 case "PayBill":
                     return SelectedOrder != null && !SelectedOrder.HasBeenPaied;
                 case "PreGroup":
