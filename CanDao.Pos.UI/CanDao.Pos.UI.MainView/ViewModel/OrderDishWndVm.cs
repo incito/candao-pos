@@ -414,12 +414,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     orderDishInfo.FreeAuthorizeId = Globals.Authorizer.UserName;
                 }
             }
-
-            if (!string.IsNullOrWhiteSpace(Data.MemberNo))
+            else
             {
-                foreach (var orderDishInfo in OrderDishInfos)
+                if (!string.IsNullOrWhiteSpace(Data.MemberNo))
                 {
-                    orderDishInfo.Price = orderDishInfo.MemberPrice;
+                    foreach (var orderDishInfo in OrderDishInfos)
+                    {
+                        orderDishInfo.Price = orderDishInfo.MemberPrice;
+                    }
                 }
             }
 
