@@ -26,7 +26,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         {
             _rightType = rightType;
             Account = userName;
-            Password = "123456";
+            //Password = "123456";
 
             AllowInputUserName = rightType != EnumRightType.Clearner;//清机不允许修改用户名。
         }

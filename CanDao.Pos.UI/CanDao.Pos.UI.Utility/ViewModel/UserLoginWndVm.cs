@@ -27,7 +27,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         public UserLoginWndVm()
         {
-            Password = "123456";
+            //Password = "123456";
         }
 
         #endregion
