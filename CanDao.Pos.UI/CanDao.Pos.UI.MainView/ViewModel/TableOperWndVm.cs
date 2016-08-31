@@ -1809,6 +1809,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns>允许结账则返回null，否则返回错误信息。</returns>
         private string CheckTheBillAllowPay()
         {
+            if (Data.DishInfos == null || !Data.DishInfos.Any())
+                return "不能结账空账单。";
+
             if (Data.DishInfos.Any(t => t.DishStatus == EnumDishStatus.ToBeWeighed))
                 return "还有未称重菜品。";
 
