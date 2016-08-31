@@ -1795,7 +1795,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var tipPayment = Data.TotalAlreadyPayment - realyPayment;//小费实付金额=付款总额-真实应收。
                 tipPayment = Math.Max(0, tipPayment);//小费实付金额不能小于0。
                 tipPayment = Math.Min(CashAmount, tipPayment);//小费实付金额不能大于现金。
+                tipPayment = Math.Min(Data.TipAmount, tipPayment);//小费金额不能大于用户设置的小费金额。
                 TipPaymentAmount = tipPayment;
+                settlementInfo.Add(string.Format("小费：{0:f2}", TipPaymentAmount));
             }
 
             SettlementInfo = string.Format("收款：{0}", string.Join("，", settlementInfo));
@@ -2453,7 +2455,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var result = service.GetOrderInfo(_tableInfo.OrderId,"", _isKeepOdd);
+            var result = service.GetOrderInfo(_tableInfo.OrderId, "", _isKeepOdd);
             if (!string.IsNullOrEmpty(result.Item1))
                 return string.Format("获取餐台明细失败：{0}", result.Item1);
 
