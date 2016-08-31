@@ -56,7 +56,8 @@
                                            FontSize="24"
                                            Height="54" Width="250"
                                            VerticalContentAlignment="Center"/>
-                <controls:WatermarkPasswordBox Grid.Row="1" Grid.Column="0"
+                <controls:WatermarkPasswordBox x:Name="TbPassword"
+                                               Grid.Row="1" Grid.Column="0"
                                                Watermark="密码："
                                                Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                FontSize="24"

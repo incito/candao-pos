@@ -131,6 +131,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 {
                     IsSaveLoginInfo = true;
                     Account = data;
+                    ((UserLoginWindow)OwnerWindow).TbPassword.Focus();
                 }
                 else
                 {
