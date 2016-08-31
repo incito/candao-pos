@@ -8,7 +8,7 @@ namespace CanDao.Pos.UI.Utility.View
     /// </summary>
     public partial class AuthorizationWindow
     {
-        public AuthorizationWindow(EnumRightType rightType, string userName = "002")
+        public AuthorizationWindow(EnumRightType rightType, string userName = "")
         {
             InitializeComponent();
             DataContext = new AuthorizationWndVm(rightType, userName) { OwnerWindow = this };

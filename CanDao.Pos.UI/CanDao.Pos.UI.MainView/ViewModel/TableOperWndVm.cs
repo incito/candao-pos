@@ -1268,14 +1268,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
             }
 
-            if (Data.TotalAlreadyPayment - ChargeAmount > Data.PaymentAmount)
-            {
-                InfoLog.Instance.I(string.Format("实际支付金额\"{0}\"超过应收金额\"{1}\"。", Data.TotalAlreadyPayment, Data.PaymentAmount));
-                if (!MessageDialog.Quest(string.Format("实际支付金额\"{0}\"超过应收金额\"{1}\"，确定继续结算？", Data.TotalAlreadyPayment, Data.PaymentAmount), OwnerWindow))
-                    return;
-                InfoLog.Instance.I("用户选择继续结算...");
-            }
-
             if (!MessageDialog.Quest(string.Format("桌号：{0} 确定现在结算吗？", Data.TableName), OwnerWindow))
                 return;
 
@@ -1784,6 +1776,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 settlementInfo.Add(string.Format("微信支付：{0:f2}", WechatAmount));
 
             Data.TotalAlreadyPayment = CashAmount + BankAmount + MemberAmount + IntegralAmount + DebitAmount + AlipayAmount + WechatAmount; //付款总额=各种付款方式总和。
+            Data.TotalAlreadyPayment = Math.Round(Data.TotalAlreadyPayment, 2);
             var remainderAmount = Data.PaymentAmount - Data.TotalAlreadyPayment;//剩余金额=应付金额-付款总额。
             if (remainderAmount > 0)
             {
@@ -1856,6 +1849,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (WechatAmount > 0 && string.IsNullOrEmpty(WechatNo))
                 return "使用微信支付请先输入微信账号。";
+
+            if (Data.TotalAlreadyPayment - ChargeAmount > Data.PaymentAmount)
+                return string.Format("实际支付金额\"{0}\"超过应收金额\"{1}\"。", Data.TotalAlreadyPayment, Data.PaymentAmount);
 
             return null;
         }
