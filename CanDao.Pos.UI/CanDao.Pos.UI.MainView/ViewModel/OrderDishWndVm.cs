@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Windows.Input;
 using CanDao.Pos.Common;
@@ -617,7 +618,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (srcItem == null || dstItem == null)
                 return false;
 
-            if (srcItem.IsComboDish || srcItem.IsFishPotDish)
+            if (srcItem.IsComboDish || srcItem.IsFishPotDish || srcItem.DishType != EnumDishType.Normal)
                 return false;
 
             if (srcItem.DishId != dstItem.DishId || !srcItem.SrcDishUnit.Equals(dstItem.SrcUnit))
@@ -631,6 +632,32 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             return true;
         }
 
+        private bool OrderDishEqual(OrderDishInfo srcItem, MenuComboFullInfo dstItem, string diet)
+        {
+            if (srcItem == null || dstItem == null)
+                return false;
+
+            if (srcItem.IsComboDish || srcItem.IsFishPotDish || srcItem.DishType != EnumDishType.Packages)
+                return false;
+
+            if (srcItem.DishId != dstItem.ComboSelfInfo.DishId || !srcItem.SrcDishUnit.Equals(dstItem.ComboSelfInfo.SrcUnit))
+                return false;
+
+            if (!string.IsNullOrEmpty(srcItem.Diet) && !srcItem.Diet.Equals(diet))
+                return false;
+
+            var menuComboAllDishes = new List<MenuDishInfo>();
+            menuComboAllDishes.AddRange(dstItem.SingleDishInfos);
+            dstItem.ComboDishInfos.ForEach(t => { menuComboAllDishes.AddRange(t.SourceDishes.Where(y => y.SelectedCount > 0)); });//将选择的菜品提取出来。
+            if (srcItem.DishInfos.Count != menuComboAllDishes.Count)
+                return false;
+
+            if (!srcItem.DishInfos.All(t => menuComboAllDishes.Any(y => t.DishId == y.DishId && t.SrcDishUnit.Equals(y.SrcUnit))))
+                return false;
+
+            return true;
+        }
+
         /// <summary>
         /// 添加套餐菜。
         /// </summary>
@@ -638,10 +665,20 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="diet">套餐忌口信息。</param>
         private void AddComboDishInfo(MenuComboFullInfo comboFullInfo, string diet)
         {
-            var comboOrderDish = Convert2OrderDishInfo(comboFullInfo, diet);
-            if (comboOrderDish.DishInfos != null && comboOrderDish.DishInfos.Any())//将套餐内的菜加到列表来。
-                comboOrderDish.DishInfos.ForEach(InsertOrderDishInfo);
-            InsertOrderDishInfo(comboOrderDish);//添加套餐主菜，因为是插入型添加，所以先放套餐内的菜。
+            var item = OrderDishInfos.FirstOrDefault(t => OrderDishEqual(t, comboFullInfo, diet));//称重的菜都不合并。
+            if (item != null)
+            {
+                UpdateOrderDishNum(item, ++item.DishNum);
+                item.DishInfos.ForEach(t => UpdateOrderDishNum(t, ++t.DishNum));
+            }
+            else
+            {
+                var comboOrderDish = Convert2OrderDishInfo(comboFullInfo, diet);
+                if (comboOrderDish.DishInfos != null && comboOrderDish.DishInfos.Any()) //将套餐内的菜加到列表来。
+                    comboOrderDish.DishInfos.ForEach(InsertOrderDishInfo);
+                InsertOrderDishInfo(comboOrderDish); //添加套餐主菜，因为是插入型添加，所以先放套餐内的菜。
+            }
+
             DoWhenDishChanged();
         }
 
@@ -749,10 +786,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (comboFullInfo.ComboDishInfos != null)
             {
                 var allComboDishInfos = new List<MenuDishInfo>();
-                comboFullInfo.ComboDishInfos.ForEach(t =>
-                {
-                    allComboDishInfos.AddRange(t.SourceDishes.Where(y => y.SelectedCount > 0));//将选择的菜品提取出来。
-                });
+                comboFullInfo.ComboDishInfos.ForEach(t => { allComboDishInfos.AddRange(t.SourceDishes.Where(y => y.SelectedCount > 0)); });//将选择的菜品提取出来。
                 comboOrderDishInfo.DishInfos.AddRange(allComboDishInfos.Select(t => Convert2OrderDishInfo(t, "", "", true)));
             }
 

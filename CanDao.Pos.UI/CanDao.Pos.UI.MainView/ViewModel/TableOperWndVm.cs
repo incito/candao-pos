@@ -685,6 +685,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         #region 优惠券处理
+
         /// <summary>
         /// 优惠券鼠标按下命令的执行方法。
         /// </summary>
@@ -843,6 +844,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             TaskService.Start(usePreferential, UseCouponProcess, UseCouponInfoComplete, "保存使用优惠券...");
         }
+
         /// <summary>
         /// 保存使用优惠券处理
         /// </summary>
@@ -856,6 +858,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             return service.UsePreferential((UsePreferentialRequest)arg);
         }
+
         /// <summary>
         /// 使用优惠券完成
         /// </summary>
@@ -878,6 +881,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
             }
         }
+
         /// <summary>
         /// 手工优免类优惠券处理方式。
         /// </summary>
@@ -938,6 +942,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             return result;
         }
+
         /// <summary>
         /// 删除优惠券处理
         /// </summary>
@@ -951,6 +956,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             return service.DelPreferential((DelPreferentialRequest)arg);
         }
+
         /// <summary>
         /// 删除优惠券完成
         /// </summary>
@@ -976,6 +982,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
             }
         }
+
         /// <summary>
         /// 移除一个优惠券。
         /// </summary>
@@ -1475,7 +1482,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
 
             var helper = new AntiSettlementHelper();
-            var afterAntiSettlementWf = new WorkFlowInfo(null, delegate(object o)
+            var afterAntiSettlementWf = new WorkFlowInfo(null, delegate
             {
                 NotifyDialog.Notify(string.Format("订单号：\"{0}\"反结算成功。", Data.OrderId), OwnerWindow);
                 //_tableInfo.TableStatus = EnumTableStatus.Dinner;//将餐桌状态设置成就餐，调用GetTableDishInfo获取餐桌信息时就不会弹出开台窗口了。
