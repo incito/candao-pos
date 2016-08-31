@@ -45,7 +45,7 @@ namespace CanDao.Pos.UI.Utility.View
         /// <summary>
         /// 获取设定的菜品数量。
         /// </summary>
-        public int DishNum
+        public decimal DishNum
         {
             get { return (int)((SetDishTasteAndDietWndVm)DataContext).DishNum; }
         }
