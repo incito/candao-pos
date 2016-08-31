@@ -707,7 +707,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private OrderDishInfo Convert2OrderDishInfo(MenuDishInfo dishInfo, string taste, string diet, bool isComboDish = false)
         {
-            var dishNum = dishInfo.SelectedCount;
+            var dishNum = dishInfo.SelectedCount * Math.Max(1, dishInfo.DishCount);//#9354，DishCount在单品菜的时候为0，所以取最小值1。菜品数量=菜品选择数量*菜品的个数。这里的菜品个数是指套餐里设定的某个菜的数量。
             var price = isComboDish ? 0 : (dishInfo.Price ?? 0);//套餐内的菜价格为0。
             var item = new OrderDishInfo
             {

@@ -28,7 +28,8 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="{Binding DishName}" FontSize="16" />
-                            <TextBlock Text="{Binding Unit, StringFormat=({0})}" FontSize="16"/>
+                            <TextBlock Text="{Binding DishCount, StringFormat=({0}}" FontSize="16"/>
+                            <TextBlock Text="{Binding Unit, StringFormat={}{0})}" FontSize="16"/>
                         </StackPanel>
                         <TextBox Grid.Column="1"
                                  Text="{Binding SelectedCount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
