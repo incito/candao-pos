@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CanDao.Pos.Common;
 using CanDao.Pos.Common.Operates;
 using CanDao.Pos.Common.PublicValues;
-using CanDao.Pos.ReportPrint.Operates;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model.Request;
+using CanDao.Pos.ReportPrint.Operates;
 
 namespace CanDao.Pos.ReportPrint
 {

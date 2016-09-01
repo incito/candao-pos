@@ -92,8 +92,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             var invoice = new PrintInvoiceInfo();
             invoice.OrderId = Data.OrderId;
             invoice.InvoiceAmount = InvoiceAmount;
-            ReportPrintHelper.PrintInvoiceReport(invoice);
-
+            var print = new ReportPrintHelper2(OwnerWindow);
+            print.PrintInvoiceReport(invoice);
+            //ReportPrintHelper.PrintInvoiceReport(invoice);
             InfoLog.Instance.I("结束更新发票信息。");
             return null;
         }

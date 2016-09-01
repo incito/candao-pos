@@ -166,7 +166,9 @@ namespace CanDao.Pos.UI.Utility
                 return null;
             }
 
-            ReportPrintHelper.PrintClearPosReport(result.Item2);
+            var print = new ReportPrintHelper2(null);
+            print.PrintClearPosReport(result.Item2);
+            //ReportPrintHelper.PrintClearPosReport(result.Item2);
             _clearPosSuccess = true;
             _arEvent.Set();
 

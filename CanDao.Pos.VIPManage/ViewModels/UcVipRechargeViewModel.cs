@@ -38,7 +38,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         private ObservableCollection<MListBoxInfo> _listBoxInfos;
         private MListBoxInfo _selectInfo;
 
-        private IMemberService _memberService=null;
+        private IMemberService _memberService = null;
 
         private CanDaoMemberStorageResponse _ret;
         #endregion
@@ -183,11 +183,11 @@ namespace CanDao.Pos.VIPManage.ViewModels
             switch (textBox.Name)
             {
                 case "TexRecharge": //储值金额
-                {
-                    Model.RechargeValue = textBox.Text;
-                    ItemChangeHandel(_selectInfo);
-                    break;
-                }
+                    {
+                        Model.RechargeValue = textBox.Text;
+                        ItemChangeHandel(_selectInfo);
+                        break;
+                    }
             }
         }
 
@@ -260,7 +260,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                         if (data.CouponType.Equals("1"))
                         {
 
-                            giveValue = ((int) (recharge/deal))*present;
+                            giveValue = ((int)(recharge / deal)) * present;
                         }
                         else
                         {
@@ -291,7 +291,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
                     try
                     {
-                      
+
                         if (Model.IsEnabledNum)
                         {
                             var request = new CanDaoMemberQueryRequest();
@@ -369,14 +369,14 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     }
                     finally
                     {
-                     
+
                     }
                 }
             }
         }
 
         #region 异步
-       
+
         private void Print()
         {
             Model.CardBalance = string.Format("卡余额:{0}", _ret.StoreCardBalance);
@@ -434,10 +434,11 @@ namespace CanDao.Pos.VIPManage.ViewModels
             memberstoreinfo.TradeTime = DateTime.Now;
             memberstoreinfo.StoredBalance = decimal.Parse(Model.RechargeValue);
             memberstoreinfo.ScoreBalance = SelectModel.Integral;
-            memberstoreinfo.StoredAmount =storeCardbalance ;
+            memberstoreinfo.StoredAmount = storeCardbalance;
 
-           
-            ReportPrintHelper.PrintMemberStoredReport(memberstoreinfo);
+            var print = new ReportPrintHelper2(null);
+            print.PrintMemberStoredReport(memberstoreinfo);
+            //ReportPrintHelper.PrintMemberStoredReport(memberstoreinfo);
         }
 
         /// <summary>
@@ -492,9 +493,9 @@ namespace CanDao.Pos.VIPManage.ViewModels
             var height = 75;
 
             //行
-            int rowNum = (int) height/70;
+            int rowNum = (int)height / 70;
             rowNum = rowNum > 0 ? rowNum : 1;
-            
+
             //列
             int colNum = (int)width / 70;
             colNum = colNum > 0 ? colNum : 1;
@@ -502,7 +503,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
             _page = 1;
 
             //每页数量
-            _pageSize = colNum*rowNum;
+            _pageSize = colNum * rowNum;
             _pageSize = _pageSize > 0 ? _pageSize : 1;
 
             ContentShow();
@@ -517,14 +518,14 @@ namespace CanDao.Pos.VIPManage.ViewModels
             try
             {
                 ListBoxInfos =
-                    new ObservableCollection<MListBoxInfo>(ListData.Take(_pageSize*_page).Skip(_pageSize*(_page - 1)));
-                if (ListData.Count%_pageSize == 0)
+                    new ObservableCollection<MListBoxInfo>(ListData.Take(_pageSize * _page).Skip(_pageSize * (_page - 1)));
+                if (ListData.Count % _pageSize == 0)
                 {
-                    Total = ListData.Count/_pageSize;
+                    Total = ListData.Count / _pageSize;
                 }
                 else
                 {
-                    Total = ListData.Count/_pageSize + 1;
+                    Total = ListData.Count / _pageSize + 1;
                 }
                 Model.IsUp = _page > 1 ? true : false;
                 Model.IsDown = _page < Total ? true : false;

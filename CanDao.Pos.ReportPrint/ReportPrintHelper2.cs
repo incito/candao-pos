@@ -1,7 +1,8 @@
-﻿using System;
+﻿using System.Globalization;
 using System.Windows;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
+using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 
 namespace CanDao.Pos.ReportPrint
@@ -35,7 +36,6 @@ namespace CanDao.Pos.ReportPrint
         /// <param name="printUser">打印人员。</param>
         public void PrintPresettlementReport(string orderId, string printUser)
         {
-            ReportPrintingWindow.Instance.Show();
             var param = new PrintParamWithType(orderId, printUser, EnumPrintPayType.BeforehandPay);
             TaskService.Start(param, PrintPayBillProcess, PrintPresettlementBillComplete, "打印预结单中...");
         }
@@ -47,7 +47,6 @@ namespace CanDao.Pos.ReportPrint
         /// <param name="printUser">打印人员。</param>
         public void PrintSettlementReport(string orderId, string printUser)
         {
-            ReportPrintingWindow.Instance.Show();
             var param = new PrintParamWithType(orderId, printUser, EnumPrintPayType.Pay);
             TaskService.Start(param, PrintPayBillProcess, PrintSettlementBillComplete, "打印结账单中...");
         }
@@ -59,7 +58,6 @@ namespace CanDao.Pos.ReportPrint
         /// <param name="printUser"></param>
         public void PrintCustomUseBillReport(string orderId, string printUser)
         {
-            ReportPrintingWindow.Instance.Show();
             var param = new PrintParamWithType(orderId, printUser, EnumPrintPayType.CustomerUse);
             TaskService.Start(param, PrintPayBillProcess, PrintCustomUseBillComplete, "打印客用单中...");
         }
@@ -71,7 +69,6 @@ namespace CanDao.Pos.ReportPrint
         /// <param name="printer">打印用户id。</param>
         public void PrintMemberPayBillReport(string orderId, string printer)
         {
-            ReportPrintingWindow.Instance.Show();
             var param = new PrintParam(orderId, printer);
             TaskService.Start(param, PrintPrintMemberPayBillProcess, PrintPrintMemberPayBillComplete, "打印会员交易凭条中...");
         }
@@ -82,7 +79,6 @@ namespace CanDao.Pos.ReportPrint
         /// <param name="userId"></param>
         public void PrintClearPosReport(string userId)
         {
-            ReportPrintingWindow.Instance.Show();
             TaskService.Start(userId, PrintClearPosProcess, PrintClearPosComplete, "打印清机单中...");
         }
 
@@ -115,9 +111,97 @@ namespace CanDao.Pos.ReportPrint
             return true;
         }
 
+        /// <summary>
+        /// 打印发票单。
+        /// </summary>
+        /// <param name="invoiceInfo">发票单信息。</param>
+        public void PrintInvoiceReport(PrintInvoiceInfo invoiceInfo)
+        {
+            TaskService.Start(invoiceInfo, PrintInvoiceProcess, PrintInvoiceComplete, "打印发票单中...");
+        }
+
+        /// <summary>
+        /// 打印品项销售明细。
+        /// </summary>
+        /// <param name="type">统计周期。</param>
+        public void PrintDishInfoStatisticReport(EnumStatisticsPeriodsType type)
+        {
+            TaskService.Start(type, PrintDishInfoStatisticReportProcess, PrintDishInfoStatisticReportComplete, "打印品项销售明细中...");
+        }
+
+        /// <summary>
+        /// 打印小费统计信息。
+        /// </summary>
+        /// <param name="type"></param>
+        public void PrintTipInfoStatisticReport(EnumStatisticsPeriodsType type)
+        {
+            TaskService.Start(type, PrintTipInfoStatisticReportProcess, PrintTipInfoStatisticReportComplete, "打印小费统计明细中...");
+        }
+
+        /// <summary>
+        /// 打印会员储值凭条。
+        /// </summary>
+        /// <param name="info">会员储值信息。</param>
+        public void PrintMemberStoredReport(PrintMemberStoredInfo info)
+        {
+            TaskService.Start(info, PrintMemberStoredReportProcess, PrintMemberStoredReportComplete, "打印会员储值凭条中...");
+        }
+
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// 打印报表结束处理。
+        /// </summary>
+        /// <param name="printType"></param>
+        /// <param name="result"></param>
+        private void PrintReportComplete(EnumPrintType printType, string result)
+        {
+            var typeString = "";
+            switch (printType)
+            {
+                case EnumPrintType.PreSettlement:
+                    typeString = "预结单";
+                    break;
+                case EnumPrintType.Settlement:
+                    typeString = "结账单";
+                    break;
+                case EnumPrintType.CustomUse:
+                    typeString = "客用单";
+                    break;
+                case EnumPrintType.ClearPos:
+                    typeString = "清机单";
+                    break;
+                case EnumPrintType.MemberPay:
+                    typeString = "会员凭条";
+                    break;
+                case EnumPrintType.Invoice:
+                    typeString = "发票单";
+                    break;
+                case EnumPrintType.DishInfoStatistic:
+                    typeString = "品项销售明细";
+                    break;
+                case EnumPrintType.TipInfoStatistic:
+                    typeString = "小费统计明细";
+                    break;
+                case EnumPrintType.MemberStored:
+                    typeString = "会员储值";
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                var msg = string.Format("{0}打印失败：{1}", typeString, result);
+                ErrLog.Instance.E(msg);
+                MessageDialog.Warning(msg, _ownerWnd);
+                return;
+            }
+
+            var msg2 = string.Format("{0}打印完成。", typeString);
+            InfoLog.Instance.I(msg2);
+            NotifyDialog.Notify(msg2, _ownerWnd != null ? _ownerWnd.Owner : null);
+        }
 
         /// <summary>
         /// 打印会员交易凭条执行方法。
@@ -198,6 +282,11 @@ namespace CanDao.Pos.ReportPrint
             PrintReportComplete(EnumPrintType.CustomUse, (string)param);
         }
 
+        /// <summary>
+        /// 打印清机单的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         private object PrintClearPosProcess(object param)
         {
             var service = ServiceManager.Instance.GetServiceIntance<IPrintService>();
@@ -208,50 +297,113 @@ namespace CanDao.Pos.ReportPrint
             return service.PrintClearMachine((string)param, " ", SystemConfigCache.PosId);
         }
 
+        /// <summary>
+        /// 打印清机单执行完成。
+        /// </summary>
+        /// <param name="param"></param>
         private void PrintClearPosComplete(object param)
         {
             PrintReportComplete(EnumPrintType.ClearPos, (string)param);
         }
 
         /// <summary>
-        /// 打印报表结束处理。
+        /// 打印发票的执行方法。
         /// </summary>
-        /// <param name="printType"></param>
-        /// <param name="result"></param>
-        private void PrintReportComplete(EnumPrintType printType, string result)
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object PrintInvoiceProcess(object param)
         {
-            ReportPrintingWindow.Instance.Hide();
-            var typeString = "";
-            switch (printType)
-            {
-                case EnumPrintType.PreSettlement:
-                    typeString = "预结单";
-                    break;
-                case EnumPrintType.Settlement:
-                    typeString = "结账单";
-                    break;
-                case EnumPrintType.CustomUse:
-                    typeString = "客用单";
-                    break;
-                case EnumPrintType.ClearPos:
-                    typeString = "清机单";
-                    break;
-                case EnumPrintType.MemberPay:
-                    typeString = "会员凭条";
-                    break;
-            }
+            var service = ServiceManager.Instance.GetServiceIntance<IPrintService>();
+            if (service == null)
+                return "创建IPrintServer服务失败。";
 
-            if (!string.IsNullOrEmpty(result))
-            {
-                var msg = string.Format("{0}打印失败：{1}", typeString, result);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg, _ownerWnd);
-                return;
-            }
+            InfoLog.Instance.I("开始打印发票单...");
+            var invoiceInfo = (PrintInvoiceInfo)param;
+            return service.PrintInvoice(invoiceInfo.OrderId, invoiceInfo.InvoiceAmount.ToString(CultureInfo.InvariantCulture));
+        }
 
-            var msg2 = string.Format("{0}打印完成。", typeString);
-            InfoLog.Instance.I(msg2);
-            NotifyDialog.Notify(msg2, _ownerWnd.Owner);
+        /// <summary>
+        /// 打印发票执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void PrintInvoiceComplete(object param)
+        {
+            PrintReportComplete(EnumPrintType.Invoice, (string)param);
+        }
+
+        /// <summary>
+        /// 品项销售明细打印执行。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object PrintDishInfoStatisticReportProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IPrintService>();
+            if (service == null)
+                return "创建IPrintServer服务失败。";
+
+            InfoLog.Instance.I("开始准备打印品项销售统计数据...");
+            var type = (EnumStatisticsPeriodsType)param;
+            return service.PrintItemSell(((int)type).ToString());
+        }
+
+        /// <summary>
+        /// 品项销售明细打印完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void PrintDishInfoStatisticReportComplete(object param)
+        {
+            PrintReportComplete(EnumPrintType.DishInfoStatistic, (string)param);
+        }
+
+        /// <summary>
+        /// 打印小费统计执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object PrintTipInfoStatisticReportProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IPrintService>();
+            if (service == null)
+                return "创建IPrintServer服务失败。";
+
+            InfoLog.Instance.I("开始准备打印小费统计数据...");
+            var type = (EnumStatisticsPeriodsType)param;
+            return service.PrintTip(((int)type).ToString());
+        }
+
+        /// <summary>
+        /// 打印小费统计执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void PrintTipInfoStatisticReportComplete(object param)
+        {
+            PrintReportComplete(EnumPrintType.TipInfoStatistic, (string)param);
+        }
+
+        /// <summary>
+        /// 打印会员储值凭条执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object PrintMemberStoredReportProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IPrintService>();
+            if (service == null)
+                return "创建IPrintServer服务失败。";
+
+            InfoLog.Instance.I("开始准备打印小费统计数据...");
+            var info = (PrintMemberStoredInfo)param;
+            return service.PrintMemberStore(info);
+        }
+
+        /// <summary>
+        /// 打印会员储值凭条执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void PrintMemberStoredReportComplete(object param)
+        {
+            PrintReportComplete(EnumPrintType.MemberStored, (string)param);
         }
 
         #endregion
@@ -315,5 +467,21 @@ namespace CanDao.Pos.ReportPrint
         /// 清机单。
         /// </summary>
         ClearPos,
+        /// <summary>
+        /// 发票。
+        /// </summary>
+        Invoice,
+        /// <summary>
+        /// 品项销售明细。
+        /// </summary>
+        DishInfoStatistic,
+        /// <summary>
+        /// 小费明细。
+        /// </summary>
+        TipInfoStatistic,
+        /// <summary>
+        /// 会员储值凭条。
+        /// </summary>
+        MemberStored,
     }
 }

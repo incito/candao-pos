@@ -22,7 +22,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override void PrintReport()
         {
-            ReportPrintHelper.PrintTipInfoStatisticReport((int)StatisticsPeriodsType);
+            var print = new ReportPrintHelper2(null);
+            print.PrintTipInfoStatisticReport(StatisticsPeriodsType);
+            //ReportPrintHelper.PrintTipInfoStatisticReport((int)StatisticsPeriodsType);
         }
     }
 }
