@@ -1476,7 +1476,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var helper = new AntiSettlementHelper();
             var afterAntiSettlementWf = new WorkFlowInfo(null, delegate
             {
-                NotifyDialog.Notify(string.Format("订单号：\"{0}\"反结算成功。", Data.OrderId), OwnerWindow);
+                NotifyDialog.Notify(string.Format("订单号：\"{0}\"反结算成功。", Data.OrderId), OwnerWindow.Owner);
                 //_tableInfo.TableStatus = EnumTableStatus.Dinner;//将餐桌状态设置成就餐，调用GetTableDishInfo获取餐桌信息时就不会弹出开台窗口了。
                 GetTableDishInfoAsync();
                 return null;
@@ -2514,10 +2514,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 MessageDialog.Warning(result, OwnerWindow);
                 CloseWindow(false);
-            }
-            if (_dishesTimer != null)
-            {
-                _dishesTimer.TotalAmount = Data.TotalAmount;
             }
             GenerateSettlementInfo();
         }

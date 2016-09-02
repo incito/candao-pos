@@ -49,7 +49,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 _dishesTimer.TableName = _tableInfo.TableName;
                 _dishesTimer.DataChangeAction = new Action<string>(DataChangeHandel);
-                _dishesTimer.Start(Data.TotalAmount);
+                _dishesTimer.Start();
             }
         }
 
@@ -77,7 +77,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             if (_dishesTimer != null)
             {
-                _dishesTimer.stop();
+                _dishesTimer.Stop();
                 _dishesTimer = null;
             }
         }

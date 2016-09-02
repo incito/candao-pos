@@ -15,8 +15,6 @@ namespace CanDao.Pos.UI.MainView.Operates
 
         private Timer _refreshTimer;
 
-        private decimal _totalAmount;
-
         private string _tableName;
 
 
@@ -35,14 +33,6 @@ namespace CanDao.Pos.UI.MainView.Operates
             get { return _tableName; }
         }
 
-        /// <summary>
-        /// 总计金额
-        /// </summary>
-        public decimal TotalAmount
-        {
-            set { _totalAmount = value; }
-            get { return _totalAmount; }
-        }
         #endregion
 
         #region 构造函数
@@ -60,13 +50,9 @@ namespace CanDao.Pos.UI.MainView.Operates
         /// <summary>
         /// 启动
         /// </summary>
-        /// <param name="totalAmount"></param>
-        /// <param name="tableName"></param>
-        /// <param name="userID"></param>
-        public void Start(decimal totalAmount)
+        public void Start()
         {
-            _totalAmount = totalAmount;
-            _refreshTimer.Interval = 10*1000;
+            _refreshTimer.Interval = 10 * 1000;
             _refreshTimer.Elapsed += _refreshTimer_Elapsed;
             _refreshTimer.Start();
         }
@@ -74,19 +60,17 @@ namespace CanDao.Pos.UI.MainView.Operates
         /// <summary>
         /// 停止
         /// </summary>
-        public void stop()
+        public void Stop()
         {
             try
             {
-                _totalAmount = 0;
                 _tableName = string.Empty;
                 _refreshTimer.Stop();
             }
-            catch
+            catch (Exception ex)
             {
-
+                ErrLog.Instance.E(ex.MyMessage());
             }
-
         }
 
         #endregion
@@ -110,31 +94,24 @@ namespace CanDao.Pos.UI.MainView.Operates
         {
             try
             {
-              
+
                 var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
                 if (string.IsNullOrEmpty(_tableName) || Globals.UserInfo.UserName == null)
                     return;
 
                 var resTable = service.GetTableDishInfoes(_tableName, Globals.UserInfo.UserName);
 
-                if (!string.IsNullOrEmpty(resTable.Item1) || resTable.Item2==null)//发生异常
+                if (!string.IsNullOrEmpty(resTable.Item1) || resTable.Item2 == null)//发生异常
                 {
                     return;
                 }
 
-                if (resTable.Item2.TotalAmount != _totalAmount)
-                {
-                    _totalAmount = resTable.Item2.TotalAmount;
-                    if (DataChangeAction != null)
-                    {
-                        DataChangeAction(resTable.Item2.OrderId);
-                    }
-                }
+                if (DataChangeAction != null)
+                    DataChangeAction(resTable.Item2.OrderId);
             }
             catch (Exception ex)
             {
                 ErrLog.Instance.E(string.Format("订单信息同步异常：{0}", ex));
-              
             }
         }
 
