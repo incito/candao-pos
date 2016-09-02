@@ -102,6 +102,7 @@
     <Compile Include="BindableBase.cs" />
     <Compile Include="ControlAttachProperty.cs" />
     <Compile Include="Controls\FlagControl\Implementation\FlagControl.cs" />
+    <Compile Include="Controls\PosMainWindow\Implementation\PosMainWindow.cs" />
     <Compile Include="Controls\WatermarkPasswordBox\Implementation\WatermarkPasswordBox.cs" />
     <Compile Include="Controls\WatermarkTextBox\Implementation\WatermarkTextBox.cs" />
     <Compile Include="Converter\CountToBooleanConverter.cs" />
@@ -311,6 +312,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\PosMainWindow\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\PosMsgWindow\Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -467,6 +472,10 @@
   <ItemGroup>
     <Resource Include="Images\Add_Press.png" />
     <Resource Include="Images\Reduce_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\AppExit.png" />
+    <Resource Include="Images\MinWindow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

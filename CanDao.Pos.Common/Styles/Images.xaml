@@ -32,5 +32,7 @@
     <BitmapImage x:Key="CanDaoPosImageBackPress" UriSource="/CanDao.Pos.Common;component/Images/Back_Press.png"/>
     <BitmapImage x:Key="CanDaoPosImageClear" UriSource="/CanDao.Pos.Common;component/Images/Clear_Normal.png"/>
     <BitmapImage x:Key="CanDaoPosImageClearPress" UriSource="/CanDao.Pos.Common;component/Images/Clear_Press.png"/>
+    <BitmapImage x:Key="CanDaoPosImageAppExit" UriSource="/CanDao.Pos.Common;component/Images/AppExit.png"/>
+    <BitmapImage x:Key="CanDaoPosImageMinWindow" UriSource="/CanDao.Pos.Common;component/Images/MinWindow.png"/>
 
 </ResourceDictionary>
