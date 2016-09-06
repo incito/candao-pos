@@ -641,7 +641,7 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        public string UpdateDishWeight(string tableNo, string dishId, string primaryKey, decimal dishNum)
+        public string UpdateDishWeight(string orderId, string dishId, string primaryKey, decimal dishNum)
         {
             var addr = ServiceAddrCache.GetServiceAddr("UpdateDishWeigh");
             if (string.IsNullOrEmpty(addr))
@@ -651,7 +651,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var request = new UpdateDishWeightRequest
                 {
-                    tableNo = tableNo,
+                    orderId = orderId,
                     dishid = dishId,
                     dishnum = dishNum.ToString(CultureInfo.InvariantCulture),
                     primarykey = primaryKey,

@@ -5,7 +5,7 @@
     /// </summary>
     public class UpdateDishWeightRequest
     {
-        public string tableNo { get; set; }
+        public string orderId { get; set; }
 
         public string dishid { get; set; }
 

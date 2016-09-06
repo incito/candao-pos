@@ -1481,8 +1481,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
 
                 InfoLog.Instance.I("开始调用菜品称重接口...");
-                var result = service.UpdateDishWeight(Data.TableNo, SelectedOrderDish.DishId,
-                    SelectedOrderDish.PrimaryKey, dishWeightWnd.InputNum);
+                var result = service.UpdateDishWeight(Data.OrderId, SelectedOrderDish.DishId, SelectedOrderDish.PrimaryKey, dishWeightWnd.InputNum);
                 if (!string.IsNullOrEmpty(result))
                 {
                     ErrLog.Instance.E("菜品\"{0}\"称重失败：{1}", SelectedOrderDish.DishName, result);

@@ -252,12 +252,12 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 菜品称重。
         /// </summary>
-        /// <param name="tableNo">餐台名称。</param>
+        /// <param name="orderId">订单号。</param>
         /// <param name="dishId">称重菜品Id。</param>
         /// <param name="primaryKey">称重菜品Key。</param>
         /// <param name="dishNum">称重数量。</param>
         /// <returns></returns>
-        string UpdateDishWeight(string tableNo, string dishId, string primaryKey, decimal dishNum);
+        string UpdateDishWeight(string orderId, string dishId, string primaryKey, decimal dishNum);
 
         /// <summary>
         /// 设置订单为外卖单。
