@@ -68,11 +68,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (!MessageDialog.Quest("确定选好了吗？", OwnerWindow))
                 return;
 
-            //对选定套餐的一些处理
             Data.ComboSelfInfo.SelectedCount = 1;//设定点菜数量为1。
-            Data.SingleDishInfos.ForEach(t => { t.SelectedCount = t.DishCount; });//将套餐内的单品菜选择数量设为套餐设定的数量。
-
-            //对套餐内所有菜品设定忌口信息
+            Data.SingleDishInfos.ForEach(t => { t.SelectedCount = 1; });//将套餐内的单品菜选择数量设为1。
 
             base.Confirm(param);
         }
