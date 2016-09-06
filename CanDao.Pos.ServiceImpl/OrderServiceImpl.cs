@@ -155,7 +155,7 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, bool>("检测菜品状态地址为空。", false);
 
             addr = string.Format("{0}/{1}/", addr, dishId);
-            var param = new Dictionary<string, string> {{"dishUnit", dishUnit}};
+            var param = new Dictionary<string, string> { { "dishUnit", dishUnit } };
             var result = RestHttpHelper.HttpPost<RestBaseResponse>(addr, param);
             return !string.IsNullOrEmpty(result.Item1) ? new Tuple<string, bool>(result.Item1, false) : new Tuple<string, bool>(null, !result.Item2.Info.Equals("1"));
         }
@@ -743,7 +743,7 @@ namespace CanDao.Pos.ServiceImpl
         /// <param name="orderId">订单号。</param>
         /// <param name="itemid">订单号。</param>
         /// <returns></returns>
-        public Tuple<string, TableFullInfo> GetOrderInfo(string orderId,string tableNo, string itemid)
+        public Tuple<string, TableFullInfo> GetOrderInfo(string orderId, string tableNo, string itemid)
         {
             var addr = ServiceAddrCache.GetServiceAddr("GetOrderInfo");
             if (string.IsNullOrEmpty(addr))

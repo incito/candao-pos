@@ -77,6 +77,7 @@
     <Compile Include="Enum\EnumFishPotType.cs" />
     <Compile Include="Enum\EnumGender.cs" />
     <Compile Include="Enum\EnumHandCouponType.cs" />
+    <Compile Include="Enum\EnumKeepOdd.cs" />
     <Compile Include="Enum\EnumMemberSystem.cs" />
     <Compile Include="Enum\EnumOddAccuracy.cs" />
     <Compile Include="Enum\EnumOddModel.cs" />

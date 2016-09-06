@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Timers;
 using System.Windows.Input;
@@ -41,11 +40,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private string _antiSettlementReason;
 
         /// <summary>
-        /// 当前零头处理方式。
-        /// </summary>
-        private EnumOddModel _curOddModel;
-
-        /// <summary>
         /// 当前选中的优惠券。
         /// </summary>
         private CouponInfo _curSelectedCouponInfo;
@@ -75,22 +69,24 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private bool _isLongPressModel;
 
-        protected DishesTimer _dishesTimer;
+        private DishesTimer _dishesTimer;
 
-        //POS是否作抹零
-        protected string _isKeepOdd;
+        /// <summary>
+        /// 零头是否保留枚举。
+        /// </summary>
+        private EnumKeepOdd _isKeepOdd;
+
         #endregion
 
         #region Constructor
 
         public TableOperWndVm(TableInfo tableInfo)
         {
-            _isKeepOdd = "1";
+            _isKeepOdd = EnumKeepOdd.Process;
             _tableInfo = tableInfo;
             InitCouponCategories();
             InitCouponLongPressTimer();
             SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
-            _curOddModel = Globals.OddModel;
             Data = new TableFullInfo();
             Data.CloneDataFromTableInfo(tableInfo);
         }
@@ -1078,8 +1074,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     OpenCashBoxAsync();
                     break;
                 case "KeepOdd":
-                    _curOddModel = EnumOddModel.None;
-                    _isKeepOdd = "0";
+                    _isKeepOdd = EnumKeepOdd.None;
                     GetTableDishInfoAsync();
                     break;
                 case "BackDish":
@@ -2461,7 +2456,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var result = service.GetOrderInfo(_tableInfo.OrderId, "", _isKeepOdd);
+            var result = service.GetOrderInfo(_tableInfo.OrderId, "", ((int)_isKeepOdd).ToString());
             if (!string.IsNullOrEmpty(result.Item1))
                 return string.Format("获取餐台明细失败：{0}", result.Item1);
 

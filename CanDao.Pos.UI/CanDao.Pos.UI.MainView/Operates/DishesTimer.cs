@@ -2,6 +2,7 @@
 using System.Timers;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
+using CanDao.Pos.Model;
 
 namespace CanDao.Pos.UI.MainView.Operates
 {
@@ -13,10 +14,11 @@ namespace CanDao.Pos.UI.MainView.Operates
 
         #region 字段
 
-        private Timer _refreshTimer;
+        private readonly Timer _refreshTimer;
 
         private string _tableName;
 
+        private TableFullInfo _data;
 
         #endregion
 
@@ -37,10 +39,10 @@ namespace CanDao.Pos.UI.MainView.Operates
 
         #region 构造函数
 
-        public DishesTimer()
+        public DishesTimer(TableFullInfo data)
         {
             _refreshTimer = new Timer();
-
+            _data = data;
         }
 
         #endregion

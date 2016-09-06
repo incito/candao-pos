@@ -21,7 +21,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             if (IsInDesignMode)
                 return;
-            _dishesTimer = new DishesTimer();
+            _dishesTimer = new DishesTimer(Data);
 
             if (_tableInfo.TableStatus == EnumTableStatus.Idle)
             {
@@ -58,13 +58,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void DataChangeHandel(string orderId)
         {
-            this.OwnerWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                new Action(() =>
-                {
-                    _tableInfo.OrderId = orderId;
-                    GetTableDishInfoAsync();
-                }));
-
+            OwnerWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                _tableInfo.OrderId = orderId;
+                GetTableDishInfoAsync();
+            }));
         }
 
         protected override void BackAllDishSuccessProcess()
