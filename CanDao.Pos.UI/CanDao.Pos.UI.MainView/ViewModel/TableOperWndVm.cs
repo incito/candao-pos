@@ -18,7 +18,6 @@ using CanDao.Pos.UI.Utility.View;
 using CanDao.Pos.UI.Utility.ViewModel;
 using Timer = System.Timers.Timer;
 using CanDao.Pos.Model.Response;
-using CanDao.Pos.UI.MainView.Operates;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
@@ -57,7 +56,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <summary>
         /// 优惠券长按定时器。
         /// </summary>
-        private Timer _couponLongPressTimer;
+        protected Timer _couponLongPressTimer;
 
         /// <summary>
         /// 长按定时器的触发间隔（1秒）
@@ -69,12 +68,20 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private bool _isLongPressModel;
 
-        private DishesTimer _dishesTimer;
-
         /// <summary>
         /// 零头是否保留枚举。
         /// </summary>
         private EnumKeepOdd _isKeepOdd;
+
+        /// <summary>
+        /// 刷新定时器。
+        /// </summary>
+        protected Timer _refreshTimer;
+
+        /// <summary>
+        /// 刷新定时器间隔（秒）。
+        /// </summary>
+        private const int RefreshTimerSecond = 10;
 
         #endregion
 
@@ -86,6 +93,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _tableInfo = tableInfo;
             InitCouponCategories();
             InitCouponLongPressTimer();
+            InitRefreshTimer();
             SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
             Data = new TableFullInfo();
             Data.CloneDataFromTableInfo(tableInfo);
@@ -1187,6 +1195,49 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
+        /// 初始化刷新定时器。
+        /// </summary>
+        private void InitRefreshTimer()
+        {
+            _refreshTimer = new Timer(RefreshTimerSecond * 1000);
+            _refreshTimer.Elapsed += RefreshTimerOnElapsed;
+        }
+
+        /// <summary>
+        /// 刷新定时器触发时执行。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="elapsedEventArgs"></param>
+        private void RefreshTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+            {
+                ErrLog.Instance.E("创建IOrderService服务失败。");
+                return;
+            }
+
+            var result = service.GetTableDishInfoes(Data.TableName, Globals.UserInfo.UserName);
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("获取餐台信息错误：{0}。", result.Item1);
+                return;
+            }
+
+            if (result.Item2 == null)
+            {
+                ErrLog.Instance.E("获取到餐台信息为空。");
+                return;
+            }
+
+            if (Data.TotalAmount != result.Item2.TotalAmount || Data.DishInfos.Sum(t => t.DishNum) != result.Item2.DishInfos.Sum(t => t.DishNum))//当总价或菜品数量改变时再触发刷新方法。
+            {
+                _tableInfo.OrderId = result.Item2.OrderId;//可能会有并台导致订单号改变。
+                GetTableDishInfoAsync();
+            }
+        }
+
+        /// <summary>
         /// 长按定时器触发时执行。
         /// </summary>
         /// <param name="sender"></param>
@@ -1339,16 +1390,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void BackDish()
         {
-            if (SelectedOrderDish == null)
+            var selectedDish = SelectedOrderDish;//这里做一个临时变量，是为了解决定时器刷新时更新了菜品列表，导致当前选择的菜品改变的问题。
+            if (selectedDish == null)
                 return;
 
-            if (SelectedOrderDish.IsComboDish)
+            if (selectedDish.IsComboDish)
             {
                 MessageDialog.Warning("请选择套餐主体退整个套餐。");
                 return;
             }
 
-            if (SelectedOrderDish.IsFishPotDish && SelectedOrderDish.IsPot) //选中了鱼锅的锅。
+            if (selectedDish.IsFishPotDish && selectedDish.IsPot) //选中了鱼锅的锅。
             {
                 if (!MessageDialog.Quest("选择鱼锅锅底退菜会退掉整个鱼锅，确定继续退菜？"))
                     return;
@@ -1361,12 +1413,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
 
             InfoLog.Instance.I("选择退菜原因：\"{0}\"。", backDishReasonWnd.SelectedReason);
-            bool allowInputBackNum = !(SelectedOrderDish.IsPot || (SelectedOrderDish.IsMaster && SelectedOrderDish.DishType == EnumDishType.FishPot));//鱼锅和套餐， 那不用输入数量
+            bool allowInputBackNum = !(selectedDish.IsPot || (selectedDish.IsMaster && selectedDish.DishType == EnumDishType.FishPot));//鱼锅和套餐， 那不用输入数量
 
-            var backDishNum = SelectedOrderDish.DishNum;
+            var backDishNum = selectedDish.DishNum;
             if (allowInputBackNum)
             {
-                var numWnd = new NumInputWindow("退菜", SelectedOrderDish.DishName, "退菜数量：", SelectedOrderDish.DishNum);
+                var numWnd = new NumInputWindow("退菜", selectedDish.DishName, "退菜数量：", selectedDish.DishNum);
                 if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                     return;
 
@@ -1384,7 +1436,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 AuthorizerUser = Globals.Authorizer.UserName,
                 BackDishNum = backDishNum,
                 BackDishReason = backDishReasonWnd.SelectedReason,
-                DishInfo = SelectedOrderDish,
+                DishInfo = selectedDish,
                 OrderId = Data.OrderId,
                 TableNo = Data.TableNo,
                 Waiter = Globals.UserInfo.UserName

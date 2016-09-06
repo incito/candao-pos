@@ -21,7 +21,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             if (IsInDesignMode)
                 return;
-            _dishesTimer = new DishesTimer(Data);
 
             if (_tableInfo.TableStatus == EnumTableStatus.Idle)
             {
@@ -43,14 +42,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 WindowHelper.ShowDialog(new OrderDishWindow(tableFullInfo), OwnerWindow);
             }
             GetTableDishInfoAsync();
-
-            //定时检查菜品信息是否一致
-            if (OwnerWindow.DialogResult == null)
-            {
-                _dishesTimer.TableName = _tableInfo.TableName;
-                _dishesTimer.DataChangeAction = new Action<string>(DataChangeHandel);
-                _dishesTimer.Start();
-            }
+            _refreshTimer.Start();//启动刷新定时器。
         }
 
         /// <summary>
@@ -73,10 +65,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         protected override void OnWindowClosed(object param)
         {
-            if (_dishesTimer != null)
+            if (_refreshTimer != null)
             {
-                _dishesTimer.Stop();
-                _dishesTimer = null;
+                _refreshTimer.Stop();
+                _refreshTimer.Dispose();
+            }
+
+            if (_couponLongPressTimer != null)
+            {
+                _couponLongPressTimer.Stop();
+                _couponLongPressTimer.Dispose();
             }
         }
     }
