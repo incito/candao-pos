@@ -168,7 +168,7 @@
                 </controls:GroupSelector>
 
             </Border>
-            
+
             <StackPanel Grid.Row="4" Grid.Column="0">
                 <controls:FlagControl Margin="0,4">
                     <TextBlock Text="{Binding Data.CouponAmount, StringFormat=优惠券总额：{0}}" FontSize="14"/>
@@ -201,7 +201,7 @@
                         Command="{Binding OperCmd}"
                         CommandParameter="DishWeight"/>
             </StackPanel>
-            
+
             <StackPanel Grid.Row="3" Grid.Column="1">
                 <Button Style="{StaticResource BtnUpStyle}"
                         Command="{Binding DataGridPageOperCmd}"
@@ -290,7 +290,7 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
-            
+
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -465,16 +465,19 @@
                         </Grid>
                         <toolkit:DoubleTextBox x:Name="TbMemAmount"
                                                Text="{Binding MemberAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
+                                               IsEnabled="{Binding IsMemberLogin}"
                                                Watermark="刷卡金额："
                                                Margin="0,5" Height="40"/>
                         <toolkit:DoubleTextBox Minimum="0" 
                                                Text="{Binding IntegralAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
+                                               IsEnabled="{Binding IsMemberLogin}"
                                                Watermark="使用积分：" 
                                                Margin="0,5" Height="40"/>
                         <controls:WatermarkPasswordBox Password="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-                                                   Watermark="会员密码："
-                                                   VerticalContentAlignment="Center" VerticalAlignment="Center"
-                                                   Margin="0,5" Height="40"/>
+                                                       Watermark="会员密码："
+                                                       IsEnabled="{Binding IsMemberLogin}"
+                                                       VerticalContentAlignment="Center" VerticalAlignment="Center"
+                                                       Margin="0,5" Height="40"/>
                         <Grid HorizontalAlignment="Left" TextBlock.Foreground="{StaticResource CanDaoPosColorSelected}" TextBlock.FontSize="16">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -585,7 +588,7 @@
                            Visibility="{Binding Data.OrderInvoiceTitle, Converter={StaticResource Strinig2VisibleCvt}}"/>
             </Grid>
         </Grid>
-        
+
         <view:StatusControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"/>
     </Grid>
 </controls:PosBaseWindow>

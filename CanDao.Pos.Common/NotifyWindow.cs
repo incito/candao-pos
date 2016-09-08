@@ -71,6 +71,7 @@ namespace CanDao.Pos.Common
             Height = WndHeight;
             WindowStartupLocation = WindowStartupLocation.Manual;
             Owner = ownerWindow ?? Application.Current.MainWindow;
+            Topmost = true;
             Point point = GetMainWindowBottomRight();
             Top = point.Y - 10 - WndHeight * (_showingCount + 1);//多个通知窗口同时显示，则依次往上叠加。
             Left = point.X - 10 - WndWidth;
