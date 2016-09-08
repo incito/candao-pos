@@ -1875,12 +1875,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (ChargeAmount > 100)
                 return "找零金额不能大于100。";
 
-            if (MemberAmount > 0 && string.IsNullOrEmpty(MemberCardNo))
-                return "使用会员储值请先登录会员。";
-
-            if (IntegralAmount > 0 && string.IsNullOrEmpty(MemberCardNo))
-                return "使用会员积分请先登录会员。";
-
             if (Globals.IsCanDaoMember &&
                 !string.IsNullOrWhiteSpace(MemberCardNo) &&
                 (IntegralAmount > 0 || MemberAmount > 0) &&
@@ -1889,12 +1883,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (DebitAmount > 0 && SelectedOnCmpAccInfo == null)
                 return "使用挂账金额请先选择挂账单位。";
-
-            if (AlipayAmount > 0 && string.IsNullOrEmpty(AlipayNo))
-                return "使用支付宝支付请输入支付宝账号。";
-
-            if (WechatAmount > 0 && string.IsNullOrEmpty(WechatNo))
-                return "使用微信支付请先输入微信账号。";
 
             if (Data.TotalAlreadyPayment - ChargeAmount > Data.PaymentAmount)
                 return string.Format("实际支付金额\"{0}\"超过应收金额\"{1}\"。", Data.TotalAlreadyPayment, Data.PaymentAmount);
