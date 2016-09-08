@@ -1144,7 +1144,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "PayBill":
                     return Data != null && !Data.HasBeenPaied;
                 case "MemberLogin":
-                    return !string.IsNullOrEmpty(MemberCardNo) && MemberCardNo.Length >= 0;
+                    return !string.IsNullOrEmpty(MemberCardNo) && MemberCardNo.Length > 0;
                 case "CouponRemove":
                     return SelectedUsedCouponInfo != null;
                 case "CouponClear":
