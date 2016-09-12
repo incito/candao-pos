@@ -370,7 +370,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             var param = new List<EnumTableType> { EnumTableType.CFTakeout };
-            TaskService.Start(param, GetTableInfoByTableTypeProcess, GetCfTakeoutTableInfoComplete, "获取咖啡外卖台信息中...");
+            TaskService.Start(param, GetTableInfoByTableTypeProcess, GetCfTakeoutTableInfoComplete, null);
         }
 
         /// <summary>
