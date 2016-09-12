@@ -584,20 +584,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
                 if (WindowHelper.ShowDialog(selectTableWnd, OwnerWindow))//选择了咖啡外卖。
                 {
-                    if (selectTableWnd.IsSelectNormalTakeout)//选择普通外卖。
-                    {
-                        InfoLog.Instance.I("开始获取普通外卖台...");
-                        var request = new List<EnumTableType> { EnumTableType.Takeout };
-                        TaskService.Start(request, GetTableInfoByTableTypeProcess, GetTakeoutTableInfoComplete, "获取普通外卖台信息中...");
-                    }
-                    else//选择了咖啡外卖。
+                    if (!selectTableWnd.IsSelectNormalTakeout)//选择了咖啡外卖。
                     {
                         InfoLog.Instance.I("选择了\"{0}\"咖啡外卖台", selectTableWnd.SelectedTable.TableName);
                         selectTableWnd.SelectedTable.OrderId = null; //清空订单号才会在进入结账页面时开台。
                         WindowHelper.ShowDialog(new TableOperWindow(selectTableWnd.SelectedTable), OwnerWindow);
+                        return;
                     }
                 }
             }
+
+            InfoLog.Instance.I("开始获取普通外卖台...");
+            var request = new List<EnumTableType> { EnumTableType.Takeout };
+            TaskService.Start(request, GetTableInfoByTableTypeProcess, GetTakeoutTableInfoComplete, "获取普通外卖台信息中...");
         }
 
         private void GetTakeoutTableInfoComplete(object param)
