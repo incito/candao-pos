@@ -111,14 +111,14 @@
         </ResourceDictionary>
     </controls:PosMainWindow.Resources>
     <controls:PosMainWindow.TitleContent>
-        <ListBox>
+        <ListBox Background="Transparent" HorizontalAlignment="Center">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
-            <ListBoxItem Content="标准台"/>
-            <ListBoxItem Content="咖啡台"/>
+            <ListBoxItem Content="标准台" Foreground="White"/>
+            <ListBoxItem Content="咖啡台" Foreground="White"/>
         </ListBox>
     </controls:PosMainWindow.TitleContent>
     <Grid Background="{StaticResource CanDaoPosColorBgMainGray}">

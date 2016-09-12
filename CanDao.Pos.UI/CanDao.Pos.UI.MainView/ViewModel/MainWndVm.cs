@@ -24,6 +24,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Filed
 
         /// <summary>
+        /// 标准台餐台集合。
+        /// </summary>
+        private List<TableInfo> _normalTableInfos;
+
+        /// <summary>
+        /// 咖啡台餐台集合。
+        /// </summary>
+        private List<TableInfo> _coffeeTableInfos;
+
+        /// <summary>
         /// 是否已经释放了资源。
         /// </summary>
         private bool _isDisposed;
@@ -85,6 +95,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Properties
 
         /// <summary>
+        /// 餐台类型集合。
+        /// </summary>
+        public List<string> TableTypeList { get; set; }
+
+        /// <summary>
+        /// 根据各种条件过滤后的当前餐桌集合。
+        /// </summary>
+        public ObservableCollection<TableInfo> CurrentTableInfos { get; set; }
+
+        /// <summary>
+        /// 当前餐桌的分组信息集合。
+        /// </summary>
+        public ObservableCollection<string> CurrentTableGruops { get; set; }
+
+        /// <summary>
         /// 所有餐台集合。
         /// </summary>
         public ObservableCollection<TableInfo> Tables { get; private set; }
@@ -142,23 +167,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 _refreshRemainSecond = value;
                 RaisePropertiesChanged("RefreshRemainSecond");
-            }
-        }
-
-        /// <summary>
-        /// 不可用餐台个数。
-        /// </summary>
-        private int _disableCount;
-        /// <summary>
-        /// 不可用餐台个数。
-        /// </summary>
-        public int DisableCount
-        {
-            get { return _disableCount; }
-            set
-            {
-                _disableCount = value;
-                RaisePropertyChanged("DisableCount");
             }
         }
 
@@ -505,13 +513,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void GetAllTableInfoesAsync()
         {
             RefreshRemainSecond = RefreshTimerInterval;
-            var info = Tables.Any() ? "" : "加载所有餐桌信息...";//这里处理是为了第一次显示提示信息，后续定时刷新时候不显示提示信息，防止阻塞其他业务
-            var param = new List<EnumTableType>
-            {
-                EnumTableType.Room,
-                EnumTableType.Outside,
-                EnumTableType.CFTable
-            };
+            var info = (Tables.Any() || CfTables.Any()) ? "" : "加载所有餐桌信息...";//这里处理是为了第一次显示提示信息，后续定时刷新时候不显示提示信息，防止阻塞其他业务
+            var param = new List<EnumTableType> { EnumTableType.Room, EnumTableType.Outside, EnumTableType.CFTable };
             TaskService.Start(param, GetTableInfoByTableTypeProcess, GetAllTableInfoComplete, info);
         }
 
@@ -552,13 +555,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                 IdleCount = result.Item2.Count(t => !IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
                 DinnerCount = result.Item2.Count(t => t.TableStatus == EnumTableStatus.Dinner);
-                DisableCount = result.Item2.Count(t => !t.TableEnable);
 
-                var normalTables = result.Item2.Where(t => !t.IsCoffeeTable).ToList();
-                UpdateNormalTables(normalTables);
+                _normalTableInfos = result.Item2.Where(t => !t.IsCoffeeTable).ToList();
+                UpdateNormalTables(_normalTableInfos);
 
-                var cfTables = result.Item2.Where(t => t.IsCoffeeTable).ToList();
-                UpdateCfTables(cfTables);
+                _coffeeTableInfos = result.Item2.Where(t => t.IsCoffeeTable).ToList();
+                UpdateCfTables(_coffeeTableInfos);
             }
         }
 

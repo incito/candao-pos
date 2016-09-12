@@ -40,8 +40,7 @@
                                            Height="25" Width="79"
                                            Margin="20,0,0,0"/>
                                     <ContentControl Grid.Column="1"
-                                                    Content="{TemplateBinding TitleContent}"
-                                                    HorizontalAlignment="Left"/>
+                                                    Content="{TemplateBinding TitleContent}"/>
                                     <Button x:Name="PART_Min"
                                             Grid.Column="2"
                                             HorizontalAlignment="Right" VerticalAlignment="Center"
