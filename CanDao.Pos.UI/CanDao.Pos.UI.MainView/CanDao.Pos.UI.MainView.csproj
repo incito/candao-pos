@@ -155,6 +155,11 @@
       <Name>CanDao.Pos.SystemConfig</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\CanDao.Pos.VIPManage\CanDao.Pos.VIPManage.csproj">
+      <Project>{98f33740-d8b6-44fd-bf0b-73928f26fe72}</Project>
+      <Name>CanDao.Pos.VIPManage</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\CanDao.Pos.UI.Utility\CanDao.Pos.UI.Utility.csproj">
       <Project>{9b3be59e-18d6-444b-8fb5-0d32332cc720}</Project>
       <Name>CanDao.Pos.UI.Utility</Name>

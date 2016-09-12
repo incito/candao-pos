@@ -247,7 +247,7 @@
                    PlacementTarget="{Binding ElementName=BtnMore}"
                    StaysOpen="False"
                    AllowsTransparency="True"
-                   PopupAnimation="Fade">
+                   PopupAnimation="Slide">
                 <Border Background="{StaticResource CanDaoPosColorBgGray}">
                     <StackPanel >
                         <Button Content="整单退菜"

@@ -14,6 +14,7 @@ using CanDao.Pos.Model.Enum;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.VIPManage.ViewModels;
 using Timer = System.Timers.Timer;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
@@ -170,6 +171,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// 是否有打印机错误。
         /// </summary>
         private bool _hasPrinterError;
+
+        private bool _isMemberOpened;
+
         /// <summary>
         /// 是否有打印机错误。
         /// </summary>
@@ -180,6 +184,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 _hasPrinterError = value;
                 RaisePropertyChanged("HasPrinterError");
+            }
+        }
+
+        /// <summary>
+        /// 是否展开会员面板。
+        /// </summary>
+        public bool IsMemberOpened
+        {
+            get { return _isMemberOpened; }
+            set
+            {
+                _isMemberOpened = value;
+                RaisePropertyChanged("IsMemberOpened");
             }
         }
 
@@ -300,10 +317,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "Clearner"://清机
                     ClearnMachine();
                     break;
-                case "EndWork"://结业
-                    if (MessageDialog.Quest("确定要结业吗？"))
-                        EndWork();
-                    break;
                 case "Report"://报表
                     WindowHelper.ShowDialog(new ReportViewWindow(), OwnerWindow);
                     break;
@@ -311,6 +324,21 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     SetPrinterCheckTimerStatus(false);
                     WindowHelper.ShowDialog(new SystemSettingWindow(), OwnerWindow);
                     CheckPrinterStatus();//从系统退出以后马上检测一下打印机状态，不然可能出现状态在一定时间内不同步的现象。#9264
+                    break;
+                case "Member":
+                    IsMemberOpened = !IsMemberOpened;
+                    break;
+                case "MemberQuery":
+                    var query = new UcVipSelectViewModel();
+                    WindowHelper.ShowDialog(query.GetUserCtl());
+                    break;
+                case "MemberStore":
+                    var recharge = new UcVipRechargeViewModel();
+                    WindowHelper.ShowDialog(recharge.GetUserCtl());
+                    break;
+                case "MemberRegist":
+                    var regist = new UcVipRegViewModel();
+                    WindowHelper.ShowDialog(regist.GetUserCtl());
                     break;
             }
             SetRefreshTimerStatus(true);

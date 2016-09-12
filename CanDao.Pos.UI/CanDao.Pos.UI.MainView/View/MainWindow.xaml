@@ -111,7 +111,15 @@
         </ResourceDictionary>
     </controls:PosMainWindow.Resources>
     <controls:PosMainWindow.TitleContent>
-        <view:MemberControl />
+        <ListBox>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBoxItem Content="标准台"/>
+            <ListBoxItem Content="咖啡台"/>
+        </ListBox>
     </controls:PosMainWindow.TitleContent>
     <Grid Background="{StaticResource CanDaoPosColorBgMainGray}">
         <Grid.RowDefinitions>
@@ -209,18 +217,42 @@
                         Command="{Binding OperCmd}"
                         CommandParameter="QueryOrderHistory" 
                         Width="100" Margin="2"/>
-                <Button Content="清机"
+                <Button Content="清机/结业"
                         Command="{Binding OperCmd}"
                         CommandParameter="Clearner"
                         Width="100" Margin="2"/>
-                <Button Content="结业"
+                <!--<Button Content="结业"
                         Command="{Binding OperCmd}"
                         CommandParameter="EndWork"
-                        Width="100" Margin="2"/>
+                        Width="100" Margin="2"/>-->
                 <Button Content="报表"
                         Command="{Binding OperCmd}"
                         CommandParameter="Report"
                         Width="100" Margin="2"/>
+                <Button x:Name="BtnMember"
+                        Content="会员"
+                        Command="{Binding OperCmd}"
+                        CommandParameter="Member"
+                        Width="100" Margin="2"/>
+                <Popup IsOpen="{Binding IsMemberOpened}"
+                       PlacementTarget="{Binding ElementName=BtnMember}"
+                       StaysOpen="False"
+                       AllowsTransparency="True"
+                       PopupAnimation="Slide">
+                    <Border Background="{StaticResource CanDaoPosColorBgGray}">
+                        <StackPanel>
+                            <Button Content="会员查询"
+                                    Command="{Binding OperCmd}" CommandParameter="MemberQuery"
+                                    Width="90" Height="40" Margin="3"/>
+                            <Button Content="会员储值"
+                                    Command="{Binding OperCmd}" CommandParameter="MemberStore"
+                                    Width="90" Height="40" Margin="3"/>
+                            <Button Content="会员注册"
+                                    Command="{Binding OperCmd}" CommandParameter="MemberRegist"
+                                    Width="90" Height="40" Margin="3"/>
+                        </StackPanel>
+                    </Border>
+                </Popup>
                 <Border BorderBrush="{Binding HasPrinterError, Converter={StaticResource SysBorderBrushCvt}}"
                         BorderThickness="2">
                     <Button Content="系统"
