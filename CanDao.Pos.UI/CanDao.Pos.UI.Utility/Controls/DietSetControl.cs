@@ -25,12 +25,15 @@ namespace CanDao.Pos.UI.Utility.Controls
                 return;
 
             var values = diet.Split(Separator.ToCharArray()).ToList();
-            foreach (AllowSelectInfo item in ItemsSource)
+            if (ItemsSource != null)
             {
-                if (values.Contains(item.Name))
+                foreach (AllowSelectInfo item in ItemsSource)
                 {
-                    values.Remove(item.Name);
-                    item.IsSelected = true;
+                    if (values.Contains(item.Name))
+                    {
+                        values.Remove(item.Name);
+                        item.IsSelected = true;
+                    }
                 }
             }
 
