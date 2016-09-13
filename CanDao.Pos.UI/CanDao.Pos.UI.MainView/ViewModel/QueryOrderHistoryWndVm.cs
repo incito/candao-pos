@@ -247,12 +247,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void AntiPayBill()
         {
-            if (!Globals.UserRight.AllowAntiSettlement)
-            {
-                MessageDialog.Warning("您没有反结算权限。");
-                return;
-            }
-
             if (!MessageDialog.Quest(string.Format("订单号： \"{0}\" 确定反结算吗？", SelectedOrder.OrderId), OwnerWindow))
                 return;
 
