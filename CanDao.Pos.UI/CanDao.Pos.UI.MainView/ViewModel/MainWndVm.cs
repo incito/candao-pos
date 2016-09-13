@@ -689,7 +689,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 InfoLog.Instance.I("咖啡外卖台个数：{0}", result.Item2.Count);
                 var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
-                if (WindowHelper.ShowDialog(selectTableWnd, OwnerWindow))//选择了咖啡外卖。
+                if (WindowHelper.ShowDialog(selectTableWnd, OwnerWindow))
                 {
                     if (!selectTableWnd.IsSelectNormalTakeout)//选择了咖啡外卖。
                     {
@@ -698,6 +698,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         WindowHelper.ShowDialog(new TableOperWindow(selectTableWnd.SelectedTable), OwnerWindow);
                         return;
                     }
+                }
+                else//点击了“取消”或窗口的“X”
+                {
+                    return;
                 }
             }
 
