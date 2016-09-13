@@ -21,4 +21,5 @@
     <converter:PaiedStatus2StringConverter x:Key="PaiedStatus2StringCvt"/>
     <converter:QueryOrderStatusToCheckedConverter x:Key="OrderStatus2CheckedCvt"/>
     <converter:MultBooleanToVisibilityConverter x:Key="MultBool2VisibilityCvt"/>
+    <converter:ViewTableStatusToCheckedConverter x:Key="ViewTableStatus2CheckedCvt"/>
 </ResourceDictionary> 

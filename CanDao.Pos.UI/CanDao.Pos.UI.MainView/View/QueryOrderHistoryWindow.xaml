@@ -107,7 +107,9 @@
             </controls:GroupSelector.Template>
         </controls:GroupSelector>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal" HorizontalAlignment="Right"
+                    Visibility="{Binding GroupCount, ElementName=GsOrderList, Converter={StaticResource Count2VisibleCvt}, ConverterParameter=1}">
             <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding OperCmd}" CommandParameter="PreGroup"/>
             <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsOrderList}"/>
             <TextBlock Text="/"/>

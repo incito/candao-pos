@@ -8,6 +8,7 @@
                         Height="768" Width="1024"
                         Title="餐道POS收银系统"
                         WindowStartupLocation="CenterScreen"
+                        WindowState="Maximized"
                         x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -111,98 +112,110 @@
         </ResourceDictionary>
     </controls:PosMainWindow.Resources>
     <controls:PosMainWindow.TitleContent>
-        <ListBox Background="Transparent" HorizontalAlignment="Center">
+        <ListBox Background="Transparent" HorizontalAlignment="Center"
+                 ItemsSource="{Binding ViewTableTypeList}"
+                 SelectedItem="{Binding SelectedViewTableType}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
-            <ListBoxItem Content="标准台" Foreground="White"/>
-            <ListBoxItem Content="咖啡台" Foreground="White"/>
         </ListBox>
     </controls:PosMainWindow.TitleContent>
     <Grid Background="{StaticResource CanDaoPosColorBgMainGray}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TabControl x:Name="TbTables" Style="{StaticResource TabControlStyle}">
-            <TabItem x:Name="TbNormalTables" Padding="0,0,35,0">
-                <TabItem.HeaderTemplate>
+        <DockPanel DockPanel.Dock="Top">
+            <Button DockPanel.Dock="Left"
+                    Style="{StaticResource BtnLeftStyle}"
+                    Command="{Binding GroupCmd}" CommandParameter="PreAreaGroup"/>
+            <Button DockPanel.Dock="Right"
+                    Style="{StaticResource BtnRightStyle}"
+                    Command="{Binding GroupCmd}" CommandParameter="NextAreaGroup"/>
+            <controls:GroupSelector x:Name="GsArea"
+                                    ItemsSource="{Binding CurrentTableAreas}"
+                                    SelectedItem="{Binding SelectedTableArea,UpdateSourceTrigger=PropertyChanged,  Mode=TwoWay}"
+                                    ItemCountEachGroup="8">
+                <controls:GroupSelector.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </controls:GroupSelector.ItemsPanel>
+                <controls:GroupSelector.ItemTemplate>
                     <DataTemplate>
-                        <Border Height="60">
-                            <TextBlock Text="标准台" FontSize="20" VerticalAlignment="Center"/>
+                        <Border CornerRadius="5"
+                                Margin="2"
+                                MaxWidth="150"
+                                MinWidth="70"
+                                TextBlock.FontSize="16">
+                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <controls:GroupSelector x:Name="GsTables"
-                                        ItemsSource="{Binding Tables}" ItemCountEachGroup="56">
-                    <controls:GroupSelector.Template>
-                        <ControlTemplate TargetType="controls:GroupSelector">
-                            <ItemsControl x:Name="PART_Selector" 
-                                          ItemsSource="{TemplateBinding GroupedItemsSource}"
-                                          ItemTemplate="{StaticResource MainWndTableDt}"
-                                          Margin="3"
-                                          Focusable="False">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </ControlTemplate>
-                    </controls:GroupSelector.Template>
-                </controls:GroupSelector>
-            </TabItem>
-            <TabItem x:Name="TbCfTables" Padding="35,0,0,0">
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <Border Height="60">
-                            <TextBlock Text="咖啡台" FontSize="20" VerticalAlignment="Center"/>
-                        </Border>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
+                </controls:GroupSelector.ItemTemplate>
+            </controls:GroupSelector>
+        </DockPanel>
 
-                <controls:GroupSelector x:Name="GsCfTables" ItemsSource="{Binding CfTables}" ItemCountEachGroup="56">
-                    <controls:GroupSelector.Template>
-                        <ControlTemplate TargetType="controls:GroupSelector">
-                            <ItemsControl x:Name="PART_Selector" 
-                                          ItemsSource="{TemplateBinding GroupedItemsSource}"
-                                          ItemTemplate="{StaticResource MainWndTableDt}"
-                                          Margin="3"
-                                          Focusable="False">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </ControlTemplate>
-                    </controls:GroupSelector.Template>
-                </controls:GroupSelector>
-            </TabItem>
-        </TabControl>
+        <controls:GroupSelector x:Name="GsTables"
+                                Grid.Row="1"
+                                ItemsSource="{Binding CurrentTableInfos}" ItemCountEachGroup="56">
+            <controls:GroupSelector.Template>
+                <ControlTemplate TargetType="controls:GroupSelector">
+                    <ItemsControl x:Name="PART_Selector" 
+                                  ItemsSource="{TemplateBinding GroupedItemsSource}"
+                                  ItemTemplate="{StaticResource MainWndTableDt}"
+                                  Margin="3"
+                                  Focusable="False">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ControlTemplate>
+            </controls:GroupSelector.Template>
+        </controls:GroupSelector>
 
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal" HorizontalAlignment="Left"
-                    TextBlock.FontSize="16">
-            <TextBlock Text="{Binding IdleCount, StringFormat=空闲 ({0})}"
-                       Foreground="{StaticResource CanDaoPosColorFgOrange}"
-                       Width="85" Height="22"
-                       Margin="20,10,0,0"/>
-            <TextBlock Text="{Binding DinnerCount, StringFormat=就餐 ({0})}"
-                       Foreground="{StaticResource CanDaoPosColorFgFont}"
-                       Width="85" Height="22"
-                       Margin="20,10,0,0"/>
-            <!--<TextBlock Text="{Binding DisableCount, StringFormat=禁用开台({0})}"
-                       Foreground="{StaticResource CanDaoPosColorBgDisable}"
-                       Width="85" Height="22"
-                       Margin="20,10,0,0"/>-->
-        </StackPanel>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableStatusAll"
+                              Width="100" Height="40" Margin="20,10,0,0"
+                              IsChecked="{Binding ViewTableStatus, Converter={StaticResource ViewTableStatus2CheckedCvt}, ConverterParameter=All}">
+                    <TextBlock Text="{Binding AllTableCount, StringFormat=全部 ({0})}"/>
+                </ToggleButton>
+                <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableStatusDinner"
+                              Width="100" Height="40" Margin="20,10,0,0"
+                              IsChecked="{Binding ViewTableStatus, Converter={StaticResource ViewTableStatus2CheckedCvt}, ConverterParameter=Dinner}">
+                    <TextBlock Text="{Binding DinnerCount, StringFormat=就餐 ({0})}"/>
+                </ToggleButton>
+                <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableStatusIdel"
+                              Width="100" Height="40" Margin="20,10,0,0"
+                              IsChecked="{Binding ViewTableStatus, Converter={StaticResource ViewTableStatus2CheckedCvt}, ConverterParameter=Idel}">
+                    <TextBlock Text="{Binding IdleCount, StringFormat=空闲 ({0})}"/>
+                </ToggleButton>
+            </StackPanel>
 
-        <Grid Grid.Row="2" Margin="10,16,10,16">
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Visibility="{Binding GroupCount, ElementName=GsTables, Converter={StaticResource Count2VisibleCvt}, ConverterParameter=1}">
+                <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding GroupCmd}" CommandParameter="TablesPreGroup"/>
+                <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsTables}"/>
+                <TextBlock Text="/"/>
+                <TextBlock Text="{Binding GroupCount, ElementName=GsTables}"/>
+                <Button Style="{StaticResource BtnRightStyle}" Command="{Binding GroupCmd}" CommandParameter="TablesNextGroup"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="10,16,10,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -261,40 +274,8 @@
                             Width="100"/>
                 </Border>
             </StackPanel>
-
-            <StackPanel Grid.Column="1"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                <StackPanel.Visibility>
-                    <MultiBinding Converter="{StaticResource MultBool2VisibilityCvt}">
-                        <Binding Path="IsSelected" ElementName="TbNormalTables"/>
-                        <Binding Path="GroupCount" ElementName="GsTables" Converter="{StaticResource Count2BoolInvertCvt}" ConverterParameter="0_1"/>
-                    </MultiBinding>
-                </StackPanel.Visibility>
-                <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding GroupCmd}" CommandParameter="NormalTablesPreGroup"/>
-                <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsTables}"/>
-                <TextBlock Text="/"/>
-                <TextBlock Text="{Binding GroupCount, ElementName=GsTables}"/>
-                <Button Style="{StaticResource BtnRightStyle}" Command="{Binding GroupCmd}" CommandParameter="NormalTablesNextGroup"/>
-            </StackPanel>
-
-            <StackPanel Grid.Column="1"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                <StackPanel.Visibility>
-                    <MultiBinding Converter="{StaticResource MultBool2VisibilityCvt}">
-                        <Binding Path="IsSelected" ElementName="TbCfTables"/>
-                        <Binding Path="GroupCount" ElementName="GsCfTables" Converter="{StaticResource Count2BoolInvertCvt}" ConverterParameter="0_1"/>
-                    </MultiBinding>
-                </StackPanel.Visibility>
-                <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding GroupCmd}" CommandParameter="CfTablesPreGroup"/>
-                <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsCfTables}"/>
-                <TextBlock Text="/"/>
-                <TextBlock Text="{Binding GroupCount, ElementName=GsCfTables}"/>
-                <Button Style="{StaticResource BtnRightStyle}" Command="{Binding GroupCmd}" CommandParameter="CfTablesNextGroup"/>
-            </StackPanel>
         </Grid>
 
-        <view:StatusControl Grid.Row="3" Height="30"/>
+        <view:StatusControl Grid.Row="4" Height="30"/>
     </Grid>
 </controls:PosMainWindow>
