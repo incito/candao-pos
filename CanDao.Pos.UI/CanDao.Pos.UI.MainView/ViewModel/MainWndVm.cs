@@ -272,9 +272,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// 是否有打印机错误。
         /// </summary>
         private bool _hasPrinterError;
-
-        private bool _isMemberOpened;
-
         /// <summary>
         /// 是否有打印机错误。
         /// </summary>
@@ -291,6 +288,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <summary>
         /// 是否展开会员面板。
         /// </summary>
+        private bool _isMemberOpened;
+
+        /// <summary>
+        /// 是否展开会员面板。
+        /// </summary>
         public bool IsMemberOpened
         {
             get { return _isMemberOpened; }
@@ -298,6 +300,75 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 _isMemberOpened = value;
                 RaisePropertyChanged("IsMemberOpened");
+            }
+        }
+
+        /// <summary>
+        /// 未付款金额。
+        /// </summary>
+        private decimal _unpaidAmount;
+        /// <summary>
+        /// 未付款金额。
+        /// </summary>
+        public decimal UnpaidAmount
+        {
+            get { return _unpaidAmount; }
+            set
+            {
+                _unpaidAmount = value;
+                RaisePropertyChanged("UnpaidAmount");
+            }
+        }
+
+        /// <summary>
+        /// 未付款餐台数。
+        /// </summary>
+        private decimal _unpaidTableCount;
+
+        /// <summary>
+        /// 未付款餐台数。
+        /// </summary>
+        public decimal UnpaidTableCount
+        {
+            get { return _unpaidTableCount; }
+            set
+            {
+                _unpaidTableCount = value;
+                RaisePropertyChanged("UnpaidTableCount");
+            }
+        }
+
+        /// <summary>
+        /// 已付款金额。
+        /// </summary>
+        private decimal _paidAmount;
+        /// <summary>
+        /// 已付款金额。
+        /// </summary>
+        public decimal PaidAmount
+        {
+            get { return _paidAmount; }
+            set
+            {
+                _paidAmount = value;
+                RaisePropertyChanged("PaidAmount");
+            }
+        }
+
+        /// <summary>
+        /// 已付款餐台数。
+        /// </summary>
+        private decimal _paidTableCount;
+        /// <summary>
+        /// 已付款餐台数。
+        /// </summary>
+        public decimal PaidTableCount
+        {
+            get { return _paidTableCount; }
+            set
+            {
+                _paidTableCount = value;
+                RaisePropertyChanged("PaidTableCount");
             }
         }
 

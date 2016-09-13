@@ -10,6 +10,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgWhite}"/>
         <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFgFont}"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">

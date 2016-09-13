@@ -5,6 +5,7 @@
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                         xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
                         Height="768" Width="1024" ShowInTaskbar="False"
+                        WindowState="Maximized"
                         x:Name="MainWnd">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

@@ -50,7 +50,9 @@
     </Style>
 
     <Style x:Key="LbLeftStyle" TargetType="ListBoxItem" BasedOn="{StaticResource LbItemBaseStyle}">
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="2"/>
     </Style>
     
     <Style TargetType="ListBoxItem" BasedOn="{StaticResource LbItemBaseStyle}">

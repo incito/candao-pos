@@ -64,6 +64,11 @@ namespace CanDao.Pos.Model
         public int PeopleNumber { get; set; }
 
         /// <summary>
+        /// 餐桌就餐人数。
+        /// </summary>
+        public int DinnerNumber { get; set; }
+
+        /// <summary>
         /// 餐桌名称。
         /// </summary>
         private string _tableName;

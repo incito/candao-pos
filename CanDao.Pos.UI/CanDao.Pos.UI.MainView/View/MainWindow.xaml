@@ -33,6 +33,7 @@
                         Background="{StaticResource CanDaoPosColorBgWhite}"
                         BorderBrush="{StaticResource CanDaoPosColorBgWhite}"
                         BorderThickness="1"
+                        Cursor="Hand"
                         IsEnabled="{Binding TableEnable}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDown">
@@ -46,11 +47,12 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock x:Name="TbStatus"
+                        <TextBlock x:Name="TbAmt"
                                    Grid.Row="0"
                                    Visibility="Collapsed"
                                    FontSize="10"
-                                   HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                                   Text="{Binding Amount, StringFormat=¥{0}}"/>
                         <TextBlock x:Name="TbName"
                                    Grid.Row="1"
                                    Text="{Binding TableName}"
@@ -70,20 +72,19 @@
                                        Text="{Binding DinnerDuration}"
                                        HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
+                            <TextBlock x:Name="TbPpNum"
+                                           Text="{Binding PeopleNumber, StringFormat={}{0}人桌}" 
+                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
                             <StackPanel x:Name="SpInfo"
                                         Grid.Column="1"
+                                        Visibility="Collapsed"
                                         Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center"
                                         TextBlock.Foreground="{StaticResource CanDaoPosColorFgTableNormal}">
-                                <TextBlock x:Name="TbPpNum"
-                                           Text="{Binding PeopleNumber, StringFormat={}{0}人桌}" 
+                                <TextBlock Text="{Binding DinnerNumber}" 
                                            VerticalAlignment="Center"/>
-                                <TextBlock x:Name="TbSep"
-                                           Text="/"
-                                           Visibility="Collapsed"
+                                <TextBlock Text="/"
                                            FontWeight="Bold"/>
-                                <TextBlock x:Name="TbAmt"
-                                           Visibility="Collapsed"
-                                           Text="{Binding Amount, StringFormat=¥{0}}"
+                                <TextBlock Text="{Binding PeopleNumber}"
                                            VerticalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
@@ -95,17 +96,17 @@
                         <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource CanDaoPosColorBgBorder}"/>
                         <Setter TargetName="SpInfo" Property="TextBlock.Foreground" Value="{StaticResource CanDaoPosColorFgGray}"/>
                         <Setter TargetName="TbName" Property="Foreground" Value="{StaticResource CanDaoPosColorFgGray}"/>
+                        <Setter Property="Cursor" Value="Arrow"/>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding TableStatus}" Value="Dinner">
                         <Setter TargetName="Bd" Property="Background" Value="{StaticResource CanDaoPosColorBgTableDinner}"/>
                         <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource CanDaoPosColorBgTableDinner}"/>
                         <Setter TargetName="TbName" Property="Foreground" Value="{StaticResource CanDaoPosColorFgFont}"/>
                         <Setter TargetName="SpInfo" Property="TextBlock.Foreground" Value="{StaticResource CanDaoPosColorFgFont}"/>
-                        <Setter TargetName="TbStatus" Property="Text" Value="开"/>
-                        <Setter TargetName="TbStatus" Property="Visibility" Value="Visible"/>
-                        <Setter TargetName="TbDuration" Property="Visibility" Value="Visible"/>
-                        <Setter TargetName="TbSep" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="SpInfo" Property="Visibility" Value="Visible"/>
                         <Setter TargetName="TbAmt" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="TbPpNum" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="TbDuration" Property="Visibility" Value="Visible"/>
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
@@ -140,7 +141,8 @@
             <controls:GroupSelector x:Name="GsArea"
                                     ItemsSource="{Binding CurrentTableAreas}"
                                     SelectedItem="{Binding SelectedTableArea,UpdateSourceTrigger=PropertyChanged,  Mode=TwoWay}"
-                                    ItemCountEachGroup="8">
+                                    ItemCountEachGroup="8"
+                                    VerticalAlignment="Center">
                 <controls:GroupSelector.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal"/>
@@ -152,7 +154,8 @@
                                 Margin="2"
                                 MaxWidth="150"
                                 MinWidth="70"
-                                TextBlock.FontSize="16">
+                                TextBlock.FontSize="18"
+                                VerticalAlignment="Center">
                             <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </DataTemplate>
@@ -185,19 +188,20 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0"
+                        TextBlock.FontSize="14">
                 <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableStatusAll"
-                              Width="100" Height="40" Margin="20,10,0,0"
+                              Width="90" Height="40" Margin="2"
                               IsChecked="{Binding ViewTableStatus, Converter={StaticResource ViewTableStatus2CheckedCvt}, ConverterParameter=All}">
                     <TextBlock Text="{Binding AllTableCount, StringFormat=全部 ({0})}"/>
                 </ToggleButton>
                 <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableStatusDinner"
-                              Width="100" Height="40" Margin="20,10,0,0"
+                              Width="90" Height="40" Margin="10,0,0,0"
                               IsChecked="{Binding ViewTableStatus, Converter={StaticResource ViewTableStatus2CheckedCvt}, ConverterParameter=Dinner}">
                     <TextBlock Text="{Binding DinnerCount, StringFormat=就餐 ({0})}"/>
                 </ToggleButton>
                 <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableStatusIdel"
-                              Width="100" Height="40" Margin="20,10,0,0"
+                              Width="90" Height="40" Margin="10,0,0,0"
                               IsChecked="{Binding ViewTableStatus, Converter={StaticResource ViewTableStatus2CheckedCvt}, ConverterParameter=Idel}">
                     <TextBlock Text="{Binding IdleCount, StringFormat=空闲 ({0})}"/>
                 </ToggleButton>
@@ -215,7 +219,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="3" Margin="10,16,10,16">
+        <Grid Grid.Row="3" Margin="10,16,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -276,6 +280,13 @@
             </StackPanel>
         </Grid>
 
-        <view:StatusControl Grid.Row="4" Height="30"/>
+        <StackPanel Grid.Row="4"
+                    Orientation="Horizontal" Height="30">
+            <TextBlock Text="{Binding UnpaidAmount, StringFormat=未结金额：{0}}" Margin="10,0"/>
+            <TextBlock Text="{Binding UnpaidTableCount, StringFormat=未结台数：{0}}" Margin="20,0"/>
+            <TextBlock Text="{Binding PaidAmount, StringFormat=已结金额：{0}}" Margin="20,0"/>
+            <TextBlock Text="{Binding PaidTableCount, StringFormat=已结台数：{0}}" Margin="20,0"/>
+        </StackPanel>
+        <!--<view:StatusControl Grid.Row="4" Height="30"/>-->
     </Grid>
 </controls:PosMainWindow>
