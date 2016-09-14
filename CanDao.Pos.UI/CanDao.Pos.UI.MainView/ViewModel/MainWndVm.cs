@@ -23,12 +23,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
     {
         #region Filed
 
-        private enum EnumViewTableType
-        {
-            标准台,
-            咖啡台,
-        }
-
         /// <summary>
         /// 标准台餐台集合。
         /// </summary>
@@ -97,13 +91,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             _printerCheckTimer = new Timer(PrinterCheckTimerInterval * 1000);
             _printerCheckTimer.Elapsed += PrinterCheckTimerOnElapsed;
-            InitDataSource();
-        }
-
-        private void InitDataSource()
-        {
-            ViewTableTypeList = Enum.GetNames(typeof(EnumViewTableType)).ToList();
-            SelectedViewTableType = ViewTableTypeList.FirstOrDefault();
         }
 
         #endregion
@@ -111,24 +98,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Properties
 
         /// <summary>
-        /// 界面上餐台类型集合。
+        /// 选中的界面餐台类型。
         /// </summary>
-        public List<string> ViewTableTypeList { get; set; }
-
+        private EnumViewTableType _viewTableType;
         /// <summary>
         /// 选中的界面餐台类型。
         /// </summary>
-        private string _selectedViewTableType;
-        /// <summary>
-        /// 选中的界面餐台类型。
-        /// </summary>
-        public string SelectedViewTableType
+        public EnumViewTableType ViewTableType
         {
-            get { return _selectedViewTableType; }
+            get { return _viewTableType; }
             set
             {
-                _selectedViewTableType = value;
-                RaisePropertyChanged("SelectedViewTableType");
+                _viewTableType = value;
+                RaisePropertyChanged("ViewTableType");
 
                 FilterTableInfos();
             }
@@ -304,6 +286,23 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
+        /// 总金额。
+        /// </summary>
+        private decimal _totalAmount;
+        /// <summary>
+        /// 总金额。
+        /// </summary>
+        public decimal TotalAmount
+        {
+            get { return _totalAmount; }
+            set
+            {
+                _totalAmount = value;
+                RaisePropertyChanged("TotalAmount");
+            }
+        }
+
+        /// <summary>
         /// 未付款金额。
         /// </summary>
         private decimal _unpaidAmount;
@@ -369,6 +368,23 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 _paidTableCount = value;
                 RaisePropertyChanged("PaidTableCount");
+            }
+        }
+
+        /// <summary>
+        /// 累计就餐人数。
+        /// </summary>
+        private int _totalDinnerCount;
+        /// <summary>
+        /// 累计就餐人数。
+        /// </summary>
+        public int TotalDinnerCount
+        {
+            get { return _totalDinnerCount; }
+            set
+            {
+                _totalDinnerCount = value;
+                RaisePropertyChanged("TotalDinnerCount");
             }
         }
 
@@ -520,6 +536,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
                 case "TableStatusIdel":
                     ViewTableStatus = EnumViewTableStatus.Idel;
+                    break;
+                case "TableTypeNormal":
+                    ViewTableType = EnumViewTableType.Normal;
+                    break;
+                case "TableTypeCoffee":
+                    ViewTableType = EnumViewTableType.Coffee;
                     break;
             }
             SetRefreshTimerStatus(true);
@@ -985,8 +1007,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (_isInFilter)
                 return;
 
-            var curViewTableType = (EnumViewTableType)Enum.Parse(typeof(EnumViewTableType), SelectedViewTableType);
-            var tempSrc = FilterTableInfoByViewTableType(_allTableInfos, curViewTableType);
+            var tempSrc = FilterTableInfoByViewTableType(_allTableInfos, ViewTableType);
 
             _isInFilter = true;
             ProcessTableAreas(tempSrc);
@@ -1044,7 +1065,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (srcSource == null)
                 return null;
 
-            return viewTableType == EnumViewTableType.标准台 ? srcSource.Where(t => !t.IsCoffeeTable).ToList() : srcSource.Where(t => t.IsCoffeeTable).ToList();
+            return viewTableType == EnumViewTableType.Normal ? srcSource.Where(t => !t.IsCoffeeTable).ToList() : srcSource.Where(t => t.IsCoffeeTable).ToList();
         }
 
         /// <summary>

@@ -22,4 +22,5 @@
     <converter:QueryOrderStatusToCheckedConverter x:Key="OrderStatus2CheckedCvt"/>
     <converter:MultBooleanToVisibilityConverter x:Key="MultBool2VisibilityCvt"/>
     <converter:ViewTableStatusToCheckedConverter x:Key="ViewTableStatus2CheckedCvt"/>
+    <converter:ViewTableTypeToCheckedConverter x:Key="ViewTableType2CheckedCvt"/>
 </ResourceDictionary> 

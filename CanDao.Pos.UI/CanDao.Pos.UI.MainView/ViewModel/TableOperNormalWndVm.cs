@@ -3,7 +3,6 @@ using System.Windows.Threading;
 using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
-using CanDao.Pos.UI.MainView.Operates;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 
@@ -43,18 +42,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             GetTableDishInfoAsync();
             _refreshTimer.Start();//启动刷新定时器。
-        }
-
-        /// <summary>
-        /// 同步订单信息
-        /// </summary>
-        private void DataChangeHandel(string orderId)
-        {
-            OwnerWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
-            {
-                _tableInfo.OrderId = orderId;
-                GetTableDishInfoAsync();
-            }));
         }
 
         protected override void BackAllDishSuccessProcess()

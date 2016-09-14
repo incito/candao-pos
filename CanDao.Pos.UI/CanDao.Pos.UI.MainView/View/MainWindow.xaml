@@ -3,7 +3,6 @@
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View;assembly=CanDao.Pos.UI.Utility"
                         xmlns:common="clr-namespace:CanDao.Pos.Common;assembly=CanDao.Pos.Common"
                         Height="768" Width="1024"
                         Title="餐道POS收银系统"
@@ -113,15 +112,16 @@
         </ResourceDictionary>
     </controls:PosMainWindow.Resources>
     <controls:PosMainWindow.TitleContent>
-        <ListBox Background="Transparent" HorizontalAlignment="Center"
-                 ItemsSource="{Binding ViewTableTypeList}"
-                 SelectedItem="{Binding SelectedViewTableType}">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
+        <StackPanel Orientation="Horizontal">
+            <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableTypeNormal"
+                          Width="142" Height="38"
+                          Content="标准台"
+                          IsChecked="{Binding ViewTableType, Converter={StaticResource ViewTableType2CheckedCvt}, ConverterParameter=Normal}"/>
+            <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableTypeCoffee"
+                          Width="142" Height="38"
+                          Content="咖啡台"
+                          IsChecked="{Binding ViewTableType, Converter={StaticResource ViewTableType2CheckedCvt}, ConverterParameter=Coffee}"/>
+        </StackPanel>
     </controls:PosMainWindow.TitleContent>
     <Grid Background="{StaticResource CanDaoPosColorBgMainGray}">
         <Grid.RowDefinitions>
@@ -282,10 +282,12 @@
 
         <StackPanel Grid.Row="4"
                     Orientation="Horizontal" Height="30">
-            <TextBlock Text="{Binding UnpaidAmount, StringFormat=未结金额：{0}}" Margin="10,0"/>
-            <TextBlock Text="{Binding UnpaidTableCount, StringFormat=未结台数：{0}}" Margin="20,0"/>
+            <TextBlock Text="{Binding TotalAmount, StringFormat=总金额：{0}}" Margin="10,0"/>
             <TextBlock Text="{Binding PaidAmount, StringFormat=已结金额：{0}}" Margin="20,0"/>
+            <TextBlock Text="{Binding UnpaidAmount, StringFormat=未结金额：{0}}" Margin="20,0"/>
             <TextBlock Text="{Binding PaidTableCount, StringFormat=已结台数：{0}}" Margin="20,0"/>
+            <TextBlock Text="{Binding UnpaidTableCount, StringFormat=未结台数：{0}}" Margin="20,0"/>
+            <TextBlock Text="{Binding TotalDinnerCount, StringFormat=累计就餐人数：{0}}" Margin="20,0"/>
         </StackPanel>
         <!--<view:StatusControl Grid.Row="4" Height="30"/>-->
     </Grid>

@@ -39,11 +39,6 @@ namespace CanDao.Pos.Common
         public static bool AutoFillCashAmount { get; set; }
 
         /// <summary>
-        /// 外卖台餐台名称。
-        /// </summary>
-        //public static string TakeoutTableName { get; set; }
-
-        /// <summary>
         /// Pos编号。
         /// </summary>
         public static string PosId { get; set; }
@@ -84,7 +79,6 @@ namespace CanDao.Pos.Common
                     CloudServer = GetElementValue(root.Element("CloudServer"));
                     MemberSystem = GetElementInt(root.Element("MemberSystem"), 1);
                     AutoFillCashAmount = GetElementBool(root.Element("AutoFillCashAmount"), true);
-                    //TakeoutTableName = GetElementValue(root.Element("TakeoutTableName"));
                     PosId = GetElementValue(root.Element("PosId"));
                     OpenCashIp = GetElementValue(root.Element("OpenCashIp"));
                     Globals.MemberSystem = (EnumMemberSystem)MemberSystem;
