@@ -130,6 +130,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _eventWait.Set();//释放同步锁，关闭窗口。
         }
 
+        protected override void BackAllDishSuccessProcess()
+        {
+            GetTableDishInfoAsync();
+        }
+
         /// <summary>
         /// 取消订单命令的执行方法。
         /// </summary>
