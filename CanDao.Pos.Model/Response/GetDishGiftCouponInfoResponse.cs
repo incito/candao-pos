@@ -18,6 +18,6 @@
         /// <summary>
         /// 优惠券使用数量。
         /// </summary>
-        public int count { get; set; }
+        public decimal count { get; set; }
     }
 }
