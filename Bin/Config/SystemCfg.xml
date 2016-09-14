@@ -6,6 +6,8 @@
   <CloudServer value="10.66.21.6:8080"/>
   <!--会员系统。0：雅座，1：餐道-->
   <MemberSystem value="1"/>
+  <!--自动填充现金金额。0：不填充，1：填充-->
+  <AutoFillCashAmount value="1"/>
   <!--外卖台名称（现在从接口获取，这个配置先不用）-->
   <!--<TakeoutTableName value="JLOut"/>-->
   <!--Pos编号-->
