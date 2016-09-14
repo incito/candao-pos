@@ -13,7 +13,7 @@
         /// <summary>
         /// 使用的优惠券数量。
         /// </summary>
-        public int UsedCouponCount { get; set; }
+        public decimal UsedCouponCount { get; set; }
 
     }
 }

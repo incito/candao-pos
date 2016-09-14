@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -70,13 +71,19 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 if (orderDishInfo.PayAmount == 0)//价格为0的不赠送
                     continue;
 
-                //赠菜可选你数量需要减去已经赠菜的数量。
+                //赠菜可选的数量需要减去已经赠菜的数量。
                 var dishNum = orderDishInfo.DishNum;
                 var item = dishGiftCouponInfos.FirstOrDefault(t => t.DishId.Equals(orderDishInfo.DishId));
                 if (item != null)
                 {
-                    dishNum -= item.UsedCouponCount;
-                    if (dishNum == 0)
+                    var tempNum = Math.Min(dishNum, item.UsedCouponCount);
+                    dishNum -= tempNum;
+
+                    item.UsedCouponCount -= tempNum;
+                    if (item.UsedCouponCount == 0)
+                        dishGiftCouponInfos.Remove(item);
+
+                    if (dishNum <= item.UsedCouponCount)
                         continue;
                 }
 
