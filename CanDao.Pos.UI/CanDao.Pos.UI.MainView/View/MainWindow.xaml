@@ -112,14 +112,16 @@
         </ResourceDictionary>
     </controls:PosMainWindow.Resources>
     <controls:PosMainWindow.TitleContent>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableTypeNormal"
                           Width="142" Height="38"
                           Content="标准台"
+                          Style="{StaticResource NormalTableTypeTbStyle}"
                           IsChecked="{Binding ViewTableType, Converter={StaticResource ViewTableType2CheckedCvt}, ConverterParameter=Normal}"/>
             <ToggleButton Command="{Binding OperCmd}" CommandParameter="TableTypeCoffee"
                           Width="142" Height="38"
                           Content="咖啡台"
+                          Style="{StaticResource CoffeeTableTypeTbStyle}"
                           IsChecked="{Binding ViewTableType, Converter={StaticResource ViewTableType2CheckedCvt}, ConverterParameter=Coffee}"/>
         </StackPanel>
     </controls:PosMainWindow.TitleContent>
@@ -141,7 +143,7 @@
             <controls:GroupSelector x:Name="GsArea"
                                     ItemsSource="{Binding CurrentTableAreas}"
                                     SelectedItem="{Binding SelectedTableArea,UpdateSourceTrigger=PropertyChanged,  Mode=TwoWay}"
-                                    ItemCountEachGroup="8"
+                                    ItemCountEachGroup="10"
                                     VerticalAlignment="Center">
                 <controls:GroupSelector.ItemsPanel>
                     <ItemsPanelTemplate>
