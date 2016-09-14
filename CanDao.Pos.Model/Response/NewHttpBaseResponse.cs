@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace CanDao.Pos.Model.Response
 {
@@ -15,8 +12,13 @@ namespace CanDao.Pos.Model.Response
         }
     }
 
-    public class NewHttpBaseResponse<T> : NewHttpBaseResponse
+    public class NewHttpBaseRowsResponse<T> : NewHttpBaseResponse
     {
         public RowsResponse<T> data { get; set; }
+    }
+
+    public class NewHttpBaseResponse<T> : NewHttpBaseResponse
+    {
+        public List<T> data { get; set; }
     }
 }

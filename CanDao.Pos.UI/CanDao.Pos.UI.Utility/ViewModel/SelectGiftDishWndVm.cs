@@ -12,10 +12,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// </summary>
     public class SelectGiftDishWndVm : NormalWindowViewModel
     {
-        public SelectGiftDishWndVm(TableFullInfo tableFullInfo)
+        public SelectGiftDishWndVm(IEnumerable<OrderDishInfo> data, List<DishGiftCouponInfo> dishGiftCouponInfos)
         {
             GiftDishes = new ObservableCollection<GiftDishInfo>();
-            ParseTableFullInfo(tableFullInfo);
+            ParseTableFullInfo(data, dishGiftCouponInfos);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <param name="arg"></param>
         private void SelectDish(object arg)
         {
-            var giftDishInfo = (GiftDishInfo) arg;
+            var giftDishInfo = (GiftDishInfo)arg;
             if (giftDishInfo != null)
                 giftDishInfo.SelectGiftNum++;
         }
@@ -61,24 +61,25 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <summary>
         /// 解析餐桌的菜品列表和优惠列表，生成可赠菜集合。
         /// </summary>
-        /// <param name="data"></param>
-        private void ParseTableFullInfo(TableFullInfo data)
+        /// <param name="data">菜品集合。</param>
+        /// <param name="dishGiftCouponInfos">赠菜优惠券的使用信息。</param>
+        private void ParseTableFullInfo(IEnumerable<OrderDishInfo> data, List<DishGiftCouponInfo> dishGiftCouponInfos)
         {
-            var dic = GetGiftDishCouponDic(data.UsedCouponInfos);
-            foreach (var orderDishInfo in data.DishInfos)
+            foreach (var orderDishInfo in data)
             {
                 if (orderDishInfo.PayAmount == 0)//价格为0的不赠送
                     continue;
 
                 //赠菜可选你数量需要减去已经赠菜的数量。
                 var dishNum = orderDishInfo.DishNum;
-                if (dic.ContainsKey(orderDishInfo.DishName))
+                var item = dishGiftCouponInfos.FirstOrDefault(t => t.DishId.Equals(orderDishInfo.DishId));
+                if (item != null)
                 {
-                    dishNum -= dic[orderDishInfo.DishName];
+                    dishNum -= item.UsedCouponCount;
                     if (dishNum == 0)
                         continue;
                 }
-           
+
                 GiftDishes.Add(new GiftDishInfo
                 {
                     DishId = orderDishInfo.DishId,
@@ -87,34 +88,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     DishNum = dishNum,
                 });
             }
-        }
-
-        /// <summary>
-        /// 获取赠菜类优惠券字段。
-        /// </summary>
-        /// <param name="coupons">优惠券集合。</param>
-        /// <returns></returns>
-        private Dictionary<string, int> GetGiftDishCouponDic(IEnumerable<UsedCouponInfo> coupons)
-        {
-            var dic = new Dictionary<string, int>();
-            foreach (var usedCouponInfo in coupons)
-            {
-                if (!usedCouponInfo.Name.StartsWith("赠菜："))
-                    continue;
-
-                var array = usedCouponInfo.Name.Split('：');
-                if (array.Count() < 2)
-                    continue;
-
-                var dishName = array[1];
-                var count = usedCouponInfo.Count;
-                if (dic.ContainsKey(dishName))
-                    dic[dishName] += count;
-                else
-                    dic.Add(dishName, count);
-            }
-
-            return dic;
         }
     }
 }

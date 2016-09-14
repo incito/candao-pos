@@ -733,6 +733,30 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
+        public Tuple<string, List<DishGiftCouponInfo>> GetDishGiftCouponInfo(string orderId)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("GetDishGiftCouponInfo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, List<DishGiftCouponInfo>>("获取赠菜优惠券使用信息地址为空。", null);
+
+            try
+            {
+                var request = new GetDishGiftCouponInfoRequest { orderId = orderId };
+                var result = HttpHelper.HttpPost<GetDishGiftCouponInfoResponse>(addr, request);
+                if (result.IsSuccess)
+                {
+                    var list = result.data != null ? result.data.Select(DataConverter.ToDishGiftCouponInfo).ToList() : new List<DishGiftCouponInfo>();
+                    return new Tuple<string, List<DishGiftCouponInfo>>(null, list);
+                }
+                return new Tuple<string, List<DishGiftCouponInfo>>(DataHelper.GetNoneNullValueByOrder(result.msg, "获取赠菜优惠券使用信息失败。"), null);
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E("获取赠菜优惠券使用信息时异常。", ex);
+                return new Tuple<string, List<DishGiftCouponInfo>>(ex.MyMessage(), null);
+            }
+        }
+
         #endregion
 
         #region 账单处理

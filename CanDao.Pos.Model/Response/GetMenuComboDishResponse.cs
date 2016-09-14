@@ -5,7 +5,7 @@ namespace CanDao.Pos.Model.Response
     /// <summary>
     /// 获取套餐包含菜品的返回类。
     /// </summary>
-    public class GetMenuComboDishResponse : NewHttpBaseResponse<MenuComboDishMainResponse>
+    public class GetMenuComboDishResponse : NewHttpBaseRowsResponse<MenuComboDishMainResponse>
     {
     }
 

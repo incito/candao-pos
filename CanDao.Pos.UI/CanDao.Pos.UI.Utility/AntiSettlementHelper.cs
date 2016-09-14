@@ -71,8 +71,7 @@ namespace CanDao.Pos.UI.Utility
                 }
             }
 
-            var antiSettlementWf = new WorkFlowInfo(AntiSettlementProcess, AntiSettlementComplete, "账单反结算中...");
-            antiSettlementWf.NextWorkFlowInfo = afterAntiSettlementWf;
+            var antiSettlementWf = new WorkFlowInfo(AntiSettlementProcess, AntiSettlementComplete, "账单反结算中...") { NextWorkFlowInfo = afterAntiSettlementWf };
             currentWf.NextWorkFlowInfo = antiSettlementWf;
 
             WorkFlowService.Start(null, checkWf);
@@ -108,12 +107,13 @@ namespace CanDao.Pos.UI.Utility
                 }
             }
 
-            var antiSettlementWf = new WorkFlowInfo(AntiSettlementProcess, AntiSettlementComplete, "账单反结算中...");
+            var antiSettlementWf = new WorkFlowInfo(AutoAntiSettlementProcess, AntiSettlementComplete, "账单反结算中...");
 
             currentWf.NextWorkFlowInfo = antiSettlementWf;
 
             return checkWf;
         }
+
         /// <summary>
         /// 反结算执行方法。
         /// </summary>
@@ -126,10 +126,23 @@ namespace CanDao.Pos.UI.Utility
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var reason = _antiSettlementReason;
-            if (string.IsNullOrEmpty(reason))
-                reason = "会员结算失败，系统自动反结";
-            return service.AntiSettlementOrder(Globals.Authorizer.UserName, _orderId, reason);
+            return service.AntiSettlementOrder(Globals.Authorizer.UserName, _orderId, _antiSettlementReason);
+        }
+
+        /// <summary>
+        /// 自动反结算执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        public object AutoAntiSettlementProcess(object arg)
+        {
+            InfoLog.Instance.I("开始自动反结算账单：{0}...", _orderId);
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            var reason = "会员结算失败，系统自动反结";
+            return service.AntiSettlementOrder(Globals.UserInfo.UserName, _orderId, reason);
         }
 
         /// <summary>

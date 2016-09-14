@@ -286,5 +286,12 @@ namespace CanDao.Pos.IService
         /// <param name="request"></param>
         /// <returns></returns>
         Tuple<string, preferentialInfoResponse> DelPreferential(DelPreferentialRequest request);
+
+        /// <summary>
+        /// 获取某个订单赠菜优惠券的使用信息。
+        /// </summary>
+        /// <param name="orderId">订单ID。</param>
+        /// <returns></returns>
+        Tuple<string, List<DishGiftCouponInfo>> GetDishGiftCouponInfo(string orderId);
     }
 }

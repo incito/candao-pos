@@ -9,10 +9,10 @@ namespace CanDao.Pos.UI.Utility.View
     /// </summary>
     public partial class SelectGiftDishWindow
     {
-        public SelectGiftDishWindow(TableFullInfo tableFullInfo)
+        public SelectGiftDishWindow(IEnumerable<OrderDishInfo> data, List<DishGiftCouponInfo> dishGiftCouponInfos)
         {
             InitializeComponent();
-            DataContext = new SelectGiftDishWndVm(tableFullInfo) { OwnerWindow = this };
+            DataContext = new SelectGiftDishWndVm(data, dishGiftCouponInfos) { OwnerWindow = this };
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace CanDao.Pos.UI.Utility.View
         /// </summary>
         public List<GiftDishInfo> SelectedGiftDishInfos
         {
-            get { return ((SelectGiftDishWndVm) DataContext).SelectedGiftDishInfos; }
+            get { return ((SelectGiftDishWndVm)DataContext).SelectedGiftDishInfos; }
         }
     }
 }

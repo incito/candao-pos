@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Threading;
 using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
