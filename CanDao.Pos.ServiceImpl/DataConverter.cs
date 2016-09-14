@@ -512,6 +512,15 @@ namespace CanDao.Pos.ServiceImpl
             };
         }
 
+        internal static DishGiftCouponInfo ToDishGiftCouponInfo(DishGiftCouponInfoResponse response)
+        {
+            return new DishGiftCouponInfo
+            {
+                DishId = response.dishid,
+                UsedCouponCount = response.count,
+            };
+        }
+
         #region Private Method
 
         private static MenuDishInfo ToMenuDishInfo(FishPotDishResponse response)
@@ -900,14 +909,14 @@ namespace CanDao.Pos.ServiceImpl
                 {
                     if (dish.dishes != null) //套餐和鱼锅
                     {
-                        var masterItem = ToDishInfo(dish, dish.dishid, index);                       
+                        var masterItem = ToDishInfo(dish, dish.dishid, index);
                         tableFullInfo.DishInfos.Add(masterItem);
                         index++;
 
                         masterItem.DishInfos = new List<OrderDishInfo>();
                         foreach (var groupItem in dish.dishes)
                         {
-                            
+
                             var subItem = ToDishInfo(groupItem, string.Empty, index);
                             if (masterItem.DishType == EnumDishType.FishPot)
                                 subItem.IsFishPotDish = true;

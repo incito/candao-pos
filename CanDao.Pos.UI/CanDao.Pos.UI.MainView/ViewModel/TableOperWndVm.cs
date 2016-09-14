@@ -723,8 +723,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (_curSelectedCouponInfo.CouponType == EnumCouponType.HandFree) //手工优惠类特殊处理。
             {
-                if (!CouponHandFreeProcess())
-                    return;
+                CouponHandFreeProcess();
             }
             else if (_curSelectedCouponInfo.IsDiscount) //折扣类处理流程。
             {
@@ -806,7 +805,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         {
                             CreatUsePreferentialRequest("1", "", offSelectWnd.Discount, 0, 1);
 
-
                             //TaskService.Start(offSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
                         }
                     }
@@ -815,6 +813,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             //SaveCouponInfo();
         }
+
         /// <summary>
         /// 创建使用优惠券参数
         /// </summary>
@@ -824,7 +823,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="preferentialAmout">手工优惠金额</param>
         /// <param name="isCustom">是否收银员输入（1：是：0不是）</param>
         /// <returns></returns>
-        private void CreatUsePreferentialRequest(string pNum, string dishid, decimal disRate, decimal preferentialAmout, int isCustom)
+        private void CreatUsePreferentialRequest(string pNum, string dishId, decimal disRate, decimal preferentialAmout, int isCustom)
         {
             var usePreferential = new UsePreferentialRequest();
             usePreferential.orderid = _tableInfo.OrderId;
@@ -841,7 +840,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             usePreferential.toalDebitAmountMany = Data.ToalDebitAmountMany.ToString();
 
             usePreferential.preferentialNum = pNum;
-            usePreferential.dishid = dishid;
+            usePreferential.dishid = dishId;
             usePreferential.isCustom = isCustom.ToString();
             usePreferential.disrate = disRate;
             usePreferential.preferentialAmout = preferentialAmout.ToString();
@@ -889,32 +888,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <summary>
         /// 手工优免类优惠券处理方式。
         /// </summary>
-        private bool CouponHandFreeProcess()
+        private void CouponHandFreeProcess()
         {
-            var result = false;
             switch (_curSelectedCouponInfo.HandCouponType)
             {
                 case EnumHandCouponType.FreeDish:
-                    InfoLog.Instance.I("选择手工优惠赠菜类优惠券，弹出赠菜选择窗口...");
-                    var giftDishWnd = new SelectGiftDishWindow(Data);
-                    if (WindowHelper.ShowDialog(giftDishWnd, OwnerWindow))
-                    {
-                        if (giftDishWnd.SelectedGiftDishInfos.Count > 0)
-                        {
-                            var dishIds = new List<string>();
-                            var dishNum = new List<string>();
-                            foreach (var giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
-                            {
-
-                                dishIds.Add(giftDishInfo.DishId);
-                                dishNum.Add(giftDishInfo.SelectGiftNum.ToString());
-                            }
-                            CreatUsePreferentialRequest(string.Join(",", dishNum), string.Join(",", dishIds), 0, 0, 0);
-
-                        }
-
-                        result = true;
-                    }
+                    TaskService.Start(null, GetDishGiftCouponInfoProcess, GetDishGiftCouponInfoComplete, "获取赠菜优惠券使用信息...");
                     break;
                 case EnumHandCouponType.Discount:
                     InfoLog.Instance.I("选择手工优惠折扣类优惠券，弹出折扣输入窗口...");
@@ -925,7 +904,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         CreatUsePreferentialRequest("1", "", diacountSelectWnd.Discount, 0, 1);
 
                         //TaskService.Start(diacountSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
-                        result = true;
                     }
                     break;
                 case EnumHandCouponType.Amount:
@@ -936,7 +914,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         CreatUsePreferentialRequest("1", "", 0, amountSelectWnd.Amount, 1);
 
                         //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, amountSelectWnd.Amount);
-                        result = true;
                     }
                     break;
                 case null:
@@ -944,7 +921,56 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return result;
+        }
+
+        /// <summary>
+        /// 获取赠菜优惠券使用信息执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object GetDishGiftCouponInfoProcess(object param)
+        {
+            InfoLog.Instance.I("选择手工优惠赠菜类优惠券，先获取赠菜优惠券使用信息...");
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return new Tuple<string, List<DishGiftCouponInfo>>("创建IOrderService服务失败。", null);
+
+            return service.GetDishGiftCouponInfo(Data.OrderId);
+        }
+
+        /// <summary>
+        /// 获取赠菜优惠券使用信息执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void GetDishGiftCouponInfoComplete(object param)
+        {
+            var result = (Tuple<string, List<DishGiftCouponInfo>>)param;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                var msg = string.Format("获取赠菜优惠券使用信息时错误：{0}", result.Item1);
+                ErrLog.Instance.E(msg);
+                MessageDialog.Warning(msg);
+                return;
+            }
+
+            InfoLog.Instance.I("赠菜优惠券使用信息获取完成，弹出赠菜选择窗口...");
+            var giftDishWnd = new SelectGiftDishWindow(Data.DishInfos.ToList(), result.Item2);
+            if (WindowHelper.ShowDialog(giftDishWnd, OwnerWindow))
+            {
+                if (giftDishWnd.SelectedGiftDishInfos.Count > 0)
+                {
+                    var dishIds = new List<string>();
+                    var dishNum = new List<string>();
+                    foreach (var giftDishInfo in giftDishWnd.SelectedGiftDishInfos)
+                    {
+
+                        dishIds.Add(giftDishInfo.DishId);
+                        dishNum.Add(giftDishInfo.SelectGiftNum.ToString());
+                    }
+                    CreatUsePreferentialRequest(string.Join(",", dishNum), string.Join(",", dishIds), 0, 0, 0);
+
+                }
+            }
         }
 
         /// <summary>
