@@ -34,6 +34,11 @@ namespace CanDao.Pos.Common
         public static int MemberSystem { get; set; }
 
         /// <summary>
+        /// 是否自动填充现金金额。
+        /// </summary>
+        public static bool AutoFillCashAmount { get; set; }
+
+        /// <summary>
         /// 外卖台餐台名称。
         /// </summary>
         //public static string TakeoutTableName { get; set; }
@@ -78,6 +83,7 @@ namespace CanDao.Pos.Common
                     JavaServer = GetElementValue(root.Element("JavaServer"));
                     CloudServer = GetElementValue(root.Element("CloudServer"));
                     MemberSystem = GetElementInt(root.Element("MemberSystem"), 1);
+                    AutoFillCashAmount = GetElementBool(root.Element("AutoFillCashAmount"), true);
                     //TakeoutTableName = GetElementValue(root.Element("TakeoutTableName"));
                     PosId = GetElementValue(root.Element("PosId"));
                     OpenCashIp = GetElementValue(root.Element("OpenCashIp"));
@@ -113,7 +119,7 @@ namespace CanDao.Pos.Common
         private static bool GetElementBool(XElement element, bool defaultValue)
         {
             var str = GetElementValue(element);
-            return !string.IsNullOrEmpty(str) ? Convert.ToBoolean(str) : defaultValue;
+            return !string.IsNullOrEmpty(str) ? Convert.ToBoolean(Convert.ToInt32(str)) : defaultValue;
         }
     }
 }

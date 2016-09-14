@@ -1792,7 +1792,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            if (!_isUserInputCash)//当不是用户输入现金时才更新现金金额。
+            if (!_isUserInputCash && SystemConfigCache.AutoFillCashAmount)//当不是用户输入现金时才更新现金金额。
                 CashAmount = Math.Max(0, Data.PaymentAmount - BankAmount - AlipayAmount - IntegralAmount - MemberAmount - WechatAmount - DebitAmount);
 
             var settlementInfo = new List<string>();
