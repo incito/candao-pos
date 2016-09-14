@@ -6,7 +6,8 @@
                         xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                         xmlns:views="clr-namespace:CanDao.Pos.SystemConfig.Views;assembly=CanDao.Pos.SystemConfig"
                         Height="680" Width="900" ShowInTaskbar="False"
-                        Closed="SystemSettingWindow_OnClosed">
+                        Closed="SystemSettingWindow_OnClosed"
+                        WindowState="Maximized">
     <controls:PosBaseWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
