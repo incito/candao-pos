@@ -8,7 +8,6 @@
     <converter:EnumGenderToCheckedConverter x:Key="Gender2CheckedCvt"/>
     <converter:OfferTypeToVisiblityConverter x:Key="OfferType2VisibilityCvt"/>
     <converter:OfferTypeToCheckedConverter x:Key="OfferType2CheckedCvt"/>
-    <converter:PayTypeToCheckedConverter x:Key="PayType2CheckedCvt"/>
     <converter:ZeroToNullStringConverter x:Key="Zero2NullStringCvt"/>
     <converter:StringToVisibleConverter x:Key="Strinig2VisibleCvt"/>
     <converter:CountToVisibleConverter x:Key="Count2VisibleCvt"/>
@@ -19,6 +18,7 @@
     <converter:PrinterStatusToColorConverter x:Key="PrinterStatus2ColorCvt"/>
     <converter:SysBorderBrushConverter x:Key="SysBorderBrushCvt"/>
     <converter:PaiedStatus2StringConverter x:Key="PaiedStatus2StringCvt"/>
-    <converter:QueryOrderStatusToCheckedConverter x:Key="OrderStatus2CheckedCvt"/>
+    <converter:QueryOrderStatusToCheckConverter x:Key="OrderStatus2CheckedCvt"/>
     <converter:MultBooleanToVisibilityConverter x:Key="MultBool2VisibilityCvt"/>
+    <converter:StatisticsPeriodsTypeToCheckConverter x:Key="StatisticsPeriodsType2CheckCvt"/>
 </ResourceDictionary> 

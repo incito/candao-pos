@@ -109,7 +109,8 @@
     <Compile Include="Converter\CountToBooleanConverter.cs" />
     <Compile Include="Converter\MultBooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\PaiedStatus2StringConverter.cs" />
-    <Compile Include="Converter\QueryOrderStatusToCheckedConverter.cs" />
+    <Compile Include="Converter\QueryOrderStatusToCheckConverter.cs" />
+    <Compile Include="Converter\StatisticsPeriodsTypeToCheckConverter.cs" />
     <Compile Include="DataHelper.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="HttpLog.cs" />
@@ -177,7 +178,6 @@
     <Compile Include="Converter\IndexCountConverter.cs" />
     <Compile Include="Converter\OfferTypeToCheckedConverter.cs" />
     <Compile Include="Converter\OfferTypeToVisiblityConverter.cs" />
-    <Compile Include="Converter\PayTypeToCheckedConverter.cs" />
     <Compile Include="Converter\PrinterStatusToColorConverter.cs" />
     <Compile Include="Converter\StringToVisibleConverter.cs" />
     <Compile Include="Converter\SysBorderBrushConverter.cs" />

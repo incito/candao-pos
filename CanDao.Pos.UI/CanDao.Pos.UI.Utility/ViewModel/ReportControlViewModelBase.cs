@@ -163,7 +163,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <param name="arg"></param>
         private void ControlLoad(object arg)
         {
-            StatisticsPeriodsType = EnumStatisticsPeriodsType.Today;
+            if (StatisticsPeriodsType == EnumStatisticsPeriodsType.None)
+                StatisticsPeriodsType = EnumStatisticsPeriodsType.Today;
         }
 
         /// <summary>

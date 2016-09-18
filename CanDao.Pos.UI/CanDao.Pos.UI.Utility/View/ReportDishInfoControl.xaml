@@ -27,7 +27,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}" IsChecked="True">
+            <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}" IsChecked="{Binding StatisticsPeriodsType, Converter={StaticResource StatisticsPeriodsType2CheckCvt}, ConverterParameter=Today}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <i:InvokeCommandAction Command="{Binding StatisticCheckedCmd}" CommandParameter="Today"/>
@@ -35,7 +35,7 @@
                 </i:Interaction.Triggers>
                 <Label Content="今天" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,3,17,3"/>
             </RadioButton>
-            <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}">
+            <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}" IsChecked="{Binding StatisticsPeriodsType, Converter={StaticResource StatisticsPeriodsType2CheckCvt}, ConverterParameter=ThisWeek}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <i:InvokeCommandAction Command="{Binding StatisticCheckedCmd}" CommandParameter="ThisWeek"/>
@@ -43,7 +43,7 @@
                 </i:Interaction.Triggers>
                 <Label Content="本周" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </RadioButton>
-            <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}">
+            <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}" IsChecked="{Binding StatisticsPeriodsType, Converter={StaticResource StatisticsPeriodsType2CheckCvt}, ConverterParameter=ThisMonth}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <i:InvokeCommandAction Command="{Binding StatisticCheckedCmd}" CommandParameter="ThisMonth"/>
@@ -51,7 +51,7 @@
                 </i:Interaction.Triggers>
                 <Label Content="本月" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </RadioButton>
-            <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}">
+            <RadioButton GroupName="StatisticDish" Style="{StaticResource RbBtnStyle}" IsChecked="{Binding StatisticsPeriodsType, Converter={StaticResource StatisticsPeriodsType2CheckCvt}, ConverterParameter=LastMonth}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <i:InvokeCommandAction Command="{Binding StatisticCheckedCmd}" CommandParameter="LastMonth"/>
