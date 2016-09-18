@@ -712,9 +712,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (_isLongPressModel)
                 return;
 
-            if (Data.TotalAmount <= 0)
+            if (!Data.DishInfos.Any())
             {
                 MessageDialog.Warning("还未下单，不能使用优惠。", OwnerWindow);
+                return;
+            }
+
+            if (Data.TotalAmount == 0)
+            {
+                MessageDialog.Warning("账单金额为0，不能使用优惠。", OwnerWindow);
                 return;
             }
 
