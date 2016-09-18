@@ -172,7 +172,7 @@
 
             <StackPanel Grid.Row="4" Grid.Column="0">
                 <controls:FlagControl Margin="0,4">
-                    <TextBlock Text="{Binding Data.CouponAmount, StringFormat=优惠券总额：{0}}" FontSize="14"/>
+                    <TextBlock Text="{Binding Data.CouponAmount, StringFormat=优惠总额：{0}}" FontSize="14"/>
                 </controls:FlagControl>
                 <controls:FlagControl Margin="0,4">
                     <TextBlock Text="{Binding Data.PaymentAmount, StringFormat=应收：{0}}" FontSize="18"/>

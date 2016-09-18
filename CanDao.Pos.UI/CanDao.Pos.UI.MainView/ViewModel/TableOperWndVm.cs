@@ -712,9 +712,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (_isLongPressModel)
                 return;
 
-            if (Data.TotalAmount <= 0)
+            if (!Data.DishInfos.Any())
             {
                 MessageDialog.Warning("还未下单，不能使用优惠。", OwnerWindow);
+                return;
+            }
+
+            if (Data.TotalAmount == 0)
+            {
+                MessageDialog.Warning("账单金额为0，不能使用优惠。", OwnerWindow);
                 return;
             }
 
@@ -1243,7 +1249,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            var result = service.GetTableDishInfoes(Data.TableName, Globals.UserInfo.UserName);
+            var result = service.GetOrderInfo(Data.OrderId, "", ((int)_isKeepOdd).ToString());
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取餐台信息错误：{0}。", result.Item1);

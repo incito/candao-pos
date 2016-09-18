@@ -13,7 +13,7 @@
         <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgGray}"/>
         <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFgFont}"/>
         <Setter Property="AllowsTransparency" Value="True"/>
-        <Setter Property="Icon" Value="{StaticResource CanDaoPosImageLog3}"></Setter>
+        <Setter Property="Icon" Value="{StaticResource CanDaoPosImageLog3}"/>
         <Setter Property="MaxHeight" Value="768"/>
         <Setter Property="Template">
             <Setter.Value>

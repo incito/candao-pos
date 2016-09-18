@@ -11,28 +11,13 @@
         Ordered = 0,
 
         /// <summary>
-        /// 单桌已结清。
+        /// 已取消。
         /// </summary>
-        SingleTableSettle = 1,
+        CanceledOrder = 2,
 
         /// <summary>
-        /// 联桌号已结清。
-        /// </summary>
-        RelatedTableSettle = 2,
-
-        /// <summary>
-        /// 内部结算。
+        /// 已结算。
         /// </summary>
         InternalSettle = 3,
-
-        /// <summary>
-        /// 正在下单。
-        /// </summary>
-        Ordering = 4,
-
-        /// <summary>
-        /// 已经取消。
-        /// </summary>
-        Canceled = 5,
     }
 }

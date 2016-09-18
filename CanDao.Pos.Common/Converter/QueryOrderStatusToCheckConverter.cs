@@ -6,7 +6,7 @@ namespace CanDao.Pos.Common.Converter
     /// <summary>
     /// 账单查询状态跟是否选中的转换类。
     /// </summary>
-    public class QueryOrderStatusToCheckedConverter : IValueConverter
+    public class QueryOrderStatusToCheckConverter : IValueConverter
     {
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

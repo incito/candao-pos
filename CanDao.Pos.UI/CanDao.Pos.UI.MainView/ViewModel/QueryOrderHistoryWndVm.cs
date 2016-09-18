@@ -185,11 +185,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 case "ReprintPayBill":
                 case "AntiPayBill":
-                    return SelectedOrder != null && SelectedOrder.HasBeenPaied;
+                    return SelectedOrder != null && SelectedOrder.OrderStatus == EnumOrderStatus.InternalSettle;
                 case "ReprintTransactionSlip":
-                    return SelectedOrder != null && SelectedOrder.HasBeenPaied && !string.IsNullOrEmpty(SelectedOrder.MemberNo);
+                    return SelectedOrder != null && SelectedOrder.OrderStatus == EnumOrderStatus.InternalSettle && !string.IsNullOrEmpty(SelectedOrder.MemberNo);
                 case "PayBill":
-                    return SelectedOrder != null && !SelectedOrder.HasBeenPaied;
+                    return SelectedOrder != null && SelectedOrder.OrderStatus == EnumOrderStatus.Ordered;
                 case "PreGroup":
                     return ((QueryOrderHistoryWindow)OwnerWindow).GsOrderList.CanPreviousGroup;
                 case "NextGroup":
@@ -215,11 +215,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 TableName = orderInfo.TableName,
                 TableId = orderInfo.TableId,
                 TableType = orderInfo.TableType,
-                TableStatus = orderInfo.HasBeenPaied ? EnumTableStatus.Idle : EnumTableStatus.Dinner,
+                TableStatus = orderInfo.OrderStatus == EnumOrderStatus.InternalSettle ? EnumTableStatus.Idle : EnumTableStatus.Dinner,
                 OrderId = orderInfo.OrderId,
                 TableNo = orderInfo.TableName,
             };
-            item.IsHangOrder = item.IsTakeoutTable && item.TableStatus == EnumTableStatus.Dinner;
+            item.IsHangOrder = item.IsTakeoutTable;
             return item;
         }
 
@@ -304,8 +304,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var item = GenerateTableInfo(SelectedOrder);
             item.TableStatus = EnumTableStatus.Dinner;//反结算成功以后将餐台状态设置成就餐，避免进入结账页面弹出开台窗口。
             InfoLog.Instance.I("弹出结账窗口...");
-            if (WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow))
-                LoadOrderHistoryAsync();
+            WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow);
+            LoadOrderHistoryAsync();
             return null;
         }
 
@@ -320,9 +320,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             Orders.Clear();
             IEnumerable<QueryOrderInfo> temp = _source;
             if (QueryOrderStatus == EnumQueryOrderStatus.Paied)
-                temp = _source.Where(t => t.HasBeenPaied);
+                temp = _source.Where(t => t.OrderStatus == EnumOrderStatus.InternalSettle);
             else if (QueryOrderStatus == EnumQueryOrderStatus.Unpay)
-                temp = _source.Where(t => !t.HasBeenPaied);
+                temp = _source.Where(t => t.OrderStatus == EnumOrderStatus.Ordered);
 
             if (!string.IsNullOrEmpty(FilterOrderId))
                 temp = temp.Where(t => t.OrderId.ToUpper().Contains(FilterOrderId.ToUpper()));

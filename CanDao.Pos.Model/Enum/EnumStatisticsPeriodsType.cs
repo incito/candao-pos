@@ -1,7 +1,7 @@
 ﻿namespace CanDao.Pos.Model.Enum
 {
     /// <summary>
-    /// 品项销售周期类型。
+    /// 报表统计周期类型。
     /// </summary>
     public enum EnumStatisticsPeriodsType
     {
