@@ -219,7 +219,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 OrderId = orderInfo.OrderId,
                 TableNo = orderInfo.TableName,
             };
-            item.IsHangOrder = item.IsTakeoutTable && item.TableStatus == EnumTableStatus.Dinner;
+            item.IsHangOrder = item.IsTakeoutTable;
             return item;
         }
 
@@ -304,8 +304,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var item = GenerateTableInfo(SelectedOrder);
             item.TableStatus = EnumTableStatus.Dinner;//反结算成功以后将餐台状态设置成就餐，避免进入结账页面弹出开台窗口。
             InfoLog.Instance.I("弹出结账窗口...");
-            if (WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow))
-                LoadOrderHistoryAsync();
+            WindowHelper.ShowDialog(new TableOperWindow(item), OwnerWindow);
+            LoadOrderHistoryAsync();
             return null;
         }
 
