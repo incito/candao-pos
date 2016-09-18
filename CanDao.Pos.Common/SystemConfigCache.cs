@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using CanDao.Pos.Model.Enum;
 using JunLan.Common.Base;
@@ -97,6 +98,11 @@ namespace CanDao.Pos.Common
 
                     var backDishReason = GetElementValue(root.Element("BackDishReasons"));
                     BackDishReasonList = !string.IsNullOrEmpty(backDishReason) ? backDishReason.Split(';').ToList() : null;
+                }
+                catch (XmlException exp)
+                {
+                    ErrLog.Instance.E(exp);
+                    MessageDialog.Warning(string.Format("XML文档异常：{0}", exp.MyMessage()));
                 }
                 catch (Exception ex)
                 {
