@@ -1249,7 +1249,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            var result = service.GetTableDishInfoes(Data.TableName, Globals.UserInfo.UserName);
+            var result = service.GetOrderInfo(Data.OrderId, "", ((int)_isKeepOdd).ToString());
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取餐台信息错误：{0}。", result.Item1);
