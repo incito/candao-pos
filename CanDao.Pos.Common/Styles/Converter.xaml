@@ -17,7 +17,7 @@
     <converter:CountToBooleanConverter x:Key="Count2BoolInvertCvt" IsInvert="True"/>
     <converter:PrinterStatusToColorConverter x:Key="PrinterStatus2ColorCvt"/>
     <converter:SysBorderBrushConverter x:Key="SysBorderBrushCvt"/>
-    <converter:PaiedStatus2StringConverter x:Key="PaiedStatus2StringCvt"/>
+    <converter:OrderStatusToStringConverter x:Key="OrderStatus2StringCvt"/>
     <converter:QueryOrderStatusToCheckConverter x:Key="OrderStatus2CheckedCvt"/>
     <converter:MultBooleanToVisibilityConverter x:Key="MultBool2VisibilityCvt"/>
     <converter:StatisticsPeriodsTypeToCheckConverter x:Key="StatisticsPeriodsType2CheckCvt"/>

@@ -183,12 +183,7 @@ namespace CanDao.Pos.Model
         /// </summary>
         public bool HasBeenPaied
         {
-            get
-            {
-                return OrderStatus == EnumOrderStatus.InternalSettle ||
-                    OrderStatus == EnumOrderStatus.SingleTableSettle ||
-                    OrderStatus == EnumOrderStatus.RelatedTableSettle;
-            }
+            get { return OrderStatus == EnumOrderStatus.InternalSettle; }
         }
 
         /// <summary>

@@ -108,7 +108,7 @@
     <Compile Include="Controls\WatermarkTextBox\Implementation\WatermarkTextBox.cs" />
     <Compile Include="Converter\CountToBooleanConverter.cs" />
     <Compile Include="Converter\MultBooleanToVisibilityConverter.cs" />
-    <Compile Include="Converter\PaiedStatus2StringConverter.cs" />
+    <Compile Include="Converter\OrderStatusToStringConverter.cs" />
     <Compile Include="Converter\QueryOrderStatusToCheckConverter.cs" />
     <Compile Include="Converter\StatisticsPeriodsTypeToCheckConverter.cs" />
     <Compile Include="DataHelper.cs" />

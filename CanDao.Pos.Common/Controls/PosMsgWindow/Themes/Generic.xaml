@@ -14,7 +14,7 @@
         <Setter Property="Background" Value="{StaticResource CanDaoPosColorBgNormal}"/>
         <Setter Property="AllowsTransparency" Value="True"/>
         <Setter Property="Title" Value=""/>
-        <Setter Property="Icon" Value="{StaticResource CanDaoPosImageLog3}"></Setter>
+        <Setter Property="Icon" Value="{StaticResource CanDaoPosImageLog3}"/>
         <Setter Property="WindowCornerRadius" Value="3"/>
         <Setter Property="MaxHeight" Value="768"/>
         <Setter Property="Template">

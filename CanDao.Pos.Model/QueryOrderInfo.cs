@@ -37,7 +37,7 @@ namespace CanDao.Pos.Model
         /// 服务员。
         /// </summary>
         public string UserId { get; set; }
-        
+
         /// <summary>
         /// 开台时间。
         /// </summary>
@@ -82,18 +82,5 @@ namespace CanDao.Pos.Model
         /// 会员号。
         /// </summary>
         public string MemberNo { get; set; }
-
-        /// <summary>
-        /// 是否已经结账。
-        /// </summary>
-        public bool HasBeenPaied
-        {
-            get
-            {
-                return OrderStatus == EnumOrderStatus.InternalSettle ||
-                    OrderStatus == EnumOrderStatus.SingleTableSettle ||
-                    OrderStatus == EnumOrderStatus.RelatedTableSettle;
-            }
-        }
     }
 }
