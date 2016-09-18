@@ -66,7 +66,19 @@ namespace CanDao.Pos.Model
         /// <summary>
         /// 餐桌就餐人数。
         /// </summary>
-        public int DinnerNumber { get; set; }
+        private int _dinnerNumber;
+        /// <summary>
+        /// 餐桌就餐人数。
+        /// </summary>
+        public int DinnerNumber
+        {
+            get { return _dinnerNumber; }
+            set
+            {
+                _dinnerNumber = value;
+                RaisePropertyChanged("DinnerNumber");
+            }
+        }
 
         /// <summary>
         /// 餐桌名称。
@@ -150,7 +162,6 @@ namespace CanDao.Pos.Model
         /// 应收金额。
         /// </summary>
         private decimal? _amount;
-
         /// <summary>
         /// 应收金额。
         /// </summary>
@@ -202,6 +213,7 @@ namespace CanDao.Pos.Model
             TableName = srcInfo.TableName;
             OrderId = srcInfo.OrderId;
             IsHangOrder = srcInfo.IsHangOrder;
+            DinnerNumber = srcInfo.DinnerNumber;
         }
 
         /// <summary>
