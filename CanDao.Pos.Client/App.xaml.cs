@@ -367,7 +367,7 @@ namespace CanDao.Pos.Client
                 var allTableResult = service.GetAllTableInfoes();
                 if (!string.IsNullOrEmpty(allTableResult.Item1))
                 {
-                    ErrLog.Instance.E("获取所有餐桌信息失败。" + result.Item1);
+                    ErrLog.Instance.E("获取所有餐桌信息失败。" + allTableResult.Item1);
                     MessageDialog.Warning(allTableResult.Item1);
                     Shutdown();
                 }

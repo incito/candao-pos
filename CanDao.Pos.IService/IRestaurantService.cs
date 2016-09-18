@@ -217,8 +217,9 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 获取营业明细
         /// </summary>
-        /// <param name="beginTime"></param>
-        /// <param name="endTime"></param>
+        /// <param name="beginTime">开始时间。</param>
+        /// <param name="endTime">结束时间。</param>
+        /// <param name="userName">操作用户名。</param>
         /// <returns></returns>
         Tuple<string, MBusinessDataDetail> GetDayReportList(string beginTime, string endTime, string userName);
 
@@ -238,6 +239,10 @@ namespace CanDao.Pos.IService
         /// <returns></returns>
         Tuple<string, string> GetTipMoney(string beginTime, string endTime);
 
-
+        /// <summary>
+        /// 获取店铺简易基本信息。
+        /// </summary>
+        /// <returns></returns>
+        Tuple<string, BusinessSimpleInfo>GetBusinessSimpleInfo();
     }
 }

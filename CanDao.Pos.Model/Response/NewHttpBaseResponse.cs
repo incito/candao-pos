@@ -17,8 +17,14 @@ namespace CanDao.Pos.Model.Response
         public RowsResponse<T> data { get; set; }
     }
 
-    public class NewHttpBaseResponse<T> : NewHttpBaseResponse
+    public class NewHttpBaseListResponse<T> : NewHttpBaseResponse
     {
         public List<T> data { get; set; }
     }
+
+    public class NewHttpBaseResponse<T> : NewHttpBaseResponse
+    {
+        public T data { get; set; }
+    }
+
 }

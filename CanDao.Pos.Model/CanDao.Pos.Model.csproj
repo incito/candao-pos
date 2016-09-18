@@ -67,6 +67,7 @@
     <Compile Include="BaseNotifyObject.cs" />
     <Compile Include="BillPayInfo.cs" />
     <Compile Include="BranchInfo.cs" />
+    <Compile Include="BusinessSimpleInfo.cs" />
     <Compile Include="CouponCategory.cs" />
     <Compile Include="CouponInfo.cs" />
     <Compile Include="DishGiftCouponInfo.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Request\UpdateDishWeightRequest.cs" />
     <Compile Include="Request\UpdateInvoiceRequest.cs" />
     <Compile Include="Request\UsePreferentialRequest.cs" />
+    <Compile Include="Response\GetBusinessSimpleInfoResponse.cs" />
     <Compile Include="Response\GetDishGiftCouponInfoResponse.cs" />
     <Compile Include="Response\GetOrderInfoResponse.cs" />
     <Compile Include="Response\UsePreferentialRequest.cs" />

@@ -211,7 +211,7 @@ namespace CanDao.Pos.ServiceImpl
                 {
                     errMsg = result.msg;
                 }
-             
+
                 return new Tuple<string, string>(errMsg, null);
             }
             catch (Exception ex)
@@ -743,7 +743,6 @@ namespace CanDao.Pos.ServiceImpl
         public Tuple<string, string> GetTipMoney(string beginTime, string endTime)
         {
             string msg = "获取小费总额";
-
             var addr = ServiceAddrCache.GetServiceAddr("GetTipMoney");
             if (string.IsNullOrEmpty(addr))
             {
@@ -755,7 +754,6 @@ namespace CanDao.Pos.ServiceImpl
                 string parmAddr = string.Format("{0}?beginTime={1}&endTime={2}", addr, beginTime, endTime);
                 var response = HttpHelper.HttpGet<TipMoneyResponse>(parmAddr, null);
                 return new Tuple<string, string>(null, response.tipMoney);
-
             }
             catch (Exception exp)
             {
@@ -789,6 +787,27 @@ namespace CanDao.Pos.ServiceImpl
                 return !string.IsNullOrEmpty(response.Item2.Info) ? response.Item2.Info : "设置外卖挂单失败，请联系管理员或重试。";
 
             return null;
+        }
+
+        public Tuple<string, BusinessSimpleInfo> GetBusinessSimpleInfo()
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("GetBusinessSimpleInfo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, BusinessSimpleInfo>("获取店铺简易信息地址失败。", null);
+
+            try
+            {
+                var response = HttpHelper.HttpGet<GetBusinessSimpleInfoResponse>(addr);
+                if (!response.IsSuccess)
+                    return new Tuple<string, BusinessSimpleInfo>(DataHelper.GetNoneNullValueByOrder(response.msg, "获取店铺简易信息失败。"), null);
+
+                var data = DataConverter.ToBusinessoSimpleInfo(response.data);
+                return new Tuple<string, BusinessSimpleInfo>(null, data);
+            }
+            catch (Exception exp)
+            {
+                return new Tuple<string, BusinessSimpleInfo>(exp.MyMessage(), null);
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ namespace CanDao.Pos.ServiceImpl
                 AreaNo = response.areaid,
                 OrderId = response.orderid,
                 PeopleNumber = response.personNum,
+                DinnerNumber = response.custnum ?? 0,
                 TableStatus = (EnumTableStatus)response.status,
                 TableId = response.tableid,
                 TableName = response.tableName,
@@ -518,6 +519,18 @@ namespace CanDao.Pos.ServiceImpl
             {
                 DishId = response.dishid,
                 UsedCouponCount = response.count,
+            };
+        }
+
+        internal static BusinessSimpleInfo ToBusinessoSimpleInfo(BusinessSimpleInfoResponse response)
+        {
+            return new BusinessSimpleInfo
+            {
+                PaiedAmount = response.ssamount,
+                PaiedOrderCount = response.orderCount,
+                TotalAmount = response.totalAmount,
+                TotalDinnerCount = response.custnum,
+                UnpaiedAmount = response.dueamount,
             };
         }
 

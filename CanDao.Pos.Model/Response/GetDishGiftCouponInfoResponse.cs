@@ -3,7 +3,7 @@
     /// <summary>
     /// 获取赠菜优惠券返回类。
     /// </summary>
-    public class GetDishGiftCouponInfoResponse : NewHttpBaseResponse<DishGiftCouponInfoResponse>
+    public class GetDishGiftCouponInfoResponse : NewHttpBaseListResponse<DishGiftCouponInfoResponse>
     {
         
     }

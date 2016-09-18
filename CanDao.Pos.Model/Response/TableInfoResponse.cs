@@ -3,7 +3,7 @@
     public class TableInfoResponse
     {
         public string position { get; set; }
-
+        public int? custnum { get; set; }
         public int personNum { get; set; }
 
         public string areaname { get; set; }

@@ -286,105 +286,36 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 总金额。
+        /// 店铺简易信息。
         /// </summary>
-        private decimal _totalAmount;
+        private BusinessSimpleInfo _businessoSimpleInfo;
         /// <summary>
-        /// 总金额。
+        /// 店铺简易信息。
         /// </summary>
-        public decimal TotalAmount
+        public BusinessSimpleInfo BusinessSimpleInfo
         {
-            get { return _totalAmount; }
+            get { return _businessoSimpleInfo; }
             set
             {
-                _totalAmount = value;
-                RaisePropertyChanged("TotalAmount");
+                _businessoSimpleInfo = value;
+                RaisePropertyChanged("BusinessSimpleInfo");
             }
         }
 
         /// <summary>
-        /// 未付款金额。
+        /// 是否包含咖啡台。
         /// </summary>
-        private decimal _unpaidAmount;
+        private bool _hasCoffeeTables;
         /// <summary>
-        /// 未付款金额。
+        /// 是否包含咖啡台。
         /// </summary>
-        public decimal UnpaidAmount
+        public bool HasCoffeeTables
         {
-            get { return _unpaidAmount; }
+            get { return _hasCoffeeTables; }
             set
             {
-                _unpaidAmount = value;
-                RaisePropertyChanged("UnpaidAmount");
-            }
-        }
-
-        /// <summary>
-        /// 未付款餐台数。
-        /// </summary>
-        private decimal _unpaidTableCount;
-
-        /// <summary>
-        /// 未付款餐台数。
-        /// </summary>
-        public decimal UnpaidTableCount
-        {
-            get { return _unpaidTableCount; }
-            set
-            {
-                _unpaidTableCount = value;
-                RaisePropertyChanged("UnpaidTableCount");
-            }
-        }
-
-        /// <summary>
-        /// 已付款金额。
-        /// </summary>
-        private decimal _paidAmount;
-        /// <summary>
-        /// 已付款金额。
-        /// </summary>
-        public decimal PaidAmount
-        {
-            get { return _paidAmount; }
-            set
-            {
-                _paidAmount = value;
-                RaisePropertyChanged("PaidAmount");
-            }
-        }
-
-        /// <summary>
-        /// 已付款餐台数。
-        /// </summary>
-        private decimal _paidTableCount;
-        /// <summary>
-        /// 已付款餐台数。
-        /// </summary>
-        public decimal PaidTableCount
-        {
-            get { return _paidTableCount; }
-            set
-            {
-                _paidTableCount = value;
-                RaisePropertyChanged("PaidTableCount");
-            }
-        }
-
-        /// <summary>
-        /// 累计就餐人数。
-        /// </summary>
-        private int _totalDinnerCount;
-        /// <summary>
-        /// 累计就餐人数。
-        /// </summary>
-        public int TotalDinnerCount
-        {
-            get { return _totalDinnerCount; }
-            set
-            {
-                _totalDinnerCount = value;
-                RaisePropertyChanged("TotalDinnerCount");
+                _hasCoffeeTables = value;
+                RaisePropertyChanged("HasCoffeeTables");
             }
         }
 
@@ -439,6 +370,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 SetRefreshTimerStatus(false);
                 GetAllTableInfoesAsync();
+                TaskService.Start(null, GetBusinessSimpleInfoProcess, GetBusinessSimpleInfoComplete, "");
                 ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
 
                 if (Globals.IsDinnerWareEnable)
@@ -675,7 +607,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 if (RefreshRemainSecond == 0)
                 {
                     SetRefreshTimerStatus(false);
-                    OwnerWindow.Dispatcher.BeginInvoke((Action)GetAllTableInfoesAsync);
+                    OwnerWindow.Dispatcher.BeginInvoke((Action)delegate
+                    {
+                        GetAllTableInfoesAsync();
+                        TaskService.Start(null, GetBusinessSimpleInfoProcess, GetBusinessSimpleInfoComplete, "");
+                    });
                 }
                 else
                 {
@@ -711,6 +647,38 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var info = _allTableInfos != null ? "" : "加载所有餐桌信息...";//这里处理是为了第一次显示提示信息，后续定时刷新时候不显示提示信息，防止阻塞其他业务
             var param = new List<EnumTableType> { EnumTableType.Room, EnumTableType.Outside, EnumTableType.CFTable };
             TaskService.Start(param, GetTableInfoByTableTypeProcess, GetAllTableInfoComplete, info);
+        }
+
+        /// <summary>
+        /// 获取店铺简易信息执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object GetBusinessSimpleInfoProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+                return new Tuple<string, BusinessSimpleInfo>("创建IRestaurantService服务失败。", null);
+
+            return service.GetBusinessSimpleInfo();
+        }
+
+        /// <summary>
+        /// 获取店铺简易信息执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void GetBusinessSimpleInfoComplete(object param)
+        {
+            var result = (Tuple<string, BusinessSimpleInfo>)param;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                BusinessSimpleInfo = new BusinessSimpleInfo();
+                var msg = string.Format("获取店铺基本交易信息失败：{0}", result.Item1);
+                ErrLog.Instance.E(msg);
+                MessageDialog.Warning(msg);
+            }
+
+            BusinessSimpleInfo = result.Item2;
         }
 
         /// <summary>
