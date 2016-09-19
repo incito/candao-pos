@@ -22,5 +22,10 @@
         /// 结业时间。
         /// </summary>
         public string endtime { get; set; }
+
+        /// <summary>
+        /// 时间类型，当日或次日。
+        /// </summary>
+        public string datetype { get; set; }
     }
 }

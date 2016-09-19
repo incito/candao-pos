@@ -358,7 +358,7 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var response = HttpHelper.HttpGet<GetTradeTimeResponse>(addr);
-                var result = new TradeTime(response.detail.begintime, response.detail.endtime);
+                var result = new TradeTime(response.detail.begintime, response.detail.endtime, response.detail.datetype);
                 return new Tuple<string, TradeTime>(null, result);
             }
             catch (Exception exp)

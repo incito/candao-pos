@@ -92,6 +92,7 @@
     <Compile Include="Enum\EnumPrintStatus.cs" />
     <Compile Include="Enum\EnumQueryOrderStatus.cs" />
     <Compile Include="Enum\EnumStatisticsPeriodsType.cs" />
+    <Compile Include="Enum\EnumTradeTimeType.cs" />
     <Compile Include="Enum\EnumViewTableStatus.cs" />
     <Compile Include="Enum\EnumViewTableType.cs" />
     <Compile Include="GiftDishInfo.cs" />
