@@ -523,15 +523,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 {
                     var customDishes = new UcCustomDishesViewModel();
                     var wind = customDishes.GetWindow();
-                    if (wind.ShowDialog() == true)
+                    if (WindowHelper.ShowDialog(wind, OwnerWnd))
                     {
                         SelectedDish.SelectedCount = decimal.Parse(customDishes.Model.DishesCount) * decimal.Parse(customDishes.Model.Price);
                         SelectedDish.TempDishName = customDishes.Model.DishesName;
                         AddTempDishInfo(SelectedDish);
-                    }
-                    else
-                    {
-                        return;
                     }
                 }
                 else

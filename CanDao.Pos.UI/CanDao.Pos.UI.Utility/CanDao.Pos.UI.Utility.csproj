@@ -87,6 +87,9 @@
     <Compile Include="ViewModel\UcBusinessDataDetailsViewModel.cs" />
     <Compile Include="ViewModel\UCCashboxPswViewModel.cs" />
     <Compile Include="ViewModel\UcCustomDishesViewModel.cs" />
+    <Compile Include="View\CustomizeDishWindow.xaml.cs">
+      <DependentUpon>CustomizeDishWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\JdeReloadWindow.xaml.cs">
       <DependentUpon>JdeReloadWindow.xaml</DependentUpon>
     </Compile>
@@ -231,9 +234,6 @@
     <Compile Include="View\UCCashboxPswView.xaml.cs">
       <DependentUpon>UCCashboxPswView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\UcCustomDishesView.xaml.cs">
-      <DependentUpon>UcCustomDishesView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\UserLoginWindow.xaml.cs">
       <DependentUpon>UserLoginWindow.xaml</DependentUpon>
     </Compile>
@@ -252,6 +252,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomizeDishWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -396,10 +400,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\UCCashboxPswView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\UcCustomDishesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

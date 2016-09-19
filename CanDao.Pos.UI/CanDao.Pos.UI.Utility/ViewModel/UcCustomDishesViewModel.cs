@@ -25,9 +25,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public UcCustomDishesModel Model { set; get; }
 
 
-        public RelayCommand SureCommand { get; set; }
+        public RelayCommand ConfirmCmd { get; set; }
 
-        public RelayCommand CloseCommand { get; set; }
+        public RelayCommand CancelCmd { get; set; }
 
         #endregion
 
@@ -36,8 +36,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public UcCustomDishesViewModel()
         {
             Model = new UcCustomDishesModel();
-            SureCommand=new RelayCommand(SureHandel);
-            CloseCommand=new RelayCommand(CloseHandel);
+            ConfirmCmd = new RelayCommand(SureHandel);
+            CancelCmd = new RelayCommand(CloseHandel);
         }
 
         #endregion
@@ -46,9 +46,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         public Window GetWindow()
         {
-            _myVieWindow = new UcCustomDishesView();
-            _myVieWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            _myVieWindow.DataContext = this;
+            _myVieWindow = new CustomizeDishWindow
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                DataContext = this
+            };
             return _myVieWindow;
         }
 
@@ -77,7 +79,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (!decimal.TryParse(this.Model.Price, out outDecimal))
             {
                 MessageDialog.Warning("价格（元）输入格式不正确，请检查！");
-                return false; 
+                return false;
             }
             int outTem = 0;
             if (int.TryParse(this.Model.DishesCount, out outTem))
@@ -91,9 +93,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             else
             {
                 MessageDialog.Warning("数量（份）输入格式不正确，请检查！");
-                return false; 
+                return false;
             }
-        
+
             return true;
         }
 
@@ -106,9 +108,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 if (CheckInput())
                 {
-                    _myVieWindow.DialogResult = true; 
+                    _myVieWindow.DialogResult = true;
                 }
-               
+
             }
         }
 
