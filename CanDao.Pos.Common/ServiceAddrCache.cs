@@ -50,16 +50,16 @@ namespace CanDao.Pos.Common
                         }
                     }
 
-                    //var dataServerElement = root.Element("DataServerApi");
-                    //if (dataServerElement != null)
-                    //{
-                    //    foreach (var element in dataServerElement.Elements())
-                    //    {
-                    //        var addr = XmlHelper.GetAttrValue(element, "Addr");
-                    //        var uri = string.Format("http://{0}{1}", SystemConfigCache.JavaServer, addr);
-                    //        AddrDic.Add(element.Name.LocalName, uri);
-                    //    }
-                    //}
+                    var yaZuoServerElement = root.Element("YaZuoApi");
+                    if (yaZuoServerElement != null)
+                    {
+                        foreach (var element in yaZuoServerElement.Elements())
+                        {
+                            var addr = XmlHelper.GetAttrValue(element, "Addr");
+                            var uri = string.Format("http://{0}{1}", SystemConfigCache.YaZuoServer, addr);
+                            AddrDic.Add(element.Name.LocalName, uri);
+                        }
+                    }
 
                     var cloudServerElement = root.Element("CloudServerApi");
                     if (cloudServerElement != null)

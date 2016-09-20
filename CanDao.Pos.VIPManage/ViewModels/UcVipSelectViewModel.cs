@@ -64,7 +64,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 RaisePropertyChanged(() => IsOper);
             }
         }
-      
+
         #endregion
 
         #region 事件
@@ -125,9 +125,9 @@ namespace CanDao.Pos.VIPManage.ViewModels
             Model = new UcVipSelectModel();
 
             TextEnterAction = new Action(SelectHandel);
-            StoredValueCommand=new RelayCommand(StoredValueHandel);
-            LogOffCommand=new RelayCommand(LogOffHandel);
-            ModifyPswCommand=new RelayCommand(ModifyPswHandel);
+            StoredValueCommand = new RelayCommand(StoredValueHandel);
+            LogOffCommand = new RelayCommand(LogOffHandel);
+            ModifyPswCommand = new RelayCommand(ModifyPswHandel);
             BindingCardCommand = new RelayCommand(BindingCardHandel);
             ModifyCardNumCommand = new RelayCommand(ModifyCardNumHandel);
             ModifyInfoCommand = new RelayCommand(ModifyInfoHandel);
@@ -142,6 +142,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
         #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 查询事件
         /// </summary>
@@ -151,16 +152,18 @@ namespace CanDao.Pos.VIPManage.ViewModels
             {
                 if (string.IsNullOrEmpty(Model.SelectNum))//检查查询不能为空
                 {
-                    MessageDialog.Warning(
-                       string.Format("查询信息不能为空！"));
+                    MessageDialog.Warning("查询信息不能为空！");
                     return;
                 }
 
-                CanDaoVipQueryRequest request =new CanDaoVipQueryRequest();
+                var result = _memberService.QueryYaZuo(Model.SelectNum);
+                Console.WriteLine(result.Item1);
+
+                CanDaoVipQueryRequest request = new CanDaoVipQueryRequest();
                 request.cardno = Model.SelectNum;
                 request.branch_id = Globals.BranchInfo.BranchId;
 
-               var res = _memberService.VipQuery(request);
+                var res = _memberService.VipQuery(request);
 
                 if (string.IsNullOrEmpty(res.Item1))
                 {
@@ -190,27 +193,27 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     switch (_vipInfo.CardInfos[0].CardState)
                     {
                         case 0:
-                        {
-                            Model.CardState = "注销";
-                           break; 
-                        }
+                            {
+                                Model.CardState = "注销";
+                                break;
+                            }
                         case 1:
-                        {
-                            Model.CardState = "正常";
-                            break;
-                        }
+                            {
+                                Model.CardState = "正常";
+                                break;
+                            }
                         case 2:
-                        {
-                            Model.CardState = "挂失";
-                            break;
-                        }
+                            {
+                                Model.CardState = "挂失";
+                                break;
+                            }
                         default:
-                        {
-                            Model.CardState = "未知";
-                            break;
-                        }
+                            {
+                                Model.CardState = "未知";
+                                break;
+                            }
                     }
-                 
+
                     IsOper = true; //启用操作区域
                 }
                 else
@@ -275,10 +278,10 @@ namespace CanDao.Pos.VIPManage.ViewModels
             catch (Exception ex)
             {
                 MessageDialog.Warning(
-                      string.Format("修改卡号失败：{0}",ex.MyMessage()));
+                      string.Format("修改卡号失败：{0}", ex.MyMessage()));
                 return;
             }
-           
+
         }
 
         /// <summary>
@@ -305,7 +308,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
                 var modifyVipInfo = new UcVipModifyVipInfoViewModel(vipChangeInfo);
 
-                if (WindowHelper.ShowDialog(modifyVipInfo.GetUserCtl(),_userControl))
+                if (WindowHelper.ShowDialog(modifyVipInfo.GetUserCtl(), _userControl))
                 {
                     Model.UserName = modifyVipInfo.Model.UserName;
                     Model.Birthday = modifyVipInfo.Model.Birthday.ToString("yyyy-MM-dd");
@@ -348,9 +351,9 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 vipChangeInfo.TelNum = Model.TelNum;
 
                 var modifyTelNum = new UcVipModifyTelNumViewModel(vipChangeInfo);
-                if(WindowHelper.ShowDialog(modifyTelNum.GetUserCtl(),_userControl))
+                if (WindowHelper.ShowDialog(modifyTelNum.GetUserCtl(), _userControl))
                 {
-                     Model.TelNum = modifyTelNum.Model.NTelNum;
+                    Model.TelNum = modifyTelNum.Model.NTelNum;
                 }
             }
             catch (Exception ex)
@@ -394,10 +397,10 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
                 _winShowInfo.Model.Title = "新增实体卡-请刷卡";
 
-                if (WindowHelper.ShowDialog(window,_userControl))
+                if (WindowHelper.ShowDialog(window, _userControl))
                 {
                     Model.CardNum = _winShowInfo.Model.CardNum;
-                    Model.ShowCardNum= _winShowInfo.Model.CardNum;
+                    Model.ShowCardNum = _winShowInfo.Model.CardNum;
                     Model.CardType = 1;
                 }
             }
@@ -440,7 +443,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 MessageDialog.Warning(
              string.Format("会员注销失败[{0}-{1}]：{2}", Globals.BranchInfo.BranchId, Model.CardNum, ex.MyMessage()));
             }
-           
+
         }
 
         #endregion

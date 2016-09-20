@@ -299,7 +299,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                             request.branch_id = Globals.BranchInfo.BranchId;
                             request.securityCode = "";
                             request.password = "";
-                            var info = _memberService.QueryCanndao(request);
+                            var info = _memberService.QueryCandao(request);
 
                             if (string.IsNullOrEmpty(info.Item1))
                             {

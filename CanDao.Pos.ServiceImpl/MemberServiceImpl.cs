@@ -13,7 +13,9 @@ namespace CanDao.Pos.ServiceImpl
 {
     public class MemberServiceImpl : IMemberService
     {
-        public Tuple<string, MemberInfo> QueryCanndao(CanDaoMemberQueryRequest request)
+        #region 餐道会员
+
+        public Tuple<string, MemberInfo> QueryCandao(CanDaoMemberQueryRequest request)
         {
             var addr = ServiceAddrCache.GetServiceAddr("QueryCanDao");
             if (string.IsNullOrEmpty(addr))
@@ -573,5 +575,25 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, List<MVipCoupon>>(exp.MyMessage(), null);
             }
         }
+
+        #endregion
+
+        #region 雅座会员
+
+        public Tuple<string, MemberInfo> QueryYaZuo(string memberNo)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("QueryYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, MemberInfo>("雅座会员查询地址为空。", null);
+
+            var param = new List<string> { memberNo };
+            var result = RestHttpHelper.HttpGet<YaZuoMemberQueryResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return new Tuple<string, MemberInfo>(result.Item1, null);
+
+            return null;
+        }
+
+        #endregion
     }
 }

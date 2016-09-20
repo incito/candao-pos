@@ -9,12 +9,14 @@ namespace CanDao.Pos.IService
 {
     public interface IMemberService
     {
+        #region 餐道会员
+
         /// <summary>
         /// 餐道会员查询。
         /// </summary>
         /// <param name="request">查询请求类。</param>
         /// <returns>Item1当遇到错误时为错误信息，否则为null。Item2为会员信息。</returns>
-        Tuple<string, MemberInfo> QueryCanndao(CanDaoMemberQueryRequest request);
+        Tuple<string, MemberInfo> QueryCandao(CanDaoMemberQueryRequest request);
 
         /// <summary>
         /// 餐道会员储值。
@@ -170,5 +172,18 @@ namespace CanDao.Pos.IService
         /// <param name="pageSize"></param>
         /// <returns></returns>
         Tuple<string, List<MVipCoupon>> GetCouponList(string branchId, string currentPage = "", string pageSize = "");
+
+        #endregion
+
+        #region 雅座会员
+
+        /// <summary>
+        /// 雅座会员查询。
+        /// </summary>
+        /// <param name="memberNo">会员号。</param>
+        /// <returns></returns>
+        Tuple<string, MemberInfo> QueryYaZuo(string memberNo);
+
+        #endregion
     }
 }

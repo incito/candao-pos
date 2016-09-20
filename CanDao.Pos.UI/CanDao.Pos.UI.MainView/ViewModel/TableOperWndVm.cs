@@ -2051,7 +2051,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 branch_id = Globals.BranchInfo.BranchId,
                 cardno = MemberCardNo,
             };
-            return service.QueryCanndao(request);
+            return service.QueryCandao(request);
         }
 
         /// <summary>
@@ -2081,7 +2081,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private object QueryMemberYazuoProcess(object arg)
         {
-            return null;
+            InfoLog.Instance.I("开始执行雅座会员查询...");
+            var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+            if (service == null)
+                return new Tuple<string, MemberInfo>("创建IMemberService服务失败。", null);
+
+            return service.QueryYaZuo(arg as string);
         }
 
         /// <summary>
@@ -2112,7 +2117,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 branch_id = Globals.BranchInfo.BranchId,
                 cardno = MemberCardNo,
             };
-            var queryResult = service.QueryCanndao(request);
+            var queryResult = service.QueryCandao(request);
             InfoLog.Instance.I("结束餐道会员查询。");
             if (!string.IsNullOrEmpty(queryResult.Item1))
                 return string.Format("餐道会员查询失败：{0}", queryResult.Item1);

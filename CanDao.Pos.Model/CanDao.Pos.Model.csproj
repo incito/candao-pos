@@ -182,6 +182,8 @@
     <Compile Include="Response\SetCouponFavorResponse.cs" />
     <Compile Include="Response\SyncDataResponse.cs" />
     <Compile Include="Response\VipCheckCardResponse.cs" />
+    <Compile Include="Response\YaZuoMemberBaseResponse.cs" />
+    <Compile Include="Response\YaZuoMemberQueryResponse.cs" />
     <Compile Include="UnclearMachineInfo.cs" />
     <Compile Include="OnCompanyAccountInfo.cs" />
     <Compile Include="OrderDishInfo.cs" />

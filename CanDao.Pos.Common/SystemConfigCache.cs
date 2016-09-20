@@ -25,6 +25,11 @@ namespace CanDao.Pos.Common
         public static string JavaServer { get; private set; }
 
         /// <summary>
+        /// 雅座会员地址。
+        /// </summary>
+        public static string YaZuoServer { get; set; }
+
+        /// <summary>
         /// 会员等云服务地址。
         /// </summary>
         public static string CloudServer { get; private set; }
@@ -77,6 +82,7 @@ namespace CanDao.Pos.Common
                         return;
 
                     JavaServer = GetElementValue(root.Element("JavaServer"));
+                    YaZuoServer = GetElementValue(root.Element("YaZuoServer"));
                     CloudServer = GetElementValue(root.Element("CloudServer"));
                     MemberSystem = GetElementInt(root.Element("MemberSystem"), 1);
                     AutoFillCashAmount = GetElementBool(root.Element("AutoFillCashAmount"), true);

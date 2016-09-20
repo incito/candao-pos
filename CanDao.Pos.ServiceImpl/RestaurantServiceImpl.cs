@@ -492,7 +492,7 @@ namespace CanDao.Pos.ServiceImpl
                     return new Tuple<string, List<QueryOrderInfo>>(string.Format("账单查询失败：{0}", result.Item1), null);
 
                 List<QueryOrderInfo> list = new List<QueryOrderInfo>();
-                if (result.Item2 != null && result.Item2.OrderJson != null && result.Item2.OrderJson != null)
+                if (result.Item2 != null && result.Item2.OrderJson != null)
                     list = result.Item2.OrderJson.Select(DataConverter.ToQueryOrderInfo).ToList();
                 return new Tuple<string, List<QueryOrderInfo>>(null, list);
             }

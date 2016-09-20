@@ -85,7 +85,15 @@
     <PrintTip Addr="/newspicyway/print4POS/tipList.json"/><!--打印小费统计报表-->
     <PrintBusinessDetail Addr="/newspicyway/print4POS/printBusinessDetail.json"/><!--打印营业报表明细-->
     <PrintInvoice Addr="/newspicyway/print4POS/printInvoice.json"/><!--打印发票单-->
+    
+  
   </JavaServerApi>
+  
+  <!--雅座接口-->
+  <YaZuoApi>
+    <QueryYaZuo Addr="/datasnap/rest/TServerMethods1/QueryBalance/"/><!--餐道会员查询-->
+  </YaZuoApi>
+  
   <!--云接口-->
   <CloudServerApi>
     <QueryCanDao Addr="/member/memberManager/findByParams"/><!--餐道会员查询-->
