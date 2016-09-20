@@ -17,6 +17,9 @@
         /// </summary>
         public decimal psStoredCardsBalance { get; set; }
 
+        /// <summary>
+        /// 优惠券的集合。
+        /// </summary>
         public string psTicketInfo { get; set; }
 
         public string pszAddress { get; set; }

@@ -84,6 +84,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             var result = (Tuple<string, MemberInfo>) param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
+                StoredValue = 0;
+                IntegralValue = 0;
                 var errMsg = string.Format("雅座会员查询失败：{0}", result.Item1);
                 ErrLog.Instance.E(errMsg);
                 MessageDialog.Warning(errMsg);

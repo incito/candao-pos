@@ -591,6 +591,9 @@ namespace CanDao.Pos.ServiceImpl
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, MemberInfo>(result.Item1, null);
 
+            if (!result.Item2.IsSuccess)
+                return new Tuple<string, MemberInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "会员查询失败。"), null);
+
             return new Tuple<string, MemberInfo>(null, DataConverter.ToMemberInfo(result.Item2));
         }
 
