@@ -1594,22 +1594,27 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
             }
 
-            ThreadPool.QueueUserWorkItem(t =>
-            {
-                InfoLog.Instance.I("开始打开钱箱...");
-                var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
-                if (service == null)
-                {
-                    ErrLog.Instance.E("创建IRestaurantService服务失败。");
-                    return;
-                }
+            ThreadPool.QueueUserWorkItem(t => { OpenCashBoxProcess(); });
+        }
 
-                var result = service.OpenCash(SystemConfigCache.OpenCashIp);
-                if (!string.IsNullOrEmpty(result))
-                    ErrLog.Instance.E("打开钱箱失败：{0}", result);
-                else
-                    InfoLog.Instance.I("打开钱箱成功。");
-            });
+        /// <summary>
+        /// 开钱箱的执行方法。
+        /// </summary>
+        private static void OpenCashBoxProcess()
+        {
+            InfoLog.Instance.I("开始打开钱箱...");
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+            {
+                ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                return;
+            }
+
+            var result = service.OpenCash(SystemConfigCache.OpenCashIp);
+            if (!string.IsNullOrEmpty(result))
+                ErrLog.Instance.E("打开钱箱失败：{0}", result);
+            else
+                InfoLog.Instance.I("打开钱箱成功。");
         }
 
         /// <summary>
@@ -2328,6 +2333,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             else if (Data.TableType == EnumTableType.CFTable)
                 BroadcastCoffeeSettlementMsgAsyc();
+
+            //充值成功打开钱箱。
+            ThreadPool.QueueUserWorkItem(t => { OpenCashBoxProcess(); });
 
             InfoLog.Instance.I("开始打印结账单...");
             var print = new ReportPrintHelper2(OwnerWindow);

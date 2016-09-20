@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Controls;
 using CanDao.Pos.Common;
 using CanDao.Pos.Common.Classes.Mvvms;
@@ -158,7 +159,6 @@ namespace CanDao.Pos.VIPManage.ViewModels
         void _userControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             SetPageInfo();
-
         }
 
         #endregion
@@ -321,16 +321,14 @@ namespace CanDao.Pos.VIPManage.ViewModels
                             }
                             else
                             {
-                                MessageDialog.Warning(
-                                    string.Format("会员查询错误：{0}", info.Item1));
-
+                                MessageDialog.Warning(string.Format("会员查询错误：{0}", info.Item1));
                                 return;
                             }
                         }
 
                         CopyReportHelper.CardCheck();
 
-                        //会员注册
+                        //会员充值。
                         decimal amount = 0;
                         int typeRecharge = Model.IsBankCard == true ? 1 : 0;
                         decimal.TryParse(Model.RechargeValue, out amount);
@@ -353,23 +351,24 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
                         if (string.IsNullOrEmpty(ret.Item1))
                         {
+                            //充值成功打开钱箱。
+                            ThreadPool.QueueUserWorkItem(t => { OpenCashBoxProcess(); });
+
                             _ret = ret.Item2;
                             Print();
                         }
                         else
                         {
-                            MessageDialog.Warning(
-                                string.Format("注册失败：{0}", ret.Item1));
+                            var msg = string.Format("充值失败：{0}", ret.Item1);
+                            ErrLog.Instance.E(msg);
+                            MessageDialog.Warning(msg);
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageDialog.Warning(
-                            string.Format("注册失败：{0}", ex.MyMessage()));
-                    }
-                    finally
-                    {
-
+                        var msg = string.Format("充值失败：{0}", ex.MyMessage());
+                        ErrLog.Instance.E(msg);
+                        MessageDialog.Warning(msg);
                     }
                 }
             }
@@ -535,6 +534,26 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
             }
 
+        }
+
+        /// <summary>
+        /// 开钱箱的执行方法。
+        /// </summary>
+        private static void OpenCashBoxProcess()
+        {
+            InfoLog.Instance.I("开始打开钱箱...");
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+            {
+                ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                return;
+            }
+
+            var result = service.OpenCash(SystemConfigCache.OpenCashIp);
+            if (!string.IsNullOrEmpty(result))
+                ErrLog.Instance.E("打开钱箱失败：{0}", result);
+            else
+                InfoLog.Instance.I("打开钱箱成功。");
         }
 
         #endregion
