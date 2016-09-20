@@ -15,7 +15,7 @@
         /// <summary>
         /// 卡余额。（除以100以后才是真实的金额）
         /// </summary>
-        public string psStoredCardsBalance { get; set; }
+        public decimal psStoredCardsBalance { get; set; }
 
         public string psTicketInfo { get; set; }
 

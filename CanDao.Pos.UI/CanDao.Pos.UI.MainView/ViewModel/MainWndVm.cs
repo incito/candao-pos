@@ -449,8 +449,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     IsMemberOpened = !IsMemberOpened;
                     break;
                 case "MemberQuery":
-                    var query = new UcVipSelectViewModel();
-                    WindowHelper.ShowDialog(query.GetUserCtl());
+                    if (Globals.IsCanDaoMember)
+                    {
+                        var query = new UcVipSelectViewModel();
+                        WindowHelper.ShowDialog(query.GetUserCtl());
+                    }
+                    else if (Globals.IsYazuoMember)
+                    {
+                        var queryWnd = new MemberYaZuoQueryWindow();
+                        WindowHelper.ShowDialog(queryWnd);
+                    }
                     break;
                 case "MemberStore":
                     var recharge = new UcVipRechargeViewModel();

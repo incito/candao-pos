@@ -591,7 +591,7 @@ namespace CanDao.Pos.ServiceImpl
             if (!string.IsNullOrEmpty(result.Item1))
                 return new Tuple<string, MemberInfo>(result.Item1, null);
 
-            return null;
+            return new Tuple<string, MemberInfo>(null, DataConverter.ToMemberInfo(result.Item2));
         }
 
         #endregion

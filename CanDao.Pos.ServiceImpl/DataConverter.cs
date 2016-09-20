@@ -315,6 +315,15 @@ namespace CanDao.Pos.ServiceImpl
             };
         }
 
+        internal static MemberInfo ToMemberInfo(YaZuoMemberQueryResponse response)
+        {
+            return new MemberInfo
+            {
+                StoredBalance = response.psStoredCardsBalance / 100,
+                Integral = response.psIntegralOverall / 100,
+            };
+        }
+
         /// <summary>
         /// 转换会员对象
         /// </summary>
