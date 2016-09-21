@@ -716,6 +716,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 result.Item2.ForEach(SetTableEnableStatus);//设置餐台可用状态。
                 _allTableInfos = result.Item2;
+                HasCoffeeTables = result.Item2.Any(t => t.IsCoffeeTable);
                 FilterTableInfos();
 
                 //AllTableCount = result.Item2.Count;
