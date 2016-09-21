@@ -268,7 +268,7 @@
                                                     Width="132" Height="70" Margin="2.5"
                                                     Background="{StaticResource CanDaoPosColorFg}">
                                                 <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="MouseDown">
+                                                    <i:EventTrigger EventName="MouseUp">
                                                         <i:InvokeCommandAction Command="{Binding DataContext.SelectDishCmd, ElementName=MainWnd}" CommandParameter="{Binding .}"/>
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
