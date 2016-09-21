@@ -3,6 +3,7 @@ using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
+using CanDao.Pos.ReportPrint;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -17,6 +18,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// 会员号。
         /// </summary>
         public string MemberNo { get; set; }
+
+        /// <summary>
+        /// 储值信息。
+        /// </summary>
+        public YaZuoStorageInfo StorageInfo { get; set; }
 
         /// <summary>
         /// 储值余额。
@@ -113,8 +119,82 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return;
             }
 
-            CloseWindow(true);
+            StorageInfo = result.Item2;
             NotifyDialog.Notify(string.Format("会员储值成功。{0}交易流水号：{1}", Environment.NewLine, result.Item2.TradeCode), OwnerWindow.Owner);
+            TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员信息查询中...");
+        }
+
+        /// <summary>
+        /// 会员查询执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object MemberQueryProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+            if (service == null)
+                return new Tuple<string, MemberInfo>("创建IMemberService服务失败。", null);
+
+            return service.QueryYaZuo(MemberNo);
+        }
+
+        /// <summary>
+        /// 会员查询执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void MemberQueryComplete(object param)
+        {
+            var result = (Tuple<string, YaZuoMemberInfo>)param;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                var errMsg = string.Format("雅座会员查询失败：{0}", result.Item1);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg, OwnerWindow);
+                return;
+            }
+
+            StorageInfo.IntegralBalance = result.Item2.IntegralBalance;
+            var printInfo = GeneratePrintInfo();
+            TaskService.Start(printInfo, PrintSotrageReportProcess, PrintSotrageReportComplete, "会员储值凭条打印中...");
+        }
+
+        /// <summary>
+        /// 打印会员储值凭条执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object PrintSotrageReportProcess(object param)
+        {
+            var print = new ReportPrintHelper2(null);
+            print.PrintMemberStoredReport((PrintMemberStoredInfo)param);
+            return null;
+        }
+
+        /// <summary>
+        /// 打印会员储值凭条执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void PrintSotrageReportComplete(object param)
+        {
+            CloseWindow(true);
+        }
+
+        /// <summary>
+        /// 生成打印的会员储值信息。
+        /// </summary>
+        /// <returns></returns>
+        private PrintMemberStoredInfo GeneratePrintInfo()
+        {
+            return new PrintMemberStoredInfo
+            {
+                ReportTitle = Globals.BranchInfo.BranchName,
+                CardNo = StorageInfo.CardNo,
+                TraceCode = StorageInfo.TradeCode,
+                TradeTime = DateTime.Now,
+                StoredBalance = StorageInfo.StoredBalance,
+                ScoreBalance = StorageInfo.IntegralBalance,
+                StoredAmount = StoredValue,
+            };
         }
 
         #endregion

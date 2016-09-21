@@ -16,11 +16,6 @@
         public string TradeCode { get; set; }
 
         /// <summary>
-        /// 凭条抬头。
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
         /// 储值余额。
         /// </summary>
         public decimal StoredBalance { get; set; }

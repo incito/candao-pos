@@ -138,8 +138,8 @@ namespace CanDao.Pos.ServiceImpl
                 param.Add("date", storeInfo.TradeTime.ToString("yyyy-MM-dd"));
                 param.Add("time", storeInfo.TradeTime.ToString("HH:mm:ss"));
                 param.Add("storeName", storeInfo.ReportTitle);
-                param.Add("storedAmount", storeInfo.StoredAmount.ToString());
-                param.Add("storedBalance", storeInfo.StoredBalance.ToString());
+                param.Add("storedBalance", storeInfo.StoredAmount.ToString());//这里之前陈虎定义反了。
+                param.Add("storedAmount", storeInfo.StoredBalance.ToString());
                 param.Add("storedPoint", storeInfo.ScoreBalance.ToString());
 
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, param);

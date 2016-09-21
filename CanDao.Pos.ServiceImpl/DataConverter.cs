@@ -419,9 +419,8 @@ namespace CanDao.Pos.ServiceImpl
             return new YaZuoStorageInfo
             {
                 CardNo = response.pszPan,
-                StoredBalance = response.psStoreCardBalance,
+                StoredBalance = response.psStoreCardBalance / 100,
                 TradeCode = response.pszTrace,
-                Title = Globals.BranchInfo.BranchName,
             };
         }
 
