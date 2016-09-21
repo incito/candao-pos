@@ -91,6 +91,7 @@
     <Compile Include="Enum\EnumPrintPayType.cs" />
     <Compile Include="Enum\EnumPrintStatus.cs" />
     <Compile Include="Enum\EnumQueryOrderStatus.cs" />
+    <Compile Include="Enum\EnumStoragePayType.cs" />
     <Compile Include="Enum\EnumStatisticsPeriodsType.cs" />
     <Compile Include="Enum\EnumTradeTimeType.cs" />
     <Compile Include="Enum\EnumViewTableStatus.cs" />

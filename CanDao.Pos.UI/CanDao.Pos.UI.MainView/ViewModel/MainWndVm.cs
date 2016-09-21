@@ -461,8 +461,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     }
                     break;
                 case "MemberStore":
-                    var recharge = new UcVipRechargeViewModel();
-                    WindowHelper.ShowDialog(recharge.GetUserCtl());
+                    if (Globals.IsCanDaoMember)
+                    {
+                        var recharge = new UcVipRechargeViewModel();
+                        WindowHelper.ShowDialog(recharge.GetUserCtl());
+                    }
+                    else if (Globals.IsYazuoMember)
+                    {
+                        var storageWnd = new MemberYaZuoStoredWindow();
+                        WindowHelper.ShowDialog(storageWnd);
+                    }
                     break;
                 case "MemberRegist":
                     var regist = new UcVipRegViewModel();

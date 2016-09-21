@@ -111,6 +111,7 @@
     <Compile Include="Converter\OrderStatusToStringConverter.cs" />
     <Compile Include="Converter\QueryOrderStatusToCheckConverter.cs" />
     <Compile Include="Converter\StatisticsPeriodsTypeToCheckConverter.cs" />
+    <Compile Include="Converter\StoragePayTypeToCheckConverter.cs" />
     <Compile Include="Converter\ViewTableStatusToCheckedConverter.cs" />
     <Compile Include="Converter\ViewTableTypeToCheckedConverter.cs" />
     <Compile Include="DataHelper.cs" />

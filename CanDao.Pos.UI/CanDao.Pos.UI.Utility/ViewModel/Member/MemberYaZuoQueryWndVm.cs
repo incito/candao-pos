@@ -6,6 +6,9 @@ using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
+    /// <summary>
+    /// 雅座会员查询窗口的VM。
+    /// </summary>
     public class MemberYaZuoQueryWndVm : NormalWindowViewModel
     {
         /// <summary>
