@@ -370,7 +370,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 SetRefreshTimerStatus(false);
                 GetAllTableInfoesAsync();
-                TaskService.Start(null, GetBusinessSimpleInfoProcess, GetBusinessSimpleInfoComplete, "");
                 ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
 
                 if (Globals.IsDinnerWareEnable)
@@ -627,11 +626,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 if (RefreshRemainSecond == 0)
                 {
                     SetRefreshTimerStatus(false);
-                    OwnerWindow.Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        GetAllTableInfoesAsync();
-                        TaskService.Start(null, GetBusinessSimpleInfoProcess, GetBusinessSimpleInfoComplete, "");
-                    });
+                    OwnerWindow.Dispatcher.BeginInvoke((Action)GetAllTableInfoesAsync);
                 }
                 else
                 {
@@ -667,6 +662,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             var info = _allTableInfos != null ? "" : "加载所有餐桌信息...";//这里处理是为了第一次显示提示信息，后续定时刷新时候不显示提示信息，防止阻塞其他业务
             var param = new List<EnumTableType> { EnumTableType.Room, EnumTableType.Outside, EnumTableType.CFTable };
             TaskService.Start(param, GetTableInfoByTableTypeProcess, GetAllTableInfoComplete, info);
+            TaskService.Start(null, GetBusinessSimpleInfoProcess, GetBusinessSimpleInfoComplete, "");
         }
 
         /// <summary>
@@ -736,6 +732,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 result.Item2.ForEach(SetTableEnableStatus);//设置餐台可用状态。
                 _allTableInfos = result.Item2;
+                HasCoffeeTables = result.Item2.Any(t => t.IsCoffeeTable);
                 FilterTableInfos();
 
                 //AllTableCount = result.Item2.Count;

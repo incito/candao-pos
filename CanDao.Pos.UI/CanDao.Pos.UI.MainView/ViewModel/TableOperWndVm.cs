@@ -1397,7 +1397,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             InfoLog.Instance.I("会员登录按钮点击...");
             var loginWf = GenerateMemberLoginWf();
-            ((TableOperWindow)OwnerWindow).TbMemAmount.Focus(); //这里是为了解决登录以后直接点回车，不触发结账的问题。
             if (loginWf != null)
                 WorkFlowService.Start(MemberCardNo, loginWf);
         }
@@ -2183,6 +2182,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("设置会员价成功，完成整个会员登录流程。");
             IsMemberLogin = true;
+            ((TableOperWindow)OwnerWindow).TbMemAmount.Focus(); //这里是为了解决登录以后直接点回车，不触发结账的问题。
             GetTableDishInfoAsync();
             return new Tuple<bool, object>(true, null);
         }
