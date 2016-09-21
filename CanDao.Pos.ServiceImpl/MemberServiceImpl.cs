@@ -624,6 +624,28 @@ namespace CanDao.Pos.ServiceImpl
             return new Tuple<string, YaZuoStorageInfo>(null, DataConverter.ToYaZuoStorageInfo(result.Item2));
         }
 
+        public Tuple<string, YaZuoCardActiveInfo> CardActiveYaZuo(string cardNo, string cardPassword, string mobile)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("CardActiveYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, YaZuoCardActiveInfo>("雅座会员卡激活地址为空。", null);
+
+            var param = new List<string>
+            {
+                cardNo,
+                cardPassword,
+                mobile
+            };
+            var result = RestHttpHelper.HttpGet<YaZuoCardActiveResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return new Tuple<string, YaZuoCardActiveInfo>(result.Item1, null);
+
+            if (!result.Item2.IsSuccess)
+                return new Tuple<string, YaZuoCardActiveInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "其他会员卡激活失败。"), null);
+
+            return new Tuple<string, YaZuoCardActiveInfo>(null, DataConverter.ToYaZuoCardActiveInfo(result.Item2));
+        }
+
         #endregion
     }
 }

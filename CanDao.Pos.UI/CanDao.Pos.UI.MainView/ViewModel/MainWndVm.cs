@@ -457,7 +457,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     else if (Globals.IsYazuoMember)
                     {
                         var queryWnd = new MemberYaZuoQueryWindow();
-                        WindowHelper.ShowDialog(queryWnd);
+                        WindowHelper.ShowDialog(queryWnd, OwnerWindow);
                     }
                     break;
                 case "MemberStore":
@@ -469,12 +469,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     else if (Globals.IsYazuoMember)
                     {
                         var storageWnd = new MemberYaZuoStoredWindow();
-                        WindowHelper.ShowDialog(storageWnd);
+                        WindowHelper.ShowDialog(storageWnd, OwnerWindow);
                     }
                     break;
                 case "MemberRegist":
                     var regist = new UcVipRegViewModel();
                     WindowHelper.ShowDialog(regist.GetUserCtl());
+                    break;
+                case "MemberCardActive":
+                    var activeWnd = new MemberYaZuoCardActiveWindow();
+                    WindowHelper.ShowDialog(activeWnd, OwnerWindow);
                     break;
                 case "TableStatusAll":
                     ViewTableStatus = EnumViewTableStatus.All;

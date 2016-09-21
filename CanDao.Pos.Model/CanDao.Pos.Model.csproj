@@ -186,6 +186,8 @@
     <Compile Include="Response\VipCheckCardResponse.cs" />
     <Compile Include="Response\Member\YaZuo\YaZuoMemberBaseResponse.cs" />
     <Compile Include="Response\Member\YaZuo\YaZuoMemberQueryResponse.cs" />
+    <Compile Include="Response\YaZuoCardActiveResponse.cs" />
+    <Compile Include="YaZuoCardActiveInfo.cs" />
     <Compile Include="YaZuoMemberInfo.cs" />
     <Compile Include="YaZuoCouponInfo.cs" />
     <Compile Include="UnclearMachineInfo.cs" />

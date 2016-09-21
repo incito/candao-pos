@@ -425,6 +425,19 @@ namespace CanDao.Pos.ServiceImpl
         }
 
         /// <summary>
+        /// 转换成会员卡激活信息。
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        internal static YaZuoCardActiveInfo ToYaZuoCardActiveInfo(YaZuoCardActiveResponse response)
+        {
+            return new YaZuoCardActiveInfo
+            {
+                
+            };
+        }
+
+        /// <summary>
         /// 转换成优惠券列表
         /// </summary>
         /// <param name="response"></param>

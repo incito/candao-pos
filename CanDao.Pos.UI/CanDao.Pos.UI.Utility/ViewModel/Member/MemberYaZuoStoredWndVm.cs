@@ -4,6 +4,7 @@ using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.ReportPrint;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -61,6 +62,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         #endregion
 
         #region Protected Methods
+
+        protected override void OnWindowLoaded(object param)
+        {
+            ((MemberYaZuoStoredWindow)OwnerWindow).TbMemberNo.Focus();
+        }
 
         protected override void OperMethod(object param)
         {
@@ -121,7 +127,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
             StorageInfo = result.Item2;
             NotifyDialog.Notify(string.Format("会员储值成功。{0}交易流水号：{1}", Environment.NewLine, result.Item2.TradeCode), OwnerWindow.Owner);
-            TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员信息查询中...");
+            TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员积分余额查询中...");
         }
 
         /// <summary>
@@ -154,28 +160,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
 
             StorageInfo.IntegralBalance = result.Item2.IntegralBalance;
-            var printInfo = GeneratePrintInfo();
-            TaskService.Start(printInfo, PrintSotrageReportProcess, PrintSotrageReportComplete, "会员储值凭条打印中...");
-        }
 
-        /// <summary>
-        /// 打印会员储值凭条执行方法。
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        private object PrintSotrageReportProcess(object param)
-        {
             var print = new ReportPrintHelper2(null);
-            print.PrintMemberStoredReport((PrintMemberStoredInfo)param);
-            return null;
-        }
+            print.PrintMemberStoredReport(GeneratePrintInfo());
 
-        /// <summary>
-        /// 打印会员储值凭条执行完成。
-        /// </summary>
-        /// <param name="param"></param>
-        private void PrintSotrageReportComplete(object param)
-        {
             CloseWindow(true);
         }
 

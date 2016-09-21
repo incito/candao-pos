@@ -80,6 +80,7 @@
     <Compile Include="Model\UCCashboxPswModel.cs" />
     <Compile Include="Model\UcCustomDishesModel.cs" />
     <Compile Include="ViewModel\JdeReloadWndVm.cs" />
+    <Compile Include="ViewModel\Member\MemberYaZuoCardActiveWndVm.cs" />
     <Compile Include="ViewModel\Member\MemberYaZuoStoredWndVm.cs" />
     <Compile Include="ViewModel\Member\MemberYaZuoQueryWndVm.cs" />
     <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
@@ -94,6 +95,9 @@
     </Compile>
     <Compile Include="View\JdeReloadWindow.xaml.cs">
       <DependentUpon>JdeReloadWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Member\MemberYaZuoCardActiveWindow.xaml.cs">
+      <DependentUpon>MemberYaZuoCardActiveWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Member\MemberYaZuoQueryWindow.xaml.cs">
       <DependentUpon>MemberYaZuoQueryWindow.xaml</DependentUpon>
@@ -268,6 +272,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\JdeReloadWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Member\MemberYaZuoCardActiveWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

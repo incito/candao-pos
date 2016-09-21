@@ -91,8 +91,9 @@
   
   <!--雅座接口-->
   <YaZuoApi>
-    <QueryYaZuo Addr="/datasnap/rest/TServerMethods1/QueryBalance/"/><!--餐道会员查询-->
-    <StorageYaZuo Addr="/datasnap/rest/TServerMethods1/StoreCardDeposit/"/><!--餐道会员储值-->
+    <QueryYaZuo Addr="/datasnap/rest/TServerMethods1/QueryBalance/"/><!--雅座会员查询-->
+    <StorageYaZuo Addr="/datasnap/rest/TServerMethods1/StoreCardDeposit/"/><!--雅座会员储值-->
+    <CardActiveYaZuo Addr="/datasnap/rest/TServerMethods1/CardActive/"/><!--雅座会员激活-->
   </YaZuoApi>
   
   <!--云接口-->

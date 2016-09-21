@@ -194,6 +194,15 @@ namespace CanDao.Pos.IService
         /// <returns></returns>
         Tuple<string, YaZuoStorageInfo> StorageYaZuo(string memberNo, decimal storageValue, EnumStoragePayType payType);
 
+        /// <summary>
+        /// 雅座卡激活。
+        /// </summary>
+        /// <param name="cardNo">会员卡号。</param>
+        /// <param name="cardPassword">会员卡密码。</param>
+        /// <param name="mobile">激活手机号。</param>
+        /// <returns></returns>
+        Tuple<string, YaZuoCardActiveInfo> CardActiveYaZuo(string cardNo, string cardPassword, string mobile);
+
         #endregion
     }
 }
