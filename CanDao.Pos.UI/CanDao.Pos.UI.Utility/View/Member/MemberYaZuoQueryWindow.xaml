@@ -35,13 +35,13 @@
             <controls:WatermarkTextBox Grid.Row="1"
                                        IsEnabled="False"
                                        Watermark="储值余额："
-                                       Text="{Binding StoredValue, UpdateSourceTrigger=PropertyChanged}"
+                                       Text="{Binding MemberInfo.StoredBalance, UpdateSourceTrigger=PropertyChanged}"
                                        Height="48" Width="310" Margin="10,2"
                                        VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
             <controls:WatermarkTextBox Grid.Row="2"
                                        IsEnabled="False"
                                        Watermark="积分余额："
-                                       Text="{Binding IntegralValue, UpdateSourceTrigger=PropertyChanged}"
+                                       Text="{Binding MemberInfo.IntegralBalance, UpdateSourceTrigger=PropertyChanged}"
                                        Height="48" Width="310" Margin="10,2"
                                        VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
             
@@ -59,7 +59,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="会员优惠券"
-                       FontWeight="Bold"
+                       FontWeight="Bold" FontSize="16"
                        HorizontalAlignment="Center" Margin="0,22"/>
 
         </Grid>

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.Common.Models.VipModels;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
+using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
 using HttpHelper = CanDao.Pos.Common.HttpHelper;
@@ -580,21 +582,46 @@ namespace CanDao.Pos.ServiceImpl
 
         #region 雅座会员
 
-        public Tuple<string, MemberInfo> QueryYaZuo(string memberNo)
+        public Tuple<string, YaZuoMemberInfo> QueryYaZuo(string memberNo)
         {
             var addr = ServiceAddrCache.GetServiceAddr("QueryYaZuo");
             if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, MemberInfo>("雅座会员查询地址为空。", null);
+                return new Tuple<string, YaZuoMemberInfo>("雅座会员查询地址为空。", null);
 
             var param = new List<string> { memberNo };
             var result = RestHttpHelper.HttpGet<YaZuoMemberQueryResponse>(addr, param);
             if (!string.IsNullOrEmpty(result.Item1))
-                return new Tuple<string, MemberInfo>(result.Item1, null);
+                return new Tuple<string, YaZuoMemberInfo>(result.Item1, null);
 
             if (!result.Item2.IsSuccess)
-                return new Tuple<string, MemberInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "会员查询失败。"), null);
+                return new Tuple<string, YaZuoMemberInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "会员查询失败。"), null);
 
-            return new Tuple<string, MemberInfo>(null, DataConverter.ToMemberInfo(result.Item2));
+            return new Tuple<string, YaZuoMemberInfo>(null, DataConverter.ToYaZuoMemberInfo(result.Item2));
+        }
+
+        public Tuple<string, YaZuoStorageInfo> StorageYaZuo(string memberNo, decimal storageValue, EnumStoragePayType payType)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("StorageYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, YaZuoStorageInfo>("雅座会员储值地址为空。", null);
+
+            var param = new List<string>
+            {
+                Globals.UserInfo.UserName,
+                memberNo,
+                storageValue.ToString(CultureInfo.InvariantCulture),
+                DateTime.Now.ToString("yyyyMMddHHmmssffff"),
+                "0",//填充字段
+                ((int) payType).ToString()
+            };
+            var result = RestHttpHelper.HttpGet<YaZuoMemberStorageResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return new Tuple<string, YaZuoStorageInfo>(result.Item1, null);
+
+            if (!result.Item2.IsSuccess)
+                return new Tuple<string, YaZuoStorageInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "其他储值失败错误。"), null);
+
+            return new Tuple<string, YaZuoStorageInfo>(null, DataConverter.ToYaZuoStorageInfo(result.Item2));
         }
 
         #endregion

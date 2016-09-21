@@ -17,36 +17,19 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public string MemberNo { get; set; }
 
         /// <summary>
-        /// 储值余额。
+        /// 会员信息。
         /// </summary>
-        private decimal _storedValue;
+        private YaZuoMemberInfo _memberInfo;
         /// <summary>
-        /// 储值余额。
+        /// 会员信息。
         /// </summary>
-        public decimal StoredValue
+        public YaZuoMemberInfo MemberInfo
         {
-            get { return _storedValue; }
+            get { return _memberInfo; }
             set
             {
-                _storedValue = value;
-                RaisePropertyChanged("StoredValue");
-            }
-        }
-
-        /// <summary>
-        /// 积分余额。
-        /// </summary>
-        private decimal _integralValue;
-        /// <summary>
-        /// 积分余额。
-        /// </summary>
-        public decimal IntegralValue
-        {
-            get { return _integralValue; }
-            set
-            {
-                _integralValue = value;
-                RaisePropertyChanged("IntegralValue");
+                _memberInfo = value;
+                RaisePropertyChanged("MemberInfo");
             }
         }
 
@@ -73,6 +56,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #region Private Methods
 
+        /// <summary>
+        /// 会员查询执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         private object MemberQueryProcess(object param)
         {
             var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
@@ -82,21 +70,23 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             return service.QueryYaZuo(MemberNo);
         }
 
+        /// <summary>
+        /// 会员查询执行完成。
+        /// </summary>
+        /// <param name="param"></param>
         private void MemberQueryComplete(object param)
         {
-            var result = (Tuple<string, MemberInfo>) param;
+            var result = (Tuple<string, YaZuoMemberInfo>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
-                StoredValue = 0;
-                IntegralValue = 0;
+                MemberInfo = null;
                 var errMsg = string.Format("雅座会员查询失败：{0}", result.Item1);
                 ErrLog.Instance.E(errMsg);
-                MessageDialog.Warning(errMsg);
+                MessageDialog.Warning(errMsg, OwnerWindow);
                 return;
             }
 
-            StoredValue = result.Item2.StoredBalance;
-            IntegralValue = result.Item2.Integral;
+            MemberInfo = result.Item2;
         }
 
         #endregion

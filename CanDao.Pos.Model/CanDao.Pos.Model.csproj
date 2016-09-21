@@ -150,11 +150,12 @@
     <Compile Include="Response\GetBusinessSimpleInfoResponse.cs" />
     <Compile Include="Response\GetDishGiftCouponInfoResponse.cs" />
     <Compile Include="Response\GetOrderInfoResponse.cs" />
+    <Compile Include="Response\Member\YaZuo\YaZuoMemberStorageResponse.cs" />
     <Compile Include="Response\UsePreferentialRequest.cs" />
-    <Compile Include="Response\CanDaoMemberBaseResponse.cs" />
-    <Compile Include="Response\CanDaoMemberSaleResponse.cs" />
-    <Compile Include="Response\CanDaoVipBaseResponse.cs" />
-    <Compile Include="Response\CanDaoVipQueryResponse.cs" />
+    <Compile Include="Response\Member\CanDaoMemberBaseResponse.cs" />
+    <Compile Include="Response\Member\CanDaoMemberSaleResponse.cs" />
+    <Compile Include="Response\Member\CanDaoVipBaseResponse.cs" />
+    <Compile Include="Response\Member\CanDaoVipQueryResponse.cs" />
     <Compile Include="Response\CategoryResponse.cs" />
     <Compile Include="Response\GetAllTableInfoesResponse.cs" />
     <Compile Include="Response\GetBranchInfoResponse.cs" />
@@ -168,8 +169,8 @@
     <Compile Include="Response\GetReportStatisticInfoBase.cs" />
     <Compile Include="Response\GetSavedCouponResponse.cs" />
     <Compile Include="Response\GetUnclearnPosInfoResponse.cs" />
-    <Compile Include="Response\CanDaoMemberQueryResponse.cs" />
-    <Compile Include="Response\CanDaoMemberStorageResponse.cs" />
+    <Compile Include="Response\Member\CanDaoMemberQueryResponse.cs" />
+    <Compile Include="Response\Member\CanDaoMemberStorageResponse.cs" />
     <Compile Include="Response\GrouponResponse.cs" />
     <Compile Include="Response\LoginInfoResponse.cs" />
     <Compile Include="Response\MenuSingleAllDishDataResponse.cs" />
@@ -183,8 +184,10 @@
     <Compile Include="Response\SetCouponFavorResponse.cs" />
     <Compile Include="Response\SyncDataResponse.cs" />
     <Compile Include="Response\VipCheckCardResponse.cs" />
-    <Compile Include="Response\YaZuoMemberBaseResponse.cs" />
-    <Compile Include="Response\YaZuoMemberQueryResponse.cs" />
+    <Compile Include="Response\Member\YaZuo\YaZuoMemberBaseResponse.cs" />
+    <Compile Include="Response\Member\YaZuo\YaZuoMemberQueryResponse.cs" />
+    <Compile Include="YaZuoMemberInfo.cs" />
+    <Compile Include="YaZuoCouponInfo.cs" />
     <Compile Include="UnclearMachineInfo.cs" />
     <Compile Include="OnCompanyAccountInfo.cs" />
     <Compile Include="OrderDishInfo.cs" />
@@ -259,6 +262,7 @@
     <Compile Include="UserInfo.cs" />
     <Compile Include="UserRight.cs" />
     <Compile Include="WorkFlowInfo.cs" />
+    <Compile Include="YaZuoStorageInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

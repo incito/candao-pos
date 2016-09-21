@@ -315,13 +315,65 @@ namespace CanDao.Pos.ServiceImpl
             };
         }
 
-        internal static MemberInfo ToMemberInfo(YaZuoMemberQueryResponse response)
+        /// <summary>
+        /// 转雅座会员信息。
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        internal static YaZuoMemberInfo ToYaZuoMemberInfo(YaZuoMemberQueryResponse response)
         {
-            return new MemberInfo
+            var item = new YaZuoMemberInfo
             {
                 StoredBalance = response.psStoredCardsBalance / 100,
-                Integral = response.psIntegralOverall / 100,
+                IntegralBalance = response.psIntegralOverall / 100,
             };
+
+            if (!string.IsNullOrEmpty(response.pszTrack2))
+            {
+                var tempList = response.pszTrack2.Split(',');
+                if (tempList.Count() > 2)
+                    item.CardNoList = tempList.ToList();
+            }
+
+            if (!string.IsNullOrEmpty(response.psTicketInfo))
+            {
+                var ticketList = response.psTicketInfo.Split(';').ToList();
+                var couponItemList = ticketList.Select(ToYaZuoCouponInfo).Where(t => t != null).ToList();
+                if (couponItemList.Any())
+                    item.CouponList = couponItemList;
+            }
+
+            return item;
+        }
+
+        /// <summary>
+        /// 转雅座优惠券信息。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        internal static YaZuoCouponInfo ToYaZuoCouponInfo(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return null;
+
+            var tempList = data.Split('|').ToList();
+            try
+            {
+                var item = new YaZuoCouponInfo
+                    {
+                        CouponId = tempList[0],
+                        CouponType = tempList[2],
+                        CouponName = tempList[3],
+                        CouponCount = Parse2Int(tempList[4])
+                    };
+
+                return item;
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E(string.Format("雅座优惠券处理时异常：{0}", ex.MyMessage()));
+                return null;
+            }
         }
 
         /// <summary>
@@ -355,6 +407,22 @@ namespace CanDao.Pos.ServiceImpl
             }
 
             return info;
+        }
+
+        /// <summary>
+        /// 转换雅座储值信息。
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        internal static YaZuoStorageInfo ToYaZuoStorageInfo(YaZuoMemberStorageResponse response)
+        {
+            return new YaZuoStorageInfo
+            {
+                CardNo = response.pszPan,
+                StoredBalance = response.psStoreCardBalance,
+                TradeCode = response.pszTrace,
+                Title = Globals.BranchInfo.BranchName,
+            };
         }
 
         /// <summary>

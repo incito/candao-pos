@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CanDao.Pos.Common.Models.VipModels;
 using CanDao.Pos.Model;
+using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
 
@@ -182,7 +183,16 @@ namespace CanDao.Pos.IService
         /// </summary>
         /// <param name="memberNo">会员号。</param>
         /// <returns></returns>
-        Tuple<string, MemberInfo> QueryYaZuo(string memberNo);
+        Tuple<string, YaZuoMemberInfo> QueryYaZuo(string memberNo);
+
+        /// <summary>
+        /// 雅座会员储值。
+        /// </summary>
+        /// <param name="memberNo">会员号。</param>
+        /// <param name="storageValue">储值金额。</param>
+        /// <param name="payType">储值付款方式。</param>
+        /// <returns></returns>
+        Tuple<string, YaZuoStorageInfo> StorageYaZuo(string memberNo, decimal storageValue, EnumStoragePayType payType);
 
         #endregion
     }

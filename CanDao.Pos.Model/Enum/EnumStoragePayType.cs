@@ -8,11 +8,11 @@
         /// <summary>
         /// 现金。
         /// </summary>
-        Cash,
+        Cash = 0,
 
         /// <summary>
         /// 银行卡。
         /// </summary>
-        Bank,
+        Bank = 1,
     }
 }
