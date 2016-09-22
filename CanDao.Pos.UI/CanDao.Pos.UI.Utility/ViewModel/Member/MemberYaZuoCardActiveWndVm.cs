@@ -10,7 +10,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// <summary>
     /// 雅座会员激活窗口的VM。
     /// </summary>
-    public class MemberYaZuoCardActiveWndVm : NormalWindowViewModel
+    public class MemberYaZuoCardActiveWndVm : NormalWindowViewModel<MemberYaZuoCardActiveWindow>
     {
 
         #region Properties

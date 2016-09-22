@@ -11,7 +11,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// <summary>
     /// 雅座会员储值窗口的VM。
     /// </summary>
-    public class MemberYaZuoStoredWndVm : NormalWindowViewModel
+    public class MemberYaZuoStoredWndVm : NormalWindowViewModel<MemberYaZuoStoredWindow>
     {
         #region Properties
 

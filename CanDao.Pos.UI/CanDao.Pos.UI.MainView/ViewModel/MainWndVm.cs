@@ -14,6 +14,7 @@ using CanDao.Pos.Model.Enum;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.UI.Utility.ViewModel;
 using CanDao.Pos.VIPManage.ViewModels;
 using Timer = System.Timers.Timer;
 
@@ -455,8 +456,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     }
                     else if (Globals.IsYazuoMember)
                     {
-                        var queryWnd = new MemberYaZuoQueryWindow();
-                        WindowHelper.ShowDialog(queryWnd, OwnerWindow);
+                        WindowHelper.ShowDialog(new MemberYaZuoQueryWndVm(), OwnerWindow);
                     }
                     break;
                 case "MemberStore":
@@ -467,8 +467,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     }
                     else if (Globals.IsYazuoMember)
                     {
-                        var storageWnd = new MemberYaZuoStoredWindow();
-                        WindowHelper.ShowDialog(storageWnd, OwnerWindow);
+                        WindowHelper.ShowDialog(new MemberYaZuoStoredWndVm(), OwnerWindow);
                     }
                     break;
                 case "MemberRegist":
@@ -476,8 +475,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     WindowHelper.ShowDialog(regist.GetUserCtl());
                     break;
                 case "MemberCardActive":
-                    var activeWnd = new MemberYaZuoCardActiveWindow();
-                    WindowHelper.ShowDialog(activeWnd, OwnerWindow);
+                    WindowHelper.ShowDialog(new MemberYaZuoCardActiveWndVm(), OwnerWindow);
                     break;
                 case "TableStatusAll":
                     ViewTableStatus = EnumViewTableStatus.All;

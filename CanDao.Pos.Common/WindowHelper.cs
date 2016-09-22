@@ -56,6 +56,17 @@ namespace CanDao.Pos.Common
         }
 
         /// <summary>
+        /// 显示模态窗口。
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <param name="ownerWnd"></param>
+        /// <returns></returns>
+        public static bool ShowDialog(NormalWindowViewModel vm, Window ownerWnd)
+        {
+            return ShowDialog(vm.OwnerWindow, ownerWnd);
+        }
+
+        /// <summary>
         /// 显示非模态窗口。
         /// </summary>
         /// <param name="wnd"></param>

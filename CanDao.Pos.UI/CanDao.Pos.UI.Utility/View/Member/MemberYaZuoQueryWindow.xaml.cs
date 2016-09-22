@@ -1,6 +1,4 @@
-﻿using CanDao.Pos.UI.Utility.ViewModel;
-
-namespace CanDao.Pos.UI.Utility.View
+﻿namespace CanDao.Pos.UI.Utility.View
 {
     /// <summary>
     /// 雅座会员查询窗口。
@@ -10,7 +8,6 @@ namespace CanDao.Pos.UI.Utility.View
         public MemberYaZuoQueryWindow()
         {
             InitializeComponent();
-            DataContext = new MemberYaZuoQueryWndVm { OwnerWindow = this };
         }
     }
 }

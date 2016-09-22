@@ -234,4 +234,12 @@ namespace CanDao.Pos.Common
             }
         }
     }
+
+    public class NormalWindowViewModel<T> : NormalWindowViewModel where T : Window, new()
+    {
+        public NormalWindowViewModel()
+        {
+            OwnerWindow = new T { DataContext = this };
+        }
+    }
 }

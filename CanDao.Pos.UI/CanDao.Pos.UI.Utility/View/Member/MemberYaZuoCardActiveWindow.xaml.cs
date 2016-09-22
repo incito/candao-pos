@@ -10,7 +10,6 @@ namespace CanDao.Pos.UI.Utility.View
         public MemberYaZuoCardActiveWindow()
         {
             InitializeComponent();
-            DataContext = new MemberYaZuoCardActiveWndVm { OwnerWindow = this };
         }
     }
 }
