@@ -143,9 +143,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\CanDaoPosSplash.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="App.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

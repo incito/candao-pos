@@ -11,7 +11,5 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
-        <Image Source="{StaticResource CanDaoPosSplashImg}" Height="768" Width="1024" VerticalAlignment="Stretch"/>
-    </Grid>
+    <Image Source="{StaticResource CanDaoPosSplashImg}" VerticalAlignment="Stretch" Stretch="Fill"/>
 </Window>
