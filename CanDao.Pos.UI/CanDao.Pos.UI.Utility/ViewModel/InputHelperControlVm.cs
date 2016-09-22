@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
 using CanDao.Pos.Common;
 using Keyboard = CanDao.Pos.Common.Keyboard;
 
@@ -29,6 +30,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public bool IsLetter { get; set; }
 
         /// <summary>
+        /// 输入的焦点控件。即当点击本输入控件时，先将焦点控件设置成焦点。
+        /// </summary>
+        public UIElement FocusElement { get; set; }
+
+        /// <summary>
         /// 输入命令。
         /// </summary>
         public ICommand InputCmd { get; private set; }
@@ -41,6 +47,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         {
             if(param == null)
                 return;
+
+            if (FocusElement != null)
+                FocusElement.Focus();
 
             string keyString = (string) param;
             switch (keyString)

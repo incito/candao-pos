@@ -234,11 +234,11 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <view:InputLetterControl ItemSize="42" ItemMargin="2,3"/>
+                <view:InputLetterControl ItemSize="42" ItemMargin="2,3" FocusElement="{Binding ElementName=TbDishFirstLetter}"/>
 
                 <DockPanel Grid.Row="1" Margin="0,8">
                     <Button DockPanel.Dock="Right" Content="清除" Width="90" Height="43" FontSize="18" Command="{Binding OperCmd}" CommandParameter="ClearFilter"/>
-                    <controls:WatermarkTextBox Text="{Binding FilterMenuGroup, UpdateSourceTrigger=PropertyChanged}"
+                    <controls:WatermarkTextBox x:Name="TbDishFirstLetter" Text="{Binding FilterMenuGroup, UpdateSourceTrigger=PropertyChanged}"
                                                Background="{StaticResource CanDaoPosColorBgWhite}"
                                                Watermark="输入菜品首字母"
                                                Margin="3"
