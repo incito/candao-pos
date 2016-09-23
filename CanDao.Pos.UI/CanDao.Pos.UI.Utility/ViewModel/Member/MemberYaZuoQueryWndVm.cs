@@ -37,9 +37,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override void OnWindowLoaded(object param)
         {
-            var wnd = OwnerWindow as MemberYaZuoQueryWindow;
-            if (wnd != null)
-                wnd.TbMemberNo.Focus();
+            ((MemberYaZuoQueryWindow)OwnerWindow).TbMemberNo.Focus();
         }
 
         protected override bool CanConfirm(object param)

@@ -493,7 +493,7 @@
                             <StackPanel Grid.Row="0"  Grid.Column="1"
                                         Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                 <TextBlock Text="{Binding Data.MemberInfo.StoredBalance}"/>
-                                <TextBlock Text="{Binding Data.MemberInfo.CardLevel, StringFormat=({0})}"/>
+                                <TextBlock Text="{Binding Data.MemberInfo.CardLevel, StringFormat=({0})}" Visibility="{Binding Data.MemberInfo.CardLevel, Converter={StaticResource Strinig2VisibleCvt}}"/>
                             </StackPanel>
                             <TextBlock Grid.Row="1" Grid.Column="0"
                                        Text="积分余额："

@@ -1136,13 +1136,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         SelectedOnCmpAccInfo = companyWnd.SelectedCompany;
                     break;
                 case "MemberLogin":
+                    InfoLog.Instance.I("会员登录按钮点击...");
                     MemberLogin();
                     break;
                 case "MemberLogout":
                     InfoLog.Instance.I("会员登出按钮点击...");
-                    var logoutWf = GenerateMemberLogoutWf();
-                    if (logoutWf != null)
-                        WorkFlowService.Start(MemberCardNo, logoutWf);
+                    WorkFlowService.Start(null, new WorkFlowInfo(MemberLogoutProcess, MemberLogoutComplete, "会员登出中..."));
                     break;
                 case "CouponRemove":
                     InfoLog.Instance.I("移除优惠券：{0}。", SelectedUsedCouponInfo.Name);
@@ -1337,11 +1336,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 {
                     if (Data.TotalAlreadyPayment - Data.PaymentAmount + Data.TipAmount > TipPaymentAmount)//总共支付金额计算出的小费超过约定规则计算后的小费金额，说明小费金额部分不是由现金支付的，不允许结账。
                     {
-                        MessageDialog.Warning(string.Format("小费{0}元，必须使用现金结算。", Data.TipAmount));
+                        MessageDialog.Warning(string.Format("小费{0}元，必须使用现金结算。", Data.TipAmount), OwnerWindow);
                         return;
                     }
 
-                    if (!MessageDialog.Quest(string.Format("还有{0}元小费未结算，点击确定继续结算，点击取消取消结算。", Data.TipAmount - TipPaymentAmount)))
+                    if (!MessageDialog.Quest(string.Format("还有{0}元小费未结算，点击确定继续结算，点击取消取消结算。", Data.TipAmount - TipPaymentAmount), OwnerWindow))
                         return;
                 }
             }
@@ -1354,7 +1353,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             var payBillWorkFlow = new WorkFlowInfo(PayTheBillProcess, PayTheBillComplete, "账单结算中...");
             var curStepWf = payBillWorkFlow;
-
 
             if (HasTip && Data.TipAmount > 0)
             {
@@ -1395,10 +1393,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void MemberLogin()
         {
-            InfoLog.Instance.I("会员登录按钮点击...");
-            var loginWf = GenerateMemberLoginWf();
-            if (loginWf != null)
-                WorkFlowService.Start(MemberCardNo, loginWf);
+            WorkFlowService.Start(null, new WorkFlowInfo(MemberLoginProcess, MemberLoginComplete, "会员登录中..."));
         }
 
         /// <summary>
@@ -1654,22 +1649,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 生成会员登录工作流。
-        /// </summary>
-        /// <returns></returns>
-        private WorkFlowInfo GenerateMemberLoginWf()
-        {
-            WorkFlowInfo wf = null;
-            if (Globals.MemberSystem == EnumMemberSystem.Candao)
-                wf = new WorkFlowInfo(MemberCanDaoLoginProcess, MemberCanDaoLoginComplete, "会员登录中...");
-            else if (Globals.MemberSystem == EnumMemberSystem.Yazuo)
-            {
-
-            }
-            return wf;
-        }
-
-        /// <summary>
         /// 生成会员登出工作流。
         /// </summary>
         /// <returns></returns>
@@ -1677,7 +1656,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             WorkFlowInfo wf = null;
             if (Globals.MemberSystem == EnumMemberSystem.Candao)
-                wf = new WorkFlowInfo(MemberCanDaoLogoutProcess, MemberCanDaoLogoutComplete, "会员登出中...");
+                wf = new WorkFlowInfo(MemberLogoutProcess, MemberLogoutComplete, "会员登出中...");
             else if (Globals.MemberSystem == EnumMemberSystem.Yazuo)
             {
 
@@ -1917,6 +1896,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 string.IsNullOrWhiteSpace(MemberPassword))//雅座会员消费不必输入密码。
                 return "使用会员储值或积分请输入会员密码。";
 
+            if (MemberAmount > Data.MemberInfo.StoredBalance)
+                return "会员储值余额不足。";
+
+            if (IntegralAmount > Data.MemberInfo.Integral)
+                return "积分余额不足。";
+
             if (DebitAmount > 0 && SelectedOnCmpAccInfo == null)
                 return "使用挂账金额请先选择挂账单位。";
 
@@ -2105,63 +2090,47 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 会员登录时的执行方法。
+        /// 会员登录执行方法。
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private object MemberCanDaoLoginProcess(object arg)
+        private object MemberLoginProcess(object arg)
         {
             InfoLog.Instance.I("开始执行餐道会员查询...");
             var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
             if (service == null)
                 return "创建IMemberService服务失败。";
 
-            var request = new CanDaoMemberQueryRequest
+            if (Globals.IsCanDaoMember)
             {
-                branch_id = Globals.BranchInfo.BranchId,
-                cardno = MemberCardNo,
-            };
-            var queryResult = service.QueryCandao(request);
-            InfoLog.Instance.I("结束餐道会员查询。");
-            if (!string.IsNullOrEmpty(queryResult.Item1))
-                return string.Format("餐道会员查询失败：{0}", queryResult.Item1);
+                var request = new CanDaoMemberQueryRequest
+                {
+                    branch_id = Globals.BranchInfo.BranchId,
+                    cardno = MemberCardNo,
+                };
+                var queryResult = service.QueryCandao(request);
+                InfoLog.Instance.I("结束餐道会员查询。");
+                if (!string.IsNullOrEmpty(queryResult.Item1))
+                    return string.Format("会员查询失败：{0}", queryResult.Item1);
 
-            Data.MemberInfo = queryResult.Item2;
+                Data.MemberInfo = queryResult.Item2;
+            }
+            else if (Globals.IsYazuoMember)
+            {
+                var yzQueryResult = service.QueryYaZuo(MemberCardNo);
+                InfoLog.Instance.I("结束雅座会员查询。");
+                if (!string.IsNullOrEmpty(yzQueryResult.Item1))
+                    return string.Format("会员查询失败：{0}", yzQueryResult.Item1);
 
-            InfoLog.Instance.I("开始执行餐道会员登入...");
+                Data.MemberInfo = yzQueryResult.Item2;
+            }
+
+            InfoLog.Instance.I("开始执行会员登入...");
             var loginResult = service.MemberLogin(Data.OrderId, MemberCardNo);
             if (!string.IsNullOrEmpty(loginResult))
-                return string.Format("餐道会员登入失败：{0}。", loginResult);
+                return string.Format("会员登入失败：{0}。", loginResult);
 
-            InfoLog.Instance.I("餐道会员登入成功。");
-
-            //InfoLog.Instance.I("开始设置会员价...");
-            //var orderService = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            //if (orderService == null)
-            //    return "创建IOrderService服务失败。";
-
-            //var setMemberPriceResult = orderService.SetMemberPrice(Data.OrderId, MemberCardNo);
-            //if (!string.IsNullOrEmpty(setMemberPriceResult))
-            //    return string.Format("设置会员价失败：{0}", setMemberPriceResult);
-
-            //InfoLog.Instance.I("设置会员价完成。");
-            //InfoLog.Instance.I("从新获取餐台所有信息...");
-
-            //var result = new Tuple<string, TableFullInfo>("未赋值", null);
-            //if (Data.TableType == EnumTableType.CFTakeout || Data.TableType == EnumTableType.Takeout)
-            //    result = orderService.GetTableDishInfoByOrderId(_tableInfo.OrderId, Globals.UserInfo.UserName);
-            //else
-            //    result = orderService.GetTableDishInfoes(_tableInfo.TableName, Globals.UserInfo.UserName);
-
-            //if (!string.IsNullOrEmpty(result.Item1))
-            //    return string.Format("获取餐台明细失败：{0}", result.Item1);
-
-            //InfoLog.Instance.I("获取餐台所有信息完成。");
-            //if (result.Item2 == null)
-            //    return "没有获取到该餐台的账单信息。";
-
-            //result.Item2.MemberInfo = Data.MemberInfo;//会员信息保留，不用再次查询了。
-            //Data = result.Item2;
+            InfoLog.Instance.I("会员登入成功。");
             return null;
         }
 
@@ -2170,7 +2139,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private Tuple<bool, object> MemberCanDaoLoginComplete(object arg)
+        private Tuple<bool, object> MemberLoginComplete(object arg)
         {
             var result = arg as string;
             if (!string.IsNullOrEmpty(result))
@@ -2180,7 +2149,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return new Tuple<bool, object>(false, null);//不能return null，因为要执行错误工作流。
             }
 
-            InfoLog.Instance.I("设置会员价成功，完成整个会员登录流程。");
+            InfoLog.Instance.I("完成会员登录流程。");
             IsMemberLogin = true;
             ((TableOperWindow)OwnerWindow).TbMemAmount.Focus(); //这里是为了解决登录以后直接点回车，不触发结账的问题。
             GetTableDishInfoAsync();
@@ -2192,27 +2161,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private object MemberCanDaoLogoutProcess(object arg)
+        private object MemberLogoutProcess(object arg)
         {
-            InfoLog.Instance.I("开始执行餐道会员登出...");
+            InfoLog.Instance.I("开始执行会员登出...");
             var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
             if (service == null)
                 return "创建IMemberService服务失败。";
 
             var logoutResult = service.MemberLogout(Data.OrderId, MemberCardNo);
             if (!string.IsNullOrEmpty(logoutResult))
-                return string.Format("餐道会员登出失败：{0}。", logoutResult);
+                return string.Format("会员登出失败：{0}。", logoutResult);
 
-            InfoLog.Instance.I("餐道会员登出成功。");
-
+            InfoLog.Instance.I("会员登出成功。");
             return null;
-            //InfoLog.Instance.I("开始设置成正常价...");
-            //var orderService = ServiceManager.Instance.GetServiceIntance<IOrderService>();
-            //if (orderService == null)
-            //    return "创建IOrderService服务失败。";
-
-            //var setNormalPriceResult = orderService.SetNormalPrice(Data.OrderId);
-            //return !string.IsNullOrEmpty(setNormalPriceResult) ? string.Format("设置成正常价失败：{0}", setNormalPriceResult) : null;
         }
 
         /// <summary>
@@ -2220,7 +2181,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private Tuple<bool, object> MemberCanDaoLogoutComplete(object arg)
+        private Tuple<bool, object> MemberLogoutComplete(object arg)
         {
             var result = arg as string;
             if (!string.IsNullOrEmpty(result))
@@ -2230,7 +2191,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return null;
             }
 
-            InfoLog.Instance.I("设置成正常价成功，完成整个会员登出流程。");
+            InfoLog.Instance.I("完成会员登出流程。");
             IsMemberLogin = false;
             Data.MemberInfo = null;
             MemberCardNo = null;
@@ -2311,7 +2272,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private object SaleMemberYazuoProcess(object arg)
         {
-            return null;
+            InfoLog.Instance.I("开始会员消费结算...");
+            var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+            if (service == null)
+                return "创建IMemberService服务失败。";
+
+            return service.SettlementYaZuo(GenerateYaZuoSettlementInfo());
         }
 
         /// <summary>
@@ -2321,7 +2287,35 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private Tuple<bool, object> SaleMemberYazuoComplete(object arg)
         {
+            var result = arg as string;
+            if (!string.IsNullOrEmpty(result))
+            {
+                ErrLog.Instance.E(result);
+                MessageDialog.Warning(result, OwnerWindow);
+                return new Tuple<bool, object>(false, null);//会员结算失败，走错误流程。
+            }
+
             return new Tuple<bool, object>(true, null);
+        }
+
+        /// <summary>
+        /// 生成雅座会员结算信息。
+        /// </summary>
+        /// <returns></returns>
+        private YaZuoSettlementInfo GenerateYaZuoSettlementInfo()
+        {
+            return new YaZuoSettlementInfo
+            {
+                CashAmount = CashAmount,
+                CouponTotalAmount = 0,
+                CouponUsedInfo = "",
+                IntegralValue = IntegralAmount,
+                MemberCardNo = MemberCardNo,
+                OrderId = Data.OrderId,
+                Password = MemberPassword,
+                StoredPayAmount = MemberAmount,
+                UserId = Globals.UserInfo.UserName,
+            };
         }
 
         /// <summary>
@@ -2559,25 +2553,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(MemberCardNo))//走会员登录的流程。
             {
                 InfoLog.Instance.I("该餐台登录了会员，开始会员登录...");
-                var memberLoginResult = MemberCanDaoLoginProcess(null) as string;
+                var memberLoginResult = MemberLoginProcess(null) as string;
                 if (!string.IsNullOrEmpty(memberLoginResult))
                     ErrLog.Instance.E("会员登录时失败：{0}", memberLoginResult);
                 else
                 {
-                    InfoLog.Instance.I("设置会员价成功，完成整个会员登录流程。");
+                    InfoLog.Instance.I("完成会员登录流程。");
                     IsMemberLogin = true;
                 }
             }
-
-            //新后台接口每次获取会返回发票抬头，注销此业务
-
-            //InfoLog.Instance.I("开始获取订单{0}的发票抬头。", Data.OrderId);
-            //var invoiceResult = service.GetOrderInvoice(Data.OrderId);
-            //if (!string.IsNullOrEmpty(invoiceResult.Item1))
-            //    return string.Format("获取订单发票抬头失败。" + invoiceResult.Item1);
-
-            //InfoLog.Instance.I("结束获取订单发票抬头：{0}。", invoiceResult.Item2);
-            //Data.OrderInvoiceTitle = invoiceResult.Item2;
 
             return null;
         }

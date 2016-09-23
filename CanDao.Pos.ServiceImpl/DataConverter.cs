@@ -325,7 +325,7 @@ namespace CanDao.Pos.ServiceImpl
             var item = new YaZuoMemberInfo
             {
                 StoredBalance = response.psStoredCardsBalance / 100,
-                IntegralBalance = response.psIntegralOverall / 100,
+                Integral = response.psIntegralOverall / 100,
             };
 
             if (!string.IsNullOrEmpty(response.pszTrack2))

@@ -5,28 +5,8 @@ namespace CanDao.Pos.Model
     /// <summary>
     /// 雅座会员信息。
     /// </summary>
-    public class YaZuoMemberInfo
+    public class YaZuoMemberInfo : MemberInfo
     {
-        /// <summary>
-        /// 手机号。
-        /// </summary>
-        public string Mobile { get; set; }
-
-        /// <summary>
-        /// 储值余额。
-        /// </summary>
-        public decimal StoredBalance { get; set; }
-
-        /// <summary>
-        /// 积分余额。
-        /// </summary>
-        public decimal IntegralBalance { get; set; }
-
-        /// <summary>
-        /// 卡号。
-        /// </summary>
-        public string CardNo { get; set; }
-
         /// <summary>
         /// 多卡号集合。如果只有一个卡号，该字段为null。
         /// </summary>

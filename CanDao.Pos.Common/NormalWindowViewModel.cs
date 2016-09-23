@@ -240,6 +240,9 @@ namespace CanDao.Pos.Common
         public NormalWindowViewModel()
         {
             OwnerWindow = new T { DataContext = this };
+            OwnerWindow.Loaded += (sender, args) => { OnWindowLoaded(null); };
+            OwnerWindow.Closing += (sender, args) => { OnWindowClosing(args); };
+            OwnerWindow.Closed += (sender, args) => { OnWindowClosed(null); };
         }
     }
 }

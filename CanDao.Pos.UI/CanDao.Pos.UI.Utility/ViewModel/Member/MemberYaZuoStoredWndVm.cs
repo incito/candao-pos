@@ -159,7 +159,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return;
             }
 
-            StorageInfo.IntegralBalance = result.Item2.IntegralBalance;
+            StorageInfo.IntegralBalance = result.Item2.Integral;
 
             var print = new ReportPrintHelper2(null);
             print.PrintMemberStoredReport(GeneratePrintInfo());

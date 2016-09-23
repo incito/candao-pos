@@ -264,6 +264,7 @@
     <Compile Include="UserInfo.cs" />
     <Compile Include="UserRight.cs" />
     <Compile Include="WorkFlowInfo.cs" />
+    <Compile Include="YaZuoSettlementInfo.cs" />
     <Compile Include="YaZuoStorageInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -646,6 +646,39 @@ namespace CanDao.Pos.ServiceImpl
             return new Tuple<string, YaZuoCardActiveInfo>(null, DataConverter.ToYaZuoCardActiveInfo(result.Item2));
         }
 
+        public string SettlementYaZuo(YaZuoSettlementInfo settlementInfo)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("SettlementYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return "雅座会员消费地址为空。";
+
+            var msg = settlementInfo.CheckDataValid();
+            if (!string.IsNullOrEmpty(msg))
+                return msg;
+
+            var param = new List<string>
+            {
+                settlementInfo.UserId,
+                settlementInfo.OrderId,
+                settlementInfo.MemberCardNo,
+                settlementInfo.OrderId,//接口文档来看，这里是收银软件生成的标识号，用订单号来处理
+                settlementInfo.CashAmount.ToString(CultureInfo.InvariantCulture),
+                settlementInfo.IntegralValue.ToString(CultureInfo.InvariantCulture),
+                settlementInfo.TransType,
+                settlementInfo.StoredPayAmount.ToString(CultureInfo.InvariantCulture),
+                !string.IsNullOrEmpty(settlementInfo.CouponUsedInfo) ? settlementInfo.CouponUsedInfo : " ",
+                DataHelper.GetNoneNullValueByOrder(settlementInfo.Password, "0"),
+                settlementInfo.CouponTotalAmount.ToString(CultureInfo.InvariantCulture),
+                SystemConfigCache.JavaServer,
+            };
+
+            var result = RestHttpHelper.HttpGet<YaZuoMemberBaseResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return result.Item1;
+
+            return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "会员消费失败。") : null;
+        }
+
         #endregion
     }
 }

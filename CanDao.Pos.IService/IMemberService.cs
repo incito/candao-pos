@@ -203,6 +203,13 @@ namespace CanDao.Pos.IService
         /// <returns></returns>
         Tuple<string, YaZuoCardActiveInfo> CardActiveYaZuo(string cardNo, string cardPassword, string mobile);
 
+        /// <summary>
+        /// 雅座会员结算。
+        /// </summary>
+        /// <param name="settlementInfo">结算信息。</param>
+        /// <returns>结算成功返回null，否则返回错误信息。</returns>
+        string SettlementYaZuo(YaZuoSettlementInfo settlementInfo);
+
         #endregion
     }
 }

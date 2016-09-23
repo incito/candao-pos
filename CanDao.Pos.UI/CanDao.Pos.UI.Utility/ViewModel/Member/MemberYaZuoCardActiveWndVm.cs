@@ -12,7 +12,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// </summary>
     public class MemberYaZuoCardActiveWndVm : NormalWindowViewModel<MemberYaZuoCardActiveWindow>
     {
-
         #region Properties
 
         /// <summary>
