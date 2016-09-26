@@ -832,7 +832,41 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void ClearnMachine()
         {
             InfoLog.Instance.I("点击清机按钮，选择清机或结业...");
-            var hasDinnerTable = Tables.Any(t => t.TableStatus == EnumTableStatus.Dinner);
+            TaskService.Start(null, GetAllOrderInfosProcess, GetAllOrderInfoComplete, "查询所有账单状态中...");
+        }
+
+        /// <summary>
+        /// 加载账单信息的执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private object GetAllOrderInfosProcess(object arg)
+        {
+            InfoLog.Instance.I("开始获取账单数据...");
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+                return new Tuple<string, List<QueryOrderInfo>>("创建IRestaurantService服务失败。", null);
+
+            return service.QueryOrderInfos(Globals.UserInfo.UserName);
+        }
+
+        /// <summary>
+        /// 加载账单执行完成。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private void GetAllOrderInfoComplete(object arg)
+        {
+            var result = (Tuple<string, List<QueryOrderInfo>>)arg;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E(result.Item1);
+                MessageDialog.Warning(result.Item1, OwnerWindow);
+                return;
+            }
+
+            InfoLog.Instance.I("账单查询完成。");
+            var hasDinnerTable = result.Item2.Any(t => t.OrderStatus == EnumOrderStatus.Ordered);
             var allowCash = !IsForcedEndWorkModel && Globals.UserRight.AllowClearn;//只有当不是强制结业且有清机权限时才允许清机。
             var wnd = new SelectClearnStepWindow(!hasDinnerTable, allowCash);
             if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
