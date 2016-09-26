@@ -1641,9 +1641,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             WorkFlowInfo wf = null;
             if (Globals.IsCanDaoMember)
-                wf = new WorkFlowInfo(SaleMemberCanDaoProcess, SaleMemberCanDaoComplete, "会员消费结算中...");
+                wf = new WorkFlowInfo(SaleMemberCanDaoProcess, SaleMemberComplete, "会员消费结算中...");
             else if (Globals.IsYazuoMember)
-                wf = new WorkFlowInfo(SaleMemberYazuoProcess, SaleMemberYazuoComplete, "会员消费结算中...");
+                wf = new WorkFlowInfo(SaleMemberYazuoProcess, SaleMemberComplete, "会员消费结算中...");
 
             return wf;
         }
@@ -2248,24 +2248,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 餐道会员消费执行完成。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private Tuple<bool, object> SaleMemberCanDaoComplete(object arg)
-        {
-            var result = (string)arg;
-            if (!string.IsNullOrEmpty(result))
-            {
-                ErrLog.Instance.E(result);
-                MessageDialog.Warning(result, OwnerWindow);
-                return new Tuple<bool, object>(false, null); //会员结算失败，走错误流程。
-            }
-
-            return new Tuple<bool, object>(true, null);
-        }
-
-        /// <summary>
         /// 雅座会员消费执行方法。
         /// </summary>
         /// <param name="arg"></param>
@@ -2281,11 +2263,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 雅座会员消费执行完成。
+        /// 会员消费执行完成。
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private Tuple<bool, object> SaleMemberYazuoComplete(object arg)
+        private Tuple<bool, object> SaleMemberComplete(object arg)
         {
             var result = arg as string;
             if (!string.IsNullOrEmpty(result))
