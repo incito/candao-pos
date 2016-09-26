@@ -210,6 +210,13 @@ namespace CanDao.Pos.IService
         /// <returns>结算成功返回null，否则返回错误信息。</returns>
         string SettlementYaZuo(YaZuoSettlementInfo settlementInfo);
 
+        /// <summary>
+        /// 反结算。
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
+        /// <returns></returns>
+        string AntiSettlementYaZuo(string orderId);
+
         #endregion
     }
 }

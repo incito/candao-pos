@@ -41,7 +41,7 @@
             <controls:WatermarkTextBox Grid.Row="2"
                                        IsEnabled="False"
                                        Watermark="积分余额："
-                                       Text="{Binding MemberInfo.IntegralBalance, UpdateSourceTrigger=PropertyChanged}"
+                                       Text="{Binding MemberInfo.Integral, UpdateSourceTrigger=PropertyChanged}"
                                        Height="48" Width="310" Margin="10,2"
                                        VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
             

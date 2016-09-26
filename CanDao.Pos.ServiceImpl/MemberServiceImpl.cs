@@ -679,6 +679,25 @@ namespace CanDao.Pos.ServiceImpl
             return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "会员消费失败。") : null;
         }
 
+        public string AntiSettlementYaZuo(string orderId)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("AntiSettlementYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return "雅座会员反结算地址为空。";
+
+            var param = new List<string>
+            {
+                orderId,
+                "0",//密码
+                "11111111"//超级密码
+            };
+            var result = RestHttpHelper.HttpGet<YaZuoMemberBaseResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return result.Item1;
+
+            return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "雅座会员反结算失败。") : null;
+        }
+
         #endregion
     }
 }

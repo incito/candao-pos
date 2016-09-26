@@ -33,12 +33,6 @@ namespace CanDao.Pos.UI.Utility
 
         #endregion
 
-        #region 属性
-
-        public string OrderId { set; get; }
-
-        #endregion
-
         #region Public Methods
 
         /// <summary>
@@ -59,13 +53,13 @@ namespace CanDao.Pos.UI.Utility
             {
                 if (Globals.IsCanDaoMember)
                 {
-                    var canDaoMemberResettlementWf = new WorkFlowInfo(CanDaoMemberResettlementProcess, CanDaoMemberResettlementComplete);//餐道会员反结算工作流。
+                    var canDaoMemberResettlementWf = new WorkFlowInfo(CanDaoMemberResettlementProcess, MemberResettlementComplete);//餐道会员反结算工作流。
                     checkWf.NextWorkFlowInfo = canDaoMemberResettlementWf;
                     currentWf = canDaoMemberResettlementWf;
                 }
                 else if (Globals.IsYazuoMember)
                 {
-                    var yaZuoMemberResettlementWf = new WorkFlowInfo(YaZuoMemberResettlementProcess, YaZuoMemberResettlementComplete);//雅座会员反结算工作流。
+                    var yaZuoMemberResettlementWf = new WorkFlowInfo(YaZuoMemberResettlementProcess, MemberResettlementComplete);//雅座会员反结算工作流。
                     checkWf.NextWorkFlowInfo = yaZuoMemberResettlementWf;
                     currentWf = yaZuoMemberResettlementWf;
                 }
@@ -95,13 +89,13 @@ namespace CanDao.Pos.UI.Utility
             {
                 if (Globals.IsCanDaoMember)
                 {
-                    var canDaoMemberResettlementWf = new WorkFlowInfo(CanDaoMemberResettlementProcess, CanDaoMemberResettlementComplete);//餐道会员反结算工作流。
+                    var canDaoMemberResettlementWf = new WorkFlowInfo(CanDaoMemberResettlementProcess, MemberResettlementComplete);//餐道会员反结算工作流。
                     currentWf.NextWorkFlowInfo = canDaoMemberResettlementWf;
                     currentWf = canDaoMemberResettlementWf;
                 }
                 else if (Globals.IsYazuoMember)
                 {
-                    var yaZuoMemberResettlementWf = new WorkFlowInfo(YaZuoMemberResettlementProcess, YaZuoMemberResettlementComplete);//雅座会员反结算工作流。
+                    var yaZuoMemberResettlementWf = new WorkFlowInfo(YaZuoMemberResettlementProcess, MemberResettlementComplete);//雅座会员反结算工作流。
                     currentWf.NextWorkFlowInfo = yaZuoMemberResettlementWf;
                     currentWf = yaZuoMemberResettlementWf;
                 }
@@ -271,32 +265,14 @@ namespace CanDao.Pos.UI.Utility
             }
 
             InfoLog.Instance.I("开始会员消费反结算...");
-            var voidSaleRequest = new CanDaoMemberVoidSaleRequest(_orderId);
-            voidSaleRequest.branch_id = Globals.BranchInfo.BranchId;
-            voidSaleRequest.cardno = result.Item2.cardno;
-            voidSaleRequest.TraceCode = result.Item2.serial;
+            var voidSaleRequest = new CanDaoMemberVoidSaleRequest(_orderId)
+            {
+                branch_id = Globals.BranchInfo.BranchId,
+                cardno = result.Item2.cardno,
+                TraceCode = result.Item2.serial
+            };
 
             return memberService.VoidSale(voidSaleRequest);
-        }
-
-        /// <summary>
-        /// 餐道会员反结算执行完成。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private Tuple<bool, object> CanDaoMemberResettlementComplete(object arg)
-        {
-            var result = (string)arg;
-            if (!string.IsNullOrWhiteSpace(result))
-            {
-                var errMsg = string.Format("餐道会员消费反结算失败：{0}", result);
-                ErrLog.Instance.E(errMsg);
-                MessageDialog.Warning(errMsg);
-                return new Tuple<bool, object>(false, null);
-            }
-
-            InfoLog.Instance.I("餐道会员消费反结算完成。");
-            return new Tuple<bool, object>(true, null);
         }
 
         /// <summary>
@@ -306,17 +282,33 @@ namespace CanDao.Pos.UI.Utility
         /// <returns></returns>
         private object YaZuoMemberResettlementProcess(object arg)
         {
-            return null;
+            InfoLog.Instance.I("开始会员消费反结算。");
+
+            var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+            if (service == null)
+                return "创建IMemberService服务失败。";
+
+            return service.AntiSettlementYaZuo(_orderId);
         }
 
         /// <summary>
-        /// 雅座会员反结算执行完成。
+        /// 会员反结算执行完成。
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private Tuple<bool, object> YaZuoMemberResettlementComplete(object arg)
+        private Tuple<bool, object> MemberResettlementComplete(object arg)
         {
-            return null;
+            var result = (string)arg;
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                var errMsg = string.Format("会员消费反结算失败：{0}", result);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
+                return new Tuple<bool, object>(false, null);
+            }
+
+            InfoLog.Instance.I("会员消费反结算完成。");
+            return new Tuple<bool, object>(true, null);
         }
 
         #endregion

@@ -95,6 +95,7 @@
     <StorageYaZuo Addr="/datasnap/rest/TServerMethods1/StoreCardDeposit/"/><!--雅座会员储值-->
     <CardActiveYaZuo Addr="/datasnap/rest/TServerMethods1/CardActive/"/><!--雅座会员激活-->
     <SettlementYaZuo Addr="/datasnap/rest/TServerMethods1/Sale/"/><!--雅座会员消费-->
+    <AntiSettlementYaZuo Addr="/datasnap/rest/TServerMethods1/VoidSale/"/><!--雅座会员反结算-->
   </YaZuoApi>
   
   <!--云接口-->
