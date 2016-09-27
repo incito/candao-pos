@@ -324,14 +324,16 @@ namespace CanDao.Pos.ServiceImpl
         {
             var item = new YaZuoMemberInfo
             {
+                CardNo = response.pszPan,
                 StoredBalance = response.psStoredCardsBalance / 100,
                 Integral = response.psIntegralOverall / 100,
+                Mobile = response.pszMobile,
             };
 
             if (!string.IsNullOrEmpty(response.pszTrack2))
             {
                 var tempList = response.pszTrack2.Split(',');
-                if (tempList.Count() > 2)
+                if (tempList.Count() > 1)
                     item.CardNoList = tempList.ToList();
             }
 
@@ -433,7 +435,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             return new YaZuoCardActiveInfo
             {
-                
+
             };
         }
 

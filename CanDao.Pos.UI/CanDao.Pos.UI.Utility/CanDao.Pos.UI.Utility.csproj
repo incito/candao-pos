@@ -83,6 +83,7 @@
     <Compile Include="ViewModel\Member\MemberYaZuoCardActiveWndVm.cs" />
     <Compile Include="ViewModel\Member\MemberYaZuoStoredWndVm.cs" />
     <Compile Include="ViewModel\Member\MemberYaZuoQueryWndVm.cs" />
+    <Compile Include="ViewModel\MultMemberCardSelectWndVm.cs" />
     <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
     <Compile Include="ViewModel\SelectTakeoutOnAccountCompanyVm.cs" />
     <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
@@ -104,6 +105,9 @@
     </Compile>
     <Compile Include="View\Member\MemberYaZuoStoredWindow.xaml.cs">
       <DependentUpon>MemberYaZuoStoredWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Member\MultMemberCardSelectWindow.xaml.cs">
+      <DependentUpon>MultMemberCardSelectWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\NumInputWindow.xaml.cs">
       <DependentUpon>NumInputWindow.xaml</DependentUpon>
@@ -284,6 +288,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Member\MemberYaZuoStoredWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Member\MultMemberCardSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

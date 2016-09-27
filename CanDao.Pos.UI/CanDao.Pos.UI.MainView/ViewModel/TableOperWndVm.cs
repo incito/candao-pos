@@ -1365,7 +1365,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 if (Data.MemberInfo == null)
                 {
-                    var queryMemberWf = GenerateMemberQueryWf();
+                    var queryMemberWf = new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...");
                     curStepWf.NextWorkFlowInfo = queryMemberWf;
                     curStepWf = queryMemberWf;
                 }
@@ -1393,7 +1393,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void MemberLogin()
         {
-            WorkFlowService.Start(null, new WorkFlowInfo(MemberLoginProcess, MemberLoginComplete, "会员登录中..."));
+            var queryMemberWf = new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete2, "会员查询中..."); ;
+            queryMemberWf.NextWorkFlowInfo = new WorkFlowInfo(MemberLoginProcess, MemberLoginComplete, "会员登录中...");
+            WorkFlowService.Start(null, queryMemberWf);
         }
 
         /// <summary>
@@ -1617,20 +1619,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected void GetTableDishInfoAsync()
         {
             TaskService.Start(null, GetOrderInfoProcess, GetOrderInfoComplete, "加载餐台详情...");
-        }
-
-        /// <summary>
-        /// 生成会员查询工作流。
-        /// </summary>
-        /// <returns></returns>
-        private WorkFlowInfo GenerateMemberQueryWf()
-        {
-            WorkFlowInfo wf = null;
-            if (Globals.IsCanDaoMember)
-                wf = new WorkFlowInfo(QueryMemberCanDaoProcess, QueryMemberCanDaoComplete, "会员查询中...");
-            else if (Globals.IsYazuoMember)
-                wf = new WorkFlowInfo(QueryMemberYazuoProcess, QueryMemberYazuoComplete, "会员查询中...");
-            return wf;
         }
 
         /// <summary>
@@ -2024,69 +2012,101 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 餐道会员查询执行方法。
+        /// 生成会员查询工作流。
+        /// </summary>
+        /// <returns></returns>
+        private WorkFlowInfo GenerateMemberQueryWf()
+        {
+            return new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...");
+        }
+
+        /// <summary>
+        /// 会员查询执行方法。
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private object QueryMemberCanDaoProcess(object arg)
+        private object QueryMemberProcess(object arg)
         {
-            InfoLog.Instance.I("开始执行餐道会员查询...");
             var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
             if (service == null)
                 return new Tuple<string, MemberInfo>("创建IMemberService服务失败。", null);
 
-            var request = new CanDaoMemberQueryRequest
+            if (Globals.IsCanDaoMember)
             {
-                branch_id = Globals.BranchInfo.BranchId,
-                cardno = MemberCardNo,
-            };
-            return service.QueryCandao(request);
+                var request = new CanDaoMemberQueryRequest
+                {
+                    branch_id = Globals.BranchInfo.BranchId,
+                    cardno = MemberCardNo,
+                };
+                InfoLog.Instance.I("开始执行餐道会员查询...");
+                return service.QueryCandao(request);
+            }
+            if (Globals.IsYazuoMember)
+            {
+                InfoLog.Instance.I("开始执行雅座会员查询...");
+                var result = service.QueryYaZuo(MemberCardNo);
+                return new Tuple<string, MemberInfo>(result.Item1, result.Item2);
+            }
+            return new Tuple<string, MemberInfo>("错误的会员配置项。", null);
         }
 
         /// <summary>
-        /// 餐道会员查询执行完成。
+        /// 会员查询执行完成。
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private Tuple<bool, object> QueryMemberCanDaoComplete(object arg)
+        private Tuple<bool, object> QueryMemberComplete(object arg)
         {
             var result = (Tuple<string, MemberInfo>)arg;
             if (!string.IsNullOrEmpty(result.Item1))
             {
-                ErrLog.Instance.E("餐道会员查询失败：{0}", result.Item1);
+                ErrLog.Instance.E("会员查询失败：{0}", result.Item1);
                 MessageDialog.Warning(result.Item1, OwnerWindow);
                 return new Tuple<bool, object>(false, null);//不能return null，因为要执行错误工作流。
             }
 
-            InfoLog.Instance.I("餐道会员查询成功。");
+            InfoLog.Instance.I("会员查询成功。");
             Data.MemberInfo = result.Item2;
             return new Tuple<bool, object>(true, Data.MemberInfo);
         }
 
         /// <summary>
-        /// 雅座会员查询执行方法。
+        /// 会员查询执行完成。（区别是这个方法在遇到多卡的情况下，会弹出会员卡选择窗口让用户选择一个卡）。
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        private object QueryMemberYazuoProcess(object arg)
+        private Tuple<bool, object> QueryMemberComplete2(object arg)
         {
-            InfoLog.Instance.I("开始执行雅座会员查询...");
-            var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
-            if (service == null)
-                return new Tuple<string, MemberInfo>("创建IMemberService服务失败。", null);
+            var result = (Tuple<string, MemberInfo>)arg;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E("会员查询失败：{0}", result.Item1);
+                MessageDialog.Warning(result.Item1, OwnerWindow);
+                return new Tuple<bool, object>(false, null);//不能return null，因为要执行错误工作流。
+            }
 
-            return service.QueryYaZuo(arg as string);
-        }
+            InfoLog.Instance.I("会员查询成功。");
+            Data.MemberInfo = result.Item2;
 
-        /// <summary>
-        /// 雅座会员查询执行完成。
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private Tuple<bool, object> QueryMemberYazuoComplete(object arg)
-        {
-            IsMemberLogin = true;
-            return null;
+            if (Globals.IsYazuoMember)
+            {
+                var yazuoMemberInfo = (YaZuoMemberInfo)Data.MemberInfo;
+                if (yazuoMemberInfo.CardNoList != null && yazuoMemberInfo.CardNoList.Any())
+                {
+                    var cardSelectVm = new MultMemberCardSelectWndVm(yazuoMemberInfo.CardNoList, yazuoMemberInfo.CardNo);
+                    if (WindowHelper.ShowDialog(cardSelectVm, OwnerWindow))
+                    {
+                        if (!MemberCardNo.Equals(cardSelectVm.SelectedCard))
+                        {
+                            MemberCardNo = cardSelectVm.SelectedCard;
+                            MemberLogin();
+                            return null;
+                        }
+                    }
+                }
+            }
+
+            return new Tuple<bool, object>(true, Data.MemberInfo);
         }
 
         /// <summary>
@@ -2096,34 +2116,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private object MemberLoginProcess(object arg)
         {
-            InfoLog.Instance.I("开始执行餐道会员查询...");
             var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
             if (service == null)
                 return "创建IMemberService服务失败。";
-
-            if (Globals.IsCanDaoMember)
-            {
-                var request = new CanDaoMemberQueryRequest
-                {
-                    branch_id = Globals.BranchInfo.BranchId,
-                    cardno = MemberCardNo,
-                };
-                var queryResult = service.QueryCandao(request);
-                InfoLog.Instance.I("结束餐道会员查询。");
-                if (!string.IsNullOrEmpty(queryResult.Item1))
-                    return string.Format("会员查询失败：{0}", queryResult.Item1);
-
-                Data.MemberInfo = queryResult.Item2;
-            }
-            else if (Globals.IsYazuoMember)
-            {
-                var yzQueryResult = service.QueryYaZuo(MemberCardNo);
-                InfoLog.Instance.I("结束雅座会员查询。");
-                if (!string.IsNullOrEmpty(yzQueryResult.Item1))
-                    return string.Format("会员查询失败：{0}", yzQueryResult.Item1);
-
-                Data.MemberInfo = yzQueryResult.Item2;
-            }
 
             InfoLog.Instance.I("开始执行会员登入...");
             var loginResult = service.MemberLogin(Data.OrderId, MemberCardNo);
@@ -2532,15 +2527,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 WipeOddAmount = Data.RemovezeroAmount;
             });
 
-            if (!string.IsNullOrEmpty(MemberCardNo))//走会员登录的流程。
+            if (!string.IsNullOrEmpty(MemberCardNo) && !IsMemberLogin)//走会员登录的流程。
             {
-                InfoLog.Instance.I("该餐台登录了会员，开始会员登录...");
-                var memberLoginResult = MemberLoginProcess(null) as string;
-                if (!string.IsNullOrEmpty(memberLoginResult))
-                    ErrLog.Instance.E("会员登录时失败：{0}", memberLoginResult);
+                InfoLog.Instance.I("该餐台登录了会员，开始会员信息查询...");
+                var memberQueryResult = (Tuple<string, MemberInfo>)QueryMemberProcess(null);
+                if (!string.IsNullOrEmpty(memberQueryResult.Item1))
+                    ErrLog.Instance.E("会员信息查询时失败：{0}", memberQueryResult.Item1);
                 else
                 {
-                    InfoLog.Instance.I("完成会员登录流程。");
+                    InfoLog.Instance.I("完成会员查询。");
+                    Data.MemberInfo = memberQueryResult.Item2;
                     IsMemberLogin = true;
                 }
             }

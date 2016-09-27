@@ -47,7 +47,7 @@
             
             <view:InputNumberControl Grid.Row="3" HorizontalAlignment="Center"/>
 
-            <view:WindowButtonOperControl Grid.Row="4"/>
+            <view:WindowButtonOperControl Grid.Row="4" Margin="15,0"/>
         </Grid>
         
         <Separator Grid.Column="1" Width="3" Background="{StaticResource CanDaoPosColorFgDisable}"/>
