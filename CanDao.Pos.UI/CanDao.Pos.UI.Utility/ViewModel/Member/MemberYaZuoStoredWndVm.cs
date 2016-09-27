@@ -205,9 +205,14 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return;
             }
 
-            StorageInfo = result.Item2;
             NotifyDialog.Notify(string.Format("会员储值成功。{0}交易流水号：{1}", Environment.NewLine, result.Item2.TradeCode), OwnerWindow.Owner);
-            TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员积分余额查询中...");
+
+            StorageInfo = result.Item2;
+            StorageInfo.IntegralBalance = MemberInfo.Integral;
+
+            var print = new ReportPrintHelper2(null);
+            print.PrintMemberStoredReport(GeneratePrintInfo());
+            CloseWindow(true);
         }
 
         /// <summary>

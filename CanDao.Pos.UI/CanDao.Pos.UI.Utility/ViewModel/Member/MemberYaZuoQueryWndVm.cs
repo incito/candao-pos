@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
@@ -16,12 +17,25 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <summary>
         /// 会员号。
         /// </summary>
-        public string MemberNo { get; set; }
+        private string _memberNo;
+        /// <summary>
+        /// 会员号。
+        /// </summary>
+        public string MemberNo
+        {
+            get { return _memberNo; }
+            set
+            {
+                _memberNo = value;
+                RaisePropertyChanged("MemberNo");
+            }
+        }
 
         /// <summary>
         /// 会员信息。
         /// </summary>
         private YaZuoMemberInfo _memberInfo;
+
         /// <summary>
         /// 会员信息。
         /// </summary>
@@ -86,6 +100,20 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 ErrLog.Instance.E(errMsg);
                 MessageDialog.Warning(errMsg, OwnerWindow);
                 return;
+            }
+
+            if (result.Item2.CardNoList != null && result.Item2.CardNoList.Any())
+            {
+                var cardSelectVm = new MultMemberCardSelectWndVm(result.Item2.CardNoList, result.Item2.CardNo);
+                if (WindowHelper.ShowDialog(cardSelectVm, OwnerWindow))
+                {
+                    if (!MemberNo.Equals(cardSelectVm.SelectedCard))
+                    {
+                        MemberNo = cardSelectVm.SelectedCard;
+                        TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员积分余额查询中...");
+                        return;
+                    }
+                }
             }
 
             MemberInfo = result.Item2;

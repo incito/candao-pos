@@ -37,13 +37,13 @@
                                        Watermark="储值余额："
                                        Text="{Binding MemberInfo.StoredBalance, UpdateSourceTrigger=PropertyChanged}"
                                        Height="48" Width="310" Margin="10,2"
-                                       VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
+                                       VerticalContentAlignment="Center" HorizontalAlignment="Center" BorderThickness="0"/>
             <controls:WatermarkTextBox Grid.Row="2"
                                        IsEnabled="False"
                                        Watermark="积分余额："
                                        Text="{Binding MemberInfo.Integral, UpdateSourceTrigger=PropertyChanged}"
                                        Height="48" Width="310" Margin="10,2"
-                                       VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
+                                       VerticalContentAlignment="Center" HorizontalAlignment="Center" BorderThickness="0"/>
             
             <view:InputNumberControl Grid.Row="3" HorizontalAlignment="Center"/>
 
