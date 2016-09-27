@@ -4,7 +4,8 @@
                        xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
                        xmlns:view="clr-namespace:CanDao.Pos.UI.Utility.View"
                        xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
-                       Title="会员储值" Height="280" Width="600"
+                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                       Title="会员储值" Height="300" Width="700"
                        ShowInTaskbar="False">
     <controls:PosMsgWindow.Resources>
         <ResourceDictionary>
@@ -15,7 +16,7 @@
     </controls:PosMsgWindow.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid>
@@ -25,29 +26,71 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <controls:WatermarkTextBox x:Name="TbMemberNo"
-                                       Watermark="会员卡号："
-                                       Text="{Binding MemberNo, UpdateSourceTrigger=PropertyChanged}"
-                                       Height="48" Width="250" Margin="10,11,0,5"
-                                       VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
-            <toolkit:DoubleTextBox Grid.Row="1"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <controls:WatermarkTextBox x:Name="TbMemberNo"
+                                           Watermark="会员卡号："
+                                           IsEnabled="{Binding IsMemberQueried, Converter={StaticResource BoolRevertCvt}}"
+                                           Text="{Binding MemberNo, UpdateSourceTrigger=PropertyChanged}"
+                                           Height="48" Width="300" Margin="10,10,0,5"
+                                           VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <i:InvokeCommandAction Command="{Binding OperCmd}" CommandParameter="MemberCardNoGotFocus"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="LostFocus">
+                            <i:InvokeCommandAction Command="{Binding OperCmd}" CommandParameter="MemberCardNoLostFocus"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </controls:WatermarkTextBox>
+                <Button Grid.Column="1" HorizontalAlignment="Left"
+                        Width="45" Height="45" Margin="5"
+                        Content="查询"
+                        Visibility="{Binding IsMemberQueried, Converter={StaticResource Bool2CollapsedCvt}}"
+                        Command="{Binding OperCmd}" CommandParameter="Query"/>
+                <Button Grid.Column="1" HorizontalAlignment="Left"
+                        Width="45" Height="45" Margin="5"
+                        Content="退出"
+                        Visibility="{Binding IsMemberQueried, Converter={StaticResource Bool2VisibilityCvt}}"
+                        Command="{Binding OperCmd}" CommandParameter="Quite"/>
+            </Grid>
+            <Grid Grid.Row="1" Margin="10,0,0,5"
+                  Visibility="{Binding IsMemberQueried, Converter={StaticResource Bool2VisibilityCvt}}"
+                  TextBlock.Foreground="{StaticResource CanDaoPosColorSelected}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding MemberInfo.StoredBalance, StringFormat=储值余额：{0}}"
+                           HorizontalAlignment="Left"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding MemberInfo.Integral, StringFormat=积分余额：{0}}"
+                           HorizontalAlignment="Left"/>
+            </Grid>
+            <toolkit:DoubleTextBox  x:Name="TbStorage"
+                                    Grid.Row="2"
                                    Watermark="储值金额："
+                                   IsEnabled="{Binding IsMemberQueried}"
                                    Text="{Binding StoredValue, UpdateSourceTrigger=PropertyChanged}"
-                                   Height="48" Width="250" Margin="10,0,0,5"
-                                   VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
-            <CheckBox Grid.Row="2"
+                                   Height="48" Width="300" Margin="10,0,0,5"
+                                   VerticalContentAlignment="Center" HorizontalAlignment="Left"/>
+            <CheckBox Grid.Row="3"
                       Content="现金"
                       Margin="25,10,0,10"
                       Command="{Binding OperCmd}" CommandParameter="Cash"
                       IsChecked="{Binding StoragePayType, Converter={StaticResource StoragePayType2CheckCvt}, ConverterParameter=Cash}"/>
-            <CheckBox Grid.Row="3"
+            <CheckBox Grid.Row="4"
                       Content="银行卡"
                       Margin="25,10,0,10"
                       Command="{Binding OperCmd}" CommandParameter="Bank"
                       IsChecked="{Binding StoragePayType, Converter={StaticResource StoragePayType2CheckCvt}, ConverterParameter=Bank}"/>
             
-            <view:WindowButtonOperControl Grid.Row="4" VerticalAlignment="Bottom"/>
+            <view:WindowButtonOperControl Grid.Row="5" VerticalAlignment="Bottom"/>
         </Grid>
 
         <view:InputNumberControl Grid.Column="1" VerticalAlignment="Top"/>

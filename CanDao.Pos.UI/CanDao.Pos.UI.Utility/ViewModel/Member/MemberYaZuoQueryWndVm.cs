@@ -11,6 +11,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// </summary>
     public class MemberYaZuoQueryWndVm : NormalWindowViewModel<MemberYaZuoQueryWindow>
     {
+        #region Properties
+
         /// <summary>
         /// 会员号。
         /// </summary>
@@ -32,6 +34,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 RaisePropertyChanged("MemberInfo");
             }
         }
+        
+        #endregion
 
         #region Protected Methods
 

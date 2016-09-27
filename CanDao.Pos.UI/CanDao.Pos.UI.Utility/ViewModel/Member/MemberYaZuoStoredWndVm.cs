@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
@@ -16,9 +18,26 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         #region Properties
 
         /// <summary>
+        /// 是否会员卡为当前焦点。
+        /// </summary>
+        private bool _isMemberCardFocus;
+
+        /// <summary>
         /// 会员号。
         /// </summary>
-        public string MemberNo { get; set; }
+        private string _memberNo;
+        /// <summary>
+        /// 会员号。
+        /// </summary>
+        public string MemberNo
+        {
+            get { return _memberNo; }
+            set
+            {
+                _memberNo = value;
+                RaisePropertyChanged("MemberNo");
+            }
+        }
 
         /// <summary>
         /// 储值信息。
@@ -59,6 +78,41 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
         }
 
+        /// <summary>
+        /// 会员信息。
+        /// </summary>
+        private YaZuoMemberInfo _memberInfo;
+        /// <summary>
+        /// 会员信息。
+        /// </summary>
+        public YaZuoMemberInfo MemberInfo
+        {
+            get { return _memberInfo; }
+            set
+            {
+                _memberInfo = value;
+                RaisePropertyChanged("MemberInfo");
+            }
+        }
+
+        /// <summary>
+        /// 是否进行过会员查询。
+        /// </summary>
+        private bool _isMemberQueried;
+        /// <summary>
+        /// 是否进行过会员查询。
+        /// </summary>
+        public bool IsMemberQueried
+        {
+            get { return _isMemberQueried; }
+            set
+            {
+                _isMemberQueried = value;
+                RaisePropertyChanged("IsMemberQueried");
+            }
+        }
+
+
         #endregion
 
         #region Protected Methods
@@ -66,12 +120,27 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         protected override void OnWindowLoaded(object param)
         {
             ((MemberYaZuoStoredWindow)OwnerWindow).TbMemberNo.Focus();
+            _isMemberCardFocus = true;
         }
 
         protected override void OperMethod(object param)
         {
             switch (param as string)
             {
+                case "Query":
+                    QueryMember();
+                    break;
+                case "Quite":
+                    MemberNo = "";
+                    IsMemberQueried = false;
+                    MemberInfo = null;
+                    break;
+                case "MemberCardNoGotFocus":
+                    _isMemberCardFocus = true;
+                    break;
+                case "MemberCardNoLostFocus":
+                    _isMemberCardFocus = false;
+                    break;
                 case "Cash":
                     StoragePayType = EnumStoragePayType.Cash;
                     break;
@@ -83,13 +152,24 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override void Confirm(object param)
         {
-            if (MessageDialog.Quest(string.Format("确定给会员号：\"{0}\"储值：\"{1}\"吗？", MemberNo, StoredValue)))
-                TaskService.Start(null, StorageProcess, StorageComplete, "会员储值处理中...");
+            StorageMember();
         }
 
         protected override bool CanConfirm(object param)
         {
             return !string.IsNullOrEmpty(MemberNo) && StoredValue > 0;
+        }
+
+        protected override void OnPreviewKeyDown(KeyEventArgs arg)
+        {
+            if (arg.Key == Key.Enter)
+            {
+                arg.Handled = true;
+                if (_isMemberCardFocus)
+                    QueryMember();
+                else
+                    StorageMember();
+            }
         }
 
         #endregion
@@ -159,12 +239,30 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return;
             }
 
-            StorageInfo.IntegralBalance = result.Item2.Integral;
+            if (result.Item2.CardNoList != null && result.Item2.CardNoList.Any())
+            {
+                var cardSelectVm = new MultMemberCardSelectWndVm(result.Item2.CardNoList, result.Item2.CardNo);
+                if (WindowHelper.ShowDialog(cardSelectVm, OwnerWindow))
+                {
+                    if (!MemberNo.Equals(cardSelectVm.SelectedCard))
+                    {
+                        MemberNo = cardSelectVm.SelectedCard;
+                        TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员积分余额查询中...");
+                        return;
+                    }
+                }
+            }
 
-            var print = new ReportPrintHelper2(null);
-            print.PrintMemberStoredReport(GeneratePrintInfo());
+            MemberInfo = result.Item2;
+            IsMemberQueried = true;
+            if (StorageInfo != null)
+            {
+                StorageInfo.IntegralBalance = result.Item2.Integral;
 
-            CloseWindow(true);
+                var print = new ReportPrintHelper2(null);
+                print.PrintMemberStoredReport(GeneratePrintInfo());
+                CloseWindow(true);
+            }
         }
 
         /// <summary>
@@ -183,6 +281,23 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 ScoreBalance = StorageInfo.IntegralBalance,
                 StoredAmount = StoredValue,
             };
+        }
+
+        /// <summary>
+        /// 会员查询。
+        /// </summary>
+        private void QueryMember()
+        {
+            TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员查询中...");
+        }
+
+        /// <summary>
+        /// 会员储值。
+        /// </summary>
+        private void StorageMember()
+        {
+            if (MessageDialog.Quest(string.Format("确定给会员号：\"{0}\"储值：\"{1}\"吗？", MemberNo, StoredValue)))
+                TaskService.Start(null, StorageProcess, StorageComplete, "会员储值处理中...");
         }
 
         #endregion
