@@ -110,7 +110,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     if (!MemberNo.Equals(cardSelectVm.SelectedCard))
                     {
                         MemberNo = cardSelectVm.SelectedCard;
-                        TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员积分余额查询中...");
+                        TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员查询中...");
                         return;
                     }
                 }
