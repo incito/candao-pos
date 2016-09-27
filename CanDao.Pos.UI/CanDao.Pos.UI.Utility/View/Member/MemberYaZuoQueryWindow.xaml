@@ -61,7 +61,54 @@
             <TextBlock Text="会员优惠券"
                        FontWeight="Bold" FontSize="16"
                        HorizontalAlignment="Center" Margin="0,22"/>
+            <controls:GroupSelector x:Name="GsCoupon"
+                                Grid.Row="1"
+                                Margin="5"
+                                ItemsSource="{Binding MemberInfo.CouponList}"
+                                ItemCountEachGroup="6"
+                                ItemContainerStyle="{StaticResource LbNormalStyle}"
+                                VerticalAlignment="Top">
+                <controls:GroupSelector.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </controls:GroupSelector.ItemsPanel>
+                <controls:GroupSelector.Template>
+                    <ControlTemplate TargetType="controls:GroupSelector">
+                        <ItemsControl x:Name="PART_Selector" 
+                                  ItemsSource="{TemplateBinding GroupedItemsSource}"
+                                  Margin="3"
+                                  Focusable="False">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="3" Background="{StaticResource CanDaoPosColorBgWhite}"
+                                            Width="120" Height="48" Margin="3">
+                                        <TextBlock Text="{Binding CouponName}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                   FontSize="14"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ControlTemplate>
+                </controls:GroupSelector.Template>
+            </controls:GroupSelector>
 
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center" Margin="0,5"
+                        Visibility="{Binding GroupCount, ElementName=GsCards, Converter={StaticResource Count2VisibleCvt}, ConverterParameter=1}">
+                <Button Style="{StaticResource BtnLeftStyle}" Command="{Binding OperCmd}" CommandParameter="CouponPreGroup"/>
+                <TextBlock Text="{Binding SelectedGroupIndex, Converter={StaticResource CountAdd1Cvt}, ElementName=GsCoupon}"/>
+                <TextBlock Text="/"/>
+                <TextBlock Text="{Binding GroupCount, ElementName=GsCoupon}"/>
+                <Button Style="{StaticResource BtnRightStyle}" Command="{Binding OperCmd}" CommandParameter="CouponNextGroup"/>
+            </StackPanel>
         </Grid>
 
     </Grid>

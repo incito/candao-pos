@@ -33,7 +33,7 @@
                                        VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
             <controls:WatermarkPasswordBox Grid.Row="1"
                                            Watermark="会员密码："
-                                           Text="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged}"
+                                           Password="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                            Height="48" Width="250" Margin="10,0,0,5"
                                            VerticalContentAlignment="Center" HorizontalAlignment="Center"/>
             <toolkit:DoubleTextBox Grid.Row="2"

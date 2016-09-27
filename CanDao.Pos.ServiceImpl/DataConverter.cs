@@ -362,12 +362,14 @@ namespace CanDao.Pos.ServiceImpl
             try
             {
                 var item = new YaZuoCouponInfo
-                    {
-                        CouponId = tempList[0],
-                        CouponType = tempList[2],
-                        CouponName = tempList[3],
-                        CouponCount = Parse2Int(tempList[4])
-                    };
+                {
+                    CouponId = tempList[0],
+                    CouponType = tempList[2],
+                    CouponName = tempList[3],
+                    CouponCount = Parse2Int(tempList[4]),
+                    CouponTotalAmount = Parse2Decimal(tempList[1]),
+                    CouponEachAmount = 0,
+                };
 
                 return item;
             }
@@ -713,6 +715,16 @@ namespace CanDao.Pos.ServiceImpl
             return retValue;
         }
 
+        private static decimal Parse2Decimal(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return 0;
+
+            decimal retValue;
+            decimal.TryParse(value, out retValue);
+            return retValue;
+        }
+
         private static DateTime? Parse2DateTime(string value, string format)
         {
             if (string.IsNullOrEmpty(value))
@@ -735,16 +747,6 @@ namespace CanDao.Pos.ServiceImpl
                 ErrLog.Instance.E(string.Format("日期转换异常。src:{0},   fmt:{1}", value, format), exp);
                 return defaulTime;
             }
-        }
-
-        /// <summary>
-        /// 根据顺序取第一个不为空的值。
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        private static string GetAnOrderValue(params string[] values)
-        {
-            return values.FirstOrDefault(value => !string.IsNullOrEmpty(value));
         }
 
         private static List<DishDetailRequest> ToDishDetailRequestList(List<OrderDishInfo> dishInfos)
@@ -1045,6 +1047,7 @@ namespace CanDao.Pos.ServiceImpl
         /// </summary>
         /// <param name="response"></param>
         /// <param name="relateDishId"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
         internal static OrderDishInfo ToDishInfo(DishGroupInfo response, string relateDishId, int index)
         {

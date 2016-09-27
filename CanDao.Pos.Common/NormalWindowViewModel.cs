@@ -239,11 +239,14 @@ namespace CanDao.Pos.Common
     {
         public NormalWindowViewModel()
         {
-            OwnerWindow = new T { DataContext = this };
+            OwnerWnd = new T { DataContext = this };
+            OwnerWindow = OwnerWnd;
             OwnerWindow.Loaded += (sender, args) => { OnWindowLoaded(null); };
             OwnerWindow.Closing += (sender, args) => { OnWindowClosing(args); };
             OwnerWindow.Closed += (sender, args) => { OnWindowClosed(null); };
             OwnerWindow.PreviewKeyDown += (sender, args) => { OnPreviewKeyDown(args); };
         }
+
+        public T OwnerWnd { get; set; }
     }
 }

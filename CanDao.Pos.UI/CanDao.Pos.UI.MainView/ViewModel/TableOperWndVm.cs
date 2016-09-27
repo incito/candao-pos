@@ -2012,15 +2012,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 生成会员查询工作流。
-        /// </summary>
-        /// <returns></returns>
-        private WorkFlowInfo GenerateMemberQueryWf()
-        {
-            return new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...");
-        }
-
-        /// <summary>
         /// 会员查询执行方法。
         /// </summary>
         /// <param name="arg"></param>
@@ -2091,6 +2082,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (Globals.IsYazuoMember)
             {
                 var yazuoMemberInfo = (YaZuoMemberInfo)Data.MemberInfo;
+
+                //处理雅座多卡
                 if (yazuoMemberInfo.CardNoList != null && yazuoMemberInfo.CardNoList.Any())
                 {
                     var cardSelectVm = new MultMemberCardSelectWndVm(yazuoMemberInfo.CardNoList, yazuoMemberInfo.CardNo);
@@ -2103,6 +2096,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                             return null;
                         }
                     }
+                }
+
+                //处理雅座优惠券
+                if (yazuoMemberInfo.CouponList != null   && yazuoMemberInfo.CouponList.Any())
+                {
+                    
                 }
             }
 

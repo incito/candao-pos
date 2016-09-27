@@ -48,7 +48,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 RaisePropertyChanged("MemberInfo");
             }
         }
-        
+
         #endregion
 
         #region Protected Methods
@@ -66,6 +66,32 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         protected override void Confirm(object param)
         {
             TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员查询中...");
+        }
+
+        protected override void OperMethod(object param)
+        {
+            switch (param as string)
+            {
+                case "CouponPreGroup":
+                    OwnerWnd.GsCoupon.PreviousGroup();
+                    break;
+                case "CouponNextGroup":
+                    OwnerWnd.GsCoupon.NextGroup();
+                    break;
+            }
+        }
+
+        protected override bool CanOperMethod(object param)
+        {
+            switch (param as string)
+            {
+                case "CouponPreGroup":
+                    return OwnerWnd.GsCoupon.CanPreviousGroup;
+                case "CouponNextGroup":
+                    return OwnerWnd.GsCoupon.CanNextGruop;
+                default:
+                    return true;
+            }
         }
 
         #endregion
