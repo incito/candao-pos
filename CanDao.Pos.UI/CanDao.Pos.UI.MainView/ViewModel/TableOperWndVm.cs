@@ -1878,17 +1878,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (ChargeAmount > 100)
                 return "找零金额不能大于100。";
 
-            if (Globals.IsCanDaoMember &&
-                !string.IsNullOrWhiteSpace(MemberCardNo) &&
+            if (Globals.IsCanDaoMember && IsMemberLogin &&
                 (IntegralAmount > 0 || MemberAmount > 0) &&
                 string.IsNullOrWhiteSpace(MemberPassword))//雅座会员消费不必输入密码。
                 return "使用会员储值或积分请输入会员密码。";
 
-            if (MemberAmount > Data.MemberInfo.StoredBalance)
-                return "会员储值余额不足。";
+            if (IsMemberLogin)
+            {
+                if (MemberAmount > Data.MemberInfo.StoredBalance)
+                    return "会员储值余额不足。";
 
-            if (IntegralAmount > Data.MemberInfo.Integral)
-                return "积分余额不足。";
+                if (IntegralAmount > Data.MemberInfo.Integral)
+                    return "积分余额不足。";
+            }
 
             if (DebitAmount > 0 && SelectedOnCmpAccInfo == null)
                 return "使用挂账金额请先选择挂账单位。";
@@ -2099,9 +2101,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
 
                 //处理雅座优惠券
-                if (yazuoMemberInfo.CouponList != null   && yazuoMemberInfo.CouponList.Any())
+                if (yazuoMemberInfo.CouponList != null && yazuoMemberInfo.CouponList.Any())
                 {
-                    
+
                 }
             }
 
