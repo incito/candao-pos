@@ -16,6 +16,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -51,6 +52,11 @@
                 CommandParameter="OrderDishNextGroup"
                 VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
 
-        <view:WindowButtonOperControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"/>
+        <TextBlock Grid.Column="0" Grid.Row="2"
+                   Text="选择&quot;取消&quot;或关闭窗口则直接采用手机号登录会员。"
+                   HorizontalAlignment="Left" Margin="15,0"
+                   Foreground="{StaticResource CanDaoPosColorFgOrange}"/>
+
+        <view:WindowButtonOperControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"/>
     </Grid>
 </controls:PosMsgWindow>
