@@ -231,6 +231,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 ErrLog.Instance.E("获取用户权限失败：{0}。", result.Item1);
                 MessageDialog.Warning(result.Item1, OwnerWindow);
+                return;
             }
 
             InfoLog.Instance.I("获取用户权限成功。");
