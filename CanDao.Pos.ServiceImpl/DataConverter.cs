@@ -364,11 +364,10 @@ namespace CanDao.Pos.ServiceImpl
                 var item = new YaZuoCouponInfo
                 {
                     CouponId = tempList[0],
+                    CouponAmount = Parse2Decimal(tempList[1]) / 100,//金额是精确到分的。
                     CouponType = tempList[2],
                     CouponName = tempList[3],
                     CouponCount = Parse2Int(tempList[4]),
-                    CouponTotalAmount = Parse2Decimal(tempList[1]),
-                    CouponEachAmount = 0,
                 };
 
                 return item;

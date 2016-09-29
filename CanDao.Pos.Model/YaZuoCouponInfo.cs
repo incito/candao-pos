@@ -23,13 +23,7 @@
         /// <summary>
         /// 券金额。
         /// </summary>
-        public decimal CouponTotalAmount { get; set; }
-
-
-        /// <summary>
-        /// 单张券金额。
-        /// </summary>
-        public decimal CouponEachAmount { get; set; }
+        public decimal CouponAmount { get; set; }
 
         /// <summary>
         /// 券类型。

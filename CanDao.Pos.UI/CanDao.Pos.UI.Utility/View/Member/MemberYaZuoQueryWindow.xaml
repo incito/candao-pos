@@ -88,9 +88,34 @@
                                 <DataTemplate>
                                     <Border CornerRadius="3" Background="{StaticResource CanDaoPosColorBgWhite}"
                                             Width="120" Height="48" Margin="3">
-                                        <TextBlock Text="{Binding CouponName}"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                                   FontSize="14"/>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                                       Text="{Binding CouponName}"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                       Foreground="{StaticResource CanDaoPosColorFgOrange}"
+                                                       FontSize="14"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="0"
+                                                       Text="{Binding CouponAmount, StringFormat={}{0}元}"
+                                                       HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"
+                                                       FontSize="14"/>
+                                            <GridSplitter Grid.Row="1" Grid.Column="1"
+                                                          Width="1.5"
+                                                          Background="Gray"
+                                                          VerticalAlignment="Stretch" Margin="0,2"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="2"
+                                                       Text="{Binding CouponCount, StringFormat={}{0}张}"
+                                                       HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0"
+                                                       FontSize="14"/>
+                                        </Grid>
                                     </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
