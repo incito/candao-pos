@@ -11,6 +11,11 @@
         public string DishId { get; set; }
 
         /// <summary>
+        /// 赠菜的菜品单位。
+        /// </summary>
+        public string DishUnit { get; set; }
+
+        /// <summary>
         /// 使用的优惠券数量。
         /// </summary>
         public decimal UsedCouponCount { get; set; }
