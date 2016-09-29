@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace CanDao.Pos.Model.Response
+﻿namespace CanDao.Pos.Model.Response
 {
-    public class UsePreferentialResponse:NewHttpBaseResponse
+    public class UsePreferentialResponse : NewHttpBaseResponse
     {
         public preferentialInfoResponse data { set; get; }
     }

@@ -68,6 +68,7 @@ namespace CanDao.Pos.Model.Response
         /// 调整金额
         /// </summary>
         public decimal adjAmout { set; get; }
+
         public List<GetpreferentialDetails> detailPreferentials { set; get; }
     }
 
@@ -94,6 +95,7 @@ namespace CanDao.Pos.Model.Response
         /// 优惠券明细Id
         /// </summary>
         public string coupondetailid { set; get; }
+
         public PreferentialDetails activity { set; get; }
     }
 
