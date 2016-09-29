@@ -16,6 +16,11 @@
         public string dishid { get; set; }
 
         /// <summary>
+        /// 菜品单位。
+        /// </summary>
+        public string unit { get; set; }
+
+        /// <summary>
         /// 优惠券使用数量。
         /// </summary>
         public decimal count { get; set; }

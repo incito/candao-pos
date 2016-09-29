@@ -73,7 +73,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
                 //赠菜可选的数量需要减去已经赠菜的数量。
                 var dishNum = orderDishInfo.DishNum;
-                var item = dishGiftCouponInfos.FirstOrDefault(t => t.DishId.Equals(orderDishInfo.DishId));
+                var item = dishGiftCouponInfos.FirstOrDefault(t => t.DishId.Equals(orderDishInfo.DishId) && t.DishUnit.Equals(orderDishInfo.DishUnit));
                 if (item != null)
                 {
                     var tempNum = Math.Min(dishNum, item.UsedCouponCount);
@@ -93,6 +93,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     DishName = orderDishInfo.DishName,
                     DishPrice = orderDishInfo.Price,
                     DishNum = dishNum,
+                    DishUnit = orderDishInfo.DishUnit,
                 });
             }
         }

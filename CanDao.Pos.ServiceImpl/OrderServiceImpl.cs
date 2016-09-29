@@ -189,57 +189,7 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, List<CouponInfo>>(ex.MyMessage(), null);
             }
         }
-
-        public Tuple<string, decimal> CalcDiscountAmount(CalcDiscountAmountRequest request)
-        {
-
-            var addr = ServiceAddrCache.GetServiceAddr("CalcDiscountAmount");
-            if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, decimal>("获取优惠券集合为空。", 0);
-
-            try
-            {
-                var result = HttpHelper.HttpPost<CalcDiscountAmountResponse>(addr, request);
-                return !result.IsSuccess
-                    ? new Tuple<string, decimal>(null, result.amount)
-                    : new Tuple<string, decimal>(DataHelper.GetNoneNullValueByOrder(result.msg, "接口调用错误。"), 0); //这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
-            }
-            catch (Exception ex)
-            {
-                ErrLog.Instance.E("计算折扣金额时异常。", ex);
-                return new Tuple<string, decimal>(ex.MyMessage(), 0);
-            }
-        }
-
-
-        public string SaveUsedCoupon(string orderId, string userName, List<UsedCouponInfo> couponInfos)
-        {
-            var addr = ServiceAddrCache.GetServiceAddr("SaveCouponInfo");
-            if (string.IsNullOrEmpty(addr))
-                return "保存优惠券信息地址为空。";
-
-            var parmaAdd = string.Format("{0}/{1}/{2}/{3}/", addr, userName, PCInfoHelper.IPAddr, orderId);
-            var result = RestHttpHelper.HttpPost<RestBaseResponse>(parmaAdd, couponInfos);
-            if (!string.IsNullOrEmpty(result.Item1))
-                return result.Item1;
-
-            return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "保存优惠券使用列表失败。") : null;
-        }
-
-        public Tuple<string, List<UsedCouponInfo>> GetSavedUsedCoupon(string orderId, string userId)
-        {
-            var addr = ServiceAddrCache.GetServiceAddr("GetSavedCouponInfo");
-            if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, List<UsedCouponInfo>>("获取保存的优惠券信息地址为空。", null);
-
-            var param = new List<string> { orderId, userId };
-            var response = RestHttpHelper.HttpGet<GetSavedCouponResponse>(addr, param);
-            var result = new List<UsedCouponInfo>();
-            if (response.Item2.Data != null)
-                result = response.Item2.Data.Select(DataConverter.ToUsedCouponInfo).ToList();
-            return new Tuple<string, List<UsedCouponInfo>>(null, result);
-        }
-
+        
         public Tuple<string, MenuComboFullInfo> GetMenuComboDishes(GetMenuComboDishRequest request)
         {
             var addr = ServiceAddrCache.GetServiceAddr("GetMenuComboDish");

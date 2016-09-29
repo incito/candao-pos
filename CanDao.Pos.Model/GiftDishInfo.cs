@@ -12,6 +12,11 @@
         public string DishId { set; get; }
 
         /// <summary>
+        /// 菜品单位。
+        /// </summary>
+        public string DishUnit { get; set; }
+
+        /// <summary>
         /// 是否选中。
         /// </summary>
         public bool IsSelected

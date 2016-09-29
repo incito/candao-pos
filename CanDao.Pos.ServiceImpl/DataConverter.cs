@@ -518,6 +518,7 @@ namespace CanDao.Pos.ServiceImpl
             return new DishGiftCouponInfo
             {
                 DishId = response.dishid,
+                DishUnit = response.unit,
                 UsedCouponCount = response.count,
             };
         }

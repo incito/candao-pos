@@ -22,5 +22,6 @@ namespace CanDao.Pos.Model.Request
         public string isCustom { set; get; }
 
         public string dishid { set; get; }
+        public string unit { get; set; }
     }
 }

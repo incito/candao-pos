@@ -68,30 +68,6 @@ namespace CanDao.Pos.IService
         Tuple<string, List<CouponInfo>> GetCouponInfos(string couponTypeId, string userName);
 
         /// <summary>
-        /// 计算折扣类优惠金额。
-        /// </summary>
-        /// <param name="request">请求参数类。</param>
-        /// <returns>Item1当遇到错误时为错误信息，否则为null。Item2为计算后折扣优惠金额。</returns>
-        Tuple<string, decimal> CalcDiscountAmount(CalcDiscountAmountRequest request);
-
-        /// <summary>
-        /// 保存优惠券使用列表。
-        /// </summary>
-        /// <param name="orderId">订单号。</param>
-        /// <param name="userName">当前登录用户Id。</param>
-        /// <param name="couponInfos">优惠券信息集合。。</param>
-        /// <returns>保存成功返回null，否则返回错误信息。</returns>
-        string SaveUsedCoupon(string orderId, string userName, List<UsedCouponInfo> couponInfos);
-
-        /// <summary>
-        /// 获取保存的优惠券信息。
-        /// </summary>
-        /// <param name="orderId">订单号。</param>
-        /// <param name="userId">用户。</param>
-        /// <returns></returns>
-        Tuple<string, List<UsedCouponInfo>> GetSavedUsedCoupon(string orderId, string userId);
-
-        /// <summary>
         /// 获取套餐信息。
         /// </summary>
         /// <param name="request">获取套餐信息的请求类。</param>
@@ -270,6 +246,7 @@ namespace CanDao.Pos.IService
         /// 获取餐台账单明细
         /// </summary>
         /// <param name="orderId"></param>
+        /// <param name="tableNo"></param>
         /// <returns></returns>
         Tuple<string, TableFullInfo> GetOrderInfo(string orderId, string tableNo, string itemid);
 
