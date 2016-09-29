@@ -192,9 +192,8 @@ namespace CanDao.Pos.ReportPrint
 
             if (!string.IsNullOrEmpty(result))
             {
-                var msg = string.Format("{0}打印失败：{1}", typeString, result);
-                ErrLog.Instance.E(msg);
-                MessageDialog.Warning(msg, _ownerWnd);
+                ErrLog.Instance.E(result);
+                MessageDialog.Warning(result, _ownerWnd);
                 return;
             }
 
