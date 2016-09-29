@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
@@ -47,6 +48,20 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 _memberInfo = value;
                 RaisePropertyChanged("MemberInfo");
             }
+        }
+
+        /// <summary>
+        /// 会员优惠券集合。
+        /// </summary>
+        public ObservableCollection<YaZuoCouponInfo> CouponInfos { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        public MemberYaZuoQueryWndVm()
+        {
+            CouponInfos = new ObservableCollection<YaZuoCouponInfo>();
         }
 
         #endregion
@@ -133,9 +148,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 var cardSelectVm = new MultMemberCardSelectWndVm(result.Item2.CardNoList, result.Item2.CardNo);
                 if (WindowHelper.ShowDialog(cardSelectVm, OwnerWindow))
                 {
-                    if (!MemberNo.Equals(cardSelectVm.SelectedCard))
+                    MemberNo = cardSelectVm.SelectedCard;
+                    if (!result.Item2.CardNo.Equals(cardSelectVm.SelectedCard)) //当默认的卡号跟选择的卡号不同时，重新查询。
                     {
-                        MemberNo = cardSelectVm.SelectedCard;
                         TaskService.Start(null, MemberQueryProcess, MemberQueryComplete, "会员查询中...");
                         return;
                     }
@@ -143,6 +158,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
 
             MemberInfo = result.Item2;
+            CouponInfos.Clear();
+            if (result.Item2.CouponList != null)
+                result.Item2.CouponList.ForEach(CouponInfos.Add);
         }
 
         #endregion

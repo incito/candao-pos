@@ -64,7 +64,7 @@
             <controls:GroupSelector x:Name="GsCoupon"
                                 Grid.Row="1"
                                 Margin="5"
-                                ItemsSource="{Binding MemberInfo.CouponList}"
+                                ItemsSource="{Binding CouponInfos}"
                                 ItemCountEachGroup="6"
                                 ItemContainerStyle="{StaticResource LbNormalStyle}"
                                 VerticalAlignment="Top">
