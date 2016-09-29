@@ -38,7 +38,10 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                     <Grid>
-                                        <TextBlock Foreground="{TemplateBinding Foreground}" Text="{Binding DishName}" FontSize="20" TextWrapping="Wrap"  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,6,3"/>
+                                        <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,6,3">
+                                            <TextBlock Foreground="{TemplateBinding Foreground}" Text="{Binding DishName}" FontSize="16" TextWrapping="Wrap"/>
+                                            <TextBlock Foreground="{TemplateBinding Foreground}" Text="{Binding DishUnit, StringFormat=({0})}" FontSize="16"/>
+                                        </WrapPanel>
                                         <TextBlock HorizontalAlignment="Right" Foreground="Coral" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,0,2,2" Text="{Binding NumString}" Visibility="{Binding ShowSelectString, Converter={StaticResource Bool2VisibilityCvt}}"/>
                                     </Grid>
                                 </Border>
