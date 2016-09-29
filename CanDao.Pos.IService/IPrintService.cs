@@ -23,11 +23,11 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 打印清机单
         /// </summary>
-        /// <param name="Userid"></param>
+        /// <param name="userid"></param>
         /// <param name="jsorder">结算ID</param>
         /// <param name="posid"></param>
         /// <returns></returns>
-        string PrintClearMachine(string Userid, string jsorder, string posid);
+        string PrintClearMachine(string userid, string jsorder, string posid);
         /// <summary>
         /// 打印会员消费
         /// </summary>
@@ -58,10 +58,11 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 打印营业报表明细
         /// </summary>
-        /// <param name="beginTime"></param>
-        /// <param name="endTime"></param>
+        /// <param name="beginTime">起始时间。</param>
+        /// <param name="endTime">结束时间。</param>
+        /// <param name="operationName">操作员。</param>
         /// <returns></returns>
-        string PrintBusinessDetail(string beginTime, string endTime, string operationname);
+        string PrintBusinessDetail(string beginTime, string endTime, string operationName);
         /// <summary>
         /// 打印发票
         /// </summary>

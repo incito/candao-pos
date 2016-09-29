@@ -45,7 +45,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                string parmAddr = string.Format("{0}/{1}/{2}/{3}", addr, userid, orderid, (int)printPayType);
+                string parmAddr = string.Format("{0}/{1}/{2}/{3}/{4}", addr, userid, orderid, (int)printPayType, SystemConfigCache.PosId);
                 var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null);
                 return response.IsSuccess ? null : string.Format("{0}错误：{1}", msg, response.msg);
             }
@@ -58,11 +58,11 @@ namespace CanDao.Pos.ServiceImpl
         /// <summary>
         /// 打印清机单
         /// </summary>
-        /// <param name="Userid"></param>
+        /// <param name="userid"></param>
         /// <param name="jsorder"></param>
         /// <param name="posid"></param>
         /// <returns></returns>
-        public string PrintClearMachine(string Userid, string jsorder, string posid)
+        public string PrintClearMachine(string userid, string jsorder, string posid)
         {
             string msg = "打印清机单";
             var addr = ServiceAddrCache.GetServiceAddr("PrintClearMachine");
@@ -74,7 +74,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                string parmAddr = string.Format("{0}/{1}/{2}/{3}/", addr, Userid, jsorder, posid);
+                string parmAddr = string.Format("{0}/{1}/{2}/{3}/", addr, userid, jsorder, posid);
                 var response = HttpHelper.HttpPost<JavaResponse>(parmAddr, null);
                 return response.IsSuccess ? null : string.Format("{0}错误：{1}", msg, response.msg);
             }
@@ -103,7 +103,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                string parmAddr = string.Format("{0}/{1}/{2}/", addr, Userid, orderid);
+                string parmAddr = string.Format("{0}/{1}/{2}/{3}", addr, Userid, orderid, SystemConfigCache.PosId);
                 var response = HttpHelper.HttpGet<JavaResponse>(parmAddr, null);
                 return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
 
@@ -131,16 +131,19 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new Dictionary<string, string>();
-                param.Add("cardno", storeInfo.CardNo);
-                param.Add("memberTitle", storeInfo.ReportTitle);
-                param.Add("pzh", storeInfo.TraceCode);
-                param.Add("date", storeInfo.TradeTime.ToString("yyyy-MM-dd"));
-                param.Add("time", storeInfo.TradeTime.ToString("HH:mm:ss"));
-                param.Add("storeName", storeInfo.ReportTitle);
-                param.Add("storedAmount", storeInfo.StoredAmount.ToString());
-                param.Add("storedBalance", storeInfo.StoredBalance.ToString());
-                param.Add("storedPoint", storeInfo.ScoreBalance.ToString());
+                var param = new Dictionary<string, string>
+                {
+                    {"cardno", storeInfo.CardNo},
+                    {"memberTitle", storeInfo.ReportTitle},
+                    {"pzh", storeInfo.TraceCode},
+                    {"date", storeInfo.TradeTime.ToString("yyyy-MM-dd")},
+                    {"time", storeInfo.TradeTime.ToString("HH:mm:ss")},
+                    {"storeName", storeInfo.ReportTitle},
+                    {"storedAmount", storeInfo.StoredAmount.ToString()},
+                    {"storedBalance", storeInfo.StoredBalance.ToString()},
+                    {"storedPoint", storeInfo.ScoreBalance.ToString()},
+                    {"deviceid", SystemConfigCache.PosId}
+                };
 
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
                 return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
@@ -168,8 +171,7 @@ namespace CanDao.Pos.ServiceImpl
             }
             try
             {
-                var param = new Dictionary<string, string>();
-                param.Add("flag", flag);
+                var param = new Dictionary<string, string> { { "flag", flag }, { "deviceid", SystemConfigCache.PosId } };
 
                 var response = HttpHelper.HttpGet<JavaResponse>(addr, param);
                 return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
@@ -198,8 +200,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new Dictionary<string, string>();
-                param.Add("flag", flag);
+                var param = new Dictionary<string, string> { { "flag", flag }, { "deviceid", SystemConfigCache.PosId } };
 
                 var response = HttpHelper.HttpGet<JavaResponse>(addr, param);
                 return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
@@ -217,8 +218,9 @@ namespace CanDao.Pos.ServiceImpl
         /// </summary>
         /// <param name="beginTime"></param>
         /// <param name="endTime"></param>
+        /// <param name="operationName"></param>
         /// <returns></returns>
-        public string PrintBusinessDetail(string beginTime, string endTime, string operationname)
+        public string PrintBusinessDetail(string beginTime, string endTime, string operationName)
         {
             string msg = "打印营业报表明细";
             var addr = ServiceAddrCache.GetServiceAddr("PrintBusinessDetail");
@@ -229,10 +231,13 @@ namespace CanDao.Pos.ServiceImpl
             }
             try
             {
-                var param = new Dictionary<string, string>();
-                param.Add("beginTime", beginTime);
-                param.Add("endTime", endTime);
-                param.Add("operationname", operationname);
+                var param = new Dictionary<string, string>
+                {
+                    {"beginTime", beginTime},
+                    {"endTime", endTime},
+                    {"operationname", operationName},
+                    {"deviceid", SystemConfigCache.PosId}
+                };
 
                 var response = HttpHelper.HttpGet<JavaResponse>(addr, param);
                 return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);
@@ -261,9 +266,12 @@ namespace CanDao.Pos.ServiceImpl
             }
             try
             {
-                var param = new Dictionary<string, string>();
-                param.Add("orderid", orderid);
-                param.Add("amount", amount);
+                var param = new Dictionary<string, string>
+                {
+                    { "orderid", orderid },
+                    { "amount", amount },
+                    {"deviceid", SystemConfigCache.PosId}
+                };
 
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
                 return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);

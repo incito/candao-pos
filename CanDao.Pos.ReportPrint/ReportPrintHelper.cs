@@ -651,8 +651,10 @@ namespace CanDao.Pos.ReportPrint
         /// <summary>
         /// 打印营业报表明细。
         /// </summary>
-        /// <param name="fullInfo"></param>
-        public static bool PrintBusinessDataDetail(string starTime, string endTime, string operationname)
+        /// <param name="starTime">起始时间。</param>
+        /// <param name="endTime">结束时间。</param>
+        /// <param name="operationName"></param>
+        public static bool PrintBusinessDataDetail(string starTime, string endTime, string operationName)
         {
             //string msg = "打印营业报表明细";
             //DataTable mainDb;
@@ -684,7 +686,7 @@ namespace CanDao.Pos.ReportPrint
             {
                 InfoLog.Instance.I("开始打印营业报表明细...");
                 var res = ServiceManager.Instance.GetServiceIntance<IPrintService>()
-                     .PrintBusinessDetail(starTime, endTime, operationname);
+                     .PrintBusinessDetail(starTime, endTime, operationName);
                 if (string.IsNullOrEmpty(res))
                 {
                     InfoLog.Instance.I("结束打印营业报表明细");
