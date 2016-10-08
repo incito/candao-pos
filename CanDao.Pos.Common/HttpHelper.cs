@@ -143,7 +143,7 @@ namespace CanDao.Pos.Common
 
             using (var client = new HttpClient())
             {
-                //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.Timeout = new TimeSpan(0, 0, 0, timeoutSecond, 0);//超时设置。
                 HttpResponseMessage response;
                 HttpLog.Instance.D("URL：{0}。 Request ：{1}", uri, data.ToJson());

@@ -156,9 +156,6 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     return;
                 }
 
-                var result = _memberService.QueryYaZuo(Model.SelectNum);
-                Console.WriteLine(result.Item1);
-
                 CanDaoVipQueryRequest request = new CanDaoVipQueryRequest();
                 request.cardno = Model.SelectNum;
                 request.branch_id = Globals.BranchInfo.BranchId;
