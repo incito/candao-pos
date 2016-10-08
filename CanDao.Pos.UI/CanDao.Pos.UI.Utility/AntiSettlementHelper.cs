@@ -6,6 +6,7 @@ using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility
 {
@@ -186,17 +187,17 @@ namespace CanDao.Pos.UI.Utility
 
             InfoLog.Instance.I("结束检测账单是否允许反结算。");
             InfoLog.Instance.I("弹出选择反结算原因选择窗口，选择反结算原因...");
-            var wnd = new AntiSettlementReasonSelectorWindow();
-            if (!WindowHelper.ShowDialog(wnd, _ownerWindow))
+            var reasonSelectorWnd = new AntiSettlementReasonSelectorWndVm();
+            if (!WindowHelper.ShowDialog(reasonSelectorWnd, _ownerWindow))
             {
                 InfoLog.Instance.I("取消选择反结算原因，退出反结算流程。");
                 return null;
             }
 
-            _antiSettlementReason = wnd.SelectedReason;
-            InfoLog.Instance.I("结束选择反结算原因：{0}", wnd.SelectedReason);
+            _antiSettlementReason = reasonSelectorWnd.SelectedReason;
+            InfoLog.Instance.I("结束选择反结算原因：{0}", reasonSelectorWnd.SelectedReason);
             InfoLog.Instance.I("开始反结算授权...");
-            if (!WindowHelper.ShowDialog(new AuthorizationWindow(EnumRightType.AntiSettlement), _ownerWindow))
+            if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.AntiSettlement), _ownerWindow))
             {
                 InfoLog.Instance.I("反结算授权失败，退出反结算流程。");
                 return null;

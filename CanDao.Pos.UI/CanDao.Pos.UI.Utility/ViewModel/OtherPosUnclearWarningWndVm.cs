@@ -6,10 +6,11 @@ using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
-    public class OtherPosUnclearWarningWndVm : NormalWindowViewModel
+    public class OtherPosUnclearWarningWndVm : NormalWindowViewModel<OtherPosUnclearWarningWindow>
     {
         public ICommand RetryCmd { get; private set; }
 

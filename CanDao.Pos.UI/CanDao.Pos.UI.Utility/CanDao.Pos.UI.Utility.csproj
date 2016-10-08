@@ -79,6 +79,7 @@
     <Compile Include="Model\UcBusinessDataDetailsModel.cs" />
     <Compile Include="Model\UCCashboxPswModel.cs" />
     <Compile Include="Model\UcCustomDishesModel.cs" />
+    <Compile Include="ViewModel\CashboxPasswordInputWndVm.cs" />
     <Compile Include="ViewModel\JdeReloadWndVm.cs" />
     <Compile Include="ViewModel\Member\MemberYaZuoCardActiveWndVm.cs" />
     <Compile Include="ViewModel\Member\MemberYaZuoStoredWndVm.cs" />
@@ -91,6 +92,9 @@
     <Compile Include="ViewModel\UcBusinessDataDetailsViewModel.cs" />
     <Compile Include="ViewModel\UCCashboxPswViewModel.cs" />
     <Compile Include="ViewModel\UcCustomDishesViewModel.cs" />
+    <Compile Include="View\CashboxPasswordInputWindow.xaml.cs">
+      <DependentUpon>CashboxPasswordInputWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CustomizeDishWindow.xaml.cs">
       <DependentUpon>CustomizeDishWindow.xaml</DependentUpon>
     </Compile>
@@ -268,6 +272,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CashboxPasswordInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

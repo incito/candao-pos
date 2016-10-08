@@ -6,8 +6,7 @@
                         xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
                         CloseBtnText="{Binding WndTitle}" CloseBtnEnable="False"
                         Width="530" Height="300"
-                        ShowInTaskbar="False"
-                        Loaded="DishInfoEditWindow_OnLoaded">
+                        ShowInTaskbar="False">
     <Grid>
         <Grid.Resources>
             <Style TargetType="TextBlock">

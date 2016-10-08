@@ -27,6 +27,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// </summary>
         private Timer _refreshTimer;
 
+        /// <summary>
+        /// 是否已经释放了资源。
+        /// </summary>
+        private bool _isDisposed;
+
         #endregion
 
         #region Constructor
@@ -115,7 +120,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         private void Refresh(object arg)
         {
             RemainingTimes = RefreshIntervalsSecond - 1;
-            _refreshTimer.Stop();
+            SetRefreshTimerStatus(false);
 
             string msg = null;
             if (!string.IsNullOrEmpty(arg as string) && arg.Equals("BtnPress"))
@@ -176,6 +181,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 InfoLog.Instance.I("释放打印机定时器...");
                 _refreshTimer.Stop();
                 _refreshTimer.Dispose();
+                _isDisposed = true;
             }
         }
 
@@ -226,7 +232,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 ErrLog.Instance.E("获取打印机列表时错误：{0}", result.Item1);
                 MessageDialog.Warning(result.Item1);
-                _refreshTimer.Start();
+                SetRefreshTimerStatus(true);
                 return;
             }
 
@@ -239,7 +245,15 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 InfoLog.Instance.I("打印机全部状态正常。");
             else
                 InfoLog.Instance.E("有打印机状态异常。");
-            _refreshTimer.Start();
+            SetRefreshTimerStatus(true);
+        }
+
+        private void SetRefreshTimerStatus(bool enable)
+        {
+            if (_isDisposed)
+                return;
+
+            _refreshTimer.Enabled = enable;
         }
 
         #endregion

@@ -13,7 +13,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// <summary>
     /// 挂账单位选择窗口Vm。
     /// </summary>
-    public class OnAccountCompanySelectWndVm : NormalWindowViewModel
+    public class OnAccountCompanySelectWndVm : NormalWindowViewModel<OnAccountCompanySelectWindow>
     {
         public OnAccountCompanySelectWndVm()
         {

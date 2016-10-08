@@ -8,10 +8,9 @@ namespace CanDao.Pos.UI.Utility.View
     /// </summary>
     public partial class MenuComboDishSelectWindow
     {
-        public MenuComboDishSelectWindow(MenuComboFullInfo info)
+        public MenuComboDishSelectWindow()
         {
             InitializeComponent();
-            DataContext = new MenuComboDishSelectWndVm(info) { OwnerWindow = this };
         }
 
         public MenuComboFullInfo ComboFullInfo

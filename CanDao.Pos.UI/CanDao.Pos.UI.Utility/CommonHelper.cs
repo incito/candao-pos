@@ -9,6 +9,7 @@ using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.ReportPrint;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.UI.Utility.ViewModel;
 using JunLan.Common.Base;
 
 namespace CanDao.Pos.UI.Utility
@@ -106,8 +107,7 @@ namespace CanDao.Pos.UI.Utility
 
                 if (otherMachineNoClear)
                 {
-                    var wnd = new OtherPosUnclearWarningWindow();
-                    if (!WindowHelper.ShowDialog(wnd))
+                    if (!WindowHelper.ShowDialog(new OtherPosUnclearWarningWndVm()))
                         return false;
                 }
             }
@@ -118,8 +118,7 @@ namespace CanDao.Pos.UI.Utility
 
         public static bool ClearPos(string userName = null)
         {
-            var wnd = new AuthorizationWindow(EnumRightType.Clearner, userName);
-            if (!WindowHelper.ShowDialog(wnd))
+            if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.Clearner, userName)))
                 return false;
 
             var request = new ClearnerRequest
@@ -183,8 +182,7 @@ namespace CanDao.Pos.UI.Utility
         {
             Application.Current.MainWindow.Hide();
 
-            var loginWnd = new UserLoginWindow();//登录
-            if (WindowHelper.ShowDialog(loginWnd))
+            if (WindowHelper.ShowDialog(new UserLoginWndVm()))
                 Application.Current.MainWindow.ShowDialog();
             else
                 Application.Current.Shutdown();

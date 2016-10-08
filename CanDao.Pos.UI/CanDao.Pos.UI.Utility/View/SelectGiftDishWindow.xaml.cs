@@ -1,26 +1,13 @@
-﻿using System.Collections.Generic;
-using CanDao.Pos.Model;
-using CanDao.Pos.UI.Utility.ViewModel;
-
-namespace CanDao.Pos.UI.Utility.View
+﻿namespace CanDao.Pos.UI.Utility.View
 {
     /// <summary>
     /// 赠菜选择窗口。
     /// </summary>
     public partial class SelectGiftDishWindow
     {
-        public SelectGiftDishWindow(IEnumerable<OrderDishInfo> data, List<DishGiftCouponInfo> dishGiftCouponInfos)
+        public SelectGiftDishWindow()
         {
             InitializeComponent();
-            DataContext = new SelectGiftDishWndVm(data, dishGiftCouponInfos) { OwnerWindow = this };
-        }
-
-        /// <summary>
-        /// 选择的赠菜集合。
-        /// </summary>
-        public List<GiftDishInfo> SelectedGiftDishInfos
-        {
-            get { return ((SelectGiftDishWndVm)DataContext).SelectedGiftDishInfos; }
         }
     }
 }

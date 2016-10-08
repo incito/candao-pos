@@ -1,12 +1,13 @@
 ﻿using System.Windows.Input;
 using CanDao.Pos.Common;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
     /// <summary>
     /// 反结算窗口Vm。
     /// </summary>
-    public class AntiSettlementReasonSelectorWndVm : NormalWindowViewModel
+    public class AntiSettlementReasonSelectorWndVm : NormalWindowViewModel<AntiSettlementReasonSelectorWindow>
     {
         private string _selectedReason;
 

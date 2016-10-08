@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model.Enum;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
     /// <summary>
     /// 授权窗口VM。
     /// </summary>
-    public class AuthorizationWndVm : NormalWindowViewModel
+    public class AuthorizationWndVm : NormalWindowViewModel<AuthorizationWindow>
     {
         #region Fields
 
@@ -22,7 +22,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         #region Constructor
 
-        public AuthorizationWndVm(EnumRightType rightType, string userName)
+        public AuthorizationWndVm(EnumRightType rightType, string userName = "")
         {
             _rightType = rightType;
             Account = userName;
@@ -113,6 +113,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         protected override bool CanConfirm(object param)
         {
             return !string.IsNullOrEmpty(Account) && !string.IsNullOrEmpty(Password);
+        }
+
+        protected override void OnWindowLoaded(object param)
+        {
+            OwnerWnd.TbUserName.Focus();
         }
 
         #endregion

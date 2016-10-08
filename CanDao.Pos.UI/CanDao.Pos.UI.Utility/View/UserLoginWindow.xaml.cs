@@ -1,6 +1,4 @@
-﻿using CanDao.Pos.UI.Utility.ViewModel;
-
-namespace CanDao.Pos.UI.Utility.View
+﻿namespace CanDao.Pos.UI.Utility.View
 {
     /// <summary>
     /// 用户登录窗口。
@@ -10,7 +8,6 @@ namespace CanDao.Pos.UI.Utility.View
         public UserLoginWindow()
         {
             InitializeComponent();
-            DataContext = new UserLoginWndVm { OwnerWindow = this };
         }
     }
 }

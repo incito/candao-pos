@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility.View
@@ -19,28 +8,9 @@ namespace CanDao.Pos.UI.Utility.View
     /// </summary>
     public partial class DishInfoEditWindow
     {
-        public DishInfoEditWindow(string dishName, decimal dishPrice, bool allowEditDishName = false, bool allowEditDishPrice = false)
+        public DishInfoEditWindow()
         {
             InitializeComponent();
-            DataContext = new DishInfoEditWndVm
-            {
-                OwnerWindow = this,
-                DishName = dishName,
-                DishPrice = dishPrice,
-                AllowEditDishName = allowEditDishName,
-                AllowEditDishPrice = allowEditDishPrice,
-                WndTitle = (!allowEditDishName && !allowEditDishPrice) ? "菜品数量设置窗口" : "菜品信息编辑窗口",
-            };
-        }
-
-        public decimal DishNum
-        {
-            get { return ((DishInfoEditWndVm)DataContext).DishNum; }
-        }
-
-        private void DishInfoEditWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            TbDishNum.Focus();
         }
     }
 }

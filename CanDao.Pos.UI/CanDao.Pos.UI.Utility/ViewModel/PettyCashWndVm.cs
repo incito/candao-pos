@@ -5,7 +5,7 @@ using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
-    public class PettyCashWndVm : NormalWindowViewModel
+    public class PettyCashWndVm : NormalWindowViewModel<PettyCashWindow>
     {
         private string _amount;
 

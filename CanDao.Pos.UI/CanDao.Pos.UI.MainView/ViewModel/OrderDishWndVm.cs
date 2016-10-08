@@ -847,11 +847,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("结束获取套餐信息，弹出套餐选择窗口。");
             result.Item2.ComboSelfInfo = SelectedDish;
-            var wnd = new MenuComboDishSelectWindow(result.Item2);
-            if (WindowHelper.ShowDialog(wnd, OwnerWnd))
-            {
-                AddComboDishInfo(wnd.ComboFullInfo, wnd.SelectedDiet);
-            }
+            var comboSelectWnd = new MenuComboDishSelectWndVm(result.Item2);
+            if (WindowHelper.ShowDialog(comboSelectWnd, OwnerWnd))
+                AddComboDishInfo(comboSelectWnd.Data, comboSelectWnd.SelectedDiet);
         }
 
         /// <summary>
@@ -982,8 +980,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!WindowHelper.ShowDialog(reasonWnd, OwnerWnd))
                 return;
 
-            var authorizeWnd = new AuthorizationWindow(EnumRightType.FreeDish);
-            if (!WindowHelper.ShowDialog(authorizeWnd, OwnerWnd))
+            if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.FreeDish), OwnerWnd))
                 return;
 
             OrderType = EnumOrderType.Free;
@@ -995,14 +992,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void HangTakeoutOrder()
         {
-            var wnd = new SelectTakeoutOnAccountCompany();
+            var wnd = new SelectTakeoutOnAccountCompanyVm();
             if (WindowHelper.ShowDialog(wnd, OwnerWnd))
             {
                 _onAccountRequest = new SetTakeoutOrderOnAccountRequest
                 {
                     CmpCode = wnd.OnAccountInfo.Id,
                     CmpName = wnd.OnAccountInfo.Name,
-                    ContactMobile = wnd.ContactMobile,
+                    ContactMobile = string.IsNullOrWhiteSpace(wnd.ContactMobile) ? " " : wnd.ContactMobile,//没有输入的时候要求一个空格占位符，在拼URL的时候用。
                     ContactName = wnd.ContactName,
                 };
 

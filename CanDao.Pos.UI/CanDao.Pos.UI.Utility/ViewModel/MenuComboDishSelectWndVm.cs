@@ -1,14 +1,13 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
-    public class MenuComboDishSelectWndVm : NormalWindowViewModel
+    public class MenuComboDishSelectWndVm : NormalWindowViewModel<MenuComboDishSelectWindow>
     {
         #region Fileds
 
@@ -50,6 +49,14 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 _needPageUpDown = value;
                 RaisePropertiesChanged("NeedPageUpDown");
             }
+        }
+
+        /// <summary>
+        /// 选择的忌口信息。
+        /// </summary>
+        public string SelectedDiet
+        {
+            get { return OwnerWnd.DietSetCtrl.SelectedInfo; }
         }
 
         #endregion

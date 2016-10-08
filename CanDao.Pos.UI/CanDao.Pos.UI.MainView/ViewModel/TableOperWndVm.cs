@@ -960,7 +960,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             InfoLog.Instance.I("赠菜优惠券使用信息获取完成，弹出赠菜选择窗口...");
-            var giftDishWnd = new SelectGiftDishWindow(Data.DishInfos.ToList(), result.Item2);
+            var giftDishWnd = new SelectGiftDishWndVm(Data.DishInfos.ToList(), result.Item2);
             if (WindowHelper.ShowDialog(giftDishWnd, OwnerWindow))
             {
                 if (giftDishWnd.SelectedGiftDishInfos.Count > 0)
@@ -1125,13 +1125,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     break;
                 case "SelectBank":
                     InfoLog.Instance.I("开始选择银行...");
-                    var wnd = new SelectBankWindow(SelectedBankInfo);
-                    if (WindowHelper.ShowDialog(wnd, OwnerWindow))
-                        SelectedBankInfo = wnd.SelectedBank;
+                    var selectBankWnd = new SelectBankWndVm(SelectedBankInfo);
+                    if (WindowHelper.ShowDialog(selectBankWnd, OwnerWindow))
+                        SelectedBankInfo = selectBankWnd.SelectedBank;
                     break;
                 case "SelectOnAccountCompany":
                     InfoLog.Instance.I("开始获取挂账单位...");
-                    var companyWnd = new OnAccountCompanySelectWindow();
+                    var companyWnd = new OnAccountCompanySelectWndVm();
                     if (WindowHelper.ShowDialog(companyWnd, OwnerWindow))
                         SelectedOnCmpAccInfo = companyWnd.SelectedCompany;
                     break;
@@ -1454,8 +1454,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 InfoLog.Instance.I("输入退菜数量：\"{0}\"。", numWnd.InputNum);
             }
 
-            var wnd = new AuthorizationWindow(EnumRightType.BackDish);
-            if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
+            if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.BackDish), OwnerWindow))
                 return;
 
             InfoLog.Instance.I("退菜授权人：\"{0}\"", Globals.Authorizer.UserName);
@@ -1482,7 +1481,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!WindowHelper.ShowDialog(backDishReasonWnd, OwnerWindow))
                 return;
 
-            if (WindowHelper.ShowDialog(new AuthorizationWindow(EnumRightType.BackDish), OwnerWindow))
+            if (WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.BackDish), OwnerWindow))
                 WorkFlowService.Start(backDishReasonWnd.SelectedReason, GenerateBackAllDishWf());
         }
 
@@ -1583,11 +1582,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             //密码验证
             if (PvSystemConfig.VSystemConfig.IsEnabledCheck)
             {
-                var viewModel = new UCCashboxPswViewModel();
-                if (WindowHelper.ShowDialog(viewModel.GetUserCtl(), OwnerWindow) == false)
-                {
+                if (!WindowHelper.ShowDialog(new CashboxPasswordInputWndVm(), OwnerWindow))
                     return;
-                }
             }
 
             ThreadPool.QueueUserWorkItem(t => { OpenCashBoxProcess(); });
@@ -2329,7 +2325,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(Data.OrderInvoiceTitle))
             {
                 InfoLog.Instance.I("有发票信息，显示发票金额设置窗口...");
-                WindowHelper.ShowDialog(new SetInvoiceAmountWindow(Data), OwnerWindow);
+                WindowHelper.ShowDialog(new SetInvoiceAmountWndVm(Data), OwnerWindow);
             }
 
             NotifyDialog.Notify(string.Format("桌号\"{0}\"结账成功。", Data.TableName), OwnerWindow.Owner);

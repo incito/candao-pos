@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Windows;
-
 using System.Windows.Input;
-using CanDao.Pos.Common.Controls;
-using CanDao.Pos.Common.Controls.CSystem;
-
 
 namespace CanDao.Pos.UI.Utility.View
 {

@@ -12,7 +12,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// <summary>
     /// 用户登录窗口Vm。
     /// </summary>
-    public class UserLoginWndVm : NormalWindowViewModel
+    public class UserLoginWndVm : NormalWindowViewModel<UserLoginWindow>
     {
         #region Fields
 
@@ -275,7 +275,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (!result.Item2)
             {
                 InfoLog.Instance.I("未输入零找金，显示零找金设置窗口...");
-                CloseWindow(WindowHelper.ShowDialog(new PettyCashWindow(), OwnerWindow));
+                CloseWindow(WindowHelper.ShowDialog(new PettyCashWndVm(), OwnerWindow));
                 return;
             }
 

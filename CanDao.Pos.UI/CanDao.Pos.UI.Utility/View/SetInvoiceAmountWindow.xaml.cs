@@ -1,5 +1,4 @@
-﻿using CanDao.Pos.Model;
-using CanDao.Pos.UI.Utility.ViewModel;
+﻿using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility.View
 {
@@ -8,10 +7,9 @@ namespace CanDao.Pos.UI.Utility.View
     /// </summary>
     public partial class SetInvoiceAmountWindow
     {
-        public SetInvoiceAmountWindow(TableFullInfo tableFullInfo)
+        public SetInvoiceAmountWindow()
         {
             InitializeComponent();
-            DataContext = new SetInvoiceAmountWndVm(tableFullInfo) { OwnerWindow = this };
         }
     }
 }
