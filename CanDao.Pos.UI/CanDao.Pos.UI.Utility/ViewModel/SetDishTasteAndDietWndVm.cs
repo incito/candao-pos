@@ -88,8 +88,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return;
             }
 
-            var wnd = new DishInfoEditWindow(DishInfo.DishName, DishInfo.DishPrice);
-            if (wnd.ShowDialog() == true)
+            var wnd = new DishInfoEditWndVm(DishInfo.DishName, DishInfo.DishPrice);
+            if (WindowHelper.ShowDialog(wnd, OwnerWindow))
             {
                 DishNum = Convert.ToInt32(wnd.DishNum);
             }
@@ -136,7 +136,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override bool CanConfirm(object param)
         {
-            var tasteSetCtrl = ((SetDishTasteAndDietWindow) OwnerWindow).TasteSetCtrl;
+            var tasteSetCtrl = ((SetDishTasteAndDietWindow)OwnerWindow).TasteSetCtrl;
             return tasteSetCtrl.TasteInfos == null || !string.IsNullOrWhiteSpace(((SetDishTasteAndDietWindow)OwnerWindow).TasteSetCtrl.SelectedTaste);//当有口味时必须选择一个口味。
         }
 

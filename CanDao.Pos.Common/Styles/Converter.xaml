@@ -23,4 +23,5 @@
     <converter:StatisticsPeriodsTypeToCheckConverter x:Key="StatisticsPeriodsType2CheckCvt"/>
     <converter:ViewTableStatusToCheckedConverter x:Key="ViewTableStatus2CheckedCvt"/>
     <converter:ViewTableTypeToCheckedConverter x:Key="ViewTableType2CheckedCvt"/>
+    <converter:StoragePayTypeToCheckConverter x:Key="StoragePayType2CheckCvt"/>
 </ResourceDictionary> 

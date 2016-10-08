@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CanDao.Pos.Common.Models.VipModels;
 using CanDao.Pos.Model;
+using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
 
@@ -9,12 +10,14 @@ namespace CanDao.Pos.IService
 {
     public interface IMemberService
     {
+        #region 餐道会员
+
         /// <summary>
         /// 餐道会员查询。
         /// </summary>
         /// <param name="request">查询请求类。</param>
         /// <returns>Item1当遇到错误时为错误信息，否则为null。Item2为会员信息。</returns>
-        Tuple<string, MemberInfo> QueryCanndao(CanDaoMemberQueryRequest request);
+        Tuple<string, MemberInfo> QueryCandao(CanDaoMemberQueryRequest request);
 
         /// <summary>
         /// 餐道会员储值。
@@ -170,5 +173,50 @@ namespace CanDao.Pos.IService
         /// <param name="pageSize"></param>
         /// <returns></returns>
         Tuple<string, List<MVipCoupon>> GetCouponList(string branchId, string currentPage = "", string pageSize = "");
+
+        #endregion
+
+        #region 雅座会员
+
+        /// <summary>
+        /// 雅座会员查询。
+        /// </summary>
+        /// <param name="memberNo">会员号。</param>
+        /// <returns></returns>
+        Tuple<string, YaZuoMemberInfo> QueryYaZuo(string memberNo);
+
+        /// <summary>
+        /// 雅座会员储值。
+        /// </summary>
+        /// <param name="memberNo">会员号。</param>
+        /// <param name="storageValue">储值金额。</param>
+        /// <param name="payType">储值付款方式。</param>
+        /// <returns></returns>
+        Tuple<string, YaZuoStorageInfo> StorageYaZuo(string memberNo, decimal storageValue, EnumStoragePayType payType);
+
+        /// <summary>
+        /// 雅座卡激活。
+        /// </summary>
+        /// <param name="cardNo">会员卡号。</param>
+        /// <param name="cardPassword">会员卡密码。</param>
+        /// <param name="mobile">激活手机号。</param>
+        /// <returns></returns>
+        Tuple<string, YaZuoCardActiveInfo> CardActiveYaZuo(string cardNo, string cardPassword, string mobile);
+
+        /// <summary>
+        /// 雅座会员结算。
+        /// </summary>
+        /// <param name="settlementInfo">结算信息。</param>
+        /// <returns>结算成功返回null，否则返回错误信息。</returns>
+        string SettlementYaZuo(YaZuoSettlementInfo settlementInfo);
+
+        /// <summary>
+        /// 反结算。
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
+        /// <returns></returns>
+        string AntiSettlementYaZuo(string orderId);
+
+        #endregion
     }
 }

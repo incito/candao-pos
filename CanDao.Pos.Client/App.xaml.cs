@@ -15,6 +15,7 @@ using CanDao.Pos.Model.Request;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.Client
 {
@@ -118,8 +119,8 @@ namespace CanDao.Pos.Client
             if (wnd.ShowDialog() != true)
                 return false;
 
-            var authorizationWnd = new AuthorizationWindow(EnumRightType.Opening);
-            return authorizationWnd.ShowDialog() == true;
+            var authorizationWnd = new AuthorizationWndVm(EnumRightType.Opening);
+            return authorizationWnd.OwnerWindow.ShowDialog() == true;
         }
 
         /// <summary>
@@ -128,8 +129,8 @@ namespace CanDao.Pos.Client
         /// <returns>登录成功返回true，不是收银员返回null，登录失败返回false。</returns>
         private bool? CashierLogin()
         {
-            var loginWnd = new UserLoginWindow();//登录
-            if (loginWnd.ShowDialog() == true)
+            var loginWnd = new UserLoginWndVm();//登录
+            if (loginWnd.OwnerWindow.ShowDialog() == true)
             {
                 if (!Globals.UserRight.AllowCash)
                     return null;
@@ -493,8 +494,7 @@ namespace CanDao.Pos.Client
         /// </summary>
         private void EndWork()
         {
-            var wnd = new AuthorizationWindow(EnumRightType.EndWork);
-            if (!WindowHelper.ShowDialog(wnd))
+            if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.EndWork)))
                 return;
 
             TaskService.Start(null, EndWorkProcess, EndWorkComplete, "结业中...");

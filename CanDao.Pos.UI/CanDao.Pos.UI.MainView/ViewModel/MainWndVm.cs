@@ -14,6 +14,7 @@ using CanDao.Pos.Model.Enum;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.UI.Utility.ViewModel;
 using CanDao.Pos.VIPManage.ViewModels;
 using Timer = System.Timers.Timer;
 
@@ -448,16 +449,33 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     IsMemberOpened = !IsMemberOpened;
                     break;
                 case "MemberQuery":
-                    var query = new UcVipSelectViewModel();
-                    WindowHelper.ShowDialog(query.GetUserCtl());
+                    if (Globals.IsCanDaoMember)
+                    {
+                        var query = new UcVipSelectViewModel();
+                        WindowHelper.ShowDialog(query.GetUserCtl());
+                    }
+                    else if (Globals.IsYazuoMember)
+                    {
+                        WindowHelper.ShowDialog(new MemberYaZuoQueryWndVm(), OwnerWindow);
+                    }
                     break;
                 case "MemberStore":
-                    var recharge = new UcVipRechargeViewModel();
-                    WindowHelper.ShowDialog(recharge.GetUserCtl());
+                    if (Globals.IsCanDaoMember)
+                    {
+                        var recharge = new UcVipRechargeViewModel();
+                        WindowHelper.ShowDialog(recharge.GetUserCtl());
+                    }
+                    else if (Globals.IsYazuoMember)
+                    {
+                        WindowHelper.ShowDialog(new MemberYaZuoStoredWndVm(), OwnerWindow);
+                    }
                     break;
                 case "MemberRegist":
                     var regist = new UcVipRegViewModel();
                     WindowHelper.ShowDialog(regist.GetUserCtl());
+                    break;
+                case "MemberCardActive":
+                    WindowHelper.ShowDialog(new MemberYaZuoCardActiveWndVm(), OwnerWindow);
                     break;
                 case "TableStatusAll":
                     ViewTableStatus = EnumViewTableStatus.All;
@@ -746,7 +764,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (result.Item2 != null && result.Item2.Any())
             {
                 InfoLog.Instance.I("咖啡外卖台个数：{0}", result.Item2.Count);
-                var selectTableWnd = new SelectCoffeeTakeoutTableWindow(result.Item2);
+                var selectTableWnd = new SelectCoffeeTakeoutTableWndVm(result.Item2);
                 if (WindowHelper.ShowDialog(selectTableWnd, OwnerWindow))
                 {
                     if (!selectTableWnd.IsSelectNormalTakeout)//选择了咖啡外卖。
@@ -850,7 +868,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             InfoLog.Instance.I("账单查询完成。");
             var hasDinnerTable = result.Item2.Any(t => t.OrderStatus == EnumOrderStatus.Ordered);
             var allowCash = !IsForcedEndWorkModel && Globals.UserRight.AllowClearn;//只有当不是强制结业且有清机权限时才允许清机。
-            var wnd = new SelectClearnStepWindow(!hasDinnerTable, allowCash);
+            var wnd = new SelectClearnStepWndVm(!hasDinnerTable, allowCash);
             if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
                 return;
 
@@ -876,8 +894,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void EndWork()
         {
             InfoLog.Instance.I("结业授权...");
-            var wnd = new AuthorizationWindow(EnumRightType.EndWork);
-            if (!WindowHelper.ShowDialog(wnd, OwnerWindow))
+            if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.EndWork), OwnerWindow))
             {
                 InfoLog.Instance.I("结业授权失败，终止结业。");
                 return;

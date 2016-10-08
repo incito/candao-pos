@@ -131,19 +131,16 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var param = new Dictionary<string, string>
-                {
-                    {"cardno", storeInfo.CardNo},
-                    {"memberTitle", storeInfo.ReportTitle},
-                    {"pzh", storeInfo.TraceCode},
-                    {"date", storeInfo.TradeTime.ToString("yyyy-MM-dd")},
-                    {"time", storeInfo.TradeTime.ToString("HH:mm:ss")},
-                    {"storeName", storeInfo.ReportTitle},
-                    {"storedAmount", storeInfo.StoredAmount.ToString()},
-                    {"storedBalance", storeInfo.StoredBalance.ToString()},
-                    {"storedPoint", storeInfo.ScoreBalance.ToString()},
-                    {"deviceid", SystemConfigCache.PosId}
-                };
+                var param = new Dictionary<string, string>();
+                param.Add("cardno", storeInfo.CardNo);
+                param.Add("memberTitle", storeInfo.ReportTitle);
+                param.Add("pzh", storeInfo.TraceCode);
+                param.Add("date", storeInfo.TradeTime.ToString("yyyy-MM-dd"));
+                param.Add("time", storeInfo.TradeTime.ToString("HH:mm:ss"));
+                param.Add("storeName", storeInfo.ReportTitle);
+                param.Add("storedBalance", storeInfo.StoredAmount.ToString());//这里之前陈虎定义反了。
+                param.Add("storedAmount", storeInfo.StoredBalance.ToString());
+                param.Add("storedPoint", storeInfo.ScoreBalance.ToString());
 
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, param);
                 return response.IsSuccess ? string.Empty : string.Format("{0}错误：{1}", msg, response.msg);

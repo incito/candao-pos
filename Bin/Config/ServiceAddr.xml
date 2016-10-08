@@ -85,7 +85,19 @@
     <PrintTip Addr="/newspicyway/print4POS/tipList.json"/><!--打印小费统计报表-->
     <PrintBusinessDetail Addr="/newspicyway/print4POS/printBusinessDetail.json"/><!--打印营业报表明细-->
     <PrintInvoice Addr="/newspicyway/print4POS/printInvoice.json"/><!--打印发票单-->
+    
+  
   </JavaServerApi>
+  
+  <!--雅座接口-->
+  <YaZuoApi>
+    <QueryYaZuo Addr="/datasnap/rest/TServerMethods1/QueryBalance/"/><!--雅座会员查询-->
+    <StorageYaZuo Addr="/datasnap/rest/TServerMethods1/StoreCardDeposit/"/><!--雅座会员储值-->
+    <CardActiveYaZuo Addr="/datasnap/rest/TServerMethods1/CardActive/"/><!--雅座会员激活-->
+    <SettlementYaZuo Addr="/datasnap/rest/TServerMethods1/Sale/"/><!--雅座会员消费-->
+    <AntiSettlementYaZuo Addr="/datasnap/rest/TServerMethods1/VoidSale/"/><!--雅座会员反结算-->
+  </YaZuoApi>
+  
   <!--云接口-->
   <CloudServerApi>
     <QueryCanDao Addr="/member/memberManager/findByParams"/><!--餐道会员查询-->

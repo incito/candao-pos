@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility.View
 {
@@ -37,5 +38,21 @@ namespace CanDao.Pos.UI.Utility.View
             DependencyProperty.Register("ItemSize", typeof(double), typeof(InputLetterControl), new PropertyMetadata(40d));
 
 
+
+        public UIElement FocusElement
+        {
+            get { return (UIElement)GetValue(FocusElementProperty); }
+            set { SetValue(FocusElementProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FocusElement.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FocusElementProperty =
+            DependencyProperty.Register("FocusElement", typeof(UIElement), typeof(InputLetterControl), new PropertyMetadata(null, FocusElement_PropertyChanged));
+
+        private static void FocusElement_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ctrl = (InputLetterControl) d;
+            ((InputHelperControlVm) ctrl.DataContext).FocusElement = ctrl.FocusElement;
+        }
     }
 }

@@ -299,7 +299,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                             request.branch_id = Globals.BranchInfo.BranchId;
                             request.securityCode = "";
                             request.password = "";
-                            var info = _memberService.QueryCanndao(request);
+                            var info = _memberService.QueryCandao(request);
 
                             if (string.IsNullOrEmpty(info.Item1))
                             {
@@ -431,9 +431,9 @@ namespace CanDao.Pos.VIPManage.ViewModels
 
             memberstoreinfo.TraceCode = tracecode;
             memberstoreinfo.TradeTime = DateTime.Now;
-            memberstoreinfo.StoredBalance = decimal.Parse(Model.RechargeValue);
+            memberstoreinfo.StoredBalance = storeCardbalance;
             memberstoreinfo.ScoreBalance = SelectModel.Integral;
-            memberstoreinfo.StoredAmount = storeCardbalance;
+            memberstoreinfo.StoredAmount = decimal.Parse(Model.RechargeValue);
 
             var print = new ReportPrintHelper2(null);
             print.PrintMemberStoredReport(memberstoreinfo);

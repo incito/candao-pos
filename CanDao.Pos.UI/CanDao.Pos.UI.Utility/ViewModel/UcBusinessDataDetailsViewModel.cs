@@ -16,10 +16,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// </summary>
     public class UcBusinessDataDetailsViewModel : ViewModelBase
     {
-
         #region 字段
         //当前已选择时间Id
-        private int _checkId=0;
+        private int _checkId = 0;
         #endregion
 
         #region 属性
@@ -51,11 +50,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             Model.Month = DateTime.Now.ToString("yyyy.MM");
             Model.LastMonth = DateTime.Now.AddMonths(-1).ToString("yyyy.MM");
             TodayCommand = new RelayCommand(TodayHandel);
-            YesterdayCommand=new RelayCommand(YesterdayHandel);
-            MonthCommand=new RelayCommand(MonthHandel);
-            LastCommand=new RelayCommand(LastHandel);
+            YesterdayCommand = new RelayCommand(YesterdayHandel);
+            MonthCommand = new RelayCommand(MonthHandel);
+            LastCommand = new RelayCommand(LastHandel);
             OpenStarTimeCommand = new RelayCommand(OpenStarTimeHandel);
-            OpenEndTimeCommand=new RelayCommand(OpenEndTimeHandel);
+            OpenEndTimeCommand = new RelayCommand(OpenEndTimeHandel);
 
             PrintCommand = new RelayCommand(PrintHandel);
         }
@@ -63,6 +62,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 当天点击时间
         /// </summary>
@@ -78,10 +78,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             else
             {
                 _checkId = 1;
-                Model.StarTime = string.Format("{0} 00:00:00",Model.Today);
+                Model.StarTime = string.Format("{0} 00:00:00", Model.Today);
                 Model.EndTime = string.Format("{0} 23:59:59", Model.Today);
-            } 
+            }
         }
+
         /// <summary>
         /// 昨天点击事件
         /// </summary>
@@ -99,8 +100,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 _checkId = 2;
                 Model.StarTime = string.Format("{0} 00:00:00", Model.Yesterday);
                 Model.EndTime = string.Format("{0} 23:59:59", Model.Yesterday);
-            } 
+            }
         }
+
         /// <summary>
         /// 当月点击事件
         /// </summary>
@@ -118,8 +120,9 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 _checkId = 3;
                 Model.StarTime = string.Format("{0}.01 00:00:00", Model.Month);
                 Model.EndTime = string.Format("{0}.{1} 23:59:59", Model.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
-            } 
+            }
         }
+
         /// <summary>
         /// 上月点击事件
         /// </summary>
@@ -138,7 +141,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 Model.StarTime = string.Format("{0}.01 00:00:00", Model.LastMonth);
                 var time = DateTime.Now.AddMonths(-1);
                 Model.EndTime = string.Format("{0}.{1} 23:59:59", Model.LastMonth, DateTime.DaysInMonth(time.Year, time.Month));
-            } 
+            }
         }
 
         /// <summary>
@@ -146,13 +149,13 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// </summary>
         private void OpenStarTimeHandel()
         {
-            var wTimeSelect=new WTimeSelect();
+            var wTimeSelect = new WTimeSelect();
             DateTime outtemp;
             if (DateTime.TryParse(Model.StarTime, out outtemp))
             {
                 wTimeSelect.Init(outtemp);
             }
-            wTimeSelect.SelectTimeAction = new Action<DateTime>(StarTimeHandel);
+            wTimeSelect.SelectTimeAction = StarTimeHandel;
             wTimeSelect.ShowDialog();
         }
 
@@ -172,7 +175,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 wTimeSelect.Init(outtemp);
             }
-            wTimeSelect.SelectTimeAction = new Action<DateTime>(EndTimeHandel);
+            wTimeSelect.SelectTimeAction = EndTimeHandel;
             wTimeSelect.ShowDialog();
         }
 
@@ -180,6 +183,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         {
             Model.EndTime = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
         }
+
         /// <summary>
         /// 打印事件
         /// </summary>
@@ -189,10 +193,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 if (Model.StarTime.Equals("开始时间") || Model.EndTime.Equals("结束时间"))
                 {
- 
                     MessageDialog.Warning("开始和结束时间不能为空，请检查！");
                     return;
                 }
+
                 DateTime outsTime;
                 DateTime outeTime;
                 if (!DateTime.TryParse(Model.StarTime, out outsTime) | !DateTime.TryParse(Model.EndTime, out outeTime))
@@ -200,6 +204,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     MessageDialog.Warning("打印自定义时间不是时间格式，请检查！");
                     return;
                 }
+
                 if (outsTime > outeTime)
                 {
                     MessageDialog.Warning("自定义时间选择错误：开始时间不能大于结束时间，请检查！");
@@ -210,19 +215,18 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 {
                     return;
                 }
-              
+
                 if (ReportPrintHelper.PrintBusinessDataDetail(Model.StarTime, Model.EndTime, Globals.UserInfo.UserName))
                 {
-                     MessageDialog.Warning("打印成功！");
+                    MessageDialog.Warning("打印成功！");
                 }
-              
             }
             catch (Exception ex)
             {
                 MessageDialog.Warning("打印失败：" + ex.MyMessage());
             }
-
         }
+
         #endregion
     }
 }

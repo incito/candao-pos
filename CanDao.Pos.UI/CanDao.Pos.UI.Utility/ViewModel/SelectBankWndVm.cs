@@ -1,10 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using CanDao.Pos.Common;
 using CanDao.Pos.Model;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
-    public class SelectBankWndVm : NormalWindowViewModel
+    public class SelectBankWndVm : NormalWindowViewModel<SelectBankWindow>
     {
         public SelectBankWndVm(BankInfo bankInfo)
         {

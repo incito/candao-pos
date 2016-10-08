@@ -1,8 +1,6 @@
 ﻿using System.Windows.Input;
 using CanDao.Pos.Common;
-using CanDao.Pos.IService;
 using CanDao.Pos.Model;
-using CanDao.Pos.Model.Request;
 using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
@@ -10,8 +8,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// <summary>
     /// 选择外卖挂账单位窗口Vm。
     /// </summary>
-    public class SelectTakeoutOnAccountCompanyVm : NormalWindowViewModel
+    public class SelectTakeoutOnAccountCompanyVm : NormalWindowViewModel<SelectTakeoutOnAccountCompany>
     {
+        #region Properties
+
         /// <summary>
         /// 挂账单位信息。
         /// </summary>
@@ -40,10 +40,18 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// </summary>
         public string ContactName { get; set; }
 
+        #endregion
+
+        #region Command
+
         /// <summary>
         /// 选择挂账单位命令。
         /// </summary>
         public ICommand SelectOnAccountCmd { get; private set; }
+        
+        #endregion
+
+        #region Command Methods
 
         /// <summary>
         /// 选择挂账单位命令的执行方法。
@@ -51,12 +59,12 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <param name="arg"></param>
         private void SelectOnAccount(object arg)
         {
-            var companyWnd = new OnAccountCompanySelectWindow();
+            var companyWnd = new OnAccountCompanySelectWndVm();
             if (WindowHelper.ShowDialog(companyWnd, OwnerWindow))
-            {
                 OnAccountInfo = companyWnd.SelectedCompany;
-            }
         }
+        
+        #endregion
 
         #region Protected Methods
 

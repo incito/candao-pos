@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.UI.Utility.View;
+using CanDao.Pos.UI.Utility.ViewModel;
 
 namespace CanDao.Pos.UI.Utility.Controls
 {
@@ -107,7 +108,7 @@ namespace CanDao.Pos.UI.Utility.Controls
 
         private void TbOnMouseDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            var wnd = new InputMoreInfoWindow(NullText, OtherInfo);
+            var wnd = new InputMoreInfoWndVm(NullText, OtherInfo);
             SoftKeyboardHelper.ShowSoftKeyboard();//系统软键盘。
             if (WindowHelper.ShowDialog(wnd))
                 OtherInfo = wnd.InputInfo;

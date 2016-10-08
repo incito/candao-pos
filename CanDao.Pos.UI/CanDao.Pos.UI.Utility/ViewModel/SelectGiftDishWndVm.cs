@@ -5,13 +5,14 @@ using System.Linq;
 using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.Model;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
     /// <summary>
     /// 赠菜选择窗口的VM。
     /// </summary>
-    public class SelectGiftDishWndVm : NormalWindowViewModel
+    public class SelectGiftDishWndVm : NormalWindowViewModel<SelectGiftDishWindow>
     {
         public SelectGiftDishWndVm(IEnumerable<OrderDishInfo> data, List<DishGiftCouponInfo> dishGiftCouponInfos)
         {

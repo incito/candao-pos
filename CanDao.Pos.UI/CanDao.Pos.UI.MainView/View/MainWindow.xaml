@@ -268,7 +268,12 @@
                                     Command="{Binding OperCmd}" CommandParameter="MemberStore"
                                     Width="90" Height="40" Margin="3"/>
                             <Button Content="会员注册"
+                                    Visibility="{Binding Source={x:Static common:Globals.IsYazuoMember}, Converter={StaticResource Bool2CollapsedCvt}}"
                                     Command="{Binding OperCmd}" CommandParameter="MemberRegist"
+                                    Width="90" Height="40" Margin="3"/>
+                            <Button Content="会员激活"
+                                    Visibility="{Binding Source={x:Static common:Globals.IsYazuoMember}, Converter={StaticResource Bool2VisibilityCvt}}"
+                                    Command="{Binding OperCmd}" CommandParameter="MemberCardActive"
                                     Width="90" Height="40" Margin="3"/>
                         </StackPanel>
                     </Border>

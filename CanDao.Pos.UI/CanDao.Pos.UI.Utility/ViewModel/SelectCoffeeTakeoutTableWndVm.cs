@@ -10,7 +10,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// <summary>
     /// 咖啡外卖桌台选择窗口Vm。
     /// </summary>
-    public class SelectCoffeeTakeoutTableWndVm : NormalWindowViewModel
+    public class SelectCoffeeTakeoutTableWndVm : NormalWindowViewModel<SelectCoffeeTakeoutTableWindow>
     {
         public SelectCoffeeTakeoutTableWndVm(List<TableInfo> tableInfos)
         {

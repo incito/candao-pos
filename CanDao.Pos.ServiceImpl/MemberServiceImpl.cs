@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CanDao.Pos.Common;
 using CanDao.Pos.Common.Models.VipModels;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
+using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
 using HttpHelper = CanDao.Pos.Common.HttpHelper;
@@ -13,7 +15,9 @@ namespace CanDao.Pos.ServiceImpl
 {
     public class MemberServiceImpl : IMemberService
     {
-        public Tuple<string, MemberInfo> QueryCanndao(CanDaoMemberQueryRequest request)
+        #region 餐道会员
+
+        public Tuple<string, MemberInfo> QueryCandao(CanDaoMemberQueryRequest request)
         {
             var addr = ServiceAddrCache.GetServiceAddr("QueryCanDao");
             if (string.IsNullOrEmpty(addr))
@@ -573,5 +577,127 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, List<MVipCoupon>>(exp.MyMessage(), null);
             }
         }
+
+        #endregion
+
+        #region 雅座会员
+
+        public Tuple<string, YaZuoMemberInfo> QueryYaZuo(string memberNo)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("QueryYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, YaZuoMemberInfo>("雅座会员查询地址为空。", null);
+
+            var param = new List<string> { memberNo };
+            var result = RestHttpHelper.HttpGet<YaZuoMemberQueryResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return new Tuple<string, YaZuoMemberInfo>(result.Item1, null);
+
+            if (!result.Item2.IsSuccess)
+                return new Tuple<string, YaZuoMemberInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "会员查询失败。"), null);
+
+            return new Tuple<string, YaZuoMemberInfo>(null, DataConverter.ToYaZuoMemberInfo(result.Item2));
+        }
+
+        public Tuple<string, YaZuoStorageInfo> StorageYaZuo(string memberNo, decimal storageValue, EnumStoragePayType payType)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("StorageYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, YaZuoStorageInfo>("雅座会员储值地址为空。", null);
+
+            var param = new List<string>
+            {
+                Globals.UserInfo.UserName,
+                memberNo,
+                storageValue.ToString(CultureInfo.InvariantCulture),
+                DateTime.Now.ToString("yyyyMMddHHmmssffff"),
+                "0",//填充字段
+                ((int) payType).ToString()
+            };
+            var result = RestHttpHelper.HttpGet<YaZuoMemberStorageResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return new Tuple<string, YaZuoStorageInfo>(result.Item1, null);
+
+            if (!result.Item2.IsSuccess)
+                return new Tuple<string, YaZuoStorageInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "其他储值失败错误。"), null);
+
+            return new Tuple<string, YaZuoStorageInfo>(null, DataConverter.ToYaZuoStorageInfo(result.Item2));
+        }
+
+        public Tuple<string, YaZuoCardActiveInfo> CardActiveYaZuo(string cardNo, string cardPassword, string mobile)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("CardActiveYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, YaZuoCardActiveInfo>("雅座会员卡激活地址为空。", null);
+
+            var param = new List<string>
+            {
+                cardNo,
+                cardPassword,
+                mobile
+            };
+            var result = RestHttpHelper.HttpGet<YaZuoCardActiveResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return new Tuple<string, YaZuoCardActiveInfo>(result.Item1, null);
+
+            if (!result.Item2.IsSuccess)
+                return new Tuple<string, YaZuoCardActiveInfo>(DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "其他会员卡激活失败。"), null);
+
+            return new Tuple<string, YaZuoCardActiveInfo>(null, DataConverter.ToYaZuoCardActiveInfo(result.Item2));
+        }
+
+        public string SettlementYaZuo(YaZuoSettlementInfo settlementInfo)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("SettlementYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return "雅座会员消费地址为空。";
+
+            var msg = settlementInfo.CheckDataValid();
+            if (!string.IsNullOrEmpty(msg))
+                return msg;
+
+            var param = new List<string>
+            {
+                settlementInfo.UserId,
+                settlementInfo.OrderId,
+                settlementInfo.MemberCardNo,
+                settlementInfo.OrderId,//接口文档来看，这里是收银软件生成的标识号，用订单号来处理
+                settlementInfo.CashAmount.ToString(CultureInfo.InvariantCulture),
+                settlementInfo.IntegralValue.ToString(CultureInfo.InvariantCulture),
+                settlementInfo.TransType,
+                settlementInfo.StoredPayAmount.ToString(CultureInfo.InvariantCulture),
+                !string.IsNullOrEmpty(settlementInfo.CouponUsedInfo) ? settlementInfo.CouponUsedInfo : " ",
+                DataHelper.GetNoneNullValueByOrder(settlementInfo.Password, "0"),
+                settlementInfo.CouponTotalAmount.ToString(CultureInfo.InvariantCulture),
+                SystemConfigCache.JavaServer,
+            };
+
+            var result = RestHttpHelper.HttpGet<YaZuoMemberBaseResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return result.Item1;
+
+            return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "会员消费失败。") : null;
+        }
+
+        public string AntiSettlementYaZuo(string orderId)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("AntiSettlementYaZuo");
+            if (string.IsNullOrEmpty(addr))
+                return "雅座会员反结算地址为空。";
+
+            var param = new List<string>
+            {
+                orderId,
+                "0",//密码
+                "11111111"//超级密码
+            };
+            var result = RestHttpHelper.HttpGet<YaZuoMemberBaseResponse>(addr, param);
+            if (!string.IsNullOrEmpty(result.Item1))
+                return result.Item1;
+
+            return !result.Item2.IsSuccess ? DataHelper.GetNoneNullValueByOrder(result.Item2.Info, "雅座会员反结算失败。") : null;
+        }
+
+        #endregion
     }
 }

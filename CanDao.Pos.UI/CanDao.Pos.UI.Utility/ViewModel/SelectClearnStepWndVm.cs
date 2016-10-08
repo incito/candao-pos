@@ -1,9 +1,10 @@
 ﻿using System.Windows.Input;
 using CanDao.Pos.Common;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
-    public class SelectClearnStepWndVm : NormalWindowViewModel
+    public class SelectClearnStepWndVm : NormalWindowViewModel<SelectClearnStepWindow>
     {
         #region Constructor
 

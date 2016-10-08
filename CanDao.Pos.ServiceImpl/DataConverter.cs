@@ -316,6 +316,70 @@ namespace CanDao.Pos.ServiceImpl
         }
 
         /// <summary>
+        /// 转雅座会员信息。
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        internal static YaZuoMemberInfo ToYaZuoMemberInfo(YaZuoMemberQueryResponse response)
+        {
+            var item = new YaZuoMemberInfo
+            {
+                CardNo = response.pszPan,
+                StoredBalance = response.psStoredCardsBalance / 100,
+                Integral = response.psIntegralOverall / 100,
+                Mobile = response.pszMobile,
+            };
+
+            if (!string.IsNullOrEmpty(response.pszTrack2))
+            {
+                var tempList = response.pszTrack2.Split(',');
+                if (tempList.Count() > 1)
+                    item.CardNoList = tempList.ToList();
+            }
+
+            if (!string.IsNullOrEmpty(response.psTicketInfo))
+            {
+                var ticketList = response.psTicketInfo.Split(';').ToList();
+                var couponItemList = ticketList.Select(ToYaZuoCouponInfo).Where(t => t != null).ToList();
+                if (couponItemList.Any())
+                    item.CouponList = couponItemList;
+            }
+
+            return item;
+        }
+
+        /// <summary>
+        /// 转雅座优惠券信息。
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        internal static YaZuoCouponInfo ToYaZuoCouponInfo(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return null;
+
+            var tempList = data.Split('|').ToList();
+            try
+            {
+                var item = new YaZuoCouponInfo
+                {
+                    CouponId = tempList[0],
+                    CouponAmount = Parse2Decimal(tempList[1]) / 100,//金额是精确到分的。
+                    CouponType = tempList[2],
+                    CouponName = tempList[3],
+                    CouponCount = Parse2Int(tempList[4]),
+                };
+
+                return item;
+            }
+            catch (Exception ex)
+            {
+                ErrLog.Instance.E(string.Format("雅座优惠券处理时异常：{0}", ex.MyMessage()));
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 转换会员对象
         /// </summary>
         /// <param name="response"></param>
@@ -346,6 +410,34 @@ namespace CanDao.Pos.ServiceImpl
             }
 
             return info;
+        }
+
+        /// <summary>
+        /// 转换雅座储值信息。
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        internal static YaZuoStorageInfo ToYaZuoStorageInfo(YaZuoMemberStorageResponse response)
+        {
+            return new YaZuoStorageInfo
+            {
+                CardNo = response.pszPan,
+                StoredBalance = response.psStoreCardBalance / 100,
+                TradeCode = response.pszTrace,
+            };
+        }
+
+        /// <summary>
+        /// 转换成会员卡激活信息。
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        internal static YaZuoCardActiveInfo ToYaZuoCardActiveInfo(YaZuoCardActiveResponse response)
+        {
+            return new YaZuoCardActiveInfo
+            {
+
+            };
         }
 
         /// <summary>
@@ -623,6 +715,16 @@ namespace CanDao.Pos.ServiceImpl
             return retValue;
         }
 
+        private static decimal Parse2Decimal(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return 0;
+
+            decimal retValue;
+            decimal.TryParse(value, out retValue);
+            return retValue;
+        }
+
         private static DateTime? Parse2DateTime(string value, string format)
         {
             if (string.IsNullOrEmpty(value))
@@ -645,16 +747,6 @@ namespace CanDao.Pos.ServiceImpl
                 ErrLog.Instance.E(string.Format("日期转换异常。src:{0},   fmt:{1}", value, format), exp);
                 return defaulTime;
             }
-        }
-
-        /// <summary>
-        /// 根据顺序取第一个不为空的值。
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        private static string GetAnOrderValue(params string[] values)
-        {
-            return values.FirstOrDefault(value => !string.IsNullOrEmpty(value));
         }
 
         private static List<DishDetailRequest> ToDishDetailRequestList(List<OrderDishInfo> dishInfos)
@@ -955,6 +1047,7 @@ namespace CanDao.Pos.ServiceImpl
         /// </summary>
         /// <param name="response"></param>
         /// <param name="relateDishId"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
         internal static OrderDishInfo ToDishInfo(DishGroupInfo response, string relateDishId, int index)
         {
