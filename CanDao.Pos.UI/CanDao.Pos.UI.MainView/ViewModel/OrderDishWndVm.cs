@@ -1000,7 +1000,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     CmpCode = wnd.OnAccountInfo.Id,
                     CmpName = wnd.OnAccountInfo.Name,
                     ContactMobile = string.IsNullOrWhiteSpace(wnd.ContactMobile) ? " " : wnd.ContactMobile,//没有输入的时候要求一个空格占位符，在拼URL的时候用。
-                    ContactName = wnd.ContactName,
+                    ContactName = string.IsNullOrWhiteSpace(wnd.ContactName) ? " " : wnd.ContactName,//没有输入的时候要求一个空格占位符，在拼URL的时候用。
                 };
 
                 IsOrderHanged = true;
