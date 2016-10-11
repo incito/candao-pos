@@ -191,7 +191,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding GroupName}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <controls:TextBoxWithEllipsis Text="{Binding GroupName}" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTipService.ShowOnDisabled="True"/>
                                     <Border Grid.Column="1"
                                             Width="15" Height="15"
                                             Visibility="{Binding SelectDishCount, Converter={StaticResource Count2VisibleCvt}}">

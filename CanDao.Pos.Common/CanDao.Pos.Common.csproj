@@ -104,6 +104,7 @@
     <Compile Include="ControlAttachProperty.cs" />
     <Compile Include="Controls\FlagControl\Implementation\FlagControl.cs" />
     <Compile Include="Controls\PosMainWindow\Implementation\PosMainWindow.cs" />
+    <Compile Include="Controls\TextBoxWithEllipsis\TextBoxWithEllipsis.cs" />
     <Compile Include="Controls\WatermarkPasswordBox\Implementation\WatermarkPasswordBox.cs" />
     <Compile Include="Controls\WatermarkTextBox\Implementation\WatermarkTextBox.cs" />
     <Compile Include="Converter\CountToBooleanConverter.cs" />
