@@ -15,6 +15,12 @@ namespace CanDao.Pos.IService
     public interface IRestaurantService
     {
         /// <summary>
+        /// 获取系统配置信息。
+        /// </summary>
+        /// <returns></returns>
+        Tuple<string, GetSystemConfigInfoResponse> GetSysCfgInfo();
+
+        /// <summary>
         /// 检测餐厅是否开业。
         /// </summary>
         /// <returns>Item1全部正常则为null，否则为错误信息，Item2为是否开业。</returns>

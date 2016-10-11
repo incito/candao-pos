@@ -19,6 +19,16 @@ namespace CanDao.Pos.Common
         }
 
         /// <summary>
+        /// 雅座会员地址。
+        /// </summary>
+        public static string YaZuoServer { get; set; }
+
+        /// <summary>
+        /// 餐道会员等云服务地址。
+        /// </summary>
+        public static string CloudServer { get; set; }
+
+        /// <summary>
         /// 用户权限。
         /// </summary>
         public static UserRight UserRight { get; private set; }

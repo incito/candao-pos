@@ -11,9 +11,19 @@ namespace CanDao.Pos.Common
         private const string CfgFile = @"Config\ServiceAddr.xml";
 
         /// <summary>
-        /// 地址字典。
+        /// Java后台地址字典。
         /// </summary>
-        private static readonly Dictionary<string, string> AddrDic = new Dictionary<string, string>();
+        private static readonly  Dictionary<string, string> JavaAddrDic = new Dictionary<string, string>();
+ 
+        /// <summary>
+        /// 餐道会员地址字典。
+        /// </summary>
+        private static readonly  Dictionary<string, string> CloundAddrDic = new Dictionary<string, string>();
+ 
+        /// <summary>
+        /// 雅座会员地址字典。
+        /// </summary>
+        private static readonly Dictionary<string, string> YaZuoAddrDic = new Dictionary<string, string>(); 
 
         /// <summary>
         /// 获取指定名称的服务地址。
@@ -22,9 +32,20 @@ namespace CanDao.Pos.Common
         /// <returns></returns>
         public static string GetServiceAddr(string name)
         {
-            if (AddrDic.ContainsKey(name))
-                return AddrDic[name];
-            return null;
+            string addr = null;
+            if (JavaAddrDic.ContainsKey(name))
+                addr = string.Format("{0}{1}", SystemConfigCache.JavaServer, JavaAddrDic[name]);
+
+            if(YaZuoAddrDic.ContainsKey(name))
+                addr = string.Format("{0}{1}", Globals.YaZuoServer, YaZuoAddrDic[name]);
+
+            if (CloundAddrDic.ContainsKey(name))
+                addr = string.Format("{0}{1}", Globals.CloudServer, CloundAddrDic[name]);
+
+            if (!string.IsNullOrEmpty(addr) && !addr.StartsWith("http://"))
+                addr = string.Format("http://{0}", addr);
+
+            return addr;
         }
 
         public static void LoadCfgFile()
@@ -45,8 +66,7 @@ namespace CanDao.Pos.Common
                         foreach (var element in javaServerElement.Elements())
                         {
                             var addr = XmlHelper.GetAttrValue(element, "Addr");
-                            var uri = string.Format("http://{0}{1}", SystemConfigCache.JavaServer, addr);
-                            AddrDic.Add(element.Name.LocalName, uri);
+                            JavaAddrDic.Add(element.Name.LocalName, addr);
                         }
                     }
 
@@ -56,8 +76,7 @@ namespace CanDao.Pos.Common
                         foreach (var element in yaZuoServerElement.Elements())
                         {
                             var addr = XmlHelper.GetAttrValue(element, "Addr");
-                            var uri = string.Format("http://{0}{1}", SystemConfigCache.YaZuoServer, addr);
-                            AddrDic.Add(element.Name.LocalName, uri);
+                            YaZuoAddrDic.Add(element.Name.LocalName, addr);
                         }
                     }
 
@@ -67,8 +86,7 @@ namespace CanDao.Pos.Common
                         foreach (var element in cloudServerElement.Elements())
                         {
                             var addr = XmlHelper.GetAttrValue(element, "Addr");
-                            var uri = string.Format("http://{0}{1}", SystemConfigCache.CloudServer, addr);
-                            AddrDic.Add(element.Name.LocalName, uri);
+                            CloundAddrDic.Add(element.Name.LocalName, addr);
                         }
                     }
                 }

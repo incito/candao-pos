@@ -25,21 +25,6 @@ namespace CanDao.Pos.Common
         public static string JavaServer { get; private set; }
 
         /// <summary>
-        /// 雅座会员地址。
-        /// </summary>
-        public static string YaZuoServer { get; set; }
-
-        /// <summary>
-        /// 会员等云服务地址。
-        /// </summary>
-        public static string CloudServer { get; private set; }
-
-        /// <summary>
-        /// 会员系统。0：雅座，1：餐道。
-        /// </summary>
-        public static int MemberSystem { get; set; }
-
-        /// <summary>
         /// 是否自动填充现金金额。
         /// </summary>
         public static bool AutoFillCashAmount { get; set; }
@@ -82,13 +67,9 @@ namespace CanDao.Pos.Common
                         return;
 
                     JavaServer = GetElementValue(root.Element("JavaServer"));
-                    YaZuoServer = GetElementValue(root.Element("YaZuoServer"));
-                    CloudServer = GetElementValue(root.Element("CloudServer"));
-                    MemberSystem = GetElementInt(root.Element("MemberSystem"), 1);
                     AutoFillCashAmount = GetElementBool(root.Element("AutoFillCashAmount"), true);
                     PosId = GetElementValue(root.Element("PosId"));
                     OpenCashIp = GetElementValue(root.Element("OpenCashIp"));
-                    Globals.MemberSystem = (EnumMemberSystem)MemberSystem;
 
                     var resettlementReason = GetElementValue(root.Element("ResettlementReason"));
                     ResettlementReasonList = !string.IsNullOrEmpty(resettlementReason) ? resettlementReason.Split(';').ToList() : null;

@@ -2,12 +2,6 @@
 <configuration>
   <!--Java后台服务地址-->
   <JavaServer value="10.66.21.5:8080"/>
-  <!--雅座会员地址-->
-  <YaZuoServer value="10.66.21.5:9081"/>
-  <!--餐道会员地址-->
-  <CloudServer value="10.66.21.6:8080"/>
-  <!--会员系统。0：雅座，1：餐道-->
-  <MemberSystem value="0"/>
   <!--自动填充现金金额。0：不填充，1：填充-->
   <AutoFillCashAmount value="1"/>
   <!--Pos编号-->

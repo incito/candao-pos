@@ -19,6 +19,23 @@ namespace CanDao.Pos.ServiceImpl
     /// </summary>
     public class RestaurantServiceImpl : IRestaurantService
     {
+        public Tuple<string, GetSystemConfigInfoResponse> GetSysCfgInfo()
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("GetCfgInfo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, GetSystemConfigInfoResponse>("获取系统配置信息地址为空。", null);
+
+            try
+            {
+                var result = HttpHelper.HttpGet<GetSystemConfigInfoResponse>(addr);
+                return new Tuple<string, GetSystemConfigInfoResponse>(null, result);
+            }
+            catch (Exception ex)
+            {
+                return new Tuple<string, GetSystemConfigInfoResponse>(ex.MyMessage(), null);
+            }
+        }
+
         public Tuple<string, bool> CheckRestaurantOpened()
         {
             string addr = ServiceAddrCache.GetServiceAddr("RestaurantOpened");

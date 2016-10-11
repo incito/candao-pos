@@ -12,6 +12,7 @@ using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Request;
+using CanDao.Pos.Model.Response;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
@@ -66,7 +67,7 @@ namespace CanDao.Pos.Client
             GetDietSettingAsync();
             GetDinnerWareSettingAsync();
 
-            TaskService.Start(null, GetBranchInfoProcess, GetBranchInfoComplete, "");
+            TaskService.Start(null, GetSysCfgInfoProcess, GetSysCfgInfoComplete, "");
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -290,6 +291,46 @@ namespace CanDao.Pos.Client
                     }
                 }
             });
+        }
+
+        /// <summary>
+        /// 获取系统配置信息执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object GetSysCfgInfoProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+            {
+                ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                return new Tuple<string, GetSystemConfigInfoResponse>("创建IRestaurantService服务失败。", null);
+            }
+
+            return service.GetSysCfgInfo();
+        }
+
+        /// <summary>
+        /// 获取系统配置执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void GetSysCfgInfoComplete(object param)
+        {
+            var result = (Tuple<string, GetSystemConfigInfoResponse>)param;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                var errMsg = string.Format("获取系统配置信息时错误：{0}", result.Item1);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
+                Shutdown();
+                return;
+            }
+
+            Globals.YaZuoServer = result.Item2.data.vipotherurl;
+            Globals.CloudServer = result.Item2.data.vipcandaourl;
+            Globals.MemberSystem = (EnumMemberSystem) result.Item2.data.viptype;
+
+            TaskService.Start(null, GetBranchInfoProcess, GetBranchInfoComplete, "");
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 <Address>
   <!--Java后台接口-->
   <JavaServerApi>
+    <GetCfgInfo Addr="/newspicyway/padinterface/getconfiginfos.json"/><!--系统配置信息-->
     <AuthorizeLogin Addr="/newspicyway/padinterface/login.json"/><!--授权登录-->
     <GetUserRight Addr="/newspicyway/padinterface/userrights.json"/><!--获取用户权限-->
     <GetAllTableInfos Addr="/newspicyway/padinterface/querytables.json"/><!--获取所有餐桌信息-->

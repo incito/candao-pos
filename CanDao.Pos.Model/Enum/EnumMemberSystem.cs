@@ -6,12 +6,12 @@
     public enum EnumMemberSystem
     {
         /// <summary>
-        /// 雅座。
-        /// </summary>
-        Yazuo,
-        /// <summary>
         /// 餐道。
         /// </summary>
-        Candao,
+        Candao = 1,
+        /// <summary>
+        /// 雅座。
+        /// </summary>
+        Yazuo = 2,
     }
 }

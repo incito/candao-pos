@@ -151,6 +151,7 @@
     <Compile Include="Response\GetDishGiftCouponInfoResponse.cs" />
     <Compile Include="Response\GetOrderInfoResponse.cs" />
     <Compile Include="Response\Member\YaZuo\YaZuoMemberStorageResponse.cs" />
+    <Compile Include="Response\SystemConfigInfoResponse.cs" />
     <Compile Include="Response\UsePreferentialRequest.cs" />
     <Compile Include="Response\Member\CanDaoMemberBaseResponse.cs" />
     <Compile Include="Response\Member\CanDaoMemberSaleResponse.cs" />
