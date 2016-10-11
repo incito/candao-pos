@@ -30,9 +30,10 @@ namespace CanDao.Pos.ServiceImpl
                 var result = HttpHelper.HttpGet<GetSystemConfigInfoResponse>(addr);
                 return new Tuple<string, GetSystemConfigInfoResponse>(null, result);
             }
-            catch (Exception ex)
+            catch (Exception exp)
             {
-                return new Tuple<string, GetSystemConfigInfoResponse>(ex.MyMessage(), null);
+                ErrLog.Instance.E(exp);
+                return new Tuple<string, GetSystemConfigInfoResponse>(exp.MyMessage(), null);
             }
         }
 
