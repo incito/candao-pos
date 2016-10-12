@@ -103,9 +103,8 @@ namespace CanDao.Pos.ReportPrint
                 return false;
             }
 
-            var msg2 = "清机单打印完成。";
-            InfoLog.Instance.I(msg2);
-            NotifyDialog.Notify(msg2, _ownerWnd.Owner);
+            InfoLog.Instance.I("清机单打印完成。");
+            NotifyDialog.Notify("正在打印清机单，请稍等。", _ownerWnd.Owner);
 
             ReportPrintingWindow.Instance.Hide();
             return true;
@@ -197,7 +196,7 @@ namespace CanDao.Pos.ReportPrint
                 return;
             }
 
-            var msg2 = string.Format("{0}打印完成。", typeString);
+            var msg2 = string.Format("正在打印{0}，请稍等。", typeString);
             InfoLog.Instance.I(msg2);
             NotifyDialog.Notify(msg2, _ownerWnd != null ? _ownerWnd.Owner : null);
         }
@@ -235,7 +234,7 @@ namespace CanDao.Pos.ReportPrint
             }
 
             InfoLog.Instance.I("交易凭条打印完成。");
-            NotifyDialog.Notify("交易凭条打印完成。", _ownerWnd.Owner);
+            NotifyDialog.Notify("正在打印交易凭条，请稍等。", _ownerWnd.Owner);
         }
 
         /// <summary>
