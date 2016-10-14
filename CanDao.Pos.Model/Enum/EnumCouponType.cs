@@ -46,9 +46,18 @@
         CooperationCompany = 8,
 
         /// <summary>
-        /// 会员优惠。
+        /// 雅座折扣。
         /// </summary>
-        Member = 100,
+        YaZuoDiscount = 9902,
 
+        /// <summary>
+        /// 雅座优免。
+        /// </summary>
+        YaZuoFree = 9903,
+
+        /// <summary>
+        /// 雅座团购。
+        /// </summary>
+        YaZuoGroupBuy = 9904,
     }
 }

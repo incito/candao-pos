@@ -318,25 +318,27 @@ namespace CanDao.Pos.Model
                     }
             }
 
-
-
             if (preferential.detailPreferentials == null)
             { return; }
 
             foreach (var info in preferential.detailPreferentials)
             {
-                var coupon = new UsedCouponInfo();
-                coupon.CouponInfo = new CouponInfo();
-                coupon.CouponInfo.RuleId = info.coupondetailid;
-                coupon.CouponInfo.CouponId = info.preferential;
+                var coupon = new UsedCouponInfo
+                {
+                    CouponInfo = new CouponInfo
+                    {
+                        RuleId = info.coupondetailid,
+                        CouponId = info.preferential
+                    },
+                    Count = 1,//默认单张
+                    RelationId = info.id,
+                    UsedCouponType = (EnumUsedCouponType)info.isCustom,
+                    BillAmount = info.deAmount,
+                    DebitAmount = info.toalDebitAmount,
+                    FreeAmount = info.toalFreeAmount,
+                    Name = info.activity.name
+                };
 
-
-                coupon.Count = 1;//默认单张
-                coupon.RelationId = info.id;
-                coupon.BillAmount = info.deAmount;
-                coupon.DebitAmount = info.toalDebitAmount;
-                coupon.FreeAmount = info.toalFreeAmount;
-                coupon.Name = info.activity.name;
                 UsedCouponInfos.Add(coupon);
             }
         }

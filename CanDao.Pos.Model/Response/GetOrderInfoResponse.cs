@@ -96,6 +96,11 @@ namespace CanDao.Pos.Model.Response
         /// </summary>
         public string coupondetailid { set; get; }
 
+        /// <summary>
+        /// 优惠券的使用类型。0：使用优惠，1：服务员优惠；2：系统自动查找优惠；4：赠送菜优惠；5：雅座优惠。
+        /// </summary>
+        public int isCustom { get; set; }
+
         public PreferentialDetails activity { set; get; }
     }
 

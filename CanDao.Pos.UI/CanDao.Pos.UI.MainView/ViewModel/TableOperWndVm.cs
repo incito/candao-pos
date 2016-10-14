@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Timers;
@@ -83,6 +84,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private const int RefreshTimerSecond = 10;
 
+        /// <summary>
+        /// 雅座优惠券集合。
+        /// </summary>
+        private List<CouponInfo> _yaZuoMemberCouponInfos;
+
         #endregion
 
         #region Constructor
@@ -146,19 +152,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 RaisePropertiesChanged("SelectedCouponCategory");
 
                 CouponInfos.Clear();
-                InfoLog.Instance.I("开始获取\"{0}\"优惠券...", value.CategoryName);
-                TaskService.Start(value.CategoryType, GetCouponCategoriesProcess, GetCouponCategoriesComplete);
-
-                //不缓存优惠券，每次都重新获取。
-                //if (value.CouponInfos == null || !value.CouponInfos.Any())
-                //{
-                //    InfoLog.Instance.I("开始获取\"{0}\"优惠券...", value.CategoryName);
-                //    TaskService.Start(value.CategoryType, GetCouponCategoriesProcess, GetCouponCategoriesComplete);
-                //}
-                //else
-                //{
-                //    value.CouponInfos.ForEach(CouponInfos.Add);
-                //}
+                if (_selectedCouponCategory.CategoryType == "88" && Globals.IsYazuoMember)//雅座会员。
+                {
+                    if (_yaZuoMemberCouponInfos != null)
+                        _yaZuoMemberCouponInfos.ForEach(CouponInfos.Add);
+                }
+                else
+                {
+                    InfoLog.Instance.I("开始获取\"{0}\"优惠券...", value.CategoryName);
+                    TaskService.Start(value.CategoryType, GetCouponCategoriesProcess, GetCouponCategoriesComplete);
+                }
             }
         }
 
@@ -769,21 +772,18 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 {
                     if (_curSelectedCouponInfo.FreeAmount > 0 || _curSelectedCouponInfo.DebitAmount > 0)
                     {
-                        if (_curSelectedCouponInfo.CouponType == EnumCouponType.Member)
-                        {
+                        //增加选择数量的窗口
+                        var numWnd = new NumInputWindow("优惠券", _curSelectedCouponInfo.Name, "使用数量", 0, false);
+                        if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
+                            return;
 
+                        if (_curSelectedCouponInfo.CouponType == EnumCouponType.YaZuoFree)
+                        {
+                            CreatUsePreferentialRequest(numWnd.InputNum, 0, _curSelectedCouponInfo.FreeAmount ?? 0, 0);
                         }
                         else
                         {
-                            //增加选择数量的窗口
-                            var numWnd = new NumInputWindow("优惠券", _curSelectedCouponInfo.Name, "使用数量", 0, false);
-                            if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
-                                return;
-
-                            //AddCouponInfoAsUsed(_curSelectedCouponInfo, Convert.ToInt32(numWnd.InputNum), false);
-
                             CreatUsePreferentialRequest(numWnd.InputNum, 0, 0, 0);
-
                         }
                     }
                     else if (_curSelectedCouponInfo.BillAmount <= 0 && _curSelectedCouponInfo.DebitAmount <= 0)
@@ -837,10 +837,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 type = _curSelectedCouponInfo.CouponType.GetHashCode().ToString(),
                 preferentialAmt = Data.CouponAmount.ToString(),
                 adjAmout = Data.AdjustmentAmount.ToString(),
-                toalDebitAmount = Data.TotalDebitAmount.ToString(),
-                toalFreeAmount = Data.TotalFreeAmount.ToString(),
-                toalDebitAmountMany = Data.ToalDebitAmountMany.ToString(),
+                totalDebitAmount = Data.TotalDebitAmount.ToString(),
+                totalFreeAmount = Data.TotalFreeAmount.ToString(),
+                totalDebitAmountMany = Data.ToalDebitAmountMany.ToString(),
                 preferentialNum = num.ToString(),
+                preferentialName = _curSelectedCouponInfo.Name,
                 dishid = "",
                 isCustom = isCustom.ToString(),
                 disrate = disRate,
@@ -866,10 +867,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 type = _curSelectedCouponInfo.CouponType.GetHashCode().ToString(),
                 preferentialAmt = Data.CouponAmount.ToString(),
                 adjAmout = Data.AdjustmentAmount.ToString(),
-                toalDebitAmount = Data.TotalDebitAmount.ToString(),
-                toalFreeAmount = Data.TotalFreeAmount.ToString(),
-                toalDebitAmountMany = Data.ToalDebitAmountMany.ToString(),
+                totalDebitAmount = Data.TotalDebitAmount.ToString(),
+                totalFreeAmount = Data.TotalFreeAmount.ToString(),
+                totalDebitAmountMany = Data.ToalDebitAmountMany.ToString(),
                 preferentialNum = dishNumString,
+                preferentialName = _curSelectedCouponInfo.Name,
                 dishid = dishIdString,
                 unit = dishUnitString,
                 isCustom = "0",
@@ -1651,22 +1653,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 生成会员登出工作流。
-        /// </summary>
-        /// <returns></returns>
-        private WorkFlowInfo GenerateMemberLogoutWf()
-        {
-            WorkFlowInfo wf = null;
-            if (Globals.MemberSystem == EnumMemberSystem.Candao)
-                wf = new WorkFlowInfo(MemberLogoutProcess, MemberLogoutComplete, "会员登出中...");
-            else if (Globals.MemberSystem == EnumMemberSystem.Yazuo)
-            {
-
-            }
-            return wf;
-        }
-
-        /// <summary>
         /// 生成整单退菜工作流。
         /// </summary>
         /// <returns></returns>
@@ -2114,14 +2100,43 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     }
                 }
 
-                //处理雅座优惠券
-                if (yazuoMemberInfo.CouponList != null && yazuoMemberInfo.CouponList.Any())
-                {
-
-                }
+                ProcessYaZuoCouponInfo(yazuoMemberInfo);
             }
 
             return new Tuple<bool, object>(true, Data.MemberInfo);
+        }
+
+        /// <summary>
+        /// 处理雅座优惠券。
+        /// </summary>
+        /// <param name="yazuoMemberInfo"></param>
+        private void ProcessYaZuoCouponInfo(YaZuoMemberInfo yazuoMemberInfo)
+        {
+            if (_yaZuoMemberCouponInfos != null)
+                _yaZuoMemberCouponInfos.Clear();
+
+            if (yazuoMemberInfo != null && yazuoMemberInfo.CouponList != null && yazuoMemberInfo.CouponList.Any())
+            {
+                _yaZuoMemberCouponInfos = yazuoMemberInfo.CouponList.Select(Convert2CouponInfo).ToList();
+            }
+        }
+
+        /// <summary>
+        /// 将雅座优惠券信息转成系统的优惠券信息，方便使用。
+        /// </summary>
+        /// <param name="yaZuoCouponInfo"></param>
+        /// <returns></returns>
+        private CouponInfo Convert2CouponInfo(YaZuoCouponInfo yaZuoCouponInfo)
+        {
+            return new CouponInfo
+            {
+                CouponId = yaZuoCouponInfo.CouponId,
+                Name = yaZuoCouponInfo.CouponName,
+                CouponType = EnumCouponType.YaZuoFree,
+                FreeAmount = yaZuoCouponInfo.CouponAmount,
+                MaxCouponCount = yaZuoCouponInfo.CouponCount,
+                Color = "LightBlue",
+            };
         }
 
         /// <summary>
@@ -2300,7 +2315,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 CashAmount = CashAmount,
                 CouponTotalAmount = 0,
-                CouponUsedInfo = "",
+                CouponUsedInfo = GenerateYaZuoCouponUsedInfo(),
                 IntegralValue = IntegralAmount,
                 MemberCardNo = MemberCardNo,
                 OrderId = Data.OrderId,
@@ -2308,6 +2323,38 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 StoredPayAmount = MemberAmount,
                 UserId = Globals.UserInfo.UserName,
             };
+        }
+
+        /// <summary>
+        /// 生成雅座优惠券使用信息。
+        /// </summary>
+        /// <returns></returns>
+        private string GenerateYaZuoCouponUsedInfo()
+        {
+            if (Data.UsedCouponInfos != null && Globals.IsYazuoMember)
+            {
+                var couponIds = Data.UsedCouponInfos.Where(t => t.UsedCouponType == EnumUsedCouponType.YaZuo).Select(t => t.CouponInfo.CouponId).Distinct().ToList();
+                if (couponIds.Any())
+                {
+                    var result = "";
+                    foreach (var couponId in couponIds)
+                    {
+                        var couponName = Data.UsedCouponInfos.First(t => t.CouponInfo.CouponId == couponId).Name;
+                        var items = Data.UsedCouponInfos.Where(t => t.CouponInfo.CouponId == couponId).ToList();
+                        var totalFreeAmount = items.Sum(t => t.FreeAmount);
+                        var totalNum = items.Sum(t => t.Count);
+
+                        var name = couponName.PadRight(30, ' ');//优惠券名称，不足30位时后面的补空格。
+                        var code = couponId.PadLeft(15, '0');//优惠券编号，不足15位时采用高位字符0。
+                        var amount = Convert.ToInt32((totalFreeAmount * 100)).ToString("D12");//优惠券金额，不足12位时采用高位字符0。
+                        var count = totalNum.ToString().PadLeft(4, '0');//优惠券编号，不足4位时采用高位补字符0。
+
+                        result += string.Format("{0}{1}{2}{3}", name, code, amount, count);
+                    }
+                    return result;
+                }
+            }
+            return "";
         }
 
         /// <summary>
@@ -2553,6 +2600,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     InfoLog.Instance.I("完成会员查询。");
                     Data.MemberInfo = memberQueryResult.Item2;
                     IsMemberLogin = true;
+
+                    if (Globals.IsYazuoMember)
+                    {
+                        ProcessYaZuoCouponInfo((YaZuoMemberInfo)Data.MemberInfo);
+                    }
                 }
             }
 
@@ -2604,11 +2656,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("结束获取\"{0}\"优惠券。优惠券个数：{1}", SelectedCouponCategory.CategoryName, result.Item2 != null ? result.Item2.Count : 0);
             if (result.Item2 != null)
-                result.Item2.ForEach(t =>
-                {
-                    SelectedCouponCategory.CouponInfos.Add(t);
-                    CouponInfos.Add(t);
-                });
+                result.Item2.ForEach(t => { CouponInfos.Add(t); });
         }
 
         /// <summary>

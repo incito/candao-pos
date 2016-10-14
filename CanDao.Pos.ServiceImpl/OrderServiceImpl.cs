@@ -189,7 +189,7 @@ namespace CanDao.Pos.ServiceImpl
                 return new Tuple<string, List<CouponInfo>>(ex.MyMessage(), null);
             }
         }
-        
+
         public Tuple<string, MenuComboFullInfo> GetMenuComboDishes(GetMenuComboDishRequest request)
         {
             var addr = ServiceAddrCache.GetServiceAddr("GetMenuComboDish");
@@ -358,7 +358,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             var addr = ServiceAddrCache.GetServiceAddr("PayTheBill");
             if (string.IsNullOrEmpty(addr))
-                return "获取结账地址为空。";
+                return "获取结算地址为空。";
 
             var request = DataConverter.ToPayBillRequest(orderId, userId, payInfos);
             return PayTheBillProcess(addr, request);
@@ -368,7 +368,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             var addr = ServiceAddrCache.GetServiceAddr("PayTheBillCf");
             if (string.IsNullOrEmpty(addr))
-                return "获取结账地址为空。";
+                return "获取咖啡结算地址为空。";
 
             var request = DataConverter.ToPayBillRequest(orderId, userId, payInfos);
             return PayTheBillProcess(addr, request);
@@ -378,13 +378,13 @@ namespace CanDao.Pos.ServiceImpl
         {
             try
             {
-                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return result.IsSuccess ? null : "结账失败";
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
+                return result.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(result.msg, "结算失败，请联系管理员。");
             }
             catch (Exception ex)
             {
-                ErrLog.Instance.E("结账时异常。", ex);
-                return "结账失败。" + ex.MyMessage();
+                ErrLog.Instance.E("结算时异常。", ex);
+                return "结算失败。" + ex.MyMessage();
             }
         }
 

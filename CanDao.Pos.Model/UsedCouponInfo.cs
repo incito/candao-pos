@@ -1,4 +1,6 @@
-﻿namespace CanDao.Pos.Model
+﻿using CanDao.Pos.Model.Enum;
+
+namespace CanDao.Pos.Model
 {
     /// <summary>
     /// 使用的优惠券信息。 
@@ -14,6 +16,11 @@
         /// 使用的优惠券。
         /// </summary>
         public CouponInfo CouponInfo { get; set; }
+
+        /// <summary>
+        /// 使用的优惠券类型。
+        /// </summary>
+        public EnumUsedCouponType UsedCouponType { get; set; }
 
         /// <summary>
         /// 是否是折扣类优惠券。
