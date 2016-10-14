@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Timers;
 using System.Windows.Input;
@@ -674,26 +675,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 现金控件获取或失去焦点命令时执行。
-        /// </summary>
-        /// <param name="param"></param>
-        private void CashControlFocus(object param)
-        {
-            _isUserInputCash = Convert.ToBoolean(param);
-        }
-
-        /// <summary>
-        /// 会员控件获取获取或失去焦点命令的执行。
-        /// </summary>
-        /// <param name="param"></param>
-        private void MemberControlFocus(object param)
-        {
-            _isUserInputMember = Convert.ToBoolean(param);
-        }
-
-        #region 优惠券处理
-
-        /// <summary>
         /// 优惠券鼠标按下命令的执行方法。
         /// </summary>
         /// <param name="arg"></param>
@@ -760,31 +741,25 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         return;
                     }
 
-                    //_curSelectedCouponInfo.BillAmount = debitAmount;
-                    //_curSelectedCouponInfo.FreeAmount = 0;
-                    //_curSelectedCouponInfo.Amount = debitAmount;
-
                     CreatUsePreferentialRequest(1, 0, debitAmount, 1);
-
-                    //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
                 }
                 else
                 {
                     if (_curSelectedCouponInfo.FreeAmount > 0 || _curSelectedCouponInfo.DebitAmount > 0)
                     {
-                        //增加选择数量的窗口
-                        var numWnd = new NumInputWindow("优惠券", _curSelectedCouponInfo.Name, "使用数量", 0, false);
+                        //选择数量的窗口
+                        var maxNum = 0;
+                        var preferentialAmout = 0m;
+                        if (_curSelectedCouponInfo.CouponType == EnumCouponType.YaZuoFree)
+                        {
+                            maxNum = _curSelectedCouponInfo.MaxCouponCount;//雅座优惠券的时候，最大数值为雅座优惠券的数量。
+                            preferentialAmout = _curSelectedCouponInfo.FreeAmount ?? 0;//雅座优惠券的时候，优免金额为优惠券的优免金额。
+                        }
+                        var numWnd = new NumInputWindow("优惠券", _curSelectedCouponInfo.Name, "使用数量", maxNum, false);
                         if (!WindowHelper.ShowDialog(numWnd, OwnerWindow))
                             return;
 
-                        if (_curSelectedCouponInfo.CouponType == EnumCouponType.YaZuoFree)
-                        {
-                            CreatUsePreferentialRequest(numWnd.InputNum, 0, _curSelectedCouponInfo.FreeAmount ?? 0, 0);
-                        }
-                        else
-                        {
-                            CreatUsePreferentialRequest(numWnd.InputNum, 0, 0, 0);
-                        }
+                        CreatUsePreferentialRequest(numWnd.InputNum, 0, preferentialAmout, 0);
                     }
                     else if (_curSelectedCouponInfo.BillAmount <= 0 && _curSelectedCouponInfo.DebitAmount <= 0)
                     {
@@ -802,16 +777,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                             }
 
                             CreatUsePreferentialRequest(1, 0, offSelectWnd.Amount, 1);
-
-                            //_curSelectedCouponInfo.BillAmount = offSelectWnd.Amount;
-                            //_curSelectedCouponInfo.FreeAmount = offSelectWnd.Amount;
-                            //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false, offSelectWnd.Amount);
                         }
                         else if (offSelectWnd.SelectedOfferType == EnumOfferType.Discount)
                         {
                             CreatUsePreferentialRequest(1, offSelectWnd.Discount, 0, 1);
-
-                            //TaskService.Start(offSelectWnd.Discount, CalcDiscountAmountProcess, CalcDiscountAmountComplete, "计算折扣金额中...");
                         }
                     }
                 }
@@ -819,6 +788,26 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             //SaveCouponInfo();
         }
+
+        /// <summary>
+        /// 现金控件获取或失去焦点命令时执行。
+        /// </summary>
+        /// <param name="param"></param>
+        private void CashControlFocus(object param)
+        {
+            _isUserInputCash = Convert.ToBoolean(param);
+        }
+
+        /// <summary>
+        /// 会员控件获取获取或失去焦点命令的执行。
+        /// </summary>
+        /// <param name="param"></param>
+        private void MemberControlFocus(object param)
+        {
+            _isUserInputMember = Convert.ToBoolean(param);
+        }
+
+        #region 优惠券处理
 
         /// <summary>
         /// 创建使用优惠券参数
@@ -2344,7 +2333,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         var totalFreeAmount = items.Sum(t => t.FreeAmount);
                         var totalNum = items.Sum(t => t.Count);
 
-                        var name = couponName.PadRight(30, ' ');//优惠券名称，不足30位时后面的补空格。
+                        var nameLength = Encoding.Default.GetBytes(couponName).Length;//名称如果包含中文，如果直接用string.Length会导致长度计算问题。
+                        var name = couponName + "".PadLeft(30 - nameLength, ' ');//优惠券名称，不足30位时后面的补空格。
                         var code = couponId.PadLeft(15, '0');//优惠券编号，不足15位时采用高位字符0。
                         var amount = Convert.ToInt32((totalFreeAmount * 100)).ToString("D12");//优惠券金额，不足12位时采用高位字符0。
                         var count = totalNum.ToString().PadLeft(4, '0');//优惠券编号，不足4位时采用高位补字符0。
