@@ -378,7 +378,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             try
             {
-                var result = HttpHelper.HttpPost<JavaResponse>(addr, request);
+                var result = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return result.IsSuccess ? null : "结账失败";
             }
             catch (Exception ex)
