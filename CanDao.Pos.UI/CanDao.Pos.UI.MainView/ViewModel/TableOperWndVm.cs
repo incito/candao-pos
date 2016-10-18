@@ -2209,6 +2209,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             IsMemberLogin = false;
             Data.MemberInfo = null;
             MemberCardNo = null;
+            if (Globals.IsYazuoMember)
+            {
+                _yaZuoMemberCouponInfos = null;
+                if (SelectedCouponCategory.CategoryType == "88")
+                    CouponInfos.Clear();
+            }
             GetTableDishInfoAsync();
             return null;
         }
