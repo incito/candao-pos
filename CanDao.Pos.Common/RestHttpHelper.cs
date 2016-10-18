@@ -325,7 +325,7 @@ namespace CanDao.Pos.Common
             //if (!jArray.Any())
             //    return default(T);
 
-            var result = ParseJson2Object<T>(resultStr);
+            var result = ParseJson2Object<T>(resultStr.FromUnicodeString());
 
             return result;
         }

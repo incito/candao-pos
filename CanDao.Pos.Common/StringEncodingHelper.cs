@@ -26,16 +26,23 @@ namespace CanDao.Pos.Common
             StringBuilder strResult = new StringBuilder();
             if (!string.IsNullOrEmpty(str))
             {
-                string[] strlist = str.Replace("\\", "").Split('u');
-                try
+                if (str.Contains(@"\u"))
                 {
-                    for (int i = 1; i < strlist.Length; i++)
+                    string[] strlist = str.Replace("\\", "").Split('u');
+                    try
                     {
-                        int charCode = Convert.ToInt32(strlist[i], 16);
-                        strResult.Append((char)charCode);
+                        for (int i = 1; i < strlist.Length; i++)
+                        {
+                            int charCode = Convert.ToInt32(strlist[i], 16);
+                            strResult.Append((char) charCode);
+                        }
+                    }
+                    catch (FormatException ex)
+                    {
+                        return Regex.Unescape(str);
                     }
                 }
-                catch (FormatException ex)
+                else
                 {
                     return Regex.Unescape(str);
                 }
