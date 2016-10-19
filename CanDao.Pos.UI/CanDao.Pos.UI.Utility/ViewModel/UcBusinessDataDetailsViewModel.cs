@@ -3,11 +3,8 @@ using System;
 using CanDao.Pos.Common;
 using CanDao.Pos.Common.Classes.Mvvms;
 using CanDao.Pos.Common.Controls;
-using CanDao.Pos.Common.Operates;
-using CanDao.Pos.IService;
 using CanDao.Pos.ReportPrint;
 using CanDao.Pos.UI.Utility.Model;
-
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {

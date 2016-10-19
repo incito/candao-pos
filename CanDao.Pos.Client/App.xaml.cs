@@ -11,7 +11,6 @@ using CanDao.Pos.Common.PublicValues;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
-using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
 using CanDao.Pos.UI.MainView.View;
 using CanDao.Pos.UI.Utility;
@@ -116,12 +115,10 @@ namespace CanDao.Pos.Client
         /// <returns>授权成功返回true，否则返回false。</returns>
         private bool AuthorizeOpen()
         {
-            var wnd = new RestaurantOpeningWindow();
-            if (wnd.ShowDialog() != true)
+            if (!WindowHelper.ShowDialog(new RestaurantOpeningWindow()))
                 return false;
 
-            var authorizationWnd = new AuthorizationWndVm(EnumRightType.Opening);
-            return authorizationWnd.OwnerWindow.ShowDialog() == true;
+            return WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.Opening));
         }
 
         /// <summary>
@@ -130,8 +127,7 @@ namespace CanDao.Pos.Client
         /// <returns>登录成功返回true，不是收银员返回null，登录失败返回false。</returns>
         private bool? CashierLogin()
         {
-            var loginWnd = new UserLoginWndVm();//登录
-            if (loginWnd.OwnerWindow.ShowDialog() == true)
+            if (WindowHelper.ShowDialog(new UserLoginWndVm()))
             {
                 if (!Globals.UserRight.AllowCash)
                     return null;
@@ -145,7 +141,6 @@ namespace CanDao.Pos.Client
         /// </summary>
         private void GetBankInfosAsync()
         {
-
             ThreadPool.QueueUserWorkItem(t =>
             {
                 InfoLog.Instance.I("异步获取可选银行信息...");
@@ -328,7 +323,7 @@ namespace CanDao.Pos.Client
 
             Globals.YaZuoServer = result.Item2.data.vipotherurl;
             Globals.CloudServer = result.Item2.data.vipcandaourl;
-            Globals.MemberSystem = (EnumMemberSystem) result.Item2.data.viptype;
+            Globals.MemberSystem = (EnumMemberSystem)result.Item2.data.viptype;
 
             TaskService.Start(null, GetBranchInfoProcess, GetBranchInfoComplete, "");
         }
@@ -439,7 +434,7 @@ namespace CanDao.Pos.Client
                         break;
                     }
 
-                    (new MainWindow(true)).ShowDialog();
+                    WindowHelper.ShowDialog(new MainWindow(true));
                     InfoLog.Instance.I("强制结账完成。");
                     return;
                 }
@@ -521,7 +516,7 @@ namespace CanDao.Pos.Client
             {
                 InfoLog.Instance.I("用户：{0}登录成功，显示主窗口。", Globals.UserInfo.UserName);
                 Current.ShutdownMode = ShutdownMode.OnLastWindowClose;
-                (new MainWindow(false)).ShowDialog();
+                WindowHelper.ShowDialog(new MainWindow(false));
             }
             else
             {

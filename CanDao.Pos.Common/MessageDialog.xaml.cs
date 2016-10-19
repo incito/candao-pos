@@ -30,15 +30,16 @@ namespace CanDao.Pos.Common
         public static bool? Show(string message, MessageBoxButton btn, Window ownerWindow = null)
         {
             var dialog = new MessageDialog { InfoMsg = message, BoxButton = btn };
-            if (!Equals(Application.Current.MainWindow, dialog))
-            {
-                dialog.Owner = ownerWindow ?? (Application.Current.MainWindow.IsLoaded ? Application.Current.MainWindow : null);
-            }
-            else
+            if (WindowHelper.LastShowWindow == null)
             {
                 dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 dialog.ShowInTaskbar = true;
             }
+            else
+            {
+                dialog.Owner = ownerWindow ?? WindowHelper.LastShowWindow;
+            }
+
             dialog.ShowDialog();
             return dialog.DialogResult;
         }

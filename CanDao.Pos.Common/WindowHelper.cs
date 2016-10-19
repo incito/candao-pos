@@ -1,16 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using Application = System.Windows.Application;
 
 namespace CanDao.Pos.Common
 {
     public class WindowHelper
     {
         /// <summary>
-        /// 当前有效窗体。
+        /// 窗口的顺序集合信息。
         /// </summary>
-        public static Window CurActiveWindow { get; set; }
+        private static readonly List<Window> WindowStack;
+
+        private static object _syncObj = new object();
+
+        /// <summary>
+        /// 最后一个当前显示的窗口。
+        /// </summary>
+        public static Window LastShowWindow
+        {
+            get { return WindowStack.Last(); }
+        }
+
+        static WindowHelper()
+        {
+            WindowStack = new List<Window>();
+        }
 
         public static DependencyObject FindVisualTreeRoot(DependencyObject initial)
         {
@@ -39,7 +57,7 @@ namespace CanDao.Pos.Common
         /// <returns></returns>
         public static bool ShowDialog(Window wnd)
         {
-            return ShowDialog(wnd, Application.Current.MainWindow);
+            return ShowDialog(wnd, null);
         }
 
         /// <summary>
@@ -51,19 +69,17 @@ namespace CanDao.Pos.Common
         public static bool ShowDialog(Window wnd, Window ownerWnd)
         {
             ProcessWindow(wnd, ownerWnd);
-            var result = wnd.ShowDialog() == true;
-            return result;
+            return wnd.ShowDialog() == true;
         }
 
         /// <summary>
         /// 显示模态窗口。
         /// </summary>
         /// <param name="vm"></param>
-        /// <param name="ownerWnd"></param>
         /// <returns></returns>
         public static bool ShowDialog(NormalWindowViewModel vm)
         {
-            return ShowDialog(vm, Application.Current.MainWindow);
+            return ShowDialog(vm, null);
         }
 
         /// <summary>
@@ -103,9 +119,12 @@ namespace CanDao.Pos.Common
                 throw new ArgumentNullException("wnd");
 
             if (ownerWnd == null)
-                ownerWnd = Application.Current.MainWindow;
+            {
+                if (WindowStack.Any())
+                    ownerWnd = WindowStack.Last();
+            }
 
-            if (Equals(wnd, ownerWnd))
+            if (ownerWnd == null || Equals(wnd, ownerWnd))
             {
                 wnd.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
@@ -113,6 +132,19 @@ namespace CanDao.Pos.Common
             {
                 wnd.Owner = ownerWnd;
                 wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            }
+
+            wnd.Closed += delegate
+            {
+                lock (_syncObj)
+                {
+                    WindowStack.Remove(wnd);
+                }
+            };
+
+            lock (_syncObj)
+            {
+                WindowStack.Add(wnd);
             }
         }
     }
