@@ -22,7 +22,7 @@ namespace CanDao.Pos.Common
         /// </summary>
         public static Window LastShowWindow
         {
-            get { return WindowStack.Last(); }
+            get { return WindowStack.Any() ? WindowStack.Last() : null; }
         }
 
         static WindowHelper()
