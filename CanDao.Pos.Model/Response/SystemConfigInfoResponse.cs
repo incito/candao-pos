@@ -7,6 +7,7 @@
 
     public class SystemConfigInfoResponse
     {
+        public bool vipstatus { get; set; }
         /// <summary>
         /// 会员类型。1：餐道，2：雅座。
         /// </summary>

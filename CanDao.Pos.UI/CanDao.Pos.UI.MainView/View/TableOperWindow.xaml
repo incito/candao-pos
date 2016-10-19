@@ -426,7 +426,8 @@
                     </StackPanel>
                 </TabItem>
 
-                <TabItem Header="会员卡">
+                <TabItem Header="会员卡"
+                        Visibility="{Binding Source={x:Static common:Globals.IsMemberEnabled}, Converter={StaticResource Bool2VisibilityCvt}}">
                     <StackPanel Margin="10,10,310,10">
                         <Grid Height="40" Margin="0,5">
                             <Grid.ColumnDefinitions>

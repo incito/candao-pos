@@ -323,7 +323,12 @@ namespace CanDao.Pos.Client
 
             Globals.YaZuoServer = result.Item2.data.vipotherurl;
             Globals.CloudServer = result.Item2.data.vipcandaourl;
-            Globals.MemberSystem = (EnumMemberSystem)result.Item2.data.viptype;
+            Globals.IsMemberEnabled = result.Item2.data.vipstatus;
+
+            if (Globals.IsMemberEnabled)
+                Globals.MemberSystem = (EnumMemberSystem)result.Item2.data.viptype;
+            else
+                Globals.MemberSystem = EnumMemberSystem.None;
 
             TaskService.Start(null, GetBranchInfoProcess, GetBranchInfoComplete, "");
         }

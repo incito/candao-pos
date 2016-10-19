@@ -253,7 +253,8 @@
                         Content="会员"
                         Command="{Binding OperCmd}"
                         CommandParameter="Member"
-                        Width="100" Margin="2"/>
+                        Width="100" Margin="2"
+                        Visibility="{Binding Source={x:Static common:Globals.IsMemberEnabled}, Converter={StaticResource Bool2VisibilityCvt}}"/>
                 <Popup IsOpen="{Binding IsMemberOpened}"
                        PlacementTarget="{Binding ElementName=BtnMember}"
                        StaysOpen="False"

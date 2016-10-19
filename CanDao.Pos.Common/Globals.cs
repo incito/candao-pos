@@ -113,6 +113,11 @@ namespace CanDao.Pos.Common
         public static EnumMemberSystem MemberSystem { get; set; }
 
         /// <summary>
+        /// 是否启用会员。
+        /// </summary>
+        public static bool IsMemberEnabled { get; set; }
+
+        /// <summary>
         /// 零头处理方式。
         /// </summary>
         private static EnumOddModel? _oddModel;
