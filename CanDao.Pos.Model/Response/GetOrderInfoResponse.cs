@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace CanDao.Pos.Model.Response
 {
@@ -14,17 +11,17 @@ namespace CanDao.Pos.Model.Response
     {
         public OrderInfos ()
         {
-            preferentialInfo = new preferentialInfoResponse();
+            preferentialInfo = new PreferentialInfoResponse();
             rows = new List<DishInfosResponse>();
             
         }
 
         public UserOrderInfo userOrderInfo { set; get; }
-        public preferentialInfoResponse preferentialInfo { set; get; }
+        public PreferentialInfoResponse preferentialInfo { set; get; }
         public List<DishInfosResponse> rows { set; get; }
     }
 
-    public class preferentialInfoResponse
+    public class PreferentialInfoResponse
     {
 
         /// <summary>
@@ -69,10 +66,13 @@ namespace CanDao.Pos.Model.Response
         /// </summary>
         public decimal adjAmout { set; get; }
 
-        public List<GetpreferentialDetails> detailPreferentials { set; get; }
+        public List<GetPreferentialDetails> detailPreferentials { set; get; }
     }
 
-    public class GetpreferentialDetails
+    /// <summary>
+    /// 优惠券明细信息。
+    /// </summary>
+    public class GetPreferentialDetails
     {
         public string id { set; get; }
         /// <summary>

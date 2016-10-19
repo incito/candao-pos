@@ -225,7 +225,11 @@ namespace CanDao.Pos.Model
             IsHangOrder = tableInfo.IsHangOrder;
         }
 
-        public void CloneData(TableFullInfo info)
+        /// <summary>
+        /// 复制简单信息。
+        /// </summary>
+        /// <param name="info"></param>
+        public void CloneSimpleData(TableFullInfo info)
         {
             OrderId = info.OrderId;
             MemberInfo = info.MemberInfo;
@@ -237,20 +241,16 @@ namespace CanDao.Pos.Model
             TotalAmount = info.TotalAmount;
             TableStatus = info.TableStatus;
             CustomerNumber = info.CustomerNumber;
-
-            DishInfos.Clear();
-            if (info.DishInfos != null && info.DishInfos.Any())
-            {
-                foreach (var dishInfo in info.DishInfos)
-                {
-                    DishInfos.Add(dishInfo);
-                }
-            }
         }
 
+        /// <summary>
+        /// 复制订单信息。
+        /// </summary>
+        /// <param name="info"></param>
         public void CloneOrderData(TableFullInfo info)
         {
             OrderId = info.OrderId;
+            MemberInfo = info.MemberInfo;
             MemberNo = info.MemberNo;
             TableStatus = info.TableStatus;
             CustomerNumber = info.CustomerNumber;
@@ -276,6 +276,7 @@ namespace CanDao.Pos.Model
                     DishInfos.Add(dishInfo);
                 }
             }
+
             UsedCouponInfos.Clear();
             if (info.UsedCouponInfos != null && info.UsedCouponInfos.Any())
             {
@@ -286,7 +287,11 @@ namespace CanDao.Pos.Model
             }
         }
 
-        public void ClonePreferentialInfo(preferentialInfoResponse preferential)
+        /// <summary>
+        /// 复制优惠券信息。
+        /// </summary>
+        /// <param name="preferential"></param>
+        public void ClonePreferentialInfo(PreferentialInfoResponse preferential)
         {
             TotalFreeAmount = preferential.toalFreeAmount;
             CouponAmount = preferential.amount;
@@ -318,29 +323,32 @@ namespace CanDao.Pos.Model
                     }
             }
 
-            if (preferential.detailPreferentials == null)
-            { return; }
+            if (preferential.detailPreferentials != null)
+                preferential.detailPreferentials.ForEach(t => UsedCouponInfos.Add(Convert2UsedCouponInfo(t)));
+        }
 
-            foreach (var info in preferential.detailPreferentials)
+        /// <summary>
+        /// 将优惠券明细信息转换成优惠券使用信息。
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private UsedCouponInfo Convert2UsedCouponInfo(GetPreferentialDetails info)
+        {
+            return new UsedCouponInfo
             {
-                var coupon = new UsedCouponInfo
+                CouponInfo = new CouponInfo
                 {
-                    CouponInfo = new CouponInfo
-                    {
-                        RuleId = info.coupondetailid,
-                        CouponId = info.preferential
-                    },
-                    Count = 1,//默认单张
-                    RelationId = info.id,
-                    UsedCouponType = (EnumUsedCouponType)info.isCustom,
-                    BillAmount = info.deAmount,
-                    DebitAmount = info.toalDebitAmount,
-                    FreeAmount = info.toalFreeAmount,
-                    Name = info.activity.name
-                };
-
-                UsedCouponInfos.Add(coupon);
-            }
+                    RuleId = info.coupondetailid,
+                    CouponId = info.preferential
+                },
+                Count = 1,//默认单张
+                RelationId = info.id,
+                UsedCouponType = (EnumUsedCouponType)info.isCustom,
+                BillAmount = info.deAmount,
+                DebitAmount = info.toalDebitAmount,
+                FreeAmount = info.toalFreeAmount,
+                Name = info.activity.name
+            };
         }
     }
 }

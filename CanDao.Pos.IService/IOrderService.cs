@@ -255,14 +255,14 @@ namespace CanDao.Pos.IService
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Tuple<string, preferentialInfoResponse> UsePreferential(UsePreferentialRequest request);
+        Tuple<string, PreferentialInfoResponse> UsePreferential(UsePreferentialRequest request);
 
         /// <summary>
         /// 删除优惠券
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Tuple<string, preferentialInfoResponse> DelPreferential(DelPreferentialRequest request);
+        Tuple<string, PreferentialInfoResponse> DelPreferential(DelPreferentialRequest request);
 
         /// <summary>
         /// 获取某个订单赠菜优惠券的使用信息。

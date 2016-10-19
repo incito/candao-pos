@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -883,7 +882,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             IOrderService service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
-                return new Tuple<string, preferentialInfoResponse>("创建IOrderService服务失败。", null);
+                return new Tuple<string, PreferentialInfoResponse>("创建IOrderService服务失败。", null);
 
             return service.UsePreferential((UsePreferentialRequest)arg);
         }
@@ -894,7 +893,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="obj"></param>
         private void UseCouponInfoComplete(object obj)
         {
-            var result = obj as Tuple<string, preferentialInfoResponse>;
+            var result = obj as Tuple<string, PreferentialInfoResponse>;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 var errMsg = string.Format("保存优惠券信息失败：{0}", result.Item1);
@@ -997,7 +996,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             IOrderService service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
-                return new Tuple<string, preferentialInfoResponse>("创建IOrderService服务失败。", null);
+                return new Tuple<string, PreferentialInfoResponse>("创建IOrderService服务失败。", null);
 
             return service.DelPreferential((DelPreferentialRequest)arg);
         }
@@ -1008,7 +1007,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="obj"></param>
         private void DeleCouponInfoComplete(object obj)
         {
-            var result = obj as Tuple<string, preferentialInfoResponse>;
+            var result = obj as Tuple<string, PreferentialInfoResponse>;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 var errMsg = string.Format("删除优惠券信息失败：{0}", result);
@@ -1068,7 +1067,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// 
         /// </summary>
         /// <param name="preferential"></param>
-        private void ProcessCouponShow(preferentialInfoResponse preferential)
+        private void ProcessCouponShow(PreferentialInfoResponse preferential)
         {
             Data.ClonePreferentialInfo(preferential);
             GenerateSettlementInfo();
@@ -1250,10 +1249,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="elapsedEventArgs"></param>
         private void RefreshTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
+            _refreshTimer.Stop();
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
             {
                 ErrLog.Instance.E("创建IOrderService服务失败。");
+                _refreshTimer.Start();
                 return;
             }
 
@@ -1261,20 +1262,24 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取餐台信息错误：{0}。", result.Item1);
+                _refreshTimer.Start();
                 return;
             }
 
             if (result.Item2 == null)
             {
                 ErrLog.Instance.E("获取到餐台信息为空。");
+                _refreshTimer.Start();
                 return;
             }
 
+            Data.CloneSimpleData(result.Item2);
             if (Data.TotalAmount != result.Item2.TotalAmount || Data.DishInfos.Sum(t => t.DishNum) != result.Item2.DishInfos.Sum(t => t.DishNum))//当总价或菜品数量改变时再触发刷新方法。
             {
                 _tableInfo.OrderId = result.Item2.OrderId;//可能会有并台导致订单号改变。
                 GetTableDishInfoAsync();
             }
+            _refreshTimer.Start();
         }
 
         /// <summary>

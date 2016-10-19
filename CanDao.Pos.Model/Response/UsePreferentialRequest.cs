@@ -2,7 +2,7 @@
 {
     public class UsePreferentialResponse : NewHttpBaseResponse
     {
-        public preferentialInfoResponse data { set; get; }
+        public PreferentialInfoResponse data { set; get; }
     }
 
     public class DelePreferentialResponse : NewHttpBaseResponse
@@ -11,6 +11,6 @@
     }
     public class PreferentialInfo
     {
-        public preferentialInfoResponse preferentialInfo { set; get; }
+        public PreferentialInfoResponse preferentialInfo { set; get; }
     }
 }

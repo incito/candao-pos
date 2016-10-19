@@ -1079,7 +1079,7 @@ namespace CanDao.Pos.ServiceImpl
         /// </summary>
         /// <param name="preferential"></param>
         /// <param name="tableFullInfo"></param>
-        internal static void ToAccount(preferentialInfoResponse preferential, ref TableFullInfo tableFullInfo)
+        internal static void ToAccount(PreferentialInfoResponse preferential, ref TableFullInfo tableFullInfo)
         {
             tableFullInfo.ClonePreferentialInfo(preferential);
         }
