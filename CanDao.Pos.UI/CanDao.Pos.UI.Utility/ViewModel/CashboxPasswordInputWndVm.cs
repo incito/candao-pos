@@ -18,6 +18,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// </summary>
         public string CashPassword { get; set; }
 
+        protected override void OnWindowLoaded(object param)
+        {
+            OwnerWnd.PbBox.Focus();
+        }
+
         protected override void Confirm(object param)
         {
             if (string.IsNullOrEmpty(CashPassword))
