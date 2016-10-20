@@ -77,6 +77,7 @@
     <CancelOrder Addr="/newspicyway/datasnap/rest/TServerMethods1/cancelOrder/"/><!--外卖取消账单-->
     <SetTakeoutOrderOnAccount Addr="/newspicyway/datasnap/rest/TServerMethods1/putOrder/"/><!--外卖挂单-->
     <SetOrderTakeout Addr="/newspicyway/datasnap/rest/TServerMethods1/wmOrder/"/><!--设置订单为外卖单。-->
+    <SendMsgAsync Addr="/newspicyway/datasnap/rest/TServerMethods1/sendMsgAsyn/"/><!--异步发送消息。-->
 	
     <PrintPay Addr="/newspicyway/print4POS/getOrderInfo"/><!--打印预结，结算，客用-->
     <PrintClearMachine Addr="/newspicyway/print4POS/getClearMachineData"/><!--打印清机单-->

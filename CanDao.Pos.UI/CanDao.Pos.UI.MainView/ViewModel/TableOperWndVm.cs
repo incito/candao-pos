@@ -2368,12 +2368,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (Data.TableType == EnumTableType.Outside || Data.TableType == EnumTableType.Room)
             {
                 //BroadcastSettlementMsgAsync(); //转成后台进行发送。
+                CommonHelper.SendMsgAsync(Data.OrderId, EnumMsgType.Settlement);//结账完成广播消息，通知PAD清台。
             }
-
             else if (Data.TableType == EnumTableType.CFTable)
                 BroadcastCoffeeSettlementMsgAsyc();
 
-            //充值成功打开钱箱。
+            //结账成功打开钱箱。
             ThreadPool.QueueUserWorkItem(t => { OpenCashBoxProcess(); });
 
             InfoLog.Instance.I("开始打印结账单...");
