@@ -250,5 +250,18 @@ namespace CanDao.Pos.IService
         /// </summary>
         /// <returns></returns>
         Tuple<string, BusinessSimpleInfo>GetBusinessSimpleInfo();
+
+        /// <summary>
+        /// 获取支付方式信息。
+        /// </summary>
+        /// <returns></returns>
+        Tuple<string, List<PayWayInfo>> GetPayWayInfo();
+
+        /// <summary>
+        /// 保存支付信息。顺序以及显示。
+        /// </summary>
+        /// <param name="infos"></param>
+        /// <returns></returns>
+        string SavePayWayInfo(List<PayWayInfo> infos);
     }
 }

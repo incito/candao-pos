@@ -104,6 +104,7 @@
     <Compile Include="MenuComboDishInfo.cs" />
     <Compile Include="MenuComboFullInfo.cs" />
     <Compile Include="MenuFishPotFullInfo.cs" />
+    <Compile Include="PayWayInfo.cs" />
     <Compile Include="PrintInvoiceInfo.cs" />
     <Compile Include="PrintMemberPayInfo.cs" />
     <Compile Include="PrintMemberStoredInfo.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Request\GetOrderMemberInfoRequest.cs" />
     <Compile Include="Request\GetTableByTypeRequest.cs" />
     <Compile Include="Request\GzdwResponse.cs" />
+    <Compile Include="Request\SavePayWayInfoRequest.cs" />
     <Compile Include="Request\SetTakeoutOrderOnAccountRequest.cs" />
     <Compile Include="Request\SendVerifyCodeRequest.cs" />
     <Compile Include="Request\SetCouponFavorRequest.cs" />
@@ -151,6 +153,7 @@
     <Compile Include="Response\GetBusinessSimpleInfoResponse.cs" />
     <Compile Include="Response\GetDishGiftCouponInfoResponse.cs" />
     <Compile Include="Response\GetOrderInfoResponse.cs" />
+    <Compile Include="Response\GetPayWayInfoResponse.cs" />
     <Compile Include="Response\Member\YaZuo\YaZuoMemberStorageResponse.cs" />
     <Compile Include="Response\SystemConfigInfoResponse.cs" />
     <Compile Include="Response\UsePreferentialRequest.cs" />

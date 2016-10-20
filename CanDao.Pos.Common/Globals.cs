@@ -64,6 +64,11 @@ namespace CanDao.Pos.Common
         public static List<OnCompanyAccountInfo> OnCompanyInfos { get; set; }
 
         /// <summary>
+        /// 支付方式信息集合。
+        /// </summary>
+        public static List<PayWayInfo> PayWayInfos { get; set; }
+
+        /// <summary>
         /// 分店信息。
         /// </summary>
         public static BranchInfo BranchInfo { get; set; }

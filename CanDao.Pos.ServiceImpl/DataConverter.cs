@@ -627,6 +627,25 @@ namespace CanDao.Pos.ServiceImpl
             };
         }
 
+        internal static PayWayInfo ToPayWayInfo(PayWayInfoResponse response)
+        {
+            return new PayWayInfo
+            {
+                ItemId = response.itemId,
+                Name = response.title,
+                IsVisible = Convert.ToBoolean(response.status),
+            };
+        }
+
+        internal static SavePayWayInfoRequest ToSavePayWayInfoRequest(PayWayInfo info)
+        {
+            return new SavePayWayInfoRequest
+            {
+                itemId = info.ItemId,
+                status = info.IsVisible ? 1 : 0,
+            };
+        }
+
         #region Private Method
 
         private static MenuDishInfo ToMenuDishInfo(FishPotDishResponse response)

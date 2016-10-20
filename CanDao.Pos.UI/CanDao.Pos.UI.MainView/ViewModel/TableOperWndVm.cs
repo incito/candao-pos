@@ -103,6 +103,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
             Data = new TableFullInfo();
             Data.CloneDataFromTableInfo(tableInfo);
+
+            PayWayInfos = new ObservableCollection<PayWayInfo>();
+            Globals.PayWayInfos.Where(t => t.IsVisible).ToList().ForEach(PayWayInfos.Add);
         }
 
         #endregion
@@ -130,6 +133,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// 当前分类集合。
         /// </summary>
         public ObservableCollection<CouponCategory> CouponCategories { get; private set; }
+
+        /// <summary>
+        /// 支付方式集合。
+        /// </summary>
+        public ObservableCollection<PayWayInfo> PayWayInfos { get; set; }
 
         /// <summary>
         /// 当前优惠券分类下的优惠券集合。

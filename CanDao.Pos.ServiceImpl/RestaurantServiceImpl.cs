@@ -811,7 +811,7 @@ namespace CanDao.Pos.ServiceImpl
         {
             var addr = ServiceAddrCache.GetServiceAddr("GetBusinessSimpleInfo");
             if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, BusinessSimpleInfo>("获取店铺简易信息地址失败。", null);
+                return new Tuple<string, BusinessSimpleInfo>("店铺简易信息地址为空。", null);
 
             try
             {
@@ -825,6 +825,45 @@ namespace CanDao.Pos.ServiceImpl
             catch (Exception exp)
             {
                 return new Tuple<string, BusinessSimpleInfo>(exp.MyMessage(), null);
+            }
+        }
+
+        public Tuple<string, List<PayWayInfo>> GetPayWayInfo()
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("GetPayWayInfo");
+            if (string.IsNullOrEmpty(addr))
+                return new Tuple<string, List<PayWayInfo>>("获取支付方式信息地址为空。", null);
+
+            try
+            {
+                var response = HttpHelper.HttpGet<GetPayWayInfoResponse>(addr);
+                if (!response.IsSuccess)
+                    return new Tuple<string, List<PayWayInfo>>(DataHelper.GetNoneNullValueByOrder(response.msg, "获取支付方式信息失败。"), null);
+
+                var dataList = response.data.Select(DataConverter.ToPayWayInfo).ToList();
+                return new Tuple<string, List<PayWayInfo>>(null, dataList);
+            }
+            catch (Exception exp)
+            {
+                return new Tuple<string, List<PayWayInfo>>(exp.MyMessage(), null);
+            }
+        }
+
+        public string SavePayWayInfo(List<PayWayInfo> infos)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("SavePayWayInfo");
+            if (string.IsNullOrEmpty(addr))
+                return "保存支付方式信息地址为空。";
+
+            try
+            {
+                var request = infos.Select(DataConverter.ToSavePayWayInfoRequest).ToList();
+                var response = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
+                return response.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(response.msg, "保存支付方式信息失败。");
+            }
+            catch (Exception ex)
+            {
+                return ex.MyMessage();
             }
         }
     }

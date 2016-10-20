@@ -50,6 +50,8 @@
     <GetTipMoney Addr="/newspicyway/tip/tipListByTime.json"/><!--获取小费总额-->
     <GetDishGiftCouponInfo Addr="/newspicyway/padinterface/givePrefer.json"/><!--获取赠菜优惠券的信息。-->
     <GetBusinessSimpleInfo Addr="/newspicyway/padinterface/consumInfo.json"/><!--获取基本的营业数据。-->
+    <GetPayWayInfo Addr="/newspicyway/padinterface/getPayways.json"/><!--获取支付方式信息。-->
+    <SavePayWayInfo Addr="/newspicyway/padinterface/savePayway.json"/><!--保存支付方式信息。-->
     
     <RestaurantOpened Addr="/newspicyway/datasnap/rest/TServerMethods1/OpenUp/"/><!--店铺开业，分查询是否开业和开业-->
     <PettyCashInput Addr="/newspicyway/datasnap/rest/TServerMethods1/InputTellerCash/"/><!--零找金，分查询是否输入过零找金和输入零找金-->

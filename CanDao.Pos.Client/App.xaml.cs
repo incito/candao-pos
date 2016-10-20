@@ -64,6 +64,7 @@ namespace CanDao.Pos.Client
             GetTradeTimeAsync();
             GetOddSettingAsync();
             GetDietSettingAsync();
+            GetPayWayInfoAsync();
             GetDinnerWareSettingAsync();
 
             TaskService.Start(null, GetSysCfgInfoProcess, GetSysCfgInfoComplete, "");
@@ -218,7 +219,6 @@ namespace CanDao.Pos.Client
                         MessageDialog.Warning("为空。");
                     }
                 }
-
             });
         }
 
@@ -285,6 +285,30 @@ namespace CanDao.Pos.Client
                         MessageDialog.Warning("为空。");
                     }
                 }
+            });
+        }
+
+        /// <summary>
+        /// 异步获取支付方式信息。
+        /// </summary>
+        private void GetPayWayInfoAsync()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                InfoLog.Instance.I("异步获取支付方式信息...");
+                var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+                if (service == null)
+                {
+                    ErrLog.Instance.E("创建IRestaurantService服务失败。");
+                    return;
+                }
+
+                var result = service.GetPayWayInfo();
+                InfoLog.Instance.I("异步获取支付方式信息完成。");
+                if (!string.IsNullOrEmpty(result.Item1))
+                    ErrLog.Instance.E("异步获取支付方式时错误：{0}", result.Item1);
+                else
+                    Globals.PayWayInfos = result.Item2;
             });
         }
 

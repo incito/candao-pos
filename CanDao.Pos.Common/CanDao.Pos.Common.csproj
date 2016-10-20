@@ -244,6 +244,7 @@
     <Compile Include="SystemConfigCache.cs" />
     <Compile Include="TaskService.cs" />
     <Compile Include="TemplateSelector\DishPayamountTemplateSelector.cs" />
+    <Compile Include="TemplateSelector\PayWayTemplateSelector.cs" />
     <Compile Include="WindowHelper.cs" />
     <Compile Include="WorkFlowService.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
