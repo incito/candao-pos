@@ -147,5 +147,13 @@ namespace CanDao.Pos.Model.Response
         public int customerNumber { set; get; }
         public string orderid { set; get; }
         public int orderStatus { set; get; }
+        /// <summary>
+        /// 餐具是否收费。0不收费/1收费。
+        /// </summary>
+        public byte isFree { get; set; }
+        /// <summary>
+        /// 餐具人数。
+        /// </summary>
+        public int numOfMeals { get; set; }
     }
 }
