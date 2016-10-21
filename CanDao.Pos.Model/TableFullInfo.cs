@@ -174,6 +174,16 @@ namespace CanDao.Pos.Model
         }
 
         /// <summary>
+        /// 餐具是否免费。
+        /// </summary>
+        public bool IsDinnerWareFree { get; set; }
+
+        /// <summary>
+        /// 餐具个数。
+        /// </summary>
+        public int DinnerWareCount { get; set; }
+
+        /// <summary>
         /// 订单状态。
         /// </summary>
         public EnumOrderStatus OrderStatus { get; set; }
@@ -254,8 +264,11 @@ namespace CanDao.Pos.Model
             MemberNo = info.MemberNo;
             TableStatus = info.TableStatus;
             CustomerNumber = info.CustomerNumber;
+            IsDinnerWareFree = info.IsDinnerWareFree;
+            DinnerWareCount = info.DinnerWareCount;
             OrderInvoiceTitle = info.OrderInvoiceTitle;
             OrderStatus = info.OrderStatus;
+
 
             PaymentAmount = info.PaymentAmount;
             TipAmount = info.TipAmount;

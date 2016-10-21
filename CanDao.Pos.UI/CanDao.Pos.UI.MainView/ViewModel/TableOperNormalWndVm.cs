@@ -36,6 +36,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var tableFullInfo = new TableFullInfo();
                 tableFullInfo.CloneDataFromTableInfo(_tableInfo);
                 tableFullInfo.CustomerNumber = openTableWnd.CustomerNumber;
+                tableFullInfo.DinnerWareCount = openTableWnd.CustomerNumber;//点菜页面使用餐具的个数。
+                tableFullInfo.IsDinnerWareFree = false;
 
                 // 开台成功以后，弹出点菜窗口。
                 WindowHelper.ShowDialog(new OrderDishWindow(tableFullInfo), OwnerWindow);

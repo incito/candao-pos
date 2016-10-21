@@ -82,6 +82,7 @@
     <Compile Include="Enum\EnumHandCouponType.cs" />
     <Compile Include="Enum\EnumKeepOdd.cs" />
     <Compile Include="Enum\EnumMemberSystem.cs" />
+    <Compile Include="Enum\EnumMsgType.cs" />
     <Compile Include="Enum\EnumOddAccuracy.cs" />
     <Compile Include="Enum\EnumOddModel.cs" />
     <Compile Include="Enum\EnumOfferType.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Request\GetTableByTypeRequest.cs" />
     <Compile Include="Request\GzdwResponse.cs" />
     <Compile Include="Request\SavePayWayInfoRequest.cs" />
+    <Compile Include="Request\SendMsgAsyncRequest.cs" />
     <Compile Include="Request\SetTakeoutOrderOnAccountRequest.cs" />
     <Compile Include="Request\SendVerifyCodeRequest.cs" />
     <Compile Include="Request\SetCouponFavorRequest.cs" />

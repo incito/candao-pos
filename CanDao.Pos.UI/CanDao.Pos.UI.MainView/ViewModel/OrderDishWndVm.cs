@@ -397,7 +397,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
-                return new Tuple<string, List<MenuDishGroupInfo>>("创建IOrderService服务失败。", null);
+                return "创建IOrderService服务失败。";
 
             if (OrderType == EnumOrderType.Free)
             {
@@ -430,14 +430,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return service.OrderDishCf(Data.OrderId, Data.TableName, OrderRemark, dishList);
 
             //如果餐具收费，则添加餐具到下单菜品里。
-            if (Globals.IsDinnerWareEnable && !Data.DishInfos.Any())
+            if (Globals.IsDinnerWareEnable && !Data.DishInfos.Any() && !Data.IsDinnerWareFree)
             {
                 InfoLog.Instance.I("餐具收费，添加餐具到下单菜品列表里。");
                 var dinnerWare = Globals.DinnerWareInfo.CloneData();
                 dinnerWare.PrimaryKey = Guid.NewGuid().ToString();
                 if (!string.IsNullOrEmpty(Data.MemberNo))
                     dinnerWare.Price = dinnerWare.MemberPrice;
-                UpdateOrderDishNum(dinnerWare, Data.CustomerNumber);
+                UpdateOrderDishNum(dinnerWare, Data.DinnerWareCount);
                 dishList.Add(dinnerWare);
             }
 

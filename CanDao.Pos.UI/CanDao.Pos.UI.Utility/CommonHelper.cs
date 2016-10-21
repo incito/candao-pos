@@ -67,6 +67,33 @@ namespace CanDao.Pos.UI.Utility
         }
 
         /// <summary>
+        /// 异步发送消息。
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="type">消息类型。</param>
+        public static void SendMsgAsync(string orderId, EnumMsgType type)
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                var errMsg = SendMessage(orderId, type);
+                if (!string.IsNullOrEmpty(errMsg))
+                    ErrLog.Instance.E("广播指令失败：{0}", (int)type);
+            });
+        }
+
+        /// <summary>
+        /// 发送消息。
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="type">消息类型。</param>
+        /// <returns></returns>
+        public static string SendMessage(string orderId, EnumMsgType type)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            return service == null ? "创建IOrderService服务失败。" : service.SendMsgAsync(orderId, type);
+        }
+
+        /// <summary>
         /// 清理所有POS机。都清理成功返回true，否则返回false。
         /// </summary>
         /// <param name="isInForcedEndWorkModel">是否是强制结业清机。</param>

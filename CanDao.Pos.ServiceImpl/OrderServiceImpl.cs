@@ -739,5 +739,28 @@ namespace CanDao.Pos.ServiceImpl
         }
 
         #endregion
+
+        public string SendMsgAsync(string orderId, EnumMsgType msgType)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("SendMsgAsync");
+            if (string.IsNullOrEmpty(addr))
+                return "异步发送消息地址为空。";
+
+            try
+            {
+                var request = new SendMsgAsyncRequest
+                {
+                    orderId = orderId,
+                    type = (int)msgType,
+                };
+                var response = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
+                return response.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(response.msg, "异步发送消息失败。");
+            }
+            catch (Exception ex)
+            {
+                return ex.MyMessage();
+            }
+        }
+
     }
 }

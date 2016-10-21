@@ -447,20 +447,10 @@ namespace CanDao.Pos.ServiceImpl
         /// <returns></returns>
         internal static List<MVipCoupon> ToCouponList(GetCouponListResponse response)
         {
-            var mVipCoupons = new List<MVipCoupon>();
-            foreach (var coupon in response.datas)
+            return response.datas.Select(coupon => new MVipCoupon
             {
-                var info = new MVipCoupon
-                {
-                    Id = coupon.id,
-                    CouponType = coupon.type,
-                    DealValue = coupon.dealValue,
-                    PresentValu = coupon.presentValue
-                };
-                mVipCoupons.Add(info);
-            }
-
-            return mVipCoupons;
+                Id = coupon.id, CouponType = coupon.type, DealValue = coupon.dealValue, PresentValu = coupon.presentValue
+            }).ToList();
         }
 
         internal static MenuComboFullInfo ToMenuComboFullInfo(MenuComboDishMainResponse response)
@@ -1041,7 +1031,6 @@ namespace CanDao.Pos.ServiceImpl
                         masterItem.DishInfos = new List<OrderDishInfo>();
                         foreach (var groupItem in dish.dishes)
                         {
-
                             var subItem = ToDishInfo(groupItem, string.Empty, index);
                             if (masterItem.DishType == EnumDishType.FishPot)
                                 subItem.IsFishPotDish = true;
@@ -1114,6 +1103,8 @@ namespace CanDao.Pos.ServiceImpl
             tableFullInfo.OrderInvoiceTitle = userOrderInfo.orderInvoiceTitle;
             tableFullInfo.OrderId = userOrderInfo.orderid;
             tableFullInfo.TableStatus = (EnumTableStatus)userOrderInfo.tableStatus;
+            tableFullInfo.DinnerWareCount = userOrderInfo.numOfMeals;
+            tableFullInfo.IsDinnerWareFree = Convert.ToBoolean(userOrderInfo.isFree);
         }
         #endregion
     }

@@ -270,5 +270,13 @@ namespace CanDao.Pos.IService
         /// <param name="orderId">订单ID。</param>
         /// <returns></returns>
         Tuple<string, List<DishGiftCouponInfo>> GetDishGiftCouponInfo(string orderId);
+
+        /// <summary>
+        /// 发送消息异步。
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="msgType">消息类型。</param>
+        /// <returns>如果正常返回null，否则返回错误信息。</returns>
+        string SendMsgAsync(string orderId, EnumMsgType msgType);
     }
 }
