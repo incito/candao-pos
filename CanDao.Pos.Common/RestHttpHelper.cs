@@ -314,20 +314,25 @@ namespace CanDao.Pos.Common
 
         private static T ParseRestJson<T>(string json) where T : class , new()
         {
-            //var jObj = (JObject)JsonConvert.DeserializeObject(json);
-            //var resultStr = jObj["result"] != null ? jObj["result"].ToString() : "";
-            var headerLength = "{\"result\":[\"".Length;
-            var resultStr = json.StartsWith("{\"result\":[\"") ? json.Substring(headerLength, json.Length - headerLength - 3) : json;
+            var flag = "{\"result\":[\"";
+            var flag2 = "{\"result\":[";
+
+            var resultStr = json;
+            if (json.StartsWith(flag))
+            {
+                var headerLength = flag.Length;
+                resultStr = json.Substring(headerLength, json.Length - headerLength - 3);
+            }
+            else if (json.StartsWith(flag2))
+            {
+                var headerLength = flag2.Length;
+                resultStr = json.Substring(headerLength, json.Length - headerLength - 2);
+            }
+
             if (string.IsNullOrEmpty(resultStr))
                 return default(T);
 
-            //var jArray = (JArray)JsonConvert.DeserializeObject(resultStr);
-            //if (!jArray.Any())
-            //    return default(T);
-
-            var result = ParseJson2Object<T>(resultStr.FromUnicodeString());
-
-            return result;
+            return ParseJson2Object<T>(resultStr.FromUnicodeString());
         }
 
         private static T ParseJson2Object<T>(string jsonString) where T : class , new()
