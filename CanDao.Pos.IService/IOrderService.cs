@@ -260,9 +260,10 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 删除优惠券
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="couponId">删除的优惠券ID，如果是清空，则传空字符串。</param>
         /// <returns></returns>
-        Tuple<string, PreferentialInfoResponse> DelPreferential(DelPreferentialRequest request);
+        Tuple<string, PreferentialInfoResponse> DelPreferential(string orderId, string couponId = "");
 
         /// <summary>
         /// 获取某个订单赠菜优惠券的使用信息。

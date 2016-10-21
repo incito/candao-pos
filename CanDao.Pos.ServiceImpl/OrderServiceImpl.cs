@@ -658,12 +658,7 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        /// <summary>
-        /// 删除优惠券
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public Tuple<string, PreferentialInfoResponse> DelPreferential(DelPreferentialRequest request)
+        public Tuple<string, PreferentialInfoResponse> DelPreferential(string orderId, string couponId = "")
         {
             var addr = ServiceAddrCache.GetServiceAddr("DelPreferential");
             if (string.IsNullOrEmpty(addr))
@@ -671,6 +666,18 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
+                var request = new DelPreferentialRequest { orderid = orderId };
+                if (string.IsNullOrEmpty(couponId))
+                {
+                    request.DetalPreferentiald = "";
+                    request.clear = 1;
+                }
+                else
+                {
+                    request.DetalPreferentiald = couponId;
+                    request.clear = 0;
+                }
+
                 var result = HttpHelper.HttpPost<DelePreferentialResponse>(addr, request);
                 return result.IsSuccess
                    ? new Tuple<string, PreferentialInfoResponse>(null, result.data.preferentialInfo)
