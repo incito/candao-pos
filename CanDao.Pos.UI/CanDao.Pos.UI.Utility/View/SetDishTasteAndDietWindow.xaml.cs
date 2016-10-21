@@ -47,7 +47,7 @@ namespace CanDao.Pos.UI.Utility.View
         /// </summary>
         public decimal DishNum
         {
-            get { return (int)((SetDishTasteAndDietWndVm)DataContext).DishNum; }
+            get { return ((SetDishTasteAndDietWndVm)DataContext).DishNum; }
         }
     }
 }
