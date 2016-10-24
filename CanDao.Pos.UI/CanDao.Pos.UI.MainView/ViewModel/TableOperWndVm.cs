@@ -1407,9 +1407,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (!string.IsNullOrEmpty(Data.MemberNo))
             {
+                var helper = new AntiSettlementHelper();
+                var antiSettlementWf = helper.GetAntiSettlement(Data.OrderId, MemberCardNo, OwnerWindow);
+
                 if (Data.MemberInfo == null)
                 {
                     var queryMemberWf = new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...");
+                    queryMemberWf.ErrorWorkFlowInfo = antiSettlementWf;//会员查询错误时执行自动反结算工作流。
                     curStepWf.NextWorkFlowInfo = queryMemberWf;
                     curStepWf = queryMemberWf;
                 }
@@ -1418,8 +1422,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 curStepWf.NextWorkFlowInfo = saleMemberWf;
                 curStepWf = saleMemberWf;
 
-                var helper = new AntiSettlementHelper();
-                var antiSettlementWf = helper.GetAntiSettlement(Data.OrderId, MemberCardNo, OwnerWindow);
                 curStepWf.ErrorWorkFlowInfo = antiSettlementWf;//会员消费结算错误时执行自动反结算工作流。
             }
 
