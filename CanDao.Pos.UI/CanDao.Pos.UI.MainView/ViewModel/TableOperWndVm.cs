@@ -1006,7 +1006,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return new Tuple<string, PreferentialInfoResponse>("创建IOrderService服务失败。", null);
 
-            return service.DelPreferential((DelPreferentialRequest)arg);
+            return service.DelPreferential(_tableInfo.OrderId, arg as string);
         }
 
         /// <summary>
@@ -1015,7 +1015,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="obj"></param>
         private void DeleCouponInfoComplete(object obj)
         {
-            var result = obj as Tuple<string, PreferentialInfoResponse>;
+            var result = (Tuple<string, PreferentialInfoResponse>)obj;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 var errMsg = string.Format("删除优惠券信息失败：{0}", result);
@@ -1023,16 +1023,43 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 MessageDialog.Warning(errMsg, OwnerWindow);
                 return;
             }
-            else
+
+            Data.UsedCouponInfos.Clear();
+            ProcessCouponShow(result.Item2);
+            InfoLog.Instance.I("结束删除优惠券。");
+        }
+
+        /// <summary>
+        /// 删除雅座优惠券的执行方法。（当退出雅座会员时如果有使用的雅座优惠券则删除之）
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private object DeleYaZuoCouponInfoProcess(object arg)
+        {
+            IOrderService service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            var idList = (List<string>)arg;
+            idList.ForEach(t => service.DelPreferential(_tableInfo.OrderId, t));
+            return null;
+        }
+
+        /// <summary>
+        /// 删除雅座优惠券信息后，重新拉取账单信息。
+        /// </summary>
+        /// <param name="arg"></param>
+        private void DeleYaZuoCouponInfoComplete(object arg)
+        {
+            var result = arg as string;
+            if (!string.IsNullOrEmpty(result))
             {
-                //先清除
-                Data.UsedCouponInfos.Clear();
-
-                ProcessCouponShow(result.Item2);
-
-                InfoLog.Instance.I("结束删除优惠券。");
-                //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
+                var errMsg = string.Format("删除优惠券信息失败：{0}", result);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
             }
+
+            GetTableDishInfoAsync();
         }
 
         /// <summary>
@@ -1041,20 +1068,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="item">移除的优惠券信息。</param>
         private void RemoveUsedCouponInfo(UsedCouponInfo item)
         {
-            //if (item == null || Data == null)
-            //    return;
-
-            //Data.UsedCouponInfos.Remove(item);
-            //Data.TotalDebitAmount = Data.UsedCouponInfos.Sum(t => t.DebitAmount * t.Count);
-            //Data.TotalFreeAmount = Data.UsedCouponInfos.Sum(t => t.FreeAmount * t.Count);
-
-            //CalculatePaymentAmount(); //优惠券添加完毕后计算实收。
-            var parma = new DelPreferentialRequest();
-            parma.orderid = _tableInfo.OrderId;
-            parma.DetalPreferentiald = item.RelationId;
-            parma.clear = 0;
-
-            TaskService.Start(parma, DeleCouponInfoProcess, DeleCouponInfoComplete, "正在删除优惠券...");
+            TaskService.Start(item.RelationId, DeleCouponInfoProcess, DeleCouponInfoComplete, "正在删除优惠券...");
         }
 
         /// <summary>
@@ -1063,12 +1077,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="Data"></param>
         private void ClearUsedCouponInfo()
         {
-            var parma = new DelPreferentialRequest();
-            parma.orderid = _tableInfo.OrderId;
-            parma.DetalPreferentiald = "";
-            parma.clear = 1;
-
-            TaskService.Start(parma, DeleCouponInfoProcess, DeleCouponInfoComplete, "正在清空优惠券...");
+            TaskService.Start(null, DeleCouponInfoProcess, DeleCouponInfoComplete, "正在清空优惠券...");
         }
 
         /// <summary>
@@ -2120,6 +2129,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (yazuoMemberInfo != null && yazuoMemberInfo.CouponList != null && yazuoMemberInfo.CouponList.Any())
             {
                 _yaZuoMemberCouponInfos = yazuoMemberInfo.CouponList.Select(Convert2CouponInfo).ToList();
+
+                if (_selectedCouponCategory.CategoryType == "88" && Globals.IsYazuoMember)//雅座会员。
+                {
+                    CouponInfos.Clear();
+                    if (_yaZuoMemberCouponInfos != null)
+                        _yaZuoMemberCouponInfos.ForEach(CouponInfos.Add);
+                }
             }
         }
 
@@ -2227,6 +2243,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _yaZuoMemberCouponInfos = null;
                 if (SelectedCouponCategory.CategoryType == "88")
                     CouponInfos.Clear();
+
+                var couponIds = Data.UsedCouponInfos.Where(t => t.UsedCouponType == EnumUsedCouponType.YaZuo).Select(t => t.RelationId).Distinct().ToList();
+                if (couponIds.Any())
+                {
+                    TaskService.Start(couponIds, DeleYaZuoCouponInfoProcess, DeleYaZuoCouponInfoComplete, "移除使用的雅座优惠券...");
+                    return null;
+                }
             }
             GetTableDishInfoAsync();
             return null;
