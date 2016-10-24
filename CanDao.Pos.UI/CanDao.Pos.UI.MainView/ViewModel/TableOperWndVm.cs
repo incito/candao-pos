@@ -105,7 +105,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             Data.CloneDataFromTableInfo(tableInfo);
 
             PayWayInfos = new ObservableCollection<PayWayInfo>();
-            Globals.PayWayInfos.Where(t => t.IsVisible).ToList().ForEach(PayWayInfos.Add);
+            if (Globals.PayWayInfos != null)
+                Globals.PayWayInfos.Where(t => t.IsVisible).ToList().ForEach(PayWayInfos.Add);
         }
 
         #endregion
