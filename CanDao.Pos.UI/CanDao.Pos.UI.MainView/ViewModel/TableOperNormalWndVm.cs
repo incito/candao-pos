@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Threading;
-using CanDao.Pos.Common;
+﻿using CanDao.Pos.Common;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.UI.MainView.View;
@@ -43,7 +41,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 WindowHelper.ShowDialog(new OrderDishWindow(tableFullInfo), OwnerWindow);
             }
             GetTableDishInfoAsync();
-            _refreshTimer.Start();//启动刷新定时器。
+            SetRefreshTimerStatus(true);//启动刷新定时器。
         }
 
         protected override void BackAllDishSuccessProcess()
@@ -65,6 +63,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _couponLongPressTimer.Stop();
                 _couponLongPressTimer.Dispose();
             }
+
+            _isDisposed = true;
         }
     }
 }

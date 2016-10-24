@@ -89,6 +89,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private List<CouponInfo> _yaZuoMemberCouponInfos;
 
+        /// <summary>
+        /// 是否是已经释放资源的状态。
+        /// </summary>
+        protected bool _isDisposed;
+
         #endregion
 
         #region Constructor
@@ -683,7 +688,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _curSelectedCouponInfo = coupon;
 
             _isLongPressModel = false;
-            _couponLongPressTimer.Start();
+            SetCouponPressTimerStatus(true);
         }
 
         /// <summary>
@@ -691,7 +696,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void CouponMouseUp(object arg)
         {
-            _couponLongPressTimer.Stop();
+            SetCouponPressTimerStatus(false);
             if (_isLongPressModel)
                 return;
 
@@ -1208,6 +1213,22 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
+        protected void SetRefreshTimerStatus(bool enabled)
+        {
+            if (_isDisposed)
+                return;
+
+            _refreshTimer.Enabled = enabled;
+        }
+
+        protected void SetCouponPressTimerStatus(bool enabled)
+        {
+            if (_isDisposed)
+                return;
+
+            _couponLongPressTimer.Enabled = enabled;
+        }
+
         #endregion
 
         #region Private Methods
@@ -1258,12 +1279,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="elapsedEventArgs"></param>
         private void RefreshTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            _refreshTimer.Stop();
+            SetRefreshTimerStatus(false);
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
             {
                 ErrLog.Instance.E("创建IOrderService服务失败。");
-                _refreshTimer.Start();
+                SetRefreshTimerStatus(true);
                 return;
             }
 
@@ -1271,14 +1292,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取餐台信息错误：{0}。", result.Item1);
-                _refreshTimer.Start();
+                SetRefreshTimerStatus(true);
                 return;
             }
 
             if (result.Item2 == null)
             {
                 ErrLog.Instance.E("获取到餐台信息为空。");
-                _refreshTimer.Start();
+                SetRefreshTimerStatus(true);
                 return;
             }
 
@@ -1288,7 +1309,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _tableInfo.OrderId = result.Item2.OrderId;//可能会有并台导致订单号改变。
                 GetTableDishInfoAsync();
             }
-            _refreshTimer.Start();
+            SetRefreshTimerStatus(true);
         }
 
         /// <summary>
@@ -1298,7 +1319,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="elapsedEventArgs"></param>
         private void CouponLongPressTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            _couponLongPressTimer.Stop();
+            SetCouponPressTimerStatus(false);
             _isLongPressModel = true;
             OwnerWindow.Dispatcher.BeginInvoke((Action)delegate
             {
