@@ -2641,7 +2641,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 InfoLog.Instance.I("该餐台登录了会员，开始会员信息查询...");
                 var memberQueryResult = (Tuple<string, MemberInfo>)QueryMemberProcess(null);
                 if (!string.IsNullOrEmpty(memberQueryResult.Item1))
-                    ErrLog.Instance.E("会员信息查询时失败：{0}", memberQueryResult.Item1);
+                {
+                    var msg = string.Format("会员信息查询时失败：{0}", memberQueryResult.Item1);
+                    ErrLog.Instance.E(msg);
+                    msg += "\n，请联系管理员处理，不然可能导致结算失败。";
+                    MessageDialog.Warning(msg);
+                }
                 else
                 {
                     InfoLog.Instance.I("完成会员查询。");
