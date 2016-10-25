@@ -89,6 +89,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private List<CouponInfo> _yaZuoMemberCouponInfos;
 
+        /// <summary>
+        /// 是否是已经释放资源的状态。
+        /// </summary>
+        protected bool _isDisposed;
+
         #endregion
 
         #region Constructor
@@ -692,7 +697,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             _curSelectedCouponInfo = coupon;
 
             _isLongPressModel = false;
-            _couponLongPressTimer.Start();
+            SetCouponPressTimerStatus(true);
         }
 
         /// <summary>
@@ -700,7 +705,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void CouponMouseUp(object arg)
         {
-            _couponLongPressTimer.Stop();
+            SetCouponPressTimerStatus(false);
             if (_isLongPressModel)
                 return;
 
@@ -1217,6 +1222,22 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
         }
 
+        protected void SetRefreshTimerStatus(bool enabled)
+        {
+            if (_isDisposed)
+                return;
+
+            _refreshTimer.Enabled = enabled;
+        }
+
+        protected void SetCouponPressTimerStatus(bool enabled)
+        {
+            if (_isDisposed)
+                return;
+
+            _couponLongPressTimer.Enabled = enabled;
+        }
+
         #endregion
 
         #region Private Methods
@@ -1267,12 +1288,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="elapsedEventArgs"></param>
         private void RefreshTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            _refreshTimer.Stop();
+            SetRefreshTimerStatus(false);
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
             {
                 ErrLog.Instance.E("创建IOrderService服务失败。");
-                _refreshTimer.Start();
+                SetRefreshTimerStatus(true);
                 return;
             }
 
@@ -1280,14 +1301,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取餐台信息错误：{0}。", result.Item1);
-                _refreshTimer.Start();
+                SetRefreshTimerStatus(true);
                 return;
             }
 
             if (result.Item2 == null)
             {
                 ErrLog.Instance.E("获取到餐台信息为空。");
-                _refreshTimer.Start();
+                SetRefreshTimerStatus(true);
                 return;
             }
 
@@ -1297,7 +1318,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _tableInfo.OrderId = result.Item2.OrderId;//可能会有并台导致订单号改变。
                 GetTableDishInfoAsync();
             }
-            _refreshTimer.Start();
+            SetRefreshTimerStatus(true);
         }
 
         /// <summary>
@@ -1307,7 +1328,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="elapsedEventArgs"></param>
         private void CouponLongPressTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            _couponLongPressTimer.Stop();
+            SetCouponPressTimerStatus(false);
             _isLongPressModel = true;
             OwnerWindow.Dispatcher.BeginInvoke((Action)delegate
             {
@@ -1395,9 +1416,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (!string.IsNullOrEmpty(Data.MemberNo))
             {
+                var helper = new AntiSettlementHelper();
+                var antiSettlementWf = helper.GetAntiSettlement(Data.OrderId, MemberCardNo, OwnerWindow);
+
                 if (Data.MemberInfo == null)
                 {
                     var queryMemberWf = new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...");
+                    queryMemberWf.ErrorWorkFlowInfo = antiSettlementWf;//会员查询错误时执行自动反结算工作流。
                     curStepWf.NextWorkFlowInfo = queryMemberWf;
                     curStepWf = queryMemberWf;
                 }
@@ -1406,8 +1431,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 curStepWf.NextWorkFlowInfo = saleMemberWf;
                 curStepWf = saleMemberWf;
 
-                var helper = new AntiSettlementHelper();
-                var antiSettlementWf = helper.GetAntiSettlement(Data.OrderId, MemberCardNo, OwnerWindow);
                 curStepWf.ErrorWorkFlowInfo = antiSettlementWf;//会员消费结算错误时执行自动反结算工作流。
             }
 
@@ -2239,6 +2262,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             IsMemberLogin = false;
             Data.MemberInfo = null;
             MemberCardNo = null;
+            MemberAmount = 0;//会员刷卡金额清零。
+            IntegralAmount = 0;//会员试用积分清零。
             if (Globals.IsYazuoMember)
             {
                 _yaZuoMemberCouponInfos = null;
@@ -2627,7 +2652,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 InfoLog.Instance.I("该餐台登录了会员，开始会员信息查询...");
                 var memberQueryResult = (Tuple<string, MemberInfo>)QueryMemberProcess(null);
                 if (!string.IsNullOrEmpty(memberQueryResult.Item1))
-                    ErrLog.Instance.E("会员信息查询时失败：{0}", memberQueryResult.Item1);
+                {
+                    var msg = string.Format("会员信息查询时失败：{0}", memberQueryResult.Item1);
+                    ErrLog.Instance.E(msg);
+                    msg += "\n，请联系管理员处理，不然可能导致结算失败。";
+                    MessageDialog.Warning(msg);
+                }
                 else
                 {
                     InfoLog.Instance.I("完成会员查询。");

@@ -259,7 +259,6 @@ namespace CanDao.Pos.Model
         public void CloneOrderData(TableFullInfo info)
         {
             OrderId = info.OrderId;
-            MemberInfo = info.MemberInfo;
             MemberNo = info.MemberNo;
             TableStatus = info.TableStatus;
             CustomerNumber = info.CustomerNumber;
