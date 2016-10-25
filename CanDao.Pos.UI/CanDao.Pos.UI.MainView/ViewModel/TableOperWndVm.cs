@@ -2253,6 +2253,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             IsMemberLogin = false;
             Data.MemberInfo = null;
             MemberCardNo = null;
+            MemberAmount = 0;//会员刷卡金额清零。
+            IntegralAmount = 0;//会员试用积分清零。
             if (Globals.IsYazuoMember)
             {
                 _yaZuoMemberCouponInfos = null;
