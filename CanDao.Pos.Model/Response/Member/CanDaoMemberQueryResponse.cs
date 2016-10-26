@@ -27,7 +27,7 @@
 
         public string name { get; set; }
 
-        public int gender { get; set; }
+        public int? gender { get; set; }
 
         public decimal IntegralOverall { get; set; }
 
