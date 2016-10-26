@@ -43,7 +43,7 @@ namespace CanDao.Pos.Common.TemplateSelector
             if (element == null)
                 return NormalTemplate;
 
-            var data = element.DataContext as PayWayInfo;
+            var data = item as PayWayInfo;
             if (data == null)
                 return NormalTemplate;
 
@@ -53,7 +53,7 @@ namespace CanDao.Pos.Common.TemplateSelector
                     return CashTemplate;
                 case 1://银行卡。
                     return BankTemplate;
-                case 2://会员卡。
+                case 8://会员卡。
                     return MemberTemplate;
                 case 5://挂账。
                     return OnAccountTemplate;

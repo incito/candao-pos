@@ -2656,7 +2656,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     var msg = string.Format("会员信息查询时失败：{0}", memberQueryResult.Item1);
                     ErrLog.Instance.E(msg);
                     msg += "\n，请联系管理员处理，不然可能导致结算失败。";
-                    MessageDialog.Warning(msg);
+                    OwnerWindow.Dispatcher.Invoke((Action)delegate { MessageDialog.Warning(msg); });
                 }
                 else
                 {

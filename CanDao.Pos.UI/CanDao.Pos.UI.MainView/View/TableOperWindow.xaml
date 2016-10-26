@@ -49,13 +49,13 @@
                                            Margin="13,11,0,0"/>
                             <toolkit:DoubleTextBox Grid.Row="0" Grid.Column="1"
                                                        FontSize="60"
-                                                       Text="{Binding CashAmount, UpdateSourceTrigger=PropertyChanged}">
+                                                       Text="{Binding DataContext.CashAmount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="GotFocus">
-                                        <i:InvokeCommandAction Command="{Binding CashControlFocusCmd}" CommandParameter="true"/>
+                                        <i:InvokeCommandAction Command="{Binding DataContext.CashControlFocusCmd, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}" CommandParameter="true"/>
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="LostFocus">
-                                        <i:InvokeCommandAction Command="{Binding CashControlFocusCmd}" CommandParameter="false"/>
+                                        <i:InvokeCommandAction Command="{Binding DataContext.CashControlFocusCmd, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}" CommandParameter="false"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </toolkit:DoubleTextBox>
@@ -74,7 +74,7 @@
                                        VerticalAlignment="Center" HorizontalAlignment="Left"
                                        Margin="0,10,0,0"/>
                         <TextBlock Grid.Column="1"
-                                       Text="{Binding ChargeAmount}"
+                                       Text="{Binding DataContext.ChargeAmount}"
                                        VerticalAlignment="Center"
                                        Margin="0,10,0,0"
                                        HorizontalAlignment="Left"/>
@@ -209,8 +209,8 @@
 
             <DataTemplate x:Key="NormalTemplate">
                 <StackPanel Margin="10,10,310,10">
-                    <controls:WatermarkTextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                                   Watermark="{Binding Remark, StringFormat={}{0}：}"
+                    <controls:WatermarkTextBox Text="{Binding Remark, UpdateSourceTrigger=PropertyChanged}"
+                                                   Watermark="{Binding Name, StringFormat={}{0}：}"
                                                    VerticalContentAlignment="Center"
                                                    VerticalAlignment="Center"
                                                    Margin="0,5" Height="40"/>
@@ -548,7 +548,8 @@
 
             <TabControl Grid.Row="3"
                         FontSize="18"
-                        IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}">
+                        IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}"
+                        Visibility="Collapsed">
                 <TabItem Header="现金支付">
                     <Grid Margin="10,10,310,10" VerticalAlignment="Top">
                         <Grid.RowDefinitions>
@@ -751,6 +752,23 @@
                                                Margin="0,5" Height="40"/>
                     </StackPanel>
                 </TabItem>
+            </TabControl>
+            <TabControl Grid.Row="3"
+                        FontSize="18"
+                        IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}"
+                        ItemsSource="{Binding PayWayInfos}"
+                        ContentTemplateSelector="{StaticResource PayWayTemplateSelector}">
+                <TabControl.ItemContainerStyle>
+                    <Style TargetType="TabItem">
+                        <Setter Property="HeaderTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TabControl.ItemContainerStyle>
             </TabControl>
             <view:InputHelperLetterControl Grid.Row="3"
                                            HorizontalAlignment="Right" VerticalAlignment="Top"

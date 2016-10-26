@@ -18,7 +18,7 @@
               ItemsSource="{Binding PayWays}"
               SelectedItem="{Binding SelectedPayWay}">
         <DataGrid.Columns>
-            <DataGridTextColumn Header="支付方式" Width="200" Binding="{Binding Name}" IsReadOnly="True"/>
+            <DataGridTextColumn Header="支付方式" Width="200" Binding="{Binding Name}" IsReadOnly="True" CanUserSort="False"/>
             <DataGridTemplateColumn Header="操作" Width="200">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
