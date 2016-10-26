@@ -85,6 +85,7 @@
     <Compile Include="ViewModel\Member\MemberYaZuoStoredWndVm.cs" />
     <Compile Include="ViewModel\Member\MemberYaZuoQueryWndVm.cs" />
     <Compile Include="ViewModel\MultMemberCardSelectWndVm.cs" />
+    <Compile Include="ViewModel\PayWaySetControlVm.cs" />
     <Compile Include="ViewModel\SelectCoffeeTakeoutTableWndVm.cs" />
     <Compile Include="ViewModel\SelectTakeoutOnAccountCompanyVm.cs" />
     <Compile Include="ViewModel\SetInvoiceAmountWndVm.cs" />
@@ -115,6 +116,9 @@
     </Compile>
     <Compile Include="View\NumInputWindow.xaml.cs">
       <DependentUpon>NumInputWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PayWaySetControl.xaml.cs">
+      <DependentUpon>PayWaySetControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\PrinterErrorInfoWindow.xaml.cs">
       <DependentUpon>PrinterErrorInfoWindow.xaml</DependentUpon>
@@ -304,6 +308,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\NumInputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PayWaySetControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

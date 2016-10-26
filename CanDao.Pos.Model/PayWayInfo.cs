@@ -65,5 +65,14 @@
                 RaisePropertyChanged("Remark");
             }
         }
+
+        /// <summary>
+        /// 克隆数据。
+        /// </summary>
+        /// <returns></returns>
+        public PayWayInfo CloneObject()
+        {
+            return (PayWayInfo) MemberwiseClone();
+        }
     }
 }

@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="CanDao.Pos.UI.Utility.View.PayWaySetControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModel="clr-namespace:CanDao.Pos.UI.Utility.ViewModel"
+             x:Name="CtrlSelf">
+    <UserControl.DataContext>
+        <viewModel:PayWaySetControlVm/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <DataGrid FontSize="14" MinRowHeight="35"
+              AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserAddRows="False" SelectionUnit="FullRow"
+              ItemsSource="{Binding PayWays}"
+              SelectedItem="{Binding SelectedPayWay}">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="支付方式" Width="200" Binding="{Binding Name}" IsReadOnly="True"/>
+            <DataGridTemplateColumn Header="操作" Width="200">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Button Command="{Binding DataContext.OperCmd, ElementName=CtrlSelf}" CommandParameter="Enabled"
+                                    Visibility="{Binding IsVisible, Converter={StaticResource Bool2CollapsedCvt}}">
+                                <Button.Content>
+                                    <TextBlock Text="启用" Foreground="{StaticResource CanDaoPosColorFgOrange}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button.Content>
+                            </Button>
+                            <Button Command="{Binding DataContext.OperCmd, ElementName=CtrlSelf}" CommandParameter="Disabled"
+                                Visibility="{Binding IsVisible, Converter={StaticResource Bool2VisibilityCvt}}">
+                                <Button.Content>
+                                    <TextBlock Text="禁用" Foreground="{StaticResource CanDaoPosColorFgOrange}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="调整显示顺序">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" HorizontalAlignment="Right" Content="上移" Command="{Binding DataContext.OperCmd, ElementName=CtrlSelf}" CommandParameter="Up" Margin="0,0,5,0"/>
+                            <Button Grid.Column="1" HorizontalAlignment="Left" Content="下移" Command="{Binding DataContext.OperCmd, ElementName=CtrlSelf}" CommandParameter="Down" Margin="5,0,0,0"/>
+                        </Grid>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>
