@@ -100,23 +100,23 @@
   
   <!--云接口-->
   <CloudServerApi>
-    <QueryCanDao Addr="/member/memberManager/findByParams"/><!--餐道会员查询-->
-    <StorageCanDao Addr="/member/deal/StoreCardToNewPos.json"/><!--餐道会员储值-->
-    <ModifyPwdCanDao Addr="/member/memberManager/MemberEdit.json"/><!--修改密码-->
-    <SendVerifyCode Addr="/member/memberManager/sendAccountByMobile"/><!--发送验证码-->
-    <MobileRepeatCheck Addr="/member/memberManager/validateTbMemberManager"/><!--验证手机号是否重复-->
-    <RegistCanDao Addr="/member/memberManager/save.json"/><!--餐道会员会员注册-->
-    <ReportLossCanDao Addr="/member/deal/CardLose.json"/><!--餐道会员会员挂失-->
-    <CancelCanDao Addr="/member/memberManager/delete.json"/><!--餐道会员会员注销-->
-    <SaleCanDao Addr="/member/deal/MemberSale.json"/><!--餐道会员会员消费-->
-    <VoidSaleCanDao Addr="/member/deal/VoidSale.json"/><!--餐道会员取消消费-->
+    <QueryCanDao Addr="/newspicyway/memberManager/findByParams.json"/><!--餐道会员查询-->
+    <StorageCanDao Addr="/newspicyway/deal/StoreCardToNewPos.json"/><!--餐道会员储值-->
+    <ModifyPwdCanDao Addr="/newspicyway/memberManager/MemberEdit.json"/><!--修改密码-->
+    <SendVerifyCode Addr="/newspicyway/memberManager/sendAccountByMobile.json"/><!--发送验证码-->
+    <MobileRepeatCheck Addr="/newspicyway/memberManager/validateTbMemberManager.json"/><!--验证手机号是否重复-->
+    <RegistCanDao Addr="/newspicyway/memberManager/save.json"/><!--餐道会员会员注册-->
+    <ReportLossCanDao Addr="/newspicyway/deal/CardLose.json"/><!--餐道会员会员挂失-->
+    <CancelCanDao Addr="/newspicyway/memberManager/delete.json"/><!--餐道会员会员注销-->
+    <SaleCanDao Addr="/newspicyway/deal/MemberSale.json"/><!--餐道会员会员消费-->
+    <VoidSaleCanDao Addr="/newspicyway/deal/VoidSale.json"/><!--餐道会员取消消费-->
 
-    <VipChangeCardNum Addr="/member/rest/memberCardService/cardNoByModify" /><!--修改会员卡号-->
-    <VipChangeInfo Addr="/member/rest/memberService/memberEditService" /><!--修改会员基本信息-->
-    <VipQuery Addr="/member/rest/memberCardService/getCardNoByMobile" /><!--会员查询(一户多卡)-->
-    <VipInsertCard Addr="/member/rest/memberCardService/bindingCardService" /><!--新增会员实体卡号-->
-    <VipCheckCard Addr="/member/memberManager/byUserTouse.json" /><!--判断会员实体卡-->
-    <VipChangePsw Addr="/member/memberManager/MemberEdit.json" /><!--会员密码修改（新）-->
-    <GetCouponList Addr="/member/preferential/posPreferentialList" /><!--获取优惠列表-->
+    <VipChangeCardNum Addr="/newspicyway/memberCardService/cardNoByModify.json" /><!--修改会员卡号-->
+    <VipChangeInfo Addr="/newspicyway/memberService/unCardLoseService.json" /><!--修改会员基本信息-->
+    <VipQuery Addr="/newspicyway/memberCardService/getCardNoByMobile.json" /><!--会员查询(一户多卡)-->
+    <VipInsertCard Addr="/newspicyway/memberCardService/bindingCardService.json" /><!--新增会员实体卡号-->
+    <VipCheckCard Addr="/newspicyway/memberManager/byUserTouse.json" /><!--判断会员实体卡-->
+    <VipChangePsw Addr="/newspicyway/memberManager/MemberEdit.json" /><!--会员密码修改（新）-->
+    <GetCouponList Addr="/newspicyway/memberpreferential/posPreferentialList.json" /><!--获取优惠列表-->
   </CloudServerApi>
 </Address>
