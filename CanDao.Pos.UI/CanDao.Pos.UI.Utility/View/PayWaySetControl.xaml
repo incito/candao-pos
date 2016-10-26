@@ -22,15 +22,17 @@
             <DataGridTemplateColumn Header="操作" Width="200">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <Grid>
+                        <Grid Width="200">
                             <Button Command="{Binding DataContext.OperCmd, ElementName=CtrlSelf}" CommandParameter="Enabled"
+                                    HorizontalAlignment="Center"
                                     Visibility="{Binding IsVisible, Converter={StaticResource Bool2CollapsedCvt}}">
                                 <Button.Content>
                                     <TextBlock Text="启用" Foreground="{StaticResource CanDaoPosColorFgOrange}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Button.Content>
                             </Button>
                             <Button Command="{Binding DataContext.OperCmd, ElementName=CtrlSelf}" CommandParameter="Disabled"
-                                Visibility="{Binding IsVisible, Converter={StaticResource Bool2VisibilityCvt}}">
+                                    HorizontalAlignment="Center"
+                                    Visibility="{Binding IsVisible, Converter={StaticResource Bool2VisibilityCvt}}">
                                 <Button.Content>
                                     <TextBlock Text="禁用" Foreground="{StaticResource CanDaoPosColorFgOrange}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Button.Content>
@@ -39,10 +41,10 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn Header="调整显示顺序">
+            <DataGridTemplateColumn Header="调整显示顺序" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <Grid>
+                        <Grid Width="300">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>

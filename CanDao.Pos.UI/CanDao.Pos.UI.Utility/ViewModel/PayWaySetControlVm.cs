@@ -28,7 +28,19 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <summary>
         /// 选择的结算方式。
         /// </summary>
-        public PayWayInfo SelectedPayWay { get; set; }
+        private PayWayInfo _selectedPayWay;
+        /// <summary>
+        /// 选择的结算方式。
+        /// </summary>
+        public PayWayInfo SelectedPayWay
+        {
+            get { return _selectedPayWay; }
+            set
+            {
+                _selectedPayWay = value;
+                RaisePropertyChanged("SelectedPayWay");
+            }
+        }
 
         /// <summary>
         /// 操作命令。
