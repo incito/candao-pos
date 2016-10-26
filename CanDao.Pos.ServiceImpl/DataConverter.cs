@@ -308,7 +308,7 @@ namespace CanDao.Pos.ServiceImpl
                 Name = response.name,
                 Mobile = response.mobile,
                 Birthday = DateTime.ParseExact(response.birthday, "yyyy-MM-dd", null),
-                Gender = (EnumGender)response.gender,
+                Gender = response.gender == null ? EnumGender.None : (EnumGender)response.gender,
                 StoredBalance = response.StoreCardBalance,
                 CardLevel = response.CardLevel,
                 Integral = response.IntegralOverall,

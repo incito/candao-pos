@@ -17,6 +17,7 @@ using CanDao.Pos.Model.Request;
 using CanDao.Pos.Model.Response;
 using CanDao.Pos.ReportPrint;
 using CanDao.Pos.Model;
+using CanDao.Pos.Model.Enum;
 
 namespace CanDao.Pos.VIPManage.ViewModels
 {
@@ -304,14 +305,12 @@ namespace CanDao.Pos.VIPManage.ViewModels
                             if (string.IsNullOrEmpty(info.Item1))
                             {
                                 SelectModel.UserName = info.Item2.Name;
-                                if (info.Item2.Gender == 0)
-                                {
+                                if (info.Item2.Gender == EnumGender.Male)
                                     SelectModel.Sex = "男";
-                                }
-                                else
-                                {
+                                else if (info.Item2.Gender == EnumGender.Female)
                                     SelectModel.Sex = "女";
-                                }
+                                else
+                                    SelectModel.Sex = "";
                                 SelectModel.TelNum = info.Item2.Mobile;
                                 SelectModel.Birthday = info.Item2.Birthday.ToString("yyyy-MM-dd");
                                 SelectModel.Integral = info.Item2.Integral;

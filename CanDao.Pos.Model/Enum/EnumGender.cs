@@ -6,6 +6,10 @@
     public enum EnumGender
     {
         /// <summary>
+        /// 未定义。
+        /// </summary>
+        None=-1,
+        /// <summary>
         /// 男。
         /// </summary>
         Male = 0,
