@@ -759,7 +759,7 @@
                         ItemsSource="{Binding PayWayInfos}"
                         ContentTemplateSelector="{StaticResource PayWayTemplateSelector}">
                 <TabControl.ItemContainerStyle>
-                    <Style TargetType="TabItem">
+                    <Style TargetType="TabItem" BasedOn="{StaticResource TabItemStyle}">
                         <Setter Property="HeaderTemplate">
                             <Setter.Value>
                                 <DataTemplate>
