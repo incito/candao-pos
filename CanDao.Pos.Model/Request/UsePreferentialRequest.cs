@@ -40,17 +40,17 @@
         /// <summary>
         /// 总优免金额。
         /// </summary>
-        public string totalFreeAmount { set; get; }
+        public string toalFreeAmount { set; get; }
 
         /// <summary>
         /// 总挂账。
         /// </summary>
-        public string totalDebitAmount { set; get; }
+        public string toalDebitAmount { set; get; }
 
         /// <summary>
         /// 总挂账多收。
         /// </summary>
-        public string totalDebitAmountMany { set; get; }
+        public string toalDebitAmountMany { set; get; }
 
         /// <summary>
         /// 优免调整。
