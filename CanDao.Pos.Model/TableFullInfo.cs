@@ -248,6 +248,7 @@ namespace CanDao.Pos.Model
             PaymentAmount = info.PaymentAmount;
             TipAmount = info.TipAmount;
             TotalAmount = info.TotalAmount;
+            TotalFreeAmount = info.TotalFreeAmount;
             TableStatus = info.TableStatus;
             CustomerNumber = info.CustomerNumber;
         }
