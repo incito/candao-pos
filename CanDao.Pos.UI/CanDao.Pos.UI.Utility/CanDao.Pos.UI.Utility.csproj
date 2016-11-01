@@ -93,8 +93,20 @@
     <Compile Include="ViewModel\UcBusinessDataDetailsViewModel.cs" />
     <Compile Include="ViewModel\UCCashboxPswViewModel.cs" />
     <Compile Include="ViewModel\UcCustomDishesViewModel.cs" />
+    <Compile Include="View\PayWay\OnCmpAccPayControl.xaml.cs">
+      <DependentUpon>OnCmpAccPayControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PayWay\MemberPayControl.xaml.cs">
+      <DependentUpon>MemberPayControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PayWay\BankPayControl.xaml.cs">
+      <DependentUpon>BankPayControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CashboxPasswordInputWindow.xaml.cs">
       <DependentUpon>CashboxPasswordInputWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PayWay\CashPayControl.xaml.cs">
+      <DependentUpon>CashPayControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\CustomizeDishWindow.xaml.cs">
       <DependentUpon>CustomizeDishWindow.xaml</DependentUpon>
@@ -279,7 +291,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\PayWay\OnCmpAccPayControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PayWay\MemberPayControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PayWay\BankPayControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\CashboxPasswordInputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PayWay\CashPayControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -495,6 +523,7 @@
   <ItemGroup>
     <Resource Include="Controls\CalendarImage.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

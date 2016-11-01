@@ -57,6 +57,11 @@ namespace CanDao.Pos.Model
         public decimal TotalAlreadyPayment { get; set; }
 
         /// <summary>
+        /// 剩余未付金额。
+        /// </summary>
+        public decimal RemainderAmount { get; set; }
+
+        /// <summary>
         /// 优免调整金额
         /// </summary>
         public decimal AdjustmentAmount { get; set; }
@@ -205,24 +210,6 @@ namespace CanDao.Pos.Model
         /// 使用的优惠券集合。
         /// </summary>
         public ObservableCollection<UsedCouponInfo> UsedCouponInfos { get; private set; }
-
-        /// <summary>
-        /// 会员信息。
-        /// </summary>
-        private MemberInfo _memberInfo;
-
-        /// <summary>
-        /// 会员信息。
-        /// </summary>
-        public MemberInfo MemberInfo
-        {
-            get { return _memberInfo; }
-            set
-            {
-                _memberInfo = value;
-                RaisePropertyChanged("MemberInfo");
-            }
-        }
 
         public void CloneDataFromTableInfo(TableInfo tableInfo)
         {

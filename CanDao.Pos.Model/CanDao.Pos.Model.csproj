@@ -88,6 +88,7 @@
     <Compile Include="Enum\EnumOfferType.cs" />
     <Compile Include="Enum\EnumOpenTableResult.cs" />
     <Compile Include="Enum\EnumOrderType.cs" />
+    <Compile Include="Enum\EnumPayWayType.cs" />
     <Compile Include="Enum\EnumPrintOrderType.cs" />
     <Compile Include="Enum\EnumPrintPayType.cs" />
     <Compile Include="Enum\EnumPrintStatus.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Enum\EnumUsedCouponType.cs" />
     <Compile Include="Enum\EnumViewTableStatus.cs" />
     <Compile Include="Enum\EnumViewTableType.cs" />
+    <Compile Include="Event\AmountChangedEventArgs.cs" />
     <Compile Include="GiftDishInfo.cs" />
     <Compile Include="MemberInfo.cs" />
     <Compile Include="MenuDishGroupInfo.cs" />
@@ -105,7 +107,12 @@
     <Compile Include="MenuComboDishInfo.cs" />
     <Compile Include="MenuComboFullInfo.cs" />
     <Compile Include="MenuFishPotFullInfo.cs" />
-    <Compile Include="PayWayInfo.cs" />
+    <Compile Include="PayWayOnAccount.cs" />
+    <Compile Include="PayWay\PayWayBankInfo.cs" />
+    <Compile Include="PayWay\PayWayCashInfo.cs" />
+    <Compile Include="PayWay\PayWayInfo.cs" />
+    <Compile Include="PayWay\PayWayMemberInfo.cs" />
+    <Compile Include="PayWay\PayWayOnCmpAccount.cs" />
     <Compile Include="PrintInvoiceInfo.cs" />
     <Compile Include="PrintMemberPayInfo.cs" />
     <Compile Include="PrintMemberStoredInfo.cs" />
@@ -283,6 +290,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

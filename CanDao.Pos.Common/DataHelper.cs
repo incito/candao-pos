@@ -15,6 +15,17 @@ namespace CanDao.Pos.Common
             return values.FirstOrDefault(value => !string.IsNullOrWhiteSpace(value));
         }
 
+        /// <summary>
+        /// 用指定的分隔符组合字符串。
+        /// </summary>
+        /// <param name="sep"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static string JoinString(string sep, params string[] args)
+        {
+            return string.Join(sep, args);
+        }
+
         public static int Parse2Int(object valueStr, int defaultValue = 0)
         {
             if(valueStr == null)

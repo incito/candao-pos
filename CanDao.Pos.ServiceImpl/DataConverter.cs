@@ -449,7 +449,10 @@ namespace CanDao.Pos.ServiceImpl
         {
             return response.datas.Select(coupon => new MVipCoupon
             {
-                Id = coupon.id, CouponType = coupon.type, DealValue = coupon.dealValue, PresentValu = coupon.presentValue
+                Id = coupon.id,
+                CouponType = coupon.type,
+                DealValue = coupon.dealValue,
+                PresentValu = coupon.presentValue
             }).ToList();
         }
 
@@ -619,12 +622,35 @@ namespace CanDao.Pos.ServiceImpl
 
         internal static PayWayInfo ToPayWayInfo(PayWayInfoResponse response)
         {
-            return new PayWayInfo
+            var item = new PayWayInfo
             {
                 ItemId = response.itemId,
                 Name = response.title,
                 IsVisible = Convert.ToBoolean(response.status),
             };
+
+            switch (item.ItemId)
+            {
+                case 0:
+                    item.PayWayType = EnumPayWayType.Cash;
+                    break;
+                case 1:
+                    item.PayWayType = EnumPayWayType.Bank;
+                    break;
+                case 5:
+                    item.PayWayType = EnumPayWayType.OnAccount;
+                    break;
+                case 8:
+                    item.PayWayType = EnumPayWayType.Member;
+                    break;
+                case 17:
+                    item.PayWayType = EnumPayWayType.WeChat;
+                    break;
+                default:
+                    item.PayWayType = EnumPayWayType.Other;
+                    break;
+            }
+            return item;
         }
 
         internal static SavePayWayInfoRequest ToSavePayWayInfoRequest(PayWayInfo info)

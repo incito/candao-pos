@@ -71,7 +71,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var cardNo = Data.MemberInfo != null ? Data.MemberInfo.CardNo : "";
+            var cardNo = string.IsNullOrEmpty(Data.MemberNo) ? "" : Data.MemberNo;
             return service.UpdateOrderInvoice(Data.OrderId, InvoiceAmount, cardNo);
         }
 

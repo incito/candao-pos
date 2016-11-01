@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
@@ -47,15 +46,15 @@ namespace CanDao.Pos.Common.TemplateSelector
             if (data == null)
                 return NormalTemplate;
 
-            switch (data.ItemId)
+            switch (data.PayWayType)
             {
-                case 0://现金。
+                case EnumPayWayType.Cash://现金。
                     return CashTemplate;
-                case 1://银行卡。
+                case EnumPayWayType.Bank://银行卡。
                     return BankTemplate;
-                case 8://会员卡。
+                case EnumPayWayType.Member://会员卡。
                     return MemberTemplate;
-                case 5://挂账。
+                case EnumPayWayType.OnAccount://挂账。
                     return OnAccountTemplate;
                 default:
                     return NormalTemplate;

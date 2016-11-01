@@ -29,194 +29,33 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/CanDao.Pos.Common;component/BaseDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
+            
             <DataTemplate x:Key="CashTemplate">
-                <Grid Margin="10,10,310,10" VerticalAlignment="Top">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Border Background="{StaticResource CanDaoPosColorBgWhite}"
-                                Height="90">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="金额："
-                                           VerticalAlignment="Top" HorizontalAlignment="Left"
-                                           FontSize="20"
-                                           Margin="13,11,0,0"/>
-                            <toolkit:DoubleTextBox Grid.Row="0" Grid.Column="1"
-                                                       FontSize="60"
-                                                       Text="{Binding DataContext.CashAmount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="GotFocus">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.CashControlFocusCmd, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}" CommandParameter="true"/>
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="LostFocus">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.CashControlFocusCmd, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}" CommandParameter="false"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </toolkit:DoubleTextBox>
-                        </Grid>
-                    </Border>
-                    <Grid Grid.Row="1"
-                              Height="60"
-                              TextBlock.Foreground="{StaticResource CanDaoPosColorBgOrange}"
-                              TextBlock.FontSize="20">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
-                                       Text="找零："
-                                       VerticalAlignment="Center" HorizontalAlignment="Left"
-                                       Margin="0,10,0,0"/>
-                        <TextBlock Grid.Column="1"
-                                       Text="{Binding DataContext.ChargeAmount}"
-                                       VerticalAlignment="Center"
-                                       Margin="0,10,0,0"
-                                       HorizontalAlignment="Left"/>
-                    </Grid>
-                </Grid>
+                <view:CashPayControl/>
             </DataTemplate>
-
+            
             <DataTemplate x:Key="BankTemplate">
-                <StackPanel Margin="10,10,310,10">
-                    <Grid Margin="0,5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Text="{Binding SelectedBankInfo.Name}" IsEnabled="False" VerticalContentAlignment="Center" Height="40"/>
-                        <Button Grid.Column="1" Content="选择银行" Command="{Binding OperCmd}" CommandParameter="SelectBank" Width="75" Height="40"/>
-                    </Grid>
-                    <toolkit:DoubleTextBox Text="{Binding BankCardNo}"
-                                               DecimalPlaces="0"
-                                               Watermark="银行卡号："
-                                               VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                               Height="40" Margin="0,5" MaxLength="20"/>
-                    <toolkit:DoubleTextBox Minimum="0"
-                                               Text="{Binding BankAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
-                                               Watermark="金额："
-                                               Height="40" Margin="0,5"/>
-                </StackPanel>
+                <view:BankPayControl/>
             </DataTemplate>
 
             <DataTemplate x:Key="OnAccountTemplate">
-                <StackPanel Margin="10,10,310,10">
-                    <Grid Margin="0,5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <controls:WatermarkTextBox Text="{Binding SelectedOnCmpAccInfo.Name}"
-                                                       IsEnabled="False"
-                                                       Watermark="挂账单位："
-                                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                                       Height="40"/>
-                        <Button Grid.Row="0" Grid.Column="1"
-                                    Content="选择"
-                                    Command="{Binding OperCmd}" CommandParameter="SelectOnAccountCompany"
-                                    VerticalAlignment="Center"
-                                    Width="50" Height="40"/>
-                    </Grid>
-                    <toolkit:DoubleTextBox Text="{Binding DebitAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
-                                               Watermark="挂账金额："
-                                               Height="40" Margin="0,5"/>
-                </StackPanel>
+                <view:OnCmpAccPayControl/>
             </DataTemplate>
 
             <DataTemplate x:Key="MemberTemplate">
-                <StackPanel Margin="10,10,310,10">
-                    <Grid Height="40" Margin="0,5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <controls:WatermarkTextBox Text="{Binding MemberCardNo, UpdateSourceTrigger=PropertyChanged}"
-                                                       IsEnabled="{Binding IsMemberLogin, Converter={StaticResource BoolRevertCvt}}"
-                                                       Watermark="会员卡号："
-                                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                                       Height="40">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="GotFocus">
-                                    <i:InvokeCommandAction Command="{Binding MemberControlFocusCmd}" CommandParameter="true"/>
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="LostFocus">
-                                    <i:InvokeCommandAction Command="{Binding MemberControlFocusCmd}" CommandParameter="false"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </controls:WatermarkTextBox>
-                        <Button Grid.Row="0" Grid.Column="1"
-                                    Content="登录"
-                                    Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2CollapsedCvt}}" 
-                                    Command="{Binding OperCmd}" CommandParameter="MemberLogin" 
-                                    VerticalAlignment="Center"
-                                    Width="40" Height="40"
-                                    Focusable="False"
-                                    IsTabStop="False"/>
-                        <Button Grid.Row="0" Grid.Column="1"
-                                    Content="退出"
-                                    Visibility="{Binding IsMemberLogin, Converter={StaticResource Bool2VisibilityCvt}}"
-                                    Command="{Binding OperCmd}" CommandParameter="MemberLogout"
-                                    VerticalAlignment="Center"
-                                    Width="40" Height="40"
-                                    Focusable="False"
-                                    IsTabStop="False"/>
-                    </Grid>
-                    <toolkit:DoubleTextBox x:Name="TbMemAmount"
-                                               Text="{Binding MemberAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
-                                               IsEnabled="{Binding IsMemberLogin}"
-                                               Watermark="刷卡金额："
-                                               Margin="0,5" Height="40"/>
-                    <toolkit:DoubleTextBox Minimum="0" 
-                                               Text="{Binding IntegralAmount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
-                                               IsEnabled="{Binding IsMemberLogin}"
-                                               Watermark="使用积分：" 
-                                               Margin="0,5" Height="40"/>
-                    <controls:WatermarkPasswordBox Password="{Binding MemberPassword, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-                                                       Watermark="会员密码："
-                                                       IsEnabled="{Binding IsMemberLogin}"
-                                                       VerticalContentAlignment="Center" VerticalAlignment="Center"
-                                                       Margin="0,5" Height="40"/>
-                    <Grid HorizontalAlignment="Left" TextBlock.Foreground="{StaticResource CanDaoPosColorSelected}" TextBlock.FontSize="16">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="储值金额："
-                                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        <StackPanel Grid.Row="0"  Grid.Column="1"
-                                        Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
-                            <TextBlock Text="{Binding Data.MemberInfo.StoredBalance}"/>
-                            <TextBlock Text="{Binding Data.MemberInfo.CardLevel, StringFormat=({0})}" Visibility="{Binding Data.MemberInfo.CardLevel, Converter={StaticResource Strinig2VisibleCvt}}"/>
-                        </StackPanel>
-                        <TextBlock Grid.Row="1" Grid.Column="0"
-                                       Text="积分余额："
-                                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1"
-                                       Text="{Binding Data.MemberInfo.Integral}"
-                                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                    </Grid>
-                </StackPanel>
+                <view:MemberPayControl/>
             </DataTemplate>
 
             <DataTemplate x:Key="NormalTemplate">
                 <StackPanel Margin="10,10,310,10">
                     <controls:WatermarkTextBox Text="{Binding Remark, UpdateSourceTrigger=PropertyChanged}"
-                                                   Watermark="{Binding Name, StringFormat={}{0}：}"
-                                                   VerticalContentAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   Margin="0,5" Height="40"/>
+                                               Watermark="{Binding Name, StringFormat={}{0}:}"
+                                               VerticalContentAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Margin="0,5" Height="40"/>
                     <toolkit:DoubleTextBox Text="{Binding Amount, Converter={StaticResource Zero2NullStringCvt}, UpdateSourceTrigger=PropertyChanged}"
-                                              Watermark="金额："
-                                              Margin="0,5" Height="40"/>
+                                           Watermark="金额："
+                                           Margin="0,5" Height="40"/>
                 </StackPanel>
             </DataTemplate>
 
@@ -757,6 +596,7 @@
                         FontSize="18"
                         IsEnabled="{Binding Data.HasBeenPaied, Converter={StaticResource BoolRevertCvt}}"
                         ItemsSource="{Binding PayWayInfos}"
+                        SelectedItem="{Binding SelectedPayWayInfo}"
                         ContentTemplateSelector="{StaticResource PayWayTemplateSelector}">
                 <TabControl.ItemContainerStyle>
                     <Style TargetType="TabItem" BasedOn="{StaticResource TabItemStyle}">
