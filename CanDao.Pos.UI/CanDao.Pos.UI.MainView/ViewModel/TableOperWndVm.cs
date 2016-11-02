@@ -342,6 +342,46 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private PayWayOnCmpAccount _onCmpAccountPayWay;
 
+        /// <summary>
+        /// 获取现金金额。
+        /// </summary>
+        public decimal CashAmount
+        {
+            get { return _cashPayWay != null ? _cashPayWay.Amount : 0m; }
+        }
+
+        /// <summary>
+        /// 获取找零金额。
+        /// </summary>
+        public decimal ChargeAmount
+        {
+            get { return _cashPayWay != null ? _cashPayWay.ChargeAmount : 0m; }
+        }
+
+        /// <summary>
+        /// 获取会员积分金额。
+        /// </summary>
+        public decimal IntegralAmount
+        {
+            get { return _memberPayWay != null ? _memberPayWay.IntegralAmount : 0m; }
+        }
+
+        /// <summary>
+        /// 获取会员储值消费金额。
+        /// </summary>
+        public decimal MemberAmount
+        {
+            get { return _memberPayWay != null ? _memberPayWay.Amount : 0m; }
+        }
+
+        /// <summary>
+        /// 获取会员号。
+        /// </summary>
+        public string MemberNo
+        {
+            get { return _memberPayWay != null ? _memberPayWay.Remark : Data.MemberNo; }
+        }
+
         #endregion
 
         #endregion
@@ -983,7 +1023,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "PayBill":
                     return Data != null && !Data.HasBeenPaied;
                 case "MemberLogin":
-                    return !string.IsNullOrEmpty(_memberPayWay.Remark) && _memberPayWay.Remark.Length > 0;
+                    return _memberPayWay != null && !string.IsNullOrEmpty(_memberPayWay.Remark) && _memberPayWay.Remark.Length > 0;
                 case "CouponRemove":
                     return SelectedUsedCouponInfo != null;
                 case "CouponClear":
@@ -1196,7 +1236,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var helper = new AntiSettlementHelper();
                 var antiSettlementWf = helper.GetAntiSettlement(Data.OrderId, Data.MemberNo, OwnerWindow);
 
-                if (!_memberPayWay.IsMemberLogin)
+                if (_memberPayWay != null && !_memberPayWay.IsMemberLogin)
                 {
                     var queryMemberWf = new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...");
                     queryMemberWf.ErrorWorkFlowInfo = antiSettlementWf;//会员查询错误时执行自动反结算工作流。
@@ -1515,16 +1555,19 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             //计算自动填充现金金额。
             var otherPayWayWithoutCashPayWay = PayWayInfos.Where(t => t.PayWayType != EnumPayWayType.Cash).ToList();
-            var amoumtSum = otherPayWayWithoutCashPayWay.Sum(t => t.Amount) + _memberPayWay.IntegralAmount;//所有结算方式输入金额的总和，注意要加上会员的积分金额。
+            var amoumtSum = otherPayWayWithoutCashPayWay.Sum(t => t.Amount) + IntegralAmount;//所有结算方式输入金额的总和，注意要加上会员的积分金额。
             SetCashAmount(Math.Max(0, Data.PaymentAmount - amoumtSum));
 
             //计算总共已付金额。
-            Data.TotalAlreadyPayment = PayWayInfos.Sum(t => t.Amount) + _memberPayWay.IntegralAmount; //付款总额=各种付款方式总和。
+            Data.TotalAlreadyPayment = PayWayInfos.Sum(t => t.Amount) + IntegralAmount; //付款总额=各种付款方式总和。
             Data.TotalAlreadyPayment = Math.Round(Data.TotalAlreadyPayment, 2);
             Data.RemainderAmount = Data.PaymentAmount - Data.TotalAlreadyPayment;//剩余金额=应付金额-付款总额。
 
-            var tempChargeAmount = Math.Abs(Math.Min(0, Data.RemainderAmount));
-            _cashPayWay.ChargeAmount = Math.Min(tempChargeAmount, _cashPayWay.Amount);//找零金额只能是现金
+            if (_cashPayWay != null)
+            {
+                var tempChargeAmount = Math.Abs(Math.Min(0, Data.RemainderAmount));
+                _cashPayWay.ChargeAmount = Math.Min(tempChargeAmount, _cashPayWay.Amount);//找零金额只能是现金
+            }
         }
 
         /// <summary>
@@ -1615,7 +1658,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var realyPayment = Data.PaymentAmount - Data.TipAmount;//真实的应收=明面行应收-小费金额。
                 var tipPayment = Data.TotalAlreadyPayment - realyPayment;//小费实付金额=付款总额-真实应收。
                 tipPayment = Math.Max(0, tipPayment);//小费实付金额不能小于0。
-                tipPayment = Math.Min(_cashPayWay.Amount, tipPayment);//小费实付金额不能大于现金。
+                tipPayment = Math.Min(CashAmount, tipPayment);//小费实付金额不能大于现金。
                 tipPayment = Math.Min(Data.TipAmount, tipPayment);//小费金额不能大于用户设置的小费金额。
                 TipPaymentAmount = tipPayment;
                 settlementInfo.Add(string.Format("小费：{0:f2}", TipPaymentAmount));
@@ -1647,15 +1690,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return "还有未收金额。";
             }
 
-            if (_cashPayWay.ChargeAmount > 100)
-                return "找零金额不能大于100。";
-
-            if (Globals.IsCanDaoMember && _memberPayWay.IsMemberLogin &&
-                (_memberPayWay.IntegralAmount > 0 || _memberPayWay.Amount > 0) &&
+            if (_memberPayWay != null && Globals.IsCanDaoMember && _memberPayWay.IsMemberLogin &&
+                (IntegralAmount > 0 || MemberAmount > 0) &&
                 string.IsNullOrWhiteSpace(_memberPayWay.MemberPassword))//雅座会员消费不必输入密码。
                 return "使用会员储值或积分请输入会员密码。";
 
-            if (Data.TotalAlreadyPayment - _cashPayWay.ChargeAmount > Data.PaymentAmount)
+            if (Data.TotalAlreadyPayment - ChargeAmount > Data.PaymentAmount)
                 return string.Format("实际支付金额\"{0}\"超过应收金额\"{1}\"。", Data.TotalAlreadyPayment, Data.PaymentAmount);
 
             var errMsgList = PayWayInfos.Select(t => t.CheckTheBillAllowPay()).ToList();
@@ -1855,7 +1895,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var request = new CanDaoMemberQueryRequest
                 {
                     branch_id = Globals.BranchInfo.BranchId,
-                    cardno = _memberPayWay.Remark,
+                    cardno = MemberNo,
                 };
                 InfoLog.Instance.I("开始执行餐道会员查询...");
                 return service.QueryCandao(request);
@@ -1863,7 +1903,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (Globals.IsYazuoMember)
             {
                 InfoLog.Instance.I("开始执行雅座会员查询...");
-                var result = service.QueryYaZuo(_memberPayWay.Remark);
+                var result = service.QueryYaZuo(MemberNo);
                 return new Tuple<string, MemberInfo>(result.Item1, result.Item2);
             }
             return new Tuple<string, MemberInfo>("错误的会员配置项。", null);
@@ -2083,15 +2123,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             var otherPayWays = PayWayInfos.Where(t => t.PayWayType != EnumPayWayType.Member && t.PayWayType != EnumPayWayType.WeChat).ToList();
             var wechatPayWay = PayWayInfos.FirstOrDefault(t => t.PayWayType == EnumPayWayType.WeChat);
+            var cardNo = _memberPayWay != null ? _memberPayWay.MemberInfo.CardNo : Data.MemberNo;
             var request = new CanDaoMemberSaleRequest
             {
                 branch_id = Globals.BranchInfo.BranchId,
-                cardno = _memberPayWay.MemberInfo.CardNo,
-                password = _memberPayWay.MemberPassword,
+                cardno = cardNo,
+                password = _memberPayWay != null ? _memberPayWay.MemberPassword : "",
                 FCash = otherPayWays.Sum(t => t.Amount),
                 FWeChat = wechatPayWay != null ? wechatPayWay.Amount : 0,
-                FStore = _memberPayWay.Amount,
-                FIntegral = _memberPayWay.IntegralAmount,
+                FStore = MemberAmount,
+                FIntegral = IntegralAmount,
                 Serial = Data.OrderId,
             };
             var result = service.Sale(request);
@@ -2101,7 +2142,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             //添加会员消费记录。
             var saleInfoRequest = new AddOrderMemberSaleInfoRequest
             {
-                cardno = _memberPayWay.MemberInfo.CardNo,
+                cardno = cardNo,
                 orderid = Data.OrderId,
                 userid = Globals.UserInfo.UserName,
                 business = Globals.BranchInfo.BranchId,
@@ -2111,8 +2152,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 score = result.Item2.AddIntegral - result.Item2.DecIntegral,
                 scorebalance = result.Item2.IntegralOverall,
                 storedbalance = result.Item2.StoreCardBalance,
-                netvalue = _memberPayWay.Amount,
-                stored = _memberPayWay.Amount,
+                netvalue = MemberAmount,
+                stored = MemberAmount,
             };
 
             var saleInfoResult = service.AddMemberSaleInfo(saleInfoRequest);
@@ -2164,11 +2205,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 CashAmount = otherPayWays.Sum(t => t.Amount),
                 CouponTotalAmount = 0,
                 CouponUsedInfo = GenerateYaZuoCouponUsedInfo(),
-                IntegralValue = _memberPayWay.IntegralAmount,
-                MemberCardNo = _memberPayWay.Remark,
+                IntegralValue = IntegralAmount,
+                MemberCardNo = MemberNo,
                 OrderId = Data.OrderId,
-                Password = _memberPayWay.MemberPassword,
-                StoredPayAmount = _memberPayWay.Amount,
+                Password = _memberPayWay != null ? _memberPayWay.MemberPassword : "",
+                StoredPayAmount = MemberAmount,
                 UserId = Globals.UserInfo.UserName,
             };
         }
@@ -2433,7 +2474,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             OwnerWindow.Dispatcher.Invoke((Action)delegate
             {
                 Data.CloneOrderData(result.Item2);//合并餐台账单明细(金额，菜，优惠)
-                _memberPayWay.Remark = Data.MemberNo;
+                if (_memberPayWay != null)
+                    _memberPayWay.Remark = Data.MemberNo;
             });
 
             if (!string.IsNullOrEmpty(_memberPayWay.Remark) && !_memberPayWay.IsMemberLogin)//走会员登录的流程。

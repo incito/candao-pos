@@ -61,12 +61,12 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             switch (arg as string)
             {
                 case "Enabled":
-                    if (!MessageDialog.Quest("确认启用后，在结算方式区域里显示出该结算方式！"))
+                    if (!MessageDialog.Quest("确认显示后，在结算方式区域里显示出该结算方式！"))
                         return;
                     item.IsVisible = true;
                     break;
                 case "Disabled":
-                    if (!MessageDialog.Quest("确认禁用后，在结算方式区域里不再显示该结算方式！"))
+                    if (!MessageDialog.Quest("确认隐藏后，在结算方式区域里不再显示该结算方式！"))
                         return;
                     item.IsVisible = false;
                     break;

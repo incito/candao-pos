@@ -27,14 +27,14 @@
                                     HorizontalAlignment="Center"
                                     Visibility="{Binding IsVisible, Converter={StaticResource Bool2CollapsedCvt}}">
                                 <Button.Content>
-                                    <TextBlock Text="启用" Foreground="{StaticResource CanDaoPosColorFgOrange}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock Text="显示" Foreground="{StaticResource CanDaoPosColorFgOrange}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Button.Content>
                             </Button>
                             <Button Command="{Binding DataContext.OperCmd, ElementName=CtrlSelf}" CommandParameter="Disabled"
                                     HorizontalAlignment="Center"
                                     Visibility="{Binding IsVisible, Converter={StaticResource Bool2VisibilityCvt}}">
                                 <Button.Content>
-                                    <TextBlock Text="禁用" Foreground="{StaticResource CanDaoPosColorFgOrange}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock Text="隐藏" Foreground="{StaticResource CanDaoPosColorFgOrange}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Button.Content>
                             </Button>
                         </Grid>

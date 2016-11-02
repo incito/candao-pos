@@ -93,7 +93,7 @@ namespace CanDao.Pos.Model
         {
             var list = new List<BillPayInfo>();
             if (Amount > 0)
-                list.Add(new BillPayInfo(Amount, (int)EnumBillPayType.MemberSotred, "", Remark));
+                list.Add(new BillPayInfo(Amount, (int)EnumBillPayType.MemberCard, "", Remark));
             if (IntegralAmount > 0)
                 list.Add(new BillPayInfo(IntegralAmount, (int)EnumBillPayType.MemberIntegral, "", Remark));
             return list;
