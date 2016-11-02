@@ -1014,14 +1014,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             foreach (var areaInfo in _allAreaInfos)
             {
                 var tableInfos = areaInfo.TableInfos.Where(t => !t.IsTakeoutTable && ViewTableType == EnumViewTableType.Normal ? !t.IsCoffeeTable : t.IsCoffeeTable).ToList();
-
-                if (tableInfos.Any())
-                {
-                    var areaTemp = areaInfo.SimpleClone();
-                    tableInfos.ForEach(areaTemp.TableInfos.Add);
-                    areaInfos.Add(areaTemp);
-                    allTableInfos.AddRange(tableInfos);//把所有餐桌的都加入一个集合，赋值给全部分组。
-                }
+                var areaTemp = areaInfo.SimpleClone();
+                tableInfos.ForEach(areaTemp.TableInfos.Add);
+                areaInfos.Add(areaTemp);
+                allTableInfos.AddRange(tableInfos);//把所有餐桌的都加入一个集合，赋值给全部分组。
             }
             foreach (var tableInfo in allTableInfos)
             {
