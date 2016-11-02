@@ -37,6 +37,23 @@ namespace CanDao.Pos.Model
             AreaName = item.AreaName;
         }
 
+        /// <summary>
+        /// 简单信息克隆。
+        /// </summary>
+        /// <returns></returns>
+        public AreaInfo SimpleClone()
+        {
+            return new AreaInfo
+            {
+                AreaName = AreaName,
+                SortIndex = SortIndex,
+            };
+        }
+
+        /// <summary>
+        /// 全部信息克隆。
+        /// </summary>
+        /// <returns></returns>
         public AreaInfo Clone()
         {
             var stream = new MemoryStream();
