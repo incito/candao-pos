@@ -64,10 +64,10 @@ namespace CanDao.Pos.IService
         Tuple<string, OrderDishInfo> GetDinnerWareInfo(string userName);
 
         /// <summary>
-        /// 获取所有餐桌信息。
+        /// 获取所有餐桌分区信息。
         /// </summary>
         /// <returns>Item1全部正常则为null，否则为错误信息，Item2为餐桌信息集合。</returns>
-        Tuple<string, List<TableInfo>> GetAllTableInfoes();
+        Tuple<string, List<AreaInfo>> GetAllAreaInfoes();
 
         /// <summary>
         /// 获取指定类型的餐桌信息。

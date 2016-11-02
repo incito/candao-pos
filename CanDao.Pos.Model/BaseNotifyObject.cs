@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace CanDao.Pos.Model
 {
+    [Serializable]
     public class BaseNotifyObject : INotifyPropertyChanged
     {
         protected void RaisePropertyChanged(string propertyName)

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace CanDao.Pos.Model.Response
 {
-    public class GetAllTableInfoesResponse:NewHttpBaseResponse 
+    public class GetAllTableInfoesResponse : NewHttpBaseResponse
     {
-        public List<TableInfoResponse> data { set; get; }
+        public List<AreaInfoResponse> data { set; get; }
     }
 }

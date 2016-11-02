@@ -5,7 +5,7 @@
     <GetCfgInfo Addr="/newspicyway/padinterface/getconfiginfos.json"/><!--系统配置信息-->
     <AuthorizeLogin Addr="/newspicyway/padinterface/login.json"/><!--授权登录-->
     <GetUserRight Addr="/newspicyway/padinterface/userrights.json"/><!--获取用户权限-->
-    <GetAllTableInfos Addr="/newspicyway/padinterface/querytables.json"/><!--获取所有餐桌信息-->
+    <GetAllTableInfos Addr="/newspicyway/padinterface/getTableAndType.json"/><!--获取所有餐桌信息-->
     <GetSystemSetData Addr="/newspicyway/padinterface/getSystemSetData.json"/><!--获取系统设置-->
     <VerifyUser Addr="/newspicyway/padinterface/verifyuser.json"/><!--验证用户是否存在-->
     <OpenTable Addr="/newspicyway/padinterface/setorder.json"/><!--餐桌开台-->

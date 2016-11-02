@@ -142,30 +142,24 @@ namespace CanDao.Pos.ServiceImpl
             return new Tuple<string, OrderDishInfo>(null, dinnerWareInfo);
         }
 
-        public Tuple<string, List<TableInfo>> GetAllTableInfoes()
+        public Tuple<string, List<AreaInfo>> GetAllAreaInfoes()
         {
             string addr = ServiceAddrCache.GetServiceAddr("GetAllTableInfos");
             if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, List<TableInfo>>("获取所有餐桌信息接口地址为空。", null);
+                return new Tuple<string, List<AreaInfo>>("获取所有餐桌信息接口地址为空。", null);
 
             try
             {
                 var result = HttpHelper.HttpPost<GetAllTableInfoesResponse>(addr, null);
-                var dataList = new List<TableInfo>();
-                if (result.IsSuccess)
-                {
-                    dataList = result.data.Select(DataConverter.ToTableInfo).ToList();
-                    return new Tuple<string, List<TableInfo>>(null, dataList);
-                }
-                else
-                {
-                    return new Tuple<string, List<TableInfo>>(result.msg, null);
-                }
+                if (!result.IsSuccess)
+                    return new Tuple<string, List<AreaInfo>>(DataHelper.GetNoneNullValueByOrder(result.msg, "获取所有餐台信息失败。"), null);
+                var dataList = result.data != null ? result.data.Select(DataConverter.ToAreaInfo).ToList() : new List<AreaInfo>();
+                return new Tuple<string, List<AreaInfo>>(null, dataList);
             }
             catch (Exception ex)
             {
                 ErrLog.Instance.E(ex);
-                return new Tuple<string, List<TableInfo>>(ex.MyMessage(), null);
+                return new Tuple<string, List<AreaInfo>>(ex.MyMessage(), null);
             }
         }
 

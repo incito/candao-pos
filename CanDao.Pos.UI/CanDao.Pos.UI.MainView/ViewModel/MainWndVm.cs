@@ -25,9 +25,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region Filed
 
         /// <summary>
-        /// 标准台餐台集合。
+        /// 所有餐桌分区信息。
         /// </summary>
-        private List<TableInfo> _allTableInfos;
+        private List<AreaInfo> _allAreaInfos;
 
         /// <summary>
         /// 正在过滤操作中。
@@ -80,13 +80,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         public MainWndVm(bool isForcedEndWorkModel)
         {
             IsForcedEndWorkModel = isForcedEndWorkModel;
-            CurrentTableInfos = new ObservableCollection<TableInfo>();
-            CurrentTableAreas = new ObservableCollection<string>();
+            AreaInfos = new ObservableCollection<AreaInfo>();
+            TableInfos = new ObservableCollection<TableInfo>();
 
-            Tables = new ObservableCollection<TableInfo>();
-            CfTables = new ObservableCollection<TableInfo>();
             RefreshRemainSecond = RefreshTimerInterval;
-
             _refreshTimer = new Timer(1000) { Enabled = true };
             _refreshTimer.Elapsed += RefreshTimer_Elapsed;
 
@@ -113,39 +110,37 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 _viewTableType = value;
                 RaisePropertyChanged("ViewTableType");
 
-                FilterTableInfos();
+                FilterAreaInfo();
             }
         }
 
         /// <summary>
-        /// 根据各种条件过滤后的当前餐桌集合。
+        /// 分区信息集合。
         /// </summary>
-        public ObservableCollection<TableInfo> CurrentTableInfos { get; set; }
+        public ObservableCollection<AreaInfo> AreaInfos { get; set; }
 
         /// <summary>
-        /// 当前餐桌的分组信息集合。
+        /// 餐台信息集合。
         /// </summary>
-        public ObservableCollection<string> CurrentTableAreas { get; set; }
+        public ObservableCollection<TableInfo> TableInfos { get; set; }
 
         /// <summary>
-        /// 选择的分组区域。
+        /// 选择的餐桌分区。
         /// </summary>
-        private string _selectedTableArea;
+        private AreaInfo _selectedAreaInfo;
         /// <summary>
-        /// 选择的分组区域。
+        /// 选择的餐桌分区。
         /// </summary>
-        public string SelectedTableArea
+        public AreaInfo SelectedAreaInfo
         {
-            get { return _selectedTableArea; }
+            get { return _selectedAreaInfo; }
             set
             {
-                if (_selectedTableArea != value)
-                    ViewTableStatus = EnumViewTableStatus.All;
+                _selectedAreaInfo = value;
+                RaisePropertyChanged("SelectedAreaInfo");
 
-                _selectedTableArea = value;
-                RaisePropertyChanged("SelectedTableArea");
-
-                FilterTableInfos();
+                if (_selectedAreaInfo != null)
+                    FilterTableInfos();
             }
         }
 
@@ -167,16 +162,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 FilterTableInfos();
             }
         }
-
-        /// <summary>
-        /// 所有餐台集合。
-        /// </summary>
-        public ObservableCollection<TableInfo> Tables { get; private set; }
-
-        /// <summary>
-        /// 咖啡台集合。
-        /// </summary>
-        public ObservableCollection<TableInfo> CfTables { get; private set; }
 
         /// <summary>
         /// 所有餐台个数。
@@ -632,8 +617,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
 
                 //更新餐桌开台持续时间
-                Tables.Where(t => t.TableStatus == EnumTableStatus.Dinner).ToList().ForEach(t => t.UpdateDinnerDuration());
-                CfTables.Where(t => t.TableStatus == EnumTableStatus.Dinner).ToList().ForEach(t => t.UpdateDinnerDuration());
+                foreach (var areaInfo in _allAreaInfos)
+                {
+                    areaInfo.TableInfos.Where(t => t.TableStatus == EnumTableStatus.Dinner).ToList().ForEach(t => t.UpdateDinnerDuration());
+                }
             }
             catch (Exception ex)
             {
@@ -657,7 +644,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void GetAllTableInfoesAsync()
         {
             RefreshRemainSecond = RefreshTimerInterval;
-            var info = _allTableInfos != null ? "" : "加载所有餐桌信息...";//这里处理是为了第一次显示提示信息，后续定时刷新时候不显示提示信息，防止阻塞其他业务
+            var info = _allAreaInfos != null ? "" : "加载所有餐桌信息...";//这里处理是为了第一次显示提示信息，后续定时刷新时候不显示提示信息，防止阻塞其他业务
             var param = new List<EnumTableType> { EnumTableType.Room, EnumTableType.Outside, EnumTableType.CFTable };
             TaskService.Start(param, GetTableInfoByTableTypeProcess, GetAllTableInfoComplete, info);
             TaskService.Start(null, GetBusinessSimpleInfoProcess, GetBusinessSimpleInfoComplete, "");
@@ -704,9 +691,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
             if (service == null)
-                return new Tuple<string, List<TableInfo>>("创建IRestaurantService服务失败。", null);
+                return new Tuple<string, List<AreaInfo>>("创建IRestaurantService服务失败。", null);
 
-            return service.GetTableInfoByType((List<EnumTableType>)param);
+            return service.GetAllAreaInfoes(); ;
         }
 
         /// <summary>
@@ -715,10 +702,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="param"></param>
         private void GetAllTableInfoComplete(object param)
         {
-            var result = (Tuple<string, List<TableInfo>>)param;
+            var result = (Tuple<string, List<AreaInfo>>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
-                var errMsg = string.Format("获取所有餐桌信息失败：{0}", result.Item1);
+                var errMsg = string.Format("获取所有餐桌分区信息失败：{0}", result.Item1);
                 ErrLog.Instance.E(errMsg);
                 MessageDialog.Warning(errMsg, OwnerWindow);
                 SetRefreshTimerStatus(true);
@@ -728,20 +715,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             SetRefreshTimerStatus(true);
             if (result.Item2 != null && result.Item2.Any())
             {
-                result.Item2.ForEach(SetTableEnableStatus);//设置餐台可用状态。
-                _allTableInfos = result.Item2;
-                HasCoffeeTables = result.Item2.Any(t => t.IsCoffeeTable);
-                FilterTableInfos();
+                var tableInfos = new List<TableInfo>();
+                result.Item2.ForEach(t => tableInfos.AddRange(t.TableInfos.Where(x => !x.IsTakeoutTable)));
+                tableInfos.ForEach(SetTableEnableStatus);//设置餐台可用状态。
 
-                //AllTableCount = result.Item2.Count;
-                //IdleCount = result.Item2.Count(t => !IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
-                //DinnerCount = result.Item2.Count(t => t.TableStatus == EnumTableStatus.Dinner);
-
-                //_normalTableInfos = result.Item2.Where(t => !t.IsCoffeeTable).ToList();
-                //UpdateNormalTables(_normalTableInfos);
-
-                //_coffeeTableInfos = result.Item2.Where(t => t.IsCoffeeTable).ToList();
-                //UpdateCfTables(_coffeeTableInfos);
+                _allAreaInfos = result.Item2;
+                HasCoffeeTables = tableInfos.Any(t => t.IsCoffeeTable);
+                FilterAreaInfo();
             }
         }
 
@@ -1013,138 +993,96 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         #region 餐台过滤分组
 
         /// <summary>
-        /// 过滤餐台集合。
+        /// 过滤餐桌分区信息。
         /// </summary>
-        /// <param name="srcSource">餐台集合数据源。</param>
-        /// <returns></returns>
-        private void FilterTableInfos()
+        private void FilterAreaInfo()
         {
             if (_isInFilter)
                 return;
 
-            var tempSrc = FilterTableInfoByViewTableType(_allTableInfos, ViewTableType);
+            if (_allAreaInfos == null)
+                return;
 
             _isInFilter = true;
-            ProcessTableAreas(tempSrc);
+            var areaInfos = new List<AreaInfo>();
 
-            tempSrc = FilterTableInfoByArea(tempSrc, SelectedTableArea);
-            if (tempSrc != null)
+            //添加全部分区。
+            var allAreaInfo = new AreaInfo { AreaName = "全部" };
+            areaInfos.Add(allAreaInfo);
+
+            var allTableInfos = new List<TableInfo>();
+            foreach (var areaInfo in _allAreaInfos)
             {
-                AllTableCount = tempSrc.Count;
-                IdleCount = tempSrc.Count(t => !IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
-                DinnerCount = tempSrc.Count(t => t.TableStatus == EnumTableStatus.Dinner);
-            }
+                var tableInfos = areaInfo.TableInfos.Where(t => ViewTableType == EnumViewTableType.Normal ? !t.IsCoffeeTable : t.IsCoffeeTable).ToList();
 
-            tempSrc = FilterTableInfoByStatus(tempSrc, ViewTableStatus);
-            if (tempSrc != null)
-                UpdateTables(tempSrc);
-            else
-                CurrentTableInfos.Clear();
+                if (tableInfos.Any())
+                {
+                    var areaTemp = areaInfo.Clone();
+                    tableInfos.ForEach(areaTemp.TableInfos.Add);
+                    areaInfos.Add(areaTemp);
+                    allTableInfos.AddRange(tableInfos);//把所有餐桌的都加入一个集合，赋值给全部分组。
+                }
+            }
+            foreach (var tableInfo in allTableInfos)
+            {
+                tableInfo.UpdateDinnerDuration();
+                allAreaInfo.TableInfos.Add(tableInfo);
+            }
+            AllTableCount = allTableInfos.Count;
+            IdleCount = allTableInfos.Count(t => !IsForcedEndWorkModel && t.TableStatus == EnumTableStatus.Idle);
+            DinnerCount = allTableInfos.Count(t => t.TableStatus == EnumTableStatus.Dinner);
+
+            UpdateAreaInfos(areaInfos);
+
+            FilterTableInfos();
 
             _isInFilter = false;
         }
 
         /// <summary>
-        /// 处理餐台区域的增加或减少。
+        /// 过滤餐台集合。
         /// </summary>
-        /// <param name="tableInfos">餐台集合。</param>
-        private void ProcessTableAreas(List<TableInfo> tableInfos)
+        private void FilterTableInfos()
         {
-            var tableAreas = new List<string> { "全部" };
-            if (tableInfos != null)
+            TableInfos.Clear();
+            foreach (var tableInfo in SelectedAreaInfo.TableInfos)
             {
-                var list = tableInfos.Select(t => t.AreaName).Distinct().ToList();
-                tableAreas.AddRange(list);
-            }
-
-            var newItems = tableAreas.Where(t => !CurrentTableAreas.Contains(t)).ToList();//找出新增的区域。
-            if (newItems.Any())
-                newItems.ToList().ForEach(CurrentTableAreas.Add);
-
-            var removedItems = CurrentTableAreas.Where(t => !tableAreas.Contains(t)).ToList();//找出移除的区域。
-            if (removedItems.Any())
-                removedItems.ForEach(t => CurrentTableAreas.Remove(t));
-
-            if (SelectedTableArea == null)
-                SelectedTableArea = CurrentTableAreas.FirstOrDefault();
-        }
-
-        /// <summary>
-        /// 根据界面的餐台类型过滤餐台集合。
-        /// </summary>
-        /// <param name="srcSource">餐台集合。</param>
-        /// <param name="viewTableType">餐台类型。</param>
-        /// <returns></returns>
-        private List<TableInfo> FilterTableInfoByViewTableType(List<TableInfo> srcSource, EnumViewTableType viewTableType)
-        {
-            if (srcSource == null)
-                return null;
-
-            return viewTableType == EnumViewTableType.Normal ? srcSource.Where(t => !t.IsCoffeeTable).ToList() : srcSource.Where(t => t.IsCoffeeTable).ToList();
-        }
-
-        /// <summary>
-        /// 根据餐台分组区域名称过滤餐台集合。
-        /// </summary>
-        /// <param name="srcSource">餐台集合。</param>
-        /// <param name="areaName">区域名称。</param>
-        /// <returns></returns>
-        private List<TableInfo> FilterTableInfoByArea(List<TableInfo> srcSource, string areaName)
-        {
-            if (srcSource == null)
-                return null;
-
-            return areaName == "全部" ? srcSource : srcSource.Where(t => t.AreaName.Equals(areaName)).ToList();
-        }
-
-        /// <summary>
-        /// 根据选择的餐台状态过滤餐台集合。
-        /// </summary>
-        /// <param name="srcSource">餐台集合。</param>
-        /// <param name="status">选择的餐台状态。</param>
-        /// <returns></returns>
-        private List<TableInfo> FilterTableInfoByStatus(List<TableInfo> srcSource, EnumViewTableStatus status)
-        {
-            if (srcSource == null)
-                return null;
-
-            switch (status)
-            {
-                case EnumViewTableStatus.All:
-                    return srcSource;
-                case EnumViewTableStatus.Dinner:
-                    return srcSource.Where(t => t.TableStatus == EnumTableStatus.Dinner).ToList();
-                case EnumViewTableStatus.Idel:
-                    return srcSource.Where(t => t.TableStatus == EnumTableStatus.Idle).ToList();
-                default:
-                    throw new ArgumentOutOfRangeException("status", status, null);
+                switch (ViewTableStatus)
+                {
+                    case EnumViewTableStatus.All:
+                        TableInfos.Add(tableInfo);
+                        break;
+                    case EnumViewTableStatus.Dinner:
+                        if (tableInfo.IsInDinner)
+                            TableInfos.Add(tableInfo);
+                        break;
+                    case EnumViewTableStatus.Idel:
+                        if (!tableInfo.IsInDinner)
+                            TableInfos.Add(tableInfo);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
-        /// <summary>
-        /// 更新当前显示的餐桌。
-        /// </summary>
-        /// <param name="tableInfos">最新的餐桌集合。</param>
-        private void UpdateTables(List<TableInfo> tableInfos)
+        private void UpdateAreaInfos(List<AreaInfo> src)
         {
-            if (tableInfos == null)
-                return;
+            var removedAreaInfos = AreaInfos.Where(t => !src.Any(x => t.AreaName.Equals(x.AreaName))).ToList();
+            if (removedAreaInfos.Any())
+                removedAreaInfos.ForEach(t => AreaInfos.Remove(t));
 
-            for (int index = 0; index < tableInfos.Count; index++)
+            var addedAreaInfos = src.Where(t => !AreaInfos.Any(x => t.AreaName.Equals(x.AreaName))).ToList();
+            if (addedAreaInfos.Any())
+                addedAreaInfos.ForEach(t => AreaInfos.Add(t.Clone()));
+
+            foreach (var areaInfo in AreaInfos)
             {
-                var tableInfo = tableInfos[index];
-                var item = CurrentTableInfos.FirstOrDefault(t => t.TableId == tableInfo.TableId);
-                if (item == null)
-                    CurrentTableInfos.Insert(index, tableInfo);
-                else
-                    item.CloneData(tableInfo);
+                areaInfo.TableInfos.Clear();
+                var newItem = src.FirstOrDefault(t => t.AreaName.Equals(areaInfo.AreaName));
+                if (newItem != null)
+                    newItem.TableInfos.ToList().ForEach(areaInfo.TableInfos.Add);
             }
-
-            var removedTables = CurrentTableInfos.Where(t => tableInfos.All(y => y.TableId != t.TableId)).ToList();
-            if (removedTables.Any())
-                removedTables.ForEach(t => CurrentTableInfos.Remove(t));
-
-            foreach (var table in CurrentTableInfos) { table.UpdateDinnerDuration(); }
         }
 
         #endregion

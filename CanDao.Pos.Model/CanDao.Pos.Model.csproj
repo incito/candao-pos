@@ -61,6 +61,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AreaInfo.cs" />
     <Compile Include="BackDishComboInfo.cs" />
     <Compile Include="BackDishInfo.cs" />
     <Compile Include="BankInfo.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Request\UpdateDishWeightRequest.cs" />
     <Compile Include="Request\UpdateInvoiceRequest.cs" />
     <Compile Include="Request\UsePreferentialRequest.cs" />
+    <Compile Include="Response\AreaInfoResponse.cs" />
     <Compile Include="Response\GetBusinessSimpleInfoResponse.cs" />
     <Compile Include="Response\GetDishGiftCouponInfoResponse.cs" />
     <Compile Include="Response\GetOrderInfoResponse.cs" />

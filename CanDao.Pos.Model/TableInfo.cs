@@ -3,6 +3,10 @@ using CanDao.Pos.Model.Enum;
 
 namespace CanDao.Pos.Model
 {
+    /// <summary>
+    /// 餐桌信息。
+    /// </summary>
+    [Serializable]
     public class TableInfo : BaseNotifyObject
     {
         /// <summary>
