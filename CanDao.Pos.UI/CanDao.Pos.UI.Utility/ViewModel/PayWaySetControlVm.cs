@@ -4,6 +4,7 @@ using System.Windows.Input;
 using CanDao.Pos.Common;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model;
+using CanDao.Pos.UI.Utility.View;
 
 namespace CanDao.Pos.UI.Utility.ViewModel
 {
@@ -47,6 +48,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
         }
 
+        public PayWaySetControl SetControl { get; set; }
+
         /// <summary>
         /// 操作命令。
         /// </summary>
@@ -89,6 +92,14 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     PayWays.Insert(index + 1, item);
                     SelectedPayWay = item;
                     break;
+                case "PreGroup":
+                    if (SetControl != null)
+                        SetControl.PayWaySelector.PreviousGroup();
+                    break;
+                case "NextGroup":
+                    if (SetControl != null)
+                        SetControl.PayWaySelector.NextGroup();
+                    break;
                 default:
                     return;
             }
@@ -102,6 +113,14 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <returns></returns>
         private bool CanOperMethod(object param)
         {
+            switch (param as string)
+            {
+                case "PreGroup":
+                    return SetControl.PayWaySelector.CanPreviousGroup;
+                case "NextGroup":
+                    return SetControl.PayWaySelector.CanNextGruop;
+            }
+
             if (SelectedPayWay == null)
                 return true;
 
