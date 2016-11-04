@@ -444,6 +444,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "CouponListNextGroup":
                     wnd.GsCouponList.NextGroup();
                     break;
+                case "PrePayWayGroup":
+                    wnd.PayWayGroup.PreviousGroup();
+                    break;
+                case "NextPayWayGroup":
+                    wnd.PayWayGroup.NextGroup();
+                    break;
             }
         }
 
@@ -469,6 +475,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return wnd.GsCouponList.CanPreviousGroup;
                 case "CouponListNextGroup":
                     return wnd.GsCouponList.CanNextGruop;
+                case "PrePayWayGroup":
+                    return wnd.PayWayGroup.CanPreviousGroup;
+                case "NextPayWayGroup":
+                    return wnd.PayWayGroup.CanNextGruop;
                 default:
                     return true;
             }
@@ -2049,7 +2059,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             InfoLog.Instance.I("完成会员登录流程。");
             _memberPayWay.IsMemberLogin = true;
-            ((TableOperWindow)OwnerWindow).TbMemAmount.Focus(); //这里是为了解决登录以后直接点回车，不触发结账的问题。
             GetTableDishInfoAsync();
             return new Tuple<bool, object>(true, null);
         }
