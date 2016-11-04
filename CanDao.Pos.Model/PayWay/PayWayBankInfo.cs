@@ -34,7 +34,7 @@ namespace CanDao.Pos.Model
         {
             var list = new List<BillPayInfo>();
             int bankId = SelectedBankInfo != null ? SelectedBankInfo.Id : 0;
-            list.Add(new BillPayInfo(Amount, ItemId, bankId.ToString()));
+            list.Add(new BillPayInfo(Amount, ItemId, Remark, bankId.ToString()));
             return list;
         }
     }

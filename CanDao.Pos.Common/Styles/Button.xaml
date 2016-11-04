@@ -4,7 +4,7 @@
         <ResourceDictionary Source="Brushes.xaml"/>
         <ResourceDictionary Source="Images.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style x:Key="BtnBaseStyle" TargetType="Button">
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Margin" Value="2"/>
@@ -43,11 +43,11 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="Button" BasedOn="{StaticResource BtnBaseStyle}">
-        
+
     </Style>
-    
+
     <Style x:Key="NoBorderBtnStyle" TargetType="Button">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -112,7 +112,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="NumBtnStyle" BasedOn="{StaticResource BtnBaseStyle}" TargetType="Button">
         <Setter Property="Focusable" Value="False"/>
     </Style>
@@ -366,7 +366,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="BtnClearStyle" BasedOn="{StaticResource BtnImgBaseStyle}" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
@@ -399,7 +399,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="BtnCloseStyle" TargetType="Button">
         <Setter Property="Width" Value="22"/>
         <Setter Property="Height" Value="22"/>
@@ -435,7 +435,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="Button" x:Key="ChangeShiftBtnStyle">
         <Setter Property="Template">
             <Setter.Value>
@@ -459,7 +459,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="Button" x:Key="EndWorkBtnStyle">
         <Setter Property="Template">
             <Setter.Value>
@@ -519,6 +519,77 @@
                                Source="{StaticResource CanDaoPosImageAppExit}" UseLayoutRounding="True"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnMoveUpStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Background="{TemplateBinding Background}">
+                        <Image x:Name="Img" Height="24"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Source="{StaticResource CanDaoPosImageMoveUp}" UseLayoutRounding="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="true ">
+                            <Setter TargetName="Img" Property="Source" Value="{StaticResource CanDaoPosImageMoveUpSelected}"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnMoveDownStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border SnapsToDevicePixels="True" ClipToBounds="True"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Background="{TemplateBinding Background}">
+                        <Image x:Name="Img" Height="24"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Source="{StaticResource CanDaoPosImageMoveDown}" UseLayoutRounding="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="true ">
+                            <Setter TargetName="Img" Property="Source" Value="{StaticResource CanDaoPosImageMoveDownSelected}"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnPayWayEnableStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFgOrange}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"/>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="true ">
+                            <Setter Property="Foreground" Value="{StaticResource CanDaoPosColorFg}"/>
+                        </DataTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Cursor" Value="Hand"/>
                         </Trigger>

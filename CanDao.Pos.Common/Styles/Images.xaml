@@ -34,5 +34,8 @@
     <BitmapImage x:Key="CanDaoPosImageClearPress" UriSource="/CanDao.Pos.Common;component/Images/Clear_Press.png"/>
     <BitmapImage x:Key="CanDaoPosImageAppExit" UriSource="/CanDao.Pos.Common;component/Images/AppExit.png"/>
     <BitmapImage x:Key="CanDaoPosImageMinWindow" UriSource="/CanDao.Pos.Common;component/Images/MinWindow.png"/>
-
+    <BitmapImage x:Key="CanDaoPosImageMoveDown" UriSource="/CanDao.Pos.Common;component/Images/MoveDown.png"/>
+    <BitmapImage x:Key="CanDaoPosImageMoveDownSelected" UriSource="/CanDao.Pos.Common;component/Images/MoveDown_Selected.png"/>
+    <BitmapImage x:Key="CanDaoPosImageMoveUp" UriSource="/CanDao.Pos.Common;component/Images/MoveUp.png"/>
+    <BitmapImage x:Key="CanDaoPosImageMoveUpSelected" UriSource="/CanDao.Pos.Common;component/Images/MoveUp_Selected.png"/>
 </ResourceDictionary>

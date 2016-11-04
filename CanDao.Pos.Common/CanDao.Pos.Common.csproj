@@ -483,6 +483,14 @@
     <Resource Include="Images\AppExit.png" />
     <Resource Include="Images\MinWindow.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MoveDown.png" />
+    <Resource Include="Images\MoveUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MoveDown_Selected.png" />
+    <Resource Include="Images\MoveUp_Selected.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -114,6 +114,23 @@ namespace CanDao.Pos.Model
         }
 
         /// <summary>
+        /// 是否被选中。
+        /// </summary>
+        private bool _isSelected;
+        /// <summary>
+        /// 是否被选中。
+        /// </summary>
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged("IsSelected");
+            }
+        }
+
+        /// <summary>
         /// 克隆数据。
         /// </summary>
         /// <returns></returns>

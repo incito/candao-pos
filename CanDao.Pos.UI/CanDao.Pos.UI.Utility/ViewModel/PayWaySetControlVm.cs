@@ -37,7 +37,12 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             get { return _selectedPayWay; }
             set
             {
+                if (_selectedPayWay != null)
+                    _selectedPayWay.IsSelected = false;
+
                 _selectedPayWay = value;
+                if (_selectedPayWay != null)
+                    _selectedPayWay.IsSelected = true;
                 RaisePropertyChanged("SelectedPayWay");
             }
         }
