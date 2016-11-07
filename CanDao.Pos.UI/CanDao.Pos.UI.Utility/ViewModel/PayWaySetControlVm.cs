@@ -56,6 +56,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         public ICommand OperCmd { get; private set; }
 
         /// <summary>
+        /// 分组命令。
+        /// </summary>
+        public ICommand GroupCmd { get; set; }
+
+        /// <summary>
         /// 操作命令的执行方法。
         /// </summary>
         /// <param name="arg"></param>
@@ -92,14 +97,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     PayWays.Insert(index + 1, item);
                     SelectedPayWay = item;
                     break;
-                case "PreGroup":
-                    if (SetControl != null)
-                        SetControl.PayWaySelector.PreviousGroup();
-                    break;
-                case "NextGroup":
-                    if (SetControl != null)
-                        SetControl.PayWaySelector.NextGroup();
-                    break;
                 default:
                     return;
             }
@@ -113,14 +110,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// <returns></returns>
         private bool CanOperMethod(object param)
         {
-            switch (param as string)
-            {
-                case "PreGroup":
-                    return SetControl.PayWaySelector.CanPreviousGroup;
-                case "NextGroup":
-                    return SetControl.PayWaySelector.CanNextGruop;
-            }
-
             if (SelectedPayWay == null)
                 return true;
 
@@ -132,11 +121,48 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         }
 
         /// <summary>
+        /// 分组命令的 执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        private void GroupMethod(object arg)
+        {
+            switch (arg as string)
+            {
+                case "PreGroup":
+                    if (SetControl != null)
+                        SetControl.PayWaySelector.PreviousGroup();
+                    break;
+                case "NextGroup":
+                    if (SetControl != null)
+                        SetControl.PayWaySelector.NextGroup();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 分组命令是否可用的判断你方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private bool CanGroupMethod(object arg)
+        {
+            switch (arg as string)
+            {
+                case "PreGroup":
+                    return SetControl.PayWaySelector.CanPreviousGroup;
+                case "NextGroup":
+                    return SetControl.PayWaySelector.CanNextGruop;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// 初始化命令。
         /// </summary>
         private void InitCommand()
         {
             OperCmd = CreateDelegateCommand(OperMethod, CanOperMethod);
+            GroupCmd = CreateDelegateCommand(GroupMethod, CanGroupMethod);
         }
 
         /// <summary>

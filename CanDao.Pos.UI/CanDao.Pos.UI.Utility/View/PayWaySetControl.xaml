@@ -79,7 +79,7 @@
         <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="5,0">
             <Button Style="{StaticResource BtnUpStyle}"
                     Height="60"
-                    Command="{Binding OperCmd}"
+                    Command="{Binding GroupCmd}"
                     CommandParameter="PreGroup"/>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"
@@ -90,7 +90,7 @@
             </StackPanel>
             <Button Style="{StaticResource BtnDownStyle}"
                     Height="60"
-                    Command="{Binding OperCmd}"
+                    Command="{Binding GroupCmd}"
                     CommandParameter="NextGroup"/>
         </StackPanel>
     </Grid>
