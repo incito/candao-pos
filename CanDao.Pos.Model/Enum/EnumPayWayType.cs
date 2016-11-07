@@ -7,8 +7,8 @@
     {
         Cash = 0,
         Bank = 1,
-        OnAccount = 5,
         Member = 8,
+        OnAccount = 13,
         WeChat = 17,
         Other,
     }

@@ -637,7 +637,7 @@ namespace CanDao.Pos.ServiceImpl
                 case 1:
                     item.PayWayType = EnumPayWayType.Bank;
                     break;
-                case 5:
+                case 13:
                     item.PayWayType = EnumPayWayType.OnAccount;
                     break;
                 case 8:
