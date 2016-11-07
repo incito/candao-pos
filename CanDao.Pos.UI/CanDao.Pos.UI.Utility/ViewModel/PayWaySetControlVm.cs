@@ -204,7 +204,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             }
 
             NotifyDialog.Notify("修改结算方式成功。");
-            Globals.PayWayInfos = PayWays.ToList();
+            Globals.PayWayInfos = PayWays.Select(t => t.CloneObject()).ToList();
+            Globals.PayWayInfos.ForEach(t => t.IsSelected = false);
         }
     }
 }
