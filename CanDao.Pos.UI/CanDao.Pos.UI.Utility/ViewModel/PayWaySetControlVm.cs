@@ -173,6 +173,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             PayWays.Clear();
             if (Globals.PayWayInfos != null)
                 Globals.PayWayInfos.ForEach(t => PayWays.Add(t.CloneObject()));
+            SelectedPayWay = PayWays.FirstOrDefault();
         }
 
         /// <summary>
