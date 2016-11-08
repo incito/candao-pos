@@ -122,6 +122,7 @@
     <Compile Include="Request\AntiSettlementOrderRequest.cs" />
     <Compile Include="Request\BackAllDishRequest.cs" />
     <Compile Include="Request\BackFishPotDishRequest.cs" />
+    <Compile Include="Request\CanDaoMemberUnVoidSaleRequest.cs" />
     <Compile Include="Request\CanDaoMemberVoidSaleRequest.cs" />
     <Compile Include="Request\ClearTableRequest.cs" />
     <Compile Include="Request\CanDaoMemberBaseRequest.cs" />

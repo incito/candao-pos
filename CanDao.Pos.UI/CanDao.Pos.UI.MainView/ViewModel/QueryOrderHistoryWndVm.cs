@@ -252,7 +252,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             var helper = new AntiSettlementHelper();
             var afterAntiSettlementWf = new WorkFlowInfo(null, AfterAntiSettlement);
-            helper.AntiSettlementAsync(SelectedOrder.OrderId, SelectedOrder.MemberNo, OwnerWindow, afterAntiSettlementWf);
+            helper.AntiSettlementAsync(SelectedOrder.OrderId, SelectedOrder.MemberNo, afterAntiSettlementWf);
         }
 
         /// <summary>

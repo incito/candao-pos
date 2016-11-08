@@ -209,24 +209,45 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        public string VoidSale(CanDaoMemberVoidSaleRequest request)
+        public Tuple<string, string> VoidSale(CanDaoMemberVoidSaleRequest request)
         {
             var addr = ServiceAddrCache.GetServiceAddr("VoidSaleCanDao");
             if (string.IsNullOrEmpty(addr))
-                return "餐道会员消费反结算地址为空。";
+                return new Tuple<string, string>("餐道会员消费反结算地址为空。", null);
 
             try
             {
                 var response = HttpHelper.HttpPost<CanDaoMemberSaleResponse>(addr, request);
                 if (!response.IsSuccess)
-                    return DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员消费反结算失败。");
+                    return new Tuple<string, string>(DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员消费反结算失败。"), null);
+
+                return new Tuple<string, string>(null, response.TraceCode);
+            }
+            catch (Exception exp)
+            {
+                ErrLog.Instance.E("会员消费反结算时异常。", exp);
+                return new Tuple<string, string>(string.Format("会员消费反结算时异常：{0}", exp.MyMessage()), null);
+            }
+        }
+
+        public string UnVoidSale(CanDaoMemberUnVoidSaleRequest request)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("UnVoidSaleCanDao");
+            if (string.IsNullOrEmpty(addr))
+                return "餐道会员消费取消反结算地址为空。";
+
+            try
+            {
+                var response = HttpHelper.HttpPost<CanDaoMemberBaseResponse>(addr, request);
+                if (!response.IsSuccess)
+                    return DataHelper.GetNoneNullValueByOrder(response.RetInfo, "会员消费取消反结算失败。");
 
                 return null;
             }
             catch (Exception exp)
             {
-                ErrLog.Instance.E("会员消费反结算时异常。", exp);
-                return string.Format("会员消费反结算时异常：{0}", exp.MyMessage());
+                ErrLog.Instance.E("会员消费取消反结算时异常。", exp);
+                return string.Format("会员消费取消反结算时异常：{0}", exp.MyMessage());
             }
         }
 

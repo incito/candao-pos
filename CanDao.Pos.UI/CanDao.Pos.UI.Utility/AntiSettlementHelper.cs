@@ -28,9 +28,19 @@ namespace CanDao.Pos.UI.Utility
         private string _orderId;
 
         /// <summary>
-        /// 所属窗体。
+        /// 会员卡号或手机号。
         /// </summary>
-        private Window _ownerWindow;
+        private string _cardNo;
+
+        /// <summary>
+        /// 交易号。
+        /// </summary>
+        private string _traceCode;
+
+        /// <summary>
+        /// 反结算交易号。
+        /// </summary>
+        private string _antiSettlementTraceCode;
 
         #endregion
 
@@ -41,12 +51,10 @@ namespace CanDao.Pos.UI.Utility
         /// </summary>
         /// <param name="orderId">订单号。</param>
         /// <param name="memberNo">会员号。</param>
-        /// <param name="ownerWnd">所属窗体。显示弹出窗口时设置父窗口用。</param>
         /// <param name="afterAntiSettlementWf">反结算执行完成后执行的工作流。</param>
-        public void AntiSettlementAsync(string orderId, string memberNo, Window ownerWnd, WorkFlowInfo afterAntiSettlementWf)
+        public void AntiSettlementAsync(string orderId, string memberNo, WorkFlowInfo afterAntiSettlementWf)
         {
             _orderId = orderId;
-            _ownerWindow = ownerWnd;
 
             var checkWf = new WorkFlowInfo(CheckOrderCanResettlementProcess, CheckOrderCanResettlementComplete);//检测订单是否允许反结工作流。
             var currentWf = checkWf;//当前工作流。
@@ -54,26 +62,29 @@ namespace CanDao.Pos.UI.Utility
             {
                 if (Globals.IsCanDaoMember)
                 {
-                    var canDaoMemberResettlementWf = new WorkFlowInfo(CanDaoMemberResettlementProcess, MemberResettlementComplete);//餐道会员反结算工作流。
+                    var canDaoMemberResettlementWf = GenerateCanDaoMemberResettlememnntWf();//餐道会员反结算工作流。
                     checkWf.NextWorkFlowInfo = canDaoMemberResettlementWf;
                     currentWf = canDaoMemberResettlementWf;
                 }
                 else if (Globals.IsYazuoMember)
                 {
-                    var yaZuoMemberResettlementWf = new WorkFlowInfo(YaZuoMemberResettlementProcess, MemberResettlementComplete);//雅座会员反结算工作流。
+                    var yaZuoMemberResettlementWf = GenerateYaZuoResettlementWf();//雅座会员反结算工作流。
                     checkWf.NextWorkFlowInfo = yaZuoMemberResettlementWf;
                     currentWf = yaZuoMemberResettlementWf;
                 }
             }
 
             var antiSettlementWf = new WorkFlowInfo(AntiSettlementProcess, AntiSettlementComplete, "账单反结算中...") { NextWorkFlowInfo = afterAntiSettlementWf };
+            if (Globals.IsCanDaoMember)
+                antiSettlementWf.ErrorWorkFlowInfo = GenerateCanDaoMemberUnResettlementWf();
+
             currentWf.NextWorkFlowInfo = antiSettlementWf;
 
             WorkFlowService.Start(null, checkWf);
         }
 
         /// <summary>
-        /// 设置获取反结算工作流（自动反结算）
+        /// 获取反结算工作流（自动反结算）
         /// </summary>
         /// <param name="orderId"></param>
         /// <param name="memberNo"></param>
@@ -81,32 +92,7 @@ namespace CanDao.Pos.UI.Utility
         public WorkFlowInfo GetAntiSettlement(string orderId, string memberNo, Window ownerWnd)
         {
             _orderId = orderId;
-            _ownerWindow = ownerWnd;
-
-            InfoLog.Instance.I("开始检测账单是否允许反结算...");
-            var checkWf = new WorkFlowInfo(CheckOrderCanResettlementProcess, OrderCanResettlementComplete);//检测订单是否允许反结工作流。
-            var currentWf = checkWf;//当前工作流。
-            if (!string.IsNullOrEmpty(memberNo))
-            {
-                if (Globals.IsCanDaoMember)
-                {
-                    var canDaoMemberResettlementWf = new WorkFlowInfo(CanDaoMemberResettlementProcess, MemberResettlementComplete);//餐道会员反结算工作流。
-                    currentWf.NextWorkFlowInfo = canDaoMemberResettlementWf;
-                    currentWf = canDaoMemberResettlementWf;
-                }
-                else if (Globals.IsYazuoMember)
-                {
-                    var yaZuoMemberResettlementWf = new WorkFlowInfo(YaZuoMemberResettlementProcess, MemberResettlementComplete);//雅座会员反结算工作流。
-                    currentWf.NextWorkFlowInfo = yaZuoMemberResettlementWf;
-                    currentWf = yaZuoMemberResettlementWf;
-                }
-            }
-
-            var antiSettlementWf = new WorkFlowInfo(AutoAntiSettlementProcess, AntiSettlementComplete, "账单反结算中...");
-
-            currentWf.NextWorkFlowInfo = antiSettlementWf;
-
-            return checkWf;
+            return new WorkFlowInfo(AutoAntiSettlementProcess1, AntiSettlementComplete, "账单反结算中...");
         }
 
         /// <summary>
@@ -152,8 +138,8 @@ namespace CanDao.Pos.UI.Utility
             if (!string.IsNullOrEmpty(result))
             {
                 ErrLog.Instance.E(result);
-                MessageDialog.Warning(result, _ownerWindow);
-                return null;
+                MessageDialog.Warning(result);
+                return new Tuple<bool, object>(false, null);
             }
 
             InfoLog.Instance.I("反结算账单：{0}完成。", _orderId);
@@ -163,6 +149,23 @@ namespace CanDao.Pos.UI.Utility
         #endregion
 
         #region Private Methods
+
+        private object AutoAntiSettlementProcess1(object arg)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            if (service == null)
+                return "创建IOrderService服务失败。";
+
+            InfoLog.Instance.I("开始检测账单是否允许反结算...");
+            var result = service.CheckCanAntiSettlement(_orderId, Globals.UserInfo.UserName);
+            if (!string.IsNullOrEmpty(result))
+                return string.Format("检测账单是否允许反结算失败：{0}", result);
+
+            InfoLog.Instance.I("结束检测账单是否允许反结算。");
+            InfoLog.Instance.I("开始自动反结算账单：{0}...", _orderId);
+            return service.AntiSettlementOrder(Globals.UserInfo.UserName, _orderId, "会员结算失败，系统自动反结");
+        }
+
 
         private object CheckOrderCanResettlementProcess(object arg)
         {
@@ -181,14 +184,14 @@ namespace CanDao.Pos.UI.Utility
             if (!string.IsNullOrEmpty(result))
             {
                 ErrLog.Instance.E("检测账单是否允许反结算失败：{0}", result);
-                MessageDialog.Warning(result, _ownerWindow);
+                MessageDialog.Warning(result);
                 return null;
             }
 
             InfoLog.Instance.I("结束检测账单是否允许反结算。");
             InfoLog.Instance.I("弹出选择反结算原因选择窗口，选择反结算原因...");
             var reasonSelectorWnd = new AntiSettlementReasonSelectorWndVm();
-            if (!WindowHelper.ShowDialog(reasonSelectorWnd, _ownerWindow))
+            if (!WindowHelper.ShowDialog(reasonSelectorWnd))
             {
                 InfoLog.Instance.I("取消选择反结算原因，退出反结算流程。");
                 return null;
@@ -197,7 +200,7 @@ namespace CanDao.Pos.UI.Utility
             _antiSettlementReason = reasonSelectorWnd.SelectedReason;
             InfoLog.Instance.I("结束选择反结算原因：{0}", reasonSelectorWnd.SelectedReason);
             InfoLog.Instance.I("开始反结算授权...");
-            if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.AntiSettlement), _ownerWindow))
+            if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.AntiSettlement)))
             {
                 InfoLog.Instance.I("反结算授权失败，退出反结算流程。");
                 return null;
@@ -208,23 +211,30 @@ namespace CanDao.Pos.UI.Utility
         }
 
         /// <summary>
-        /// 不需要弹出验证授权
+        /// 生成餐道会员反结算工作流。
         /// </summary>
-        /// <param name="arg"></param>
         /// <returns></returns>
-        private Tuple<bool, object> OrderCanResettlementComplete(object arg)
+        private WorkFlowInfo GenerateCanDaoMemberResettlememnntWf()
         {
-            var result = arg as string;
-            if (!string.IsNullOrEmpty(result))
-            {
-                ErrLog.Instance.E("检测账单是否允许反结算失败：{0}", result);
-                MessageDialog.Warning(result, _ownerWindow);
-                return null;
-            }
+            return new WorkFlowInfo(CanDaoMemberResettlementProcess, MemberResettlementComplete);
+        }
 
-            InfoLog.Instance.I("结束检测账单是否允许反结算。");
+        /// <summary>
+        /// 生产雅座会员反结算工作流。
+        /// </summary>
+        /// <returns></returns>
+        private WorkFlowInfo GenerateYaZuoResettlementWf()
+        {
+            return new WorkFlowInfo(YaZuoMemberResettlementProcess, MemberResettlementComplete);
+        }
 
-            return new Tuple<bool, object>(true, _orderId);
+        /// <summary>
+        /// 生成会员取消反结算工作流。
+        /// </summary>
+        /// <returns></returns>
+        private WorkFlowInfo GenerateCanDaoMemberUnResettlementWf()
+        {
+            return new WorkFlowInfo(CanDaoMemberUnResettlementProcess, CanDaoMemberUnResettlementComplete, "取消会员消费反结算中...");
         }
 
         /// <summary>
@@ -266,14 +276,20 @@ namespace CanDao.Pos.UI.Utility
             }
 
             InfoLog.Instance.I("开始会员消费反结算...");
+            _cardNo = result.Item2.cardno;
+            _traceCode = result.Item2.serial;
             var voidSaleRequest = new CanDaoMemberVoidSaleRequest(_orderId)
             {
                 branch_id = Globals.BranchInfo.BranchId,
-                cardno = result.Item2.cardno,
-                TraceCode = result.Item2.serial
+                cardno = _cardNo,
+                TraceCode = _traceCode,
             };
 
-            return memberService.VoidSale(voidSaleRequest);
+            var voidSaleResult = memberService.VoidSale(voidSaleRequest);
+            if (string.IsNullOrEmpty(voidSaleResult.Item1))
+                _antiSettlementTraceCode = voidSaleResult.Item2;
+
+            return voidSaleResult.Item1;
         }
 
         /// <summary>
@@ -309,6 +325,51 @@ namespace CanDao.Pos.UI.Utility
             }
 
             InfoLog.Instance.I("会员消费反结算完成。");
+            return new Tuple<bool, object>(true, null);
+        }
+
+        /// <summary>
+        /// 取消会员消费反结算的执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private object CanDaoMemberUnResettlementProcess(object arg)
+        {
+            InfoLog.Instance.I("开始取消订单：\"{0}\"的反结算信息...", _orderId);
+            var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+            if (service == null)
+            {
+                var msg = "创建IMemberService服务失败。";
+                ErrLog.Instance.E(msg);
+                return msg;
+            }
+
+            var request = new CanDaoMemberUnVoidSaleRequest
+            {
+                cardno = _cardNo,
+                deal_no = _antiSettlementTraceCode,
+                tracecode = _traceCode,
+            };
+            return service.UnVoidSale(request);
+        }
+
+        /// <summary>
+        /// 会员消费取消反结算执行完成。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private Tuple<bool, object> CanDaoMemberUnResettlementComplete(object arg)
+        {
+            var result = (string)arg;
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                var errMsg = string.Format("会员消费取消反结算失败：{0}", result);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
+                return new Tuple<bool, object>(false, null);
+            }
+
+            InfoLog.Instance.I("会员消费取消反结算完成。");
             return new Tuple<bool, object>(true, null);
         }
 
