@@ -1436,7 +1436,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 GetTableDishInfoAsync();
                 return null;
             });
-            helper.AntiSettlementAsync(Data.OrderId, Data.MemberNo, OwnerWindow, afterAntiSettlementWf);
+            helper.AntiSettlementAsync(Data.OrderId, Data.MemberNo, afterAntiSettlementWf);
         }
 
         /// <summary>

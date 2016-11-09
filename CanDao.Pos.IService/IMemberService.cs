@@ -79,8 +79,15 @@ namespace CanDao.Pos.IService
         /// 餐道会员反结算。
         /// </summary>
         /// <param name="request">反结算请求类。</param>
-        /// <returns>反结算成功返回null，否则返回错误信息。</returns>
-        string VoidSale(CanDaoMemberVoidSaleRequest request);
+        /// <returns>Item1当遇到错误时为错误信息，否则为null。Item2为会员反结算返回类。</returns>
+        Tuple<string, string> VoidSale(CanDaoMemberVoidSaleRequest request);
+
+        /// <summary>
+        /// 取消餐道会员反结算。
+        /// </summary>
+        /// <param name="request">取消反结算的请求参数。</param>
+        /// <returns>取消反结算成功返回null，否则返回错误信息。</returns>
+        string UnVoidSale(CanDaoMemberUnVoidSaleRequest request);
 
         /// <summary>
         /// 会员登录。
