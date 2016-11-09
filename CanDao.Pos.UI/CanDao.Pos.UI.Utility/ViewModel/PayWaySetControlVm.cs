@@ -190,7 +190,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (service == null)
                 return "创建IRestaurantService服务失败。";
 
-            return service.SavePayWayInfo(PayWays.ToList());
+            var temp = PayWays.ToList();
+            return service.SavePayWayInfo(temp);
         }
 
         private void SavePayWaySettingComplete(object arg)

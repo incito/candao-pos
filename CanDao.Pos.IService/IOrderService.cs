@@ -245,10 +245,11 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 获取餐台账单明细
         /// </summary>
-        /// <param name="orderId"></param>
-        /// <param name="tableNo"></param>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="tableNo">餐台号。</param>
+        /// <param name="keepOdd">是否保留零头。</param>
         /// <returns></returns>
-        Tuple<string, TableFullInfo> GetOrderInfo(string orderId, string tableNo, string itemid);
+        Tuple<string, TableFullInfo> GetOrderInfo(string orderId, string tableNo, int keepOdd);
 
         /// <summary>
         /// 使用优惠券

@@ -462,7 +462,7 @@ namespace CanDao.Pos.Common.Controls
         private void TempOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
             GroupCount = GetGruopCount();
-            SelectedGroupIndex = 0;
+            SelectedGroupIndex = SelectedGroupIndex;
             GroupedItemsSource = GetGroupItemsSource(SelectedGroupIndex);
         }
 

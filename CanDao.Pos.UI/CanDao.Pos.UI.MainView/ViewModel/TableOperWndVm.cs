@@ -1124,7 +1124,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            var result = service.GetOrderInfo(Data.OrderId, "", ((int)_isKeepOdd).ToString());
+            var result = service.GetOrderInfo(Data.OrderId, "", ((int)_isKeepOdd));
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 ErrLog.Instance.E("获取餐台信息错误：{0}。", result.Item1);
@@ -2472,7 +2472,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var result = service.GetOrderInfo(_tableInfo.OrderId, "", ((int)_isKeepOdd).ToString());
+            var result = service.GetOrderInfo(_tableInfo.OrderId, "", ((int)_isKeepOdd));
             if (!string.IsNullOrEmpty(result.Item1))
                 return string.Format("获取餐台明细失败：{0}", result.Item1);
 
