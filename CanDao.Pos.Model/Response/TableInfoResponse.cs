@@ -1,5 +1,8 @@
 ﻿namespace CanDao.Pos.Model.Response
 {
+    /// <summary>
+    /// 餐台信息返回类。
+    /// </summary>
     public class TableInfoResponse
     {
         public string position { get; set; }

@@ -18,6 +18,17 @@ namespace CanDao.Pos.ServiceImpl
 
         private const string DateTimeFormat2 = "yyyy-MM-dd HH:mm:ss";
 
+        internal static AreaInfo ToAreaInfo(AreaInfoResponse response)
+        {
+            var areaInfo = new AreaInfo();
+            areaInfo.AreaName = response.areaname;
+            areaInfo.SortIndex = response.areaSort ?? 0;
+            if (response.tables != null)
+                response.tables.Select(ToTableInfo).ToList().ForEach(areaInfo.TableInfos.Add);
+
+            return areaInfo;
+        }
+
         internal static TableInfo ToTableInfo(TableInfoResponse response)
         {
             return new TableInfo

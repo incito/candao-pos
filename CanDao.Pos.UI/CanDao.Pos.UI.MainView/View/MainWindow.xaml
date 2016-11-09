@@ -142,8 +142,8 @@
                     Style="{StaticResource BtnRightStyle}"
                     Command="{Binding GroupCmd}" CommandParameter="NextAreaGroup"/>
             <controls:GroupSelector x:Name="GsArea"
-                                    ItemsSource="{Binding CurrentTableAreas}"
-                                    SelectedItem="{Binding SelectedTableArea,UpdateSourceTrigger=PropertyChanged,  Mode=TwoWay}"
+                                    ItemsSource="{Binding AreaInfos}"
+                                    SelectedItem="{Binding SelectedAreaInfo,UpdateSourceTrigger=PropertyChanged,  Mode=TwoWay}"
                                     ItemCountEachGroup="10"
                                     VerticalAlignment="Center">
                 <controls:GroupSelector.ItemsPanel>
@@ -159,7 +159,7 @@
                                 MinWidth="70"
                                 TextBlock.FontSize="18"
                                 VerticalAlignment="Center">
-                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding AreaName}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </DataTemplate>
                 </controls:GroupSelector.ItemTemplate>
@@ -168,7 +168,7 @@
 
         <controls:GroupSelector x:Name="GsTables"
                                 Grid.Row="1"
-                                ItemsSource="{Binding CurrentTableInfos}" ItemCountEachGroup="56">
+                                ItemsSource="{Binding TableInfos}" ItemCountEachGroup="56">
             <controls:GroupSelector.Template>
                 <ControlTemplate TargetType="controls:GroupSelector">
                     <ItemsControl x:Name="PART_Selector" 

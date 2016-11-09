@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -430,15 +431,18 @@ namespace CanDao.Pos.Client
                 InfoLog.Instance.I("上次未结业，开始强制结业...");
                 var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
                 InfoLog.Instance.I("开始获取所有餐桌信息...");
-                var allTableResult = service.GetAllTableInfoes();
-                if (!string.IsNullOrEmpty(allTableResult.Item1))
+                var allAreaResult = service.GetAllAreaInfoes();
+                if (!string.IsNullOrEmpty(allAreaResult.Item1))
                 {
-                    ErrLog.Instance.E("获取所有餐桌信息失败。" + allTableResult.Item1);
-                    MessageDialog.Warning(allTableResult.Item1);
+                    ErrLog.Instance.E("获取所有餐桌分区信息失败。" + allAreaResult.Item1);
+                    MessageDialog.Warning(allAreaResult.Item1);
                     Shutdown();
                 }
 
-                if (allTableResult.Item2.Any(t => t.TableStatus == EnumTableStatus.Dinner)) //还有就餐的餐台，就让收银员登录，结账。
+                var tableInfos = new List<TableInfo>();
+                allAreaResult.Item2.ForEach(t => tableInfos.AddRange(t.TableInfos));
+
+                if (tableInfos.Any(t => t.TableStatus == EnumTableStatus.Dinner)) //还有就餐的餐台，就让收银员登录，结账。
                 {
                     if (_splashWnd != null)
                         _splashWnd.Close();
