@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using CanDao.Pos.Common;
@@ -18,7 +20,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             InitCommand();
 
             PayWays = new ObservableCollection<PayWayInfo>();
-            InitPayWayInfos();
+            TaskService.Start(null, GetPayWayInfoProcess, GetPayWayInfoComplete, null);
         }
 
         /// <summary>
@@ -166,17 +168,6 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         }
 
         /// <summary>
-        /// 初始化支付方式集合。
-        /// </summary>
-        private void InitPayWayInfos()
-        {
-            PayWays.Clear();
-            if (Globals.PayWayInfos != null)
-                Globals.PayWayInfos.ForEach(t => PayWays.Add(t.CloneObject()));
-            SelectedPayWay = PayWays.FirstOrDefault();
-        }
-
-        /// <summary>
         /// 异步保存结算方式设置。
         /// </summary>
         private void SavePayWaySettingAsync()
@@ -184,6 +175,11 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             TaskService.Start(null, SavePayWaySettingProcess, SavePayWaySettingComplete, "保存结算方式设置中...");
         }
 
+        /// <summary>
+        /// 保存结算设置执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         private object SavePayWaySettingProcess(object arg)
         {
             var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
@@ -194,6 +190,10 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             return service.SavePayWayInfo(temp);
         }
 
+        /// <summary>
+        /// 保存结算设置执行完成。
+        /// </summary>
+        /// <param name="arg"></param>
         private void SavePayWaySettingComplete(object arg)
         {
             var result = arg as string;
@@ -201,13 +201,47 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             {
                 ErrLog.Instance.E(result);
                 MessageDialog.Warning(result);
-                InitPayWayInfos();
                 return;
             }
 
             NotifyDialog.Notify("修改结算方式成功。");
-            Globals.PayWayInfos = PayWays.Select(t => t.CloneObject()).ToList();
-            Globals.PayWayInfos.ForEach(t => t.IsSelected = false);
         }
+
+
+        /// <summary>
+        /// 获取结算方式执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object GetPayWayInfoProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+                return new Tuple<string, List<PayWayInfo>>("创建IRestaurantService服务失败。", null);
+
+            return service.GetPayWayInfo();
+        }
+
+        /// <summary>
+        /// 获取结算方式完成时执行。
+        /// </summary>
+        /// <param name="obj"></param>
+        private void GetPayWayInfoComplete(object obj)
+        {
+            var result = (Tuple<string, List<PayWayInfo>>)obj;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                var errMsg = string.Format("获取结算方式失败：{0}", result.Item1);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
+            }
+
+            if (result.Item2 != null)
+            {
+                result.Item2.ForEach(PayWays.Add);
+                SelectedPayWay = PayWays.FirstOrDefault();
+            }
+        }
+
     }
 }

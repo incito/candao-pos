@@ -105,7 +105,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             Data = new TableFullInfo();
             Data.CloneDataFromTableInfo(tableInfo);
 
-            InitPayWayInfos();
+            PayWayInfos = new ObservableCollection<PayWayInfo>();
+            TaskService.Start(null, GetPayWayInfoProcess, GetPayWayInfoComplete, null);
         }
 
         #endregion
@@ -1772,55 +1773,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             return list;
         }
 
-        /// <summary>
-        /// 初始化结算方式集合。
-        /// </summary>
-        private void InitPayWayInfos()
-        {
-            PayWayInfos = new ObservableCollection<PayWayInfo>();
-            if (Globals.PayWayInfos != null)
-            {
-                foreach (var info in Globals.PayWayInfos)
-                {
-                    var temp = info.CloneObject();
-                    switch (info.PayWayType)
-                    {
-                        case EnumPayWayType.Cash:
-                            var cashPayWay = new PayWayCashInfo();
-                            cashPayWay.CloneData(info);
-                            temp = cashPayWay;
-                            _cashPayWay = cashPayWay;
-                            break;
-                        case EnumPayWayType.Bank:
-                            var bankPayWay = new PayWayBankInfo();
-                            bankPayWay.CloneData(info);
-                            bankPayWay.SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
-                            temp = bankPayWay;
-                            _bankPayWay = bankPayWay;
-                            break;
-                        case EnumPayWayType.Member:
-                            var memberPayWay = new PayWayMemberInfo();
-                            memberPayWay.CloneData(info);
-                            temp = memberPayWay;
-                            _memberPayWay = memberPayWay;
-                            break;
-                        case EnumPayWayType.OnAccount:
-                            var onCmpAccPayWay = new PayWayOnCmpAccount();
-                            onCmpAccPayWay.CloneData(info);
-                            temp = onCmpAccPayWay;
-                            _onCmpAccountPayWay = onCmpAccPayWay;
-                            break;
-                    }
-
-                    if (temp.IsVisible)
-                    {
-                        temp.AmountChanged += AmountChanged;
-                        PayWayInfos.Add(temp);
-                    }
-                }
-            }
-        }
-
         private void AmountChanged(object sender, AmountChangedEventArgs eventArgs)
         {
             _isUserInputCash = eventArgs.IsCashAmountChanged;
@@ -2601,6 +2553,77 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             NotifyDialog.Notify("取消账单完成。", OwnerWindow.Owner);
             CloseWindow(true);
             return null;
+        }
+
+        /// <summary>
+        /// 获取结算方式执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object GetPayWayInfoProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+                return new Tuple<string, List<PayWayInfo>>("创建IRestaurantService服务失败。", null);
+
+            return service.GetPayWayInfo();
+        }
+
+        /// <summary>
+        /// 获取结算方式完成时执行。
+        /// </summary>
+        /// <param name="obj"></param>
+        private void GetPayWayInfoComplete(object obj)
+        {
+            var result = (Tuple<string, List<PayWayInfo>>)obj;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                var errMsg = string.Format("获取结算方式失败：{0}", result.Item1);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
+            }
+
+            if (result.Item2 != null)
+            {
+                foreach (var info in result.Item2)
+                {
+                    var temp = info.CloneObject();
+                    switch (info.PayWayType)
+                    {
+                        case EnumPayWayType.Cash:
+                            var cashPayWay = new PayWayCashInfo();
+                            cashPayWay.CloneData(info);
+                            temp = cashPayWay;
+                            _cashPayWay = cashPayWay;
+                            break;
+                        case EnumPayWayType.Bank:
+                            var bankPayWay = new PayWayBankInfo();
+                            bankPayWay.CloneData(info);
+                            bankPayWay.SelectedBankInfo = Globals.BankInfos != null ? Globals.BankInfos.FirstOrDefault(t => t.Id == 0) : null;
+                            temp = bankPayWay;
+                            _bankPayWay = bankPayWay;
+                            break;
+                        case EnumPayWayType.Member:
+                            var memberPayWay = new PayWayMemberInfo();
+                            memberPayWay.CloneData(info);
+                            temp = memberPayWay;
+                            _memberPayWay = memberPayWay;
+                            break;
+                        case EnumPayWayType.OnAccount:
+                            var onCmpAccPayWay = new PayWayOnCmpAccount();
+                            onCmpAccPayWay.CloneData(info);
+                            temp = onCmpAccPayWay;
+                            _onCmpAccountPayWay = onCmpAccPayWay;
+                            break;
+                    }
+
+                    if (temp.IsVisible)
+                    {
+                        temp.AmountChanged += AmountChanged;
+                        PayWayInfos.Add(temp);
+                    }
+                }
+            }
         }
 
         #endregion
