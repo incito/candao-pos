@@ -59,11 +59,6 @@ namespace CanDao.Pos.Common
         public static List<BankInfo> BankInfos { get; set; }
 
         /// <summary>
-        /// 挂账单位集合。
-        /// </summary>
-        public static List<OnCompanyAccountInfo> OnCompanyInfos { get; set; }
-
-        /// <summary>
         /// 分店信息。
         /// </summary>
         public static BranchInfo BranchInfo { get; set; }

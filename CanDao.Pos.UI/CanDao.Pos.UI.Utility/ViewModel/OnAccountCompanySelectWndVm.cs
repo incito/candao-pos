@@ -15,6 +15,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
     /// </summary>
     public class OnAccountCompanySelectWndVm : NormalWindowViewModel<OnAccountCompanySelectWindow>
     {
+        private List<OnCompanyAccountInfo> _srcCmpInfos;
+
         public OnAccountCompanySelectWndVm()
         {
             CompanyInfos = new ObservableCollection<OnCompanyAccountInfo>();
@@ -71,10 +73,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
 
         protected override void OnWindowLoaded(object param)
         {
-            if (Globals.OnCompanyInfos == null || !Globals.OnCompanyInfos.Any())
-                TaskService.Start(null, GetAllOnAccountCompanyProcess, GetAllOnAccountCompanyComplete, "获取挂账单位...");
-            else
-                FilterCompany();
+            TaskService.Start(null, GetAllOnAccountCompanyProcess, GetAllOnAccountCompanyComplete, "获取挂账单位...");
         }
 
         protected override bool CanConfirm(object param)
@@ -87,7 +86,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             switch (param as string)
             {
                 case "PreGroup":
-                    ((OnAccountCompanySelectWindow) OwnerWindow).GsCpys.PreviousGroup();
+                    ((OnAccountCompanySelectWindow)OwnerWindow).GsCpys.PreviousGroup();
                     break;
                 case "NextGroup":
                     ((OnAccountCompanySelectWindow)OwnerWindow).GsCpys.NextGroup();
@@ -137,7 +136,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return;
             }
 
-            Globals.OnCompanyInfos = result.Item2;
+            _srcCmpInfos = result.Item2;
             FilterCompany();
         }
 
@@ -146,14 +145,14 @@ namespace CanDao.Pos.UI.Utility.ViewModel
         /// </summary>
         private void FilterCompany()
         {
-            if (Globals.OnCompanyInfos == null)
+            if (_srcCmpInfos == null)
                 return;
 
             CompanyInfos.Clear();
             if (string.IsNullOrEmpty(FilterLetter))
-                Globals.OnCompanyInfos.ForEach(CompanyInfos.Add);
+                _srcCmpInfos.ForEach(CompanyInfos.Add);
             else
-                Globals.OnCompanyInfos.Where(t => t.NameFirstLetter.ToLower().Contains(FilterLetter.ToLower())).ToList().ForEach(CompanyInfos.Add);
+                _srcCmpInfos.Where(t => t.NameFirstLetter.ToLower().Contains(FilterLetter.ToLower())).ToList().ForEach(CompanyInfos.Add);
         }
     }
 }
