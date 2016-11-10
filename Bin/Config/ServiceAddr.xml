@@ -102,7 +102,7 @@
   
   <!--云接口-->
   <CloudServerApi>
-    <QueryCanDao Addr="/chain-newspicyway/memberManager/findByParams.json"/><!--餐道会员查询-->
+    <QueryCanDao Addr="/newspicyway/memberManager/findByParams.json"/><!--餐道会员查询-->
     <StorageCanDao Addr="/newspicyway/deal/StoreCardToNewPos.json"/><!--餐道会员储值-->
     <ModifyPwdCanDao Addr="/newspicyway/memberManager/MemberEdit.json"/><!--修改密码-->
     <SendVerifyCode Addr="/newspicyway/memberManager/sendAccountByMobile.json"/><!--发送验证码-->
@@ -110,9 +110,9 @@
     <RegistCanDao Addr="/newspicyway/memberManager/save.json"/><!--餐道会员会员注册-->
     <ReportLossCanDao Addr="/newspicyway/deal/CardLose.json"/><!--餐道会员会员挂失-->
     <CancelCanDao Addr="/newspicyway/memberManager/delete.json"/><!--餐道会员会员注销-->
-    <SaleCanDao Addr="/chain-newspicyway/deal/MemberSale.json"/><!--餐道会员会员消费-->
-    <VoidSaleCanDao Addr="/chain-newspicyway/deal/VoidSale.json"/><!--餐道会员取消消费-->
-    <UnVoidSaleCanDao Addr="/chain-newspicyway/deal/UnVoidSale.json"/><!--餐道会员取消消费-->
+    <SaleCanDao Addr="/newspicyway/deal/MemberSale.json"/><!--餐道会员会员消费-->
+    <VoidSaleCanDao Addr="/newspicyway/deal/VoidSale.json"/><!--餐道会员取消消费-->
+    <UnVoidSaleCanDao Addr="/newspicyway/deal/UnVoidSale.json"/><!--餐道会员取消消费-->
 
     <VipChangeCardNum Addr="/newspicyway/memberCardService/cardNoByModify.json" /><!--修改会员卡号-->
     <VipChangeInfo Addr="/newspicyway/memberService/unCardLoseService.json" /><!--修改会员基本信息-->

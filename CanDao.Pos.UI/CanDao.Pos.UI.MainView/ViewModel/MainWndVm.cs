@@ -645,8 +645,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             RefreshRemainSecond = RefreshTimerInterval;
             var info = _allAreaInfos != null ? "" : "加载所有餐桌信息...";//这里处理是为了第一次显示提示信息，后续定时刷新时候不显示提示信息，防止阻塞其他业务
-            var param = new List<EnumTableType> { EnumTableType.Room, EnumTableType.Outside, EnumTableType.CFTable };
-            TaskService.Start(param, GetTableInfoByTableTypeProcess, GetAllTableInfoComplete, info);
+            TaskService.Start(null, GetAllAreaInfoProcess, GetAllAreaInfoComplete, info);
             TaskService.Start(null, GetBusinessSimpleInfoProcess, GetBusinessSimpleInfoComplete, "");
         }
 
@@ -693,14 +692,28 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return new Tuple<string, List<AreaInfo>>("创建IRestaurantService服务失败。", null);
 
-            return service.GetAllAreaInfoes(); ;
+            return service.GetTableInfoByType((List<EnumTableType>)param);
+        }
+
+        /// <summary>
+        /// 获取所有餐台信息包含分区信息的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object GetAllAreaInfoProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IRestaurantService>();
+            if (service == null)
+                return new Tuple<string, List<AreaInfo>>("创建IRestaurantService服务失败。", null);
+
+            return service.GetAllAreaInfoes();
         }
 
         /// <summary>
         /// 获取所有餐台信息执行完成。
         /// </summary>
         /// <param name="param"></param>
-        private void GetAllTableInfoComplete(object param)
+        private void GetAllAreaInfoComplete(object param)
         {
             var result = (Tuple<string, List<AreaInfo>>)param;
             if (!string.IsNullOrEmpty(result.Item1))
