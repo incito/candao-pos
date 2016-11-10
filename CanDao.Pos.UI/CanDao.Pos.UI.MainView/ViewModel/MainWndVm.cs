@@ -20,7 +20,7 @@ using Timer = System.Timers.Timer;
 
 namespace CanDao.Pos.UI.MainView.ViewModel
 {
-    public class MainWndVm : NormalWindowViewModel
+    public class MainWndVm : NormalWindowViewModel<MainWindow>
     {
         #region Filed
 
@@ -486,16 +486,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             switch ((string)param)
             {
                 case "TablesPreGroup":
-                    ((MainWindow)OwnerWindow).GsTables.PreviousGroup();
+                    OwnerWnd.GsTables.PreviousGroup();
                     break;
                 case "TablesNextGroup":
-                    ((MainWindow)OwnerWindow).GsTables.NextGroup();
+                    OwnerWnd.GsTables.NextGroup();
                     break;
                 case "PreAreaGroup":
-                    ((MainWindow)OwnerWindow).GsArea.PreviousGroup();
+                    OwnerWnd.GsArea.PreviousGroup();
                     break;
                 case "NextAreaGroup":
-                    ((MainWindow)OwnerWindow).GsArea.NextGroup();
+                    OwnerWnd.GsArea.NextGroup();
                     break;
             }
         }
@@ -505,13 +505,13 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             switch ((string)param)
             {
                 case "TablesPreGroup":
-                    return ((MainWindow)OwnerWindow).GsTables.CanPreviousGroup;
+                    return OwnerWnd.GsTables.CanPreviousGroup;
                 case "TablesNextGroup":
-                    return ((MainWindow)OwnerWindow).GsTables.CanNextGruop;
+                    return OwnerWnd.GsTables.CanNextGruop;
                 case "PreAreaGroup":
-                    return ((MainWindow)OwnerWindow).GsArea.CanPreviousGroup;
+                    return OwnerWnd.GsArea.CanPreviousGroup;
                 case "NextAreaGroup":
-                    return ((MainWindow)OwnerWindow).GsArea.CanNextGruop;
+                    return OwnerWnd.GsArea.CanNextGruop;
                 default:
                     return true;
             }
@@ -1080,13 +1080,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         private void UpdateAreaInfos(List<AreaInfo> src)
         {
-            var removedAreaInfos = AreaInfos.Where(t => !src.Any(x => t.AreaName.Equals(x.AreaName))).ToList();
-            if (removedAreaInfos.Any())
-                removedAreaInfos.ForEach(t => AreaInfos.Remove(t));
-
-            var addedAreaInfos = src.Where(t => !AreaInfos.Any(x => t.AreaName.Equals(x.AreaName))).ToList();
-            if (addedAreaInfos.Any())
-                addedAreaInfos.ForEach(t => AreaInfos.Add(t.Clone()));
+            var selectedItem = SelectedAreaInfo;
+            AreaInfos.Clear();
+            src.ForEach(t => AreaInfos.Add(t.Clone()));
 
             foreach (var areaInfo in AreaInfos)
             {
@@ -1095,6 +1091,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 if (newItem != null)
                     newItem.TableInfos.ToList().ForEach(areaInfo.TableInfos.Add);
             }
+
+            if (selectedItem == null)
+                return;
+
+            var tempItem = AreaInfos.FirstOrDefault(t => t.AreaName.Equals(selectedItem.AreaName));
+            if (tempItem == null)
+                return;
+
+            var index = AreaInfos.IndexOf(tempItem);
+            OwnerWnd.GsArea.SelectedGroupIndex = index / OwnerWnd.GsArea.ItemCountEachGroup;
+            SelectedAreaInfo = tempItem;
         }
 
         #endregion

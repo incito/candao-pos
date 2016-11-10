@@ -14,6 +14,7 @@ using CanDao.Pos.Model;
 using CanDao.Pos.Model.Enum;
 using CanDao.Pos.Model.Response;
 using CanDao.Pos.UI.MainView.View;
+using CanDao.Pos.UI.MainView.ViewModel;
 using CanDao.Pos.UI.Utility;
 using CanDao.Pos.UI.Utility.View;
 using CanDao.Pos.UI.Utility.ViewModel;
@@ -467,7 +468,7 @@ namespace CanDao.Pos.Client
                         break;
                     }
 
-                    WindowHelper.ShowDialog(new MainWindow(true));
+                    WindowHelper.ShowDialog(new MainWndVm(true));
                     InfoLog.Instance.I("强制结账完成。");
                     return;
                 }
@@ -549,7 +550,7 @@ namespace CanDao.Pos.Client
             {
                 InfoLog.Instance.I("用户：{0}登录成功，显示主窗口。", Globals.UserInfo.UserName);
                 Current.ShutdownMode = ShutdownMode.OnLastWindowClose;
-                WindowHelper.ShowDialog(new MainWindow(false));
+                WindowHelper.ShowDialog(new MainWndVm(false));
             }
             else
             {
