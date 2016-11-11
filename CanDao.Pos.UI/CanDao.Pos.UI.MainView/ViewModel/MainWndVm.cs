@@ -1056,6 +1056,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void FilterTableInfos()
         {
+            var curSelectedTableIndex = OwnerWnd.GsTables.SelectedGroupIndex;
             TableInfos.Clear();
             foreach (var tableInfo in SelectedAreaInfo.TableInfos)
             {
@@ -1076,6 +1077,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                         throw new ArgumentOutOfRangeException();
                 }
             }
+            OwnerWnd.GsTables.SelectedGroupIndex = curSelectedTableIndex;
         }
 
         private void UpdateAreaInfos(List<AreaInfo> src)
