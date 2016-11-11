@@ -12,6 +12,7 @@ using CanDao.Pos.VIPManage.Models;
 using CanDao.Pos.VIPManage.Views;
 using CanDao.Pos.IService;
 using CanDao.Pos.Model.Request;
+using CanDao.Pos.Model.Response;
 using CanDao.Pos.ReportPrint;
 
 
@@ -42,7 +43,8 @@ namespace CanDao.Pos.VIPManage.ViewModels
         /// <summary>
         /// 验证码发送按钮样式启动
         /// </summary>
-        public bool IsStartTime {
+        public bool IsStartTime
+        {
             set
             {
                 _isStartTime = value;
@@ -86,52 +88,35 @@ namespace CanDao.Pos.VIPManage.ViewModels
             BindingCardCommand = new RelayCommand(BindingCardHandel);
             RegCommand = new RelayCommand(RegHandel);
             SendCodeCommand = new RelayCommand(SendCodeHandel);
-            CloseCommand=new RelayCommand(CloseHandel);
+            CloseCommand = new RelayCommand(CloseHandel);
         }
 
         #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 发送验证码请求
         /// </summary>
         private void SendCodeHandel()
         {
-           
-            if (OCheckFormat.IsMobilePhone(Model.TelNum))
-            {
-                IsStartTime = true;
-                //调用会员接口
-                _receiveCode = "";
-
-                var response = new SendVerifyCodeRequest();
-                response.branch_id = Globals.BranchInfo.BranchId;
-                response.mobile = Model.TelNum;
-
-               var res=_memberService.SendVerifyCode(response);
-                if (!string.IsNullOrEmpty(res.Item1))
-                {
-                    MessageDialog.Warning("发送失败，请重试！");
-              
-                }
-                else
-                {
-                    _receiveCode = res.Item2.valicode;
-                }
-            }
-            else
+            if (!OCheckFormat.IsMobilePhone(Model.TelNum))
             {
                 MessageDialog.Warning("手机号码不正确，请检查！");
+                return;
             }
-        }
 
+            IsStartTime = true;
+            _receiveCode = "";
+            TaskService.Start(null, SendCodeProcess, SendCodeComplete, "发送验证码中...");
+        }
 
         /// <summary>
         /// 绑定卡
         /// </summary>
         private void BindingCardHandel()
         {
-            _winShowInfo= new WinShowInfoViewModel();
+            _winShowInfo = new WinShowInfoViewModel();
             var window = _winShowInfo.GetShoWindow();
 
             if (WindowHelper.ShowDialog(window, _userControl))
@@ -164,39 +149,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                     }
 
                     CopyReportHelper.CardCheck();
-
-                    //调用注册接口
-                    var memberinfo = new CanDaoMemberRegistRequest();
-                    memberinfo.branch_id = Globals.BranchInfo.BranchId;
-                    memberinfo.mobile = Model.TelNum;
-                    memberinfo.cardno = Model.CardNum;
-                    memberinfo.password = Model.Psw.Trim();
-                    memberinfo.name = Model.UserName;
-
-                    if (Model.SexNan)
-                    {
-                        memberinfo.gender = "0";
-                    }
-                    else
-                    {
-                        memberinfo.gender = "1";
-                    }
-
-                    memberinfo.birthday = Model.Birthday.ToString("yyyy-MM-dd");
-                    memberinfo.tenant_id = "";
-                    memberinfo.member_avatar = "";
-                    memberinfo.channel = "0";
-                    memberinfo.createuser = Globals.UserInfo.UserName;
-                    var ret = _memberService.Regist(memberinfo);
-
-                    if (!string.IsNullOrEmpty(ret))
-                    {
-                        MessageDialog.Warning(string.Format("注册失败:{0}", ret));
-                    }
-                    else
-                    {
-                        Print();
-                    }
+                    TaskService.Start(null, RegistProcess, RegistComplete, "会员注册中...");
                 }
             }
             catch (Exception ex)
@@ -207,12 +160,13 @@ namespace CanDao.Pos.VIPManage.ViewModels
         }
 
         #region 异步
-       
+
         private void Print()
         {
             //复写卡打印
             CopyReportHelper.RegPrint(Model.UserName, Model.TelNum, WorkOk);
         }
+
         /// <summary>
         /// 异步完成
         /// </summary>
@@ -265,7 +219,7 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 MessageDialog.Warning("密码不能为空，请检查！");
                 return false;
             }
-            if (Model.Psw.Length<6)
+            if (Model.Psw.Length < 6)
             {
                 MessageDialog.Warning("密码长度不能少于6位，请检查！");
                 return false;
@@ -276,6 +230,80 @@ namespace CanDao.Pos.VIPManage.ViewModels
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// 发送验证码的执行方法。
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private object SendCodeProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+            if (service == null)
+                return new Tuple<string, SendVerifyCodeResponse>("创建服务失败。", null);
+
+            var request = new SendVerifyCodeRequest
+            {
+                branch_id = Globals.BranchInfo.BranchId,
+                mobile = Model.TelNum,
+            };
+            return service.SendVerifyCode(request);
+        }
+
+        /// <summary>
+        /// 发送验证码执行完成。
+        /// </summary>
+        /// <param name="param"></param>
+        private void SendCodeComplete(object param)
+        {
+            var result = (Tuple<string, SendVerifyCodeResponse>)param;
+            if (!string.IsNullOrEmpty(result.Item1))
+            {
+                ErrLog.Instance.E(result.Item1);
+                MessageDialog.Warning(result.Item1);
+                return;
+            }
+
+            _receiveCode = result.Item2.valicode;
+        }
+
+        private object RegistProcess(object param)
+        {
+            var service = ServiceManager.Instance.GetServiceIntance<IMemberService>();
+            if (service == null)
+                return new Tuple<string, SendVerifyCodeResponse>("创建服务失败。", null);
+
+            var memberinfo = new CanDaoMemberRegistRequest
+            {
+                branch_id = Globals.BranchInfo.BranchId,
+                mobile = Model.TelNum,
+                cardno = Model.CardNum,
+                password = Model.Psw.Trim(),
+                name = Model.UserName,
+                birthday = Model.Birthday.ToString("yyyy-MM-dd"),
+                tenant_id = "",
+                member_avatar = "",
+                channel = "0",
+                createuser = Globals.UserInfo.UserName,
+                gender = Model.SexNan ? "0" : "1"
+            };
+
+            return service.Regist(memberinfo);
+        }
+
+        private void RegistComplete(object param)
+        {
+            var result = param as string;
+            if (!string.IsNullOrEmpty(result))
+            {
+                var errMsg = string.Format("会员注册失败：{0}", result);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
+                return;
+            }
+
+            Print();
         }
         #endregion
 
