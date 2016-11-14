@@ -137,8 +137,9 @@ namespace CanDao.Pos.UI.Utility
             var result = (string)arg;
             if (!string.IsNullOrEmpty(result))
             {
-                ErrLog.Instance.E(result);
-                MessageDialog.Warning(result);
+                var errMsg = string.Format("反结算失败，请联系管理员处理。失败原因：{0}", result);
+                ErrLog.Instance.E(errMsg);
+                MessageDialog.Warning(errMsg);
                 return new Tuple<bool, object>(false, null);
             }
 

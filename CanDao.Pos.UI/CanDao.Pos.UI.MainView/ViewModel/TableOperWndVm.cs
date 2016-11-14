@@ -1246,6 +1246,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 var helper = new AntiSettlementHelper();
                 var antiSettlementWf = helper.GetAntiSettlement(Data.OrderId, Data.MemberNo, OwnerWindow);
+                antiSettlementWf.ErrorWorkFlowInfo = new WorkFlowInfo(null, AfterAntisettlementFailed);
 
                 if (_memberPayWay != null && !_memberPayWay.IsMemberLogin)
                 {
@@ -1932,6 +1933,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             return new Tuple<bool, object>(true, _memberPayWay.MemberInfo);
+        }
+
+        /// <summary>
+        /// 反结算失败以后关闭窗口。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private Tuple<bool, object> AfterAntisettlementFailed(object arg)
+        {
+            CloseWindow(true);
+            return null;
         }
 
         /// <summary>
