@@ -2449,6 +2449,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 Data.CloneOrderData(result.Item2);//合并餐台账单明细(金额，菜，优惠)
                 if (_memberPayWay != null)
                     _memberPayWay.Remark = Data.MemberNo;
+                if (_cashPayWay != null)
+                    _cashPayWay.TipPaymentAmount = Data.TipAmount;
             });
 
             if (!string.IsNullOrEmpty(_memberPayWay.Remark) && !_memberPayWay.IsMemberLogin)//走会员登录的流程。
