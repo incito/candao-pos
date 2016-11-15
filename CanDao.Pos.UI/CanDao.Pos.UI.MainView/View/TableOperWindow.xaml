@@ -299,6 +299,9 @@
                         <Button Content="零头不处理"
                                 Command="{Binding OperCmd}" CommandParameter="KeepOdd"
                                 Width="90" Height="40" Margin="3"/>
+                        <Button Content="服务费"
+                                Command="{Binding OperCmd}" CommandParameter="ServiceCharge"
+                                Width="90" Height="40" Margin="3"/>
                     </StackPanel>
                 </Border>
             </Popup>

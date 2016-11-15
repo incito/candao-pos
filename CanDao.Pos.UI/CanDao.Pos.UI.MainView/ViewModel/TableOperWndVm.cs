@@ -1016,6 +1016,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 case "BackAllDish":
                     BackAllOrderDish();
                     break;
+                case "ServiceCharge":
+                    MessageDialog.Warning("设置服务费");
+                    break;
             }
         }
 
