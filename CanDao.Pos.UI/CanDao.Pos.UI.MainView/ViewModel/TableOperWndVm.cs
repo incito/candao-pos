@@ -1760,7 +1760,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                 if (usedCouponInfo.FreeAmount > 0)
                 {
-                    var payInfo = new BillPayInfo(usedCouponInfo.FreeAmount, (int)EnumBillPayType.FreeAmount, usedCouponInfo.Name, usedCouponInfo.CouponInfo.PartnerName)
+                    var payType = usedCouponInfo.UsedCouponType == EnumUsedCouponType.YaZuo
+                        ? EnumBillPayType.YazuoMemberCoupon
+                        : EnumBillPayType.FreeAmount;
+                    var payInfo = new BillPayInfo(usedCouponInfo.FreeAmount, (int)payType, usedCouponInfo.Name, usedCouponInfo.CouponInfo.PartnerName)
                     {
                         CouponNum = usedCouponInfo.Count,
                         CouponId = usedCouponInfo.CouponInfo.CouponId,
@@ -2458,6 +2461,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 Data.CloneOrderData(result.Item2);//合并餐台账单明细(金额，菜，优惠)
                 if (_memberPayWay != null)
                     _memberPayWay.Remark = Data.MemberNo;
+                if (_cashPayWay != null)
+                    _cashPayWay.TipPaymentAmount = Data.TipAmount;
             });
 
             if (!string.IsNullOrEmpty(_memberPayWay.Remark) && !_memberPayWay.IsMemberLogin)//走会员登录的流程。
