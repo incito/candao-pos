@@ -1043,6 +1043,7 @@ namespace CanDao.Pos.ServiceImpl
             AddDishInfos(response.data.rows, ref tableFullInfo);
             ToAccount(response.data.preferentialInfo, ref tableFullInfo);
             ToTableBaseInfo(response.data.userOrderInfo, ref tableFullInfo);
+            ToServiceChargeInfo(response.data.serviceCharge, ref tableFullInfo);
             return tableFullInfo;
         }
 
@@ -1142,6 +1143,22 @@ namespace CanDao.Pos.ServiceImpl
             tableFullInfo.TableStatus = (EnumTableStatus)userOrderInfo.tableStatus;
             tableFullInfo.DinnerWareCount = userOrderInfo.numOfMeals;
             tableFullInfo.IsDinnerWareFree = Convert.ToBoolean(userOrderInfo.isFree);
+        }
+
+        internal static void ToServiceChargeInfo(ServiceChargeInfoResponse response, ref TableFullInfo tableFullInfo)
+        {
+            if (response == null)
+                return;
+
+            tableFullInfo.ServiceChargeInfo = new ServiceChargeInfo
+            {
+                OrderId = response.orderid,
+                ChargeAuthor = response.autho,
+                IsChargeOn = response.chargeOn == 1,
+                IsCustomSetting = response.isCustom == 1,
+                ServiceAmount = response.chargeAmount ?? 0,
+            };
+
         }
         #endregion
     }

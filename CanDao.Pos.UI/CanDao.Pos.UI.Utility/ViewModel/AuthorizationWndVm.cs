@@ -46,7 +46,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     case EnumRightType.Opening:
                         return "开业授权";
                     case EnumRightType.AntiSettlement:
-                        return "反结算授权";
+                        return "反结算/服务费授权";
                     case EnumRightType.Clearner:
                         return "清机授权";
                     case EnumRightType.EndWork:

@@ -152,6 +152,7 @@
     <Compile Include="Request\GetTableByTypeRequest.cs" />
     <Compile Include="Request\GzdwResponse.cs" />
     <Compile Include="Request\SavePayWayInfoRequest.cs" />
+    <Compile Include="Request\SaveServiceChargeRequest.cs" />
     <Compile Include="Request\SendMsgAsyncRequest.cs" />
     <Compile Include="Request\SetTakeoutOrderOnAccountRequest.cs" />
     <Compile Include="Request\SendVerifyCodeRequest.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Response\Member\YaZuo\YaZuoMemberBaseResponse.cs" />
     <Compile Include="Response\Member\YaZuo\YaZuoMemberQueryResponse.cs" />
     <Compile Include="Response\YaZuoCardActiveResponse.cs" />
+    <Compile Include="ServiceChargeInfo.cs" />
     <Compile Include="YaZuoCardActiveInfo.cs" />
     <Compile Include="YaZuoMemberInfo.cs" />
     <Compile Include="YaZuoCouponInfo.cs" />

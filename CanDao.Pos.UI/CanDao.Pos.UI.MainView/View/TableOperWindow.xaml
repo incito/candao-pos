@@ -83,6 +83,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -167,23 +168,29 @@
                 </controls:GroupSelector>
             </Border>
 
-            <Grid Grid.Row="2" Grid.Column="0"
+            <controls:FlagControl Grid.Row="2" Grid.Column="0" Margin="10,10,10,0">
+                <TextBlock Text="{Binding Data.TotalAmount, StringFormat=消费：{0}}"
+                               FontSize="18"/>
+            </controls:FlagControl>
+
+            <Grid Grid.Row="3" Grid.Column="0"
                   Margin="10">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <controls:FlagControl >
-                    <TextBlock Text="{Binding Data.TotalAmount, StringFormat=消费：{0}}"
-                               FontSize="18"/>
+                <controls:FlagControl Width="180"
+                                      Visibility="{Binding Data.ServiceChargeInfo.IsChargeOn, Converter={StaticResource Bool2VisibilityCvt}}">
+                    <TextBlock Text="{Binding Data.ServiceChargeInfo.ServiceAmount, StringFormat=服务费：{0}}"
+                               FontSize="14"/>
                 </controls:FlagControl>
                 <controls:FlagControl Grid.Column="1">
                     <TextBlock Text="{Binding Data.TipAmount, StringFormat=小费：{0}}"
-                               FontSize="18"/>
+                               FontSize="14"/>
                 </controls:FlagControl>
             </Grid>
 
-            <Border Grid.Row="3" Grid.Column="0"
+            <Border Grid.Row="4" Grid.Column="0"
                     Background="{StaticResource CanDaoPosColorFg}">
                 <controls:GroupSelector x:Name="CouponGroupSelector"
                                         ItemsSource="{Binding Data.UsedCouponInfos}"
@@ -206,7 +213,7 @@
 
             </Border>
 
-            <StackPanel Grid.Row="4" Grid.Column="0">
+            <StackPanel Grid.Row="5" Grid.Column="0">
                 <controls:FlagControl Margin="0,4">
                     <TextBlock Text="{Binding Data.CouponAmount, StringFormat=优惠总额：{0}}" FontSize="14"/>
                 </controls:FlagControl>
@@ -239,7 +246,7 @@
                         CommandParameter="DishWeight"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="3" Grid.Column="1">
+            <StackPanel Grid.Row="4" Grid.Column="1">
                 <Button Style="{StaticResource BtnUpStyle}"
                         Command="{Binding DataGridPageOperCmd}"
                         CommandParameter="CouponPreGroup"/>
@@ -300,6 +307,7 @@
                                 Command="{Binding OperCmd}" CommandParameter="KeepOdd"
                                 Width="90" Height="40" Margin="3"/>
                         <Button Content="服务费"
+                                Visibility="{Binding Data.HasServiceCharge, Converter={StaticResource Bool2VisibilityCvt}}"
                                 Command="{Binding OperCmd}" CommandParameter="ServiceCharge"
                                 Width="90" Height="40" Margin="3"/>
                     </StackPanel>

@@ -202,6 +202,42 @@ namespace CanDao.Pos.Model
         }
 
         /// <summary>
+        /// 服务费信息。
+        /// </summary>
+        private ServiceChargeInfo _serviceChargeInfo;
+        /// <summary>
+        /// 获取或设置服务费信息。
+        /// </summary>
+        public ServiceChargeInfo ServiceChargeInfo
+        {
+            get { return _serviceChargeInfo; }
+            set
+            {
+                _serviceChargeInfo = value;
+                RaisePropertyChanged("ServiceChargeInfo");
+
+                HasServiceCharge = value != null;
+            }
+        }
+
+        /// <summary>
+        /// 是否有服务费。
+        /// </summary>
+        private bool _hasServiceCharge;
+        /// <summary>
+        /// 获取或设置是否有服务费。
+        /// </summary>
+        public bool HasServiceCharge
+        {
+            get { return _hasServiceCharge; }
+            set
+            {
+                _hasServiceCharge = value;
+                RaisePropertyChanged("HasServiceCharge");
+            }
+        }
+
+        /// <summary>
         /// 订单明细。
         /// </summary>
         public ObservableCollection<OrderDishInfo> DishInfos { get; set; }
@@ -238,6 +274,7 @@ namespace CanDao.Pos.Model
             TotalFreeAmount = info.TotalFreeAmount;
             TableStatus = info.TableStatus;
             CustomerNumber = info.CustomerNumber;
+            ServiceChargeInfo = info.ServiceChargeInfo;
         }
 
         /// <summary>
@@ -255,7 +292,6 @@ namespace CanDao.Pos.Model
             OrderInvoiceTitle = info.OrderInvoiceTitle;
             OrderStatus = info.OrderStatus;
 
-
             PaymentAmount = info.PaymentAmount;
             TipAmount = info.TipAmount;
             TotalAmount = info.TotalAmount;
@@ -266,6 +302,7 @@ namespace CanDao.Pos.Model
             RoundAmount = info.RoundAmount;
             AdjustmentAmount = info.AdjustmentAmount;
             ToalDebitAmountMany = info.ToalDebitAmountMany;
+            ServiceChargeInfo = info.ServiceChargeInfo;
 
             DishInfos.Clear();
             if (info.DishInfos != null && info.DishInfos.Any())

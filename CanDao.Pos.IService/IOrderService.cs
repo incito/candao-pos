@@ -280,5 +280,15 @@ namespace CanDao.Pos.IService
         /// <param name="msgType">消息类型。</param>
         /// <returns>如果正常返回null，否则返回错误信息。</returns>
         string SendMsgAsync(string orderId, EnumMsgType msgType);
+
+        /// <summary>
+        /// 保存服务费。
+        /// </summary>
+        /// <param name="orderId">订单号。</param>
+        /// <param name="author">授权人。</param>
+        /// <param name="isChargeOn">是否开启账单服务费。</param>
+        /// <param name="chargeAmount">手动设置服务费金额。</param>
+        /// <returns>保存成功返回null，否则返回错误信息。</returns>
+        string SaveServiceCharge(string orderId, string author, bool isChargeOn, decimal chargeAmount);
     }
 }

@@ -40,4 +40,5 @@
         /// </summary>
         public decimal? tipAmount { get; set; }
     }
+
 }

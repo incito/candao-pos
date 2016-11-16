@@ -18,7 +18,7 @@
         /// </summary>
         Opening = 30202,
         /// <summary>
-        /// 反结算。
+        /// 反结算/服务费。
         /// </summary>
         AntiSettlement = 30203,
         /// <summary>

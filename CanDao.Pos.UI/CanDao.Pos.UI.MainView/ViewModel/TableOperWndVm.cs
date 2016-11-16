@@ -1017,7 +1017,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     BackAllOrderDish();
                     break;
                 case "ServiceCharge":
-                    MessageDialog.Warning("设置服务费");
+                    if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.AntiSettlement), OwnerWindow))
+                        return;
+
+                    WindowHelper.ShowDialog(new ServiceChargeSettingWndVm(Data.ServiceChargeInfo));
+                    GetTableDishInfoAsync();
                     break;
             }
         }
@@ -1048,6 +1052,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     return SelectedOrderDish != null;
                 case "DishWeight":
                     return SelectedOrderDish != null && SelectedOrderDish.DishStatus == EnumDishStatus.ToBeWeighed;
+                case "ServiceCharge":
+                    return Data.ServiceChargeInfo != null;
                 default:
                     return true;
             }

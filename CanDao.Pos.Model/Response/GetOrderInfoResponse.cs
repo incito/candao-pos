@@ -17,7 +17,14 @@ namespace CanDao.Pos.Model.Response
         }
 
         public UserOrderInfo userOrderInfo { set; get; }
+
         public PreferentialInfoResponse preferentialInfo { set; get; }
+
+        /// <summary>
+        /// 服务费信息。
+        /// </summary>
+        public ServiceChargeInfoResponse serviceCharge { get; set; }
+
         public List<DishInfosResponse> rows { set; get; }
     }
 
@@ -155,5 +162,61 @@ namespace CanDao.Pos.Model.Response
         /// 餐具人数。
         /// </summary>
         public int numOfMeals { get; set; }
+    }
+
+    /// <summary>
+    /// 服务费信息返回类。
+    /// </summary>
+    public class ServiceChargeInfoResponse
+    {
+        /// <summary>
+        /// 数据自增ID。
+        /// </summary>
+        public int id { get; set; }
+
+        /// <summary>
+        /// 订单号。
+        /// </summary>
+        public string orderid { get; set; }
+
+        /// <summary>
+        /// 是否开启0关闭1开启。
+        /// </summary>
+        public int chargeOn { get; set; }
+
+        /// <summary>
+        /// 服务费计算方式 服务费计算方式 0比例 1 固定 2 时长。
+        /// </summary>
+        public int chargeType { get; set; }
+
+        /// <summary>
+        /// 服务规则规则 '0:实收 1:应收'。
+        /// </summary>
+        public int chargeRateRule { get; set; }
+
+        /// <summary>
+        /// 比例计算方式 比率'。
+        /// </summary>
+        public int chargeRate { get; set; }
+
+        /// <summary>
+        /// 时长计算方式 时长(分钟单位)'。
+        /// </summary>
+        public string chargeTime { get; set; }
+
+        /// <summary>
+        /// 服务费金额。
+        /// </summary>
+        public decimal? chargeAmount { get; set; }
+
+        /// <summary>
+        /// 是否自定义服务费0系统默认 1手动修改。
+        /// </summary>
+        public int isCustom { get; set; }
+
+        /// <summary>
+        /// 服务费修改人。
+        /// </summary>
+        public string autho { get; set; }
     }
 }

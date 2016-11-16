@@ -770,5 +770,28 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
+        public string SaveServiceCharge(string orderId, string author, bool isChargeOn, decimal chargeAmount)
+        {
+            var addr = ServiceAddrCache.GetServiceAddr("SaveServiceCharge");
+            if (string.IsNullOrEmpty(addr))
+                return "保存服务费地址为空。";
+
+            try
+            {
+                var request = new SaveServiceChargeRequest
+                {
+                    orderId = orderId,
+                    autho = author,
+                    chargeAmount = chargeAmount,
+                    chargeOn = isChargeOn ? 1 : 0,
+                };
+                var response = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
+                return response.IsSuccess ? null : DataHelper.GetNoneNullValueByOrder(response.msg, "保存服务费失败。");
+            }
+            catch (Exception ex)
+            {
+                return ex.MyMessage();
+            }
+        }
     }
 }
