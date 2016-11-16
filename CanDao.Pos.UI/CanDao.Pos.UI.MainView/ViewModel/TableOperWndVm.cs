@@ -1751,7 +1751,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                 if (usedCouponInfo.FreeAmount > 0)
                 {
-                    var payInfo = new BillPayInfo(usedCouponInfo.FreeAmount, (int)EnumBillPayType.FreeAmount, usedCouponInfo.Name, usedCouponInfo.CouponInfo.PartnerName)
+                    var payType = usedCouponInfo.UsedCouponType == EnumUsedCouponType.YaZuo
+                        ? EnumBillPayType.YazuoMemberCoupon
+                        : EnumBillPayType.FreeAmount;
+                    var payInfo = new BillPayInfo(usedCouponInfo.FreeAmount, (int)payType, usedCouponInfo.Name, usedCouponInfo.CouponInfo.PartnerName)
                     {
                         CouponNum = usedCouponInfo.Count,
                         CouponId = usedCouponInfo.CouponInfo.CouponId,
