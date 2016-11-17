@@ -1336,6 +1336,11 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                 backDishNum = numWnd.InputNum;
                 InfoLog.Instance.I("输入退菜数量：\"{0}\"。", numWnd.InputNum);
+                if (selectedDish.DishType == EnumDishType.Packages && backDishNum != (int)backDishNum)
+                {
+                    MessageDialog.Warning("套餐只接受整数数量的退菜。");
+                    return;
+                }
             }
 
             if (!WindowHelper.ShowDialog(new AuthorizationWndVm(EnumRightType.BackDish), OwnerWindow))
