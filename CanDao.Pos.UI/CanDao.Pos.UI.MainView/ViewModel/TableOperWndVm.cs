@@ -2461,7 +2461,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     _cashPayWay.TipPaymentAmount = Data.TipAmount;
             });
 
-            if (!string.IsNullOrEmpty(_memberPayWay.Remark) && !_memberPayWay.IsMemberLogin)//走会员登录的流程。
+            if (_memberPayWay != null && !string.IsNullOrEmpty(_memberPayWay.Remark) && !_memberPayWay.IsMemberLogin)//走会员登录的流程。
             {
                 InfoLog.Instance.I("该餐台登录了会员，开始会员信息查询...");
                 var memberQueryResult = (Tuple<string, MemberInfo>)QueryMemberProcess(null);
