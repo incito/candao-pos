@@ -27,6 +27,7 @@ namespace CanDao.Pos.UI.Utility.View
             NumWatermark = numWatermark;
             MaxNum = maxNum;
             InputNumCtrl.AllowDot = allowDot;
+            DtbNum.DecimalPlaces = allowDot ? 2 : 0;
             BtnConfirm.IsEnabled = false;
 
             DataContext = this;
@@ -123,7 +124,7 @@ namespace CanDao.Pos.UI.Utility.View
         {
             DialogResult = false;
         }
-        
+
         #endregion
     }
 }
