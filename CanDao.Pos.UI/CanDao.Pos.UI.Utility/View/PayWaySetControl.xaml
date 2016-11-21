@@ -18,7 +18,7 @@
         <controls:GroupSelector x:Name="PayWaySelector"
                                 ItemsSource="{Binding PayWays}"
                                 SelectedItem="{Binding SelectedPayWay}"
-                                ItemCountEachGroup="15">
+                                ItemCountEachGroup="5">
             <controls:GroupSelector.Template>
                 <ControlTemplate TargetType="controls:GroupSelector">
                     <DataGrid x:Name="PART_Selector"
