@@ -251,7 +251,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// 结账明细信息。
         /// </summary>
         private string _settlementInfo;
-
         /// <summary>
         /// 结账明细信息。
         /// </summary>
@@ -286,40 +285,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// 是否有小费。（外卖不支持小费）
         /// </summary>
         protected bool HasTip { get; set; }
-
-        /// <summary>
-        /// 剩余未付金额。
-        /// </summary>
-        protected decimal RemainderAmount { get; set; }
-
-        /// <summary>
-        /// 经过计算后收到的小费金额。
-        /// </summary>
-        protected decimal TipPaymentAmount { get; set; }
-
-        #region 优惠券分组
-
-        /// <summary>
-        /// 每一组优惠券个数。
-        /// </summary>
-        private int _eachGroupCouponCount;
-        /// <summary>
-        /// 每一组优惠券个数。
-        /// </summary>
-        public int EachGroupCouponCount
-        {
-            get { return _eachGroupCouponCount; }
-            set
-            {
-                if (_eachGroupCouponCount == value)
-                    return;
-
-                _eachGroupCouponCount = value;
-                PacketCoupon();
-            }
-        }
-
-        #endregion
 
         #region 结算方式
 
@@ -1199,14 +1164,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 分组优惠券。
-        /// </summary>
-        private void PacketCoupon()
-        {
-
-        }
-
-        /// <summary>
         /// 结账操作执行。
         /// </summary>
         private void PayTheBill()
@@ -1222,15 +1179,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (Data.TipAmount > 0)//有小费的时候，进行小费特有逻辑判断。
             {
-                if (TipPaymentAmount < Data.TipAmount)
+                var tipAmount = _cashPayWay != null ? _cashPayWay.TipPaymentAmount : 0m;
+                if (tipAmount < Data.TipAmount)
                 {
-                    if (Data.TotalAlreadyPayment - Data.PaymentAmount + Data.TipAmount > TipPaymentAmount)//总共支付金额计算出的小费超过约定规则计算后的小费金额，说明小费金额部分不是由现金支付的，不允许结账。
+                    if (Data.TotalAlreadyPayment - Data.PaymentAmount + Data.TipAmount > tipAmount)//总共支付金额计算出的小费超过约定规则计算后的小费金额，说明小费金额部分不是由现金支付的，不允许结账。
                     {
                         MessageDialog.Warning(string.Format("小费{0}元，必须使用现金结算。", Data.TipAmount), OwnerWindow);
                         return;
                     }
 
-                    if (!MessageDialog.Quest(string.Format("还有{0}元小费未结算，点击确定继续结算，点击取消取消结算。", Data.TipAmount - TipPaymentAmount), OwnerWindow))
+                    if (!MessageDialog.Quest(string.Format("还有{0}元小费未结算，点击确定继续结算，点击取消取消结算。", Data.TipAmount - tipAmount), OwnerWindow))
                         return;
                 }
             }
@@ -1593,6 +1551,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 var tempChargeAmount = Math.Abs(Math.Min(0, Data.RemainderAmount));
                 _cashPayWay.ChargeAmount = Math.Min(tempChargeAmount, _cashPayWay.Amount);//找零金额只能是现金
+
+                //小费当前计算规则：只能从现金扣除，
+                if (HasTip && Data.TipAmount > 0 && _cashPayWay.IsVisible)//有小费金额的时候才计算小费实收。
+                {
+                    var realyPayment = Data.PaymentAmount - Data.TipAmount;//真实的应收=明面行应收-小费金额。
+                    var tipPayment = Data.TotalAlreadyPayment - realyPayment;//小费实付金额=付款总额-真实应收。
+                    tipPayment = Math.Max(0, tipPayment);//小费实付金额不能小于0。
+                    tipPayment = Math.Min(CashAmount, tipPayment);//小费实付金额不能大于现金。
+                    tipPayment = Math.Min(Data.TipAmount, tipPayment);//小费金额不能大于用户设置的小费金额。
+                    _cashPayWay.TipPaymentAmount = tipPayment;
+                }
             }
         }
 
@@ -1677,18 +1646,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             if (Data.RemovezeroAmount != 0)
                 settlementInfo.Add(string.Format("抹零：{0:f2}", Data.RemovezeroAmount));
-
-            //小费当前计算规则：只能从现金扣除，
-            if (HasTip && Data.TipAmount > 0)//有小费金额的时候才计算小费实收。
-            {
-                var realyPayment = Data.PaymentAmount - Data.TipAmount;//真实的应收=明面行应收-小费金额。
-                var tipPayment = Data.TotalAlreadyPayment - realyPayment;//小费实付金额=付款总额-真实应收。
-                tipPayment = Math.Max(0, tipPayment);//小费实付金额不能小于0。
-                tipPayment = Math.Min(CashAmount, tipPayment);//小费实付金额不能大于现金。
-                tipPayment = Math.Min(Data.TipAmount, tipPayment);//小费金额不能大于用户设置的小费金额。
-                TipPaymentAmount = tipPayment;
-                settlementInfo.Add(string.Format("小费：{0:f2}", TipPaymentAmount));
-            }
 
             SettlementInfo = string.Format("收款：{0}", string.Join("，", settlementInfo));
         }
@@ -2290,7 +2247,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            return service.TipSettlement(Data.OrderId, TipPaymentAmount);
+            var tipAmount = _cashPayWay != null ? _cashPayWay.TipPaymentAmount : 0m;
+            return service.TipSettlement(Data.OrderId, tipAmount);
         }
 
         /// <summary>

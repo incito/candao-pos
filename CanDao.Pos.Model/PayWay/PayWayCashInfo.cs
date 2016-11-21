@@ -41,6 +41,8 @@ namespace CanDao.Pos.Model
                 info.Add(string.Format("现金：{0:f2}", Amount));
             if (ChargeAmount > 0)
                 info.Add(string.Format("找零：{0:f2}", ChargeAmount));
+            if (TipPaymentAmount > 0)
+                info.Add(string.Format("小费：{0:f2}", TipPaymentAmount));
             return info;
         }
 
