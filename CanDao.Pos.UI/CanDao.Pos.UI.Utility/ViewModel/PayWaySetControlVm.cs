@@ -90,6 +90,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                         return;
                     PayWays.Remove(item);
                     PayWays.Insert(index - 1, item);
+
+                    SetControl.PayWaySelector.SelectedGroupIndex = PayWays.IndexOf(item) / SetControl.PayWaySelector.ItemCountEachGroup;
                     SelectedPayWay = item;
                     break;
                 case "Down":
@@ -97,6 +99,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                         return;
                     PayWays.Remove(item);
                     PayWays.Insert(index + 1, item);
+
+                    SetControl.PayWaySelector.SelectedGroupIndex = PayWays.IndexOf(item) / SetControl.PayWaySelector.ItemCountEachGroup;
                     SelectedPayWay = item;
                     break;
                 default:
