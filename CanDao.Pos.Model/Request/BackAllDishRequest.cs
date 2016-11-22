@@ -7,7 +7,7 @@
             discardReason = "";
         }
 
-        public string username { get; set; }
+        public string userName { get; set; }
         public string actionType { get; set; }
         public string currenttableid { get; set; }
         public string discardReason { get; set; }
