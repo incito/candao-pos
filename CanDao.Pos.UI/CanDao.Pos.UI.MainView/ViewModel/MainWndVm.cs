@@ -705,16 +705,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="param"></param>
         private void GetAllAreaInfoComplete(object param)
         {
-            SetRefreshTimerStatus(true);
             var result = (Tuple<string, List<AreaInfo>>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 var errMsg = string.Format("获取所有餐桌分区信息失败：{0}", result.Item1);
                 ErrLog.Instance.E(errMsg);
                 MessageDialog.Warning(errMsg, OwnerWindow);
+                SetRefreshTimerStatus(true);
                 return;
             }
 
+            SetRefreshTimerStatus(true);
             if (result.Item2 != null && result.Item2.Any())
             {
                 var tableInfos = new List<TableInfo>();
