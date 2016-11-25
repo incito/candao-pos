@@ -328,11 +328,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (tableInfo == null)
                 return;
 
-            SetRefreshTimerStatus(false);
             if (!Globals.UserRight.AllowCash)
             {
                 MessageDialog.Warning("您没有收银权限。", OwnerWindow);
-                SetRefreshTimerStatus(true);
                 return;
             }
 
@@ -354,7 +352,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         {
             if (!IsInDesignMode)
             {
-                SetRefreshTimerStatus(false);
                 GetAllTableInfoesAsync();
                 ThreadPool.QueueUserWorkItem(t => { CheckPrinterStatus(); });
 
@@ -410,7 +407,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         protected override void OperMethod(object param)
         {
-            SetRefreshTimerStatus(false);
             switch ((string)param)
             {
                 case "Takeout"://外卖
@@ -426,7 +422,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     WindowHelper.ShowDialog(new ReportViewWindow(), OwnerWindow);
                     break;
                 case "System"://系统
-                    SetPrinterCheckTimerStatus(false);
                     WindowHelper.ShowDialog(new SystemSettingWindow(), OwnerWindow);
                     CheckPrinterStatus();//从系统退出以后马上检测一下打印机状态，不然可能出现状态在一定时间内不同步的现象。#9264
                     break;
@@ -478,7 +473,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                     ViewTableType = EnumViewTableType.Coffee;
                     break;
             }
-            SetRefreshTimerStatus(true);
         }
 
         protected override void GroupMethod(object param)
@@ -607,14 +601,9 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 }
 
                 if (RefreshRemainSecond == 0)
-                {
-                    SetRefreshTimerStatus(false);
                     OwnerWindow.Dispatcher.BeginInvoke((Action)GetAllTableInfoesAsync);
-                }
                 else
-                {
                     RefreshRemainSecond--;
-                }
 
                 //更新餐桌开台持续时间
                 foreach (var areaInfo in _allAreaInfos)
@@ -643,6 +632,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         private void GetAllTableInfoesAsync()
         {
+            SetRefreshTimerStatus(false);
             RefreshRemainSecond = RefreshTimerInterval;
             var info = _allAreaInfos != null ? "" : "加载所有餐桌信息...";//这里处理是为了第一次显示提示信息，后续定时刷新时候不显示提示信息，防止阻塞其他业务
             TaskService.Start(null, GetAllAreaInfoProcess, GetAllAreaInfoComplete, info);
@@ -715,17 +705,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="param"></param>
         private void GetAllAreaInfoComplete(object param)
         {
+            SetRefreshTimerStatus(true);
             var result = (Tuple<string, List<AreaInfo>>)param;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 var errMsg = string.Format("获取所有餐桌分区信息失败：{0}", result.Item1);
                 ErrLog.Instance.E(errMsg);
                 MessageDialog.Warning(errMsg, OwnerWindow);
-                SetRefreshTimerStatus(true);
                 return;
             }
 
-            SetRefreshTimerStatus(true);
             if (result.Item2 != null && result.Item2.Any())
             {
                 var tableInfos = new List<TableInfo>();
@@ -922,7 +911,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             {
                 ErrLog.Instance.E("结业接口调用失败：{0}", result);
                 MessageDialog.Warning(result, OwnerWindow);
-                SetRefreshTimerStatus(true);
                 return;
             }
 

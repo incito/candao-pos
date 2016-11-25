@@ -36,11 +36,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected readonly TableInfo _tableInfo;
 
         /// <summary>
-        /// 反结原因。
-        /// </summary>
-        private string _antiSettlementReason;
-
-        /// <summary>
         /// 当前选中的优惠券。
         /// </summary>
         private CouponInfo _curSelectedCouponInfo;
@@ -1021,6 +1016,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
 
             _refreshTimer.Enabled = enabled;
+            InfoLog.Instance.I("设置结账页面刷新定时器状态：{0}", enabled ? "启用" : "停用");
         }
 
         protected void SetCouponPressTimerStatus(bool enabled)
@@ -1106,12 +1102,15 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
 
             OwnerWindow.Dispatcher.BeginInvoke((Action)delegate { Data.CloneSimpleData(result.Item2); });
-            if (Data.TotalAmount != result.Item2.TotalAmount || Data.DishInfos.Sum(t => t.DishNum) != result.Item2.DishInfos.Sum(t => t.DishNum))//当总价或菜品数量改变时再触发刷新方法。
+            if (Data.TotalAmount != result.Item2.TotalAmount || Data.DishInfos.Sum(t => t.DishNum) != result.Item2.DishInfos.Sum(t => t.DishNum)) //当总价或菜品数量改变时再触发刷新方法。
             {
-                _tableInfo.OrderId = result.Item2.OrderId;//可能会有并台导致订单号改变。
+                _tableInfo.OrderId = result.Item2.OrderId; //可能会有并台导致订单号改变。
                 GetTableDishInfoAsync();
             }
-            SetRefreshTimerStatus(true);
+            else
+            {
+                SetRefreshTimerStatus(true);
+            }
         }
 
         /// <summary>
@@ -1208,8 +1207,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                 if (_memberPayWay != null && !_memberPayWay.IsMemberLogin)
                 {
-                    var queryMemberWf = new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...");
-                    queryMemberWf.ErrorWorkFlowInfo = antiSettlementWf;//会员查询错误时执行自动反结算工作流。
+                    var queryMemberWf = new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...") { ErrorWorkFlowInfo = antiSettlementWf };//会员查询错误时执行自动反结算工作流。
                     curStepWf.NextWorkFlowInfo = queryMemberWf;
                     curStepWf = queryMemberWf;
                 }
@@ -1461,6 +1459,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         protected void GetTableDishInfoAsync()
         {
+            SetRefreshTimerStatus(false);
             TaskService.Start(null, GetOrderInfoProcess, GetOrderInfoComplete, "加载/更新餐台详情...");
         }
 
@@ -2452,6 +2451,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void GetOrderInfoComplete(object param)
         {
             var result = (string)param;
+            SetRefreshTimerStatus(true);
             if (!string.IsNullOrEmpty(result))
             {
                 MessageDialog.Warning(result, OwnerWindow);
