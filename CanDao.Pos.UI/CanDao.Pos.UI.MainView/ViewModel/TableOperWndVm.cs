@@ -1105,7 +1105,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            Data.CloneOrderData(result.Item2);
+            OwnerWindow.Dispatcher.BeginInvoke((Action)delegate { Data.CloneSimpleData(result.Item2); });
             if (Data.TotalAmount != result.Item2.TotalAmount || Data.DishInfos.Sum(t => t.DishNum) != result.Item2.DishInfos.Sum(t => t.DishNum))//当总价或菜品数量改变时再触发刷新方法。
             {
                 _tableInfo.OrderId = result.Item2.OrderId;//可能会有并台导致订单号改变。
@@ -1461,7 +1461,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         protected void GetTableDishInfoAsync()
         {
-            TaskService.Start(null, GetOrderInfoProcess, GetOrderInfoComplete, "加载餐台详情...");
+            TaskService.Start(null, GetOrderInfoProcess, GetOrderInfoComplete, "加载/更新餐台详情...");
         }
 
         /// <summary>

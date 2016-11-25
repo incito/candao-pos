@@ -223,6 +223,24 @@ namespace CanDao.Pos.Model
         }
 
         /// <summary>
+        /// 复制简单信息。
+        /// </summary>
+        /// <param name="info"></param>
+        public void CloneSimpleData(TableFullInfo info)
+        {
+            OrderId = info.OrderId;
+            MemberNo = info.MemberNo;
+            OrderInvoiceTitle = info.OrderInvoiceTitle;
+            OrderStatus = info.OrderStatus;
+            PaymentAmount = info.PaymentAmount;
+            TipAmount = info.TipAmount;
+            TotalAmount = info.TotalAmount;
+            TotalFreeAmount = info.TotalFreeAmount;
+            TableStatus = info.TableStatus;
+            CustomerNumber = info.CustomerNumber;
+        }
+
+        /// <summary>
         /// 复制订单信息。
         /// </summary>
         /// <param name="info"></param>
