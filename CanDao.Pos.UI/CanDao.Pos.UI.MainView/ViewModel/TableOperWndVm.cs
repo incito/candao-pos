@@ -1416,7 +1416,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!MessageDialog.Quest(string.Format("确定要取消桌号：{0}的帐单吗?", _tableInfo.TableName)))
                 return;
 
-            TaskService.Start(null, ClearTableProcess, ClearTableComplete, "取消账单中...");
+            if (Data.IsCoffeeTable)
+                TaskService.Start(null, ClearCoffeeTableProcess, ClearCoffeeTableComplete, "取消咖啡台账单中...");
+            else
+                TaskService.Start(null, ClearTableProcess, ClearTableComplete, "取消账单中...");
         }
 
         /// <summary>

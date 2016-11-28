@@ -495,7 +495,7 @@ namespace CanDao.Pos.ServiceImpl
             {
                 var request = new ClearTableRequest { orderNo = orderNo };
                 var response = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
-                return !response.IsSuccess ? "清台失败。" : null;
+                return !response.IsSuccess ? DataHelper.GetNoneNullValueByOrder(response.msg, "清台失败。") : null;
             }
             catch (Exception ex)
             {
