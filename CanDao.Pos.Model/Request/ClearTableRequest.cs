@@ -6,8 +6,8 @@
     public class ClearTableRequest
     {
         /// <summary>
-        /// 桌台号。
+        /// 订单号。
         /// </summary>
-        public string tableNo { get; set; } 
+        public string orderNo { get; set; } 
     }
 }

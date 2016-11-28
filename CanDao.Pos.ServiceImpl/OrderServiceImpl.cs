@@ -485,7 +485,7 @@ namespace CanDao.Pos.ServiceImpl
             }
         }
 
-        public string ClearTable(string tableNo)
+        public string ClearTable(string orderNo)
         {
             var addr = ServiceAddrCache.GetServiceAddr("ClearTable");
             if (string.IsNullOrEmpty(addr))
@@ -493,7 +493,7 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new ClearTableRequest { tableNo = tableNo };
+                var request = new ClearTableRequest { orderNo = orderNo };
                 var response = HttpHelper.HttpPost<NewHttpBaseResponse>(addr, request);
                 return !response.IsSuccess ? "清台失败。" : null;
             }
@@ -534,9 +534,9 @@ namespace CanDao.Pos.ServiceImpl
 
             try
             {
-                var request = new ClearTableRequest { tableNo = tableNo };
+                var request = new ClearTableCfRequest { tableNo = tableNo };
                 var response = HttpHelper.HttpPost<JavaResponse>(addr, request);
-                return !response.IsSuccess ? "清台失败。" : null;
+                return !response.IsSuccess ? DataHelper.GetNoneNullValueByOrder(response.msg, "清台失败。") : null;
             }
             catch (Exception ex)
             {
