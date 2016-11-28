@@ -1416,7 +1416,10 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!MessageDialog.Quest(string.Format("确定要取消桌号：{0}的帐单吗?", _tableInfo.TableName)))
                 return;
 
-            WorkFlowService.Start(null, new WorkFlowInfo(ClearTableProcess, ClearTableComplete, "取消账单中..."));
+            if (Data.IsCoffeeTable)
+                TaskService.Start(null, ClearCoffeeTableProcess, ClearCoffeeTableComplete, "清台执行中...");
+            else
+                TaskService.Start(null, ClearTableProcess, ClearTableComplete, "取消账单中...");
         }
 
         /// <summary>
@@ -2513,7 +2516,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        private Tuple<bool, object> ClearTableComplete(object param)
+        private void ClearTableComplete(object param)
         {
             var result = (string)param;
             if (!string.IsNullOrEmpty(result))
@@ -2521,7 +2524,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var msg = string.Format("账单取消失败“{0}", result);
                 ErrLog.Instance.E(msg);
                 MessageDialog.Warning(msg, OwnerWindow);
-                return null;
+                return;
             }
 
             InfoLog.Instance.I("取消账单完成。");
@@ -2532,7 +2535,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             NotifyDialog.Notify("取消账单完成。", OwnerWindow.Owner);
             CloseWindow(true);
-            return null;
         }
 
         /// <summary>

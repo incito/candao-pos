@@ -94,7 +94,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                     DishName = orderDishInfo.DishName,
                     DishPrice = orderDishInfo.Price,
                     DishNum = dishNum,
-                    DishUnit = orderDishInfo.DishUnit,
+                    DishUnit = orderDishInfo.SrcDishUnit,
                 });
             }
         }
