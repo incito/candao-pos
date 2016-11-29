@@ -33,7 +33,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="服务费：" FontSize="14" HorizontalAlignment="Right"/>
-            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left">
                 <ToggleButton Content="收费"
                               Width="83" Height="36"
                               Margin="0,0,6,0"
@@ -51,7 +51,7 @@
                                    IsEnabled="{Binding IsCharge}"
                                    Text="{Binding CusChargeAmount, UpdateSourceTrigger=PropertyChanged}"
                                    DecimalPlaces="2"
-                                   Width="260" Height="40"/>
+                                   Width="160" Height="40" HorizontalAlignment="Left"/>
         </Grid>
 
         <view:InputNumberControl Grid.Row="0" Grid.Column="1" Margin="0,0,40,0" ItemWidth="90"/>
