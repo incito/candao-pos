@@ -36,11 +36,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         protected readonly TableInfo _tableInfo;
 
         /// <summary>
-        /// 反结原因。
-        /// </summary>
-        private string _antiSettlementReason;
-
-        /// <summary>
         /// 当前选中的优惠券。
         /// </summary>
         private CouponInfo _curSelectedCouponInfo;
@@ -1030,6 +1025,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
 
             _refreshTimer.Enabled = enabled;
+            InfoLog.Instance.I("设置结账页面刷新定时器状态：{0}", enabled ? "启用" : "停用");
         }
 
         protected void SetCouponPressTimerStatus(bool enabled)
@@ -1114,13 +1110,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return;
             }
 
-            Data.CloneSimpleData(result.Item2);
-            if (Data.TotalAmount != result.Item2.TotalAmount || Data.DishInfos.Sum(t => t.DishNum) != result.Item2.DishInfos.Sum(t => t.DishNum))//当总价或菜品数量改变时再触发刷新方法。
+            OwnerWindow.Dispatcher.BeginInvoke((Action)delegate { Data.CloneSimpleData(result.Item2); });
+            if (Data.TotalAmount != result.Item2.TotalAmount || Data.DishInfos.Sum(t => t.DishNum) != result.Item2.DishInfos.Sum(t => t.DishNum)) //当总价或菜品数量改变时再触发刷新方法。
             {
-                _tableInfo.OrderId = result.Item2.OrderId;//可能会有并台导致订单号改变。
+                _tableInfo.OrderId = result.Item2.OrderId; //可能会有并台导致订单号改变。
                 GetTableDishInfoAsync();
             }
-            SetRefreshTimerStatus(true);
+            else
+            {
+                SetRefreshTimerStatus(true);
+            }
         }
 
         /// <summary>
@@ -1217,8 +1216,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
                 if (_memberPayWay != null && !_memberPayWay.IsMemberLogin)
                 {
-                    var queryMemberWf = new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...");
-                    queryMemberWf.ErrorWorkFlowInfo = antiSettlementWf;//会员查询错误时执行自动反结算工作流。
+                    var queryMemberWf = new WorkFlowInfo(QueryMemberProcess, QueryMemberComplete, "会员查询中...") { ErrorWorkFlowInfo = antiSettlementWf };//会员查询错误时执行自动反结算工作流。
                     curStepWf.NextWorkFlowInfo = queryMemberWf;
                     curStepWf = queryMemberWf;
                 }
@@ -1427,7 +1425,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (!MessageDialog.Quest(string.Format("确定要取消桌号：{0}的帐单吗?", _tableInfo.TableName)))
                 return;
 
-            WorkFlowService.Start(null, new WorkFlowInfo(ClearTableProcess, ClearTableComplete, "取消账单中..."));
+            TaskService.Start(null, ClearTableProcess, ClearTableComplete, "取消账单中...");
         }
 
         /// <summary>
@@ -1470,7 +1468,8 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         protected void GetTableDishInfoAsync()
         {
-            TaskService.Start(null, GetOrderInfoProcess, GetOrderInfoComplete, "加载餐台详情...");
+            SetRefreshTimerStatus(false);
+            TaskService.Start(null, GetOrderInfoProcess, GetOrderInfoComplete, "加载/更新餐台详情...");
         }
 
         /// <summary>
@@ -2282,7 +2281,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 return "创建IOrderService服务失败。";
 
             var backDishReason = param as string;
-            return service.BackAllDish(Data.OrderId, Data.TableName, Globals.UserInfo.UserName, backDishReason);
+            return service.BackAllDish(Data.OrderId, Data.TableName, Globals.Authorizer.UserName, backDishReason);
         }
 
         /// <summary>
@@ -2461,6 +2460,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         private void GetOrderInfoComplete(object param)
         {
             var result = (string)param;
+            SetRefreshTimerStatus(true);
             if (!string.IsNullOrEmpty(result))
             {
                 MessageDialog.Warning(result, OwnerWindow);
@@ -2522,7 +2522,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        private Tuple<bool, object> ClearTableComplete(object param)
+        private void ClearTableComplete(object param)
         {
             var result = (string)param;
             if (!string.IsNullOrEmpty(result))
@@ -2530,7 +2530,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 var msg = string.Format("账单取消失败“{0}", result);
                 ErrLog.Instance.E(msg);
                 MessageDialog.Warning(msg, OwnerWindow);
-                return null;
+                return;
             }
 
             InfoLog.Instance.I("取消账单完成。");
@@ -2541,7 +2541,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             }
             NotifyDialog.Notify("取消账单完成。", OwnerWindow.Owner);
             CloseWindow(true);
-            return null;
         }
 
         /// <summary>

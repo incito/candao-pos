@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CanDao.Pos.Model
@@ -8,7 +9,6 @@ namespace CanDao.Pos.Model
     /// <summary>
     /// 分区信息。
     /// </summary>
-    [Serializable]
     public class AreaInfo
     {
         public AreaInfo()
@@ -56,11 +56,16 @@ namespace CanDao.Pos.Model
         /// <returns></returns>
         public AreaInfo Clone()
         {
-            var stream = new MemoryStream();
-            var formatter = new BinaryFormatter();
-            formatter.Serialize(stream, this);
-            stream.Position = 0;
-            return formatter.Deserialize(stream) as AreaInfo;
+            var item = new AreaInfo
+            {
+                SortIndex = SortIndex,
+                AreaName = AreaName
+            };
+            foreach (var tableInfo in TableInfos)
+            {
+                item.TableInfos.Add(tableInfo.Clone());
+            }
+            return item;
         }
     }
 }

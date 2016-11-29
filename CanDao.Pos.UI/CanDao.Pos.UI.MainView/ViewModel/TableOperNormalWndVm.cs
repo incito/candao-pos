@@ -41,7 +41,6 @@ namespace CanDao.Pos.UI.MainView.ViewModel
                 WindowHelper.ShowDialog(new OrderDishWindow(tableFullInfo), OwnerWindow);
             }
             GetTableDishInfoAsync();
-            SetRefreshTimerStatus(true);//启动刷新定时器。
         }
 
         protected override void BackAllDishSuccessProcess()

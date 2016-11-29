@@ -338,6 +338,7 @@ namespace CanDao.Pos.ServiceImpl
 
                 var request = new BackAllDishRequest
                 {
+                    userName = Globals.UserInfo.UserName,
                     orderNo = orderId,
                     currenttableid = tableNo,
                     discardUserId = userId,

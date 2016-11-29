@@ -6,7 +6,6 @@ namespace CanDao.Pos.Model
     /// <summary>
     /// 餐桌信息。
     /// </summary>
-    [Serializable]
     public class TableInfo : BaseNotifyObject
     {
         /// <summary>
@@ -218,6 +217,11 @@ namespace CanDao.Pos.Model
             OrderId = srcInfo.OrderId;
             IsHangOrder = srcInfo.IsHangOrder;
             DinnerNumber = srcInfo.DinnerNumber;
+        }
+
+        public TableInfo Clone()
+        {
+            return (TableInfo) MemberwiseClone();
         }
 
         /// <summary>
