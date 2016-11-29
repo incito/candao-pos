@@ -188,9 +188,9 @@ namespace CanDao.Pos.IService
         /// <summary>
         /// 清台。
         /// </summary>
-        /// <param name="tableNo">餐台名。</param>
+        /// <param name="orderNo">订单号。</param>
         /// <returns>清台成功返回null，否则返回错误信息。</returns>
-        string ClearTable(string tableNo);
+        string ClearTable(string orderNo);
 
         /// <summary>
         /// 取消账单。

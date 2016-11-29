@@ -133,6 +133,7 @@
     <Compile Include="Request\BackFishPotDishRequest.cs" />
     <Compile Include="Request\CanDaoMemberUnVoidSaleRequest.cs" />
     <Compile Include="Request\CanDaoMemberVoidSaleRequest.cs" />
+    <Compile Include="Request\ClearTableCfRequest.cs" />
     <Compile Include="Request\ClearTableRequest.cs" />
     <Compile Include="Request\CanDaoMemberBaseRequest.cs" />
     <Compile Include="Request\CanDaoMemberCheckMobileRepeatRequest.cs" />
