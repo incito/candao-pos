@@ -1105,7 +1105,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
             if (Data.TotalAmount != result.Item2.TotalAmount || Data.DishInfos.Sum(t => t.DishNum) != result.Item2.DishInfos.Sum(t => t.DishNum)) //当总价或菜品数量改变时再触发刷新方法。
             {
                 _tableInfo.OrderId = result.Item2.OrderId; //可能会有并台导致订单号改变。
-                GetTableDishInfoAsync();
+                OwnerWindow.Dispatcher.BeginInvoke((Action)GetTableDishInfoAsync);
             }
             else
             {
