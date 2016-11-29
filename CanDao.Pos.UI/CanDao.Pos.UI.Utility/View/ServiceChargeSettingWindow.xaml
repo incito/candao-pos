@@ -13,12 +13,16 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:PosMsgWindow.Resources>
-    <Grid>
+    <Grid Margin="0,40,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Left" Margin="153,60,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="53,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="45"/>
@@ -49,7 +53,9 @@
                                    DecimalPlaces="2"
                                    Width="260" Height="40"/>
         </Grid>
-        
-        <view:WindowButtonOperControl Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="84,63,84,69"/>
+
+        <view:InputNumberControl Grid.Row="0" Grid.Column="1" Margin="0,0,40,0" ItemWidth="90"/>
+
+        <view:WindowButtonOperControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="84,63,84,69"/>
     </Grid>
 </controls:PosMsgWindow>
