@@ -6,7 +6,7 @@
              xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400"
-             Margin="10,10,270,10" VerticalAlignment="Top">
+             Margin="0,10,270,10" VerticalAlignment="Top">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -31,7 +31,7 @@
                            FontSize="20"
                            Margin="13,11,0,0"/>
                 <toolkit:DoubleTextBox Grid.Row="0" Grid.Column="1"
-                                       FontSize="50"
+                                       FontSize="48"
                                        Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </Grid>
         </Border>
