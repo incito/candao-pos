@@ -115,7 +115,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            return service.SaveServiceCharge(_orderId, Globals.Authorizer.UserName, IsCharge, CusChargeAmount);
+            var isCustomChange = CusChargeAmount == SrcChargeAmount;//根据服务费是否改变来判断是否是服务员设置了服务费。
+            return service.SaveServiceCharge(_orderId, Globals.Authorizer.UserName, IsCharge, isCustomChange, CusChargeAmount);
         }
 
         private void SaveServiceChargeComplete(object arg)

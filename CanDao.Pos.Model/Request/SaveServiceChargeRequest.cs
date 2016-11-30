@@ -21,6 +21,11 @@
         public int chargeOn { get; set; }
 
         /// <summary>
+        /// 是否服务员修改了服务费，0没有，1修改过。
+        /// </summary>
+        public int custom { get; set; }
+
+        /// <summary>
         /// 手动设置金额。
         /// </summary>
         public decimal chargeAmount { get; set; }
