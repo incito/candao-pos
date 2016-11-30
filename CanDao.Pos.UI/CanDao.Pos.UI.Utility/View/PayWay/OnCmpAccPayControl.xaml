@@ -14,7 +14,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel Margin="10,10,310,10">
+    <StackPanel Margin="10,10,270,10">
         <Grid Margin="0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

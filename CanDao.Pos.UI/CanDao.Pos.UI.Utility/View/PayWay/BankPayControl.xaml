@@ -1,12 +1,8 @@
 ﻿<UserControl x:Class="CanDao.Pos.UI.Utility.View.BankPayControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:toolkit="clr-namespace:Engine.Wpf.Toolkit;assembly=Engine.Wpf.Toolkit"
-             xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             xmlns:controls="clr-namespace:CanDao.Pos.Common.Controls;assembly=CanDao.Pos.Common">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,7 +10,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel Margin="10,10,310,10">
+    <StackPanel Margin="10,10,270,10">
         <Grid Margin="0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
