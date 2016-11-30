@@ -207,6 +207,9 @@
     <Compile Include="Response\Member\YaZuo\YaZuoMemberQueryResponse.cs" />
     <Compile Include="Response\YaZuoCardActiveResponse.cs" />
     <Compile Include="ServiceChargeInfo.cs" />
+    <Compile Include="TableAfterUseCouponInfo.cs" />
+    <Compile Include="TableAmountPartInfo.cs" />
+    <Compile Include="TableServiceChargePartInfo.cs" />
     <Compile Include="YaZuoCardActiveInfo.cs" />
     <Compile Include="YaZuoMemberInfo.cs" />
     <Compile Include="YaZuoCouponInfo.cs" />

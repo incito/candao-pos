@@ -686,7 +686,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <returns></returns>
         private object UseCouponProcess(object arg)
         {
-            IOrderService service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
+            var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
                 return new Tuple<string, PreferentialInfoResponse>("创建IOrderService服务失败。", null);
 
@@ -699,21 +699,17 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="obj"></param>
         private void UseCouponInfoComplete(object obj)
         {
-            var result = obj as Tuple<string, PreferentialInfoResponse>;
+            var result = (Tuple<string, TableAfterUseCouponInfo>)obj;
             if (!string.IsNullOrEmpty(result.Item1))
             {
-                var errMsg = string.Format("保存优惠券信息失败：{0}", result.Item1);
+                var errMsg = string.Format("使用优惠券失败：{0}", result.Item1);
                 ErrLog.Instance.E(errMsg);
                 MessageDialog.Warning(errMsg, OwnerWindow);
                 return;
             }
-            else
-            {
-                ProcessCouponShow(result.Item2);
 
-                InfoLog.Instance.I("结束保存优惠券到使用列表。");
-                //AddCouponInfoAsUsed(_curSelectedCouponInfo, 1, false);
-            }
+            ProcessCouponShow(result.Item2);
+            InfoLog.Instance.I("结束使用优惠券流程。");
         }
 
         /// <summary>
@@ -813,7 +809,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         /// <param name="obj"></param>
         private void DeleCouponInfoComplete(object obj)
         {
-            var result = (Tuple<string, PreferentialInfoResponse>)obj;
+            var result = (Tuple<string, TableAfterUseCouponInfo>)obj;
             if (!string.IsNullOrEmpty(result.Item1))
             {
                 var errMsg = string.Format("删除优惠券信息失败：{0}", result);
@@ -879,12 +875,12 @@ namespace CanDao.Pos.UI.MainView.ViewModel
         }
 
         /// <summary>
-        /// 
+        /// 处理优惠券的相关数据。
         /// </summary>
-        /// <param name="preferential"></param>
-        private void ProcessCouponShow(PreferentialInfoResponse preferential)
+        /// <param name="info">优惠券返回信息。</param>
+        private void ProcessCouponShow(TableAfterUseCouponInfo info)
         {
-            Data.ClonePreferentialInfo(preferential);
+            Data.CloneFromTableServiceChargePart(info);
             GenerateSettlementInfo();
         }
 

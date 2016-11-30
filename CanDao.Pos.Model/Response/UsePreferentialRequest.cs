@@ -1,16 +1,15 @@
 ﻿namespace CanDao.Pos.Model.Response
 {
-    public class UsePreferentialResponse : NewHttpBaseResponse
+    /// <summary>
+    /// 优惠券操作信息返回类。（使用和删除）
+    /// </summary>
+    public class PreferentialOperResponse : NewHttpBaseResponse<PreferentialResponse>
     {
-        public PreferentialInfoResponse data { set; get; }
     }
 
-    public class DelePreferentialResponse : NewHttpBaseResponse
-    {
-        public PreferentialInfo data { set; get; }
-    }
-    public class PreferentialInfo
+    public class PreferentialResponse
     {
         public PreferentialInfoResponse preferentialInfo { set; get; }
+        public ServiceChargeInfoResponse serviceCharge { get; set; }
     }
 }

@@ -638,32 +638,32 @@ namespace CanDao.Pos.ServiceImpl
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public Tuple<string, PreferentialInfoResponse> UsePreferential(UsePreferentialRequest request)
+        public Tuple<string, TableAfterUseCouponInfo> UsePreferential(UsePreferentialRequest request)
         {
             var addr = ServiceAddrCache.GetServiceAddr("CalcDiscountAmount");
             if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, PreferentialInfoResponse>("使用优惠券地址为空。", null);
+                return new Tuple<string, TableAfterUseCouponInfo>("使用优惠券地址为空。", null);
 
             try
             {
-                var result = HttpHelper.HttpPost<UsePreferentialResponse>(addr, request);
+                var result = HttpHelper.HttpPost<PreferentialOperResponse>(addr, request);
                 return result.IsSuccess
-                    ? new Tuple<string, PreferentialInfoResponse>(null, result.data)
-                    : new Tuple<string, PreferentialInfoResponse>(DataHelper.GetNoneNullValueByOrder(result.msg, "使用优惠券失败。"), null);
+                    ? new Tuple<string, TableAfterUseCouponInfo>(null, DataConverter.ToTableAfterUseCouponInfo(result))
+                    : new Tuple<string, TableAfterUseCouponInfo>(DataHelper.GetNoneNullValueByOrder(result.msg, "使用优惠券失败。"), null);
                 //这里判断错误取值是因为接口的问题，返回1表示成功，我表示很无语。
             }
             catch (Exception ex)
             {
                 ErrLog.Instance.E("使用优惠券时异常。", ex);
-                return new Tuple<string, PreferentialInfoResponse>(ex.MyMessage(), null);
+                return new Tuple<string, TableAfterUseCouponInfo>(ex.MyMessage(), null);
             }
         }
 
-        public Tuple<string, PreferentialInfoResponse> DelPreferential(string orderId, string couponId = "")
+        public Tuple<string, TableAfterUseCouponInfo> DelPreferential(string orderId, string couponId = "")
         {
             var addr = ServiceAddrCache.GetServiceAddr("DelPreferential");
             if (string.IsNullOrEmpty(addr))
-                return new Tuple<string, PreferentialInfoResponse>("删除优惠券地址为空。", null);
+                return new Tuple<string, TableAfterUseCouponInfo>("删除优惠券地址为空。", null);
 
             try
             {
@@ -679,15 +679,15 @@ namespace CanDao.Pos.ServiceImpl
                     request.clear = 0;
                 }
 
-                var result = HttpHelper.HttpPost<DelePreferentialResponse>(addr, request);
+                var result = HttpHelper.HttpPost<PreferentialOperResponse>(addr, request);
                 return result.IsSuccess
-                   ? new Tuple<string, PreferentialInfoResponse>(null, result.data.preferentialInfo)
-                    : new Tuple<string, PreferentialInfoResponse>(DataHelper.GetNoneNullValueByOrder(result.msg, "删除优惠券失败。"), null);
+                    ? new Tuple<string, TableAfterUseCouponInfo>(null, DataConverter.ToTableAfterUseCouponInfo(result))
+                    : new Tuple<string, TableAfterUseCouponInfo>(DataHelper.GetNoneNullValueByOrder(result.msg, "删除优惠券失败。"), null);
             }
             catch (Exception ex)
             {
                 ErrLog.Instance.E("删除优惠券时异常。", ex);
-                return new Tuple<string, PreferentialInfoResponse>(ex.MyMessage(), null);
+                return new Tuple<string, TableAfterUseCouponInfo>(ex.MyMessage(), null);
             }
         }
 

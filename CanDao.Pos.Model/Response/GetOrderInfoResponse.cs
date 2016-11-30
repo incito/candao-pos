@@ -2,18 +2,17 @@
 
 namespace CanDao.Pos.Model.Response
 {
-    public class GetOrderInfoResponse : NewHttpBaseResponse
+    public class GetOrderInfoResponse : NewHttpBaseResponse<OrderInfosResponse>
     {
-        public OrderInfos data { set; get; }
     }
 
-    public class OrderInfos
+    public class OrderInfosResponse
     {
-        public OrderInfos ()
+        public OrderInfosResponse()
         {
             preferentialInfo = new PreferentialInfoResponse();
             rows = new List<DishInfosResponse>();
-            
+
         }
 
         public UserOrderInfo userOrderInfo { set; get; }
@@ -28,9 +27,11 @@ namespace CanDao.Pos.Model.Response
         public List<DishInfosResponse> rows { set; get; }
     }
 
+    /// <summary>
+    /// 优惠券返回信息类。
+    /// </summary>
     public class PreferentialInfoResponse
     {
-
         /// <summary>
         /// 优惠总额
         /// </summary>
@@ -116,7 +117,7 @@ namespace CanDao.Pos.Model.Response
         public string name { set; get; }
     }
 
-    public class DishInfosResponse:DishGroupInfo
+    public class DishInfosResponse : DishGroupInfo
     {
         /// <summary>
         /// 套餐、鱼锅
@@ -143,7 +144,7 @@ namespace CanDao.Pos.Model.Response
         public decimal dishnum { set; get; }
 
         public string taste { set; get; }
-   
+
     }
 
     public class UserOrderInfo

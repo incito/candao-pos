@@ -12,7 +12,7 @@ using CanDao.Pos.Model.Response;
 
 namespace CanDao.Pos.ServiceImpl
 {
-    internal class DataConverter
+    public class DataConverter
     {
         private const string DateTimeFormat = "yyyyMMdd HH:mm:ss";
 
@@ -1041,9 +1041,10 @@ namespace CanDao.Pos.ServiceImpl
         {
             var tableFullInfo = new TableFullInfo();
             AddDishInfos(response.data.rows, ref tableFullInfo);
-            ToAccount(response.data.preferentialInfo, ref tableFullInfo);
             ToTableBaseInfo(response.data.userOrderInfo, ref tableFullInfo);
-            ToServiceChargeInfo(response.data.serviceCharge, ref tableFullInfo);
+
+            var temp = ToTableAfterUseCouponInfo(response.data.preferentialInfo, response.data.serviceCharge);
+            tableFullInfo.CloneFromTableServiceChargePart(temp);
             return tableFullInfo;
         }
 
@@ -1121,16 +1122,6 @@ namespace CanDao.Pos.ServiceImpl
         }
 
         /// <summary>
-        /// 账单金额、优惠转换
-        /// </summary>
-        /// <param name="preferential"></param>
-        /// <param name="tableFullInfo"></param>
-        internal static void ToAccount(PreferentialInfoResponse preferential, ref TableFullInfo tableFullInfo)
-        {
-            tableFullInfo.ClonePreferentialInfo(preferential);
-        }
-
-        /// <summary>
         /// 转换桌台基础信息
         /// </summary>
         internal static void ToTableBaseInfo(UserOrderInfo userOrderInfo, ref TableFullInfo tableFullInfo)
@@ -1145,12 +1136,82 @@ namespace CanDao.Pos.ServiceImpl
             tableFullInfo.IsDinnerWareFree = Convert.ToBoolean(userOrderInfo.isFree);
         }
 
-        internal static void ToServiceChargeInfo(ServiceChargeInfoResponse response, ref TableFullInfo tableFullInfo)
+        internal static TableAfterUseCouponInfo ToTableAfterUseCouponInfo(PreferentialOperResponse operResponse)
+        {
+            return ToTableAfterUseCouponInfo(operResponse.data.preferentialInfo, operResponse.data.serviceCharge);
+        }
+
+        internal static TableAfterUseCouponInfo ToTableAfterUseCouponInfo(PreferentialInfoResponse preferential, ServiceChargeInfoResponse serviceCharge)
+        {
+            decimal roundAmount = 0m;
+            decimal removeZeroAmount = 0m;
+            switch (preferential.moneyDisType)
+            {
+                case 0: //未设置
+                        roundAmount = 0;
+                        removeZeroAmount = 0;
+                        break;
+                case 1: //四舍五入
+                        roundAmount = preferential.moneyWipeAmount;
+                        removeZeroAmount = 0;
+                        break;
+                case 2: //抹零
+                        roundAmount = 0;
+                        removeZeroAmount = preferential.moneyWipeAmount;
+                        break;
+            }
+
+            var item = new TableAfterUseCouponInfo
+            {
+                TotalFreeAmount = preferential.toalFreeAmount,
+                CouponAmount = preferential.amount,
+                PaymentAmount = preferential.payamount,
+                TipAmount = preferential.tipAmount,
+                TotalAmount = preferential.menuAmount,
+                TotalDebitAmount = preferential.toalDebitAmount,
+                AdjustmentAmount = preferential.adjAmout,
+                ToalDebitAmountMany = preferential.toalDebitAmountMany,
+                RoundAmount = roundAmount,
+                RemovezeroAmount = removeZeroAmount,
+                ServiceChargeInfo = ToServiceChargeInfo(serviceCharge),
+            };
+
+            if (preferential.detailPreferentials != null)
+                item.AddedCouponInfos = preferential.detailPreferentials.Select(Convert2UsedCouponInfo).ToList();
+
+            return item;
+        }
+
+        /// <summary>
+        /// 将优惠券明细信息转换成优惠券使用信息。
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private static UsedCouponInfo Convert2UsedCouponInfo(GetPreferentialDetails info)
+        {
+            return new UsedCouponInfo
+            {
+                CouponInfo = new CouponInfo
+                {
+                    RuleId = info.coupondetailid,
+                    CouponId = info.preferential
+                },
+                Count = 1,//默认单张
+                RelationId = info.id,
+                UsedCouponType = (EnumUsedCouponType)info.isCustom,
+                BillAmount = info.deAmount,
+                DebitAmount = info.toalDebitAmount,
+                FreeAmount = info.toalFreeAmount,
+                Name = info.activity.name
+            };
+        }
+
+        public static ServiceChargeInfo ToServiceChargeInfo(ServiceChargeInfoResponse response)
         {
             if (response == null)
-                return;
+                return null;
 
-            tableFullInfo.ServiceChargeInfo = new ServiceChargeInfo
+            return new ServiceChargeInfo
             {
                 OrderId = response.orderid,
                 ChargeAuthor = response.autho,
@@ -1158,8 +1219,8 @@ namespace CanDao.Pos.ServiceImpl
                 IsCustomSetting = response.isCustom == 1,
                 ServiceAmount = response.chargeAmount ?? 0,
             };
-
         }
+
         #endregion
     }
 }
