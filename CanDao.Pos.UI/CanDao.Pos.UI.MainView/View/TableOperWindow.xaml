@@ -47,7 +47,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="NormalTemplate">
-                <StackPanel Margin="10,10,310,10">
+                <StackPanel Margin="0,10,270,10">
                     <controls:WatermarkTextBox Text="{Binding Remark, UpdateSourceTrigger=PropertyChanged}"
                                                Watermark="{Binding Name, StringFormat={}{0}:}"
                                                VerticalContentAlignment="Center"
