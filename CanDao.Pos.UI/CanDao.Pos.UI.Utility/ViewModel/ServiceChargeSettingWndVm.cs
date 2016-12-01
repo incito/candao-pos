@@ -109,16 +109,25 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             TaskService.Start(null, SaveServiceChargeProcess, SaveServiceChargeComplete, "保存服务费中...");
         }
 
+        /// <summary>
+        /// 保存优惠券信息执行方法。
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         private object SaveServiceChargeProcess(object arg)
         {
             var service = ServiceManager.Instance.GetServiceIntance<IOrderService>();
             if (service == null)
                 return "创建IOrderService服务失败。";
 
-            var isCustomChange = CusChargeAmount == SrcChargeAmount;//根据服务费是否改变来判断是否是服务员设置了服务费。
+            var isCustomChange = CusChargeAmount != SrcChargeAmount;//根据服务费是否改变来判断是否是服务员设置了服务费。
             return service.SaveServiceCharge(_orderId, Globals.Authorizer.UserName, IsCharge, isCustomChange, CusChargeAmount);
         }
 
+        /// <summary>
+        /// 保存优惠券信息执行完成。
+        /// </summary>
+        /// <param name="arg"></param>
         private void SaveServiceChargeComplete(object arg)
         {
             var result = arg as string;
