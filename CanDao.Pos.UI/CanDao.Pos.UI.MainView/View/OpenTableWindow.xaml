@@ -52,12 +52,14 @@
                                    Text="{Binding MaleCustomer, UpdateSourceTrigger=PropertyChanged}"
                                    Watermark="就餐人数（男）："
                                    DecimalPlaces="0"
+                                   Maximum="9999"
                                    VerticalContentAlignment="Center"
                                    Height="38" Margin="0,2"/>
             <toolkit:DoubleTextBox Grid.Row="3" Grid.Column="0"
                                    Text="{Binding FemaleCustomer, UpdateSourceTrigger=PropertyChanged}"
                                    Watermark="就餐人数（女）："
                                    DecimalPlaces="0"
+                                   Maximum="9999"
                                    VerticalContentAlignment="Center"
                                    Height="38" Margin="0,2"/>
             <TextBox Grid.Row="4" Grid.Column="0"
