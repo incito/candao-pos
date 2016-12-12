@@ -902,7 +902,7 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         protected override void OnPreviewKeyDown(KeyEventArgs arg)
         {
-            
+
         }
 
         protected override void OperMethod(object param)
@@ -2064,13 +2064,14 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
             var otherPayWays = PayWayInfos.Where(t => t.PayWayType != EnumPayWayType.Member && t.PayWayType != EnumPayWayType.WeChat).ToList();
             var wechatPayWay = PayWayInfos.FirstOrDefault(t => t.PayWayType == EnumPayWayType.WeChat);
+            var tipAmount = _cashPayWay != null ? _cashPayWay.TipPaymentAmount : 0m;//小费金额。
             var cardNo = _memberPayWay != null ? _memberPayWay.MemberInfo.CardNo : Data.MemberNo;
             var request = new CanDaoMemberSaleRequest
             {
                 branch_id = Globals.BranchInfo.BranchId,
                 cardno = cardNo,
                 password = _memberPayWay != null ? _memberPayWay.MemberPassword : "",
-                FCash = otherPayWays.Sum(t => t.Amount),
+                FCash = otherPayWays.Sum(t => t.Amount) - tipAmount,
                 FWeChat = wechatPayWay != null ? wechatPayWay.Amount : 0,
                 FStore = MemberAmount,
                 FIntegral = IntegralAmount,
