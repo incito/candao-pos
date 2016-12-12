@@ -902,17 +902,16 @@ namespace CanDao.Pos.UI.MainView.ViewModel
 
         protected override void OnPreviewKeyDown(KeyEventArgs arg)
         {
-            if (arg.Key == Key.Enter)
-            {
-                arg.Handled = true;
-                PayTheBill();
-            }
+            
         }
 
         protected override void OperMethod(object param)
         {
             switch (param as string)
             {
+                case "PayBill":
+                    PayTheBill();
+                    break;
                 case "More":
                     IsPrintMoreOpened = !IsPrintMoreOpened;
                     break;

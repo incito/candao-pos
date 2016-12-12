@@ -97,6 +97,6 @@
         <Button Grid.Row="4" Grid.Column="0" Content="清空" Command="{Binding InputCmd}" CommandParameter="Clear" Style="{StaticResource NumBtnStyle}"/>
         <Button Grid.Row="4" Grid.Column="1" Content="字母" Command="{Binding InputCmd}" CommandParameter="Letter" Style="{StaticResource NumBtnStyle}" Visibility="{Binding IsLetter, Converter={StaticResource Bool2CollapsedCvt}}"/>
         <Button Grid.Row="4" Grid.Column="1" Content="数字" Command="{Binding InputCmd}" CommandParameter="Num" Style="{StaticResource NumBtnStyle}" Visibility="{Binding IsLetter, Converter={StaticResource Bool2VisibilityCvt}}"/>
-        <Button Grid.Row="4" Grid.Column="2" Content="确定" Command="{Binding InputCmd}" CommandParameter="Enter" Style="{StaticResource NumBtnStyle}"/>
+        <Button Grid.Row="4" Grid.Column="2" Content="结账" Command="{Binding DataContext.OperCmd, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="PayBill" Style="{StaticResource NumBtnStyle}"/>
     </Grid>
 </UserControl>

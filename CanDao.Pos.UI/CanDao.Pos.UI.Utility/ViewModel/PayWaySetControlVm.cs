@@ -78,16 +78,22 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 case "Enabled":
                     if (!MessageDialog.Quest("确认启用后，在结算方式区域里显示出该结算方式！"))
                         return;
+
+                    InfoLog.Instance.I("用户选择启用\"{0}\"结算方式操作。", item.Name);
                     item.IsVisible = true;
                     break;
                 case "Disabled":
                     if (!MessageDialog.Quest("确认禁用后，在结算方式区域里不再显示该结算方式！"))
                         return;
+
+                    InfoLog.Instance.I("用户选择禁用\"{0}\"结算方式操作。", item.Name);
                     item.IsVisible = false;
                     break;
                 case "Up":
                     if (index <= 0)
                         return;
+
+                    InfoLog.Instance.I("用户选择上移\"{0}\"结算方式操作。", item.Name);
                     PayWays.Remove(item);
                     PayWays.Insert(index - 1, item);
 
@@ -97,6 +103,8 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 case "Down":
                     if (index >= PayWays.Count - 1)
                         return;
+
+                    InfoLog.Instance.I("用户选择下移\"{0}\"结算方式操作。", item.Name);
                     PayWays.Remove(item);
                     PayWays.Insert(index + 1, item);
 
@@ -191,6 +199,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return "创建IRestaurantService服务失败。";
 
             var temp = PayWays.ToList();
+            InfoLog.Instance.I("开始执行保存结算方式的操作...");
             return service.SavePayWayInfo(temp);
         }
 
@@ -208,6 +217,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 return;
             }
 
+            InfoLog.Instance.I("保存结算方式成功。");
             NotifyDialog.Notify("修改结算方式成功。");
         }
 
@@ -223,6 +233,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
             if (service == null)
                 return new Tuple<string, List<PayWayInfo>>("创建IRestaurantService服务失败。", null);
 
+            InfoLog.Instance.I("开始获取所有结算方式...");
             return service.GetPayWayInfo();
         }
 
@@ -240,6 +251,7 @@ namespace CanDao.Pos.UI.Utility.ViewModel
                 MessageDialog.Warning(errMsg);
             }
 
+            InfoLog.Instance.I("获取所有结算方式成功。");
             if (result.Item2 != null)
             {
                 result.Item2.ForEach(PayWays.Add);
